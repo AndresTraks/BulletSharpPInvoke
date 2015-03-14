@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B2ED4D6D-0DB3-43B3-99F4-128FB985028D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BulletSharp</RootNamespace>
+    <AssemblyName>BulletSharp.OpenTK</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BulletSharp">
+      <HintPath>..\..\bin\Release\BulletSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Collision\Box2dShapeExtensions.cs" />
+    <Compile Include="Collision\BoxShapeExtensions.cs" />
+    <Compile Include="Collision\BroadphaseInterfaceExtensions.cs" />
+    <Compile Include="Collision\BroadphaseProxyExtensions.cs" />
+    <Compile Include="Collision\BvhTriangleMeshShapeExtensions.cs" />
+    <Compile Include="Collision\CollisionObjectWrapperExtensions.cs" />
+    <Compile Include="Collision\CollisionShapeExtensions.cs" />
+    <Compile Include="Collision\CollisionWorldExtensions.cs" />
+    <Compile Include="Collision\CompoundShapeExtensions.cs" />
+    <Compile Include="Collision\ConcaveShapeExtensions.cs" />
+    <Compile Include="Collision\ConvexConcaveCollisionAlgorithmExtensions.cs" />
+    <Compile Include="Collision\ConvexHullShapeExtensions.cs" />
+    <Compile Include="Collision\ConvexInternalShapeExtensions.cs" />
+    <Compile Include="Collision\ConvexPenetrationDepthSolverExtensions.cs" />
+    <Compile Include="Collision\ConvexPlaneCollisionAlgorithmExtensions.cs" />
+    <Compile Include="Collision\ConvexPointCloudShapeExtensions.cs" />
+    <Compile Include="Collision\ConvexPolyhedronExtensions.cs" />
+    <Compile Include="Collision\ConvexShapeExtensions.cs" />
+    <Compile Include="Collision\ConvexTriangleMeshShapeExtensions.cs" />
+    <Compile Include="Collision\CylinderShapeExtensions.cs" />
+    <Compile Include="Collision\DbvtBroadphaseExtensions.cs" />
+    <Compile Include="Collision\DiscreteCollisionDetectorInterfaceExtensions.cs" />
+    <Compile Include="Collision\GhostObjectExtensions.cs" />
+    <Compile Include="Collision\GjkPairDetectorExtensions.cs" />
+    <Compile Include="Collision\ManifoldPointExtensions.cs" />
+    <Compile Include="Collision\MinkowskiSumShapeExtensions.cs" />
+    <Compile Include="Collision\MultimaterialTriangleMeshShapeExtensions.cs" />
+    <Compile Include="Collision\MultiSphereShapeExtensions.cs" />
+    <Compile Include="Collision\PersistentManifoldExtensions.cs" />
+    <Compile Include="Collision\PointCollectorExtensions.cs" />
+    <Compile Include="Collision\PolyhedralConvexShapeExtensions.cs" />
+    <Compile Include="Collision\ScaledBvhTriangleMeshShapeExtensions.cs" />
+    <Compile Include="Collision\ShapeHullExtensions.cs" />
+    <Compile Include="Collision\SoftBodyConcaveCollisionAlgorithmExtensions.cs" />
+    <Compile Include="Collision\SphereBoxCollisionAlgorithmExtensions.cs" />
+    <Compile Include="Collision\SphereTriangleDetectorExtensions.cs" />
+    <Compile Include="Collision\StaticPlaneShapeExtensions.cs" />
+    <Compile Include="Collision\StridingMeshInterfaceExtensions.cs" />
+    <Compile Include="Collision\TetrahedronShapeExtensions.cs" />
+    <Compile Include="Collision\TriangleMeshExtensions.cs" />
+    <Compile Include="Collision\TriangleMeshShapeExtensions.cs" />
+    <Compile Include="Collision\TriangleShapeExtensions.cs" />
+    <Compile Include="Collision\VoronoiSimplexSolverExtensions.cs" />
+    <Compile Include="DefaultMotionStateExtensions.cs" />
+    <Compile Include="Dynamics\CharacterControllerInterfaceExtensions.cs" />
+    <Compile Include="Dynamics\CollisionObjectExtensions.cs" />
+    <Compile Include="Dynamics\ConeTwistConstraintExtensions.cs" />
+    <Compile Include="Dynamics\DynamicsWorldExtensions.cs" />
+    <Compile Include="Dynamics\FixedConstraintExtensions.cs" />
+    <Compile Include="Dynamics\GearConstraintExtensions.cs" />
+    <Compile Include="Dynamics\Generic6DofConstraintExtensions.cs" />
+    <Compile Include="Dynamics\Generic6DofSpringConstraintExtensions.cs" />
+    <Compile Include="Dynamics\Hinge2ConstraintExtensions.cs" />
+    <Compile Include="Dynamics\HingeConstraintExtensions.cs" />
+    <Compile Include="Dynamics\Point2PointConstraintExtensions.cs" />
+    <Compile Include="Dynamics\RigidBodyExtensions.cs" />
+    <Compile Include="Dynamics\SliderConstraintExtensions.cs" />
+    <Compile Include="Dynamics\TypedConstraintExtensions.cs" />
+    <Compile Include="Dynamics\UniversalConstraintExtensions.cs" />
+    <Compile Include="Dynamics\VehicleRaycasterExtensions.cs" />
+    <Compile Include="Dynamics\WheelInfoExtensions.cs" />
+    <Compile Include="IDebugDrawExtensions.cs" />
+    <Compile Include="Math\MatrixExtensions.cs" />
+    <Compile Include="Math\QuaternionExtensions.cs" />
+    <Compile Include="Math\Vector3Extensions.cs" />
+    <Compile Include="MotionStateExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
