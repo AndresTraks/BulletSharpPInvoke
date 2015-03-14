@@ -1121,25 +1121,6 @@ namespace BulletSharp
             return (degrees / 360.0f) * SIMD_2_PI;
         }
 
-
-        public static Vector3 Interpolate3(Vector3 v0, Vector3 v1, float rt)
-        {
-            float s = 1.0f - rt;
-            return new Vector3(
-                s * v0.X + rt * v1.X,
-                s * v0.Y + rt * v1.Y,
-                s * v0.Z + rt * v1.Z);
-        }
-
-
-        public static Vector3 Interpolate3(ref Vector3 v0, ref Vector3 v1, float rt)
-        {
-            float s = 1.0f - rt;
-            return new Vector3(
-                s * v0.X + rt * v1.X,
-                s * v0.Y + rt * v1.Y,
-                s * v0.Z + rt * v1.Z);
-        }
         /*
         public static Matrix SetEulerZYX(float eulerX, float eulerY, float eulerZ)
         {

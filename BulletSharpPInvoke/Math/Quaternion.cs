@@ -284,9 +284,9 @@ namespace BulletSharp.Math
         /// <summary>
         /// Return the inverse of this quaternion.
         /// </summary>
-        public Quaternion Inverse()
+        public Quaternion Inverse
         {
-            return new Quaternion(-X, -Y, -Z, W);
+            get { return new Quaternion(-X, -Y, -Z, W); }
         }
 
         /// <summary>

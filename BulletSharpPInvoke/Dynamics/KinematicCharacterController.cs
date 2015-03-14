@@ -122,7 +122,7 @@ namespace BulletSharp
                     m_currentStepOffset = m_stepHeight * callback.ClosestHitFraction;
                     if (m_interpolateUp)
                     {
-                        m_currentPosition = MathUtil.Interpolate3(ref m_currentPosition, ref m_targetPosition, callback.ClosestHitFraction);
+                        Vector3.Lerp(ref m_currentPosition, ref m_targetPosition, callback.ClosestHitFraction, out m_currentPosition);
                     }
                     else
                     {
@@ -362,17 +362,17 @@ namespace BulletSharp
                 {
                     if (full_drop == true)
                     {
-                        m_currentPosition = MathUtil.Interpolate3(ref m_currentPosition, ref m_targetPosition, callback.ClosestHitFraction);
+                        Vector3.Lerp(ref m_currentPosition, ref m_targetPosition, callback.ClosestHitFraction, out m_currentPosition);
                     }
                     else
                     {
                         //due to errors in the closestHitFraction variable when used with large polygons, calculate the hit fraction manually
-                        m_currentPosition = MathUtil.Interpolate3(ref m_currentPosition, ref m_targetPosition, fraction);
+                        Vector3.Lerp(ref m_currentPosition, ref m_targetPosition, fraction, out m_currentPosition);
                     }
                 }
                 else
                 {
-                    m_currentPosition = MathUtil.Interpolate3(ref m_currentPosition, ref m_targetPosition, callback.ClosestHitFraction);
+                    Vector3.Lerp(ref m_currentPosition, ref m_targetPosition, callback.ClosestHitFraction, out m_currentPosition);
                 }
 
                 full_drop = false;

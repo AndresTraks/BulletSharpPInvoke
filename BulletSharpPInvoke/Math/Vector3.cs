@@ -880,6 +880,25 @@ namespace BulletSharp.Math
         /// <code>start + (end - start) * amount</code>
         /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
         /// </remarks>
+        public static Vector3 Lerp(ref Vector3 start, ref Vector3 end, float amount)
+        {
+            Vector3 result;
+            Lerp(ref start, ref end, amount, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Performs a linear interpolation between two vectors.
+        /// </summary>
+        /// <param name="start">Start vector.</param>
+        /// <param name="end">End vector.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+        /// <returns>The linear interpolation of the two vectors.</returns>
+        /// <remarks>
+        /// This method performs the linear interpolation based on the following formula.
+        /// <code>start + (end - start) * amount</code>
+        /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
+        /// </remarks>
         public static Vector3 Lerp(Vector3 start, Vector3 end, float amount)
         {
             Vector3 result;

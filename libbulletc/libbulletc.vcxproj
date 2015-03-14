@@ -169,7 +169,6 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalOptions> /machine:X86 /debug %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -214,7 +213,6 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalOptions> /machine:X86 /debug %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -259,7 +257,6 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -304,7 +301,6 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -349,7 +345,6 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -394,7 +389,6 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -438,7 +432,6 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalOptions> /machine:X86 /debug %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -482,7 +475,6 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalOptions> /machine:X86 /debug %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -864,7 +856,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="src\btPointCollector_wrap.cpp" />
     <ClCompile Include="src\btPolarDecomposition_wrap.cpp" />
     <ClCompile Include="src\btPolyhedralConvexShape_wrap.cpp" />
-    <ClCompile Include="src\btQuantizedBvh_wrap.cpp"  />
+    <ClCompile Include="src\btQuantizedBvh_wrap.cpp" />
     <ClCompile Include="src\btRaycastVehicle_wrap.cpp" />
     <ClCompile Include="src\btRigidBody_wrap.cpp" />
     <ClCompile Include="src\btScaledBvhTriangleMeshShape_wrap.cpp" />
@@ -877,7 +869,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="src\btSoftBodyConcaveCollisionAlgorithm_wrap.cpp" />
     <ClCompile Include="src\btSoftBodyHelpers_wrap.cpp" />
     <ClCompile Include="src\btSoftBodyRigidBodyCollisionConfiguration_wrap.cpp" />
-    <ClCompile Include="src\btSoftBodySolvers_wrap.cpp"  />
+    <ClCompile Include="src\btSoftBodySolvers_wrap.cpp" />
     <ClCompile Include="src\btSoftRigidCollisionAlgorithm_wrap.cpp" />
     <ClCompile Include="src\btSoftRigidDynamicsWorld_wrap.cpp" />
     <ClCompile Include="src\btSoftSoftCollisionAlgorithm_wrap.cpp" />

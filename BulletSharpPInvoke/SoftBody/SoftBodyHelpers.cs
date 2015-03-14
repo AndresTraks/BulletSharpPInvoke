@@ -231,8 +231,8 @@ namespace BulletSharp.SoftBody
             for (int iy = 0; iy < ry; iy++)
             {
                 float ty = iy / (float)(ry - 1);
-                Vector3 py0 = Vector3.Lerp(corner00, corner01, ty);
-                Vector3 py1 = Vector3.Lerp(corner10, corner11, ty);
+                Vector3 py0 = Vector3.Lerp(ref corner00, ref corner01, ty);
+                Vector3 py1 = Vector3.Lerp(ref corner10, ref corner11, ty);
                 for (int ix = 0; ix < rx; ix++)
                 {
                     float tx = ix / (float)(rx - 1);
