@@ -152,3 +152,4 @@
 #include "btWheelInfo_wrap.h"
 #include "btWorldImporter_wrap.h"
 #include "collections.h"
+#include "hacdHACD_wrap.h"

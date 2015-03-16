@@ -242,7 +242,7 @@ int btAlignedSoftBodyNodeArray_index_of(btSoftBody::tNodeArray* obj, btSoftBody:
 	if (val < &obj->at(0) || val > &obj->at(obj->size() - 1)) {
 		return -1;
 	}
-	return val - &obj->at(0);
+	return (int)(val - &obj->at(0));
 }
 
 void btAlignedSoftBodyNodeArray_push_back(btSoftBody::tNodeArray* obj, btSoftBody::Node* val)

@@ -1092,6 +1092,12 @@ typedef void* (*Win32lsMemorySetupFunc)();
 #define btPolarDecomposition void
 #endif
 
+#ifndef HACD_HACD_H
+#define HACD_HACD void
+#else
+#define HACD_HACD HACD::HACD
+#endif
+
 #ifndef SPU_GATHERING_COLLISION_TASK_H
 #if defined(_WIN64)
 	typedef unsigned __int64 ppu_address_t;

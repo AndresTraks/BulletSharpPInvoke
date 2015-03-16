@@ -148,7 +148,7 @@ namespace FeatherStoneDemo
 
             Vector3 joint_axis_hinge = new Vector3(1, 0, 0);
             Vector3 joint_axis_prismatic = new Vector3(0, 0, 1);
-            Quaternion parent_to_child = orn.Inverse();
+            Quaternion parent_to_child = orn.Inverse;
             Vector3 joint_axis_child_prismatic = parent_to_child.Rotate(joint_axis_prismatic);
             Vector3 joint_axis_child_hinge = parent_to_child.Rotate(joint_axis_hinge);
 
@@ -169,7 +169,7 @@ namespace FeatherStoneDemo
                 if (settings.UsePrismatic) // i == (nLinks - 1))
                 {
                     body.SetupPrismatic(child_link_num, mass, inertia, this_link_num,
-                        parent_to_child, joint_axis_child_prismatic, parent_to_child.Rotate(pos), settings.DisableParentCollision);
+                        parent_to_child, joint_axis_child_prismatic, parent_to_child.Rotate(pos), Vector3.Zero, settings.DisableParentCollision);
                 }
                 else
                 {
@@ -232,7 +232,7 @@ namespace FeatherStoneDemo
                 var collider = new MultiBodyLinkCollider(body, -1);
 
                 collider.CollisionShape = box;
-                Matrix tr = Matrix.RotationQuaternion(worldToLocal[0].Inverse()) * Matrix.Translation(localOrigin[0]);
+                Matrix tr = Matrix.RotationQuaternion(worldToLocal[0].Inverse) * Matrix.Translation(localOrigin[0]);
                 collider.WorldTransform = tr;
                 bodyB.WorldTransform = tr;
 
@@ -247,7 +247,7 @@ namespace FeatherStoneDemo
             {
                 int parent = body.GetParent(i);
                 worldToLocal[i + 1] = body.GetParentToLocalRot(i) * worldToLocal[parent + 1];
-                localOrigin[i + 1] = localOrigin[parent + 1] + (worldToLocal[i + 1].Inverse().Rotate(body.GetRVector(i)));
+                localOrigin[i + 1] = localOrigin[parent + 1] + (worldToLocal[i + 1].Inverse.Rotate(body.GetRVector(i)));
             }
 
             for (int i = 0; i < body.NumLinks; i++)
@@ -256,7 +256,7 @@ namespace FeatherStoneDemo
                 var collider = new MultiBodyLinkCollider(body, i);
 
                 collider.CollisionShape = box;
-                Matrix tr = Matrix.RotationQuaternion(worldToLocal[i + 1].Inverse()) * Matrix.Translation(localOrigin[i + 1]);
+                Matrix tr = Matrix.RotationQuaternion(worldToLocal[i + 1].Inverse) * Matrix.Translation(localOrigin[i + 1]);
                 collider.WorldTransform = tr;
                 World.AddCollisionObject(collider, CollisionFilterGroups.StaticFilter,
                     CollisionFilterGroups.DefaultFilter | CollisionFilterGroups.StaticFilter);
