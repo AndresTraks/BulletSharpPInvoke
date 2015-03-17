@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security;
 using BulletSharp.Math;
@@ -9,10 +10,24 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
+        [UnmanagedFunctionPointer(Native.Conv)]
+        delegate bool CallbackFunctionUnmanagedDelegate(IntPtr msg, double progress, double globalConcavity, IntPtr n);
+
+        public delegate bool CallBackFunction(string msg, double progress, double globalConcativity, int n);
+
+        CallbackFunctionUnmanagedDelegate _callbackFunctionUnmanaged;
+        CallBackFunction _callbackFunction;
+
 		public Hacd()
 		{
 			_native = HACD_new();
 		}
+
+        bool CallbackFunctionUnmanaged(IntPtr msg, double progress, double globalConcavity, IntPtr n)
+        {
+            string msg2 = Marshal.PtrToStringAnsi(msg);
+            return _callbackFunction(msg2, progress, globalConcavity, n.ToInt32());
+        }
 
 		public bool Compute()
 		{
@@ -34,10 +49,24 @@ namespace BulletSharp
 			HACD_DenormalizeData(_native);
 		}
 
-        public bool GetCH(int numCH, out Vector3[] points, out int[] triangles)
+        public bool GetCH(int numCH, double[] points, long[] triangles)
 		{
-            throw new NotImplementedException();
-			//return HACD_GetCH(_native, numCH, points, triangles);
+            if (points.Length < GetNPointsCH(numCH))
+            {
+                return false;
+            }
+
+            if (triangles.Length < GetNTrianglesCH(numCH))
+            {
+                return false;
+            }
+
+            GCHandle pointsArray = GCHandle.Alloc(points, GCHandleType.Pinned);
+            GCHandle trianglesArray = GCHandle.Alloc(triangles, GCHandleType.Pinned);
+            bool ret = HACD_GetCH(_native, numCH, pointsArray.AddrOfPinnedObject(), trianglesArray.AddrOfPinnedObject());
+            pointsArray.Free();
+            trianglesArray.Free();
+            return ret;
 		}
 
 		public int GetNPointsCH(int numCH)
@@ -49,6 +78,32 @@ namespace BulletSharp
 		{
 			return HACD_GetNTrianglesCH(_native, numCH);
 		}
+
+        public double[] GetPoints()
+        {
+            IntPtr pointsPtr = HACD_GetPoints(_native);
+            int pointsLen = NPoints * 3;
+            if (pointsLen == 0 || pointsPtr == IntPtr.Zero)
+            {
+                return new double[0];
+            }
+            double[] pointsArray = new double[pointsLen];
+            Marshal.Copy(pointsPtr, pointsArray, 0, pointsLen);
+            return pointsArray;
+        }
+
+        public long[] GetTriangles()
+        {
+            IntPtr trianglesPtr = HACD_GetTriangles(_native);
+            int trianglesLen = NTriangles * 3;
+            if (trianglesLen == 0 || trianglesPtr == IntPtr.Zero)
+            {
+                return new long[0];
+            }
+            long[] trianglesArray = new long[trianglesLen];
+            Marshal.Copy(trianglesPtr, trianglesArray, 0, trianglesLen);
+            return trianglesArray;
+        }
 
 		public void NormalizeData()
 		{
@@ -71,6 +126,83 @@ namespace BulletSharp
             return ret;
 		}
 
+        public void SetPoints(ICollection<double> points)
+        {
+            double[] pointsArray;
+            int arrayLen = points.Count;
+            if (points is double[])
+            {
+                pointsArray = points as double[];
+            }
+            else
+            {
+                pointsArray = new double[arrayLen];
+                points.CopyTo(pointsArray, 0);
+            }
+
+            IntPtr pointsPtr = HACD_GetPoints(_native);
+            if (pointsPtr != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(pointsPtr);
+            }
+
+            pointsPtr = Marshal.AllocHGlobal(sizeof(double) * arrayLen);
+            Marshal.Copy(pointsArray, 0, pointsPtr, arrayLen);
+            HACD_SetPoints(_native, pointsPtr);
+            NPoints = arrayLen / 3;
+        }
+
+        public void SetPoints(ICollection<Vector3> points)
+        {
+            double[] pointsArray = new double[points.Count * 3];
+            int i = 0;
+            foreach (Vector3 v in points)
+            {
+                pointsArray[i++] = v.X;
+                pointsArray[i++] = v.Y;
+                pointsArray[i++] = v.Z;
+            }
+            SetPoints(pointsArray);
+        }
+
+        public void SetTriangles(ICollection<long> triangles)
+        {
+            long[] trianglesLong;
+            int arrayLen = triangles.Count;
+            if (triangles is long[])
+            {
+                trianglesLong = triangles as long[];
+            }
+            else
+            {
+                trianglesLong = new long[arrayLen];
+                triangles.CopyTo(trianglesLong, 0);
+            }
+
+            IntPtr trianglesPtr = HACD_GetTriangles(_native);
+            if (trianglesPtr != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(trianglesPtr);
+            }
+
+            trianglesPtr = Marshal.AllocHGlobal(sizeof(long) * arrayLen);
+            Marshal.Copy(trianglesLong, 0, trianglesPtr, arrayLen);
+            HACD_SetTriangles(_native, trianglesPtr);
+            NTriangles = arrayLen / 3;
+        }
+
+        public void SetTriangles(ICollection<int> triangles)
+        {
+            int n = triangles.Count;
+            long[] trianglesLong = new long[n];
+            int i = 0;
+            foreach (int t in triangles)
+            {
+                trianglesLong[i++] = t;
+            }
+            SetTriangles(trianglesLong);
+        }
+
 		public bool AddExtraDistPoints
 		{
 			get { return HACD_GetAddExtraDistPoints(_native); }
@@ -88,13 +220,25 @@ namespace BulletSharp
 			get { return HACD_GetAddNeighboursDistPoints(_native); }
 			set { HACD_SetAddNeighboursDistPoints(_native, value); }
 		}
-        /*
+
 		public CallBackFunction CallBack
 		{
-			get { return HACD_GetCallBack(_native); }
-			set { HACD_SetCallBack(_native, value._native); }
+            get { return _callbackFunction; }
+            set
+            {
+                _callbackFunctionUnmanaged = CallbackFunctionUnmanaged;
+                _callbackFunction = value;
+                if (_callbackFunction != null)
+                {
+                    HACD_SetCallBack(_native, Marshal.GetFunctionPointerForDelegate(_callbackFunctionUnmanaged));
+                }
+                else
+                {
+                    HACD_SetCallBack(_native, IntPtr.Zero);
+                }
+            }
 		}
-        */
+
 		public double CompacityWeight
 		{
 			get { return HACD_GetCompacityWeight(_native); }
@@ -131,7 +275,7 @@ namespace BulletSharp
 			set { HACD_SetNTriangles(_native, value); }
 		}
 
-        public int NumVerticesPerConvexHull
+        public int NVerticesPerCH
 		{
 			get { return HACD_GetNVerticesPerCH(_native); }
 			set { HACD_SetNVerticesPerCH(_native, value); }
@@ -141,25 +285,13 @@ namespace BulletSharp
 		{
 			get { return HACD_GetPartition(_native); }
 		}
-
-		public HACD::Vec3 Points
-		{
-			get { return HACD_GetPoints(_native); }
-			set { HACD_SetPoints(_native, value._native); }
-		}
         */
 		public double ScaleFactor
 		{
 			get { return HACD_GetScaleFactor(_native); }
 			set { HACD_SetScaleFactor(_native, value); }
 		}
-        /*
-		public HACD::Vec3 Triangles
-		{
-			get { return HACD_GetTriangles(_native); }
-			set { HACD_SetTriangles(_native, value._native); }
-		}
-        */
+
 		public double VolumeWeight
 		{
 			get { return HACD_GetVolumeWeight(_native); }
@@ -176,6 +308,20 @@ namespace BulletSharp
 		{
 			if (_native != IntPtr.Zero)
 			{
+                IntPtr pointsPtr = HACD_GetPoints(_native);
+                if (pointsPtr != IntPtr.Zero)
+                {
+                    Marshal.FreeHGlobal(pointsPtr);
+                    HACD_SetPoints(_native, IntPtr.Zero);
+                }
+
+                IntPtr trianglesPtr = HACD_GetTriangles(_native);
+                if (trianglesPtr != IntPtr.Zero)
+                {
+                    Marshal.FreeHGlobal(trianglesPtr);
+                    HACD_SetTriangles(_native, IntPtr.Zero);
+                }
+
 				HACD_delete(_native);
 				_native = IntPtr.Zero;
 			}
@@ -189,29 +335,29 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr HACD_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.I1)]
+		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool HACD_Compute(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.I1)]
+		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool HACD_Compute2(IntPtr obj, bool fullCH);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.I1)]
+		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool HACD_Compute3(IntPtr obj, bool fullCH, bool exportDistPoints);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void HACD_DenormalizeData(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.I1)]
+		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool HACD_GetAddExtraDistPoints(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.I1)]
+		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool HACD_GetAddFacesPoints(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.I1)]
+		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool HACD_GetAddNeighboursDistPoints(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr HACD_GetCallBack(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.I1)]
+		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool HACD_GetCH(IntPtr obj, int numCH, IntPtr points, IntPtr triangles);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern double HACD_GetCompacityWeight(IntPtr obj);
@@ -244,10 +390,10 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void HACD_NormalizeData(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.I1)]
+		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool HACD_Save(IntPtr obj, IntPtr fileName, bool uniColor);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.I1)]
+		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool HACD_Save2(IntPtr obj, IntPtr fileName, bool uniColor, long numCluster);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void HACD_SetAddExtraDistPoints(IntPtr obj, bool addExtraDistPoints);

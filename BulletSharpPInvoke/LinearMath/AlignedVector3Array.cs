@@ -3,9 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Diagnostics;
 
 namespace BulletSharp
 {
+    [DebuggerDisplay("Count = {Count}")]
+	[DebuggerTypeProxy(typeof(Vector3ListDebugView))]
     public class AlignedVector3Array : IList<Vector3>, IDisposable
     {
         internal IntPtr _native;

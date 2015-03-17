@@ -41,16 +41,14 @@ void btAlignedVector3Array_at(btAlignedVector3Array* obj, int n, btScalar* value
 
 void btAlignedVector3Array_push_back(btAlignedVector3Array* obj, const btScalar* value)
 {
-	VECTOR3_DEF(value);
+	VECTOR3_CONV(value);
 	obj->push_back(VECTOR3_USE(value));
 }
 
 void btAlignedVector3Array_push_back2(btAlignedVector3Array* obj, const btScalar* value) // btVector4
 {
-	//VECTOR4_DEF(value);
-	//obj->push_back(VECTOR4_USE(value));
-	ATTRIBUTE_ALIGNED16(btVector4) valueTemp = btVector4(value[0], value[1], value[2], value[3]);
-	obj->push_back(valueTemp);
+	VECTOR4_CONV(value);
+	obj->push_back(VECTOR4_USE(value));
 }
 
 void btAlignedVector3Array_set(btAlignedVector3Array* obj, int n, const btScalar* value)

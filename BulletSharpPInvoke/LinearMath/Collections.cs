@@ -3,9 +3,31 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security;
 using BulletSharp.Math;
+using System.Diagnostics;
 
 namespace BulletSharp
 {
+    internal class Vector3ListDebugView
+	{
+		private IList<Vector3> _list;
+
+		public Vector3ListDebugView(IList<Vector3> list)
+        {
+            _list = list;
+        }
+
+		[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+        public Vector3[] Items
+		{
+			get
+            {
+                Vector3[] arr = new Vector3[_list.Count];
+	            _list.CopyTo(arr, 0);
+	            return arr;
+            }
+		}
+	};
+
     public class ArrayEnumerator
     {
         protected int _i;
@@ -313,6 +335,8 @@ namespace BulletSharp
         }
     }
 
+    [DebuggerDisplay("Count = {Count}")]
+    [DebuggerTypeProxy(typeof(Vector3ListDebugView))]
     public class Vector3Array : FixedSizeArray, IList<Vector3>
     {
         internal Vector3Array(IntPtr native, int count)

@@ -356,6 +356,8 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btWheelInfo_wrap.h
     src/btWorldImporter_wrap.cpp
     src/btWorldImporter_wrap.h
+    src/hacdHACD_wrap.cpp
+    src/hacdHACD_wrap.h
 )
 
 TARGET_LINK_LIBRARIES(${BULLETC_LIB} BulletCollision${LIB_SUFFIX})

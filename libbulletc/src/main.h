@@ -1,5 +1,6 @@
 #pragma once
 
+//#define BULLETC_DISABLE_HACD
 #define BULLETC_DISABLE_IACTION_CLASSES // omits classes inheriting from btActionInterface
 #define BULLETC_DISABLE_SOFTBODY_HELPERS
 #define BULLETC_DISABLE_WORLD_IMPORTERS
@@ -1094,8 +1095,14 @@ typedef void* (*Win32lsMemorySetupFunc)();
 
 #ifndef HACD_HACD_H
 #define HACD_HACD void
+#define HACD_Vec3_long void
+#define HACD_Vec3_Real void
+typedef bool (*HACD_CallBackFunction)(const char *, double, double, size_t);
 #else
 #define HACD_HACD HACD::HACD
+#define HACD_Vec3_long HACD::Vec3<long>
+#define HACD_Vec3_Real HACD::Vec3<HACD::Real>
+#define HACD_CallBackFunction HACD::CallBackFunction
 #endif
 
 #ifndef SPU_GATHERING_COLLISION_TASK_H

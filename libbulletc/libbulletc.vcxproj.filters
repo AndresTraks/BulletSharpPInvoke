@@ -460,6 +460,9 @@
     <ClCompile Include="src\btWorldImporter_wrap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\hacdHACD_wrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\conversion.h">
@@ -922,6 +925,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\btWorldImporter_wrap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hacdHACD_wrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

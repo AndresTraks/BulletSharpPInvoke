@@ -199,7 +199,7 @@ namespace ConvexDecompositionDemo
             CollisionConf = new DefaultCollisionConfiguration();
             Dispatcher = new CollisionDispatcher(CollisionConf);
 
-            CompoundCollisionAlgorithm.CompoundChildShapePairCallback = MyCompoundChildShapeCallback;
+            //CompoundCollisionAlgorithm.CompoundChildShapePairCallback = MyCompoundChildShapeCallback;
 
             convexDecompositionObjectOffset = new Vector3(10, 0, 0);
 
@@ -328,7 +328,7 @@ namespace ConvexDecompositionDemo
                 const bool addFacesPoints = false;
 
                 myHACD.NClusters = nClusters;                     // minimum number of clusters
-                myHACD.NumVerticesPerConvexHull = 100;               // max of 100 vertices per convex-hull
+                myHACD.NVerticesPerCH = 100;                      // max of 100 vertices per convex-hull
                 myHACD.Concavity = concavity;                     // maximum concavity
                 myHACD.AddExtraDistPoints = addExtraDistPoints;
                 myHACD.AddNeighboursDistPoints = addNeighboursDistPoints;
@@ -350,11 +350,33 @@ namespace ConvexDecompositionDemo
                     for (int c = 0; c < nClusters; c++)
                     {
                         //generate convex result
-                        Vector3[] points;
-                        int[] triangles;
-                        myHACD.GetCH(c, out points, out triangles);
+                        int nVertices = myHACD.GetNPointsCH(c);
+                        int trianglesLen = myHACD.GetNTrianglesCH(c) * 3;
+                        double[] points = new double[nVertices * 3];
+                        long[] triangles = new long[trianglesLen];
+                        myHACD.GetCH(c, points, triangles);
 
-                        ConvexResult r = new ConvexResult(points, triangles);
+                        if (trianglesLen == 0)
+                        {
+                            continue;
+                        }
+
+                        Vector3[] verticesArray = new Vector3[nVertices];
+                        int vi3 = 0;
+                        for (int vi = 0; vi < nVertices; vi++)
+                        {
+                            verticesArray[vi] = new Vector3(
+                                (float)points[vi3], (float)points[vi3 + 1], (float)points[vi3 + 2]);
+                            vi3 += 3;
+                        }
+
+                        int[] trianglesInt = new int[trianglesLen];
+                        for (int ti = 0; ti < trianglesLen; ti++)
+                        {
+                            trianglesInt[ti] = (int)triangles[ti];
+                        }
+
+                        ConvexResult r = new ConvexResult(verticesArray, trianglesInt);
                         convexDecomposition.ConvexDecompResult(r);
                     }
 

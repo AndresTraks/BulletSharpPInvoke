@@ -2,6 +2,8 @@
 
 #include "hacdHACD_wrap.h"
 
+#ifndef BULLETC_DISABLE_HACD
+
 HACD_HACD* HACD_new()
 {
 	return new HACD_HACD();
@@ -41,18 +43,17 @@ bool HACD_GetAddNeighboursDistPoints(HACD_HACD* obj)
 {
 	return obj->GetAddNeighboursDistPoints();
 }
-/*
-const * HACD_GetCallBack(HACD_HACD* obj)
+
+const HACD_CallBackFunction HACD_GetCallBack(HACD_HACD* obj)
 {
-	return &obj->GetCallBack();
+	return obj->GetCallBack();
 }
-*/
-/*
-bool HACD_GetCH(HACD_HACD* obj, int numCH, HACD::Vec3* points, HACD::Vec3* triangles)
+
+bool HACD_GetCH(HACD_HACD* obj, int numCH, HACD_Vec3_Real* points, HACD_Vec3_long* triangles)
 {
 	return obj->GetCH(numCH, points, triangles);
 }
-*/
+
 double HACD_GetCompacityWeight(HACD_HACD* obj)
 {
 	return obj->GetCompacityWeight();
@@ -68,32 +69,32 @@ double HACD_GetConnectDist(HACD_HACD* obj)
 	return obj->GetConnectDist();
 }
 
-int HACD_GetNClusters(HACD_HACD* obj)
+size_t HACD_GetNClusters(HACD_HACD* obj)
 {
 	return obj->GetNClusters();
 }
 
-int HACD_GetNPoints(HACD_HACD* obj)
+size_t HACD_GetNPoints(HACD_HACD* obj)
 {
 	return obj->GetNPoints();
 }
 
-int HACD_GetNPointsCH(HACD_HACD* obj, int numCH)
+size_t HACD_GetNPointsCH(HACD_HACD* obj, int numCH)
 {
 	return obj->GetNPointsCH(numCH);
 }
 
-int HACD_GetNTriangles(HACD_HACD* obj)
+size_t HACD_GetNTriangles(HACD_HACD* obj)
 {
 	return obj->GetNTriangles();
 }
 
-int HACD_GetNTrianglesCH(HACD_HACD* obj, int numCH)
+size_t HACD_GetNTrianglesCH(HACD_HACD* obj, int numCH)
 {
 	return obj->GetNTrianglesCH(numCH);
 }
 
-int HACD_GetNVerticesPerCH(HACD_HACD* obj)
+size_t HACD_GetNVerticesPerCH(HACD_HACD* obj)
 {
 	return obj->GetNVerticesPerCH();
 }
@@ -102,22 +103,22 @@ const long* HACD_GetPartition(HACD_HACD* obj)
 {
 	return obj->GetPartition();
 }
-/*
-const HACD::Vec3* HACD_GetPoints(HACD_HACD* obj)
+
+const HACD_Vec3_Real* HACD_GetPoints(HACD_HACD* obj)
 {
 	return obj->GetPoints();
 }
-*/
+
 double HACD_GetScaleFactor(HACD_HACD* obj)
 {
 	return obj->GetScaleFactor();
 }
-/*
-const HACD::Vec3* HACD_GetTriangles(HACD_HACD* obj)
+
+const HACD_Vec3_long* HACD_GetTriangles(HACD_HACD* obj)
 {
 	return obj->GetTriangles();
 }
-*/
+
 double HACD_GetVolumeWeight(HACD_HACD* obj)
 {
 	return obj->GetVolumeWeight();
@@ -152,12 +153,12 @@ void HACD_SetAddNeighboursDistPoints(HACD_HACD* obj, bool addNeighboursDistPoint
 {
 	obj->SetAddNeighboursDistPoints(addNeighboursDistPoints);
 }
-/*
-void HACD_SetCallBack(HACD_HACD* obj, * callBack)
+
+void HACD_SetCallBack(HACD_HACD* obj, HACD_CallBackFunction callBack)
 {
-	obj->SetCallBack(*callBack);
+	obj->SetCallBack(callBack);
 }
-*/
+
 void HACD_SetCompacityWeight(HACD_HACD* obj, double alpha)
 {
 	obj->SetCompacityWeight(alpha);
@@ -192,22 +193,22 @@ void HACD_SetNVerticesPerCH(HACD_HACD* obj, int nVerticesPerCH)
 {
 	obj->SetNVerticesPerCH(nVerticesPerCH);
 }
-/*
-void HACD_SetPoints(HACD_HACD* obj, HACD::Vec3* points)
+
+void HACD_SetPoints(HACD_HACD* obj, HACD_Vec3_Real* points)
 {
 	obj->SetPoints(points);
 }
-*/
+
 void HACD_SetScaleFactor(HACD_HACD* obj, double scale)
 {
 	obj->SetScaleFactor(scale);
 }
-/*
-void HACD_SetTriangles(HACD_HACD* obj, HACD::Vec3* triangles)
+
+void HACD_SetTriangles(HACD_HACD* obj, HACD_Vec3_long* triangles)
 {
 	obj->SetTriangles(triangles);
 }
-*/
+
 void HACD_SetVolumeWeight(HACD_HACD* obj, double beta)
 {
 	obj->SetVolumeWeight(beta);
@@ -217,3 +218,5 @@ void HACD_delete(HACD_HACD* obj)
 {
 	delete obj;
 }
+
+#endif

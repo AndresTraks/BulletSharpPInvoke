@@ -169,7 +169,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib;HACD_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -213,7 +213,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib;HACD_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -257,7 +257,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib;HACD_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -301,7 +301,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib;HACD_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -345,7 +345,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib;HACD_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -389,7 +389,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib;HACD_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -432,7 +432,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib;HACD_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -475,7 +475,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;BulletCollision_$(Configuration).lib;BulletDynamics_$(Configuration).lib;LinearMath_$(Configuration).lib;BulletFileLoader_$(Configuration).lib;BulletSoftBody_$(Configuration).lib;BulletWorldImporter_$(Configuration).lib;BulletXmlWorldImporter_$(Configuration).lib;HACD_$(Configuration).lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../bullet3/src/../msvc/2010/lib/$(Configuration);../../bullet3/src/../msvc/2010/lib/$(Configuration)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -744,6 +744,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="src\btVoronoiSimplexSolver_wrap.h" />
     <ClInclude Include="src\btWheelInfo_wrap.h" />
     <ClInclude Include="src\btWorldImporter_wrap.h" />
+    <ClInclude Include="src\hacdHACD_wrap.h" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="src\collections.cpp" />
     <ClCompile Include="src\btActionInterface_wrap.cpp" />
@@ -897,6 +898,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="src\btVoronoiSimplexSolver_wrap.cpp" />
     <ClCompile Include="src\btWheelInfo_wrap.cpp" />
     <ClCompile Include="src\btWorldImporter_wrap.cpp" />
+    <ClCompile Include="src\hacdHACD_wrap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="ZERO_CHECK.vcxproj">
