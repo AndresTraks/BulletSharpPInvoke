@@ -52,6 +52,11 @@ namespace BulletSharp
 			btTriangleMesh_addTriangle2(_native, ref vertex0, ref vertex1, ref vertex2, removeDuplicateVertices);
 		}
 
+		public void AddTriangleIndices(int index1, int index2, int index3)
+		{
+			btTriangleMesh_addTriangleIndices(_native, index1, index2, index3);
+		}
+
         public int FindOrAddVertex(ref Vector3 vertex, bool removeDuplicateVertices)
         {
             return btTriangleMesh_findOrAddVertex(_native, ref vertex, removeDuplicateVertices);
@@ -95,6 +100,8 @@ namespace BulletSharp
 		static extern void btTriangleMesh_addTriangle(IntPtr obj, [In] ref Vector3 vertex0, [In] ref Vector3 vertex1, [In] ref Vector3 vertex2);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btTriangleMesh_addTriangle2(IntPtr obj, [In] ref Vector3 vertex0, [In] ref Vector3 vertex1, [In] ref Vector3 vertex2, bool removeDuplicateVertices);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btTriangleMesh_addTriangleIndices(IntPtr obj, int index1, int index2, int index3);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btTriangleMesh_findOrAddVertex(IntPtr obj, [In] ref Vector3 vertex, bool removeDuplicateVertices);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

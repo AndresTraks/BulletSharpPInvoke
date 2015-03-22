@@ -339,13 +339,13 @@ namespace BulletSharp
 
         public BroadphaseProxy Proxy0
 		{
-            get { return BroadphaseProxy.GetManaged(btBroadphasePair_getPProxy0(_native)); }
+			get { return BroadphaseProxy.GetManaged(btBroadphasePair_getPProxy0(_native)); }
 			set { btBroadphasePair_setPProxy0(_native, value._native); }
 		}
 
         public BroadphaseProxy Proxy1
 		{
-            get { return BroadphaseProxy.GetManaged(btBroadphasePair_getPProxy1(_native)); }
+			get { return BroadphaseProxy.GetManaged(btBroadphasePair_getPProxy1(_native)); }
 			set { btBroadphasePair_setPProxy1(_native, value._native); }
 		}
 

@@ -143,7 +143,7 @@ namespace BulletSharpGen
             }
             else if (cursor.Kind == CursorKind.EnumDecl)
             {
-                currentEnum = new EnumDefinition(cursor.Spelling);
+                currentEnum = new EnumDefinition(cursor.Spelling, cursor.Spelling);
                 currentHeader.Enums.Add(currentEnum);
                 cursor.VisitChildren(EnumVisitor);
                 currentEnum = null;
@@ -160,10 +160,11 @@ namespace BulletSharpGen
             if (cursor.Kind == CursorKind.EnumConstantDecl)
             {
                 currentEnum.EnumConstants.Add(cursor.Spelling);
-                currentEnum.EnumConstantValues.Add(cursor.Spelling);
+                currentEnum.EnumConstantValues.Add("");
             }
             else if (cursor.Kind == CursorKind.IntegerLiteral)
             {
+                //currentEnum.EnumConstantValues[currentEnum.EnumConstants.Count - 1] = ".";
             }
             else if (cursor.Kind == CursorKind.ParenExpr)
             {
@@ -251,10 +252,10 @@ namespace BulletSharpGen
 
             if (cursor.Kind == CursorKind.EnumDecl)
             {
-                currentEnum = new EnumDefinition(fullyQualifiedName);
+                currentEnum = new EnumDefinition(fullyQualifiedName, cursor.Spelling);
                 currentHeader.Enums.Add(currentEnum);
                 cursor.VisitChildren(EnumVisitor);
-                if (currentClass != null && currentClass.IsStruct)
+                if (currentClass != null)
                 {
                     // Enum wrapped in a struct
                     currentClass.Enum = currentEnum;
@@ -346,7 +347,7 @@ namespace BulletSharpGen
                 currentClass.BaseClass = new TypeRefDefinition(cursor.Type);
                 return Cursor.ChildVisitResult.Continue;
             }
-            
+
             if (currentMemberAccess != AccessSpecifier.Public)
             {
                 return Cursor.ChildVisitResult.Continue;

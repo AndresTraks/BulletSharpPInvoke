@@ -5,11 +5,11 @@ using System.Security;
 
 namespace BulletSharp
 {
-    public enum DispatchFunc
-    {
+	public enum DispatchFunc
+	{
         Discrete = 1,
         Continuous
-    }
+	}
 
 	public class DispatcherInfo : IDisposable
 	{

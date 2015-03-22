@@ -81,7 +81,7 @@ namespace BulletSharp
             }
         }
 
-		internal PersistentManifold(IntPtr native, bool preventDelete = false)
+		internal PersistentManifold(IntPtr native, bool preventDelete)
 		{
             _native = native;
             _preventDelete = preventDelete;

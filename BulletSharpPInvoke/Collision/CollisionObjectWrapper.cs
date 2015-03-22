@@ -16,13 +16,13 @@ namespace BulletSharp
 
 		public CollisionObject CollisionObject
 		{
-            get { return CollisionObject.GetManaged(btCollisionObjectWrapper_getCollisionObject(_native)); }
+			get { return CollisionObject.GetManaged(btCollisionObjectWrapper_getCollisionObject(_native)); }
 			set { btCollisionObjectWrapper_setCollisionObject(_native, value._native); }
 		}
 
 		public CollisionShape CollisionShape
 		{
-            get { return CollisionShape.GetManaged(btCollisionObjectWrapper_getCollisionShape(_native)); }
+			get { return CollisionShape.GetManaged(btCollisionObjectWrapper_getCollisionShape(_native)); }
             set { btCollisionObjectWrapper_setShape(_native, value._native); }
 		}
 

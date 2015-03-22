@@ -15,17 +15,17 @@ namespace BulletSharp
         DisableSimulation = 5
     }
 
-    [Flags]
-    public enum AnisotropicFrictionFlags
-    {
+	[Flags]
+	public enum AnisotropicFrictionFlags
+	{
         AnisotropicFrictionDisabled = 0,
         AnisotropicFriction = 1,
         AnisotropicRollingFriction = 2
-    }
+	}
 
-    [Flags]
-    public enum CollisionFlags
-    {
+	[Flags]
+	public enum CollisionFlags
+	{
         StaticObject = 1,
         KinematicObject = 2,
         NoContactResponse = 4,
@@ -33,18 +33,19 @@ namespace BulletSharp
         CharacterObject = 16,
         DisableVisualizeObject = 32,
         DisableSpuCollisionProcessing = 64
-    }
+	}
 
     [Flags]
-    public enum CollisionObjectTypes
-    {
+	public enum CollisionObjectTypes
+	{
         CollisionObject = 1,
         RigidBody = 2,
         GhostObject = 4,
         SoftBody = 8,
         HFFluid = 16,
-        UserType = 32
-    }
+        UserType = 32,
+		FeatherstoneLink = 64
+	}
 
 	public class CollisionObject : IDisposable
 	{

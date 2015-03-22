@@ -51,7 +51,7 @@ namespace BulletSharp
 
 		public CollisionObject GetOverlappingObject(int index)
 		{
-            return CollisionObject.GetManaged(btGhostObject_getOverlappingObject(_native, index));
+			return CollisionObject.GetManaged(btGhostObject_getOverlappingObject(_native, index));
 		}
 
         public void RayTest(ref Vector3 rayFromWorld, ref Vector3 rayToWorld, RayResultCallback resultCallback)

@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace BulletSharp
 {
-    public enum DispatcherFlags
-    {
+	public enum DispatcherFlags
+	{
         StaticStaticReported = 1,
         UseRelativeContactBreakingThreshold = 2,
         DisableContactPoolDynamicAllocation = 4
-    }
+	}
 
     public delegate void NearCallback(BroadphasePair collisionPair, CollisionDispatcher dispatcher, DispatcherInfo dispatchInfo);
 

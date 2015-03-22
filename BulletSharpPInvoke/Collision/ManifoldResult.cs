@@ -38,29 +38,29 @@ namespace BulletSharp
 
 		public CollisionObject Body0Internal
 		{
-            get { return CollisionObject.GetManaged(btManifoldResult_getBody0Internal(_native)); }
+			get { return CollisionObject.GetManaged(btManifoldResult_getBody0Internal(_native)); }
 		}
 
 		public CollisionObjectWrapper Body0Wrap
 		{
-            get { return new CollisionObjectWrapper(btManifoldResult_getBody0Wrap(_native)); }
+			get { return new CollisionObjectWrapper(btManifoldResult_getBody0Wrap(_native)); }
 			set { btManifoldResult_setBody0Wrap(_native, value._native); }
 		}
 
 		public CollisionObject Body1Internal
 		{
-            get { return CollisionObject.GetManaged(btManifoldResult_getBody1Internal(_native)); }
+			get { return CollisionObject.GetManaged(btManifoldResult_getBody1Internal(_native)); }
 		}
 
 		public CollisionObjectWrapper Body1Wrap
 		{
-            get { return new CollisionObjectWrapper(btManifoldResult_getBody1Wrap(_native)); }
+			get { return new CollisionObjectWrapper(btManifoldResult_getBody1Wrap(_native)); }
 			set { btManifoldResult_setBody1Wrap(_native, value._native); }
 		}
 
 		public PersistentManifold PersistentManifold
 		{
-            get { return new PersistentManifold(btManifoldResult_getPersistentManifold(_native)); }
+            get { return new PersistentManifold(btManifoldResult_getPersistentManifold(_native), true); }
 			set { btManifoldResult_setPersistentManifold(_native, value._native); }
 		}
 

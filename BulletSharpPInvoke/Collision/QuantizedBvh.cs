@@ -390,7 +390,7 @@ namespace BulletSharp
 			return btQuantizedBvh_deSerializeInPlace(alignedDataBuffer, dataBufferSize, swapEndian);
 		}
 
-        static public void Quantize(unsigned short out, Vector3 point, int isMax)
+		public void Quantize(unsigned short out, Vector3 point, int isMax)
 		{
 			btQuantizedBvh_quantize(_native, out._native, ref point, isMax);
 		}

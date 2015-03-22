@@ -992,10 +992,48 @@ namespace BulletSharpGen
             {
                 case "CollisionShape":
                 case "IDebugDraw":
+                case "OverlappingPairCache":
                 case "Quaternion":
                 case "Transform":
                 case "Vector3":
                 case "Vector4":
+                    return ")";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        public static string GetTypeMarshalConstructorStartCS(MethodDefinition method)
+        {
+            switch (method.ReturnType.ManagedName)
+            {
+                case "BroadphaseProxy":
+                    return "BroadphaseProxy.GetManaged(";
+                case "CollisionObject":
+                    return "CollisionObject.GetManaged(";
+                case "CollisionObjectWrapper":
+                    return "new CollisionObjectWrapper(";
+                case "CollisionShape":
+                    return "CollisionShape.GetManaged(";
+                case "IDebugDraw":
+                    return "DebugDraw.GetManaged(";
+                case "OverlappingPairCache":
+                    return "OverlappingPairCache.GetManaged(";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        public static string GetTypeMarshalConstructorEndCS(MethodDefinition method)
+        {
+            switch (method.ReturnType.ManagedName)
+            {
+                case "BroadphaseProxy":
+                case "CollisionObject":
+                case "CollisionObjectWrapper":
+                case "CollisionShape":
+                case "IDebugDraw":
+                case "OverlappingPairCache":
                     return ")";
                 default:
                     return string.Empty;
@@ -1104,7 +1142,10 @@ namespace BulletSharpGen
                 }
             }
 
-            output.AppendLine(GetTabs(level + 2) + "get { return " + prop.Parent.FullNameCS + '_' + prop.Getter.Name + "(_native); }");
+            output.AppendLine(GetTabs(level + 2) + "get { return " +
+                BulletParser.GetTypeMarshalConstructorStartCS(prop.Getter) +
+                prop.Parent.FullNameCS + '_' + prop.Getter.Name + "(_native)" +
+                BulletParser.GetTypeMarshalConstructorEndCS(prop.Getter) + "; }");
             return output.ToString();
         }
 

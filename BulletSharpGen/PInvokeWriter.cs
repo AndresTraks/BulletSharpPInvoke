@@ -401,6 +401,7 @@ namespace BulletSharpGen
                     }
 
                     Write("return ", cs);
+                    Write(BulletParser.GetTypeMarshalConstructorStartCS(method), cs);
 
                     if (!returnType.IsBasic && !returnType.IsPointer && !returnType.IsConstantArray)
                     {
@@ -514,6 +515,10 @@ namespace BulletSharpGen
                 }
                 else
                 {
+                    if (!method.IsConstructor && !method.IsVoid)
+                    {
+                        Write(BulletParser.GetTypeMarshalConstructorEndCS(method), cs);
+                    }
                     WriteLine(");", WriteTo.CS);
                 }
             }
@@ -669,6 +674,38 @@ namespace BulletSharpGen
             WriteLine('}', WriteTo.CS);
 
             hasCSWhiteSpace = false;
+        }
+
+        void WriteEnumClass(EnumDefinition e, int level)
+        {
+            EnsureWhiteSpace(WriteTo.CS);
+
+            if (e.Name.EndsWith("Flags"))
+            {
+                WriteTabs(level, WriteTo.CS);
+                WriteLine("[Flags]", WriteTo.CS);
+            }
+
+            WriteTabs(level, WriteTo.CS);
+            WriteLine(string.Format("public enum {0}", e.Name), WriteTo.CS);
+            WriteTabs(level, WriteTo.CS);
+            WriteLine('{', WriteTo.CS);
+            for (int i = 0; i < e.EnumConstants.Count; i++)
+            {
+                WriteTabs(level + 1, WriteTo.CS);
+                Write(e.EnumConstants[i], WriteTo.CS);
+                Write(" = ", WriteTo.CS);
+                Write(e.EnumConstantValues[i], WriteTo.CS);
+                if (i < e.EnumConstants.Count - 1)
+                {
+                    Write(',', WriteTo.CS);
+                }
+                WriteLine(WriteTo.CS);
+            }
+            WriteTabs(level, WriteTo.CS);
+            WriteLine('}', WriteTo.CS);
+            hasCSWhiteSpace = false;
+            hasClassSeparatingWhitespace = false;
         }
 
         void WriteClass(ClassDefinition c, int level)
@@ -1158,6 +1195,11 @@ namespace BulletSharpGen
                 csWriter.WriteLine("{");
                 hasCSWhiteSpace = true;
                 hasClassSeparatingWhitespace = true;
+
+                foreach (EnumDefinition e in header.Enums.OrderBy(x => x.Name))
+                {
+                    WriteEnumClass(e, 1);
+                }
 
                 foreach (ClassDefinition c in header.Classes)
                 {
