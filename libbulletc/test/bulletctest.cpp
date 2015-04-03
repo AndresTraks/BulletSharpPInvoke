@@ -1,6 +1,8 @@
 #include <iostream>
+#include <vector>
 
 #include <bulletc.h>
+#include "hacd_data.h"
 
 using namespace std;
 
@@ -12,6 +14,33 @@ btScalar addSingleResult(btCollisionWorld_LocalConvexResult* rayResult, bool nor
 bool needsCollision(btBroadphaseProxy* proxy0)
 {
 	return true;
+}
+
+void test_hacd()
+{
+	cout << "Calculating HACD clusters..." << endl;
+
+	HACD_HACD* myHACD = HACD_new();
+	HACD_SetPoints(myHACD, points);
+	HACD_SetNPoints(myHACD, sizeof(points) / (sizeof(points[0]) * 3));
+	HACD_SetTriangles(myHACD, triangles);
+	HACD_SetNTriangles(myHACD, sizeof(triangles) / (sizeof(triangles[0]) * 3));
+	HACD_SetCompacityWeight(myHACD, 0.1);
+	HACD_SetVolumeWeight(myHACD, 0.0);
+
+	HACD_SetNClusters(myHACD, 2);                     // minimum number of clusters
+	HACD_SetNVerticesPerCH(myHACD, 100);                      // max of 100 vertices per convex-hull
+	HACD_SetConcavity(myHACD, 100);                     // maximum concavity
+	HACD_SetAddExtraDistPoints(myHACD, false);
+	HACD_SetAddNeighboursDistPoints(myHACD, false);
+	HACD_SetAddFacesPoints(myHACD, false);
+
+	HACD_Compute(myHACD);
+	size_t nClusters = HACD_GetNClusters(myHACD);
+
+	cout << "HACD clusters: " << nClusters << endl;
+
+	HACD_Save(myHACD, "output.wrl", false);
 }
 
 int main(int argc, char* argv[])
@@ -45,6 +74,8 @@ int main(int argc, char* argv[])
 	btMotionState_delete(ms);
 	btRigidBody_btRigidBodyConstructionInfo_delete(ci);
 	btCollisionObject_delete(body);
+
+	test_hacd();
 
 	cout << "OK";
 	cin.get();

@@ -1095,7 +1095,7 @@ typedef void* (*Win32lsMemorySetupFunc)();
 
 #ifndef HACD_HACD_H
 #define HACD_HACD void
-#define HACD_Vec3_long void
+#define HACD_Vec3_long long
 #define HACD_Vec3_Real void
 typedef bool (*HACD_CallBackFunction)(const char *, double, double, size_t);
 #else
