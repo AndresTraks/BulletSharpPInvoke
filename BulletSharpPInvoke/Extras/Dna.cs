@@ -21,11 +21,11 @@ namespace BulletSharp
 
             public override bool Equals(object obj)
             {
-                if (!(obj is ElementDecl))
+                ElementDecl other = obj as ElementDecl;
+                if (other == null)
                 {
                     return false;
                 }
-                ElementDecl other = obj as ElementDecl;
                 return Type.Equals(other.Type) && Name.Equals(other.Name);
             }
 
@@ -47,11 +47,11 @@ namespace BulletSharp
 
             public override bool Equals(object obj)
             {
-                if (!(obj is StructDecl))
+                StructDecl other = obj as StructDecl;
+                if (other == null)
                 {
                     return false;
                 }
-                StructDecl other = obj as StructDecl;
 
                 int elementCount = Elements.Length;
                 if (elementCount != other.Elements.Length)
@@ -94,11 +94,11 @@ namespace BulletSharp
 
             public override bool Equals(object obj)
             {
-                if (!(obj is TypeDecl))
+                TypeDecl other = obj as TypeDecl;
+                if (other == null)
                 {
                     return false;
                 }
-                TypeDecl other = obj as TypeDecl;
                 return Name.Equals(other.Name) && Length == other.Length;
             }
 
@@ -171,11 +171,11 @@ namespace BulletSharp
 
             public override bool Equals(object obj)
             {
-                if (!(obj is NameInfo))
+                NameInfo other = obj as NameInfo;
+                if (other == null)
                 {
                     return false;
                 }
-                NameInfo other = obj as NameInfo;
                 return Name.Equals(other.Name);
             }
 

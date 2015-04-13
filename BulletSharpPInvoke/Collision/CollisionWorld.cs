@@ -378,7 +378,20 @@ namespace BulletSharp
 
         public LocalShapeInfo LocalShapeInfo
         {
-            get { return _localShapeInfo; }
+            get
+            {
+                IntPtr localShapeInfoPtr = btCollisionWorld_LocalConvexResult_getLocalShapeInfo(_native);
+                if (_localShapeInfo != null && _localShapeInfo._native == localShapeInfoPtr)
+                {
+                    return _localShapeInfo;
+                }
+                if (localShapeInfoPtr == IntPtr.Zero)
+                {
+                    return null;
+                }
+                _localShapeInfo = new LocalShapeInfo(localShapeInfoPtr, true);
+                return _localShapeInfo;
+            }
             set
             {
                 _localShapeInfo = value;
@@ -419,8 +432,8 @@ namespace BulletSharp
         static extern void btCollisionWorld_LocalConvexResult_getHitNormalLocal(IntPtr obj, [Out] out Vector3 value);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern void btCollisionWorld_LocalConvexResult_getHitPointLocal(IntPtr obj, [Out] out Vector3 value);
-        //[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        //static extern IntPtr btCollisionWorld_LocalConvexResult_getLocalShapeInfo(IntPtr obj);
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern IntPtr btCollisionWorld_LocalConvexResult_getLocalShapeInfo(IntPtr obj);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern void btCollisionWorld_LocalConvexResult_setHitCollisionObject(IntPtr obj, IntPtr value);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -478,7 +491,20 @@ namespace BulletSharp
 
         public LocalShapeInfo LocalShapeInfo
         {
-            get { return _localShapeInfo; }
+            get
+            {
+                IntPtr localShapeInfoPtr = btCollisionWorld_LocalRayResult_getLocalShapeInfo(_native);
+                if (_localShapeInfo != null && _localShapeInfo._native == localShapeInfoPtr)
+                {
+                    return _localShapeInfo;
+                }
+                if (localShapeInfoPtr == IntPtr.Zero)
+                {
+                    return null;
+                }
+                _localShapeInfo = new LocalShapeInfo(localShapeInfoPtr, true);
+                return _localShapeInfo;
+            }
             set
             {
                 _localShapeInfo = value;
@@ -517,8 +543,8 @@ namespace BulletSharp
         static extern float btCollisionWorld_LocalRayResult_getHitFraction(IntPtr obj);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern void btCollisionWorld_LocalRayResult_getHitNormalLocal(IntPtr obj, [Out] out Vector3 value);
-        //[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        //static extern IntPtr btCollisionWorld_LocalRayResult_getLocalShapeInfo(IntPtr obj);
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern IntPtr btCollisionWorld_LocalRayResult_getLocalShapeInfo(IntPtr obj);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern void btCollisionWorld_LocalRayResult_setCollisionObject(IntPtr obj, IntPtr value);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -534,6 +560,13 @@ namespace BulletSharp
 	public class LocalShapeInfo : IDisposable
 	{
 		internal IntPtr _native;
+		bool _preventDelete;
+
+		internal LocalShapeInfo(IntPtr native, bool preventDelete)
+		{
+			_native = native;
+			_preventDelete = preventDelete;
+		}
 
 		public LocalShapeInfo()
 		{
@@ -562,7 +595,10 @@ namespace BulletSharp
 		{
 			if (_native != IntPtr.Zero)
 			{
-				btCollisionWorld_LocalShapeInfo_delete(_native);
+				if (!_preventDelete)
+				{
+					btCollisionWorld_LocalShapeInfo_delete(_native);
+				}
 				_native = IntPtr.Zero;
 			}
 		}

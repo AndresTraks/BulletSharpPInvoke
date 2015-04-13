@@ -152,7 +152,7 @@ namespace BulletSharpGen
                 "btCollisionWorld::ClosestConvexResultCallback",
                 "HACD", "btRigidBody::btRigidBodyConstructionInfo",
                 "btSoftBody::ImplicitFn", "btTriangleBuffer", "btMaterialProperties",
-                "btCollisionWorld::LocalShapeInfo", "btCollisionWorld::LocalConvexResult", "btCollisionWorld::LocalRayResult",
+                "btCollisionWorld::LocalConvexResult", "btCollisionWorld::LocalRayResult",
                 "btCollisionWorld::AllHitsRayResultCallback", "btCollisionWorld::ContactResultCallback",
                 "btCollisionWorld::ClosestRayResultCallback"};
 
@@ -167,7 +167,7 @@ namespace BulletSharpGen
                 "btSolve2LinearConstraint", "btIndexedMesh", "btTriangleInfoMap",
                 "btJointFeedback", "btTypedConstraint", "btAngularLimit",
                 "btTypedConstraint::btConstraintInfo1", "btTypedConstraint::btConstraintInfo2",
-                "btWheelInfo", "btManifoldPoint"};
+                "btWheelInfo", "btManifoldPoint", "btCollisionWorld::LocalShapeInfo"};
 
             // Classes that have OnDisposing/OnDisposed events
             List<string> trackingDisposable = new List<string>() {

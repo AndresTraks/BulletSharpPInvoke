@@ -130,11 +130,8 @@ namespace BulletSharp
         {
             double[] pointsArray;
             int arrayLen = points.Count;
-            if (points is double[])
-            {
-                pointsArray = points as double[];
-            }
-            else
+            pointsArray = points as double[];
+            if (pointsArray == null)
             {
                 pointsArray = new double[arrayLen];
                 points.CopyTo(pointsArray, 0);
@@ -169,11 +166,8 @@ namespace BulletSharp
         {
             long[] trianglesLong;
             int arrayLen = triangles.Count;
-            if (triangles is long[])
-            {
-                trianglesLong = triangles as long[];
-            }
-            else
+            trianglesLong = triangles as long[];
+            if (trianglesLong == null)
             {
                 trianglesLong = new long[arrayLen];
                 triangles.CopyTo(trianglesLong, 0);

@@ -123,9 +123,24 @@ namespace BulletSharpGen
             WriteLine("if (_native != IntPtr.Zero)", WriteTo.CS);
             WriteTabs(level + 2, WriteTo.CS);
             WriteLine('{', WriteTo.CS);
-            WriteTabs(level + 3, WriteTo.CS);
-            Write(method.Parent.FullNameCS, WriteTo.CS);
-            WriteLine("_delete(_native);", WriteTo.CS);
+            if (method.Parent.HasPreventDelete)
+            {
+                WriteTabs(level + 3, WriteTo.CS);
+                WriteLine("if (!_preventDelete)", WriteTo.CS);
+                WriteTabs(level + 3, WriteTo.CS);
+                WriteLine('{', WriteTo.CS);
+                WriteTabs(level + 4, WriteTo.CS);
+                Write(method.Parent.FullNameCS, WriteTo.CS);
+                WriteLine("_delete(_native);", WriteTo.CS);
+                WriteTabs(level + 3, WriteTo.CS);
+                WriteLine('}', WriteTo.CS);
+            }
+            else
+            {
+                WriteTabs(level + 3, WriteTo.CS);
+                Write(method.Parent.FullNameCS, WriteTo.CS);
+                WriteLine("_delete(_native);", WriteTo.CS);
+            }
             WriteTabs(level + 3, WriteTo.CS);
             WriteLine("_native = IntPtr.Zero;", WriteTo.CS);
             WriteTabs(level + 2, WriteTo.CS);
@@ -760,6 +775,12 @@ namespace BulletSharpGen
                 EnsureWhiteSpace(WriteTo.CS);
                 WriteTabs(level + 1, WriteTo.CS);
                 WriteLine("internal IntPtr _native;", WriteTo.CS);
+                if (c.HasPreventDelete)
+                {
+                    WriteTabs(level + 1, WriteTo.CS);
+                    WriteLine("bool _preventDelete;", WriteTo.CS);
+                    hasCSWhiteSpace = false;
+                }
                 hasCSWhiteSpace = false;
             }
 
@@ -774,7 +795,12 @@ namespace BulletSharpGen
                 WriteTabs(level + 1, WriteTo.CS);
                 Write("internal ", WriteTo.CS);
                 Write(c.ManagedName, WriteTo.CS);
-                WriteLine("(IntPtr native)", WriteTo.CS);
+                Write("(IntPtr native", WriteTo.CS);
+                if (c.HasPreventDelete)
+                {
+                    Write(", bool preventDelete", WriteTo.CS);
+                }
+                WriteLine(')', WriteTo.CS);
                 if (c.BaseClass != null)
                 {
                     WriteTabs(level + 2, WriteTo.CS);
@@ -786,6 +812,11 @@ namespace BulletSharpGen
                 {
                     WriteTabs(level + 2, WriteTo.CS);
                     WriteLine("_native = native;", WriteTo.CS);
+                    if (c.HasPreventDelete)
+                    {
+                        WriteTabs(level + 2, WriteTo.CS);
+                        WriteLine("_preventDelete = preventDelete;", WriteTo.CS);
+                    }
                 }
                 WriteTabs(level + 1, WriteTo.CS);
                 WriteLine('}', WriteTo.CS);
