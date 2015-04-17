@@ -47,9 +47,9 @@ namespace BulletSharp
 		}
 
 		internal IntPtr _native;
-		private bool _preventDelete;
+		bool _preventDelete;
 
-		internal SimulationIslandManager(IntPtr native, bool preventDelete = true)
+		internal SimulationIslandManager(IntPtr native, bool preventDelete)
 		{
 			_native = native;
 			_preventDelete = preventDelete;

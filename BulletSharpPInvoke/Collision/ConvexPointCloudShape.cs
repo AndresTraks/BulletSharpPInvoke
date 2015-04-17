@@ -82,19 +82,19 @@ namespace BulletSharp
 			get
 			{
                 if (_unscaledPoints == null || _unscaledPoints.Count != NumPoints)
-			    {
+                {
                     IntPtr unscaledPointsPtr = btConvexPointCloudShape_getUnscaledPoints(_native);
-			        if (unscaledPointsPtr != IntPtr.Zero)
-			        {
+                    if (unscaledPointsPtr != IntPtr.Zero)
+                    {
                         _unscaledPoints = new Vector3Array(unscaledPointsPtr, NumPoints);
-			        }
-			    }
-			    return _unscaledPoints;
+                    }
+                }
+                return _unscaledPoints;
 			}
-		    set
-		    {
-		        SetPoints(value, value.Count);
-		    }
+			set
+			{
+                SetPoints(value, value.Count);
+			}
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

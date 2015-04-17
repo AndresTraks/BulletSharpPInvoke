@@ -143,10 +143,13 @@ namespace BulletSharpGen
             }
             else if (cursor.Kind == CursorKind.EnumDecl)
             {
-                currentEnum = new EnumDefinition(cursor.Spelling, cursor.Spelling);
-                currentHeader.Enums.Add(currentEnum);
-                cursor.VisitChildren(EnumVisitor);
-                currentEnum = null;
+                if (!currentHeader.Enums.Any(x => x.Name.Equals(cursor.Spelling)))
+                {
+                    currentEnum = new EnumDefinition(cursor.Spelling, cursor.Spelling);
+                    currentHeader.Enums.Add(currentEnum);
+                    cursor.VisitChildren(EnumVisitor);
+                    currentEnum = null;
+                }
             }
             else if (cursor.Kind == CursorKind.Namespace)
             {

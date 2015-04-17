@@ -7,7 +7,7 @@ namespace BulletSharp
 {
 	public class Box2DShape : PolyhedralConvexShape
 	{
-	    private Vector3Array _normals;
+        private Vector3Array _normals;
         private Vector3Array _vertices;
 
         public Box2DShape(ref Vector3 boxHalfExtents)

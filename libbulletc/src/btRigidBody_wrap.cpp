@@ -272,9 +272,19 @@ btScalar btRigidBody_computeAngularImpulseDenominator(btRigidBody* obj, const bt
 	return obj->computeAngularImpulseDenominator(VECTOR3_USE(axis));
 }
 
-void btRigidBody_computeGyroscopicForce(btRigidBody* obj, btScalar maxGyroscopicForce, btScalar* value)
+void btRigidBody_computeGyroscopicForceExplicit(btRigidBody* obj, btScalar maxGyroscopicForce, btScalar* value)
 {
-	VECTOR3_OUT_VAL(obj->computeGyroscopicForce(maxGyroscopicForce), value);
+	VECTOR3_OUT_VAL(obj->computeGyroscopicForceExplicit(maxGyroscopicForce), value);
+}
+
+void btRigidBody_computeGyroscopicImpulseImplicit_Body(btRigidBody* obj, btScalar step, btScalar* value)
+{
+	VECTOR3_OUT_VAL(obj->computeGyroscopicImpulseImplicit_Body(step), value);
+}
+
+void btRigidBody_computeGyroscopicImpulseImplicit_World(btRigidBody* obj, btScalar dt, btScalar* value)
+{
+	VECTOR3_OUT_VAL(obj->computeGyroscopicImpulseImplicit_World(dt), value);
 }
 
 btScalar btRigidBody_computeImpulseDenominator(btRigidBody* obj, const btScalar* pos, const btScalar* normal)
@@ -386,6 +396,11 @@ btScalar btRigidBody_getLinearSleepingThreshold(btRigidBody* obj)
 void btRigidBody_getLinearVelocity(btRigidBody* obj, btScalar* lin_vel)
 {
 	VECTOR3_OUT(&obj->getLinearVelocity(), lin_vel);
+}
+
+void btRigidBody_getLocalInertia(btRigidBody* obj, btScalar* value)
+{
+	VECTOR3_OUT_VAL(obj->getLocalInertia(), value);
 }
 
 btMotionState* btRigidBody_getMotionState(btRigidBody* obj)

@@ -115,7 +115,7 @@ namespace BulletSharp
 	public class ManifoldPoint : IDisposable
 	{
 		internal IntPtr _native;
-	    private readonly bool _preventDelete;
+		bool _preventDelete;
 
         static ContactAddedEventHandler _contactAdded;
         static ContactAddedUnmanagedDelegate _contactAddedUnmanaged;
@@ -152,10 +152,10 @@ namespace BulletSharp
             }
         }
 
-        internal ManifoldPoint(IntPtr native, bool preventDelete = false)
+		internal ManifoldPoint(IntPtr native, bool preventDelete)
 		{
 			_native = native;
-            _preventDelete = preventDelete;
+			_preventDelete = preventDelete;
 		}
 
 		public ManifoldPoint()
@@ -394,10 +394,10 @@ namespace BulletSharp
 		{
 			if (_native != IntPtr.Zero)
 			{
-                if (!_preventDelete)
-                {
-                    btManifoldPoint_delete(_native);
-                }
+				if (!_preventDelete)
+				{
+					btManifoldPoint_delete(_native);
+				}
 				_native = IntPtr.Zero;
 			}
 		}

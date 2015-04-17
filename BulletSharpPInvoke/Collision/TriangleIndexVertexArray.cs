@@ -10,13 +10,13 @@ namespace BulletSharp
 	public class IndexedMesh : IDisposable
 	{
 		internal IntPtr _native;
-        private bool _preventDelete;
+		bool _preventDelete;
         private bool _ownsData;
 
 		internal IndexedMesh(IntPtr native, bool preventDelete)
 		{
 			_native = native;
-            _preventDelete = preventDelete;
+			_preventDelete = preventDelete;
 		}
 
 		public IndexedMesh()
@@ -139,10 +139,10 @@ namespace BulletSharp
 			if (_native != IntPtr.Zero)
 			{
                 Free();
-                if (!_preventDelete)
-                {
-                    btIndexedMesh_delete(_native);
-                }
+				if (!_preventDelete)
+				{
+					btIndexedMesh_delete(_native);
+				}
 				_native = IntPtr.Zero;
 			}
 		}
