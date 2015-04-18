@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -192,7 +193,7 @@ namespace BulletSharp.SoftBody
 
             SoftBody psb = new SoftBody(worldInfo, maxIndex, vertices, null);
 
-            bool[] chks = new bool[maxIndex * maxIndex];
+            BitArray chks = new BitArray(maxIndex * maxIndex);
             for (int i = 0; i < numTriangleIndices; i += 3)
             {
                 int[] idx = new int[] { triangles[i], triangles[i + 1], triangles[i + 2] };
