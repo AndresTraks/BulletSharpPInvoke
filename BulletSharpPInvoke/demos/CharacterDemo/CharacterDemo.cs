@@ -102,8 +102,9 @@ namespace CharacterDemo
             World.Broadphase.OverlappingPairCache.CleanProxyFromPairs(ghostObject.BroadphaseHandle, World.Dispatcher);
 
             character.Reset(World);
-            ///WTF
-            character.Warp(new Vector3(10.210001f, -2.0306311f, 16.576973f));
+            // WTF
+            Vector3 warp = new Vector3(10.210001f, -2.0306311f, 16.576973f);
+            character.Warp(ref warp);
         }
 
         public override void OnHandleInput()
@@ -152,9 +153,11 @@ namespace CharacterDemo
 
             //use the convex sweep test to find a safe position for the camera (not blocked by static geometry)
             SphereShape cameraSphere = new SphereShape(0.2f);
-            ClosestConvexResultCallback cb = new ClosestConvexResultCallback(pos, cameraPos);
+            ClosestConvexResultCallback cb = new ClosestConvexResultCallback(ref pos, ref cameraPos);
             cb.CollisionFilterMask = CollisionFilterGroups.StaticFilter;
-            World.ConvexSweepTest(cameraSphere, Matrix.Translation(pos), Matrix.Translation(cameraPos), cb);
+            Matrix posMatrix = Matrix.Translation(pos);
+            Matrix cameraPosMatrix = Matrix.Translation(cameraPos);
+            World.ConvexSweepTestRef(cameraSphere, ref posMatrix, ref cameraPosMatrix, cb);
             cameraSphere.Dispose();
             if (cb.HasHit)
             {

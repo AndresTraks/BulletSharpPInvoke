@@ -29,7 +29,7 @@ namespace BulletSharp
 			btGhostObject_addOverlappingObjectInternal2(_native, otherProxy._native, thisProxy._native);
 		}
 
-        public void ConvexSweepTest(ConvexShape castShape, ref Matrix convexFromWorld, ref Matrix convexToWorld, ConvexResultCallback resultCallback)
+        public void ConvexSweepTestRef(ConvexShape castShape, ref Matrix convexFromWorld, ref Matrix convexToWorld, ConvexResultCallback resultCallback)
         {
             btGhostObject_convexSweepTest(_native, castShape._native, ref convexFromWorld, ref convexToWorld, resultCallback._native);
         }
@@ -39,7 +39,7 @@ namespace BulletSharp
 			btGhostObject_convexSweepTest(_native, castShape._native, ref convexFromWorld, ref convexToWorld, resultCallback._native);
 		}
 
-        public void ConvexSweepTest(ConvexShape castShape, ref Matrix convexFromWorld, ref Matrix convexToWorld, ConvexResultCallback resultCallback, float allowedCcdPenetration)
+        public void ConvexSweepTestRef(ConvexShape castShape, ref Matrix convexFromWorld, ref Matrix convexToWorld, ConvexResultCallback resultCallback, float allowedCcdPenetration)
         {
             btGhostObject_convexSweepTest2(_native, castShape._native, ref convexFromWorld, ref convexToWorld, resultCallback._native, allowedCcdPenetration);
         }
@@ -54,7 +54,7 @@ namespace BulletSharp
 			return CollisionObject.GetManaged(btGhostObject_getOverlappingObject(_native, index));
 		}
 
-        public void RayTest(ref Vector3 rayFromWorld, ref Vector3 rayToWorld, RayResultCallback resultCallback)
+        public void RayTestRef(ref Vector3 rayFromWorld, ref Vector3 rayToWorld, RayResultCallback resultCallback)
         {
             btGhostObject_rayTest(_native, ref rayFromWorld, ref rayToWorld, resultCallback._native);
         }

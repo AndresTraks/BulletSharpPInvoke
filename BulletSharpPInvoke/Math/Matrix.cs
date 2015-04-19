@@ -1812,9 +1812,12 @@ namespace BulletSharp.Math
             result.M12 = yaxis.X; result.M22 = yaxis.Y; result.M32 = yaxis.Z;
             result.M13 = zaxis.X; result.M23 = zaxis.Y; result.M33 = zaxis.Z;
 
-            result.M41 = -Vector3.Dot(ref xaxis, ref eye);
-            result.M42 = -Vector3.Dot(ref yaxis, ref eye);
-            result.M43 = -Vector3.Dot(ref zaxis, ref eye);
+            Vector3.Dot(ref xaxis, ref eye, out result.M41);
+            Vector3.Dot(ref yaxis, ref eye, out result.M42);
+            Vector3.Dot(ref zaxis, ref eye, out result.M43);
+            result.M41 = -result.M41;
+            result.M42 = -result.M42;
+            result.M43 = -result.M43;
         }
 
         /// <summary>
@@ -1850,9 +1853,12 @@ namespace BulletSharp.Math
             result.M12 = yaxis.X; result.M22 = yaxis.Y; result.M32 = yaxis.Z;
             result.M13 = zaxis.X; result.M23 = zaxis.Y; result.M33 = zaxis.Z;
 
-            result.M41 = -Vector3.Dot(ref xaxis, ref eye);
-            result.M42 = -Vector3.Dot(ref yaxis, ref eye);
-            result.M43 = -Vector3.Dot(ref zaxis, ref eye);
+            Vector3.Dot(ref xaxis, ref eye, out result.M41);
+            Vector3.Dot(ref yaxis, ref eye, out result.M42);
+            Vector3.Dot(ref zaxis, ref eye, out result.M43);
+            result.M41 = -result.M41;
+            result.M42 = -result.M42;
+            result.M43 = -result.M43;
         }
 
         /// <summary>

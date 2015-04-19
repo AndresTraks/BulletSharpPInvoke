@@ -18,7 +18,7 @@ namespace BulletSharp
 		}
         */
 
-        public void GetAabbNonVirtual(ref Matrix t, out Vector3 aabbMin, out Vector3 aabbMax)
+        public void GetAabbNonVirtualRef(ref Matrix t, out Vector3 aabbMin, out Vector3 aabbMax)
         {
             btConvexShape_getAabbNonVirtual(_native, ref t, out aabbMin, out aabbMax);
         }
@@ -28,7 +28,7 @@ namespace BulletSharp
 			btConvexShape_getAabbNonVirtual(_native, ref t, out aabbMin, out aabbMax);
 		}
 
-        public void GetAabbSlow(ref Matrix t, out Vector3 aabbMin, out Vector3 aabbMax)
+        public void GetAabbSlowRef(ref Matrix t, out Vector3 aabbMin, out Vector3 aabbMax)
         {
             btConvexShape_getAabbSlow(_native, ref t, out aabbMin, out aabbMax);
         }
@@ -43,11 +43,9 @@ namespace BulletSharp
 			btConvexShape_getPreferredPenetrationDirection(_native, index, out penetrationVector);
 		}
 
-        public Vector3 LocalGetSupportingVertex(ref Vector3 vec)
+        public void LocalGetSupportingVertex(ref Vector3 vec, out Vector3 value)
         {
-            Vector3 value;
             btConvexShape_localGetSupportingVertex(_native, ref vec, out value);
-            return value;
         }
 
 		public Vector3 LocalGetSupportingVertex(Vector3 vec)
@@ -57,11 +55,9 @@ namespace BulletSharp
 			return value;
 		}
 
-        public Vector3 LocalGetSupportingVertexWithoutMargin(ref Vector3 vec)
+        public void LocalGetSupportingVertexWithoutMargin(ref Vector3 vec, out Vector3 value)
         {
-            Vector3 value;
             btConvexShape_localGetSupportingVertexWithoutMargin(_native, ref vec, out value);
-            return value;
         }
 
 		public Vector3 LocalGetSupportingVertexWithoutMargin(Vector3 vec)
@@ -71,11 +67,9 @@ namespace BulletSharp
 			return value;
 		}
 
-        public Vector3 LocalGetSupportVertexNonVirtual(ref Vector3 vec)
+        public void LocalGetSupportVertexNonVirtual(ref Vector3 vec, out Vector3 value)
         {
-            Vector3 value;
             btConvexShape_localGetSupportVertexNonVirtual(_native, ref vec, out value);
-            return value;
         }
 
 		public Vector3 LocalGetSupportVertexNonVirtual(Vector3 vec)
@@ -85,11 +79,9 @@ namespace BulletSharp
 			return value;
 		}
 
-        public Vector3 LocalGetSupportVertexWithoutMarginNonVirtual(ref Vector3 vec)
+        public void LocalGetSupportVertexWithoutMarginNonVirtual(ref Vector3 vec, out Vector3 value)
         {
-            Vector3 value;
             btConvexShape_localGetSupportVertexWithoutMarginNonVirtual(_native, ref vec, out value);
-            return value;
         }
 
 		public Vector3 LocalGetSupportVertexWithoutMarginNonVirtual(Vector3 vec)
@@ -99,7 +91,7 @@ namespace BulletSharp
 			return value;
 		}
 
-		public void Project(Matrix trans, Vector3 dir, out float min, out float max)
+		public void Project(ref Matrix trans, Vector3 dir, out float min, out float max)
 		{
 			btConvexShape_project(_native, ref trans, ref dir, out min, out max);
 		}

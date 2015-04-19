@@ -637,11 +637,6 @@ namespace BulletSharp
             input.Z = System.Math.Max(input.Z, bounds.Z);
         }
 
-        public static void VectorMin(Vector3 input, ref Vector3 output)
-        {
-            VectorMin(ref input, ref output);
-        }
-
         public static void VectorMin(ref Vector3 input, ref Vector3 output)
         {
             output.X = System.Math.Min(input.X, output.X);
@@ -655,11 +650,6 @@ namespace BulletSharp
                 System.Math.Min(input1.X, input2.X),
                 System.Math.Min(input1.Y, input2.Y),
                 System.Math.Min(input1.Z, input2.Z));
-        }
-
-        public static void VectorMax(Vector3 input, ref Vector3 output)
-        {
-            VectorMax(ref input, ref output);
         }
 
         public static void VectorMax(ref Vector3 input, ref Vector3 output)
@@ -730,14 +720,11 @@ namespace BulletSharp
         //            return matrixOut;
         //        }
 
-        public static Quaternion ShortestArcQuat(Vector3 axisInA, Vector3 axisInB)
-        {
-            return ShortestArcQuat(ref axisInA, ref axisInB);
-        }
         public static Quaternion ShortestArcQuat(ref Vector3 axisInA, ref Vector3 axisInB)
         {
             Vector3 c = Vector3.Cross(axisInA, axisInB);
-            float d = Vector3.Dot(ref axisInA, ref axisInB);
+            float d;
+            Vector3.Dot(ref axisInA, ref axisInB, out d);
 
             if (d < -1.0 + SIMD_EPSILON)
             {
@@ -766,11 +753,6 @@ namespace BulletSharp
                 return input2;
             }
             return (-input2);
-        }
-
-        public static Vector3 QuatRotate(Quaternion rotation, Vector3 v)
-        {
-            return QuatRotate(ref rotation, ref v);
         }
 
         public static Vector3 QuatRotate(ref Quaternion rotation, ref Vector3 v)
@@ -889,18 +871,6 @@ namespace BulletSharp
             v0 = new Vector3(0f, -vecin.Z, vecin.Y);
             v1 = new Vector3(vecin.Z, 0f, -vecin.X);
             v2 = new Vector3(-vecin.Y, vecin.X, 0f);
-        }
-
-        [Conditional("DEBUG")]
-        public static void SanityCheckVector(Vector3 v)
-        {
-            SanityCheckVector(ref v);
-        }
-
-        [Conditional("DEBUG")]
-        public static void ZeroCheckVector(Vector3 v)
-        {
-            ZeroCheckVector(ref v);
         }
 
         [Conditional("DEBUG")]
@@ -1051,19 +1021,9 @@ namespace BulletSharp
         //            return v;
         //        }
 
-        public static Quaternion QuaternionInverse(Quaternion q)
-        {
-            return QuaternionInverse(ref q);
-        }
-
         public static Quaternion QuaternionInverse(ref Quaternion q)
         {
             return new Quaternion(-q.X, -q.Y, -q.Z, q.W);
-        }
-
-        public static Quaternion QuaternionMultiply(Quaternion a, Quaternion b)
-        {
-            return QuaternionMultiply(ref a, ref b);
         }
 
         public static Quaternion QuaternionMultiply(ref Quaternion a, ref Quaternion b)
@@ -1143,11 +1103,6 @@ namespace BulletSharp
         //        }
         */
 
-        public static Vector3 Vector4ToVector3(Vector4 v4)
-        {
-            return new Vector3(v4.X, v4.Y, v4.Z);
-        }
-
         public static Vector3 Vector4ToVector3(ref Vector4 v4)
         {
             return new Vector3(v4.X, v4.Y, v4.Z);
@@ -1170,14 +1125,6 @@ namespace BulletSharp
         //        //    Matrix mt = TransposeBasis(ref m);
         //        //    return Vector3.TransformNormal(ref v, ref mt);
         //        //}
-
-
-        public static bool IsAlmostZero(Vector3 v)
-        {
-            if (System.Math.Abs(v.X) > 1e-6 || System.Math.Abs(v.Y) > 1e-6 || System.Math.Abs(v.Z) > 1e-6) return false;
-            return true;
-
-        }
 
         public static bool IsAlmostZero(ref Vector3 v)
         {

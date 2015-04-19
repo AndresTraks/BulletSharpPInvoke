@@ -6,12 +6,15 @@ namespace BulletSharp
     {
         protected Vector3 ComputeReflectionDirection(ref Vector3 direction, ref Vector3 normal)
         {
-            return direction - (2.0f * Vector3.Dot(ref direction, ref normal)) * normal;
+            float dot;
+            Vector3.Dot(ref direction, ref normal, out dot);
+            return direction - (2.0f * dot) * normal;
         }
 
         protected Vector3 ParallelComponent(ref Vector3 direction, ref Vector3 normal)
         {
-            float magnitude = Vector3.Dot(ref direction, ref normal);
+            float magnitude;
+            Vector3.Dot(ref direction, ref normal, out magnitude);
             return normal * magnitude;
         }
 
@@ -24,7 +27,7 @@ namespace BulletSharp
         {
             Vector3 minAabb, maxAabb;
             m_convexShape.GetAabb(m_ghostObject.WorldTransform, out minAabb, out maxAabb);
-            collisionWorld.Broadphase.SetAabb(m_ghostObject.BroadphaseHandle,
+            collisionWorld.Broadphase.SetAabbRef(m_ghostObject.BroadphaseHandle,
                          ref minAabb,
                          ref maxAabb,
                          collisionWorld.Dispatcher);
@@ -106,11 +109,11 @@ namespace BulletSharp
 
             if (m_useGhostObjectSweepTest)
             {
-                m_ghostObject.ConvexSweepTest(m_convexShape, ref start, ref end, callback, collisionWorld.DispatchInfo.AllowedCcdPenetration);
+                m_ghostObject.ConvexSweepTestRef(m_convexShape, ref start, ref end, callback, collisionWorld.DispatchInfo.AllowedCcdPenetration);
             }
             else
             {
-                collisionWorld.ConvexSweepTest(m_convexShape, ref start, ref end, callback, 0f);
+                collisionWorld.ConvexSweepTestRef(m_convexShape, ref start, ref end, callback, 0f);
             }
 
             if (callback.HasHit)
@@ -190,7 +193,9 @@ namespace BulletSharp
 
             if (m_touchingContact)
             {
-                if (Vector3.Dot(ref m_normalizedDirection, ref m_touchingNormal) > 0.0f)
+                float dot;
+                Vector3.Dot(ref m_normalizedDirection, ref m_touchingNormal, out dot);
+                if (dot > 0.0f)
                 {
                     //interferes with step movement
                     //UpdateTargetPositionBasedOnCollision(ref m_touchingNormal, 0.0f, 1.0f);
@@ -217,11 +222,11 @@ namespace BulletSharp
 
                 if (m_useGhostObjectSweepTest)
                 {
-                    m_ghostObject.ConvexSweepTest(m_convexShape, ref start, ref end, callback, collisionWorld.DispatchInfo.AllowedCcdPenetration);
+                    m_ghostObject.ConvexSweepTestRef(m_convexShape, ref start, ref end, callback, collisionWorld.DispatchInfo.AllowedCcdPenetration);
                 }
                 else
                 {
-                    collisionWorld.ConvexSweepTest(m_convexShape, ref start, ref end, callback, collisionWorld.DispatchInfo.AllowedCcdPenetration);
+                    collisionWorld.ConvexSweepTestRef(m_convexShape, ref start, ref end, callback, collisionWorld.DispatchInfo.AllowedCcdPenetration);
                 }
 
                 m_convexShape.Margin = margin;
@@ -242,7 +247,9 @@ namespace BulletSharp
                     {
                         currentDir.Normalize();
                         /* See Quake2: "If velocity is against original velocity, stop ead to avoid tiny oscilations in sloping corners." */
-                        if (Vector3.Dot(ref currentDir, ref m_normalizedDirection) <= 0.0f)
+                        float dot;
+                        Vector3.Dot(ref currentDir, ref m_normalizedDirection, out dot);
+                        if (dot <= 0.0f)
                         {
                             break;
                         }
@@ -307,7 +314,7 @@ namespace BulletSharp
 
                 if (m_useGhostObjectSweepTest)
                 {
-                    m_ghostObject.ConvexSweepTest(m_convexShape, ref start, ref end, callback, collisionWorld.DispatchInfo.AllowedCcdPenetration);
+                    m_ghostObject.ConvexSweepTestRef(m_convexShape, ref start, ref end, callback, collisionWorld.DispatchInfo.AllowedCcdPenetration);
 
                     if (!callback.HasHit)
                     {
@@ -318,7 +325,7 @@ namespace BulletSharp
                 else
                 {
                     // this works....
-                    collisionWorld.ConvexSweepTest(m_convexShape, ref start, ref end, callback, collisionWorld.DispatchInfo.AllowedCcdPenetration);
+                    collisionWorld.ConvexSweepTestRef(m_convexShape, ref start, ref end, callback, collisionWorld.DispatchInfo.AllowedCcdPenetration);
 
                     if (!callback.HasHit)
                     {
@@ -505,11 +512,6 @@ namespace BulletSharp
         public void Warp(ref Vector3 origin)
         {
             m_ghostObject.WorldTransform = Matrix.Translation(origin);
-        }
-
-        public void Warp(Vector3 origin)
-        {
-            Warp(ref origin);
         }
 
         public void PreStep(CollisionWorld collisionWorld)
@@ -728,8 +730,10 @@ namespace BulletSharp
     ///Support ducking
     public class KinematicClosestNotMeRayResultCallback : ClosestRayResultCallback
     {
+        static Vector3 zero = new Vector3();
+
         public KinematicClosestNotMeRayResultCallback(CollisionObject me)
-            : base(Vector3.Zero, Vector3.Zero)
+            : base(ref zero, ref zero)
         {
             _me = me;
         }
@@ -747,8 +751,10 @@ namespace BulletSharp
 
     public class KinematicClosestNotMeConvexResultCallback : ClosestConvexResultCallback
     {
+        static Vector3 zero = new Vector3();
+
         public KinematicClosestNotMeConvexResultCallback(CollisionObject me, Vector3 up, float minSlopeDot)
-            : base(Vector3.Zero, Vector3.Zero)
+            : base(ref zero, ref zero)
         {
             _me = me;
             _up = up;
@@ -778,7 +784,8 @@ namespace BulletSharp
                 hitNormalWorld = Vector3.TransformCoordinate(convexResult.HitNormalLocal, convexResult.HitCollisionObject.WorldTransform.Basis);
             }
 
-            float dotUp = Vector3.Dot(ref _up, ref hitNormalWorld);
+            float dotUp;
+            Vector3.Dot(ref _up, ref hitNormalWorld, out dotUp);
             if (dotUp < _minSlopeDot)
             {
                 return 1.0f;

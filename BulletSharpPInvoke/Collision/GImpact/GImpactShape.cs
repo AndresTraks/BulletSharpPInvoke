@@ -87,11 +87,6 @@ namespace BulletSharp
             btGImpactShapeInterface_processAllTrianglesRay(_native, cb._native, ref rayFrom, ref rayTo);
         }
 
-        public void ProcessAllTrianglesRay(TriangleCallback cb, Vector3 rayFrom, Vector3 rayTo)
-		{
-            btGImpactShapeInterface_processAllTrianglesRay(_native, cb._native, ref rayFrom, ref rayTo);
-		}
-
 		public void RayTest(Vector3 rayFrom, Vector3 rayTo, RayResultCallback resultCallback)
 		{
 			btGImpactShapeInterface_rayTest(_native, ref rayFrom, ref rayTo, resultCallback._native);

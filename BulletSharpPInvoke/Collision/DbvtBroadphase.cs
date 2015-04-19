@@ -12,13 +12,8 @@ namespace BulletSharp
 		{
 		}
 
-        public DbvtProxy(ref Vector3 aabbMin, ref Vector3 aabbMax, IntPtr userPtr, short collisionFilterGroup, short collisionFilterMask)
-            : base(btDbvtProxy_new(ref aabbMin, ref aabbMax, userPtr, collisionFilterGroup, collisionFilterMask))
-        {
-        }
-
 		public DbvtProxy(Vector3 aabbMin, Vector3 aabbMax, IntPtr userPtr, short collisionFilterGroup, short collisionFilterMask)
-			: this(ref aabbMin, ref aabbMax, userPtr, collisionFilterGroup, collisionFilterMask)
+            : base(btDbvtProxy_new(ref aabbMin, ref aabbMax, userPtr, collisionFilterGroup, collisionFilterMask))
 		{
 		}
 
@@ -96,11 +91,6 @@ namespace BulletSharp
         {
             btDbvtBroadphase_setAabbForceUpdate(_native, absproxy._native, ref aabbMin, ref aabbMax, __unnamed3._native);
         }
-
-		public void SetAabbForceUpdate(BroadphaseProxy absproxy, Vector3 aabbMin, Vector3 aabbMax, Dispatcher __unnamed3)
-		{
-			btDbvtBroadphase_setAabbForceUpdate(_native, absproxy._native, ref aabbMin, ref aabbMax, __unnamed3._native);
-		}
 
         public int CId
 		{

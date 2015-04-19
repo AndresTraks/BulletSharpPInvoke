@@ -53,7 +53,7 @@ namespace DemoFramework.SharpDX
             base.Dispose(disposing);
         }
         */
-        public void DrawDebugWorld(DynamicsWorld world)
+        public void DrawDebugWorld(CollisionWorld world)
         {
             world.DebugDrawWorld();
 

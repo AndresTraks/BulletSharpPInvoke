@@ -7,16 +7,11 @@ namespace BulletSharp
 {
 	public class Hinge2Constraint : Generic6DofSpringConstraint
 	{
-        public Hinge2Constraint(RigidBody rigidBodyA, RigidBody rigidBodyB, ref Vector3 anchor, ref Vector3 axis1, ref Vector3 axis2)
+		public Hinge2Constraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 anchor, Vector3 axis1, Vector3 axis2)
             : base(btHinge2Constraint_new(rigidBodyA._native, rigidBodyB._native, ref anchor, ref axis1, ref axis2))
-        {
+		{
             _rigidBodyA = rigidBodyA;
             _rigidBodyB = rigidBodyB;
-        }
-
-		public Hinge2Constraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 anchor, Vector3 axis1, Vector3 axis2)
-			: this(rigidBodyA, rigidBodyB, ref anchor, ref axis1, ref axis2)
-		{
 		}
 
 		public void SetLowerLimit(float ang1min)

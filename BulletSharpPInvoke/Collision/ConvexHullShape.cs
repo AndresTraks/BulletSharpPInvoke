@@ -59,7 +59,7 @@ namespace BulletSharp
 		    RecalcLocalAabb();
 		}
 
-        public void AddPoint(ref Vector3 point)
+        public void AddPointRef(ref Vector3 point)
         {
             btConvexHullShape_addPoint(_native, ref point);
         }
@@ -69,7 +69,7 @@ namespace BulletSharp
 			btConvexHullShape_addPoint(_native, ref point);
 		}
 
-        public void AddPoint(ref Vector3 point, bool recalculateLocalAabb)
+        public void AddPointRef(ref Vector3 point, bool recalculateLocalAabb)
         {
             btConvexHullShape_addPoint2(_native, ref point, recalculateLocalAabb);
         }
@@ -95,11 +95,6 @@ namespace BulletSharp
         {
             btConvexHullShape_project(_native, ref trans, ref dir, out minProj, out maxProj, out witnesPtMin, out witnesPtMax);
         }
-
-        public void Project(Matrix trans, Vector3 dir, out float minProj, out float maxProj, out Vector3 witnesPtMin, out Vector3 witnesPtMax)
-		{
-            btConvexHullShape_project(_native, ref trans, ref dir, out minProj, out maxProj, out witnesPtMin, out witnesPtMax);
-		}
 
 		public int NumPoints
 		{

@@ -32,7 +32,8 @@ namespace BulletSharp
 
             Vector3 triangleNormal = v10.Cross(v20);
 
-            float dist = point0.Dot(ref triangleNormal);
+            float dist;
+            point0.Dot(ref triangleNormal, out dist);
             float distA = triangleNormal.Dot(From) - dist;
             float distB = triangleNormal.Dot(To) - dist;
 
@@ -65,17 +66,21 @@ namespace BulletSharp
                     Vector3 v1p; v1p = point1 - point;
                     Vector3 cp0; cp0 = v0p.Cross(v1p);
 
-                    if (cp0.Dot(ref triangleNormal) >= edgeTolerance)
+                    float dot;
+                    cp0.Dot(ref triangleNormal, out dot);
+                    if (dot >= edgeTolerance)
                     {
                         Vector3 v2p; v2p = point2 - point;
                         Vector3 cp1;
                         cp1 = v1p.Cross(v2p);
-                        if (cp1.Dot(ref triangleNormal) >= edgeTolerance)
+                        cp1.Dot(ref triangleNormal, out dot);
+                        if (dot >= edgeTolerance)
                         {
                             Vector3 cp2;
                             cp2 = v2p.Cross(v0p);
 
-                            if (cp2.Dot(ref triangleNormal) >= edgeTolerance)
+                            cp2.Dot(ref triangleNormal, out dot);
+                            if (dot >= edgeTolerance)
                             {
                                 //@BP Mod
                                 // Triangle normal isn't normalized

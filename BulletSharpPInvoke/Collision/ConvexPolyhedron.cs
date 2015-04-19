@@ -91,11 +91,6 @@ namespace BulletSharp
             btConvexPolyhedron_project(_native, ref trans, ref dir, out minProj, out maxProj, out witnesPtMin, out witnesPtMax);
         }
 
-		public void Project(Matrix trans, Vector3 dir, out float minProj, out float maxProj, out Vector3 witnesPtMin, out Vector3 witnesPtMax)
-		{
-			btConvexPolyhedron_project(_native, ref trans, ref dir, out minProj, out maxProj, out witnesPtMin, out witnesPtMax);
-		}
-
 		public bool TestContainment()
 		{
 			return btConvexPolyhedron_testContainment(_native);

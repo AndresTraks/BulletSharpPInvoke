@@ -544,28 +544,18 @@ namespace BulletSharp
 		{
 		}
 
-        public Generic6DofConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, ref Matrix frameInA, ref Matrix frameInB, bool useLinearReferenceFrameA)
+		public Generic6DofConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix frameInA, Matrix frameInB, bool useLinearReferenceFrameA)
             : base(btGeneric6DofConstraint_new(rigidBodyA._native, rigidBodyB._native, ref frameInA, ref frameInB, useLinearReferenceFrameA))
-        {
+		{
             _rigidBodyA = rigidBodyA;
             _rigidBodyB = rigidBodyB;
-        }
-
-		public Generic6DofConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix frameInA, Matrix frameInB, bool useLinearReferenceFrameA)
-			: this(rigidBodyA, rigidBodyB, ref frameInA, ref frameInB, useLinearReferenceFrameA)
-		{
 		}
 
-        public Generic6DofConstraint(RigidBody rigidBodyB, ref Matrix frameInB, bool useLinearReferenceFrameB)
+		public Generic6DofConstraint(RigidBody rigidBodyB, Matrix frameInB, bool useLinearReferenceFrameB)
             : base(btGeneric6DofConstraint_new2(rigidBodyB._native, ref frameInB, useLinearReferenceFrameB))
-        {
+		{
             _rigidBodyA = FixedBody;
             _rigidBodyB = rigidBodyB;
-        }
-
-		public Generic6DofConstraint(RigidBody rigidBodyB, Matrix frameInB, bool useLinearReferenceFrameB)
-			: this(rigidBodyB, ref frameInB, useLinearReferenceFrameB)
-		{
 		}
 
 		public void CalcAnchorPos()
@@ -577,11 +567,6 @@ namespace BulletSharp
         {
             btGeneric6DofConstraint_calculateTransforms(_native, ref transA, ref transB);
         }
-
-		public void CalculateTransforms(Matrix transA, Matrix transB)
-		{
-			btGeneric6DofConstraint_calculateTransforms(_native, ref transA, ref transB);
-		}
 
 		public void CalculateTransforms()
 		{
@@ -639,7 +624,7 @@ namespace BulletSharp
 			return btGeneric6DofConstraint_isLimited(_native, limitIndex);
 		}
 
-        public void SetAxis(ref Vector3 axis1, ref Vector3 axis2)
+        public void SetAxisRef(ref Vector3 axis1, ref Vector3 axis2)
         {
             btGeneric6DofConstraint_setAxis(_native, ref axis1, ref axis2);
         }
@@ -649,7 +634,7 @@ namespace BulletSharp
 			btGeneric6DofConstraint_setAxis(_native, ref axis1, ref axis2);
 		}
 
-        public void SetFrames(ref Matrix frameA, ref Matrix frameB)
+        public void SetFramesRef(ref Matrix frameA, ref Matrix frameB)
         {
             btGeneric6DofConstraint_setFrames(_native, ref frameA, ref frameB);
         }

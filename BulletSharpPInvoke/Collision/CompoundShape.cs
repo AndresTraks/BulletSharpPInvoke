@@ -100,7 +100,7 @@ namespace BulletSharp
             _childList = new CompoundShapeChildArray(_native);
 		}
 
-        public void AddChildShape(ref Matrix localTransform, CollisionShape shape)
+        public void AddChildShapeRef(ref Matrix localTransform, CollisionShape shape)
         {
             _childList.AddChildShape(ref localTransform, shape);
         }
@@ -114,11 +114,6 @@ namespace BulletSharp
         {
             btCompoundShape_calculatePrincipalAxisTransform(_native, masses, ref principal, ref inertia);
         }
-
-		public void CalculatePrincipalAxisTransform(float[] masses, Matrix principal, Vector3 inertia)
-		{
-			btCompoundShape_calculatePrincipalAxisTransform(_native, masses, ref principal, ref inertia);
-		}
 
 		public void CreateAabbTreeFromChildren()
 		{

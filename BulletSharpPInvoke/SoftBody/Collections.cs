@@ -5,14 +5,32 @@ using System.Security;
 
 namespace BulletSharp.SoftBody
 {
-    public class NodePtrArrayEnumerator : ArrayEnumerator, IEnumerator<Node>
+    public class NodePtrArrayEnumerator : IEnumerator<Node>
     {
+        int _i;
+        int _count;
         IList<Node> _array;
 
         public NodePtrArrayEnumerator(IList<Node> array)
         {
             _array = array;
             _count = array.Count;
+            _i = -1;
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public bool MoveNext()
+        {
+            _i++;
+            return _i != _count;
+        }
+
+        public void Reset()
+        {
+            _i = 0;
         }
 
         public Node Current

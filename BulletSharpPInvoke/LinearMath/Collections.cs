@@ -28,13 +28,16 @@ namespace BulletSharp
 		}
 	};
 
-    public class ArrayEnumerator
+    public class CompoundShapeChildArrayEnumerator : IEnumerator<CompoundShapeChild>
     {
-        protected int _i;
-        protected int _count;
+        int _i;
+        int _count;
+        CompoundShapeChild[] _array;
 
-        public ArrayEnumerator()
+        public CompoundShapeChildArrayEnumerator(CompoundShapeChildArray array)
         {
+            _array = array._backingArray;
+            _count = array.Count;
             _i = -1;
         }
 
@@ -52,17 +55,6 @@ namespace BulletSharp
         {
             _i = 0;
         }
-    }
-
-    public class CompoundShapeChildArrayEnumerator : ArrayEnumerator, IEnumerator<CompoundShapeChild>
-    {
-        private CompoundShapeChild[] _array;
-
-        public CompoundShapeChildArrayEnumerator(CompoundShapeChildArray array)
-        {
-            _array = array._backingArray;
-            _count = array.Count;
-        }
 
         public CompoundShapeChild Current
         {
@@ -75,14 +67,32 @@ namespace BulletSharp
         }
     }
 
-    public class UIntArrayEnumerator : ArrayEnumerator, IEnumerator<uint>
+    public class UIntArrayEnumerator : IEnumerator<uint>
     {
+        int _i;
+        int _count;
         IList<uint> _array;
 
         public UIntArrayEnumerator(IList<uint> array)
         {
             _array = array;
             _count = array.Count;
+            _i = -1;
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public bool MoveNext()
+        {
+            _i++;
+            return _i != _count;
+        }
+
+        public void Reset()
+        {
+            _i = 0;
         }
 
         public uint Current
@@ -96,14 +106,32 @@ namespace BulletSharp
         }
     }
 
-    public class Vector3ArrayEnumerator : ArrayEnumerator, IEnumerator<Vector3>
+    public class Vector3ArrayEnumerator : IEnumerator<Vector3>
     {
+        int _i;
+        int _count;
         IList<Vector3> _array;
 
         public Vector3ArrayEnumerator(IList<Vector3> array)
         {
             _array = array;
             _count = array.Count;
+            _i = -1;
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public bool MoveNext()
+        {
+            _i++;
+            return _i != _count;
+        }
+
+        public void Reset()
+        {
+            _i = 0;
         }
 
         public Vector3 Current

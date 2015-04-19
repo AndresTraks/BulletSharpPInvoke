@@ -58,12 +58,7 @@ namespace BulletSharp
             btCollisionShape_calculateTemporalAabb(_native, ref curTrans, ref linvel, ref angvel, timeStep, out temporalAabbMin, out temporalAabbMax);
         }
 
-		public void CalculateTemporalAabb(Matrix curTrans, Vector3 linvel, Vector3 angvel, float timeStep, out Vector3 temporalAabbMin, out Vector3 temporalAabbMax)
-		{
-			btCollisionShape_calculateTemporalAabb(_native, ref curTrans, ref linvel, ref angvel, timeStep, out temporalAabbMin, out temporalAabbMax);
-		}
-
-        public void GetAabb(ref Matrix t, out Vector3 aabbMin, out Vector3 aabbMax)
+        public void GetAabbRef(ref Matrix t, out Vector3 aabbMin, out Vector3 aabbMax)
         {
             btCollisionShape_getAabb(_native, ref t, out aabbMin, out aabbMax);
         }

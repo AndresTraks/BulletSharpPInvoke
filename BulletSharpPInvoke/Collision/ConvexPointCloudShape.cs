@@ -14,26 +14,16 @@ namespace BulletSharp
 		{
 		}
 
-        public ConvexPointCloudShape(Vector3Array points, int numPoints, ref Vector3 localScaling)
-			: base(btConvexPointCloudShape_new2(points._native, numPoints, ref localScaling))
-        {
-            _unscaledPoints = points;
-        }
-
         public ConvexPointCloudShape(Vector3Array points, int numPoints, Vector3 localScaling)
-            : this(points, numPoints, ref localScaling)
+            : base(btConvexPointCloudShape_new2(points._native, numPoints, ref localScaling))
         {
-        }
-
-        public ConvexPointCloudShape(Vector3Array points, int numPoints, ref Vector3 localScaling, bool computeAabb)
-			: base(btConvexPointCloudShape_new3(points._native, numPoints, ref localScaling, computeAabb))
-		{
             _unscaledPoints = points;
-		}
+        }
 
         public ConvexPointCloudShape(Vector3Array points, int numPoints, Vector3 localScaling, bool computeAabb)
-            : this(points, numPoints, ref localScaling, computeAabb)
+            : base(btConvexPointCloudShape_new3(points._native, numPoints, ref localScaling, computeAabb))
         {
+            _unscaledPoints = points;
         }
 
 		public void GetScaledPoint(int index, out Vector3 value)
@@ -59,12 +49,6 @@ namespace BulletSharp
             _unscaledPoints = points;
             btConvexPointCloudShape_setPoints2(_native, points._native, numPoints, computeAabb);
 		}
-
-        public void SetPoints(Vector3Array points, int numPoints, bool computeAabb, ref Vector3 localScaling)
-        {
-            _unscaledPoints = points;
-            btConvexPointCloudShape_setPoints3(_native, points._native, numPoints, computeAabb, ref localScaling);
-        }
 
         public void SetPoints(Vector3Array points, int numPoints, bool computeAabb, Vector3 localScaling)
 		{

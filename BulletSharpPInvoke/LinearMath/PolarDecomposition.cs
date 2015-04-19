@@ -24,12 +24,12 @@ namespace BulletSharp
 			_native = btPolarDecomposition_new2(tolerance);
 		}
 
-		public PolarDecomposition(float tolerance, uint maxIterations)
+		public PolarDecomposition(float tolerance, int maxIterations)
 		{
-			_native = btPolarDecomposition_new3(tolerance, maxIterations);
+			_native = btPolarDecomposition_new3(tolerance, (uint)maxIterations);
 		}
 
-		public uint Decompose(Matrix a, out Matrix u, out Matrix h)
+		public uint Decompose(ref Matrix a, out Matrix u, out Matrix h)
 		{
 			return btPolarDecomposition_decompose(_native, ref a, out u, out h);
 		}

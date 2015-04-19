@@ -278,7 +278,7 @@ namespace BulletSharp.SoftBody
                 btSoftBody_AJoint_IControlWrapper_setWrapperData(_native, GCHandle.ToIntPtr(handle));
 			}
 
-            public static IControl _default;
+            static IControl _default;
 			public static IControl Default
 			{
                 get
@@ -3834,11 +3834,6 @@ namespace BulletSharp.SoftBody
         {
             return btSoftBody_rayTest(_native, ref rayFrom, ref rayTo, results._native);
         }
-
-		public bool RayTest(Vector3 rayFrom, Vector3 rayTo, SRayCast results)
-		{
-			return btSoftBody_rayTest(_native, ref rayFrom, ref rayTo, results._native);
-		}
         /*
 		public int RayTest(Vector3 rayFrom, Vector3 rayTo, float mint, EFeature feature, int index, bool bcountonly)
 		{

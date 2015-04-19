@@ -131,7 +131,7 @@ namespace ConcaveConvexCastDemo
                     Quaternion qTo = Quaternion.RotationAxis(new Vector3(1.0f, 0.0f, 0.0f), 0.7f);
                     Matrix from = Matrix.RotationQuaternion(qFrom) * Matrix.Translation(source[i]);
                     Matrix to = Matrix.RotationQuaternion(qTo) * Matrix.Translation(dest[i]);
-                    cw.ConvexSweepTest(boxShape, from, to, cb);
+                    cw.ConvexSweepTestRef(boxShape, ref from, ref to, cb);
                     if (cb.HasHit)
                     {
                         hit_surface[i] = cb.HitPointWorld;
@@ -335,7 +335,7 @@ namespace ConcaveConvexCastDemo
                 Vector3 worldMin = new Vector3(-1000, -1000, -1000);
                 Vector3 worldMax = new Vector3(1000, 1000, 1000);
 
-                groundShape.RefitTree(worldMin, worldMax);
+                groundShape.RefitTree(ref worldMin, ref worldMax);
 
                 //clear all contact points involving mesh proxy. Note: this is a slow/unoptimized operation.
                 Broadphase.OverlappingPairCache.CleanProxyFromPairs(staticBody.BroadphaseHandle, Dispatcher);

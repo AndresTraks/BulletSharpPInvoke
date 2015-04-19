@@ -336,7 +336,7 @@ namespace DemoFramework.SharpDX
             _device.Rasterizer.SetViewports(new Viewport(0, 0, _width, _height));
         }
 
-        ShaderBytecode LoadShader(string name, ShaderFlags flags)
+        static ShaderBytecode LoadShader(string name, ShaderFlags flags)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             StreamReader reader = new StreamReader(assembly.GetManifestResourceStream("DemoFramework.SharpDX." + name));

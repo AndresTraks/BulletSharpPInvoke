@@ -7,28 +7,18 @@ namespace BulletSharp
 {
 	public class GearConstraint : TypedConstraint
 	{
-        public GearConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, ref Vector3 axisInA, ref Vector3 axisInB)
+		public GearConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 axisInA, Vector3 axisInB)
             : base(btGearConstraint_new(rigidBodyA._native, rigidBodyB._native, ref axisInA, ref axisInB))
-        {
+		{
             _rigidBodyA = rigidBodyA;
             _rigidBodyB = rigidBodyB;
-        }
-
-		public GearConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 axisInA, Vector3 axisInB)
-			: this(rigidBodyA, rigidBodyB, ref axisInA, ref axisInB)
-		{
 		}
 
-        public GearConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, ref Vector3 axisInA, ref Vector3 axisInB, float ratio)
+		public GearConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 axisInA, Vector3 axisInB, float ratio)
             : base(btGearConstraint_new2(rigidBodyA._native, rigidBodyB._native, ref axisInA, ref axisInB, ratio))
-        {
+		{
             _rigidBodyA = rigidBodyA;
             _rigidBodyB = rigidBodyB;
-        }
-
-		public GearConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 axisInA, Vector3 axisInB, float ratio)
-			: this(rigidBodyA, rigidBodyB, ref axisInA, ref axisInB, ratio)
-		{
 		}
 
 		public Vector3 AxisA

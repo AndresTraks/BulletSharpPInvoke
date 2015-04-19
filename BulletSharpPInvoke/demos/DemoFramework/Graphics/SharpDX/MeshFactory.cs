@@ -182,7 +182,7 @@ namespace DemoFramework.SharpDX
         uint softBodyColor;
         int linkColor = Color.Black.ToArgb();
 
-        uint ColorToUint(Color c)
+        static uint ColorToUint(Color c)
         {
             return (uint)c.R + ((uint)c.G << 8) + ((uint)c.B << 16) + ((uint)c.A << 24);
         }

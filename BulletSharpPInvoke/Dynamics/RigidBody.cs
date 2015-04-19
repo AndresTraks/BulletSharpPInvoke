@@ -37,7 +37,7 @@ namespace BulletSharp
 			btRigidBody_addConstraintRef(_native, c._native);
 		}
 
-        public void ApplyCentralForce(ref Vector3 force)
+        public void ApplyCentralForceRef(ref Vector3 force)
         {
             btRigidBody_applyCentralForce(_native, ref force);
         }
@@ -47,7 +47,7 @@ namespace BulletSharp
 			btRigidBody_applyCentralForce(_native, ref force);
 		}
 
-        public void ApplyCentralImpulse(ref Vector3 impulse)
+        public void ApplyCentralImpulseRef(ref Vector3 impulse)
         {
             btRigidBody_applyCentralImpulse(_native, ref impulse);
         }
@@ -62,7 +62,7 @@ namespace BulletSharp
 			btRigidBody_applyDamping(_native, timeStep);
 		}
 
-        public void ApplyForce(ref Vector3 force, ref Vector3 relPos)
+        public void ApplyForceRef(ref Vector3 force, ref Vector3 relPos)
         {
             btRigidBody_applyForce(_native, ref force, ref relPos);
         }
@@ -77,7 +77,7 @@ namespace BulletSharp
 			btRigidBody_applyGravity(_native);
 		}
 
-        public void ApplyImpulse(ref Vector3 impulse, ref Vector3 relPos)
+        public void ApplyImpulseRef(ref Vector3 impulse, ref Vector3 relPos)
         {
             btRigidBody_applyImpulse(_native, ref impulse, ref relPos);
         }
@@ -87,7 +87,7 @@ namespace BulletSharp
 			btRigidBody_applyImpulse(_native, ref impulse, ref relPos);
 		}
 
-        public void ApplyTorque(ref Vector3 torque)
+        public void ApplyTorqueRef(ref Vector3 torque)
         {
             btRigidBody_applyTorque(_native, ref torque);
         }
@@ -97,7 +97,7 @@ namespace BulletSharp
 			btRigidBody_applyTorque(_native, ref torque);
 		}
 
-        public void ApplyTorqueImpulse(ref Vector3 torque)
+        public void ApplyTorqueImpulseRef(ref Vector3 torque)
         {
             btRigidBody_applyTorqueImpulse(_native, ref torque);
         }
@@ -112,9 +112,9 @@ namespace BulletSharp
 			btRigidBody_clearForces(_native);
 		}
 
-        public float ComputeAngularImpulseDenominator(ref Vector3 axis)
+        public void ComputeAngularImpulseDenominator(ref Vector3 axis, out float result)
         {
-            return btRigidBody_computeAngularImpulseDenominator(_native, ref axis);
+            result = btRigidBody_computeAngularImpulseDenominator(_native, ref axis);
         }
 
 		public float ComputeAngularImpulseDenominator(Vector3 axis)
@@ -158,11 +158,9 @@ namespace BulletSharp
 			return TypedConstraint.GetManaged(btRigidBody_getConstraintRef(_native, index));
 		}
 
-        public Vector3 GetVelocityInLocalPoint(ref Vector3 relPos)
+        public void GetVelocityInLocalPoint(ref Vector3 relPos, out Vector3 value)
         {
-            Vector3 value;
             btRigidBody_getVelocityInLocalPoint(_native, ref relPos, out value);
-            return value;
         }
 
 		public Vector3 GetVelocityInLocalPoint(Vector3 relPos)
@@ -182,7 +180,7 @@ namespace BulletSharp
 			btRigidBody_predictIntegratedTransform(_native, step, out predictedTransform);
 		}
 
-        public void ProceedToTransform(ref Matrix newTrans)
+        public void ProceedToTransformRef(ref Matrix newTrans)
         {
             btRigidBody_proceedToTransform(_native, ref newTrans);
         }
@@ -207,7 +205,7 @@ namespace BulletSharp
 			btRigidBody_setDamping(_native, linDamping, angDamping);
 		}
 
-        public void SetMassProps(float mass, ref Vector3 inertia)
+        public void SetMassPropsRef(float mass, ref Vector3 inertia)
         {
             btRigidBody_setMassProps(_native, mass, ref inertia);
         }
@@ -227,7 +225,7 @@ namespace BulletSharp
 			btRigidBody_setSleepingThresholds(_native, linear, angular);
 		}
 
-        public void Translate(ref Vector3 v)
+        public void TranslateRef(ref Vector3 v)
         {
             btRigidBody_translate(_native, ref v);
         }

@@ -495,14 +495,14 @@ namespace BulletSharp
 
 		public ConeTwistConstraint CreateConeTwistConstraint(RigidBody rbA, ref Matrix rbAFrame)
 		{
-            ConeTwistConstraint constraint = new ConeTwistConstraint(rbA, ref rbAFrame);
+            ConeTwistConstraint constraint = new ConeTwistConstraint(rbA, rbAFrame);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
 
 		public ConeTwistConstraint CreateConeTwistConstraint(RigidBody rbA, RigidBody rbB, ref Matrix rbAFrame, ref Matrix rbBFrame)
 		{
-            ConeTwistConstraint constraint = new ConeTwistConstraint(rbA, rbB, ref rbAFrame, ref rbBFrame);
+            ConeTwistConstraint constraint = new ConeTwistConstraint(rbA, rbB, rbAFrame, rbBFrame);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
@@ -542,7 +542,7 @@ namespace BulletSharp
 
 		public GearConstraint CreateGearConstraint(RigidBody rbA, RigidBody rbB, ref Vector3 axisInA, ref Vector3 axisInB, float ratio)
 		{
-			GearConstraint constraint = new GearConstraint(rbA, rbB, ref axisInA, ref axisInB, ratio);
+			GearConstraint constraint = new GearConstraint(rbA, rbB, axisInA, axisInB, ratio);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
@@ -577,28 +577,28 @@ namespace BulletSharp
 
 		public HingeConstraint CreateHingeConstraint(RigidBody rbA, RigidBody rbB, ref Matrix rbAFrame, ref Matrix rbBFrame, bool useReferenceFrameA)
 		{
-            HingeConstraint constraint = new HingeConstraint(rbA, rbB, ref rbAFrame, ref rbBFrame, useReferenceFrameA);
+            HingeConstraint constraint = new HingeConstraint(rbA, rbB, rbAFrame, rbBFrame, useReferenceFrameA);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
 
         public HingeConstraint CreateHingeConstraint(RigidBody rbA, RigidBody rbB, ref Matrix rbAFrame, ref Matrix rbBFrame)
 		{
-            HingeConstraint constraint = new HingeConstraint(rbA, rbB, ref rbAFrame, ref rbBFrame);
+            HingeConstraint constraint = new HingeConstraint(rbA, rbB, rbAFrame, rbBFrame);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
 
         public HingeConstraint CreateHingeConstraint(RigidBody rbA, ref Matrix rbAFrame, bool useReferenceFrameA)
 		{
-            HingeConstraint constraint = new HingeConstraint(rbA, ref rbAFrame, useReferenceFrameA);
+            HingeConstraint constraint = new HingeConstraint(rbA, rbAFrame, useReferenceFrameA);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
 
         public HingeConstraint CreateHingeConstraint(RigidBody rbA, ref Matrix rbAFrame)
 		{
-            HingeConstraint constraint = new HingeConstraint(rbA, ref rbAFrame);
+            HingeConstraint constraint = new HingeConstraint(rbA, rbAFrame);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
@@ -696,14 +696,14 @@ namespace BulletSharp
 
 		public Point2PointConstraint CreatePoint2PointConstraint(RigidBody rbA, RigidBody rbB, ref Vector3 pivotInA, ref Vector3 pivotInB)
 		{
-            Point2PointConstraint constraint = new Point2PointConstraint(rbA, rbB, ref pivotInA, ref pivotInB);
+            Point2PointConstraint constraint = new Point2PointConstraint(rbA, rbB, pivotInA, pivotInB);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
 
 		public Point2PointConstraint CreatePoint2PointConstraint(RigidBody rbA, ref Vector3 pivotInA)
 		{
-			Point2PointConstraint constraint = new Point2PointConstraint(rbA, ref pivotInA);
+			Point2PointConstraint constraint = new Point2PointConstraint(rbA, pivotInA);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}

@@ -152,7 +152,8 @@ namespace VehicleDemo
             Vector3 vel2 = body1.GetVelocityInLocalPoint(rel_pos2);
             Vector3 vel = vel1 - vel2;
 
-            float vrel = Vector3.Dot(ref frictionDirectionWorld, ref vel);
+            float vrel;
+            Vector3.Dot(ref frictionDirectionWorld, ref vel, out vrel);
 
             // calculate j that moves us to zero relative velocity
             j1 = -vrel * jacDiagABInv;
@@ -321,10 +322,14 @@ namespace VehicleDemo
             Vector3 m_bJ = Vector3.TransformCoordinate(Vector3.Cross(rel_pos2, -normal), world2B);
             Vector3 m_0MinvJt = body1.InvInertiaDiagLocal * m_aJ;
             Vector3 m_1MinvJt = body2.InvInertiaDiagLocal * m_bJ;
-            float jacDiagAB = body1.InvMass + Vector3.Dot(ref m_0MinvJt, ref m_aJ) + body2.InvMass + Vector3.Dot(ref m_1MinvJt, ref m_bJ);
+            float dot0, dot1;
+            Vector3.Dot(ref m_0MinvJt, ref m_aJ, out dot0);
+            Vector3.Dot(ref m_1MinvJt, ref m_bJ, out dot1);
+            float jacDiagAB = body1.InvMass + dot0 + body2.InvMass + dot1;
             float jacDiagABInv = 1.0f / jacDiagAB;
 
-            float rel_vel = Vector3.Dot(ref normal, ref vel);
+            float rel_vel;
+            Vector3.Dot(ref normal, ref vel, out rel_vel);
 
             //todo: move this into proper structure
             const float contactDamping = 0.2f;
@@ -383,7 +388,8 @@ namespace VehicleDemo
                         wheelTrans[2, indexRightAxis]);
 
                     Vector3 surfNormalWS = wheel.RaycastInfo.ContactNormalWS;
-                    float proj = Vector3.Dot(ref axle[i], ref surfNormalWS);
+                    float proj;
+                    Vector3.Dot(ref axle[i], ref surfNormalWS, out proj);
                     axle[i] -= surfNormalWS * proj;
                     axle[i].Normalize();
 
@@ -500,7 +506,9 @@ namespace VehicleDemo
                         RigidBody.CenterOfMassTransform.Row1[indexUpAxis],
                         RigidBody.CenterOfMassTransform.Row2[indexUpAxis],
                         RigidBody.CenterOfMassTransform.Row3[indexUpAxis]);
-                    rel_pos -= vChassisWorldUp * (Vector3.Dot(ref vChassisWorldUp, ref rel_pos) * (1.0f - wheel.RollInfluence));
+                    float dot;
+                    Vector3.Dot(ref vChassisWorldUp, ref rel_pos, out dot);
+                    rel_pos -= vChassisWorldUp * (dot * (1.0f - wheel.RollInfluence));
 #else
                     rel_pos[indexUpAxis] *= wheel.RollInfluence;
 #endif
@@ -633,7 +641,8 @@ namespace VehicleDemo
                     float proj = Vector3.Dot(fwd, wheel.RaycastInfo.ContactNormalWS);
                     fwd -= wheel.RaycastInfo.ContactNormalWS * proj;
 
-                    float proj2 = Vector3.Dot(ref fwd, ref vel);
+                    float proj2;
+                    Vector3.Dot(ref fwd, ref vel, out proj2);
 
                     wheel.DeltaRotation = (proj2 * step) / (wheel.WheelsRadius);
                     wheel.Rotation += wheel.DeltaRotation;

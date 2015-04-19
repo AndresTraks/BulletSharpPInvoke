@@ -14,11 +14,9 @@ namespace BulletSharp
 		{
 		}
 
-        public Vector3 LocalGetSupportingVertex(ref Vector3 vec)
+        public void LocalGetSupportingVertex(ref Vector3 vec, out Vector3 value)
         {
-            Vector3 value;
             btTriangleMeshShape_localGetSupportingVertex(_native, ref vec, out value);
-            return value;
         }
 
 		public Vector3 LocalGetSupportingVertex(Vector3 vec)
@@ -28,11 +26,9 @@ namespace BulletSharp
 			return value;
 		}
 
-        public Vector3 LocalGetSupportingVertexWithoutMargin(ref Vector3 vec)
+        public void LocalGetSupportingVertexWithoutMargin(ref Vector3 vec, out Vector3 value)
         {
-            Vector3 value;
             btTriangleMeshShape_localGetSupportingVertexWithoutMargin(_native, ref vec, out value);
-            return value;
         }
 
 		public Vector3 LocalGetSupportingVertexWithoutMargin(Vector3 vec)

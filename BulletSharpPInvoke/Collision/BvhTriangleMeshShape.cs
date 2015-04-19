@@ -49,11 +49,6 @@ namespace BulletSharp
             btBvhTriangleMeshShape_partialRefitTree(_native, ref aabbMin, ref aabbMax);
         }
 
-		public void PartialRefitTree(Vector3 aabbMin, Vector3 aabbMax)
-		{
-            PartialRefitTree(ref aabbMin, ref aabbMax);
-		}
-
 		public void PerformConvexcast(TriangleCallback callback, Vector3 boxSource, Vector3 boxTarget, Vector3 boxMin, Vector3 boxMax)
 		{
 			btBvhTriangleMeshShape_performConvexcast(_native, callback._native, ref boxSource, ref boxTarget, ref boxMin, ref boxMax);
@@ -68,11 +63,6 @@ namespace BulletSharp
         {
             btBvhTriangleMeshShape_refitTree(_native, ref aabbMin, ref aabbMax);
         }
-
-		public void RefitTree(Vector3 aabbMin, Vector3 aabbMax)
-		{
-            RefitTree(ref aabbMin, ref aabbMax);
-		}
 
 		public void SerializeSingleBvh(Serializer serializer)
 		{

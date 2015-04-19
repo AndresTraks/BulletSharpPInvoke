@@ -263,7 +263,7 @@ namespace BulletSharp
 			_native = btVoronoiSimplexSolver_new();
 		}
 
-        public void AddVertex(ref Vector3 w, ref Vector3 p, ref Vector3 q)
+        public void AddVertexRef(ref Vector3 w, ref Vector3 p, ref Vector3 q)
         {
             btVoronoiSimplexSolver_addVertex(_native, ref w, ref p, ref q);
         }
@@ -288,20 +288,10 @@ namespace BulletSharp
             return btVoronoiSimplexSolver_closestPtPointTetrahedron(_native, ref p, ref a, ref b, ref c, ref d, finalResult._native);
         }
 
-		public bool ClosestPtPointTetrahedron(Vector3 p, Vector3 a, Vector3 b, Vector3 c, Vector3 d, SubSimplexClosestResult finalResult)
-		{
-			return btVoronoiSimplexSolver_closestPtPointTetrahedron(_native, ref p, ref a, ref b, ref c, ref d, finalResult._native);
-		}
-
         public bool ClosestPtPointTriangle(ref Vector3 p, ref Vector3 a, ref Vector3 b, ref Vector3 c, SubSimplexClosestResult result)
         {
             return btVoronoiSimplexSolver_closestPtPointTriangle(_native, ref p, ref a, ref b, ref c, result._native);
         }
-
-		public bool ClosestPtPointTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c, SubSimplexClosestResult result)
-		{
-			return btVoronoiSimplexSolver_closestPtPointTriangle(_native, ref p, ref a, ref b, ref c, result._native);
-		}
 
 		public void ComputePoints(out Vector3 p1, out Vector3 p2)
 		{

@@ -135,7 +135,7 @@ namespace ConcaveRaycastDemo
             {
                 using (var cb = new ClosestRayResultCallback(ref source[i], ref dest[i]))
                 {
-                    cw.RayTest(ref source[i], ref dest[i], cb);
+                    cw.RayTestRef(ref source[i], ref dest[i], cb);
                     if (cb.HasHit)
                     {
                         hit[i] = cb.HitPointWorld;
@@ -316,7 +316,7 @@ namespace ConcaveRaycastDemo
                 Vector3 worldMin = new Vector3(-1000, -1000, -1000);
                 Vector3 worldMax = new Vector3(1000, 1000, 1000);
 
-                groundShape.RefitTree(worldMin, worldMax);
+                groundShape.RefitTree(ref worldMin, ref worldMax);
 
                 //clear all contact points involving mesh proxy. Note: this is a slow/unoptimized operation.
                 Broadphase.OverlappingPairCache.CleanProxyFromPairs(staticBody.BroadphaseHandle, Dispatcher);

@@ -7,31 +7,21 @@ namespace BulletSharp
 {
 	public class SliderConstraint : TypedConstraint
 	{
-        public SliderConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, ref Matrix frameInA, ref Matrix frameInB, bool useLinearReferenceFrameA)
+		public SliderConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix frameInA, Matrix frameInB, bool useLinearReferenceFrameA)
             : base(btSliderConstraint_new(rigidBodyA._native, rigidBodyB._native, ref frameInA, ref frameInB, useLinearReferenceFrameA))
-        {
+		{
             _rigidBodyA = rigidBodyA;
             _rigidBodyB = rigidBodyB;
-        }
-
-		public SliderConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix frameInA, Matrix frameInB, bool useLinearReferenceFrameA)
-			: this(rigidBodyA, rigidBodyB, ref frameInA, ref frameInB, useLinearReferenceFrameA)
-		{
 		}
-
-        public SliderConstraint(RigidBody rigidBodyB, ref Matrix frameInB, bool useLinearReferenceFrameA)
-            : base(btSliderConstraint_new2(rigidBodyB._native, ref frameInB, useLinearReferenceFrameA))
-        {
-            _rigidBodyA = FixedBody;
-            _rigidBodyB = rigidBodyB;
-        }
 
 		public SliderConstraint(RigidBody rigidBodyB, Matrix frameInB, bool useLinearReferenceFrameA)
-			: this(rigidBodyB, ref frameInB, useLinearReferenceFrameA)
+            : base(btSliderConstraint_new2(rigidBodyB._native, ref frameInB, useLinearReferenceFrameA))
 		{
+            _rigidBodyA = FixedBody;
+            _rigidBodyB = rigidBodyB;
 		}
 
-        public void CalculateTransforms(ref Matrix transA, ref Matrix transB)
+        public void CalculateTransformsRef(ref Matrix transA, ref Matrix transB)
         {
             btSliderConstraint_calculateTransforms(_native, ref transA, ref transB);
         }
@@ -51,7 +41,7 @@ namespace BulletSharp
 			btSliderConstraint_getInfo2NonVirtual(_native, info._native, ref transA, ref transB, ref linVelA, ref linVelB, rbAinvMass, rbBinvMass);
 		}
 
-        public void SetFrames(ref Matrix frameA, ref Matrix frameB)
+        public void SetFramesRef(ref Matrix frameA, ref Matrix frameB)
         {
             btSliderConstraint_setFrames(_native, ref frameA, ref frameB);
         }

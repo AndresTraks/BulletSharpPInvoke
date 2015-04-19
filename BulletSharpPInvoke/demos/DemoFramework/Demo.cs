@@ -284,7 +284,7 @@ namespace DemoFramework
                         Vector3 rayFrom = _freelook.Eye;
 
                         ClosestRayResultCallback rayCallback = new ClosestRayResultCallback(ref rayFrom, ref rayTo);
-                        _world.RayTest(ref rayFrom, ref rayTo, rayCallback);
+                        _world.RayTestRef(ref rayFrom, ref rayTo, rayCallback);
                         if (rayCallback.HasHit)
                         {
                             RigidBody body = rayCallback.CollisionObject as RigidBody;
