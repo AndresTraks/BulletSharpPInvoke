@@ -5,7 +5,7 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
-	public class Hinge2Constraint : Generic6DofSpringConstraint
+	public class Hinge2Constraint : Generic6DofSpring2Constraint
 	{
 		public Hinge2Constraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 anchor, Vector3 axis1, Vector3 axis2)
             : base(btHinge2Constraint_new(rigidBodyA._native, rigidBodyB._native, ref anchor, ref axis1, ref axis2))
