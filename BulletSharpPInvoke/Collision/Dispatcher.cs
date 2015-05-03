@@ -11,20 +11,13 @@ namespace BulletSharp
         Continuous
 	}
 
-	public class DispatcherInfo : IDisposable
+	public class DispatcherInfo
 	{
 		internal IntPtr _native;
-        private readonly bool _preventDelete;
 
-		internal DispatcherInfo(IntPtr native, bool preventDelete)
+		internal DispatcherInfo(IntPtr native)
 		{
 			_native = native;
-            _preventDelete = preventDelete;
-		}
-
-		public DispatcherInfo()
-		{
-			_native = btDispatcherInfo_new();
 		}
 
 		public float AllowedCcdPenetration
@@ -97,29 +90,6 @@ namespace BulletSharp
 		{
 			get { return btDispatcherInfo_getUseEpa(_native); }
 			set { btDispatcherInfo_setUseEpa(_native, value); }
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-                if (!_preventDelete)
-                {
-                    btDispatcherInfo_delete(_native);
-                }
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~DispatcherInfo()
-		{
-			Dispose(false);
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

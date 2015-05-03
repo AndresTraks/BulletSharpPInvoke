@@ -20,15 +20,15 @@ namespace BulletSharp
         public delegate void InternalTickCallback(DynamicsWorld world, float timeStep);
         
         [UnmanagedFunctionPointerAttribute(CallingConvention.Cdecl)]
-        public delegate void InternalTickCallbackUnmanaged(IntPtr world, float timeStep);
+        delegate void InternalTickCallbackUnmanaged(IntPtr world, float timeStep);
 
-        internal InternalTickCallback _callback;
-        internal InternalTickCallbackUnmanaged _callbackUnmanaged;
+        InternalTickCallback _callback;
+        InternalTickCallbackUnmanaged _callbackUnmanaged;
         protected ConstraintSolver _constraintSolver;
-        private ContactSolverInfo _solverInfo;
+        ContactSolverInfo _solverInfo;
 
-        private Dictionary<IAction, ActionInterfaceWrapper> _actions;
-        private List<TypedConstraint> _constraints = new List<TypedConstraint>();
+        Dictionary<IAction, ActionInterfaceWrapper> _actions;
+        List<TypedConstraint> _constraints = new List<TypedConstraint>();
 
 		internal DynamicsWorld(IntPtr native)
 			: base(native)
@@ -151,9 +151,9 @@ namespace BulletSharp
         {
             if (_callback != cb)
             {
+                _callback = cb;
                 if (cb != null)
                 {
-                    _callback = cb;
                     if (_callbackUnmanaged == null)
                     {
                         _callbackUnmanaged = new InternalTickCallbackUnmanaged(InternalTickCallbackNative);
@@ -163,7 +163,6 @@ namespace BulletSharp
                 }
                 else
                 {
-                    _callback = null;
                     _callbackUnmanaged = null;
                     btDynamicsWorld_setInternalTickCallback3(_native, IntPtr.Zero, IntPtr.Zero, isPreTick);
                 }

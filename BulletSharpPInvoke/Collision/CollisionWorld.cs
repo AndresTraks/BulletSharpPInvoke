@@ -997,7 +997,7 @@ namespace BulletSharp
             {
                 if (_dispatchInfo == null)
                 {
-                    _dispatchInfo = new DispatcherInfo(btCollisionWorld_getDispatchInfo(_native), true);
+                    _dispatchInfo = new DispatcherInfo(btCollisionWorld_getDispatchInfo(_native));
                 }
                 return _dispatchInfo;
             }

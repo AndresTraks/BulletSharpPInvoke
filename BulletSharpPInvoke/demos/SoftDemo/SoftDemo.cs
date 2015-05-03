@@ -54,7 +54,7 @@ namespace SoftDemo
                 Init_Aero2, Init_Friction, Init_Torus, Init_TorusMatch, Init_Bunny, Init_BunnyMatch, Init_Cutting1,
                 Init_ClusterDeform, Init_ClusterCollide1, Init_ClusterCollide2, Init_ClusterSocket, Init_ClusterHinge,
                 Init_ClusterCombine, Init_ClusterCar, Init_ClusterRobot, Init_ClusterStackSoft, Init_ClusterStackMixed,
-                Init_TetraCube, Init_TetraBunny
+                Init_TetraCube, Init_TetraBunny, Init_Bending
             };
         }
 
@@ -140,13 +140,13 @@ namespace SoftDemo
             Vector3 h = s * 0.5f;
             Vector3[] c = new Vector3[]{
                 h * new Vector3(-1,-1,-1),
-		        h * new Vector3(+1,-1,-1),
-		        h * new Vector3(-1,+1,-1),
-		        h * new Vector3(+1,+1,-1),
-		        h * new Vector3(-1,-1,+1),
-		        h * new Vector3(+1,-1,+1),
-		        h * new Vector3(-1,+1,+1),
-		        h * new Vector3(+1,+1,+1)};
+                h * new Vector3(+1,-1,-1),
+                h * new Vector3(-1,+1,-1),
+                h * new Vector3(+1,+1,-1),
+                h * new Vector3(-1,-1,+1),
+                h * new Vector3(+1,-1,+1),
+                h * new Vector3(-1,+1,+1),
+                h * new Vector3(+1,+1,+1)};
             SoftBody psb = SoftBodyHelpers.CreateFromConvexHull(softBodyWorldInfo, c);
             psb.GenerateBendingConstraints(2);
             psb.Translate(p);
@@ -590,21 +590,21 @@ namespace SoftDemo
         }
 
         void Init_Bending()
-        {/*
+        {
             const float s = 4;
             Vector3[] x = new Vector3[]{new Vector3(-s,0,-s),
-		        new Vector3(+s,0,-s),
-		        new Vector3(+s,0,+s),
-		        new Vector3(-s,0,+s)};
+                new Vector3(+s,0,-s),
+                new Vector3(+s,0,+s),
+                new Vector3(-s,0,+s)};
             float[] m = new float[] { 0, 0, 0, 1 };
-            SoftBody psb = new SoftBody(softBodyWorldInfo, x, m);
+            SoftBody psb = new SoftBody(softBodyWorldInfo, 4, x, m);
             psb.AppendLink(0, 1);
             psb.AppendLink(1, 2);
             psb.AppendLink(2, 3);
             psb.AppendLink(3, 0);
             psb.AppendLink(0, 2);
 
-            SoftWorld.AddSoftBody(psb);*/
+            SoftWorld.AddSoftBody(psb);
         }
 
         void Init_Cloth()

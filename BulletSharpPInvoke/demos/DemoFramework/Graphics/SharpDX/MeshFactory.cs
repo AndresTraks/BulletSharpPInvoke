@@ -102,7 +102,7 @@ namespace DemoFramework.SharpDX
                     VertexBuffer = new Buffer(device, data, vertexBufferDesc);
                 }
 
-                VertexCount = vectors.Length;
+                VertexCount = vectors.Length / 2;
                 BufferBindings[0] = new VertexBufferBinding(VertexBuffer, 24, 0);
             }
         }

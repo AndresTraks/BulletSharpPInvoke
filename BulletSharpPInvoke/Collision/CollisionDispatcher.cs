@@ -41,11 +41,11 @@ namespace BulletSharp
 			btCollisionDispatcher_defaultNearCallback(collisionPair._native, dispatcher._native, dispatchInfo._native);
 		}
 
-        public void NearCallbackUnmanaged(IntPtr collisionPair, IntPtr dispatcher, IntPtr dispatchInfo)
+        private void NearCallbackUnmanaged(IntPtr collisionPair, IntPtr dispatcher, IntPtr dispatchInfo)
         {
             System.Diagnostics.Debug.Assert(dispatcher == _native);
 
-            _nearCallback(new BroadphasePair(collisionPair), this, new DispatcherInfo(dispatchInfo, true));
+            _nearCallback(new BroadphasePair(collisionPair), this, new DispatcherInfo(dispatchInfo));
         }
 
         public void RegisterCollisionCreateFunc(BroadphaseNativeType proxyType0, BroadphaseNativeType proxyType1, CollisionAlgorithmCreateFunc createFunc)
@@ -85,6 +85,7 @@ namespace BulletSharp
                 if (value == null)
                 {
                     btCollisionDispatcher_setNearCallback(_native, IntPtr.Zero);
+                    _nearCallbackUnmanaged = null;
                     return;
                 }
 
