@@ -24,6 +24,7 @@ extern "C"
 	EXPORT btGeneric6DofConstraint* btWorldImporter_createGeneric6DofConstraint(btWorldImporter* obj, btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB, bool useLinearReferenceFrameA);
 	EXPORT btGeneric6DofConstraint* btWorldImporter_createGeneric6DofConstraint2(btWorldImporter* obj, btRigidBody* rbB, const btScalar* frameInB, bool useLinearReferenceFrameB);
 	EXPORT btGeneric6DofSpringConstraint* btWorldImporter_createGeneric6DofSpringConstraint(btWorldImporter* obj, btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB, bool useLinearReferenceFrameA);
+	EXPORT btGeneric6DofSpring2Constraint* btWorldImporter_createGeneric6DofSpring2Constraint(btWorldImporter* obj, btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB, int rotateOrder);
 	EXPORT btGImpactMeshShape* btWorldImporter_createGimpactShape(btWorldImporter* obj, btStridingMeshInterface* trimesh);
 	EXPORT btHingeConstraint* btWorldImporter_createHingeConstraint(btWorldImporter* obj, btRigidBody* rbA, btRigidBody* rbB, const btScalar* rbAFrame, const btScalar* rbBFrame);
 	EXPORT btHingeConstraint* btWorldImporter_createHingeConstraint2(btWorldImporter* obj, btRigidBody* rbA, btRigidBody* rbB, const btScalar* rbAFrame, const btScalar* rbBFrame, bool useReferenceFrameA);

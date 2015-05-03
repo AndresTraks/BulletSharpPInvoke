@@ -310,9 +310,9 @@ namespace BulletSharp
 			set { btTranslationalLimitMotor_setAccumulatedImpulse(_native, ref value); }
 		}
         /*
-		public int CurrentLimit
+		public IntArray CurrentLimit
 		{
-			get { return btTranslationalLimitMotor_getCurrentLimit(_native); }
+			get { return new IntArray(btTranslationalLimitMotor_getCurrentLimit(_native), 3); }
 		}
         */
 		public Vector3 CurrentLimitError

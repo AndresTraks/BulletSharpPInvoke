@@ -316,6 +316,48 @@ namespace BulletSharp
                         constraint = dof;
                         break;
                     }
+                case TypedConstraintType.D6Spring:
+                    {
+                        Generic6DofSpringConstraint dof = null;
+                        int sixDofData = Generic6DofSpringConstraintFloatData.Offset("SixDofData");
+                        if (rigidBodyA != null && rigidBodyB != null)
+                        {
+                            Matrix rbaFrame = reader.ReadMatrix(sixDofData + Generic6DofConstraintFloatData.Offset("RigidBodyAFrame"));
+                            Matrix rbbFrame = reader.ReadMatrix(sixDofData + Generic6DofConstraintFloatData.Offset("RigidBodyBFrame"));
+                            int useLinearReferenceFrameA = reader.ReadInt32(sixDofData + Generic6DofConstraintFloatData.Offset("UseLinearReferenceFrameA"));
+                            dof = CreateGeneric6DofSpringConstraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame, useLinearReferenceFrameA != 0);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error in WorldImporter.CreateGeneric6DofSpringConstraint: requires rbA && rbB");
+                        }
+
+                        if (dof != null)
+                        {
+                            dof.AngularLowerLimit = reader.ReadVector3(sixDofData + Generic6DofConstraintFloatData.Offset("AngularLowerLimit"));
+                            dof.AngularUpperLimit = reader.ReadVector3(sixDofData + Generic6DofConstraintFloatData.Offset("AngularUpperLimit"));
+                            dof.LinearLowerLimit = reader.ReadVector3(sixDofData + Generic6DofConstraintFloatData.Offset("LinearLowerLimit"));
+                            dof.LinearUpperLimit = reader.ReadVector3(sixDofData + Generic6DofConstraintFloatData.Offset("LinearUpperLimit"));
+
+                            int i;
+                            if (fileVersion > 280)
+                            {
+                                int springEnabledOffset = Generic6DofSpringConstraintFloatData.Offset("SpringEnabled");
+                                int equilibriumPointOffset = Generic6DofSpringConstraintFloatData.Offset("EquilibriumPoint");
+                                int springStiffnessOffset = Generic6DofSpringConstraintFloatData.Offset("SpringStiffness");
+                                int springDampingOffset = Generic6DofSpringConstraintFloatData.Offset("SpringDamping");
+                                for (i = 0; i < 6; i++)
+                                {
+                                    dof.SetStiffness(i, reader.ReadSingle(springStiffnessOffset + sizeof(float) * i));
+                                    dof.SetEquilibriumPoint(i, reader.ReadSingle(equilibriumPointOffset + sizeof(float) * i));
+                                    dof.EnableSpring(i, reader.ReadInt32(springEnabledOffset + sizeof(int) * i) != 0);
+                                    dof.SetDamping(i, reader.ReadSingle(springDampingOffset + sizeof(float) * i));
+                                }
+                            }
+                        }
+                        constraint = dof;
+                        break;
+                    }
                 case TypedConstraintType.Hinge:
                     {
                         HingeConstraint hinge;
@@ -567,6 +609,13 @@ namespace BulletSharp
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
+
+        public Generic6DofSpring2Constraint CreateGeneric6DofSpring2Constraint(RigidBody rbA, RigidBody rbB, ref Matrix frameInA, ref Matrix frameInB, RotateOrder rotateOrder)
+        {
+            Generic6DofSpring2Constraint constraint = new Generic6DofSpring2Constraint(rbA, rbB, frameInA, frameInB, rotateOrder);
+            _allocatedConstraints.Add(constraint);
+            return constraint;
+        }
 
 		public GImpactMeshShape CreateGimpactShape(StridingMeshInterface trimesh)
 		{

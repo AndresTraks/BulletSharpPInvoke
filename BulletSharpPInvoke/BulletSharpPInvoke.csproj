@@ -167,6 +167,7 @@
     <Compile Include="Dynamics\DynamicsWorld.cs" />
     <Compile Include="Dynamics\GearConstraint.cs" />
     <Compile Include="Dynamics\Generic6DofConstraint.cs" />
+    <Compile Include="Dynamics\Generic6DofSpring2Constraint.cs" />
     <Compile Include="Dynamics\Generic6DofSpringConstraint.cs" />
     <Compile Include="Dynamics\Hinge2Constraint.cs" />
     <Compile Include="Dynamics\HingeConstraint.cs" />

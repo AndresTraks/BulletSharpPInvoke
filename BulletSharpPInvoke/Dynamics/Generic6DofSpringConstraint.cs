@@ -73,4 +73,16 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpringConstraint_setStiffness(IntPtr obj, int index, float stiffness);
 	}
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal unsafe struct Generic6DofSpringConstraintFloatData
+    {
+        public Generic6DofConstraintFloatData SixDofData;
+        public fixed int SpringEnabled[6];
+        public fixed float EquilibriumPoint[6];
+        public fixed float SpringStiffness[6];
+        public fixed float SpringDamping[6];
+
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofSpringConstraintFloatData), fieldName).ToInt32(); }
+    }
 }

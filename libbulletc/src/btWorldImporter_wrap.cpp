@@ -132,6 +132,13 @@ btGeneric6DofSpringConstraint* btWorldImporter_createGeneric6DofSpringConstraint
 	return obj->createGeneric6DofSpringConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB), useLinearReferenceFrameA);
 }
 
+btGeneric6DofSpring2Constraint* btWorldImporter_createGeneric6DofSpring2Constraint(btWorldImporter* obj, btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB, int rotateOrder)
+{
+	TRANSFORM_CONV(frameInA);
+	TRANSFORM_CONV(frameInB);
+	return obj->createGeneric6DofSpring2Constraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB), rotateOrder);
+}
+
 btGImpactMeshShape* btWorldImporter_createGimpactShape(btWorldImporter* obj, btStridingMeshInterface* trimesh)
 {
 	return obj->createGimpactShape(trimesh);
