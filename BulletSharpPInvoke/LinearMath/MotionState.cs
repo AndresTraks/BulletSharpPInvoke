@@ -9,9 +9,9 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate void GetWorldTransformUnmanagedDelegate(out Matrix worldTrans);
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate void SetWorldTransformUnmanagedDelegate(ref Matrix worldTrans);
 
         GetWorldTransformUnmanagedDelegate _getWorldTransform;

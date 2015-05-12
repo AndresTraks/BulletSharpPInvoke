@@ -236,9 +236,9 @@ namespace BulletSharp.SoftBody
 			internal IntPtr _native;
             private bool _preventDelete;
 
-            [UnmanagedFunctionPointer(Native.Conv)]
+            [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
             delegate void PrepareUnmanagedDelegate(IntPtr aJoint);
-            [UnmanagedFunctionPointer(Native.Conv)]
+            [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
             delegate float SpeedUnmanagedDelegate(IntPtr aJoint, float current);
 
             PrepareUnmanagedDelegate _prepare;
@@ -1612,7 +1612,7 @@ namespace BulletSharp.SoftBody
 	{
 		internal IntPtr _native;
 
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate float EvalUnmanagedDelegate([In] ref Vector3 x);
 
         EvalUnmanagedDelegate _eval;

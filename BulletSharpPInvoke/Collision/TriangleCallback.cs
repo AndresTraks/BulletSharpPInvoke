@@ -9,7 +9,7 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate void ProcessTriangleDelegate(IntPtr triangle, int partId, int triangleIndex);
 
         ProcessTriangleDelegate _processTriangle;
@@ -64,7 +64,7 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate void InternalProcessTriangleIndexDelegate(IntPtr triangle, int partId, int triangleIndex);
 
         InternalProcessTriangleIndexDelegate _internalProcessTriangleIndex;

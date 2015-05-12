@@ -16,7 +16,7 @@ namespace BulletSharp
 
 	public class CollisionDispatcher : Dispatcher
 	{
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         private delegate void NearCallbackUnmanagedDelegate(IntPtr collisionPair, IntPtr dispatcher, IntPtr dispatchInfo);
 
         protected CollisionConfiguration _collisionConfiguration;

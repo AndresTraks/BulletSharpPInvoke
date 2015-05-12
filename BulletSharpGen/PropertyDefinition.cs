@@ -12,6 +12,10 @@ namespace BulletSharpGen
         {
             get
             {
+                if (Getter.IsVoid)
+                {
+                    return Getter.Parameters[0].Type;
+                }
                 return Getter.ReturnType;
             }
         }

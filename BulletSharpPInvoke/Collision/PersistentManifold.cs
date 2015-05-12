@@ -20,9 +20,9 @@ namespace BulletSharp
         static IntPtr _contactDestroyedUnmanagedPtr;
         static IntPtr _contactProcessedUnmanagedPtr;
 
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         private delegate bool ContactDestroyedUnmanagedDelegate(IntPtr userPersistantData);
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         private delegate bool ContactProcessedUnmanagedDelegate(IntPtr cp, IntPtr body0, IntPtr body1);
 
         static bool ContactDestroyedUnmanaged(IntPtr userPersistentData)

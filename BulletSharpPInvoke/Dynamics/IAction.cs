@@ -16,9 +16,9 @@ namespace BulletSharp
         internal IAction _actionInterface;
         internal DynamicsWorld _world;
 
-        [UnmanagedFunctionPointerAttribute(Native.Conv)]
+        [UnmanagedFunctionPointerAttribute(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate void DebugDrawUnmanagedDelegate(IntPtr debugDrawer);
-        [UnmanagedFunctionPointerAttribute(Native.Conv)]
+        [UnmanagedFunctionPointerAttribute(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate void UpdateActionUnmanagedDelegate(IntPtr collisionWorld, float deltaTimeStep);
 
         DebugDrawUnmanagedDelegate _debugDraw;

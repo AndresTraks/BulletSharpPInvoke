@@ -15,6 +15,8 @@ namespace BulletSharp
         Contact,
         D6Spring,
         Gear,
+        Fixed,
+        D6Spring2,
         Max
     }
 

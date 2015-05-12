@@ -120,9 +120,9 @@ namespace BulletSharp
     {
         internal IntPtr _native;
 
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate float AddSingleResultUnmanagedDelegate(IntPtr cp, IntPtr colObj0Wrap, int partId0, int index0, IntPtr colObj1Wrap, int partId1, int index1);
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate bool NeedsCollisionUnmanagedDelegate(IntPtr proxy0);
 
         AddSingleResultUnmanagedDelegate _addSingleResult;
@@ -210,9 +210,9 @@ namespace BulletSharp
     {
         internal IntPtr _native;
 
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate float AddSingleResultUnmanagedDelegate(IntPtr convexResult, bool normalInWorldSpace);
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate bool NeedsCollisionUnmanagedDelegate(IntPtr proxy0);
 
         AddSingleResultUnmanagedDelegate _addSingleResult;
@@ -614,9 +614,9 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate float AddSingleResultUnmanagedDelegate(IntPtr rayResult, bool normalInWorldSpace);
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate bool NeedsCollisionUnmanagedDelegate(IntPtr proxy0);
 
 		AddSingleResultUnmanagedDelegate _addSingleResult;

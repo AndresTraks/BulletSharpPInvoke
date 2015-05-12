@@ -37,7 +37,7 @@ namespace BulletSharpGen
             "SpuMinkowskiPenetrationDepthSolver", "SpuSampleTask", "SpuSampleTaskProcess", "SpuSync", "StackAlloc",
             "SubSimplexConvexCast", "Transform", "TrbDynBody", "TrbStateVec", "vectormath_aos", "vmInclude",
             "HacdCircularList", "HacdGraph", "HacdICHull", "HacdManifoldMesh", "HacdVector",
-            "Quaternion", "Vector3", "LemkeAlgorithm", "CharacterControllerInterface" };
+            "Quaternion", "Vector3", "LemkeAlgorithm", "CharacterControllerInterface", "TypedObject" };
 
             // Managed method names
             methodNameMapping.Add("gimpact_vs_compoundshape", "GImpactVsCompoundshape");
@@ -434,9 +434,10 @@ namespace BulletSharpGen
             // Turn getters/setters into properties
             foreach (ClassDefinition c in classDefinitions.Values)
             {
+                // Getters with return type and 0 arguments
                 foreach (var method in c.Methods)
                 {
-                    if (method.Parameters.Length == 0 &&
+                    if (method.Parameters.Length == 0 && !method.IsVoid &&
                         (method.Name.StartsWith("get", StringComparison.InvariantCultureIgnoreCase) ||
                         method.Name.StartsWith("has", StringComparison.InvariantCultureIgnoreCase) ||
                         method.Name.StartsWith("is", StringComparison.InvariantCultureIgnoreCase)))
@@ -447,6 +448,34 @@ namespace BulletSharpGen
                         }
                     }
                 }
+
+                // Getters with void type and 1 pointer argument for the return value
+                // TODO: in general, it is not possible to automatically determine
+                // whether such methods can be wrapped by properties or not,
+                // so read this info from the project configuration.
+                foreach (var method in c.Methods)
+                {
+                    if (method.Parameters.Length == 1 && method.IsVoid &&
+                        method.Name.StartsWith("get", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        if (method.Property != null)
+                        {
+                            continue;
+                        }
+
+                        var paramType = method.Parameters[0].Type;
+                        if (paramType.IsPointer || paramType.IsReference)
+                        {
+                            // TODO: check project configuration
+                            //if (true)
+                            {
+                                new PropertyDefinition(method);
+                            }
+                        }
+                    }
+                }
+
+                // Setters
                 foreach (var method in c.Methods)
                 {
                     if (method.Parameters.Length == 1 &&

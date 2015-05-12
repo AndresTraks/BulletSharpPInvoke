@@ -10,7 +10,7 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate bool CallbackFunctionUnmanagedDelegate(IntPtr msg, double progress, double globalConcavity, IntPtr n);
 
         public delegate bool CallBackFunction(string msg, double progress, double globalConcativity, int n);

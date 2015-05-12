@@ -10,7 +10,7 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
-        [UnmanagedFunctionPointer(Native.Conv)]
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         internal delegate bool ProcessUnmanagedDelegate(IntPtr proxy);
 
         internal ProcessUnmanagedDelegate _process;

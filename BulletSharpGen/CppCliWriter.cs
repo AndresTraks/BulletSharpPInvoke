@@ -91,7 +91,6 @@ namespace BulletSharpGen
             {"MultimaterialTriangleMeshShape", "DISABLE_UNCOMMON"},
             {"NncgConstraintSolver", "DISABLE_CONSTRAINTS"},
             {"OptimizedBvh", "DISABLE_BVH"},
-            {"ParallelConstraintSolver", "DISABLE_MULTITHREADED"},
             {"Point2PointConstraint", "DISABLE_CONSTRAINTS"},
             {"PointCollector", "DISABLE_UNCOMMON"},
             {"PoolAllocator", "DISABLE_UNCOMMON"},
@@ -115,8 +114,6 @@ namespace BulletSharpGen
             {"SphereSphereCollisionAlgorithm", "DISABLE_COLLISION_ALGORITHMS"},
             {"SphereTriangleCollisionAlgorithm", "DISABLE_COLLISION_ALGORITHMS"},
             {"SphereTriangleDetector", "DISABLE_UNCOMMON"},
-            {"SpuGatheringCollisionDispatcher", "DISABLE_MULTITHREADED"},
-            {"ThreadSupportInterface", "DISABLE_MULTITHREADED"},
             {"TriangleBuffer", "DISABLE_UNCOMMON"},
             {"TriangleIndexVertexMaterialArray", "DISABLE_UNCOMMON"},
             {"TriangleShape", "DISABLE_UNCOMMON"},
@@ -127,7 +124,6 @@ namespace BulletSharpGen
             {"VehicleRaycaster", "DISABLE_VEHICLE"},
             {"VoronoiSimplexSolver", "DISABLE_UNCOMMON"},
             {"WheelInfo", "DISABLE_VEHICLE"},
-            {"Win32ThreadSupport", "DISABLE_MULTITHREADED"},
             {"WorldImporter", "DISABLE_SERIALIZE"}
         };
 
@@ -373,17 +369,26 @@ namespace BulletSharpGen
             // Definition: return type
             if (!method.IsConstructor)
             {
+                var returnType = method.ReturnType;
+
                 if (method.Property != null)
                 {
-                    // If property name matches type name, resolve ambiguity
-                    if (method.Equals(method.Property.Getter) &&
-                        method.Property.Name.Equals(method.Property.Type.ManagedName))
+                    if (method.Equals(method.Property.Getter))
                     {
-                        HeaderWrite(NamespaceName + "::");
+                        // If property name matches type name, resolve ambiguity
+                        if (method.Property.Name.Equals(method.Property.Type.ManagedName))
+                        {
+                            HeaderWrite(NamespaceName + "::");
+                        }
+
+                        // Getter with parameter for return value
+                        if (method.Parameters.Length == 1)
+                        {
+                            returnType = method.Parameters[0].Type;
+                        }
                     }
                 }
 
-                var returnType = method.ReturnType;
                 Write(BulletParser.GetTypeRefName(returnType));
                 Write(' ');
             }
@@ -419,6 +424,11 @@ namespace BulletSharpGen
 
             // Definition: parameters
             int numParameters = method.Parameters.Length - numOptionalParams;
+            // Getters with parameter for return value
+            if (numParameters == 1 && method.Property != null && method.Equals(method.Property.Getter))
+            {
+                numParameters = 0;
+            }
             bool hasOptionalParam = false;
             for (int i = 0; i < numParameters; i++)
             {
@@ -545,6 +555,13 @@ namespace BulletSharpGen
                             SourceWrite("return ");
                         }
                         SourceWrite(BulletParser.GetTypeMarshalConstructorStart(method));
+                    }
+                    else
+                    {
+                        if (method.Property != null && method.Equals(method.Property.Getter))
+                        {
+                            SourceWrite(BulletParser.GetTypeMarshalConstructorStart(method));
+                        }
                     }
                 }
 
