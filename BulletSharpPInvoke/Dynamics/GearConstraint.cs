@@ -8,14 +8,14 @@ namespace BulletSharp
 	public class GearConstraint : TypedConstraint
 	{
 		public GearConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 axisInA, Vector3 axisInB)
-            : base(btGearConstraint_new(rigidBodyA._native, rigidBodyB._native, ref axisInA, ref axisInB))
+			: base(btGearConstraint_new(rigidBodyA._native, rigidBodyB._native, ref axisInA, ref axisInB))
 		{
             _rigidBodyA = rigidBodyA;
             _rigidBodyB = rigidBodyB;
 		}
 
 		public GearConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 axisInA, Vector3 axisInB, float ratio)
-            : base(btGearConstraint_new2(rigidBodyA._native, rigidBodyB._native, ref axisInA, ref axisInB, ratio))
+			: base(btGearConstraint_new2(rigidBodyA._native, rigidBodyB._native, ref axisInA, ref axisInB, ratio))
 		{
             _rigidBodyA = rigidBodyA;
             _rigidBodyB = rigidBodyB;
@@ -60,7 +60,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btGearConstraint_getRatio(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGearConstraint_setAxisA(IntPtr obj, [In] ref Vector3 axisA);
+        static extern void btGearConstraint_setAxisA(IntPtr obj, [In] ref Vector3 axisA);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern void btGearConstraint_setAxisB(IntPtr obj, [In] ref Vector3 axisB);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

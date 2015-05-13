@@ -8,7 +8,7 @@ namespace BulletSharp
 	public class UniversalConstraint : Generic6DofConstraint
 	{
 		public UniversalConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 anchor, Vector3 axis1, Vector3 axis2)
-            : base(btUniversalConstraint_new(rigidBodyA._native, rigidBodyB._native, ref anchor, ref axis1, ref axis2))
+			: base(btUniversalConstraint_new(rigidBodyA._native, rigidBodyB._native, ref anchor, ref axis1, ref axis2))
 		{
             _rigidBodyA = rigidBodyA;
             _rigidBodyB = rigidBodyB;

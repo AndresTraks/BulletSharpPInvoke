@@ -63,7 +63,7 @@ namespace BulletSharp
             : base(btPoint2PointConstraint_new2(rigidBodyA._native, ref pivotInA))
 		{
             _rigidBodyA = rigidBodyA;
-            _rigidBodyB = FixedBody;
+            _rigidBodyB = GetFixedBody();
 		}
 
 		public void GetInfo1NonVirtual(ConstraintInfo1 info)

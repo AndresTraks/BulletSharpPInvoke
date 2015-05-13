@@ -13,12 +13,12 @@ namespace BulletSharp
 	public class ConstraintSolver : IDisposable
 	{
 		internal IntPtr _native;
-        private readonly bool _preventDelete;
+		bool _preventDelete;
 
-		internal ConstraintSolver(IntPtr native, bool preventDelete = false)
+		internal ConstraintSolver(IntPtr native, bool preventDelete)
 		{
 			_native = native;
-            _preventDelete = preventDelete;
+			_preventDelete = preventDelete;
 		}
 
 		public void AllSolved(ContactSolverInfo __unnamed0, IDebugDraw __unnamed1)
@@ -56,10 +56,10 @@ namespace BulletSharp
 		{
 			if (_native != IntPtr.Zero)
 			{
-                if (!_preventDelete)
-                {
-                    btConstraintSolver_delete(_native);
-                }
+				if (!_preventDelete)
+				{
+					btConstraintSolver_delete(_native);
+				}
 				_native = IntPtr.Zero;
 			}
 		}

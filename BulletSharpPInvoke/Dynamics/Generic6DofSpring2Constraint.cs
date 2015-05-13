@@ -650,14 +650,14 @@ namespace BulletSharp
 		public Generic6DofSpring2Constraint(RigidBody rigidBodyB, Matrix frameInB)
 			: base(btGeneric6DofSpring2Constraint_new3(rigidBodyB._native, ref frameInB))
 		{
-            _rigidBodyA = FixedBody;
+            _rigidBodyA = GetFixedBody();
             _rigidBodyB = rigidBodyB;
 		}
 
 		public Generic6DofSpring2Constraint(RigidBody rigidBodyB, Matrix frameInB, RotateOrder rotOrder)
 			: base(btGeneric6DofSpring2Constraint_new4(rigidBodyB._native, ref frameInB, rotOrder))
 		{
-            _rigidBodyA = FixedBody;
+            _rigidBodyA = GetFixedBody();
             _rigidBodyB = rigidBodyB;
 		}
 
@@ -686,41 +686,11 @@ namespace BulletSharp
 			return btGeneric6DofSpring2Constraint_getAngle(_native, axisIndex);
 		}
 
-		public void GetAngularLowerLimit(out Vector3 angularLower)
-		{
-			btGeneric6DofSpring2Constraint_getAngularLowerLimit(_native, out angularLower);
-		}
-
-		public void GetAngularLowerLimitReversed(out Vector3 angularLower)
-		{
-			btGeneric6DofSpring2Constraint_getAngularLowerLimitReversed(_native, out angularLower);
-		}
-
-		public void GetAngularUpperLimit(out Vector3 angularUpper)
-		{
-			btGeneric6DofSpring2Constraint_getAngularUpperLimit(_native, out angularUpper);
-		}
-
-		public void GetAngularUpperLimitReversed(out Vector3 angularUpper)
-		{
-			btGeneric6DofSpring2Constraint_getAngularUpperLimitReversed(_native, out angularUpper);
-		}
-
 		public Vector3 GetAxis(int axisIndex)
 		{
 			Vector3 value;
 			btGeneric6DofSpring2Constraint_getAxis(_native, axisIndex, out value);
 			return value;
-		}
-
-		public void GetLinearLowerLimit(out Vector3 linearLower)
-		{
-			btGeneric6DofSpring2Constraint_getLinearLowerLimit(_native, out linearLower);
-		}
-
-		public void GetLinearUpperLimit(out Vector3 linearUpper)
-		{
-			btGeneric6DofSpring2Constraint_getLinearUpperLimit(_native, out linearUpper);
 		}
 
 		public float GetRelativePivotPosition(int axisIndex)
@@ -740,26 +710,6 @@ namespace BulletSharp
 		public bool IsLimited(int limitIndex)
 		{
 			return btGeneric6DofSpring2Constraint_isLimited(_native, limitIndex);
-		}
-
-		public void SetAngularLowerLimit(Vector3 angularLower)
-		{
-			btGeneric6DofSpring2Constraint_setAngularLowerLimit(_native, ref angularLower);
-		}
-
-		public void SetAngularLowerLimitReversed(Vector3 angularLower)
-		{
-			btGeneric6DofSpring2Constraint_setAngularLowerLimitReversed(_native, ref angularLower);
-		}
-
-		public void SetAngularUpperLimit(Vector3 angularUpper)
-		{
-			btGeneric6DofSpring2Constraint_setAngularUpperLimit(_native, ref angularUpper);
-		}
-
-		public void SetAngularUpperLimitReversed(Vector3 angularUpper)
-		{
-			btGeneric6DofSpring2Constraint_setAngularUpperLimitReversed(_native, ref angularUpper);
 		}
 
 		public void SetAxis(Vector3 axis1, Vector3 axis2)
@@ -807,16 +757,6 @@ namespace BulletSharp
 			btGeneric6DofSpring2Constraint_setLimitReversed(_native, axis, lo, hi);
 		}
 
-		public void SetLinearLowerLimit(Vector3 linearLower)
-		{
-			btGeneric6DofSpring2Constraint_setLinearLowerLimit(_native, ref linearLower);
-		}
-
-		public void SetLinearUpperLimit(Vector3 linearUpper)
-		{
-			btGeneric6DofSpring2Constraint_setLinearUpperLimit(_native, ref linearUpper);
-		}
-
 		public void SetMaxMotorForce(int index, float force)
 		{
 			btGeneric6DofSpring2Constraint_setMaxMotorForce(_native, index, force);
@@ -840,6 +780,50 @@ namespace BulletSharp
 		public void SetTargetVelocity(int index, float velocity)
 		{
 			btGeneric6DofSpring2Constraint_setTargetVelocity(_native, index, velocity);
+		}
+
+		public Vector3 AngularLowerLimit
+		{
+			get
+			{
+				Vector3 value;
+				btGeneric6DofSpring2Constraint_getAngularLowerLimit(_native, out value);
+				return value;
+			}
+			set { btGeneric6DofSpring2Constraint_setAngularLowerLimit(_native, ref value); }
+		}
+
+		public Vector3 AngularLowerLimitReversed
+		{
+			get
+			{
+				Vector3 value;
+				btGeneric6DofSpring2Constraint_getAngularLowerLimitReversed(_native, out value);
+				return value;
+			}
+			set { btGeneric6DofSpring2Constraint_setAngularLowerLimitReversed(_native, ref value); }
+		}
+
+		public Vector3 AngularUpperLimit
+		{
+			get
+			{
+				Vector3 value;
+				btGeneric6DofSpring2Constraint_getAngularUpperLimit(_native, out value);
+				return value;
+			}
+			set { btGeneric6DofSpring2Constraint_setAngularUpperLimit(_native, ref value); }
+		}
+
+		public Vector3 AngularUpperLimitReversed
+		{
+			get
+			{
+				Vector3 value;
+				btGeneric6DofSpring2Constraint_getAngularUpperLimitReversed(_native, out value);
+				return value;
+			}
+			set { btGeneric6DofSpring2Constraint_setAngularUpperLimitReversed(_native, ref value); }
 		}
 
 		public Matrix CalculatedTransformA
@@ -880,6 +864,28 @@ namespace BulletSharp
 				btGeneric6DofSpring2Constraint_getFrameOffsetB(_native, out value);
 				return value;
 			}
+		}
+
+		public Vector3 LinearLowerLimit
+		{
+			get
+			{
+				Vector3 value;
+				btGeneric6DofSpring2Constraint_getLinearLowerLimit(_native, out value);
+				return value;
+			}
+			set { btGeneric6DofSpring2Constraint_setLinearLowerLimit(_native, ref value); }
+		}
+
+		public Vector3 LinearUpperLimit
+		{
+			get
+			{
+				Vector3 value;
+				btGeneric6DofSpring2Constraint_getLinearUpperLimit(_native, out value);
+				return value;
+			}
+			set { btGeneric6DofSpring2Constraint_setLinearUpperLimit(_native, ref value); }
 		}
 
 		public RotateOrder RotationOrder

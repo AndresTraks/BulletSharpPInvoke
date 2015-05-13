@@ -124,7 +124,7 @@ namespace BulletSharp
                     {
                         if (!file.LibPointers.ContainsKey(collisionObjectAPtr))
                         {
-                            a = TypedConstraint.FixedBody;
+                            a = TypedConstraint.GetFixedBody();
                         }
                         else
                         {
@@ -132,7 +132,7 @@ namespace BulletSharp
                             a = RigidBody.Upcast(_bodyMap[coData]);
                             if (a == null)
                             {
-                                a = TypedConstraint.FixedBody;
+                                a = TypedConstraint.GetFixedBody();
                             }
                         }
                     }
@@ -141,7 +141,7 @@ namespace BulletSharp
                     {
                         if (!file.LibPointers.ContainsKey(collisionObjectBPtr))
                         {
-                            b = TypedConstraint.FixedBody;
+                            b = TypedConstraint.GetFixedBody();
                         }
                         else
                         {
@@ -149,7 +149,7 @@ namespace BulletSharp
                             b = RigidBody.Upcast(_bodyMap[coData]);
                             if (b == null)
                             {
-                                b = TypedConstraint.FixedBody;
+                                b = TypedConstraint.GetFixedBody();
                             }
                         }
                     }

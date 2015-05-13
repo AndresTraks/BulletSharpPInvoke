@@ -6,13 +6,8 @@ namespace BulletSharp
 {
 	public class MultiBodyConstraintSolver : SequentialImpulseConstraintSolver
 	{
-		internal MultiBodyConstraintSolver(IntPtr native)
-			: base(native)
-		{
-		}
-
 		public MultiBodyConstraintSolver()
-			: base(btMultiBodyConstraintSolver_new())
+			: base(btMultiBodyConstraintSolver_new(), false)
 		{
 		}
         /*

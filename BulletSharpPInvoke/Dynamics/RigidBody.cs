@@ -20,11 +20,6 @@ namespace BulletSharp
 	{
         private MotionState _motionState;
 
-        public RigidBody(IntPtr native)
-            : base(native)
-        {
-        }
-
 		public RigidBody(RigidBodyConstructionInfo constructionInfo)
 			: base(btRigidBody_new(constructionInfo._native))
 		{
@@ -420,7 +415,7 @@ namespace BulletSharp
             get { return _motionState; }
             set
             {
-                btRigidBody_setMotionState(_native, value._native);
+                btRigidBody_setMotionState(_native, (value != null) ? value._native : IntPtr.Zero);
                 _motionState = value;
             }
 		}

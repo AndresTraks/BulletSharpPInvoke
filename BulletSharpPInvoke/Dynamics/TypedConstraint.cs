@@ -5,6 +5,14 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
+    public enum ConstraintParam
+    {
+        Erp = 1,
+        StopErp,
+        Cfm,
+        StopCfm
+    }
+
     public enum TypedConstraintType
     {
         Point2Point = 3,
@@ -20,22 +28,9 @@ namespace BulletSharp
         Max
     }
 
-    public enum ConstraintParam
-    {
-        Erp = 1,
-        StopErp,
-        Cfm,
-        StopCfm
-    }
-
 	public class JointFeedback : IDisposable
 	{
 		internal IntPtr _native;
-
-		internal JointFeedback(IntPtr native)
-		{
-			_native = native;
-		}
 
 		public JointFeedback()
 		{
@@ -134,11 +129,6 @@ namespace BulletSharp
 		{
 			internal IntPtr _native;
 
-			internal ConstraintInfo1(IntPtr native)
-			{
-				_native = native;
-			}
-
 			public ConstraintInfo1()
 			{
 				_native = btTypedConstraint_btConstraintInfo1_new();
@@ -193,11 +183,6 @@ namespace BulletSharp
 		public class ConstraintInfo2 : IDisposable
 		{
 			internal IntPtr _native;
-
-			internal ConstraintInfo2(IntPtr native)
-			{
-				_native = native;
-			}
 
 			public ConstraintInfo2()
 			{
@@ -372,7 +357,8 @@ namespace BulletSharp
 
         internal IntPtr _native;
 
-        private static RigidBody _fixedBody;
+        static RigidBody _fixedBody;
+        JointFeedback _jointFeedback;
 
         protected RigidBody _rigidBodyA;
         protected RigidBody _rigidBodyB;
@@ -415,6 +401,19 @@ namespace BulletSharp
 		{
 			btTypedConstraint_enableFeedback(_native, needsFeedback);
 		}
+
+        public static RigidBody GetFixedBody()
+        {
+            if (_fixedBody == null)
+            {
+                using (var cinfo = new RigidBodyConstructionInfo(0, null, null))
+                {
+                    _fixedBody = new RigidBody(cinfo);
+                    _fixedBody.SetMassProps(0, Vector3.Zero);
+                }
+            }
+            return _fixedBody;
+        }
 
 		public void GetInfo1(ConstraintInfo1 info)
 		{
@@ -498,19 +497,6 @@ namespace BulletSharp
 			set { btTypedConstraint_setDbgDrawSize(_native, value); }
 		}
 
-		public static RigidBody FixedBody
-		{
-            get
-            {
-                if (_fixedBody == null)
-                {
-                    _fixedBody = new RigidBody(btTypedConstraint_getFixedBody());
-                    _fixedBody._preventDelete = true;
-                }
-                return _fixedBody;
-            }
-		}
-
 		public bool IsEnabled
 		{
 			get { return btTypedConstraint_isEnabled(_native); }
@@ -519,12 +505,12 @@ namespace BulletSharp
 
 		public JointFeedback JointFeedback
 		{
-            get
+            get { return _jointFeedback; }
+            set
             {
-                IntPtr ptr = btTypedConstraint_getJointFeedback(_native);
-                return (ptr != IntPtr.Zero) ? new JointFeedback(ptr) : null;
+                btTypedConstraint_setJointFeedback(_native, (value == null) ? value._native : IntPtr.Zero);
+                _jointFeedback = value;
             }
-			set { btTypedConstraint_setJointFeedback(_native, value._native); }
 		}
 
 		public int OverrideNumSolverIterations
@@ -535,12 +521,12 @@ namespace BulletSharp
 
 		public RigidBody RigidBodyA
 		{
-            get { return CollisionObject.GetManaged(btTypedConstraint_getRigidBodyA(_native)) as RigidBody; }
+            get { return _rigidBodyA; }
 		}
 
 		public RigidBody RigidBodyB
 		{
-            get { return CollisionObject.GetManaged(btTypedConstraint_getRigidBodyB(_native)) as RigidBody; }
+            get { return _rigidBodyB; }
 		}
 
 		public int Uid
@@ -602,8 +588,8 @@ namespace BulletSharp
 		static extern TypedConstraintType btTypedConstraint_getConstraintType(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btTypedConstraint_getDbgDrawSize(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btTypedConstraint_getFixedBody();
+		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		//static extern IntPtr btTypedConstraint_getFixedBody();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btTypedConstraint_getInfo1(IntPtr obj, IntPtr info);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -616,10 +602,10 @@ namespace BulletSharp
         static extern float btTypedConstraint_getParam(IntPtr obj, ConstraintParam num);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern float btTypedConstraint_getParam2(IntPtr obj, ConstraintParam num, int axis);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btTypedConstraint_getRigidBodyA(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btTypedConstraint_getRigidBodyB(IntPtr obj);
+		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		//static extern IntPtr btTypedConstraint_getRigidBodyA(IntPtr obj);
+		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		//static extern IntPtr btTypedConstraint_getRigidBodyB(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btTypedConstraint_getUid(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -671,10 +657,12 @@ namespace BulletSharp
 	public class AngularLimit : IDisposable
 	{
 		internal IntPtr _native;
+		bool _preventDelete;
 
-		internal AngularLimit(IntPtr native)
+		internal AngularLimit(IntPtr native, bool preventDelete)
 		{
 			_native = native;
+			_preventDelete = preventDelete;
 		}
 
 		public AngularLimit()
@@ -772,7 +760,10 @@ namespace BulletSharp
 		{
 			if (_native != IntPtr.Zero)
 			{
-				btAngularLimit_delete(_native);
+				if (!_preventDelete)
+				{
+					btAngularLimit_delete(_native);
+				}
 				_native = IntPtr.Zero;
 			}
 		}

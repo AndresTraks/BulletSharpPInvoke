@@ -8,13 +8,8 @@ namespace BulletSharp
 	{
         private MlcpSolverInterface _mlcpSolver;
 
-		internal MlcpSolver(IntPtr native)
-			: base(native)
-		{
-		}
-
 		public MlcpSolver(MlcpSolverInterface solver)
-			: base(btMLCPSolver_new(solver._native))
+			: base(btMLCPSolver_new(solver._native), false)
 		{
             _mlcpSolver = solver;
 		}

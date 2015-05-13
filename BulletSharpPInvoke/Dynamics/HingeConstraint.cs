@@ -18,7 +18,7 @@ namespace BulletSharp
             : base(btHingeConstraint_new4(rigidBodyA._native, ref pivotInA, ref axisInA, useReferenceFrameA))
 		{
             _rigidBodyA = rigidBodyA;
-            _rigidBodyB = FixedBody;
+            _rigidBodyB = GetFixedBody();
 		}
 
 		public HingeConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix rigidBodyAFrame, Matrix rigidBodyBFrame, bool useReferenceFrameA = false)
@@ -32,7 +32,7 @@ namespace BulletSharp
             : base(btHingeConstraint_new8(rigidBodyA._native, ref rigidBodyAFrame, useReferenceFrameA))
 		{
             _rigidBodyA = rigidBodyA;
-            _rigidBodyB = FixedBody;
+            _rigidBodyB = GetFixedBody();
 		}
 
 		public void EnableAngularMotor(bool enableMotor, float targetVelocity, float maxMotorImpulse)

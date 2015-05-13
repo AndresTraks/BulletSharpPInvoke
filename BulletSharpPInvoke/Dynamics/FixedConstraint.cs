@@ -5,10 +5,10 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
-	public class FixedConstraint : TypedConstraint
+	public class FixedConstraint : Generic6DofSpring2Constraint
 	{
 		public FixedConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix frameInA, Matrix frameInB)
-            : base(btFixedConstraint_new(rigidBodyA._native, rigidBodyB._native, ref frameInA, ref frameInB))
+			: base(btFixedConstraint_new(rigidBodyA._native, rigidBodyB._native, ref frameInA, ref frameInB))
 		{
             _rigidBodyA = rigidBodyA;
             _rigidBodyB = rigidBodyB;

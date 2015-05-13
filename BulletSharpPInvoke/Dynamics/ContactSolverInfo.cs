@@ -15,19 +15,19 @@ namespace BulletSharp
         EnableFrictionDirectionCaching = 32,
         DisableVelocityDependentFrictionDirection = 64,
         CacheFriendly = 128,
-        Simd = 256,	//enabled for Windows, the solver innerloop is branchless SIMD, 40% faster than FPU/scalar version
-        Cuda = 512	//will be open sourced during Game Developers Conference 2009. Much faster.
+        Simd = 256,
+        Cuda = 512
     }
 
 	public class ContactSolverInfoData : IDisposable
 	{
 		internal IntPtr _native;
-        private readonly bool _preventDelete;
+		bool _preventDelete;
 
 		internal ContactSolverInfoData(IntPtr native, bool preventDelete)
 		{
 			_native = native;
-            _preventDelete = preventDelete;
+			_preventDelete = preventDelete;
 		}
 
 		public ContactSolverInfoData()
@@ -171,10 +171,10 @@ namespace BulletSharp
 		{
 			if (_native != IntPtr.Zero)
 			{
-                if (!_preventDelete)
-                {
-                    btContactSolverInfoData_delete(_native);
-                }
+				if (!_preventDelete)
+				{
+					btContactSolverInfoData_delete(_native);
+				}
 				_native = IntPtr.Zero;
 			}
 		}

@@ -128,7 +128,7 @@ namespace BulletSharpGen
                 "btConvexConcaveCollisionAlgorithm::CreateFunc", "btConvexConcaveCollisionAlgorithm::SwappedCreateFunc", "btConvexConcaveCollisionAlgorithm",
                 "btConvexConvexAlgorithm::CreateFunc", "btConvexConvexAlgorithm",
                 "btConvexPlaneCollisionAlgorithm::CreateFunc",
-                "btDefaultMotionState",
+                "btDefaultMotionState", "btRigidBody",
                 "btDiscreteCollisionDetectorInterface::ClosestPointInput",
                 "btEmptyAlgorithm::CreateFunc", "btEmptyAlgorithm", "btGjkConvexCast",
                 "btGjkEpaPenetrationDepthSolver", "btManifoldResult",
@@ -154,7 +154,12 @@ namespace BulletSharpGen
                 "btSoftBody::ImplicitFn", "btTriangleBuffer", "btMaterialProperties",
                 "btCollisionWorld::LocalConvexResult", "btCollisionWorld::LocalRayResult",
                 "btCollisionWorld::AllHitsRayResultCallback", "btCollisionWorld::ContactResultCallback",
-                "btCollisionWorld::ClosestRayResultCallback"};
+                "btCollisionWorld::ClosestRayResultCallback",
+                "btJointFeedback", "btTypedConstraint::btConstraintInfo1", "btTypedConstraint::btConstraintInfo2",
+                "btConeTwistConstraint", "btFixedConstraint", "btGearConstraint", "btHinge2Constraint",
+                "btHingeConstraint", "btHingeAccumulatedAngleConstraint", "btbtPoint2PointConstraint",
+                "btSliderConstraint", "btUniversalConstraint",
+                "btMLCPSolver", "btMultiBodyConstraintSolver", "btNNCGConstraintSolver" };
 
             // Classes that might be cleaned up by Bullet and not us (use preventDelete to indicate this)
             List<string> preventDelete = new List<string>() {
@@ -165,8 +170,7 @@ namespace BulletSharpGen
                 "btRotationalLimitMotor2", "btTranslationalLimitMotor2",
                 "btConstraintSetting", "btSimulationIslandManager",
                 "btSolve2LinearConstraint", "btIndexedMesh", "btTriangleInfoMap",
-                "btJointFeedback", "btTypedConstraint", "btAngularLimit",
-                "btTypedConstraint::btConstraintInfo1", "btTypedConstraint::btConstraintInfo2",
+                "btAngularLimit", "btContactSolverInfo",
                 "btWheelInfo", "btManifoldPoint", "btCollisionWorld::LocalShapeInfo"};
 
             // Classes that have OnDisposing/OnDisposed events

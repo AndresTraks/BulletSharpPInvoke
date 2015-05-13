@@ -8,16 +8,16 @@ namespace BulletSharp
 	public class SliderConstraint : TypedConstraint
 	{
 		public SliderConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix frameInA, Matrix frameInB, bool useLinearReferenceFrameA)
-            : base(btSliderConstraint_new(rigidBodyA._native, rigidBodyB._native, ref frameInA, ref frameInB, useLinearReferenceFrameA))
+			: base(btSliderConstraint_new(rigidBodyA._native, rigidBodyB._native, ref frameInA, ref frameInB, useLinearReferenceFrameA))
 		{
             _rigidBodyA = rigidBodyA;
             _rigidBodyB = rigidBodyB;
 		}
 
 		public SliderConstraint(RigidBody rigidBodyB, Matrix frameInB, bool useLinearReferenceFrameA)
-            : base(btSliderConstraint_new2(rigidBodyB._native, ref frameInB, useLinearReferenceFrameA))
+			: base(btSliderConstraint_new2(rigidBodyB._native, ref frameInB, useLinearReferenceFrameA))
 		{
-            _rigidBodyA = FixedBody;
+            _rigidBodyA = GetFixedBody();
             _rigidBodyB = rigidBodyB;
 		}
 
