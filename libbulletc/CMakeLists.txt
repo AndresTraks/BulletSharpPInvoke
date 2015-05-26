@@ -48,6 +48,21 @@ ELSE()
     SET(LIB_SUFFIX _${CMAKE_CFG_INTDIR}.lib)
 ENDIF()
 
+IF(MSVC)
+    IF (CMAKE_CL_64)
+      ADD_DEFINITIONS(-D_WIN64)
+    ELSE()
+      OPTION(USE_MSVC_SSE "Use MSVC /arch:sse option"	ON)
+      IF (USE_MSVC_SSE)
+        ADD_DEFINITIONS(/arch:SSE)
+      ENDIF()
+    ENDIF()
+    OPTION(USE_MSVC_FAST_FLOATINGPOINT "Use MSVC /fp:fast option"	ON)
+    IF (USE_MSVC_FAST_FLOATINGPOINT)
+        ADD_DEFINITIONS(/fp:fast)
+  ENDIF()
+ENDIF(MSVC)
+
 ADD_LIBRARY(${BULLETC_LIB} SHARED
     dllmain.cpp
     src/conversion.h

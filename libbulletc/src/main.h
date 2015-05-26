@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstring> // size_t
+
 //#define BULLETC_DISABLE_HACD
 #define BULLETC_DISABLE_IACTION_CLASSES // omits classes inheriting from btActionInterface
 #define BULLETC_DISABLE_SOFTBODY_HELPERS
