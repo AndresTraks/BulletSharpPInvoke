@@ -13,11 +13,6 @@ namespace DemoFramework.SlimDX
             this.device = device;
         }
 
-        protected override int ColorToInt(ref Color c)
-        {
-            return c.ToArgb();
-        }
-
         public void DrawDebugWorld(DynamicsWorld world)
         {
             world.DebugDrawWorld();

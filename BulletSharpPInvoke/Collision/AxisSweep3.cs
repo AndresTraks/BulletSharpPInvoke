@@ -48,6 +48,12 @@ namespace BulletSharp
         {
             return AddHandle(ref aabbMin, ref aabbMax, owner, collisionFilterGroup, collisionFilterMask, dispatcher, multiSapProxy);
         }
+
+        public override BroadphaseProxy CreateProxy(ref Vector3 aabbMin, ref Vector3 aabbMax, int shapeType, IntPtr userPtr, short collisionFilterGroup, short collisionFilterMask, Dispatcher dispatcher, IntPtr multiSapProxy)
+        {
+            //throw new NotImplementedException();
+            return new BroadphaseProxy(btBroadphaseInterface_createProxy(_native, ref aabbMin, ref aabbMax, shapeType, userPtr, collisionFilterGroup, collisionFilterMask, dispatcher._native, multiSapProxy));
+        }
         /*
         Handle GetHandle(ushort index)
         {
@@ -177,6 +183,12 @@ namespace BulletSharp
             CollisionFilterGroups collisionFilterMask, Dispatcher dispatcher, IntPtr multiSapProxy)
         {
             return AddHandle(ref aabbMin, ref aabbMax, owner, collisionFilterGroup, collisionFilterMask, dispatcher, multiSapProxy);
+        }
+
+        public override BroadphaseProxy CreateProxy(ref Vector3 aabbMin, ref Vector3 aabbMax, int shapeType, IntPtr userPtr, short collisionFilterGroup, short collisionFilterMask, Dispatcher dispatcher, IntPtr multiSapProxy)
+        {
+            //throw new NotImplementedException();
+            return new BroadphaseProxy(btBroadphaseInterface_createProxy(_native, ref aabbMin, ref aabbMax, shapeType, userPtr, collisionFilterGroup, collisionFilterMask, dispatcher._native, multiSapProxy));
         }
         /*
         Handle GetHandle(uint index)

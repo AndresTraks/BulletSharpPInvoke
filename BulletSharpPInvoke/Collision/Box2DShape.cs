@@ -72,11 +72,6 @@ namespace BulletSharp
 			}
 		}
 
-		public int VertexCount
-		{
-			get { return btBox2dShape_getVertexCount(_native); }
-		}
-
 		public Vector3Array Vertices
 		{
 			get
@@ -105,8 +100,6 @@ namespace BulletSharp
 		static extern IntPtr btBox2dShape_getNormals(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btBox2dShape_getPlaneEquation(IntPtr obj, [Out] out Vector4 plane, int i);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern int btBox2dShape_getVertexCount(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btBox2dShape_getVertices(IntPtr obj);
 	}

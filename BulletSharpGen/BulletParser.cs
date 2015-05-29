@@ -163,7 +163,7 @@ namespace BulletSharpGen
 
             // Classes that might be cleaned up by Bullet and not us (use preventDelete to indicate this)
             List<string> preventDelete = new List<string>() {
-                "btBroadphaseProxy", "btAABB", "btCollisionAlgorithmCreateFunc",
+                "btAABB", "btCollisionAlgorithmCreateFunc",
                 "btCollisionObject", "btCollisionObjectWrapper", "btCollisionShape",
                 "btConstraintSolver", "btContactSolverInfoData", "btDbvt",
                 "btRotationalLimitMotor", "btTranslationalLimitMotor",
@@ -176,8 +176,7 @@ namespace BulletSharpGen
             // Classes that have OnDisposing/OnDisposed events
             List<string> trackingDisposable = new List<string>() {
                 "btCollisionObject", "btCollisionShape", "btCollisionWorld",
-                "btConstraintSolver", "btDbvt", "btDispatcher", "btRaycastVehicle",
-                "btTypedConstraint"};
+                "btDbvt", "btRaycastVehicle", "btTypedConstraint"};
 
             excludedClassNames = new Dictionary<string, string>();
             foreach (string c in excludedClassArray)

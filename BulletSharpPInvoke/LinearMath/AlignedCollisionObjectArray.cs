@@ -265,36 +265,29 @@ namespace BulletSharp
 
         private void SetBodyBroadphaseHandle(CollisionObject item, BroadphaseInterface broadphase)
         {
+            IntPtr broadphaseHandle = btCollisionObject_getBroadphaseHandle(item._native);
             if (broadphase is DbvtBroadphase)
             {
-                item.BroadphaseHandle = new DbvtProxy(btCollisionObject_getBroadphaseHandle(item._native));
+                item.BroadphaseHandle = new DbvtProxy(broadphaseHandle);
             }
             // TODO: implement AxisSweep3::Handle
             /*
 	        else if (broadphase is AxisSweep3)
             {
-		        item.BroadphaseHandle = new BroadphaseProxy(btCollisionObject_getBroadphaseHandle(item._native));
+		        item.BroadphaseHandle = new AxisSweep3::Handle(broadphaseHandle);
 	        }
             else if (broadphase is AxisSweep3_32Bit)
             {
-		        item.BroadphaseHandle = new BroadphaseProxy(btCollisionObject_getBroadphaseHandle(item._native));
+		        item.BroadphaseHandle = new AxisSweep3_32Bit::Handle(broadphaseHandle);
 	        }
             */
-	        // TODO: implement AxisSweep3::Handle
-	        /*
-	        if (dynamic_cast<btAxisSweep3*>(broadphase)) {
-		        item->BroadphaseHandle = gcnew BroadphaseProxy(item->_native->getBroadphaseHandle());
-	        }
-	        else if (dynamic_cast<bt32BitAxisSweep3*>(broadphase)) {
-		        item->BroadphaseHandle = gcnew BroadphaseProxy(item->_native->getBroadphaseHandle());
-	        }*/
-	        else if (broadphase is SimpleBroadphase)
+            else if (broadphase is SimpleBroadphase)
             {
-                item.BroadphaseHandle = new SimpleBroadphaseProxy(btCollisionObject_getBroadphaseHandle(item._native));
+                item.BroadphaseHandle = new SimpleBroadphaseProxy(broadphaseHandle);
 	        }
             else
             {
-                item.BroadphaseHandle = new BroadphaseProxy(btCollisionObject_getBroadphaseHandle(item._native));
+                item.BroadphaseHandle = new BroadphaseProxy(broadphaseHandle);
 	        }
         }
 

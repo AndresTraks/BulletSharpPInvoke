@@ -65,7 +65,7 @@ namespace DemoFramework.SlimDX
         Mesh CreateShape(CollisionShape shape)
         {
             uint[] indices;
-            BulletSharp.Vector3[] vertices = CreateShape(shape, out indices);
+            BulletSharp.Math.Vector3[] vertices = CreateShape(shape, out indices);
 
             int vertexCount = vertices.Length / 2;
             int indexCount = (indices != null) ? indices.Length : vertexCount;
@@ -222,25 +222,25 @@ namespace DemoFramework.SlimDX
             device.SetRenderState(RenderState.CullMode, cullMode);
         }
 
-        void PlaneSpace1(BulletSharp.Vector3 n, out BulletSharp.Vector3 p, out BulletSharp.Vector3 q)
+        void PlaneSpace1(BulletSharp.Math.Vector3 n, out BulletSharp.Math.Vector3 p, out BulletSharp.Math.Vector3 q)
         {
             if (Math.Abs(n[2]) > (Math.Sqrt(2) / 2))
             {
                 // choose p in y-z plane
                 float a = n[1] * n[1] + n[2] * n[2];
                 float k = 1.0f / (float)Math.Sqrt(a);
-                p = new BulletSharp.Vector3(0, -n[2] * k, n[1] * k);
+                p = new BulletSharp.Math.Vector3(0, -n[2] * k, n[1] * k);
                 // set q = n x p
-                q = BulletSharp.Vector3.Cross(n, p);
+                q = BulletSharp.Math.Vector3.Cross(n, p);
             }
             else
             {
                 // choose p in x-y plane
                 float a = n[0] * n[0] + n[1] * n[1];
                 float k = 1.0f / (float)Math.Sqrt(a);
-                p = new BulletSharp.Vector3(-n[1] * k, n[0] * k, 0);
+                p = new BulletSharp.Math.Vector3(-n[1] * k, n[0] * k, 0);
                 // set q = n x p
-                q = BulletSharp.Vector3.Cross(n, p);
+                q = BulletSharp.Math.Vector3.Cross(n, p);
             }
         }
 
@@ -289,14 +289,14 @@ namespace DemoFramework.SlimDX
                     for (int i = 0; i < tetraCount; i++)
                     {
                         NodePtrArray nodes = tetras[i].Nodes;
-                        BulletSharp.Vector3 v0 = nodes[0].X;
-                        BulletSharp.Vector3 v1 = nodes[1].X;
-                        BulletSharp.Vector3 v2 = nodes[2].X;
-                        BulletSharp.Vector3 v3 = nodes[3].X;
-                        BulletSharp.Vector3 v10 = v1 - v0;
-                        BulletSharp.Vector3 v02 = v0 - v2;
+                        BulletSharp.Math.Vector3 v0 = nodes[0].Position;
+                        BulletSharp.Math.Vector3 v1 = nodes[1].Position;
+                        BulletSharp.Math.Vector3 v2 = nodes[2].Position;
+                        BulletSharp.Math.Vector3 v3 = nodes[3].Position;
+                        BulletSharp.Math.Vector3 v10 = v1 - v0;
+                        BulletSharp.Math.Vector3 v02 = v0 - v2;
 
-                        BulletSharp.Vector3 normal = BulletSharp.Vector3.Cross(v10, v02);
+                        BulletSharp.Math.Vector3 normal = BulletSharp.Math.Vector3.Cross(v10, v02);
                         normal.Normalize();
                         vectors[v].Position = v0;
                         vectors[v].Normal = normal;
@@ -305,7 +305,7 @@ namespace DemoFramework.SlimDX
                         vectors[v + 2].Position = v2;
                         vectors[v + 2].Normal = normal;
 
-                        normal = BulletSharp.Vector3.Cross(v10, v3 - v0);
+                        normal = BulletSharp.Math.Vector3.Cross(v10, v3 - v0);
                         normal.Normalize();
                         vectors[v + 3].Position = v0;
                         vectors[v + 3].Normal = normal;
@@ -314,7 +314,7 @@ namespace DemoFramework.SlimDX
                         vectors[v + 5].Position = v3;
                         vectors[v + 5].Normal = normal;
 
-                        normal = BulletSharp.Vector3.Cross(v2 - v1, v3 - v1);
+                        normal = BulletSharp.Math.Vector3.Cross(v2 - v1, v3 - v1);
                         normal.Normalize();
                         vectors[v + 6].Position = v1;
                         vectors[v + 6].Normal = normal;
@@ -323,7 +323,7 @@ namespace DemoFramework.SlimDX
                         vectors[v + 8].Position = v3;
                         vectors[v + 8].Normal = normal;
 
-                        normal = BulletSharp.Vector3.Cross(v02, v3 - v2);
+                        normal = BulletSharp.Math.Vector3.Cross(v02, v3 - v2);
                         normal.Normalize();
                         vectors[v + 9].Position = v2;
                         vectors[v + 9].Normal = normal;
@@ -349,9 +349,9 @@ namespace DemoFramework.SlimDX
                     for (int i = 0; i < linkCount; i++)
                     {
                         Link link = links[i];
-                        linkArray[i * 2].Position = link.Nodes[0].X;
+                        linkArray[i * 2].Position = link.N[0].Position;
                         linkArray[i * 2].Color = linkColor;
-                        linkArray[i * 2 + 1].Position = link.Nodes[1].X;
+                        linkArray[i * 2 + 1].Position = link.N[1].Position;
                         linkArray[i * 2 + 1].Color = linkColor;
                     }
                     device.DrawUserPrimitives(PrimitiveType.LineList, links.Count, linkArray);

@@ -12,11 +12,6 @@ namespace BulletSharp
 		{
 		}
 
-		public DbvtProxy(Vector3 aabbMin, Vector3 aabbMax, IntPtr userPtr, short collisionFilterGroup, short collisionFilterMask)
-            : base(btDbvtProxy_new(ref aabbMin, ref aabbMax, userPtr, collisionFilterGroup, collisionFilterMask))
-		{
-		}
-
 		public DbvtNode Leaf
 		{
 	        get
@@ -38,8 +33,6 @@ namespace BulletSharp
 			set { btDbvtProxy_setStage(_native, value); }
 		}
 
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btDbvtProxy_new([In] ref Vector3 aabbMin, [In] ref Vector3 aabbMax, IntPtr userPtr, short collisionFilterGroup, short collisionFilterMask);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btDbvtProxy_getLeaf(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -76,6 +69,11 @@ namespace BulletSharp
 		{
 			btDbvtBroadphase_collide(_native, dispatcher._native);
 		}
+
+        public override BroadphaseProxy CreateProxy(ref Vector3 aabbMin, ref Vector3 aabbMax, int shapeType, IntPtr userPtr, short collisionFilterGroup, short collisionFilterMask, Dispatcher dispatcher, IntPtr multiSapProxy)
+        {
+            return new DbvtProxy(btBroadphaseInterface_createProxy(_native, ref aabbMin, ref aabbMax, shapeType, userPtr, collisionFilterGroup, collisionFilterMask, dispatcher._native, multiSapProxy));
+        }
 
 		public void Optimize()
 		{

@@ -12,26 +12,12 @@ namespace BulletSharp
 		{
 		}
 
-		public SimpleBroadphaseProxy()
-			: base(btSimpleBroadphaseProxy_new())
-		{
-		}
-
-		public SimpleBroadphaseProxy(Vector3 minpt, Vector3 maxpt, int shapeType, IntPtr userPtr, short collisionFilterGroup, short collisionFilterMask, IntPtr multiSapProxy)
-			: base(btSimpleBroadphaseProxy_new2(ref minpt, ref maxpt, shapeType, userPtr, collisionFilterGroup, collisionFilterMask, multiSapProxy))
-		{
-		}
-
 		public int NextFree
 		{
 			get { return btSimpleBroadphaseProxy_GetNextFree(_native); }
 			set { btSimpleBroadphaseProxy_SetNextFree(_native, value); }
 		}
 
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSimpleBroadphaseProxy_new();
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSimpleBroadphaseProxy_new2([In] ref Vector3 minpt, [In] ref Vector3 maxpt, int shapeType, IntPtr userPtr, short collisionFilterGroup, short collisionFilterMask, IntPtr multiSapProxy);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSimpleBroadphaseProxy_GetNextFree(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -63,6 +49,11 @@ namespace BulletSharp
 		{
 			return btSimpleBroadphase_aabbOverlap(proxy0._native, proxy1._native);
 		}
+
+        public override BroadphaseProxy CreateProxy(ref Vector3 aabbMin, ref Vector3 aabbMax, int shapeType, IntPtr userPtr, short collisionFilterGroup, short collisionFilterMask, Dispatcher dispatcher, IntPtr multiSapProxy)
+        {
+            return new SimpleBroadphaseProxy(btBroadphaseInterface_createProxy(_native, ref aabbMin, ref aabbMax, shapeType, userPtr, collisionFilterGroup, collisionFilterMask, dispatcher._native, multiSapProxy));
+        }
 
 		public bool TestAabbOverlap(BroadphaseProxy proxy0, BroadphaseProxy proxy1)
 		{
