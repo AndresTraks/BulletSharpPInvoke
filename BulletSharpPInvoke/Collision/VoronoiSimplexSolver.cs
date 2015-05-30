@@ -284,14 +284,14 @@ namespace BulletSharp
 		}
 
         public bool ClosestPtPointTetrahedron(ref Vector3 p, ref Vector3 a, ref Vector3 b, ref Vector3 c, ref Vector3 d, SubSimplexClosestResult finalResult)
-        {
-            return btVoronoiSimplexSolver_closestPtPointTetrahedron(_native, ref p, ref a, ref b, ref c, ref d, finalResult._native);
-        }
+		{
+			return btVoronoiSimplexSolver_closestPtPointTetrahedron(_native, ref p, ref a, ref b, ref c, ref d, finalResult._native);
+		}
 
         public bool ClosestPtPointTriangle(ref Vector3 p, ref Vector3 a, ref Vector3 b, ref Vector3 c, SubSimplexClosestResult result)
-        {
-            return btVoronoiSimplexSolver_closestPtPointTriangle(_native, ref p, ref a, ref b, ref c, result._native);
-        }
+		{
+			return btVoronoiSimplexSolver_closestPtPointTriangle(_native, ref p, ref a, ref b, ref c, result._native);
+		}
 
 		public void ComputePoints(out Vector3 p1, out Vector3 p2)
 		{

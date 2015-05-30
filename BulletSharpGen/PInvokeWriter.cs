@@ -831,13 +831,16 @@ namespace BulletSharpGen
                 {
                     if (method.IsConstructor)
                     {
-                        WriteMethod(method, level, ref overloadIndex);
+                        if (!c.HidePublicConstructors)
+                        {
+                            WriteMethod(method, level, ref overloadIndex);
+                        }
                         hasConstructors = true;
                     }
                 }
 
                 // Write default constructor
-                if (!hasConstructors && !c.IsAbstract)
+                if (!hasConstructors && !c.IsAbstract && !c.HidePublicConstructors)
                 {
                     var constructor = new MethodDefinition(c.Name, c, 0);
                     constructor.IsConstructor = true;

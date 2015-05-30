@@ -160,17 +160,17 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btDbvtAabbMm_Lengths(IntPtr obj, [Out] out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btDbvtAabbMm_Maxs(IntPtr obj, [Out] out Vector3 value);
+		static extern void btDbvtAabbMm_Maxs(IntPtr obj, [Out] out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btDbvtAabbMm_Mins(IntPtr obj, [Out] out Vector3 value);
+		static extern void btDbvtAabbMm_Mins(IntPtr obj, [Out] out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btDbvtAabbMm_ProjectMinimum(IntPtr obj, [In] ref Vector3 v, uint signs);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btDbvtAabbMm_SignedExpand(IntPtr obj, [In] ref Vector3 e);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btDbvtAabbMm_tMaxs(IntPtr obj, [Out] out Vector3 value);
+		static extern void btDbvtAabbMm_tMaxs(IntPtr obj, [Out] out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btDbvtAabbMm_tMins(IntPtr obj, [Out] out Vector3 value);
+		static extern void btDbvtAabbMm_tMins(IntPtr obj, [Out] out Vector3 value);
 	}
 
 	public class DbvtNode
@@ -586,16 +586,16 @@ namespace BulletSharp
 			static extern void btDbvt_sStkNN_delete(IntPtr obj);
 		}
 
-		public class sStkNP : IDisposable
+		public class StkNP : IDisposable
 		{
 			internal IntPtr _native;
 
-			internal sStkNP(IntPtr native)
+			internal StkNP(IntPtr native)
 			{
 				_native = native;
 			}
 
-			public sStkNP(DbvtNode n, uint m)
+			public StkNP(DbvtNode n, uint m)
 			{
 				_native = btDbvt_sStkNP_new(n._native, m);
 			}
@@ -631,7 +631,7 @@ namespace BulletSharp
 				}
 			}
 
-			~sStkNP()
+			~StkNP()
 			{
 				Dispose(false);
 			}
@@ -732,12 +732,12 @@ namespace BulletSharp
 		}
 
 		internal IntPtr _native;
-	    private readonly bool _preventDelete;
+		bool _preventDelete;
 
 		internal Dbvt(IntPtr native, bool preventDelete)
 		{
 			_native = native;
-		    _preventDelete = preventDelete;
+			_preventDelete = preventDelete;
 		}
 
 		public Dbvt()
@@ -770,17 +770,17 @@ namespace BulletSharp
 			btDbvt_clone2(_native, dest._native, iclone._native);
 		}
         /*
-		public static void CollideKDOP(DbvtNode root, Vector3 normals, float offsets, int count, ICollide policy)
+		public static void CollideKdop(DbvtNode root, Vector3 normals, float offsets, int count, ICollide policy)
 		{
 			btDbvt_collideKDOP(root._native, ref normals, offsets._native, count, policy._native);
 		}
 
-		public static void CollideOCL(DbvtNode root, Vector3 normals, float offsets, Vector3 sortaxis, int count, ICollide policy)
+		public static void CollideOcl(DbvtNode root, Vector3 normals, float offsets, Vector3 sortaxis, int count, ICollide policy)
 		{
 			btDbvt_collideOCL(root._native, ref normals, offsets._native, ref sortaxis, count, policy._native);
 		}
 
-		public static void CollideOCL(DbvtNode root, Vector3 normals, float offsets, Vector3 sortaxis, int count, ICollide policy, bool fullsort)
+		public static void CollideOcl(DbvtNode root, Vector3 normals, float offsets, Vector3 sortaxis, int count, ICollide policy, bool fullsort)
 		{
 			btDbvt_collideOCL2(root._native, ref normals, offsets._native, ref sortaxis, count, policy._native, fullsort);
 		}
@@ -790,7 +790,7 @@ namespace BulletSharp
 			btDbvt_collideTT(_native, root0._native, root1._native, policy._native);
 		}
 
-		public void CollideTTpersistentStack(DbvtNode root0, DbvtNode root1, ICollide policy)
+		public void CollideTTPersistentStack(DbvtNode root0, DbvtNode root1, ICollide policy)
 		{
 			btDbvt_collideTTpersistentStack(_native, root0._native, root1._native, policy._native);
 		}
@@ -973,10 +973,10 @@ namespace BulletSharp
 		{
 			if (_native != IntPtr.Zero)
 			{
-			    if (!_preventDelete)
-			    {
-			        btDbvt_delete(_native);
-			    }
+				if (!_preventDelete)
+				{
+					btDbvt_delete(_native);
+				}
 				_native = IntPtr.Zero;
 			}
 		}

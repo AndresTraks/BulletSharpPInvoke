@@ -8,11 +8,6 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
-		internal MaterialProperties(IntPtr native)
-		{
-			_native = native;
-		}
-
 		public MaterialProperties()
 		{
 			_native = btMaterialProperties_new();

@@ -86,9 +86,9 @@ namespace BulletSharp
 		}
 
         public void SetAabbForceUpdate(BroadphaseProxy absproxy, ref Vector3 aabbMin, ref Vector3 aabbMax, Dispatcher __unnamed3)
-        {
-            btDbvtBroadphase_setAabbForceUpdate(_native, absproxy._native, ref aabbMin, ref aabbMax, __unnamed3._native);
-        }
+		{
+			btDbvtBroadphase_setAabbForceUpdate(_native, absproxy._native, ref aabbMin, ref aabbMax, __unnamed3._native);
+		}
 
         public int CId
 		{

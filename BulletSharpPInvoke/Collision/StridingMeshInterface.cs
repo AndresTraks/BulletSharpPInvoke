@@ -85,9 +85,9 @@ namespace BulletSharp
 		}
 
         public void SetPremadeAabb(ref Vector3 aabbMin, ref Vector3 aabbMax)
-        {
-            btStridingMeshInterface_setPremadeAabb(_native, ref aabbMin, ref aabbMax);
-        }
+		{
+			btStridingMeshInterface_setPremadeAabb(_native, ref aabbMin, ref aabbMax);
+		}
 
 		public void UnLockReadOnlyVertexBase(int subpart)
 		{

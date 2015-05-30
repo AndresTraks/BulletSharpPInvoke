@@ -11,7 +11,7 @@ namespace BulletSharp
         private Vector3Array _vertices;
 
 		public Box2DShape(Vector3 boxHalfExtents)
-            : base(btBox2dShape_new(ref boxHalfExtents))
+			: base(btBox2dShape_new(ref boxHalfExtents))
 		{
 		}
 

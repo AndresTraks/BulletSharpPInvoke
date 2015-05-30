@@ -8,6 +8,9 @@ namespace BulletSharp
 	{
 		public class CreateFunc : CollisionAlgorithmCreateFunc
 		{
+            VoronoiSimplexSolver _simplexSolver;
+            ConvexPenetrationDepthSolver _pdSolver;
+
 			public CreateFunc(VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver pdSolver)
 				: base(btConvexConvexAlgorithm_CreateFunc_new(simplexSolver._native, pdSolver._native))
 			{
@@ -25,17 +28,25 @@ namespace BulletSharp
 				set { btConvexConvexAlgorithm_CreateFunc_setNumPerturbationIterations(_native, value); }
 			}
 
-			public ConvexPenetrationDepthSolver PdSolver
-			{
-                get { return new ConvexPenetrationDepthSolver(btConvexConvexAlgorithm_CreateFunc_getPdSolver(_native)); }
-				set { btConvexConvexAlgorithm_CreateFunc_setPdSolver(_native, value._native); }
-			}
+            public ConvexPenetrationDepthSolver PdSolver
+            {
+                get { return _pdSolver; }
+                set
+                {
+                    _pdSolver = value;
+                    btConvexConvexAlgorithm_CreateFunc_setPdSolver(_native, value._native);
+                }
+            }
 
-			public VoronoiSimplexSolver SimplexSolver
-			{
-                get { return new VoronoiSimplexSolver(btConvexConvexAlgorithm_CreateFunc_getSimplexSolver(_native), true); }
-				set { btConvexConvexAlgorithm_CreateFunc_setSimplexSolver(_native, value._native); }
-			}
+            public VoronoiSimplexSolver SimplexSolver
+            {
+                get { return _simplexSolver; }
+                set
+                {
+                    _simplexSolver = value;
+                    btConvexConvexAlgorithm_CreateFunc_setSimplexSolver(_native, value._native);
+                }
+            }
 
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern IntPtr btConvexConvexAlgorithm_CreateFunc_new(IntPtr simplexSolver, IntPtr pdSolver);

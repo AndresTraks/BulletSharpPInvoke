@@ -40,9 +40,9 @@ namespace BulletSharp
 		}
 
         public bool IsInside(ref Vector3 pt, float tolerance)
-        {
-            return btPolyhedralConvexShape_isInside(_native, ref pt, tolerance);
-        }
+		{
+			return btPolyhedralConvexShape_isInside(_native, ref pt, tolerance);
+		}
 
 		public ConvexPolyhedron ConvexPolyhedron
 		{

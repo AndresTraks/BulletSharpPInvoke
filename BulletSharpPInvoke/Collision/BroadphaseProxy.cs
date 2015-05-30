@@ -186,16 +186,16 @@ namespace BulletSharp
             }
 		}
 
-        public CollisionFilterGroups CollisionFilterGroup
+		public short CollisionFilterGroup
 		{
-            get { return (CollisionFilterGroups)btBroadphaseProxy_getCollisionFilterGroup(_native); }
-            set { btBroadphaseProxy_setCollisionFilterGroup(_native, (short)value); }
+			get { return btBroadphaseProxy_getCollisionFilterGroup(_native); }
+			set { btBroadphaseProxy_setCollisionFilterGroup(_native, value); }
 		}
 
-        public CollisionFilterGroups CollisionFilterMask
+		public short CollisionFilterMask
 		{
-            get { return (CollisionFilterGroups)btBroadphaseProxy_getCollisionFilterMask(_native); }
-			set { btBroadphaseProxy_setCollisionFilterMask(_native, (short)value); }
+			get { return btBroadphaseProxy_getCollisionFilterMask(_native); }
+			set { btBroadphaseProxy_setCollisionFilterMask(_native, value); }
 		}
 
 		public IntPtr MultiSapParentProxy

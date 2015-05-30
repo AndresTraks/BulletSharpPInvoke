@@ -44,6 +44,9 @@ namespace BulletSharpGen
             methodNameMapping.Add("gimpact_vs_concave", "GImpactVsConcave");
             methodNameMapping.Add("gimpact_vs_gimpact", "GImpactVsGImpact");
             methodNameMapping.Add("gimpact_vs_shape", "GImpactVsShape");
+            methodNameMapping.Add("collideKDOP", "CollideKdop");
+            methodNameMapping.Add("collideOCL", "CollideOcl");
+            methodNameMapping.Add("collideTTpersistentStack", "CollideTTPersistentStack");
 
             // Managed method parameter names
             parameterNameMapping.Add("i_dataBufferSize", "dataBufferSize");
@@ -108,19 +111,24 @@ namespace BulletSharpGen
             classNameMapping.Add("GIM_QUANTIZED_BVH_NODE_ARRAY", "GimGImpactQuantizedBvhNodeArray");
             classNameMapping.Add("btCPUVertexBufferDescriptor", "CpuVertexBufferDescriptor");
             classNameMapping.Add("btBU_Simplex1to4", "BuSimplex1To4");
+            classNameMapping.Add("sStkCLN", "StkCln");
+            classNameMapping.Add("sStkNN", "StkNN");
+            classNameMapping.Add("sStkNP", "StkNP");
+            classNameMapping.Add("sStkNPS", "StkNps");
 
             // Classes that shouldn't be instantiated by users
             List<string> hidePublicConstructors = new List<string>() {
                 "btActivatingCollisionAlgorithm", "btContactConstraint", "btConvexInternalShape",
                 "btConvexInternalAabbCachingShape", "btPolyhedralConvexAabbCachingShape", "btTypedObject",
-                "btTriangleMeshShape"
+                "btDbvtProxy", "btSimpleBroadphaseProxy", "btDispatcherInfo", "btTriangleMeshShape",
+                "btUsageBitfield"
             };
 
             // Classes for which no internal constructor is needed
             List<string> hideInternalConstructor = new List<string>() {
                 "btBox2dBox2dCollisionAlgorithm", "btBox2dBox2dCollisionAlgorithm::CreateFunc",
                 "btBoxBoxCollisionAlgorithm", "btBoxBoxCollisionAlgorithm::CreateFunc",
-                "btBoxBoxDetector", "btCollisionAlgorithmConstructionInfo", "btDefaultCollisionConstructionInfo",
+                "btBoxBoxDetector", "btBroadphaseRayCallback", "btCollisionAlgorithmConstructionInfo", "btDefaultCollisionConstructionInfo",
                 "btCompoundCollisionAlgorithm::CreateFunc", "btCompoundCollisionAlgorithm::SwappedCreateFunc",
                 "btCompoundCompoundCollisionAlgorithm::CreateFunc", "btCompoundCompoundCollisionAlgorithm::SwappedCreateFunc", "btCompoundCompoundCollisionAlgorithm",
                 "btContinuousConvexCollision",
@@ -131,7 +139,7 @@ namespace BulletSharpGen
                 "btDefaultMotionState", "btRigidBody",
                 "btDiscreteCollisionDetectorInterface::ClosestPointInput",
                 "btEmptyAlgorithm::CreateFunc", "btEmptyAlgorithm", "btGjkConvexCast",
-                "btGjkEpaPenetrationDepthSolver", "btManifoldResult",
+                "btGjkEpaPenetrationDepthSolver",
                 "btMinkowskiPenetrationDepthSolver", "btPointCollector",
                 "btDefaultVehicleRaycaster", "btRaycastVehicle", "btDefaultSerializer",
                 "btSoftBodyConcaveCollisionAlgorithm::CreateFunc", "btSoftBodyConcaveCollisionAlgorithm::SwappedCreateFunc",
@@ -144,28 +152,34 @@ namespace BulletSharpGen
                 "btVehicleRaycaster::btVehicleRaycasterResult", "btOverlapCallback",
                 "btRaycastVehicle::btVehicleTuning",
                 "btBox2dShape", "btBoxShape", "btCapsuleShapeX", "btCapsuleShapeZ",
-                "btCylinderShapeX", "btCylinderShapeZ", "btCompoundShape",
+                "btCylinderShapeX", "btCylinderShapeZ",
                 "btConeShapeX", "btConeShapeZ", "btConvex2dShape", "btConvexHullShape",
                 "btConvexPointCloudShape", "btEmptyShape", "btHeightfieldTerrainShape", "btMinkowskiSumShape",
                 "btMultiSphereShape", "btMultimaterialTriangleMeshShape", "btScaledBvhTriangleMeshShape",
                 "btSphereShape", "btStaticPlaneShape", "btUniformScalingShape",
-                "btCollisionWorld::ClosestConvexResultCallback",
+                "btCollisionWorld::ConvexResultCallback", "btCollisionWorld::ClosestConvexResultCallback",
                 "HACD", "btRigidBody::btRigidBodyConstructionInfo",
                 "btSoftBody::ImplicitFn", "btTriangleBuffer", "btMaterialProperties",
-                "btCollisionWorld::LocalConvexResult", "btCollisionWorld::LocalRayResult",
                 "btCollisionWorld::AllHitsRayResultCallback", "btCollisionWorld::ContactResultCallback",
-                "btCollisionWorld::ClosestRayResultCallback",
+                "btCollisionWorld::ClosestRayResultCallback", "btCollisionWorld::RayResultCallback",
                 "btJointFeedback", "btTypedConstraint::btConstraintInfo1", "btTypedConstraint::btConstraintInfo2",
                 "btConeTwistConstraint", "btFixedConstraint", "btGearConstraint", "btHinge2Constraint",
                 "btHingeConstraint", "btHingeAccumulatedAngleConstraint", "btbtPoint2PointConstraint",
                 "btSliderConstraint", "btUniversalConstraint",
-                "btMLCPSolver", "btMultiBodyConstraintSolver", "btNNCGConstraintSolver" };
+                "btMLCPSolver", "btMultiBodyConstraintSolver", "btNNCGConstraintSolver",
+                "btPairCachingGhostObject", "btSortedOverlappingPairCache", "btNullPairCache",
+                "btDbvtBroadphase", "btSimpleBroadphase",
+                "btShapeHull",
+                "btCompoundShape" // constructor needed for CompoundFromGImpact in C++/CLI, but not C#
+            };
 
             // Classes that might be cleaned up by Bullet and not us (use preventDelete to indicate this)
             List<string> preventDelete = new List<string>() {
                 "btAABB", "btCollisionAlgorithmCreateFunc",
                 "btCollisionObject", "btCollisionObjectWrapper", "btCollisionShape",
+                "btCollisionWorld::LocalConvexResult", "btCollisionWorld::LocalRayResult",
                 "btConstraintSolver", "btContactSolverInfoData", "btDbvt",
+                "btOverlappingPairCache",
                 "btRotationalLimitMotor", "btTranslationalLimitMotor",
                 "btRotationalLimitMotor2", "btTranslationalLimitMotor2",
                 "btConstraintSetting", "btSimulationIslandManager",
@@ -843,6 +857,11 @@ namespace BulletSharpGen
             if (managedName.StartsWith("__unnamed"))
             {
                 return managedName;
+            }
+
+            if (managedName.Length == 1)
+            {
+                return managedName.ToLower();
             }
 
             // Remove underscores

@@ -7,9 +7,9 @@ namespace BulletSharp
 {
 	public class CollisionShape : IDisposable
 	{
-		internal readonly IntPtr _native;
-        private bool _preventDelete;
-        private bool _isDisposed;
+		internal IntPtr _native;
+		bool _preventDelete;
+        bool _isDisposed;
 
         internal static CollisionShape GetManaged(IntPtr obj)
         {
@@ -54,9 +54,9 @@ namespace BulletSharp
 		}
 
         public void CalculateTemporalAabb(ref Matrix curTrans, ref Vector3 linvel, ref Vector3 angvel, float timeStep, out Vector3 temporalAabbMin, out Vector3 temporalAabbMax)
-        {
-            btCollisionShape_calculateTemporalAabb(_native, ref curTrans, ref linvel, ref angvel, timeStep, out temporalAabbMin, out temporalAabbMax);
-        }
+		{
+			btCollisionShape_calculateTemporalAabb(_native, ref curTrans, ref linvel, ref angvel, timeStep, out temporalAabbMin, out temporalAabbMax);
+		}
 
         public void GetAabbRef(ref Matrix t, out Vector3 aabbMin, out Vector3 aabbMax)
         {

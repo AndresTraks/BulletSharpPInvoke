@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace BulletSharp
 {
+	[Flags]
 	public enum DispatcherFlags
 	{
         StaticStaticReported = 1,

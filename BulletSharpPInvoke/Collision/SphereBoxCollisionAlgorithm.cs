@@ -24,14 +24,14 @@ namespace BulletSharp
 		}
 
         public bool GetSphereDistance(CollisionObjectWrapper boxObjWrap, ref Vector3 v3PointOnBox, ref Vector3 normal, out float penetrationDepth, ref Vector3 v3SphereCenter, float fRadius, float maxContactDistance)
-        {
+		{
             return btSphereBoxCollisionAlgorithm_getSphereDistance(_native, boxObjWrap._native, ref v3PointOnBox, ref normal, out penetrationDepth, ref v3SphereCenter, fRadius, maxContactDistance);
-        }
+		}
 
         public float GetSpherePenetration(ref Vector3 boxHalfExtent, ref Vector3 sphereRelPos, ref Vector3 closestPoint, ref Vector3 normal)
-        {
+		{
             return btSphereBoxCollisionAlgorithm_getSpherePenetration(_native, ref boxHalfExtent, ref sphereRelPos, ref closestPoint, ref normal);
-        }
+		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSphereBoxCollisionAlgorithm_new(IntPtr mf, IntPtr ci, IntPtr body0Wrap, IntPtr body1Wrap, bool isSwapped);

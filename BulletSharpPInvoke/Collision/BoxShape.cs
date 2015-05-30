@@ -7,10 +7,10 @@ namespace BulletSharp
 {
 	public class BoxShape : PolyhedralConvexShape
 	{
-        public BoxShape(Vector3 boxHalfExtents)
-            : base(btBoxShape_new(ref boxHalfExtents))
-        {
-        }
+		public BoxShape(Vector3 boxHalfExtents)
+			: base(btBoxShape_new(ref boxHalfExtents))
+		{
+		}
 
         public BoxShape(float boxHalfExtent)
             : base(btBoxShape_new2(boxHalfExtent))

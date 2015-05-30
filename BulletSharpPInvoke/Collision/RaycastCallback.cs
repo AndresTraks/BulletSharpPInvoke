@@ -5,15 +5,16 @@ namespace BulletSharp
 {
 	public abstract class TriangleRaycastCallback : TriangleCallback
 	{
-        [Flags]
-        public enum EFlags
-        {
+		[Flags]
+		public enum EFlags
+		{
             None = 0,
             FilterBackfaces = 1,
             KeepUnflippedNormal = 2,
             UseSubSimplexConvexCastRaytest = 4,
+			UseGjkConvexCastRaytest = 8,
             Terminator = -1
-        };
+		}
 
         public TriangleRaycastCallback(ref Vector3 from, ref Vector3 to, EFlags flags)
         {

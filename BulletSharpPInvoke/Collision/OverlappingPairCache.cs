@@ -230,11 +230,6 @@ namespace BulletSharp
 
 	public class SortedOverlappingPairCache : OverlappingPairCache
 	{
-		internal SortedOverlappingPairCache(IntPtr native)
-			: base(native, true)
-		{
-		}
-
 		public SortedOverlappingPairCache()
 			: base(btSortedOverlappingPairCache_new(), false)
 		{
@@ -276,11 +271,6 @@ namespace BulletSharp
 
 	public class NullPairCache : OverlappingPairCache
 	{
-		internal NullPairCache(IntPtr native)
-			: base(native, true)
-		{
-		}
-
 		public NullPairCache()
 			: base(btNullPairCache_new(), false)
 		{
