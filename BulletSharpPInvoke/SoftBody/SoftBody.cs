@@ -4370,11 +4370,7 @@ namespace BulletSharp.SoftBody
             }
 		}
 
-		public IntPtr Tag
-		{
-			get { return btSoftBody_getTag(_native); }
-			set { btSoftBody_setTag(_native, value); }
-		}
+        public Object Tag { get; set; }
 
         public AlignedTetraArray Tetras
 		{

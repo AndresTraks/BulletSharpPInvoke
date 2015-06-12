@@ -180,7 +180,7 @@ namespace BasicDemo
             GL.DrawElements(PrimitiveType.Quads, 24, DrawElementsType.UnsignedByte, indices);
         }
 
-        public static Matrix4 Convert(BulletSharp.Matrix m)
+        public static Matrix4 Convert(BulletSharp.Math.Matrix m)
         {
             return new Matrix4(
                 m.M11, m.M12, m.M13, m.M14,

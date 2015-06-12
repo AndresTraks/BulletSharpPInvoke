@@ -129,6 +129,7 @@ namespace BulletSharpGen
                 confs.Add(new ProjectConfiguration("Windows API Code Pack", true, "GRAPHICS_WAPICODEPACK", slnRelDir + "..\\Windows API Code Pack 1.1\\binaries\\DirectX"));
                 confs.Add(new ProjectConfiguration("Windows API Code Pack", false, "GRAPHICS_WAPICODEPACK", slnRelDir + "..\\Windows API Code Pack 1.1\\binaries\\DirectX"));
             }
+            /*
             confs.Add(new ProjectConfiguration("XNA 3.1", true, "GRAPHICS_XNA31", "$(ProgramFiles)\\Microsoft XNA\\XNA Game Studio\\v3.1\\References\\Windows\\x86\\;$(ProgramFiles(x86))\\Microsoft XNA\\XNA Game Studio\\v3.1\\References\\Windows\\x86\\"));
             confs.Add(new ProjectConfiguration("XNA 3.1", false, "GRAPHICS_XNA31", "$(ProgramFiles)\\Microsoft XNA\\XNA Game Studio\\v3.1\\References\\Windows\\x86\\;$(ProgramFiles(x86))\\Microsoft XNA\\XNA Game Studio\\v3.1\\References\\Windows\\x86\\"));
             if (targetVS != TargetVS.VS2008)
@@ -136,6 +137,7 @@ namespace BulletSharpGen
                 confs.Add(new ProjectConfiguration("XNA 4.0", true, "GRAPHICS_XNA40", "$(ProgramFiles)\\Microsoft XNA\\XNA Game Studio\\v4.0\\References\\Windows\\x86\\;$(ProgramFiles(x86))\\Microsoft XNA\\XNA Game Studio\\v4.0\\References\\Windows\\x86\\"));
                 confs.Add(new ProjectConfiguration("XNA 4.0", false, "GRAPHICS_XNA40", "$(ProgramFiles)\\Microsoft XNA\\XNA Game Studio\\v4.0\\References\\Windows\\x86\\;$(ProgramFiles(x86))\\Microsoft XNA\\XNA Game Studio\\v4.0\\References\\Windows\\x86\\"));
             }
+            */
 
             var filterWriter = new FilterWriter(NamespaceName);
             var sourceFilter = new Filter("Source Files", "4FC737F1-C7A5-4376-A066-2A32D752A2FF", "cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx");
@@ -203,7 +205,7 @@ namespace BulletSharpGen
 
             var slnWriter = new SlnWriter(filterWriter, NamespaceName)
             {
-                IncludeDirectories = string.Format("{0}\\src;{0}\\Extras\\HACD;{0}\\Extras\\Serialize\\BulletWorldImporter;$(CUDA_INC_PATH);$(AMDAPPSDKROOT)include;", slnRelDir + bulletRoot),
+                IncludeDirectories = string.Format("{0}\\src;{0}\\Extras\\HACD;{0}\\Extras\\Serialize\\BulletWorldImporter;", slnRelDir + bulletRoot),
                 FilterWriter = filterWriter
             };
             if (targetVS == TargetVS.VS2008)
@@ -213,8 +215,8 @@ namespace BulletSharpGen
             }
             else
             {
-                slnWriter.LibraryDirectoriesRelease = slnRelDir + bulletRoot + "\\msvc\\" + targetVersionString + "\\lib\\MinSizeRel;$(AMDAPPSDKROOT)lib\\x86\\;$(CUDA_LIB_PATH);";
-                slnWriter.LibraryDirectoriesDebug = slnRelDir + bulletRoot + "\\msvc\\" + targetVersionString + "\\lib\\Debug;$(AMDAPPSDKROOT)lib\\x86\\;$(CUDA_LIB_PATH);";
+                slnWriter.LibraryDirectoriesRelease = slnRelDir + bulletRoot + "\\msvc\\" + targetVersionString + "\\lib\\MinSizeRel;";
+                slnWriter.LibraryDirectoriesDebug = slnRelDir + bulletRoot + "\\msvc\\" + targetVersionString + "\\lib\\Debug;";
             }
             slnWriter.Output(targetVS, confs, "sln" + targetVersionString);
         }

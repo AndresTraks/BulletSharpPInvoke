@@ -1,7 +1,7 @@
 using SiliconStudio.Core.Mathematics;
 ﻿using System.Collections.Generic;
 using BulletSharp;
-using Vector3 = BulletSharp.Vector3;
+using Vector3 = BulletSharp.Math.Vector3;
 
 namespace BasicDemo
 {
@@ -34,7 +34,7 @@ namespace BasicDemo
             // create the ground
             CollisionShape groundShape = new BoxShape(50, 50, 50);
             collisionShapes.Add(groundShape);
-            CollisionObject ground = LocalCreateRigidBody(0, Matrix.Translation(0, -50, 0), groundShape);
+            CollisionObject ground = LocalCreateRigidBody(0, BulletSharp.Math.Matrix.Translation(0, -50, 0), groundShape);
             ground.UserObject = "Ground";
 
             // create a few dynamic rigidbodies
@@ -55,7 +55,7 @@ namespace BasicDemo
                 {
                     for (j = 0; j < ArraySizeZ; j++)
                     {
-                        Matrix startTransform = Matrix.Translation(
+                        BulletSharp.Math.Matrix startTransform = BulletSharp.Math.Matrix.Translation(
                             new Vector3(
                                 2*i + start_x,
                                 2*k + start_y,
@@ -122,7 +122,7 @@ namespace BasicDemo
             collisionConf.Dispose();
         }
 
-        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape)
+        public RigidBody LocalCreateRigidBody(float mass, BulletSharp.Math.Matrix startTransform, CollisionShape shape)
         {
             bool isDynamic = (mass != 0.0f);
 

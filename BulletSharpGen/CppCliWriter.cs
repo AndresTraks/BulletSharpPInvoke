@@ -740,9 +740,14 @@ namespace BulletSharpGen
                 {
                     // In C++/CLI, IDisposable is inherited automatically if the destructor and finalizer are defined
                     //HeaderWriteLine(" : IDisposable");
+                    if (c.IsStaticClass)
+                    {
+                        HeaderWrite(" sealed");
+                    }
                     HeaderWriteLine();
                 }
             }
+
             WriteTabs(level);
             HeaderWriteLine("{");
             //hasHeaderWhiteSpace = false;
@@ -758,6 +763,14 @@ namespace BulletSharpGen
                 SourceWriteLine();
             }
 
+            // Classes without instances
+            if (c.IsStaticClass)
+            {
+                EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Private);
+                WriteTabs(level + 1);
+                HeaderWriteLine(string.Format("{0}() {{}}", c.ManagedName));
+            }
+
             // Downcast native pointer if any methods in a derived class use it
             if (c.BaseClass != null && c.Methods.Any(m => !m.IsConstructor && !m.IsStatic))
             {
@@ -767,7 +780,7 @@ namespace BulletSharpGen
             }
 
             // Write the unmanaged pointer to the base class
-            if (c.BaseClass == null)
+            if (c.BaseClass == null && !c.IsStaticClass)
             {
                 if (c.Classes.Count != 0)
                 {
@@ -813,7 +826,7 @@ namespace BulletSharpGen
 
             // Write unmanaged constructor
             // TODO: Write constructor from unmanaged pointer only if the class is ever instantiated in this way.
-            if (!c.NoInternalConstructor)
+            if (!c.NoInternalConstructor && !c.IsStaticClass)
             {
                 EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Internal);
 
@@ -845,7 +858,7 @@ namespace BulletSharpGen
             }
 
             // Write destructor & finalizer
-            if (c.BaseClass == null)
+            if (c.BaseClass == null && !c.IsStaticClass)
             {
                 EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Public);
                 WriteTabs(level + 1);
@@ -910,7 +923,7 @@ namespace BulletSharpGen
             }
 
             // Write default constructor
-            if (constructorCount == 0 && !c.IsAbstract)
+            if (constructorCount == 0 && !c.IsAbstract && !c.HidePublicConstructors && !c.IsStaticClass)
             {
                 EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Public);
 

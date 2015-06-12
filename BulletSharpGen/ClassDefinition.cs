@@ -34,6 +34,12 @@ namespace BulletSharpGen
             get { return Enum != null && Methods.Count == 0; }
         }
 
+        // static class contains only static methods
+        public bool IsStaticClass
+        {
+            get { return Methods.Count != 0 && Methods.All(x => x.IsStatic); }
+        }
+
         public string ManagedName { get; set; }
 
         public IEnumerable<ClassDefinition> AllSubClasses
