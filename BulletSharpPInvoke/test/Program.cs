@@ -269,7 +269,7 @@ namespace BulletSharpTest
             Vector3 rayFromWorld = testObject.WorldTransform.Origin + new Vector3(0, 0, -2);
             Vector3 rayToWorld = testObject.WorldTransform.Origin + new Vector3(0, 0, 2);
             var rayCallback = new CustomRayCallback(ref rayFromWorld, ref rayToWorld);
-            world.RayTest(ref rayFromWorld, ref rayToWorld, rayCallback);
+            world.RayTestRef(ref rayFromWorld, ref rayToWorld, rayCallback);
             if (rayCallback.CollisionObject != testObject)
             {
                 Console.WriteLine("Raycast FAILED!");
@@ -283,7 +283,7 @@ namespace BulletSharpTest
             Vector3 rayFromWorld = triMeshObject.WorldTransform.Origin + new Vector3(0, 0, -2);
             Vector3 rayToWorld = triMeshObject.WorldTransform.Origin + new Vector3(0, 0, 2);
             var cb = new TriangleMeshRayCastCallback(ref rayFromWorld, ref rayToWorld);
-            world.RayTest(ref rayFromWorld, ref rayToWorld, cb);
+            world.RayTestRef(ref rayFromWorld, ref rayToWorld, cb);
             if (!cb.Success)
             {
                 Console.WriteLine("Triangle mesh raycast fail!");
@@ -405,7 +405,7 @@ namespace BulletSharpTest
     class CustomRayCallback : ClosestRayResultCallback
     {
         public CustomRayCallback(ref Vector3 rayFrom, ref Vector3 rayTo)
-            : base(rayFrom, rayTo)
+            : base(ref rayFrom, ref rayTo)
         {
         }
 
