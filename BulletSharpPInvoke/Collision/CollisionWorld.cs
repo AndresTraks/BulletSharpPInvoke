@@ -396,7 +396,10 @@ namespace BulletSharp
 		{
 			if (_native != IntPtr.Zero)
 			{
-				btCollisionWorld_LocalConvexResult_delete(_native);
+                if (!_preventDelete)
+                {
+                    btCollisionWorld_LocalConvexResult_delete(_native);
+                }
 				_native = IntPtr.Zero;
 			}
 		}
