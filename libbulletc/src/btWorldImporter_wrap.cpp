@@ -125,18 +125,18 @@ btGeneric6DofConstraint* btWorldImporter_createGeneric6DofConstraint2(btWorldImp
 	return obj->createGeneric6DofConstraint(*rbB, TRANSFORM_USE(frameInB), useLinearReferenceFrameB);
 }
 
-btGeneric6DofSpringConstraint* btWorldImporter_createGeneric6DofSpringConstraint(btWorldImporter* obj, btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB, bool useLinearReferenceFrameA)
-{
-	TRANSFORM_CONV(frameInA);
-	TRANSFORM_CONV(frameInB);
-	return obj->createGeneric6DofSpringConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB), useLinearReferenceFrameA);
-}
-
 btGeneric6DofSpring2Constraint* btWorldImporter_createGeneric6DofSpring2Constraint(btWorldImporter* obj, btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB, int rotateOrder)
 {
 	TRANSFORM_CONV(frameInA);
 	TRANSFORM_CONV(frameInB);
 	return obj->createGeneric6DofSpring2Constraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB), rotateOrder);
+}
+
+btGeneric6DofSpringConstraint* btWorldImporter_createGeneric6DofSpringConstraint(btWorldImporter* obj, btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB, bool useLinearReferenceFrameA)
+{
+	TRANSFORM_CONV(frameInA);
+	TRANSFORM_CONV(frameInB);
+	return obj->createGeneric6DofSpringConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB), useLinearReferenceFrameA);
 }
 
 btGImpactMeshShape* btWorldImporter_createGimpactShape(btWorldImporter* obj, btStridingMeshInterface* trimesh)

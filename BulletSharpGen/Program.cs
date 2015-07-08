@@ -102,6 +102,8 @@ namespace BulletSharpGen
                 confs.Add(new ProjectConfiguration("OpenTK", false, "GRAPHICS_OPENTK", "$(USERPROFILE)\\My Documents\\OpenTK\\1.1\\Binaries\\OpenTK\\Release"));
                 confs.Add(new ProjectConfiguration("SharpDX", true, "GRAPHICS_SHARPDX", slnRelDir + "..\\SharpDX\\Bin\\DirectX11-net20"));
                 confs.Add(new ProjectConfiguration("SharpDX", false, "GRAPHICS_SHARPDX", slnRelDir + "..\\SharpDX\\Bin\\DirectX11-net20"));
+                confs.Add(new ProjectConfiguration("SharpDX Signed", true, "GRAPHICS_SHARPDX", slnRelDir + "..\\SharpDX\\Bin\\DirectX11-Signed-net20"));
+                confs.Add(new ProjectConfiguration("SharpDX Signed", false, "GRAPHICS_SHARPDX", slnRelDir + "..\\SharpDX\\Bin\\DirectX11-Signed-net20"));
                 confs.Add(new ProjectConfiguration("SlimDX", true, "GRAPHICS_SLIMDX", "$(PROGRAMFILES)\\SlimDX SDK (January 2012)\\Bin\\net20\\;$(PROGRAMFILES(x86))\\SlimDX SDK (June 2010)\\Bin\\net20\\"));
                 confs.Add(new ProjectConfiguration("SlimDX", false, "GRAPHICS_SLIMDX", "$(PROGRAMFILES)\\SlimDX SDK (January 2012)\\Bin\\net20\\;$(PROGRAMFILES(x86))\\SlimDX SDK (June 2010)\\Bin\\net20\\"));
             }
@@ -119,6 +121,8 @@ namespace BulletSharpGen
                 });
                 confs.Add(new ProjectConfiguration("SharpDX", true, "GRAPHICS_SHARPDX", slnRelDir + "..\\SharpDX\\Bin\\DirectX11-net40"));
                 confs.Add(new ProjectConfiguration("SharpDX", false, "GRAPHICS_SHARPDX", slnRelDir + "..\\SharpDX\\Bin\\DirectX11-net40"));
+                confs.Add(new ProjectConfiguration("SharpDX Signed", true, "GRAPHICS_SHARPDX", slnRelDir + "..\\SharpDX\\Bin\\DirectX11-Signed-net40"));
+                confs.Add(new ProjectConfiguration("SharpDX Signed", false, "GRAPHICS_SHARPDX", slnRelDir + "..\\SharpDX\\Bin\\DirectX11-Signed-net40"));
                 confs.Add(new ProjectConfiguration("SlimDX", true, "GRAPHICS_SLIMDX", "$(PROGRAMFILES)\\SlimDX SDK (January 2012)\\Bin\\net40\\;$(PROGRAMFILES(x86))\\SlimDX SDK (June 2010)\\Bin\\net40\\"));
                 confs.Add(new ProjectConfiguration("SlimDX", false, "GRAPHICS_SLIMDX", "$(PROGRAMFILES)\\SlimDX SDK (January 2012)\\Bin\\net40\\;$(PROGRAMFILES(x86))\\SlimDX SDK (June 2010)\\Bin\\net40\\"));
             }

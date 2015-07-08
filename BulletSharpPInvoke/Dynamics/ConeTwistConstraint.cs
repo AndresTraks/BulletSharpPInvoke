@@ -27,9 +27,9 @@ namespace BulletSharp
 		}
 
         public void CalcAngleInfo2(ref Matrix transA, ref Matrix transB, ref Matrix invInertiaWorldA, ref Matrix invInertiaWorldB)
-        {
-            btConeTwistConstraint_calcAngleInfo2(_native, ref transA, ref transB, ref invInertiaWorldA, ref invInertiaWorldB);
-        }
+		{
+			btConeTwistConstraint_calcAngleInfo2(_native, ref transA, ref transB, ref invInertiaWorldA, ref invInertiaWorldB);
+		}
 
 		public void EnableMotor(bool b)
 		{
@@ -128,7 +128,7 @@ namespace BulletSharp
 			btConeTwistConstraint_setMotorTargetInConstraintSpace(_native, ref q);
 		}
 
-		public void UpdateRHS(float timeStep)
+		public void UpdateRhs(float timeStep)
 		{
 			btConeTwistConstraint_updateRHS(_native, timeStep);
 		}

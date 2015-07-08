@@ -727,6 +727,11 @@ namespace BulletSharp
 			btGeneric6DofSpring2Constraint_setDamping(_native, index, damping);
 		}
 
+		public void SetDamping(int index, float damping, bool limitIfNeeded)
+		{
+			btGeneric6DofSpring2Constraint_setDamping2(_native, index, damping, limitIfNeeded);
+		}
+
 		public void SetEquilibriumPoint()
 		{
 			btGeneric6DofSpring2Constraint_setEquilibriumPoint(_native);
@@ -775,6 +780,11 @@ namespace BulletSharp
 		public void SetStiffness(int index, float stiffness)
 		{
 			btGeneric6DofSpring2Constraint_setStiffness(_native, index, stiffness);
+		}
+
+		public void SetStiffness(int index, float stiffness, bool limitIfNeeded)
+		{
+			btGeneric6DofSpring2Constraint_setStiffness2(_native, index, stiffness, limitIfNeeded);
 		}
 
 		public void SetTargetVelocity(int index, float velocity)
@@ -972,6 +982,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpring2Constraint_setDamping(IntPtr obj, int index, float damping);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btGeneric6DofSpring2Constraint_setDamping2(IntPtr obj, int index, float damping, bool limitIfNeeded);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpring2Constraint_setEquilibriumPoint(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpring2Constraint_setEquilibriumPoint2(IntPtr obj, int index, float val);
@@ -997,6 +1009,8 @@ namespace BulletSharp
 		static extern void btGeneric6DofSpring2Constraint_setServoTarget(IntPtr obj, int index, float target);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpring2Constraint_setStiffness(IntPtr obj, int index, float stiffness);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btGeneric6DofSpring2Constraint_setStiffness2(IntPtr obj, int index, float stiffness, bool limitIfNeeded);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpring2Constraint_setTargetVelocity(IntPtr obj, int index, float velocity);
 	}

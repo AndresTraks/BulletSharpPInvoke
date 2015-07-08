@@ -15,6 +15,11 @@ namespace BulletSharp
 		{
 			_native = native;
 		}
+
+		public void AllocateJacobiansMultiDof()
+		{
+			btMultiBodyConstraint_allocateJacobiansMultiDof(_native);
+		}
         /*
 		public void CreateConstraintRows(MultiBodyConstraintArray constraintRows, MultiBodyJacobianData data, ContactSolverInfo infoGlobal)
 		{
@@ -24,6 +29,11 @@ namespace BulletSharp
 		public void DebugDraw(IDebugDraw drawer)
 		{
 			btMultiBodyConstraint_debugDraw(_native, BulletSharp.DebugDraw.GetUnmanaged(drawer));
+		}
+
+		public void FinalizeMultiDof()
+		{
+			btMultiBodyConstraint_finalizeMultiDof(_native);
 		}
 
 		public float GetPosition(int row)
@@ -44,6 +54,11 @@ namespace BulletSharp
 		public void SetPosition(int row, float pos)
 		{
 			btMultiBodyConstraint_setPosition(_native, row, pos);
+		}
+
+		public void UpdateJacobianSizes()
+		{
+			btMultiBodyConstraint_updateJacobianSizes(_native);
 		}
 
 		public int IslandIdA
@@ -103,9 +118,13 @@ namespace BulletSharp
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultiBodyConstraint_allocateJacobiansMultiDof(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBodyConstraint_createConstraintRows(IntPtr obj, IntPtr constraintRows, IntPtr data, IntPtr infoGlobal);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBodyConstraint_debugDraw(IntPtr obj, IntPtr drawer);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultiBodyConstraint_finalizeMultiDof(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btMultiBodyConstraint_getIslandIdA(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -131,6 +150,8 @@ namespace BulletSharp
 		static extern void btMultiBodyConstraint_setMaxAppliedImpulse(IntPtr obj, float maxImp);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBodyConstraint_setPosition(IntPtr obj, int row, float pos);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultiBodyConstraint_updateJacobianSizes(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBodyConstraint_delete(IntPtr obj);
 	}

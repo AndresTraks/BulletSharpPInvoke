@@ -3,6 +3,11 @@
 
 #include "btMultiBodyConstraint_wrap.h"
 
+void btMultiBodyConstraint_allocateJacobiansMultiDof(btMultiBodyConstraint* obj)
+{
+	obj->allocateJacobiansMultiDof();
+}
+
 void btMultiBodyConstraint_createConstraintRows(btMultiBodyConstraint* obj, btMultiBodyConstraintArray* constraintRows, btMultiBodyJacobianData* data, const btContactSolverInfo* infoGlobal)
 {
 	obj->createConstraintRows(*constraintRows, *data, *infoGlobal);
@@ -11,6 +16,11 @@ void btMultiBodyConstraint_createConstraintRows(btMultiBodyConstraint* obj, btMu
 void btMultiBodyConstraint_debugDraw(btMultiBodyConstraint* obj, btIDebugDraw* drawer)
 {
 	obj->debugDraw(drawer);
+}
+
+void btMultiBodyConstraint_finalizeMultiDof(btMultiBodyConstraint* obj)
+{
+	obj->finalizeMultiDof();
 }
 
 int btMultiBodyConstraint_getIslandIdA(btMultiBodyConstraint* obj)
@@ -71,6 +81,11 @@ void btMultiBodyConstraint_setMaxAppliedImpulse(btMultiBodyConstraint* obj, btSc
 void btMultiBodyConstraint_setPosition(btMultiBodyConstraint* obj, int row, btScalar pos)
 {
 	obj->setPosition(row, pos);
+}
+
+void btMultiBodyConstraint_updateJacobianSizes(btMultiBodyConstraint* obj)
+{
+	obj->updateJacobianSizes();
 }
 
 void btMultiBodyConstraint_delete(btMultiBodyConstraint* obj)

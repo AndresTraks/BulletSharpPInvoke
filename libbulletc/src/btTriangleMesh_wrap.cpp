@@ -39,6 +39,11 @@ void btTriangleMesh_addTriangle2(btTriangleMesh* obj, const btScalar* vertex0, c
 	obj->addTriangle(VECTOR3_USE(vertex0), VECTOR3_USE(vertex1), VECTOR3_USE(vertex2), removeDuplicateVertices);
 }
 
+void btTriangleMesh_addTriangleIndices(btTriangleMesh* obj, int index1, int index2, int index3)
+{
+	obj->addTriangleIndices(index1, index2, index3);
+}
+
 int btTriangleMesh_findOrAddVertex(btTriangleMesh* obj, const btScalar* vertex, bool removeDuplicateVertices)
 {
 	VECTOR3_CONV(vertex);

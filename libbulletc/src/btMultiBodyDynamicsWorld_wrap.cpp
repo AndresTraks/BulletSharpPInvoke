@@ -35,6 +35,11 @@ void btMultiBodyDynamicsWorld_debugDrawMultiBodyConstraint(btMultiBodyDynamicsWo
 	obj->debugDrawMultiBodyConstraint(constraint);
 }
 
+int btMultiBodyDynamicsWorld_getNumMultiBodyConstraints(btMultiBodyDynamicsWorld* obj)
+{
+	return obj->getNumMultiBodyConstraints();
+}
+
 void btMultiBodyDynamicsWorld_integrateTransforms(btMultiBodyDynamicsWorld* obj, btScalar timeStep)
 {
 	obj->integrateTransforms(timeStep);

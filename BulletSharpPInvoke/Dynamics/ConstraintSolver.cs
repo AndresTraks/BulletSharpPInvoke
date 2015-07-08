@@ -5,10 +5,11 @@ using System.Security;
 namespace BulletSharp
 {
     public enum ConstraintSolverType
-    {
+	{
         SequentialImpulse = 1,
-        Mlcp = 2
-    }
+        Mlcp = 2,
+        Nncg = 4
+	}
 
 	public class ConstraintSolver : IDisposable
 	{
