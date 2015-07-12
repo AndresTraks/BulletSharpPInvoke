@@ -667,7 +667,7 @@ namespace BulletSharp
 		public CollisionObject CollisionObject
 		{
 			get { return CollisionObject.GetManaged(btCollisionWorld_RayResultCallback_getCollisionObject(_native)); }
-			set { btCollisionWorld_RayResultCallback_setCollisionObject(_native, value._native); }
+			set { btCollisionWorld_RayResultCallback_setCollisionObject(_native, (value != null) ? value._native : IntPtr.Zero); }
 		}
 
 		public uint Flags
