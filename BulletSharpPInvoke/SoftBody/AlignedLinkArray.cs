@@ -103,7 +103,7 @@ namespace BulletSharp.SoftBody
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
-                return new Link(btAlignedSoftBodyLinkArray_at(_native, index), true);
+                return new Link(btAlignedSoftBodyLinkArray_at(_native, index));
             }
             set
             {
@@ -144,7 +144,7 @@ namespace BulletSharp.SoftBody
 
             for (int i = 0; i < count; i++)
             {
-                array.SetValue(new Link(btAlignedSoftBodyLinkArray_at(_native, i), true), i + arrayIndex);
+                array.SetValue(new Link(btAlignedSoftBodyLinkArray_at(_native, i)), i + arrayIndex);
             }
         }
 

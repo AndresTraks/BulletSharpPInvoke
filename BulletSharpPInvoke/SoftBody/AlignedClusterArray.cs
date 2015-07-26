@@ -103,7 +103,7 @@ namespace BulletSharp.SoftBody
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
-                return new Cluster(btAlignedSoftBodyClusterArray_at(_native, index), true);
+                return new Cluster(btAlignedSoftBodyClusterArray_at(_native, index));
             }
             set
             {

@@ -6,22 +6,22 @@ using System.Diagnostics;
 
 namespace BulletSharp.SoftBody
 {
-    public class AlignedNodeArrayDebugView
+    public class AlignedAnchorArrayDebugView
     {
-        private AlignedNodeArray _array;
+        private AlignedAnchorArray _array;
 
-        public AlignedNodeArrayDebugView(AlignedNodeArray array)
+        public AlignedAnchorArrayDebugView(AlignedAnchorArray array)
         {
             _array = array;
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public Node[] Items
+        public Anchor[] Items
         {
             get
             {
                 int count = _array.Count;
-                Node[] array = new Node[count];
+                Anchor[] array = new Anchor[count];
                 for (int i = 0; i < count; i++)
                 {
                     array[i] = _array[i];
@@ -31,20 +31,20 @@ namespace BulletSharp.SoftBody
         }
     }
 
-    public class AlignedNodeArrayEnumerator : IEnumerator<Node>
+    public class AlignedAnchorArrayEnumerator : IEnumerator<Anchor>
     {
         int _i;
         int _count;
-        AlignedNodeArray _array;
+        AlignedAnchorArray _array;
 
-        public AlignedNodeArrayEnumerator(AlignedNodeArray array)
+        public AlignedAnchorArrayEnumerator(AlignedAnchorArray array)
         {
             _array = array;
             _count = array.Count;
             _i = -1;
         }
 
-        public Node Current
+        public Anchor Current
         {
             get { return _array[_i]; }
         }
@@ -70,22 +70,22 @@ namespace BulletSharp.SoftBody
         }
     }
 
-    [Serializable, DebuggerTypeProxy(typeof(AlignedNodeArrayDebugView)), DebuggerDisplay("Count = {Count}")]
-    public class AlignedNodeArray : IList<Node>
+    [Serializable, DebuggerTypeProxy(typeof(AlignedAnchorArrayDebugView)), DebuggerDisplay("Count = {Count}")]
+    public class AlignedAnchorArray : IList<Anchor>
     {
         private IntPtr _native;
 
-        internal AlignedNodeArray(IntPtr native)
+        internal AlignedAnchorArray(IntPtr native)
         {
             _native = native;
         }
 
-        public int IndexOf(Node item)
+        public int IndexOf(Anchor item)
         {
-            return btAlignedSoftBodyNodeArray_index_of(_native, item._native);
+            throw new NotImplementedException();
         }
 
-        public void Insert(int index, Node item)
+        public void Insert(int index, Anchor item)
         {
             throw new NotImplementedException();
         }
@@ -95,7 +95,7 @@ namespace BulletSharp.SoftBody
             throw new NotImplementedException();
         }
 
-        public Node this[int index]
+        public Anchor this[int index]
         {
             get
             {
@@ -103,7 +103,7 @@ namespace BulletSharp.SoftBody
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
-                return new Node(btAlignedSoftBodyNodeArray_at(_native, index));
+                return new Anchor(btAlignedSoftBodyAnchorArray_at(_native, index));
             }
             set
             {
@@ -111,29 +111,29 @@ namespace BulletSharp.SoftBody
             }
         }
 
-        public void Add(Node item)
+        public void Add(Anchor item)
         {
-            btAlignedSoftBodyNodeArray_push_back(_native, item._native);
+            btAlignedSoftBodyAnchorArray_push_back(_native, item._native);
         }
 
         public void Clear()
         {
-            btAlignedSoftBodyNodeArray_resizeNoInitialize(_native, 0);
+            btAlignedSoftBodyAnchorArray_resizeNoInitialize(_native, 0);
         }
 
-        public bool Contains(Node item)
+        public bool Contains(Anchor item)
         {
             throw new NotImplementedException();
         }
 
-        public void CopyTo(Node[] array, int arrayIndex)
+        public void CopyTo(Anchor[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
 
         public int Count
         {
-            get { return btAlignedSoftBodyNodeArray_size(_native); }
+            get { return btAlignedSoftBodyAnchorArray_size(_native); }
         }
 
         public bool IsReadOnly
@@ -141,30 +141,28 @@ namespace BulletSharp.SoftBody
             get { return false; }
         }
 
-        public bool Remove(Node item)
+        public bool Remove(Anchor item)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerator<Node> GetEnumerator()
+        public IEnumerator<Anchor> GetEnumerator()
         {
-            return new AlignedNodeArrayEnumerator(this);
+            return new AlignedAnchorArrayEnumerator(this);
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return new AlignedNodeArrayEnumerator(this);
+            return new AlignedAnchorArrayEnumerator(this);
         }
 
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern IntPtr btAlignedSoftBodyNodeArray_at(IntPtr obj, int n);
+        static extern IntPtr btAlignedSoftBodyAnchorArray_at(IntPtr obj, int n);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btAlignedSoftBodyNodeArray_index_of(IntPtr obj, IntPtr val);
+        static extern void btAlignedSoftBodyAnchorArray_push_back(IntPtr obj, IntPtr val);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedSoftBodyNodeArray_push_back(IntPtr obj, IntPtr val);
+        static extern void btAlignedSoftBodyAnchorArray_resizeNoInitialize(IntPtr obj, int newSize);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedSoftBodyNodeArray_resizeNoInitialize(IntPtr obj, int newSize);
-        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btAlignedSoftBodyNodeArray_size(IntPtr obj);
+        static extern int btAlignedSoftBodyAnchorArray_size(IntPtr obj);
     }
 }

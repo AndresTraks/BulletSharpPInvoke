@@ -442,18 +442,13 @@ namespace BulletSharp.SoftBody
 		static extern void btSoftBody_AJoint_setIcontrol(IntPtr obj, IntPtr value);
 	}
 
-	public class Anchor : IDisposable
+	public class Anchor
 	{
 		internal IntPtr _native;
 
 		internal Anchor(IntPtr native)
 		{
 			_native = native;
-		}
-
-		public Anchor()
-		{
-			_native = btSoftBody_Anchor_new();
 		}
 
 		public RigidBody Body
@@ -509,28 +504,8 @@ namespace BulletSharp.SoftBody
 
 		public Node Node
 		{
-            get { return new Node(btSoftBody_Anchor_getNode(_native), true); }
+            get { return new Node(btSoftBody_Anchor_getNode(_native)); }
 			set { btSoftBody_Anchor_setNode(_native, value._native); }
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-				btSoftBody_Anchor_delete(_native);
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~Anchor()
-		{
-			Dispose(false);
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -690,7 +665,7 @@ namespace BulletSharp.SoftBody
             get
             {
                 IntPtr soft = btSoftBody_Body_getSoft(_native);
-                return (soft != IntPtr.Zero) ? new Cluster(soft, true) : null;
+                return (soft != IntPtr.Zero) ? new Cluster(soft) : null;
             }
             set { btSoftBody_Body_setSoft(_native, (value != null) ? value._native : IntPtr.Zero); }
 		}
@@ -837,21 +812,13 @@ namespace BulletSharp.SoftBody
 		static extern void btSoftBody_CJoint_setNormal(IntPtr obj, [In] ref Vector3 value);
 	}
 
-	public class Cluster : IDisposable
+	public class Cluster
 	{
 		internal IntPtr _native;
 
-        private bool _preventDelete;
-
-		internal Cluster(IntPtr native, bool preventDelete)
+		internal Cluster(IntPtr native)
 		{
 			_native = native;
-            _preventDelete = preventDelete;
-		}
-
-		public Cluster()
-		{
-			_native = btSoftBody_Cluster_new();
 		}
 
 		public float AngularDamping
@@ -1014,7 +981,7 @@ namespace BulletSharp.SoftBody
 			set { btSoftBody_Cluster_setNdimpulses(_native, value); }
 		}
         /*
-		public AlignedObjectArray<Node> Nodes
+		public AlignedNodeArray Nodes
 		{
 			get { return btSoftBody_Cluster_getNodes(_native); }
 			set { btSoftBody_Cluster_setNodes(_native, value._native); }
@@ -1042,29 +1009,6 @@ namespace BulletSharp.SoftBody
 			}
 		}
         */
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-                if (!_preventDelete)
-                {
-                    btSoftBody_Cluster_delete(_native);
-                }
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~Cluster()
-		{
-			Dispose(false);
-		}
-
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Cluster_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -1485,6 +1429,21 @@ namespace BulletSharp.SoftBody
 			set { btSoftBody_Element_setTag(_native, value); }
 		}
 
+        public override bool Equals(object obj)
+        {
+            Element element = obj as Element;
+            if (element == null)
+            {
+                return false;
+            }
+            return _native == element._native;
+        }
+
+        public override int GetHashCode()
+        {
+            return _native.ToInt32();
+        }
+
 		public void Dispose()
 		{
 			Dispose(true);
@@ -1519,13 +1478,8 @@ namespace BulletSharp.SoftBody
 	{
         private NodePtrArray _n;
 
-        internal Face(IntPtr native, bool preventDelete)
-            : base(native, preventDelete)
-		{
-		}
-
-		public Face()
-			: base(btSoftBody_Face_new(), false)
+        internal Face(IntPtr native)
+            : base(native, true)
 		{
 		}
 
@@ -1565,8 +1519,6 @@ namespace BulletSharp.SoftBody
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSoftBody_Face_new();
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Face_getLeaf(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Face_getN(IntPtr obj);
@@ -1589,19 +1541,12 @@ namespace BulletSharp.SoftBody
 		{
 		}
 
-		public Feature()
-			: base(btSoftBody_Feature_new(), false)
-		{
-		}
-
 		public Material Material
 		{
-            get { return new Material(btSoftBody_Feature_getMaterial(_native), true); }
+            get { return new Material(btSoftBody_Feature_getMaterial(_native)); }
 			set { btSoftBody_Feature_setMaterial(_native, value._native); }
 		}
 
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSoftBody_Feature_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Feature_getMaterial(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -2012,34 +1957,14 @@ namespace BulletSharp.SoftBody
 	{
         private NodePtrArray _n;
 
-        internal Link(IntPtr native, bool preventDelete)
-            : base(native, preventDelete)
-		{
-		}
-
-		public Link()
-			: base(btSoftBody_Link_new(), false)
+        internal Link(IntPtr native)
+            : base(native, true)
 		{
 		}
 
         public Link(Link link)
             : base(btSoftBody_Link_new2(link._native), false)
         {
-        }
-
-        public override bool Equals(object obj)
-        {
-            Link link = obj as Link;
-            if (link == null)
-            {
-                return false;
-            }
-            return _native == link._native;
-        }
-
-        public override int GetHashCode()
-        {
-            return _native.ToInt32();
         }
 
 		public float C0
@@ -2096,8 +2021,6 @@ namespace BulletSharp.SoftBody
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSoftBody_Link_new();
-        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern IntPtr btSoftBody_Link_new2(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBody_Link_getBbending(IntPtr obj);
@@ -2180,13 +2103,8 @@ namespace BulletSharp.SoftBody
 
 	public class Material : Element
 	{
-        internal Material(IntPtr native, bool preventDelete)
-            : base(native, preventDelete)
-		{
-		}
-
-		public Material()
-			: base(btSoftBody_Material_new(), false)
+        internal Material(IntPtr native)
+            : base(native, true)
 		{
 		}
 
@@ -2215,8 +2133,6 @@ namespace BulletSharp.SoftBody
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSoftBody_Material_new();
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern FMaterial btSoftBody_Material_getFlags(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Material_getKAST(IntPtr obj);
@@ -2236,30 +2152,10 @@ namespace BulletSharp.SoftBody
 
 	public class Node : Feature
 	{
-        internal Node(IntPtr native, bool preventDelete)
-            : base(native, preventDelete)
+        internal Node(IntPtr native)
+            : base(native, true)
 		{
 		}
-
-		public Node()
-			: base(btSoftBody_Node_new(), false)
-		{
-		}
-
-        public override bool Equals(object obj)
-        {
-            Node node = obj as Node;
-            if (node == null)
-            {
-                return false;
-            }
-            return _native == node._native;
-        }
-
-        public override int GetHashCode()
-        {
-            return _native.ToInt32();
-        }
 
 		public float Area
 		{
@@ -2341,8 +2237,6 @@ namespace BulletSharp.SoftBody
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSoftBody_Node_new();
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Node_getArea(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBody_Node_getBattach(IntPtr obj);
@@ -2385,12 +2279,7 @@ namespace BulletSharp.SoftBody
         private NodePtrArray _nodes;
 
         internal Note(IntPtr native, bool preventDelete)
-            : base(native, preventDelete)
-		{
-		}
-
-		public Note()
-			: base(btSoftBody_Note_new(), false)
+            : base(native, true)
 		{
 		}
         /*
@@ -2434,8 +2323,6 @@ namespace BulletSharp.SoftBody
 			set { btSoftBody_Note_setText(_native, value); }
 		}
 
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSoftBody_Note_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Note_getCoords(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -2607,7 +2494,7 @@ namespace BulletSharp.SoftBody
 
 		public Face Face
 		{
-            get { return new Face(btSoftBody_RayFromToCaster_getFace(_native), true); }
+            get { return new Face(btSoftBody_RayFromToCaster_getFace(_native)); }
 			set { btSoftBody_RayFromToCaster_setFace(_native, value._native); }
 		}
 
@@ -2749,7 +2636,7 @@ namespace BulletSharp.SoftBody
 
 		public Node Node
 		{
-            get { return new Node(btSoftBody_RContact_getNode(_native), true); }
+            get { return new Node(btSoftBody_RContact_getNode(_native)); }
 			set { btSoftBody_RContact_setNode(_native, value._native); }
 		}
 
@@ -2826,7 +2713,7 @@ namespace BulletSharp.SoftBody
         */
 		public Face Face
 		{
-            get { return new Face(btSoftBody_SContact_getFace(_native), true); }
+            get { return new Face(btSoftBody_SContact_getFace(_native)); }
 			set { btSoftBody_SContact_setFace(_native, value._native); }
 		}
 
@@ -2844,7 +2731,7 @@ namespace BulletSharp.SoftBody
 
 		public Node Node
 		{
-			get { return new Node(btSoftBody_SContact_getNode(_native), true); }
+			get { return new Node(btSoftBody_SContact_getNode(_native)); }
 			set { btSoftBody_SContact_setNode(_native, value._native); }
 		}
 
@@ -3212,13 +3099,8 @@ namespace BulletSharp.SoftBody
 	{
         private NodePtrArray _nodes;
 
-        internal Tetra(IntPtr native, bool preventDelete)
-            : base(native, preventDelete)
-		{
-		}
-
-		public Tetra()
-			: base(btSoftBody_Tetra_new(), false)
+        internal Tetra(IntPtr native)
+            : base(native, true)
 		{
 		}
 
@@ -3269,8 +3151,6 @@ namespace BulletSharp.SoftBody
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSoftBody_Tetra_new();
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_Tetra_getC0(IntPtr obj, [Out] out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Tetra_getC1(IntPtr obj);
@@ -3304,7 +3184,7 @@ namespace BulletSharp.SoftBody
         private SolverState _solverState;
         private SoftBodyWorldInfo _worldInfo;
         private List<AJoint.IControl> _aJointControls = new List<AJoint.IControl>();
-        //private AlignedAnchorArray _anchors;
+        private AlignedAnchorArray _anchors;
         private Vector3Array _bounds;
         private AlignedClusterArray _clusters;
         private AlignedFaceArray _faces;
@@ -3523,7 +3403,7 @@ namespace BulletSharp.SoftBody
 
 		public Material AppendMaterial()
 		{
-			return new Material(btSoftBody_appendMaterial(_native), true);
+			return new Material(btSoftBody_appendMaterial(_native));
 		}
 
 		public void AppendNode(Vector3 x, float m)
@@ -4144,13 +4024,19 @@ namespace BulletSharp.SoftBody
             normals = null;
             return GetLinkVertexData(ref vertices);
         }
-        /*
-		public tAnchorArray Anchors
+
+		public AlignedAnchorArray Anchors
 		{
-			get { return btSoftBody_getAnchors(_native); }
-			set { btSoftBody_setAnchors(_native, value._native); }
+            get
+            {
+                if (_anchors == null)
+                {
+                    _anchors = new AlignedAnchorArray(btSoftBody_getAnchors(_native));
+                }
+                return _anchors;
+            }
 		}
-        */
+
 		public Vector3Array Bounds
 		{
 			get
@@ -4708,8 +4594,6 @@ namespace BulletSharp.SoftBody
 		static extern void btSoftBody_rotate(IntPtr obj, [In] ref Quaternion rot);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_scale(IntPtr obj, [In] ref Vector3 scl);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_setAnchors(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_setBounds(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

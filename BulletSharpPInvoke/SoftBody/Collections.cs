@@ -69,7 +69,7 @@ namespace BulletSharp.SoftBody
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
-                return new Node(btSoftBodyNodePtrArray_at(_native, index), true);
+                return new Node(btSoftBodyNodePtrArray_at(_native, index));
             }
             set
             {

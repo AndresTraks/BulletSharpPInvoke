@@ -103,7 +103,7 @@ namespace BulletSharp.SoftBody
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
-                return new Tetra(btAlignedSoftBodyTetraArray_at(_native, index), true);
+                return new Tetra(btAlignedSoftBodyTetraArray_at(_native, index));
             }
             set
             {

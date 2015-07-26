@@ -122,6 +122,27 @@ void btAlignedManifoldArray_delete(btAlignedManifoldArray* obj)
 }
 
 
+btSoftBody::Anchor* btAlignedSoftBodyAnchorArray_at(btSoftBody::tAnchorArray* obj, int n)
+{
+	return &obj->at(n);
+}
+
+void btAlignedSoftBodyAnchorArray_push_back(btSoftBody::tAnchorArray* obj, btSoftBody::Anchor* val)
+{
+	obj->push_back(*val);
+}
+
+void btAlignedSoftBodyAnchorArray_resizeNoInitialize(btSoftBody::tAnchorArray* obj, int newSize)
+{
+	return obj->resizeNoInitialize(newSize);
+}
+
+int btAlignedSoftBodyAnchorArray_size(btSoftBody::tAnchorArray* obj)
+{
+	return obj->size();
+}
+
+
 btSoftBody::Cluster* btAlignedSoftBodyClusterArray_at(btSoftBody::tClusterArray* obj, int n)
 {
 	return obj->at(n);

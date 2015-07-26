@@ -103,7 +103,7 @@ namespace BulletSharp.SoftBody
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
-                return new Face(btAlignedSoftBodyFaceArray_at(_native, index), true);
+                return new Face(btAlignedSoftBodyFaceArray_at(_native, index));
             }
             set
             {
