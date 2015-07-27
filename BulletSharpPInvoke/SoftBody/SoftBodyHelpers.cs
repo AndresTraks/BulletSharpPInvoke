@@ -432,7 +432,7 @@ namespace BulletSharp.SoftBody
             {
                 Node ar = link.N[0];
                 Node br = link.N[1];
-                linkBuffer.Add(link, new Link(link));
+                linkBuffer.Add(link, new Link(btSoftBody_Link_new2(link._native)));
 
                 LinkDep linkDep;
                 if (nodeWrittenAt.ContainsKey(ar))
@@ -489,6 +489,11 @@ namespace BulletSharp.SoftBody
                     linkDep = linkDep.Next;
                 }
             }
+
+            foreach (Link link in linkBuffer.Values)
+            {
+                btSoftBody_Element_delete(link._native);
+            }
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -525,5 +530,10 @@ namespace BulletSharp.SoftBody
 		static extern void btSoftBodyHelpers_DrawNodeTree2(IntPtr psb, IntPtr idraw, int minDepth);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBodyHelpers_DrawNodeTree3(IntPtr psb, IntPtr idraw, int minDepth, int maxDepth);
+
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern IntPtr btSoftBody_Link_new2(IntPtr obj);
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern void btSoftBody_Element_delete(IntPtr obj);
 	}
 }

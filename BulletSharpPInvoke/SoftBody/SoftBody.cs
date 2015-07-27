@@ -1412,15 +1412,13 @@ namespace BulletSharp.SoftBody
 		static extern void btSoftBody_Config_setVsequence(IntPtr obj, IntPtr value);
 	}
 
-	public class Element : IDisposable
+	public class Element
 	{
 		internal readonly IntPtr _native;
-        private bool _preventDelete;
 
-        internal Element(IntPtr native, bool preventDelete)
+        internal Element(IntPtr native)
 		{
 			_native = native;
-            _preventDelete = preventDelete;
 		}
 
 		public IntPtr Tag
@@ -1444,34 +1442,10 @@ namespace BulletSharp.SoftBody
             return _native.ToInt32();
         }
 
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-                if (!_preventDelete)
-                {
-                    btSoftBody_Element_delete(_native);
-                }
-			}
-		}
-
-		~Element()
-		{
-			Dispose(false);
-		}
-
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Element_getTag(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_Element_setTag(IntPtr obj, IntPtr value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Element_delete(IntPtr obj);
 	}
 
 	public class Face : Feature
@@ -1479,7 +1453,7 @@ namespace BulletSharp.SoftBody
         private NodePtrArray _n;
 
         internal Face(IntPtr native)
-            : base(native, true)
+            : base(native)
 		{
 		}
 
@@ -1536,8 +1510,8 @@ namespace BulletSharp.SoftBody
 
 	public class Feature : Element
 	{
-        internal Feature(IntPtr native, bool preventDelete)
-            : base(native, preventDelete)
+        internal Feature(IntPtr native)
+            : base(native)
 		{
 		}
 
@@ -1958,14 +1932,9 @@ namespace BulletSharp.SoftBody
         private NodePtrArray _n;
 
         internal Link(IntPtr native)
-            : base(native, true)
+            : base(native)
 		{
 		}
-
-        public Link(Link link)
-            : base(btSoftBody_Link_new2(link._native), false)
-        {
-        }
 
 		public float C0
 		{
@@ -2020,8 +1989,6 @@ namespace BulletSharp.SoftBody
 			set { btSoftBody_Link_setRl(_native, value); }
 		}
 
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern IntPtr btSoftBody_Link_new2(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBody_Link_getBbending(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -2104,7 +2071,7 @@ namespace BulletSharp.SoftBody
 	public class Material : Element
 	{
         internal Material(IntPtr native)
-            : base(native, true)
+            : base(native)
 		{
 		}
 
@@ -2153,7 +2120,7 @@ namespace BulletSharp.SoftBody
 	public class Node : Feature
 	{
         internal Node(IntPtr native)
-            : base(native, true)
+            : base(native)
 		{
 		}
 
@@ -2278,8 +2245,8 @@ namespace BulletSharp.SoftBody
 	{
         private NodePtrArray _nodes;
 
-        internal Note(IntPtr native, bool preventDelete)
-            : base(native, true)
+        internal Note(IntPtr native)
+            : base(native)
 		{
 		}
         /*
@@ -3100,7 +3067,7 @@ namespace BulletSharp.SoftBody
         private NodePtrArray _nodes;
 
         internal Tetra(IntPtr native)
-            : base(native, true)
+            : base(native)
 		{
 		}
 
