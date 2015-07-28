@@ -160,6 +160,9 @@ namespace BulletSharp
         SetSerializationFlagsUnmanagedDelegate _setSerializationFlags;
         StartSerializationUnmanagedDelegate _startSerialization;
 
+        static byte[] dna;
+        static byte[] dna64;
+
 		internal IntPtr _native;
 
 		public Serializer()
@@ -269,6 +272,28 @@ namespace BulletSharp
 			Dispose(false);
 		}
 
+        public static byte[] GetBulletDna()
+        {
+            if (dna == null)
+            {
+                int length = getBulletDNAlen();
+                dna = new byte[length];
+                Marshal.Copy(getBulletDNAstr(), dna, 0, length);
+            }
+            return dna;
+        }
+
+        public static byte[] GetBulletDna64()
+        {
+            if (dna64 == null)
+            {
+                int length = getBulletDNAlen64();
+                dna64 = new byte[length];
+                Marshal.Copy(getBulletDNAstr64(), dna, 0, length);
+            }
+            return dna64;
+        }
+
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern IntPtr btSerializerWrapper_new(IntPtr allocateCallback, IntPtr finalizeChunkCallback,
             IntPtr findNameForPointerCallback, IntPtr findPointerCallback, IntPtr finishSerializationCallback,
@@ -278,6 +303,15 @@ namespace BulletSharp
             IntPtr startSerializationCallback);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSerializer_delete(IntPtr obj);
+
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern IntPtr getBulletDNAstr();
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern int getBulletDNAlen();
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern IntPtr getBulletDNAstr64();
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern int getBulletDNAlen64();
 	}
 
 	public class DefaultSerializer : Serializer
@@ -308,7 +342,7 @@ namespace BulletSharp
 
             _buffer = (_totalSize != 0) ? Marshal.AllocHGlobal(_totalSize) : IntPtr.Zero;
 
-            InitDna((IntPtr.Size == 8) ? BulletDna.BulletDnaStr64 : BulletDna.BulletDnaStr);
+            InitDna((IntPtr.Size == 8) ? GetBulletDna64() : GetBulletDna());
 		}
 
 		public DefaultSerializer()
@@ -373,7 +407,7 @@ namespace BulletSharp
                 Debug.Assert(FindPointer(oldPtr) == IntPtr.Zero);
             }
 
-            //chunk.Dna_nr = GetReverseType(structType);
+            chunk.DnaNr = Array.IndexOf(_structs, GetReverseType(structType));
             chunk.ChunkCode = (int)chunkCode;
             IntPtr uniquePtr = GetUniquePointer(oldPtr);
 
@@ -470,7 +504,7 @@ namespace BulletSharp
             return _uniqueIdGenerator;
         }
 
-        protected unsafe void InitDna(sbyte[] bdnaOrg)
+        protected unsafe void InitDna(byte[] bdnaOrg)
         {
             if (_dna != IntPtr.Zero)
             {
@@ -479,8 +513,7 @@ namespace BulletSharp
 
             _dnaLength = bdnaOrg.Length;
             _dna = Marshal.AllocHGlobal(bdnaOrg.Length);
-            Marshal.Copy((bdnaOrg as Array) as byte[], 0, _dna, _dnaLength);
-            Marshal.Copy((byte[])(Array)bdnaOrg, 0, _dna, _dnaLength);
+            Marshal.Copy(bdnaOrg, 0, _dna, _dnaLength);
 
             Stream stream = new UnmanagedMemoryStream((byte*)_dna.ToPointer(), _dnaLength);
             BinaryReader reader = new BinaryReader(stream);

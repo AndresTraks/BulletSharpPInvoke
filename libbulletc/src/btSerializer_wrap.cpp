@@ -195,3 +195,24 @@ void btDefaultSerializer_writeHeader(btDefaultSerializer* obj, unsigned char* bu
 {
 	obj->writeHeader(buffer);
 }
+
+
+char* getBulletDNAstr()
+{
+	return sBulletDNAstr;
+}
+
+int getBulletDNAlen()
+{
+	return sBulletDNAlen;
+}
+
+char* getBulletDNAstr64()
+{
+	return sBulletDNAstr64;
+}
+
+int getBulletDNAlen64()
+{
+	return sBulletDNAlen64;
+}

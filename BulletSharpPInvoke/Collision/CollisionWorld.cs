@@ -883,14 +883,6 @@ namespace BulletSharp
 
         protected void SerializeCollisionObjects(Serializer serializer)
         {
-            foreach (CollisionObject colObj in CollisionObjectArray)
-            {
-                if (colObj.InternalType == CollisionObjectTypes.CollisionObject)
-                {
-                    colObj.SerializeSingleObject(serializer);
-                }
-            }
-
 	        // keep track of shapes already serialized
             Dictionary<CollisionShape, int> serializedShapes = new Dictionary<CollisionShape, int>();
 
@@ -901,6 +893,15 @@ namespace BulletSharp
                 {
                     serializedShapes.Add(shape, 0);
                     shape.SerializeSingleShape(serializer);
+                }
+            }
+
+            // serialize all collision objects
+            foreach (CollisionObject colObj in CollisionObjectArray)
+            {
+                if (colObj.InternalType == CollisionObjectTypes.CollisionObject)
+                {
+                    colObj.SerializeSingleObject(serializer);
                 }
             }
         }

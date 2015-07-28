@@ -71,6 +71,18 @@ namespace BulletSharp
                 //throw new NotImplementedException();
             }
 
+            foreach (byte[] solverInfoData in file._dynamicsWorldInfo)
+            {
+                if ((file.Flags & FileFlags.DoublePrecision) != 0)
+                {
+                    //throw new NotImplementedException();
+                }
+                else
+                {
+                    //throw new NotImplementedException();
+                }
+            }
+
             foreach (byte[] bodyData in file._rigidBodies)
             {
                 if ((file.Flags & FileFlags.DoublePrecision) != 0)

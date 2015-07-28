@@ -103,4 +103,9 @@ extern "C"
 	EXPORT btDefaultSerializer* btDefaultSerializer_new2(int totalSize);
 	EXPORT unsigned char* btDefaultSerializer_internalAlloc(btDefaultSerializer* obj, size_t size);
 	EXPORT void btDefaultSerializer_writeHeader(btDefaultSerializer* obj, unsigned char* buffer);
+
+	EXPORT char* getBulletDNAstr();
+	EXPORT int getBulletDNAlen();
+	EXPORT char* getBulletDNAstr64();
+	EXPORT int getBulletDNAlen64();
 }

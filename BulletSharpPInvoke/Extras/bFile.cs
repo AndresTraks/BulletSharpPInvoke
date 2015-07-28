@@ -623,7 +623,11 @@ namespace BulletSharp
                     {
                         long streamPosition = stream.Position;
                         ResolvePointersStructRecursive(reader, dataChunk.DnaNR, verboseMode, 1);
-                        stream.Position = streamPosition + oldLen;
+                        if (stream.Position != streamPosition + oldLen)
+                        {
+                            throw new InvalidOperationException();
+                            stream.Position = streamPosition + oldLen;
+                        }
                     }
                 }
             }
@@ -638,7 +642,9 @@ namespace BulletSharp
 
             foreach (Dna.ElementDecl element in oldStruct.Elements)
             {
+                int size = fileDna.GetElementSize(element);
                 int arrayLen = element.Name.ArraySizeNew;
+
                 if (element.Name.Name[0] == '*')
                 {
                     if (arrayLen > 1)
@@ -779,11 +785,10 @@ namespace BulletSharp
                                 }
                             }
                         }
+                        reader.BaseStream.Position += size;
                     }
                 }
-                int size = fileDna.GetElementSize(element);
                 totalSize += size;
-                //elemPtr += size;
             }
 
             return totalSize;

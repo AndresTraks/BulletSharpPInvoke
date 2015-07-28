@@ -108,7 +108,6 @@
     <Compile Include="Extras\BulletWriter.cs" />
     <Compile Include="Extras\Chunk.cs" />
     <Compile Include="Extras\Dna.cs" />
-    <Compile Include="Extras\BulletDna.cs" />
     <Compile Include="Extras\Hacd.cs" />
     <Compile Include="LinearMath\AlignedManifoldArray.cs" />
     <Compile Include="Collision\AxisSweep3.cs" />

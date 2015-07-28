@@ -58,6 +58,7 @@ namespace BulletSharp
         public List<byte[]> _collisionObjects = new List<byte[]>();
         public List<byte[]> _collisionShapes = new List<byte[]>();
         public List<byte[]> _constraints = new List<byte[]>();
+        public List<byte[]> _dynamicsWorldInfo = new List<byte[]>();
         public List<byte[]> _rigidBodies = new List<byte[]>();
 
 		public BulletFile()
@@ -89,16 +90,11 @@ namespace BulletSharp
         */
         public override void Parse(FileVerboseMode verboseMode)
         {
-            if (IntPtr.Size == 8)
-            {
-                _dnaCopy = new byte[BulletDna.BulletDnaStr64.Length];
-                Buffer.BlockCopy(BulletDna.BulletDnaStr64, 0, _dnaCopy, 0, _dnaCopy.Length);
-            }
-            else
-            {
-                _dnaCopy = new byte[BulletDna.BulletDnaStr.Length];
-                Buffer.BlockCopy(BulletDna.BulletDnaStr, 0, _dnaCopy, 0, _dnaCopy.Length);
-            }
+            byte[] dna = (IntPtr.Size == 8) ? Serializer.GetBulletDna64() : Serializer.GetBulletDna();
+
+            _dnaCopy = new byte[dna.Length];
+            Buffer.BlockCopy(dna, 0, _dnaCopy, 0, _dnaCopy.Length);
+
             ParseInternal(verboseMode, _dnaCopy);
 
             //the parsing will convert to cpu endian
@@ -155,6 +151,8 @@ namespace BulletSharp
                         switch(dataChunk.Code)
                         {
                             case DnaID.DynamicsWorld:
+                                _dynamicsWorldInfo.Add(id);
+                                break;
                             case DnaID.SoftBody:
                             case DnaID.TriangleInfoMap:
                                 throw new NotImplementedException();

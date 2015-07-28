@@ -106,8 +106,8 @@ namespace BulletSharp
         {
             serializer.StartSerialization();
             SerializeDynamicsWorldInfo(serializer);
-            SerializeRigidBodies(serializer);
             SerializeCollisionObjects(serializer);
+            SerializeRigidBodies(serializer);
             serializer.FinishSerialization();
         }
 
