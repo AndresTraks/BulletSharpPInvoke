@@ -460,7 +460,7 @@ namespace BulletSharp
 
             foreach (IntPtr ptr in _nameMap.Values)
             {
-                GCHandle.FromIntPtr(ptr).Free();
+                Marshal.FreeHGlobal(ptr);
             }
 
 			_structReverse.Clear();
@@ -643,7 +643,7 @@ namespace BulletSharp
             {
                 throw new NotImplementedException();
             }
-            IntPtr namePtr = GCHandle.ToIntPtr(GCHandle.Alloc(name));
+            IntPtr namePtr = Marshal.StringToHGlobalAnsi(name);
             _nameMap.Add(ptr, namePtr);
 		}
 
@@ -660,7 +660,7 @@ namespace BulletSharp
                 return;
             }
 
-            string name = GCHandle.FromIntPtr(namePtr).Target as string;
+            string name = Marshal.PtrToStringAnsi(namePtr);
             int length = name.Length;
             if (length == 0)
             {
