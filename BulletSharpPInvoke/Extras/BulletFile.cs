@@ -175,8 +175,9 @@ namespace BulletSharp
                     }
                     else
                     {
-                        //Console.WriteLine("unknown chunk " + dataChunk.Code);
-                        throw new NotImplementedException();
+#if DEBUG
+                        Console.WriteLine("unknown chunk " + dataChunk.Code);
+#endif
                         //_libPointers.Add(dataChunk.OldPtr, dataPtrHead);
                     }
                 }

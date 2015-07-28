@@ -257,6 +257,20 @@ namespace BulletSharp
             TypedConstraintType type = (TypedConstraintType)reader.ReadInt32(TypedConstraintFloatData.Offset("ObjectType"));
             switch (type)
             {
+                case TypedConstraintType.Point2Point:
+                    {
+                        Vector3 pivotInA = reader.ReadVector3(Point2PointConstraintFloatData.Offset("PivotInA"));
+                        if (rigidBodyA != null && rigidBodyB != null)
+                        {
+                            Vector3 pivotInB = reader.ReadVector3(Point2PointConstraintFloatData.Offset("PivotInB"));
+                            constraint = CreatePoint2PointConstraint(rigidBodyA, rigidBodyB, ref pivotInA, ref pivotInB);
+                        }
+                        else
+                        {
+                            constraint = CreatePoint2PointConstraint(rigidBodyA, ref pivotInA);
+                        }
+                        break;
+                    }
                 case TypedConstraintType.ConeTwist:
                     {
                         ConeTwistConstraint coneTwist;

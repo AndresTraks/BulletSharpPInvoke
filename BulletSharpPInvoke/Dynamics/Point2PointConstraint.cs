@@ -140,4 +140,14 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btPoint2PointConstraint_updateRHS(IntPtr obj, float timeStep);
 	}
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct Point2PointConstraintFloatData
+    {
+        public TypedConstraintFloatData TypedConstraintData;
+        public Vector3FloatData PivotInA;
+        public Vector3FloatData PivotInB;
+
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Point2PointConstraintFloatData), fieldName).ToInt32(); }
+    }
 }
