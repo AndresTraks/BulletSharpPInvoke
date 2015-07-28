@@ -19,6 +19,10 @@ namespace BulletSharp
 
         protected Dictionary<byte[], CollisionObject> _bodyMap = new Dictionary<byte[], CollisionObject>();
         protected Dictionary<long, OptimizedBvh> _bvhMap = new Dictionary<long, OptimizedBvh>();
+        protected Dictionary<string, RigidBody> _nameBodyMap = new Dictionary<string, RigidBody>();
+        protected Dictionary<string, TypedConstraint> _nameConstraintMap = new Dictionary<string, TypedConstraint>();
+        protected Dictionary<string, CollisionShape> _nameShapeMap = new Dictionary<string, CollisionShape>();
+        protected Dictionary<Object, string> _objectNameMap = new Dictionary<Object, string>();
         protected Dictionary<long, CollisionShape> _shapeMap = new Dictionary<long, CollisionShape>();
         protected FileVerboseMode _verboseMode;
 
@@ -248,7 +252,7 @@ namespace BulletSharp
             return shape;
         }
 
-        protected void ConvertConstraintFloat(RigidBody rigidBodyA, RigidBody rigidBodyB, byte[] constraintData, int fileVersion)
+        protected void ConvertConstraintFloat(RigidBody rigidBodyA, RigidBody rigidBodyB, byte[] constraintData, int fileVersion, Dictionary<long, byte[]> libPointers)
         {
             TypedConstraint constraint = null;
             MemoryStream stream = new MemoryStream(constraintData, false);
@@ -417,13 +421,15 @@ namespace BulletSharp
                     constraint.OverrideNumSolverIterations = reader.ReadInt32(TypedConstraintFloatData.Offset("OverrideNumSolverIterations"));
                 }
 
-                /*
-                if (constraintData->m_name)
+                long namePtr = reader.ReadPtr(TypedConstraintFloatData.Offset("Name"));
+                if (namePtr != 0)
                 {
-                    char* newname = duplicateName(constraintData->m_name);
-                    m_nameConstraintMap.insert(newname, constraint);
-                    m_objectNameMap.insert(newname, constraint);
-                }*/
+                    byte[] nameData = libPointers[namePtr];
+                    int length = Array.IndexOf(nameData, (byte)0);
+                    string name = System.Text.Encoding.ASCII.GetString(nameData, 0, length);
+                    _nameConstraintMap.Add(name, constraint);
+                    _objectNameMap.Add(constraint, name);
+                }
 
                 if (_dynamicsWorld != null)
                 {
@@ -435,7 +441,7 @@ namespace BulletSharp
             stream.Dispose();
         }
 
-        protected void ConvertRigidBodyFloat(byte[] bodyData)
+        protected void ConvertRigidBodyFloat(byte[] bodyData, Dictionary<long, byte[]> libPointers)
         {
             MemoryStream stream = new MemoryStream(bodyData, false);
             BulletReader reader = new BulletReader(stream);
@@ -444,6 +450,7 @@ namespace BulletSharp
             long collisionShapePtr = reader.ReadPtr(cod + CollisionObjectFloatData.Offset("CollisionShape"));
             Matrix startTransform = reader.ReadMatrix(cod + CollisionObjectFloatData.Offset("WorldTransform"));
             float inverseMass = reader.ReadSingle(RigidBodyFloatData.Offset("InverseMass"));
+            long namePtr = reader.ReadPtr(CollisionObjectFloatData.Offset("Name"));
 
             float mass = inverseMass.Equals(0) ? 0 : 1.0f / inverseMass;
             CollisionShape shape = _shapeMap[collisionShapePtr];
@@ -465,6 +472,12 @@ namespace BulletSharp
                 localInertia = Vector3.Zero;
             }
             string name = null;
+            if (namePtr != 0)
+            {
+                byte[] nameData = libPointers[namePtr];
+                int length = Array.IndexOf(nameData, (byte)0);
+                name = System.Text.Encoding.ASCII.GetString(nameData, 0, length);
+            }
             RigidBody body = CreateRigidBody(isDynamic, mass, ref startTransform, shape, name);
             _bodyMap.Add(bodyData, body);
 
@@ -795,8 +808,8 @@ namespace BulletSharp
 
             if (bodyName != null)
             {
-                //_objectNameMap.insert(body, bodyName);
-                //_nameBodyMap.insert(bodyName, body);
+                _objectNameMap.Add(body, bodyName);
+                _nameBodyMap.Add(bodyName, body);
             }
             _allocatedRigidBodies.Add(body);
             return body;
@@ -910,7 +923,9 @@ namespace BulletSharp
 
 		public CollisionShape GetCollisionShapeByName(string name)
 		{
-            throw new NotImplementedException();
+            CollisionShape shape;
+            _nameShapeMap.TryGetValue(name, out shape);
+            return shape;
 		}
 
 		public TypedConstraint GetConstraintByIndex(int index)
@@ -920,12 +935,16 @@ namespace BulletSharp
 
 		public TypedConstraint GetConstraintByName(string name)
 		{
-            throw new NotImplementedException();
+            TypedConstraint constraint;
+            _nameConstraintMap.TryGetValue(name, out constraint);
+            return constraint;
 		}
 
-		public string GetNameForPointer(IntPtr ptr)
+		public string GetNameForObject(Object obj)
 		{
-            throw new NotImplementedException();
+            string name;
+            _objectNameMap.TryGetValue(obj, out name);
+            return name;
 		}
 
 		public CollisionObject GetRigidBodyByIndex(int index)
@@ -935,7 +954,9 @@ namespace BulletSharp
 
 		public RigidBody GetRigidBodyByName(string name)
 		{
-            throw new NotImplementedException();
+            RigidBody body;
+            _nameBodyMap.TryGetValue(name, out body);
+            return body;
 		}
         
 		public TriangleInfoMap GetTriangleInfoMapByIndex(int index)

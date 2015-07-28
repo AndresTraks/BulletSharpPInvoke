@@ -543,4 +543,23 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btQuantizedBvh_delete(IntPtr obj);
 	}
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct QuantizedBvhFloatData
+    {
+        public Vector3FloatData BvhAabbMin;
+        public Vector3FloatData BvhAabbMax;
+        public Vector3FloatData BvhQuantization;
+        public int CurNodeIndex;
+        public int UseQuantization;
+        public int NumContiguousLeafNodes;
+        public int NumQuantizedContiguousNodes;
+        public IntPtr ContiguousNodesPtr;
+        public IntPtr QuantizedContiguousNodesPtr;
+        public IntPtr SubTreeInfoPtr;
+        public int TraversalMode;
+        public int NumSubtreeHeaders;
+
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(QuantizedBvhFloatData), fieldName).ToInt32(); }
+    }
 }

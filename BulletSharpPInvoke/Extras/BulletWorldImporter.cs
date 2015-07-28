@@ -32,9 +32,64 @@ namespace BulletSharp
                 }
                 else
                 {
+                    // QuantizedBvhData is parsed in C++, so we need to actually fix pointers
                     GCHandle bvhDataHandle = GCHandle.Alloc(bvhData, GCHandleType.Pinned);
-                    bvh.DeSerializeFloat(bvhDataHandle.AddrOfPinnedObject());
+                    IntPtr bvhDataPinnedPtr = bvhDataHandle.AddrOfPinnedObject();
+
+                    IntPtr contiguousNodesHandlePtr = IntPtr.Zero;
+                    IntPtr quantizedContiguousNodesHandlePtr = IntPtr.Zero;
+                    IntPtr subTreeInfoHandlePtr = IntPtr.Zero;
+
+                    using (MemoryStream stream = new MemoryStream(bvhData))
+                    {
+                        using (BulletReader reader = new BulletReader(stream))
+                        {
+                            long contiguousNodesPtr = reader.ReadPtr(QuantizedBvhFloatData.Offset("ContiguousNodesPtr"));
+                            long quantizedContiguousNodesPtr = reader.ReadPtr(QuantizedBvhFloatData.Offset("QuantizedContiguousNodesPtr"));
+                            long subTreeInfoPtr = reader.ReadPtr(QuantizedBvhFloatData.Offset("SubTreeInfoPtr"));
+
+                            using (BulletWriter writer = new BulletWriter(stream))
+                            {
+                                if (contiguousNodesPtr != 0)
+                                {
+                                    GCHandle contiguousNodesHandle = GCHandle.Alloc(file.LibPointers[contiguousNodesPtr], GCHandleType.Pinned);
+                                    contiguousNodesHandlePtr = GCHandle.ToIntPtr(contiguousNodesHandle);
+                                    stream.Position = QuantizedBvhFloatData.Offset("ContiguousNodesPtr");
+                                    writer.Write(contiguousNodesHandle.AddrOfPinnedObject());
+                                }
+                                if (quantizedContiguousNodesPtr != 0)
+                                {
+                                    GCHandle quantizedContiguousNodesHandle = GCHandle.Alloc(file.LibPointers[quantizedContiguousNodesPtr], GCHandleType.Pinned);
+                                    quantizedContiguousNodesHandlePtr = GCHandle.ToIntPtr(quantizedContiguousNodesHandle);
+                                    stream.Position = QuantizedBvhFloatData.Offset("QuantizedContiguousNodesPtr");
+                                    writer.Write(quantizedContiguousNodesHandle.AddrOfPinnedObject());
+                                }
+                                if (subTreeInfoPtr != 0)
+                                {
+                                    GCHandle subTreeInfoHandle = GCHandle.Alloc(file.LibPointers[subTreeInfoPtr], GCHandleType.Pinned);
+                                    subTreeInfoHandlePtr = GCHandle.ToIntPtr(subTreeInfoHandle);
+                                    stream.Position = QuantizedBvhFloatData.Offset("SubTreeInfoPtr");
+                                    writer.Write(subTreeInfoHandle.AddrOfPinnedObject());
+                                }
+                            }
+                        }
+                    }
+
+                    bvh.DeSerializeFloat(bvhDataPinnedPtr);
                     bvhDataHandle.Free();
+
+                    if (contiguousNodesHandlePtr != IntPtr.Zero)
+                    {
+                        GCHandle.FromIntPtr(contiguousNodesHandlePtr).Free();
+                    }
+                    if (quantizedContiguousNodesHandlePtr != IntPtr.Zero)
+                    {
+                        GCHandle.FromIntPtr(quantizedContiguousNodesHandlePtr).Free();
+                    }
+                    if (subTreeInfoHandlePtr != IntPtr.Zero)
+                    {
+                        GCHandle.FromIntPtr(subTreeInfoHandlePtr).Free();
+                    }
                 }
 
                 foreach (KeyValuePair<long, byte[]> lib in file.LibPointers)
@@ -60,15 +115,23 @@ namespace BulletSharp
                             break;
                         }
                     }
+
+                    using (MemoryStream stream = new MemoryStream(shapeData, false))
+                    {
+                        using (BulletReader reader = new BulletReader(stream))
+                        {
+                            long namePtr = reader.ReadPtr(CollisionShapeFloatData.Offset("Name"));
+                            if (namePtr != 0)
+                            {
+                                byte[] nameData = file.LibPointers[namePtr];
+                                int length = Array.IndexOf(nameData, (byte)0);
+                                string name = System.Text.Encoding.ASCII.GetString(nameData, 0, length);
+                                _objectNameMap.Add(shape, name);
+                                _nameShapeMap.Add(name, shape);
+                            }
+                        }
+                    }
                 }
-                /*
-                if (shape && shapeData->m_name)
-                {
-                    char* newname = duplicateName(shapeData->m_name);
-                    m_objectNameMap.insert(shape, newname);
-                    m_nameShapeMap.insert(newname, shape);
-                }*/
-                //throw new NotImplementedException();
             }
 
             foreach (byte[] solverInfoData in file._dynamicsWorldInfo)
@@ -91,7 +154,7 @@ namespace BulletSharp
                 }
                 else
                 {
-                    ConvertRigidBodyFloat(bodyData);
+                    ConvertRigidBodyFloat(bodyData, file.LibPointers);
                 }
             }
 
@@ -111,11 +174,14 @@ namespace BulletSharp
                             CollisionShape shape = _shapeMap[shapePtr];
                             Math.Matrix startTransform = colObjReader.ReadMatrix(CollisionObjectFloatData.Offset("WorldTransform"));
                             long namePtr = colObjReader.ReadPtr(CollisionObjectFloatData.Offset("Name"));
+                            string name = null;
                             if (namePtr != 0)
                             {
-                                throw new NotImplementedException();
+                                byte[] nameData = file.FindLibPointer(namePtr);
+                                int length = Array.IndexOf(nameData, (byte)0);
+                                name = System.Text.Encoding.ASCII.GetString(nameData, 0, length);
                             }
-                            CollisionObject colObj = CreateCollisionObject(ref startTransform, shape, "n");
+                            CollisionObject colObj = CreateCollisionObject(ref startTransform, shape, name);
                             _bodyMap.Add(colObjData, colObj);
                         }
                     }
@@ -178,7 +244,7 @@ namespace BulletSharp
                     }
                     else
                     {
-                        ConvertConstraintFloat(a, b, constraintData, file.Version);
+                        ConvertConstraintFloat(a, b, constraintData, file.Version, file.LibPointers);
                     }
                 }
                 stream.Dispose();

@@ -178,12 +178,16 @@ namespace BulletSharp
 #if DEBUG
                         Console.WriteLine("unknown chunk " + dataChunk.Code);
 #endif
-                        //_libPointers.Add(dataChunk.OldPtr, dataPtrHead);
+                        byte[] data = new byte[dataChunk.Length];
+                        reader.Read(data, 0, dataChunk.Length);
+                        _libPointers.Add(dataChunk.OldPtr, data);
                     }
                 }
                 else
                 {
-                    //Console.WriteLine("skipping B3_QUANTIZED_BVH_CODE due to broken DNA");
+#if DEBUG
+                    Console.WriteLine("skipping B3_QUANTIZED_BVH_CODE due to broken DNA");
+#endif
                 }
 
                 dataPtr += seek;

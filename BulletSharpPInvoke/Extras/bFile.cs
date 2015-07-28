@@ -517,7 +517,15 @@ namespace BulletSharp
 
                 if ((_flags & FileFlags.BrokenDna) != 0)
                 {
-                    throw new NotImplementedException();
+                    if (oldStruct.Type.Name.Equals("btQuantizedBvhNodeData") && oldStruct.Type.Length == 28)
+                    {
+                        throw new NotImplementedException();
+                    }
+
+                    if (oldStruct.Type.Name.Equals("btShortIntIndexData"))
+                    {
+                        throw new NotImplementedException();
+                    }
                 }
 
                 // Don't try to convert Link block data, just memcpy it. Other data can be converted.

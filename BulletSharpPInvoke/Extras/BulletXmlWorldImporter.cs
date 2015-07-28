@@ -80,19 +80,28 @@ namespace BulletSharp
                             break;
                         }
                     }
-                    /*
-                    if (shape && shapeData->m_name)
+
+                    using (MemoryStream stream = new MemoryStream(shapeData, false))
                     {
-                        char* newname = duplicateName(shapeData->m_name);
-                        m_objectNameMap.insert(shape, newname);
-                        m_nameShapeMap.insert(newname, shape);
-                    }*/
+                        using (BulletReader reader = new BulletReader(stream))
+                        {
+                            long namePtr = reader.ReadPtr(CollisionShapeFloatData.Offset("Name"));
+                            if (namePtr != 0)
+                            {
+                                byte[] nameData = _pointerLookup[namePtr];
+                                int length = Array.IndexOf(nameData, (byte)0);
+                                string name = System.Text.Encoding.ASCII.GetString(nameData, 0, length);
+                                _objectNameMap.Add(shape, name);
+                                _nameShapeMap.Add(name, shape);
+                            }
+                        }
+                    }
                 }
             }
 
             foreach (byte[] rbData in _rigidBodyData)
             {
-                ConvertRigidBodyFloat(rbData);
+                ConvertRigidBodyFloat(rbData, _pointerLookup);
             }
 
             foreach (byte[] constraintData in _constraintData)
