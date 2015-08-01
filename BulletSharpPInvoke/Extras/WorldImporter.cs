@@ -50,6 +50,28 @@ namespace BulletSharp
                         shape.LocalScaling = localScaling;
                         break;
                     }
+                case BroadphaseNativeType.GImpactShape:
+                    {
+                        //StridingMeshInterfaceData* interfaceData = CreateStridingMeshInterfaceData(&gimpactData->m_meshInterface)
+                        TriangleIndexVertexArray meshInterface = CreateMeshInterface(shapeData, GImpactMeshShapeData.Offset("MeshInterface"), libPointers);
+
+                        GImpactShapeType gImpactType = (GImpactShapeType)reader.ReadInt32(GImpactMeshShapeData.Offset("GImpactSubType"));
+                        if (gImpactType == GImpactShapeType.TrimeshShape)
+                        {
+                            GImpactMeshShape gimpactShape = CreateGimpactShape(meshInterface);
+                            gimpactShape.LocalScaling = reader.ReadVector3(GImpactMeshShapeData.Offset("LocalScaling"));
+                            gimpactShape.Margin = reader.ReadSingle(GImpactMeshShapeData.Offset("CollisionMargin"));
+                            gimpactShape.UpdateBound();
+                            shape = gimpactShape;
+                        }
+                        else
+                        {
+#if DEBUG
+                            Console.WriteLine("Unsupported GImpact subtype");
+#endif
+                        }
+                        break;
+                    }
                 case BroadphaseNativeType.CompoundShape:
                     {
                         long childShapesPtr = reader.ReadPtr();
@@ -243,7 +265,12 @@ namespace BulletSharp
                         shape = trimeshShape;
                         break;
                     }
+                case BroadphaseNativeType.SoftBodyShape:
+                    return null;
                 default:
+#if DEBUG
+                    Console.WriteLine("Unsupported shape type ({0})\n", type);
+#endif
                     throw new NotImplementedException();
             }
 
@@ -320,7 +347,7 @@ namespace BulletSharp
                             }
                             else
                             {
-                                Console.WriteLine("Error in WorldImporter.CreateGeneric6DofConstraint: missing rbB");
+                                Console.WriteLine("Error in WorldImporter.CreateGeneric6DofConstraint: missing rigidBodyB");
                             }
                         }
 
@@ -347,7 +374,7 @@ namespace BulletSharp
                         }
                         else
                         {
-                            Console.WriteLine("Error in WorldImporter.CreateGeneric6DofSpringConstraint: requires rbA && rbB");
+                            Console.WriteLine("Error in WorldImporter.CreateGeneric6DofSpringConstraint: requires rigidBodyA && rigidBodyB");
                         }
 
                         if (dof != null)
@@ -374,6 +401,80 @@ namespace BulletSharp
                             }
                         }
                         constraint = dof;
+                        break;
+                    }
+                case TypedConstraintType.D6Spring2:
+                    {
+                        Generic6DofSpring2Constraint dof = null;
+                        if (rigidBodyA != null && rigidBodyB != null)
+                        {
+                            Matrix rbaFrame = reader.ReadMatrix(Generic6DofSpring2ConstraintFloatData.Offset("RigidBodyAFrame"));
+                            Matrix rbbFrame = reader.ReadMatrix(Generic6DofSpring2ConstraintFloatData.Offset("RigidBodyBFrame"));
+                            RotateOrder rotateOrder = (RotateOrder)reader.ReadInt32(Generic6DofSpring2ConstraintFloatData.Offset("RotateOrder"));
+                            dof = CreateGeneric6DofSpring2Constraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame, rotateOrder);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error in WorldImporter.CreateGeneric6DofSpring2Constraint: requires rigidBodyA && rigidBodyB");
+                        }
+
+                        if (dof != null)
+                        {
+                            dof.AngularLowerLimit = reader.ReadVector3(Generic6DofSpring2ConstraintFloatData.Offset("AngularLowerLimit"));
+                            dof.AngularUpperLimit = reader.ReadVector3(Generic6DofSpring2ConstraintFloatData.Offset("AngularUpperLimit"));
+                            dof.LinearLowerLimit = reader.ReadVector3(Generic6DofSpring2ConstraintFloatData.Offset("LinearLowerLimit"));
+                            dof.LinearUpperLimit = reader.ReadVector3(Generic6DofSpring2ConstraintFloatData.Offset("LinearUpperLimit"));
+
+                            int i;
+                            if (fileVersion > 280)
+                            {
+                                int linearSpringStiffnessOffset = Generic6DofSpring2ConstraintFloatData.Offset("LinearSpringStiffness");
+                                int linearSpringStiffnessLimitedOffset = Generic6DofSpring2ConstraintFloatData.Offset("LinearSpringStiffnessLimited");
+                                int linearEnableSpringdOffset = Generic6DofSpring2ConstraintFloatData.Offset("LinearEnableSpring");
+                                int linearEquilibriumPointOffset = Generic6DofSpring2ConstraintFloatData.Offset("LinearEquilibriumPoint");
+                                int linearSpringDampingOffset = Generic6DofSpring2ConstraintFloatData.Offset("LinearSpringDamping");
+                                int linearSpringDampingLimitedOffset = Generic6DofSpring2ConstraintFloatData.Offset("LinearSpringDampingLimited");
+                                for (i = 0; i < 3; i++)
+                                {
+                                    dof.SetStiffness(i, reader.ReadSingle(linearSpringStiffnessOffset + sizeof(float) * i), reader.ReadByte(linearSpringStiffnessLimitedOffset + sizeof(byte) * i) != 0);
+                                    dof.SetEquilibriumPoint(i, reader.ReadSingle(linearEquilibriumPointOffset + sizeof(float) * i));
+                                    dof.EnableSpring(i, reader.ReadInt32(linearEnableSpringdOffset + sizeof(byte) * i) != 0);
+                                    dof.SetDamping(i, reader.ReadSingle(linearSpringDampingOffset + sizeof(float) * i), reader.ReadByte(linearSpringDampingLimitedOffset + sizeof(float) * i) != 0);
+                                }
+
+                                int angularSpringStiffnessOffset = Generic6DofSpring2ConstraintFloatData.Offset("AngularSpringStiffness");
+                                int angularSpringStiffnessLimitedOffset = Generic6DofSpring2ConstraintFloatData.Offset("AngularSpringStiffnessLimited");
+                                int angularEnableSpringdOffset = Generic6DofSpring2ConstraintFloatData.Offset("AngularEnableSpring");
+                                int angularEquilibriumPointOffset = Generic6DofSpring2ConstraintFloatData.Offset("AngularEquilibriumPoint");
+                                int angularSpringDampingOffset = Generic6DofSpring2ConstraintFloatData.Offset("AngularSpringDamping");
+                                int angularSpringDampingLimitedOffset = Generic6DofSpring2ConstraintFloatData.Offset("AngularSpringDampingLimited");
+                                for (i = 0; i < 3; i++)
+                                {
+                                    dof.SetStiffness(i + 3, reader.ReadSingle(angularSpringStiffnessOffset + sizeof(float) * i), reader.ReadByte(angularSpringStiffnessLimitedOffset + sizeof(byte) * i) != 0);
+                                    dof.SetEquilibriumPoint(i + 3, reader.ReadSingle(angularEquilibriumPointOffset + sizeof(float) * i));
+                                    dof.EnableSpring(i + 3, reader.ReadInt32(angularEnableSpringdOffset + sizeof(byte) * i) != 0);
+                                    dof.SetDamping(i + 3, reader.ReadSingle(angularSpringDampingOffset + sizeof(float) * i), reader.ReadByte(angularSpringDampingLimitedOffset + sizeof(float) * i) != 0);
+                                }
+                            }
+                        }
+                        constraint = dof;
+                        break;
+                    }
+                case TypedConstraintType.Gear:
+                    {
+                        GearConstraint gear;
+                        if (rigidBodyA != null && rigidBodyB != null)
+                        {
+                            Vector3 axisInA = reader.ReadVector3(GearConstraintFloatData.Offset("AxisInA"));
+                            Vector3 axisInB = reader.ReadVector3(GearConstraintFloatData.Offset("AxisInB"));
+                            float ratio = reader.ReadSingle(GearConstraintFloatData.Offset("Ratio"));
+                            gear = CreateGearConstraint(rigidBodyA, rigidBodyB, ref axisInA, ref axisInB, ratio);
+                        }
+                        else
+                        {
+                            throw new NotImplementedException();
+                        }
+                        constraint = gear;
                         break;
                     }
                 case TypedConstraintType.Hinge:
@@ -404,6 +505,27 @@ namespace BulletSharp
                             reader.ReadSingle(HingeConstraintFloatData.Offset("BiasFactor")),
                             reader.ReadSingle(HingeConstraintFloatData.Offset("RelaxationFactor")));
                         constraint = hinge;
+                        break;
+                    }
+                case TypedConstraintType.Slider:
+                    {
+                        SliderConstraint slider;
+                        Matrix rbbFrame = reader.ReadMatrix(SliderConstraintFloatData.Offset("RigidBodyBFrame"));
+                        int useLinearReferenceFrameA = reader.ReadInt32(SliderConstraintFloatData.Offset("UseLinearReferenceFrameA"));
+                        if (rigidBodyA != null && rigidBodyB != null)
+                        {
+                            Matrix rbaFrame = reader.ReadMatrix(SliderConstraintFloatData.Offset("RigidBodyAFrame"));
+                            slider = CreateSliderConstraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame, useLinearReferenceFrameA != 0);
+                        }
+                        else
+                        {
+                            slider = CreateSliderConstraint(rigidBodyB, ref rbbFrame, useLinearReferenceFrameA != 0);
+                        }
+                        slider.LowerLinearLimit = reader.ReadSingle(SliderConstraintFloatData.Offset("LinearLowerLimit"));
+                        slider.UpperLinearLimit = reader.ReadSingle(SliderConstraintFloatData.Offset("LinearUpperLimit"));
+                        slider.LowerAngularLimit = reader.ReadSingle(SliderConstraintFloatData.Offset("AngularLowerLimit"));
+                        slider.UpperAngularLimit = reader.ReadSingle(SliderConstraintFloatData.Offset("AngularUpperLimit"));
+                        slider.UseFrameOffset = reader.ReadInt32(SliderConstraintFloatData.Offset("UseOffsetForConstraintFrame")) != 0;
                         break;
                     }
                 default:

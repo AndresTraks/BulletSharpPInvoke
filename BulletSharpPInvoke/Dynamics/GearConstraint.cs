@@ -66,4 +66,16 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGearConstraint_setRatio(IntPtr obj, float ratio);
 	}
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct GearConstraintFloatData
+    {
+        public TypedConstraintFloatData TypedConstraintData;
+        public Vector3FloatData AxisInA;
+        public Vector3FloatData AxisInB;
+        public float Ratio;
+        public int Padding;
+
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(GearConstraintFloatData), fieldName).ToInt32(); }
+    }
 }

@@ -631,11 +631,7 @@ namespace BulletSharp
                     {
                         long streamPosition = stream.Position;
                         ResolvePointersStructRecursive(reader, dataChunk.DnaNR, verboseMode, 1);
-                        if (stream.Position != streamPosition + oldLen)
-                        {
-                            throw new InvalidOperationException();
-                            stream.Position = streamPosition + oldLen;
-                        }
+                        System.Diagnostics.Debug.Assert(stream.Position == streamPosition + oldLen);
                     }
                 }
             }

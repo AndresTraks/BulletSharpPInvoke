@@ -495,4 +495,20 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSliderConstraint_testLinLimits(IntPtr obj);
 	}
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct SliderConstraintFloatData
+    {
+        public TypedConstraintFloatData TypedConstraintData;
+        public TransformFloatData RigidBodyAFrame;
+        public TransformFloatData RigidBodyBFrame;
+        public float LinearUpperLimit;
+        public float LinearLowerLimit;
+        public float AngularUpperLimit;
+        public float AngularLowerLimit;
+        public int UseLinearReferenceFrameA;
+        public int UseOffsetForConstraintFrame;
+
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(SliderConstraintFloatData), fieldName).ToInt32(); }
+    }
 }

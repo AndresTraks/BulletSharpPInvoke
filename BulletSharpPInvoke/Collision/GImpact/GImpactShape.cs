@@ -623,4 +623,16 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btGImpactMeshShape_getMeshPartCount(IntPtr obj);
 	}
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal unsafe struct GImpactMeshShapeData
+    {
+        public CollisionShapeFloatData CollisionShapeData;
+        public StridingMeshInterfaceData MeshInterface;
+        public Vector3FloatData LocalScaling;
+        public float CollisionMargin;
+        public int GImpactSubType;
+
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(GImpactMeshShapeData), fieldName).ToInt32(); }
+    }
 }

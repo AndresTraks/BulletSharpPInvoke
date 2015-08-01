@@ -11,6 +11,12 @@ namespace BulletSharp
         {
         }
 
+        public float ReadByte(int position)
+        {
+            BaseStream.Position = position;
+            return ReadByte();
+        }
+
         public float ReadSingle(int position)
         {
             BaseStream.Position = position;

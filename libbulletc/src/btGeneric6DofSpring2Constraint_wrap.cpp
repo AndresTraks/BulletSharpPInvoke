@@ -93,9 +93,19 @@ btScalar btRotationalLimitMotor2_getSpringDamping(btRotationalLimitMotor2* obj)
 	return obj->m_springDamping;
 }
 
+bool btRotationalLimitMotor2_getSpringDampingLimited(btRotationalLimitMotor2* obj)
+{
+	return obj->m_springDampingLimited;
+}
+
 btScalar btRotationalLimitMotor2_getSpringStiffness(btRotationalLimitMotor2* obj)
 {
 	return obj->m_springStiffness;
+}
+
+bool btRotationalLimitMotor2_getSpringStiffnessLimited(btRotationalLimitMotor2* obj)
+{
+	return obj->m_springStiffnessLimited;
 }
 
 btScalar btRotationalLimitMotor2_getStopCFM(btRotationalLimitMotor2* obj)
@@ -198,9 +208,19 @@ void btRotationalLimitMotor2_setSpringDamping(btRotationalLimitMotor2* obj, btSc
 	obj->m_springDamping = value;
 }
 
+void btRotationalLimitMotor2_setSpringDampingLimited(btRotationalLimitMotor2* obj, bool value)
+{
+	obj->m_springDampingLimited = value;
+}
+
 void btRotationalLimitMotor2_setSpringStiffness(btRotationalLimitMotor2* obj, btScalar value)
 {
 	obj->m_springStiffness = value;
+}
+
+void btRotationalLimitMotor2_setSpringStiffnessLimited(btRotationalLimitMotor2* obj, bool value)
+{
+	obj->m_springStiffnessLimited = value;
 }
 
 void btRotationalLimitMotor2_setStopCFM(btRotationalLimitMotor2* obj, btScalar value)
@@ -314,9 +334,19 @@ void btTranslationalLimitMotor2_getSpringDamping(btTranslationalLimitMotor2* obj
 	VECTOR3_OUT(&obj->m_springDamping, value);
 }
 
+bool* btTranslationalLimitMotor2_getSpringDampingLimited(btTranslationalLimitMotor2* obj)
+{
+	return obj->m_springDampingLimited;
+}
+
 void btTranslationalLimitMotor2_getSpringStiffness(btTranslationalLimitMotor2* obj, btScalar* value)
 {
 	VECTOR3_OUT(&obj->m_springStiffness, value);
+}
+
+bool* btTranslationalLimitMotor2_getSpringStiffnessLimited(btTranslationalLimitMotor2* obj)
+{
+	return obj->m_springStiffnessLimited;
 }
 
 void btTranslationalLimitMotor2_getStopCFM(btTranslationalLimitMotor2* obj, btScalar* value)
@@ -621,6 +651,11 @@ void btGeneric6DofSpring2Constraint_setDamping(btGeneric6DofSpring2Constraint* o
 	obj->setDamping(index, damping);
 }
 
+void btGeneric6DofSpring2Constraint_setDamping2(btGeneric6DofSpring2Constraint* obj, int index, btScalar damping, bool limitIfNeeded)
+{
+	obj->setDamping(index, damping, limitIfNeeded);
+}
+
 void btGeneric6DofSpring2Constraint_setEquilibriumPoint(btGeneric6DofSpring2Constraint* obj)
 {
 	obj->setEquilibriumPoint();
@@ -688,6 +723,11 @@ void btGeneric6DofSpring2Constraint_setServoTarget(btGeneric6DofSpring2Constrain
 void btGeneric6DofSpring2Constraint_setStiffness(btGeneric6DofSpring2Constraint* obj, int index, btScalar stiffness)
 {
 	obj->setStiffness(index, stiffness);
+}
+
+void btGeneric6DofSpring2Constraint_setStiffness2(btGeneric6DofSpring2Constraint* obj, int index, btScalar stiffness, bool limitIfNeeded)
+{
+	obj->setStiffness(index, stiffness, limitIfNeeded);
 }
 
 void btGeneric6DofSpring2Constraint_setTargetVelocity(btGeneric6DofSpring2Constraint* obj, int index, btScalar velocity)

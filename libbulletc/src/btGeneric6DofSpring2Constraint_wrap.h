@@ -20,7 +20,9 @@ extern "C"
 	EXPORT bool btRotationalLimitMotor2_getServoMotor(btRotationalLimitMotor2* obj);
 	EXPORT btScalar btRotationalLimitMotor2_getServoTarget(btRotationalLimitMotor2* obj);
 	EXPORT btScalar btRotationalLimitMotor2_getSpringDamping(btRotationalLimitMotor2* obj);
+	EXPORT bool btRotationalLimitMotor2_getSpringDampingLimited(btRotationalLimitMotor2* obj);
 	EXPORT btScalar btRotationalLimitMotor2_getSpringStiffness(btRotationalLimitMotor2* obj);
+	EXPORT bool btRotationalLimitMotor2_getSpringStiffnessLimited(btRotationalLimitMotor2* obj);
 	EXPORT btScalar btRotationalLimitMotor2_getStopCFM(btRotationalLimitMotor2* obj);
 	EXPORT btScalar btRotationalLimitMotor2_getStopERP(btRotationalLimitMotor2* obj);
 	EXPORT btScalar btRotationalLimitMotor2_getTargetVelocity(btRotationalLimitMotor2* obj);
@@ -41,7 +43,9 @@ extern "C"
 	EXPORT void btRotationalLimitMotor2_setServoMotor(btRotationalLimitMotor2* obj, bool value);
 	EXPORT void btRotationalLimitMotor2_setServoTarget(btRotationalLimitMotor2* obj, btScalar value);
 	EXPORT void btRotationalLimitMotor2_setSpringDamping(btRotationalLimitMotor2* obj, btScalar value);
+	EXPORT void btRotationalLimitMotor2_setSpringDampingLimited(btRotationalLimitMotor2* obj, bool value);
 	EXPORT void btRotationalLimitMotor2_setSpringStiffness(btRotationalLimitMotor2* obj, btScalar value);
+	EXPORT void btRotationalLimitMotor2_setSpringStiffnessLimited(btRotationalLimitMotor2* obj, bool value);
 	EXPORT void btRotationalLimitMotor2_setStopCFM(btRotationalLimitMotor2* obj, btScalar value);
 	EXPORT void btRotationalLimitMotor2_setStopERP(btRotationalLimitMotor2* obj, btScalar value);
 	EXPORT void btRotationalLimitMotor2_setTargetVelocity(btRotationalLimitMotor2* obj, btScalar value);
@@ -65,7 +69,9 @@ extern "C"
 	EXPORT bool* btTranslationalLimitMotor2_getServoMotor(btTranslationalLimitMotor2* obj);
 	EXPORT void btTranslationalLimitMotor2_getServoTarget(btTranslationalLimitMotor2* obj, btScalar* value);
 	EXPORT void btTranslationalLimitMotor2_getSpringDamping(btTranslationalLimitMotor2* obj, btScalar* value);
+	EXPORT bool* btTranslationalLimitMotor2_getSpringDampingLimited(btTranslationalLimitMotor2* obj);
 	EXPORT void btTranslationalLimitMotor2_getSpringStiffness(btTranslationalLimitMotor2* obj, btScalar* value);
+	EXPORT bool* btTranslationalLimitMotor2_getSpringStiffnessLimited(btTranslationalLimitMotor2* obj);
 	EXPORT void btTranslationalLimitMotor2_getStopCFM(btTranslationalLimitMotor2* obj, btScalar* value);
 	EXPORT void btTranslationalLimitMotor2_getStopERP(btTranslationalLimitMotor2* obj, btScalar* value);
 	EXPORT void btTranslationalLimitMotor2_getTargetVelocity(btTranslationalLimitMotor2* obj, btScalar* value);
@@ -122,6 +128,7 @@ extern "C"
 	EXPORT void btGeneric6DofSpring2Constraint_setAxis(btGeneric6DofSpring2Constraint* obj, const btScalar* axis1, const btScalar* axis2);
 	EXPORT void btGeneric6DofSpring2Constraint_setBounce(btGeneric6DofSpring2Constraint* obj, int index, btScalar bounce);
 	EXPORT void btGeneric6DofSpring2Constraint_setDamping(btGeneric6DofSpring2Constraint* obj, int index, btScalar damping);
+	EXPORT void btGeneric6DofSpring2Constraint_setDamping2(btGeneric6DofSpring2Constraint* obj, int index, btScalar damping, bool limitIfNeeded);
 	EXPORT void btGeneric6DofSpring2Constraint_setEquilibriumPoint(btGeneric6DofSpring2Constraint* obj);
 	EXPORT void btGeneric6DofSpring2Constraint_setEquilibriumPoint2(btGeneric6DofSpring2Constraint* obj, int index, btScalar val);
 	EXPORT void btGeneric6DofSpring2Constraint_setEquilibriumPoint3(btGeneric6DofSpring2Constraint* obj, int index);
@@ -135,5 +142,6 @@ extern "C"
 	EXPORT void btGeneric6DofSpring2Constraint_setServo(btGeneric6DofSpring2Constraint* obj, int index, bool onOff);
 	EXPORT void btGeneric6DofSpring2Constraint_setServoTarget(btGeneric6DofSpring2Constraint* obj, int index, btScalar target);
 	EXPORT void btGeneric6DofSpring2Constraint_setStiffness(btGeneric6DofSpring2Constraint* obj, int index, btScalar stiffness);
+	EXPORT void btGeneric6DofSpring2Constraint_setStiffness2(btGeneric6DofSpring2Constraint* obj, int index, btScalar stiffness, bool limitIfNeeded);
 	EXPORT void btGeneric6DofSpring2Constraint_setTargetVelocity(btGeneric6DofSpring2Constraint* obj, int index, btScalar velocity);
 }
