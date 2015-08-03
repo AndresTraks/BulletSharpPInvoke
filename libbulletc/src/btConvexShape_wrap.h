@@ -12,5 +12,5 @@ extern "C"
 	EXPORT void btConvexShape_localGetSupportingVertexWithoutMargin(btConvexShape* obj, const btScalar* vec, btScalar* value);
 	EXPORT void btConvexShape_localGetSupportVertexNonVirtual(btConvexShape* obj, const btScalar* vec, btScalar* value);
 	EXPORT void btConvexShape_localGetSupportVertexWithoutMarginNonVirtual(btConvexShape* obj, const btScalar* vec, btScalar* value);
-	EXPORT void btConvexShape_project(btConvexShape* obj, const btScalar* trans, const btScalar* dir, btScalar* min, btScalar* max);
+	EXPORT void btConvexShape_project(btConvexShape* obj, const btScalar* trans, const btScalar* dir, btScalar* minProj, btScalar* maxProj, btScalar* witnesPtMin, btScalar* witnesPtMax);
 }

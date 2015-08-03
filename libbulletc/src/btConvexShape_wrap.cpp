@@ -69,9 +69,13 @@ void btConvexShape_localGetSupportVertexWithoutMarginNonVirtual(btConvexShape* o
 	VECTOR3_OUT_VAL(obj->localGetSupportVertexWithoutMarginNonVirtual(VECTOR3_USE(vec)), value);
 }
 
-void btConvexShape_project(btConvexShape* obj, const btScalar* trans, const btScalar* dir, btScalar* min, btScalar* max)
+void btConvexShape_project(btConvexShape* obj, const btScalar* trans, const btScalar* dir, btScalar* minProj, btScalar* maxProj, btScalar* witnesPtMin, btScalar* witnesPtMax)
 {
 	TRANSFORM_CONV(trans);
 	VECTOR3_CONV(dir);
-	obj->project(TRANSFORM_USE(trans), VECTOR3_USE(dir), *min, *max);
+	VECTOR3_DEF(witnesPtMin);
+	VECTOR3_DEF(witnesPtMax);
+	obj->project(TRANSFORM_USE(trans), VECTOR3_USE(dir), *minProj, *maxProj, VECTOR3_USE(witnesPtMin), VECTOR3_USE(witnesPtMax));
+	VECTOR3_DEF_OUT(witnesPtMin);
+	VECTOR3_DEF_OUT(witnesPtMax);
 }
