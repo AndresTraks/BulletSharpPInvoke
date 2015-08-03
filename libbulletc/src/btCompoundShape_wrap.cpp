@@ -4,11 +4,6 @@
 #include "conversion.h"
 #include "btCompoundShape_wrap.h"
 
-btCompoundShapeChild* btCompoundShapeChild_new()
-{
-	return new btCompoundShapeChild();
-}
-
 btScalar btCompoundShapeChild_getChildMargin(btCompoundShapeChild* obj)
 {
 	return obj->m_childMargin;
@@ -73,6 +68,11 @@ btCompoundShape* btCompoundShape_new()
 btCompoundShape* btCompoundShape_new2(bool enableDynamicAabbTree)
 {
 	return new btCompoundShape(enableDynamicAabbTree);
+}
+
+btCompoundShape* btCompoundShape_new3(bool enableDynamicAabbTree, int initialChildCapacity)
+{
+	return new btCompoundShape(enableDynamicAabbTree, initialChildCapacity);
 }
 
 void btCompoundShape_addChildShape(btCompoundShape* obj, const btScalar* localTransform, btCollisionShape* shape)

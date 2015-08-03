@@ -1193,6 +1193,10 @@ namespace BulletSharpGen
                 csWriter.WriteLine("using System;");
                 csWriter.WriteLine("using System.Runtime.InteropServices;");
                 csWriter.WriteLine("using System.Security;");
+                if (RequiresMathNamespace(header))
+                {
+                    csWriter.WriteLine("using BulletSharp.Math;");
+                }
                 csWriter.WriteLine();
 
                 // Write wrapper class headers
@@ -1284,6 +1288,39 @@ namespace BulletSharpGen
                 foreach (var param in method.Parameters)
                 {
                     if (BulletParser.TypeRequiresMarshal(param.Type))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static bool RequiresMathNamespace(HeaderDefinition header)
+        {
+            return header.Classes.Any(RequiresMathNamespace);
+        }
+
+        private static bool RequiresMathNamespace(ClassDefinition cl)
+        {
+            if (cl.Classes.Any(RequiresMathNamespace))
+            {
+                return true;
+            }
+
+            foreach (var method in cl.Methods)
+            {
+                if (method.ReturnType.ManagedName.Equals("Transform") ||
+                    method.ReturnType.ManagedName.Equals("Vector3"))
+                {
+                    return true;
+                }
+
+                foreach (var param in method.Parameters)
+                {
+                    if (param.ManagedName.Equals("Transform") ||
+                        param.ManagedName.Equals("Vector3"))
                     {
                         return true;
                     }

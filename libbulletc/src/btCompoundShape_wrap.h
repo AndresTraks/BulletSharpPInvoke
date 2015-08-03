@@ -2,7 +2,6 @@
 
 extern "C"
 {
-	EXPORT btCompoundShapeChild* btCompoundShapeChild_new();
 	EXPORT btScalar btCompoundShapeChild_getChildMargin(btCompoundShapeChild* obj);
 	EXPORT btCollisionShape* btCompoundShapeChild_getChildShape(btCompoundShapeChild* obj);
 	EXPORT int btCompoundShapeChild_getChildShapeType(btCompoundShapeChild* obj);
@@ -17,6 +16,7 @@ extern "C"
 
 	EXPORT btCompoundShape* btCompoundShape_new();
 	EXPORT btCompoundShape* btCompoundShape_new2(bool enableDynamicAabbTree);
+	EXPORT btCompoundShape* btCompoundShape_new3(bool enableDynamicAabbTree, int initialChildCapacity);
 	EXPORT void btCompoundShape_addChildShape(btCompoundShape* obj, const btScalar* localTransform, btCollisionShape* shape);
 	EXPORT void btCompoundShape_calculatePrincipalAxisTransform(btCompoundShape* obj, btScalar* masses, btScalar* principal, btScalar* inertia);
 	EXPORT void btCompoundShape_createAabbTreeFromChildren(btCompoundShape* obj);

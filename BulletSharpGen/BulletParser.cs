@@ -52,6 +52,7 @@ namespace BulletSharpGen
 
             // Managed method parameter names
             parameterNameMapping.Add("bcheckexist", "checkExist");
+            parameterNameMapping.Add("childShapeindex", "childShapeIndex");
             parameterNameMapping.Add("dt", "deltaTime");
             parameterNameMapping.Add("fromfaces", "fromFaces");
             parameterNameMapping.Add("i_dataBufferSize", "dataBufferSize");
@@ -135,7 +136,8 @@ namespace BulletSharpGen
                 "btSoftBody::Face", "btSoftBody::Tetra", "btSoftBody::Element", "btSoftBody::Feature",
                 "btSoftBody::Link", "btSoftBody::Material", "btSoftBody::Node", "btSoftBody::Note",
                 "btSoftBody::Pose", "btSoftBody::SolverState", "btSoftBody::Joint::Specs",
-                "btSoftBody::AJoint", "btSoftBody::CJoint", "btSoftBody::LJoint", "btSparseSdf"
+                "btSoftBody::AJoint", "btSoftBody::CJoint", "btSoftBody::LJoint", "btSparseSdf",
+                "btCompoundShapeChild"
             };
 
             // Classes for which no internal constructor is needed
