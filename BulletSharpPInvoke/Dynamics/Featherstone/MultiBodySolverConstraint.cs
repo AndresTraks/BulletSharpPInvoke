@@ -178,6 +178,18 @@ namespace BulletSharp
             }
         
 		}
+        /*
+		public MultiBodyConstraint OrgConstraint
+		{
+			get { return btMultiBodySolverConstraint_getOrgConstraint(_native); }
+			set { btMultiBodySolverConstraint_setOrgConstraint(_native, value._native); }
+		}
+        */
+		public int OrgDofIndex
+		{
+			get { return btMultiBodySolverConstraint_getOrgDofIndex(_native); }
+			set { btMultiBodySolverConstraint_setOrgDofIndex(_native, value); }
+		}
 
 		public IntPtr OriginalContactPoint
 		{
@@ -310,6 +322,10 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btMultiBodySolverConstraint_getMultiBodyB(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern IntPtr btMultiBodySolverConstraint_getOrgConstraint(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern int btMultiBodySolverConstraint_getOrgDofIndex(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btMultiBodySolverConstraint_getOriginalContactPoint(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btMultiBodySolverConstraint_getOverrideNumSolverIterations(IntPtr obj);
@@ -367,6 +383,10 @@ namespace BulletSharp
 		static extern void btMultiBodySolverConstraint_setMultiBodyA(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBodySolverConstraint_setMultiBodyB(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultiBodySolverConstraint_setOrgConstraint(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultiBodySolverConstraint_setOrgDofIndex(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBodySolverConstraint_setOriginalContactPoint(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

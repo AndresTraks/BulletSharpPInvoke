@@ -4,10 +4,6 @@
 #include "conversion.h"
 #include "btMultiBodyLink_wrap.h"
 
-btMultibodyLink* btMultibodyLink_new()
-{
-	return new btMultibodyLink();
-}
 
 btSpatialMotionVector* btMultibodyLink_getAbsFrameLocVelocity(btMultibodyLink* obj)
 {
@@ -17,6 +13,16 @@ btSpatialMotionVector* btMultibodyLink_getAbsFrameLocVelocity(btMultibodyLink* o
 btSpatialMotionVector* btMultibodyLink_getAbsFrameTotVelocity(btMultibodyLink* obj)
 {
 	return &obj->m_absFrameTotVelocity;
+}
+
+void btMultibodyLink_getAppliedConstraintForce(btMultibodyLink* obj, btScalar* value)
+{
+	VECTOR3_OUT(&obj->m_appliedConstraintForce, value);
+}
+
+void btMultibodyLink_getAppliedConstraintTorque(btMultibodyLink* obj, btScalar* value)
+{
+	VECTOR3_OUT(&obj->m_appliedConstraintTorque, value);
 }
 
 void btMultibodyLink_getAppliedForce(btMultibodyLink* obj, btScalar* value)
@@ -52,6 +58,11 @@ void btMultibodyLink_getCachedRotParentToThis(btMultibodyLink* obj, btScalar* va
 void btMultibodyLink_getCachedRVector(btMultibodyLink* obj, btScalar* value)
 {
 	VECTOR3_OUT(&obj->m_cachedRVector, value);
+}
+
+void btMultibodyLink_getCachedWorldTransform(btMultibodyLink* obj, btScalar* value)
+{
+	TRANSFORM_OUT(&obj->m_cachedWorldTransform, value);
 }
 
 int btMultibodyLink_getCfgOffset(btMultibodyLink* obj)
@@ -94,6 +105,16 @@ void btMultibodyLink_getInertiaLocal(btMultibodyLink* obj, btScalar* value)
 	VECTOR3_OUT(&obj->m_inertiaLocal, value);
 }
 
+btMultiBodyJointFeedback* btMultibodyLink_getJointFeedback(btMultibodyLink* obj)
+{
+	return obj->m_jointFeedback;
+}
+
+const char* btMultibodyLink_getJointName(btMultibodyLink* obj)
+{
+	return obj->m_jointName;
+}
+
 btScalar* btMultibodyLink_getJointPos(btMultibodyLink* obj)
 {
 	return obj->m_jointPos;
@@ -103,12 +124,17 @@ btScalar* btMultibodyLink_getJointTorque(btMultibodyLink* obj)
 {
 	return obj->m_jointTorque;
 }
-/*
-eFeatherstoneJointType btMultibodyLink_getJointType(btMultibodyLink* obj)
+
+btMultibodyLink::eFeatherstoneJointType btMultibodyLink_getJointType(btMultibodyLink* obj)
 {
 	return obj->m_jointType;
 }
-*/
+
+const char* btMultibodyLink_getLinkName(btMultibodyLink* obj)
+{
+	return obj->m_linkName;
+}
+
 btScalar btMultibodyLink_getMass(btMultibodyLink* obj)
 {
 	return obj->m_mass;
@@ -139,6 +165,16 @@ void btMultibodyLink_setAbsFrameTotVelocity(btMultibodyLink* obj, const btSpatia
 	obj->m_absFrameTotVelocity = value;
 }
 */
+void btMultibodyLink_setAppliedConstraintForce(btMultibodyLink* obj, const btScalar* value)
+{
+	VECTOR3_IN(value, &obj->m_appliedConstraintForce);
+}
+
+void btMultibodyLink_setAppliedConstraintTorque(btMultibodyLink* obj, const btScalar* value)
+{
+	VECTOR3_IN(value, &obj->m_appliedConstraintTorque);
+}
+
 void btMultibodyLink_setAppliedForce(btMultibodyLink* obj, const btScalar* value)
 {
 	VECTOR3_IN(value, &obj->m_appliedForce);
@@ -149,15 +185,15 @@ void btMultibodyLink_setAppliedTorque(btMultibodyLink* obj, const btScalar* valu
 	VECTOR3_IN(value, &obj->m_appliedTorque);
 }
 
-void btMultibodyLink_setAxisBottom(btMultibodyLink* obj, int dof, const btScalar* x, const btScalar* y, const btScalar* z)
-{
-	obj->setAxisBottom(dof, *x, *y, *z);
-}
-
-void btMultibodyLink_setAxisBottom2(btMultibodyLink* obj, int dof, const btScalar* axis)
+void btMultibodyLink_setAxisBottom(btMultibodyLink* obj, int dof, const btScalar* axis)
 {
 	VECTOR3_CONV(axis);
 	obj->setAxisBottom(dof, VECTOR3_USE(axis));
+}
+
+void btMultibodyLink_setAxisBottom2(btMultibodyLink* obj, int dof, const btScalar* x, const btScalar* y, const btScalar* z)
+{
+	obj->setAxisBottom(dof, *x, *y, *z);
 }
 
 void btMultibodyLink_setAxisTop(btMultibodyLink* obj, int dof, const btScalar* axis)
@@ -179,6 +215,11 @@ void btMultibodyLink_setCachedRotParentToThis(btMultibodyLink* obj, const btScal
 void btMultibodyLink_setCachedRVector(btMultibodyLink* obj, const btScalar* value)
 {
 	VECTOR3_IN(value, &obj->m_cachedRVector);
+}
+
+void btMultibodyLink_setCachedWorldTransform(btMultibodyLink* obj, const btScalar* value)
+{
+	TRANSFORM_IN(value, &obj->m_cachedWorldTransform);
 }
 
 void btMultibodyLink_setCfgOffset(btMultibodyLink* obj, int value)
@@ -220,12 +261,27 @@ void btMultibodyLink_setInertiaLocal(btMultibodyLink* obj, const btScalar* value
 {
 	VECTOR3_IN(value, &obj->m_inertiaLocal);
 }
-/*
-void btMultibodyLink_setJointType(btMultibodyLink* obj, eFeatherstoneJointType value)
+
+void btMultibodyLink_setJointFeedback(btMultibodyLink* obj, btMultiBodyJointFeedback* value)
+{
+	obj->m_jointFeedback = value;
+}
+
+void btMultibodyLink_setJointName(btMultibodyLink* obj, const char* value)
+{
+	obj->m_jointName = value;
+}
+
+void btMultibodyLink_setJointType(btMultibodyLink* obj, btMultibodyLink::eFeatherstoneJointType value)
 {
 	obj->m_jointType = value;
 }
-*/
+
+void btMultibodyLink_setLinkName(btMultibodyLink* obj, const char* value)
+{
+	obj->m_linkName = value;
+}
+
 void btMultibodyLink_setMass(btMultibodyLink* obj, btScalar value)
 {
 	obj->m_mass = value;

@@ -142,10 +142,22 @@ namespace BulletSharp
 			set { btRotationalLimitMotor2_setSpringDamping(_native, value); }
 		}
 
+		public bool SpringDampingLimited
+		{
+			get { return btRotationalLimitMotor2_getSpringDampingLimited(_native); }
+			set { btRotationalLimitMotor2_setSpringDampingLimited(_native, value); }
+		}
+
 		public float SpringStiffness
 		{
 			get { return btRotationalLimitMotor2_getSpringStiffness(_native); }
 			set { btRotationalLimitMotor2_setSpringStiffness(_native, value); }
+		}
+
+		public bool SpringStiffnessLimited
+		{
+			get { return btRotationalLimitMotor2_getSpringStiffnessLimited(_native); }
+			set { btRotationalLimitMotor2_setSpringStiffnessLimited(_native, value); }
 		}
 
 		public float StopCFM
@@ -229,7 +241,13 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btRotationalLimitMotor2_getSpringDamping(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
+		static extern bool btRotationalLimitMotor2_getSpringDampingLimited(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btRotationalLimitMotor2_getSpringStiffness(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
+		static extern bool btRotationalLimitMotor2_getSpringStiffnessLimited(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btRotationalLimitMotor2_getStopCFM(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -272,7 +290,11 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btRotationalLimitMotor2_setSpringDamping(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btRotationalLimitMotor2_setSpringDampingLimited(IntPtr obj, bool value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btRotationalLimitMotor2_setSpringStiffness(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btRotationalLimitMotor2_setSpringStiffnessLimited(IntPtr obj, bool value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btRotationalLimitMotor2_setStopCFM(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -456,7 +478,12 @@ namespace BulletSharp
 			}
 			set { btTranslationalLimitMotor2_setSpringDamping(_native, ref value); }
 		}
-
+        /*
+		public bool SpringDampingLimited
+		{
+			get { return btTranslationalLimitMotor2_getSpringDampingLimited(_native); }
+		}
+        */
 		public Vector3 SpringStiffness
 		{
 			get
@@ -467,7 +494,12 @@ namespace BulletSharp
 			}
 			set { btTranslationalLimitMotor2_setSpringStiffness(_native, ref value); }
 		}
-
+        /*
+		public bool SpringStiffnessLimited
+		{
+			get { return btTranslationalLimitMotor2_getSpringStiffnessLimited(_native); }
+		}
+        */
 		public Vector3 StopCFM
 		{
 			get
@@ -573,7 +605,13 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btTranslationalLimitMotor2_getSpringDamping(IntPtr obj, [Out] out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
+		static extern IntPtr btTranslationalLimitMotor2_getSpringDampingLimited(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btTranslationalLimitMotor2_getSpringStiffness(IntPtr obj, [Out] out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
+		static extern IntPtr btTranslationalLimitMotor2_getSpringStiffnessLimited(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btTranslationalLimitMotor2_getStopCFM(IntPtr obj, [Out] out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

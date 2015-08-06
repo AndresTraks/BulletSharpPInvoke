@@ -39,9 +39,34 @@ namespace BulletSharp
             _constraints.Add(constraint);
 		}
 
+		public void ClearMultiBodyConstraintForces()
+		{
+			btMultiBodyDynamicsWorld_clearMultiBodyConstraintForces(_native);
+		}
+
+		public void ClearMultiBodyForces()
+		{
+			btMultiBodyDynamicsWorld_clearMultiBodyForces(_native);
+		}
+
 		public void DebugDrawMultiBodyConstraint(MultiBodyConstraint constraint)
 		{
 			btMultiBodyDynamicsWorld_debugDrawMultiBodyConstraint(_native, constraint._native);
+		}
+
+		public void ForwardKinematics()
+		{
+			btMultiBodyDynamicsWorld_forwardKinematics(_native);
+		}
+
+		public MultiBody GetMultiBody(int mbIndex)
+		{
+            return _bodies[mbIndex];
+		}
+
+		public MultiBodyConstraint GetMultiBodyConstraint(int constraintIndex)
+		{
+            return _constraints[constraintIndex];
 		}
 
 		public void IntegrateTransforms(float timeStep)
@@ -61,6 +86,11 @@ namespace BulletSharp
             _constraints.Remove(constraint);
 		}
 
+		public int NumMultibodies
+		{
+			get { return _bodies.Count; }
+		}
+
 		public int NumMultiBodyConstraints
 		{
 			get { return btMultiBodyDynamicsWorld_getNumMultiBodyConstraints(_native); }
@@ -71,13 +101,25 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBodyDynamicsWorld_addMultiBody(IntPtr obj, IntPtr body);
 		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        //static extern void btMultiBodyDynamicsWorld_addMultiBody2(IntPtr obj, IntPtr body, short group);
+		//static extern void btMultiBodyDynamicsWorld_addMultiBody2(IntPtr obj, IntPtr body, short group);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btMultiBodyDynamicsWorld_addMultiBody3(IntPtr obj, IntPtr body, short group, short mask);
+		static extern void btMultiBodyDynamicsWorld_addMultiBody3(IntPtr obj, IntPtr body, short group, short mask);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBodyDynamicsWorld_addMultiBodyConstraint(IntPtr obj, IntPtr constraint);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultiBodyDynamicsWorld_clearMultiBodyConstraintForces(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultiBodyDynamicsWorld_clearMultiBodyForces(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBodyDynamicsWorld_debugDrawMultiBodyConstraint(IntPtr obj, IntPtr constraint);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultiBodyDynamicsWorld_forwardKinematics(IntPtr obj);
+		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		//static extern IntPtr btMultiBodyDynamicsWorld_getMultiBody(IntPtr obj, int mbIndex);
+		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		//static extern IntPtr btMultiBodyDynamicsWorld_getMultiBodyConstraint(IntPtr obj, int constraintIndex);
+		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		//static extern int btMultiBodyDynamicsWorld_getNumMultibodies(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btMultiBodyDynamicsWorld_getNumMultiBodyConstraints(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

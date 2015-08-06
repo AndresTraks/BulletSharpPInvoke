@@ -30,9 +30,39 @@ void btMultiBodyDynamicsWorld_addMultiBodyConstraint(btMultiBodyDynamicsWorld* o
 	obj->addMultiBodyConstraint(constraint);
 }
 
+void btMultiBodyDynamicsWorld_clearMultiBodyConstraintForces(btMultiBodyDynamicsWorld* obj)
+{
+	obj->clearMultiBodyConstraintForces();
+}
+
+void btMultiBodyDynamicsWorld_clearMultiBodyForces(btMultiBodyDynamicsWorld* obj)
+{
+	obj->clearMultiBodyForces();
+}
+
 void btMultiBodyDynamicsWorld_debugDrawMultiBodyConstraint(btMultiBodyDynamicsWorld* obj, btMultiBodyConstraint* constraint)
 {
 	obj->debugDrawMultiBodyConstraint(constraint);
+}
+
+void btMultiBodyDynamicsWorld_forwardKinematics(btMultiBodyDynamicsWorld* obj)
+{
+	obj->forwardKinematics();
+}
+
+btMultiBody* btMultiBodyDynamicsWorld_getMultiBody(btMultiBodyDynamicsWorld* obj, int mbIndex)
+{
+	return obj->getMultiBody(mbIndex);
+}
+
+btMultiBodyConstraint* btMultiBodyDynamicsWorld_getMultiBodyConstraint(btMultiBodyDynamicsWorld* obj, int constraintIndex)
+{
+	return obj->getMultiBodyConstraint(constraintIndex);
+}
+
+int btMultiBodyDynamicsWorld_getNumMultibodies(btMultiBodyDynamicsWorld* obj)
+{
+	return obj->getNumMultibodies();
 }
 
 int btMultiBodyDynamicsWorld_getNumMultiBodyConstraints(btMultiBodyDynamicsWorld* obj)

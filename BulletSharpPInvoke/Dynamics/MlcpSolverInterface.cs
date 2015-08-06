@@ -13,14 +13,14 @@ namespace BulletSharp
 			_native = native;
 		}
         /*
-		public bool SolveMLCP(MatrixXf A, VectorXf b, VectorXf x, VectorXf lo, VectorXf hi, AlignedObjectArray limitDependency, int numIterations)
+		public bool SolveMLCP(MatrixXf a, VectorXf b, VectorXf x, VectorXf lo, VectorXf hi, AlignedObjectArray limitDependency, int numIterations)
 		{
-			return btMLCPSolverInterface_solveMLCP(_native, A._native, b._native, x._native, lo._native, hi._native, limitDependency._native, numIterations);
+			return btMLCPSolverInterface_solveMLCP(_native, a._native, b._native, x._native, lo._native, hi._native, limitDependency._native, numIterations);
 		}
 
-		public bool SolveMLCP(MatrixXf A, VectorXf b, VectorXf x, VectorXf lo, VectorXf hi, AlignedObjectArray limitDependency, int numIterations, bool useSparsity)
+		public bool SolveMLCP(MatrixXf a, VectorXf b, VectorXf x, VectorXf lo, VectorXf hi, AlignedObjectArray limitDependency, int numIterations, bool useSparsity)
 		{
-			return btMLCPSolverInterface_solveMLCP2(_native, A._native, b._native, x._native, lo._native, hi._native, limitDependency._native, numIterations, useSparsity);
+			return btMLCPSolverInterface_solveMLCP2(_native, a._native, b._native, x._native, lo._native, hi._native, limitDependency._native, numIterations, useSparsity);
 		}
         */
 		public void Dispose()

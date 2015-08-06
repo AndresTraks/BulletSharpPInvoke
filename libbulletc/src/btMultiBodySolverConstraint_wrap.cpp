@@ -1,4 +1,5 @@
 #include <BulletDynamics/Featherstone/btMultiBody.h>
+#include <BulletDynamics/Featherstone/btMultiBodyConstraint.h>
 #include <BulletDynamics/Featherstone/btMultiBodySolverConstraint.h>
 
 #include "conversion.h"
@@ -102,6 +103,16 @@ btMultiBody* btMultiBodySolverConstraint_getMultiBodyA(btMultiBodySolverConstrai
 btMultiBody* btMultiBodySolverConstraint_getMultiBodyB(btMultiBodySolverConstraint* obj)
 {
 	return obj->m_multiBodyB;
+}
+
+btMultiBodyConstraint* btMultiBodySolverConstraint_getOrgConstraint(btMultiBodySolverConstraint* obj)
+{
+	return obj->m_orgConstraint;
+}
+
+int btMultiBodySolverConstraint_getOrgDofIndex(btMultiBodySolverConstraint* obj)
+{
+	return obj->m_orgDofIndex;
 }
 
 void* btMultiBodySolverConstraint_getOriginalContactPoint(btMultiBodySolverConstraint* obj)
@@ -247,6 +258,16 @@ void btMultiBodySolverConstraint_setMultiBodyA(btMultiBodySolverConstraint* obj,
 void btMultiBodySolverConstraint_setMultiBodyB(btMultiBodySolverConstraint* obj, btMultiBody* value)
 {
 	obj->m_multiBodyB = value;
+}
+
+void btMultiBodySolverConstraint_setOrgConstraint(btMultiBodySolverConstraint* obj, btMultiBodyConstraint* value)
+{
+	obj->m_orgConstraint = value;
+}
+
+void btMultiBodySolverConstraint_setOrgDofIndex(btMultiBodySolverConstraint* obj, int value)
+{
+	obj->m_orgDofIndex = value;
 }
 
 void btMultiBodySolverConstraint_setOriginalContactPoint(btMultiBodySolverConstraint* obj, void* value)

@@ -22,6 +22,8 @@ extern "C"
 	EXPORT btScalar btMultiBodySolverConstraint_getLowerLimit(btMultiBodySolverConstraint* obj);
 	EXPORT btMultiBody* btMultiBodySolverConstraint_getMultiBodyA(btMultiBodySolverConstraint* obj);
 	EXPORT btMultiBody* btMultiBodySolverConstraint_getMultiBodyB(btMultiBodySolverConstraint* obj);
+	EXPORT btMultiBodyConstraint* btMultiBodySolverConstraint_getOrgConstraint(btMultiBodySolverConstraint* obj);
+	EXPORT int btMultiBodySolverConstraint_getOrgDofIndex(btMultiBodySolverConstraint* obj);
 	EXPORT void* btMultiBodySolverConstraint_getOriginalContactPoint(btMultiBodySolverConstraint* obj);
 	EXPORT int btMultiBodySolverConstraint_getOverrideNumSolverIterations(btMultiBodySolverConstraint* obj);
 	EXPORT void btMultiBodySolverConstraint_getRelpos1CrossNormal(btMultiBodySolverConstraint* obj, btScalar* value);
@@ -51,6 +53,8 @@ extern "C"
 	EXPORT void btMultiBodySolverConstraint_setLowerLimit(btMultiBodySolverConstraint* obj, btScalar value);
 	EXPORT void btMultiBodySolverConstraint_setMultiBodyA(btMultiBodySolverConstraint* obj, btMultiBody* value);
 	EXPORT void btMultiBodySolverConstraint_setMultiBodyB(btMultiBodySolverConstraint* obj, btMultiBody* value);
+	EXPORT void btMultiBodySolverConstraint_setOrgConstraint(btMultiBodySolverConstraint* obj, btMultiBodyConstraint* value);
+	EXPORT void btMultiBodySolverConstraint_setOrgDofIndex(btMultiBodySolverConstraint* obj, int value);
 	EXPORT void btMultiBodySolverConstraint_setOriginalContactPoint(btMultiBodySolverConstraint* obj, void* value);
 	EXPORT void btMultiBodySolverConstraint_setOverrideNumSolverIterations(btMultiBodySolverConstraint* obj, int value);
 	EXPORT void btMultiBodySolverConstraint_setRelpos1CrossNormal(btMultiBodySolverConstraint* obj, const btScalar* value);

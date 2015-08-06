@@ -135,7 +135,7 @@ namespace BulletSharp
 			btHingeConstraint_testLimit(_native, ref transA, ref transB);
 		}
 
-		public void UpdateRHS(float timeStep)
+		public void UpdateRhs(float timeStep)
 		{
 			btHingeConstraint_updateRHS(_native, timeStep);
 		}

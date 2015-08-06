@@ -14,6 +14,40 @@ namespace BulletSharp
 			_native = native;
 		}
 
+		public Vector3 GetAxisBottom(int dof)
+		{
+			Vector3 value;
+			btMultibodyLink_getAxisBottom(_native, dof, out value);
+			return value;
+		}
+
+		public Vector3 GetAxisTop(int dof)
+		{
+			Vector3 value;
+			btMultibodyLink_getAxisTop(_native, dof, out value);
+			return value;
+		}
+
+		public void SetAxisBottom(int dof, Vector3 axis)
+		{
+			btMultibodyLink_setAxisBottom(_native, dof, ref axis);
+		}
+
+		public void SetAxisBottom(int dof, float x, float y, float z)
+		{
+			btMultibodyLink_setAxisBottom2(_native, dof, x, y, z);
+		}
+
+		public void SetAxisTop(int dof, Vector3 axis)
+		{
+			btMultibodyLink_setAxisTop(_native, dof, ref axis);
+		}
+
+		public void SetAxisTop(int dof, float x, float y, float z)
+		{
+			btMultibodyLink_setAxisTop2(_native, dof, x, y, z);
+		}
+
 		public void UpdateCache()
 		{
 			btMultibodyLink_updateCache(_native);
@@ -28,7 +62,41 @@ namespace BulletSharp
 		{
 			btMultibodyLink_updateCacheMultiDof2(_native, pq._native);
 		}
+
+		public SpatialMotionVector AbsFrameLocVelocity
+		{
+			get { return btMultibodyLink_getAbsFrameLocVelocity(_native); }
+			set { btMultibodyLink_setAbsFrameLocVelocity(_native, value._native); }
+		}
+
+		public SpatialMotionVector AbsFrameTotVelocity
+		{
+			get { return btMultibodyLink_getAbsFrameTotVelocity(_native); }
+			set { btMultibodyLink_setAbsFrameTotVelocity(_native, value._native); }
+		}
 */
+		public Vector3 AppliedConstraintForce
+		{
+			get
+			{
+				Vector3 value;
+				btMultibodyLink_getAppliedConstraintForce(_native, out value);
+				return value;
+			}
+			set { btMultibodyLink_setAppliedConstraintForce(_native, ref value); }
+		}
+
+		public Vector3 AppliedConstraintTorque
+		{
+			get
+			{
+				Vector3 value;
+				btMultibodyLink_getAppliedConstraintTorque(_native, out value);
+				return value;
+			}
+			set { btMultibodyLink_setAppliedConstraintTorque(_native, ref value); }
+		}
+
 		public Vector3 AppliedForce
 		{
 			get
@@ -50,7 +118,12 @@ namespace BulletSharp
 			}
 			set { btMultibodyLink_setAppliedTorque(_native, ref value); }
 		}
-
+/*
+		public SpatialMotionVector Axes
+		{
+			get { return btMultibodyLink_getAxes(_native); }
+		}
+*/
 		public Quaternion CachedRotParentToThis
 		{
 			get
@@ -71,6 +144,17 @@ namespace BulletSharp
 				return value;
 			}
 			set { btMultibodyLink_setCachedRVector(_native, ref value); }
+		}
+
+		public Matrix CachedWorldTransform
+		{
+			get
+			{
+				Matrix value;
+				btMultibodyLink_getCachedWorldTransform(_native, out value);
+				return value;
+			}
+			set { btMultibodyLink_setCachedWorldTransform(_native, ref value); }
 		}
 
 		public int CfgOffset
@@ -135,23 +219,41 @@ namespace BulletSharp
 			}
 			set { btMultibodyLink_setInertiaLocal(_native, ref value); }
 		}
+        /*
+		public MultiBodyJointFeedback JointFeedback
+		{
+			get { return btMultibodyLink_getJointFeedback(_native); }
+			set { btMultibodyLink_setJointFeedback(_native, value._native); }
+		}
 
-		public float JointPos
+		public char JointName
+		{
+			get { return btMultibodyLink_getJointName(_native); }
+			set { btMultibodyLink_setJointName(_native, value._native); }
+		}
+
+		public ScalarArray JointPos
 		{
 			get { return btMultibodyLink_getJointPos(_native); }
 		}
 
-		public float JointTorque
+        public ScalarArray JointTorque
 		{
 			get { return btMultibodyLink_getJointTorque(_native); }
 		}
-/*
+
 		public eFeatherstoneJointType JointType
 		{
 			get { return btMultibodyLink_getJointType(_native); }
 			set { btMultibodyLink_setJointType(_native, value); }
 		}
-*/
+
+		public char LinkName
+		{
+			get { return btMultibodyLink_getLinkName(_native); }
+			set { btMultibodyLink_setLinkName(_native, value._native); }
+		}
+        */
 		public float Mass
 		{
 			get { return btMultibodyLink_getMass(_native); }
@@ -188,6 +290,10 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_getAbsFrameTotVelocity(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultibodyLink_getAppliedConstraintForce(IntPtr obj, [Out] out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultibodyLink_getAppliedConstraintTorque(IntPtr obj, [Out] out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_getAppliedForce(IntPtr obj, [Out] out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_getAppliedTorque(IntPtr obj, [Out] out Vector3 value);
@@ -201,6 +307,8 @@ namespace BulletSharp
 		static extern void btMultibodyLink_getCachedRotParentToThis(IntPtr obj, [Out] out Quaternion value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_getCachedRVector(IntPtr obj, [Out] out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultibodyLink_getCachedWorldTransform(IntPtr obj, [Out] out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btMultibodyLink_getCfgOffset(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -218,11 +326,17 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_getInertiaLocal(IntPtr obj, [Out] out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern float btMultibodyLink_getJointPos(IntPtr obj);
+		static extern IntPtr btMultibodyLink_getJointFeedback(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern float btMultibodyLink_getJointTorque(IntPtr obj);
+		static extern IntPtr btMultibodyLink_getJointName(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern IntPtr btMultibodyLink_getJointPos(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern IntPtr btMultibodyLink_getJointTorque(IntPtr obj);
 		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		//static extern eFeatherstoneJointType btMultibodyLink_getJointType(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern IntPtr btMultibodyLink_getLinkName(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btMultibodyLink_getMass(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -231,22 +345,32 @@ namespace BulletSharp
 		static extern int btMultibodyLink_getPosVarCount(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_getZeroRotParentToThis(IntPtr obj, [Out] out Quaternion value);
+		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		//static extern void btMultibodyLink_setAbsFrameLocVelocity(IntPtr obj, SpatialMotionVector value);
+		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		//static extern void btMultibodyLink_setAbsFrameTotVelocity(IntPtr obj, SpatialMotionVector value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultibodyLink_setAppliedConstraintForce(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultibodyLink_setAppliedConstraintTorque(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setAppliedForce(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setAppliedTorque(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_setAxisBottom(IntPtr obj, int dof, IntPtr x, IntPtr y, IntPtr z);
+		static extern void btMultibodyLink_setAxisBottom(IntPtr obj, int dof, [In] ref Vector3 axis);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_setAxisBottom2(IntPtr obj, int dof, [In] ref Vector3 axis);
+        static extern void btMultibodyLink_setAxisBottom2(IntPtr obj, int dof, float x, float y, float z);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setAxisTop(IntPtr obj, int dof, [In] ref Vector3 axis);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_setAxisTop2(IntPtr obj, int dof, IntPtr x, IntPtr y, IntPtr z);
+        static extern void btMultibodyLink_setAxisTop2(IntPtr obj, int dof, float x, float y, float z);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setCachedRotParentToThis(IntPtr obj, [In] ref Quaternion value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setCachedRVector(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultibodyLink_setCachedWorldTransform(IntPtr obj, [In] ref Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setCfgOffset(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -263,8 +387,14 @@ namespace BulletSharp
 		static extern void btMultibodyLink_setFlags(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setInertiaLocal(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultibodyLink_setJointFeedback(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultibodyLink_setJointName(IntPtr obj, IntPtr value);
 		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		//static extern void btMultibodyLink_setJointType(IntPtr obj, eFeatherstoneJointType value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultibodyLink_setLinkName(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setMass(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

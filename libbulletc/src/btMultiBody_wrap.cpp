@@ -1,5 +1,6 @@
 #include <BulletDynamics/Featherstone/btMultiBody.h>
 #include <BulletDynamics/Featherstone/btMultiBodyLinkCollider.h>
+#include <LinearMath/btSerializer.h>
 
 #include "conversion.h"
 #include "btMultiBody_wrap.h"
@@ -14,6 +15,18 @@ btMultiBody* btMultiBody_new2(int n_links, btScalar mass, const btScalar* inerti
 {
 	VECTOR3_CONV(inertia);
 	return new btMultiBody(n_links, mass, VECTOR3_USE(inertia), fixedBase, canSleep, multiDof);
+}
+
+void btMultiBody_addBaseConstraintForce(btMultiBody* obj, const btScalar* f)
+{
+	VECTOR3_CONV(f);
+	obj->addBaseConstraintForce(VECTOR3_USE(f));
+}
+
+void btMultiBody_addBaseConstraintTorque(btMultiBody* obj, const btScalar* t)
+{
+	VECTOR3_CONV(t);
+	obj->addBaseConstraintTorque(VECTOR3_USE(t));
 }
 
 void btMultiBody_addBaseForce(btMultiBody* obj, const btScalar* f)
@@ -33,14 +46,26 @@ void btMultiBody_addJointTorque(btMultiBody* obj, int i, btScalar Q)
 	obj->addJointTorque(i, Q);
 }
 
-void btMultiBody_addJointTorqueMultiDof(btMultiBody* obj, int i, const btScalar* Q)
+void btMultiBody_addJointTorqueMultiDof(btMultiBody* obj, int i, int dof, btScalar Q)
+{
+	obj->addJointTorqueMultiDof(i, dof, Q);
+}
+
+void btMultiBody_addJointTorqueMultiDof2(btMultiBody* obj, int i, const btScalar* Q)
 {
 	obj->addJointTorqueMultiDof(i, Q);
 }
 
-void btMultiBody_addJointTorqueMultiDof2(btMultiBody* obj, int i, int dof, btScalar Q)
+void btMultiBody_addLinkConstraintForce(btMultiBody* obj, int i, const btScalar* f)
 {
-	obj->addJointTorqueMultiDof(i, dof, Q);
+	VECTOR3_CONV(f);
+	obj->addLinkConstraintForce(i, VECTOR3_USE(f));
+}
+
+void btMultiBody_addLinkConstraintTorque(btMultiBody* obj, int i, const btScalar* t)
+{
+	VECTOR3_CONV(t);
+	obj->addLinkConstraintTorque(i, VECTOR3_USE(t));
 }
 
 void btMultiBody_addLinkForce(btMultiBody* obj, int i, const btScalar* f)
@@ -70,6 +95,11 @@ void btMultiBody_applyDeltaVeeMultiDof(btMultiBody* obj, const btScalar* delta_v
 	obj->applyDeltaVeeMultiDof(delta_vee, multiplier);
 }
 
+void btMultiBody_applyDeltaVeeMultiDof2(btMultiBody* obj, const btScalar* delta_vee, btScalar multiplier)
+{
+	obj->applyDeltaVeeMultiDof2(delta_vee, multiplier);
+}
+
 void btMultiBody_calcAccelerationDeltas(btMultiBody* obj, const btScalar* force, btScalar* output, btAlignedScalarArray* scratch_r, btAlignedVector3Array* scratch_v)
 {
 	obj->calcAccelerationDeltas(force, output, *scratch_r, *scratch_v);
@@ -80,9 +110,19 @@ void btMultiBody_calcAccelerationDeltasMultiDof(btMultiBody* obj, const btScalar
 	obj->calcAccelerationDeltasMultiDof(force, output, *scratch_r, *scratch_v);
 }
 
+int btMultiBody_calculateSerializeBufferSize(btMultiBody* obj)
+{
+	return obj->calculateSerializeBufferSize();
+}
+
 void btMultiBody_checkMotionAndSleepIfRequired(btMultiBody* obj, btScalar timestep)
 {
 	obj->checkMotionAndSleepIfRequired(timestep);
+}
+
+void btMultiBody_clearConstraintForces(btMultiBody* obj)
+{
+	obj->clearConstraintForces();
 }
 
 void btMultiBody_clearForcesAndTorques(btMultiBody* obj)
@@ -121,7 +161,12 @@ void btMultiBody_finalizeMultiDof(btMultiBody* obj)
 {
 	obj->finalizeMultiDof();
 }
-
+/*
+void btMultiBody_forwardKinematics(btMultiBody* obj, btAlignedQuaternionArray* scratch_q, btAlignedVector3Array* scratch_m)
+{
+	obj->forwardKinematics(*scratch_q, *scratch_m);
+}
+*/
 btScalar btMultiBody_getAngularDamping(btMultiBody* obj)
 {
 	return obj->getAngularDamping();
@@ -152,6 +197,11 @@ btScalar btMultiBody_getBaseMass(btMultiBody* obj)
 	return obj->getBaseMass();
 }
 
+const char* btMultiBody_getBaseName(btMultiBody* obj)
+{
+	return obj->getBaseName();
+}
+
 void btMultiBody_getBaseOmega(btMultiBody* obj, btScalar* omega)
 {
 	VECTOR3_OUT_VAL(obj->getBaseOmega(), omega);
@@ -170,6 +220,11 @@ void btMultiBody_getBaseTorque(btMultiBody* obj, btScalar* value)
 void btMultiBody_getBaseVel(btMultiBody* obj, btScalar* vel)
 {
 	VECTOR3_OUT_VAL(obj->getBaseVel(), vel);
+}
+
+void btMultiBody_getBaseWorldTransform(btMultiBody* obj, btScalar* tr)
+{
+	TRANSFORM_OUT_VAL(obj->getBaseWorldTransform(), tr);
 }
 
 bool btMultiBody_getCanSleep(btMultiBody* obj)
@@ -317,6 +372,11 @@ bool btMultiBody_hasSelfCollision(btMultiBody* obj)
 	return obj->hasSelfCollision();
 }
 
+bool btMultiBody_internalNeedsJointFeedback(btMultiBody* obj)
+{
+	return obj->internalNeedsJointFeedback();
+}
+
 bool btMultiBody_isAwake(btMultiBody* obj)
 {
 	return obj->isAwake();
@@ -354,6 +414,16 @@ void btMultiBody_localPosToWorld(btMultiBody* obj, int i, const btScalar* vec, b
 	VECTOR3_OUT_VAL(obj->localPosToWorld(i, VECTOR3_USE(vec)), value);
 }
 
+void btMultiBody_processDeltaVeeMultiDof2(btMultiBody* obj)
+{
+	obj->processDeltaVeeMultiDof2();
+}
+
+const char* btMultiBody_serialize(btMultiBody* obj, void* dataBuffer, btSerializer* serializer)
+{
+	return obj->serialize(dataBuffer, serializer);
+}
+
 void btMultiBody_setAngularDamping(btMultiBody* obj, btScalar damp)
 {
 	obj->setAngularDamping(damp);
@@ -375,6 +445,11 @@ void btMultiBody_setBaseMass(btMultiBody* obj, btScalar mass)
 	obj->setBaseMass(mass);
 }
 
+void btMultiBody_setBaseName(btMultiBody* obj, const char* name)
+{
+	obj->setBaseName(name);
+}
+
 void btMultiBody_setBaseOmega(btMultiBody* obj, const btScalar* omega)
 {
 	VECTOR3_CONV(omega);
@@ -391,6 +466,12 @@ void btMultiBody_setBaseVel(btMultiBody* obj, const btScalar* vel)
 {
 	VECTOR3_CONV(vel);
 	obj->setBaseVel(VECTOR3_USE(vel));
+}
+
+void btMultiBody_setBaseWorldTransform(btMultiBody* obj, const btScalar* tr)
+{
+	TRANSFORM_CONV(tr);
+	obj->setBaseWorldTransform(TRANSFORM_USE(tr));
 }
 
 void btMultiBody_setCanSleep(btMultiBody* obj, bool canSleep)
@@ -480,14 +561,14 @@ void btMultiBody_setupPlanar2(btMultiBody* obj, int i, btScalar mass, const btSc
 	obj->setupPlanar(i, mass, VECTOR3_USE(inertia), parent, QUATERNION_USE(rotParentToThis), VECTOR3_USE(rotationAxis), VECTOR3_USE(parentComToThisComOffset), disableParentCollision);
 }
 
-void btMultiBody_setupPrismatic(btMultiBody* obj, int i, btScalar mass, const btScalar* inertia, int parent, const btScalar* rotParentToThis, const btScalar* jointAxis, const btScalar* parentComToThisComOffset, const btScalar* thisPivotToThisComOffset, bool disableParentCollision)
+void btMultiBody_setupPrismatic(btMultiBody* obj, int i, btScalar mass, const btScalar* inertia, int parent, const btScalar* rotParentToThis, const btScalar* jointAxis, const btScalar* parentComToThisPivotOffset, const btScalar* thisPivotToThisComOffset, bool disableParentCollision)
 {
 	VECTOR3_CONV(inertia);
 	QUATERNION_CONV(rotParentToThis);
 	VECTOR3_CONV(jointAxis);
-	VECTOR3_CONV(parentComToThisComOffset);
+	VECTOR3_CONV(parentComToThisPivotOffset);
 	VECTOR3_CONV(thisPivotToThisComOffset);
-	obj->setupPrismatic(i, mass, VECTOR3_USE(inertia), parent, QUATERNION_USE(rotParentToThis), VECTOR3_USE(jointAxis), VECTOR3_USE(parentComToThisComOffset), VECTOR3_USE(thisPivotToThisComOffset), disableParentCollision);
+	obj->setupPrismatic(i, mass, VECTOR3_USE(inertia), parent, QUATERNION_USE(rotParentToThis), VECTOR3_USE(jointAxis), VECTOR3_USE(parentComToThisPivotOffset), VECTOR3_USE(thisPivotToThisComOffset), disableParentCollision);
 }
 
 void btMultiBody_setupRevolute(btMultiBody* obj, int linkIndex, btScalar mass, const btScalar* inertia, int parentIndex, const btScalar* rotParentToThis, const btScalar* jointAxis, const btScalar* parentComToThisPivotOffset, const btScalar* thisPivotToThisComOffset)
@@ -569,6 +650,16 @@ void btMultiBody_stepVelocitiesMultiDof(btMultiBody* obj, btScalar dt, btAligned
 	obj->stepVelocitiesMultiDof(dt, *scratch_r, *scratch_v, *scratch_m);
 }
 
+void btMultiBody_stepVelocitiesMultiDof2(btMultiBody* obj, btScalar dt, btAlignedScalarArray* scratch_r, btAlignedVector3Array* scratch_v, btAlignedMatrix3x3Array* scratch_m, bool isConstraintPass)
+{
+	obj->stepVelocitiesMultiDof(dt, *scratch_r, *scratch_v, *scratch_m, isConstraintPass);
+}
+/*
+void btMultiBody_updateCollisionObjectWorldTransforms(btMultiBody* obj, btAlignedQuaternionArray* scratch_q, btAlignedVector3Array* scratch_m)
+{
+	obj->updateCollisionObjectWorldTransforms(*scratch_q, *scratch_m);
+}
+*/
 void btMultiBody_useGlobalVelocities(btMultiBody* obj, bool use)
 {
 	obj->useGlobalVelocities(use);

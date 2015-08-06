@@ -1319,8 +1319,8 @@ namespace BulletSharpGen
 
                 foreach (var param in method.Parameters)
                 {
-                    if (param.ManagedName.Equals("Transform") ||
-                        param.ManagedName.Equals("Vector3"))
+                    if (param.Type.ManagedName.Equals("Transform") ||
+                        param.Type.ManagedName.Equals("Vector3"))
                     {
                         return true;
                     }

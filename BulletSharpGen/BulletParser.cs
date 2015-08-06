@@ -137,24 +137,19 @@ namespace BulletSharpGen
                 "btSoftBody::Link", "btSoftBody::Material", "btSoftBody::Node", "btSoftBody::Note",
                 "btSoftBody::Pose", "btSoftBody::SolverState", "btSoftBody::Joint::Specs",
                 "btSoftBody::AJoint", "btSoftBody::CJoint", "btSoftBody::LJoint", "btSparseSdf",
-                "btCompoundShapeChild"
+                "btCompoundShapeChild", "btMultibodyLink"
             };
 
             // Classes for which no internal constructor is needed
             List<string> hideInternalConstructor = new List<string>() {
-                "btBox2dBox2dCollisionAlgorithm",
-                "btBoxBoxCollisionAlgorithm",
+                "btBox2dBox2dCollisionAlgorithm", "btBoxBoxCollisionAlgorithm",
                 "btBoxBoxDetector", "btBroadphaseRayCallback", "btCollisionAlgorithmConstructionInfo", "btDefaultCollisionConstructionInfo",
-                "btCompoundCompoundCollisionAlgorithm",
-                "btContinuousConvexCollision",
-                "btConvex2dConvex2dAlgorithm",
-                "btConvexConcaveCollisionAlgorithm",
-                "btConvexConvexAlgorithm",
-                "btDefaultMotionState", "btRigidBody",
-                "btDiscreteCollisionDetectorInterface::ClosestPointInput",
-                "btEmptyAlgorithm", "btGjkConvexCast",
-                "btGjkEpaPenetrationDepthSolver",
+                "btCompoundCompoundCollisionAlgorithm", "btContinuousConvexCollision", "btConvex2dConvex2dAlgorithm",
+                "btConvexConcaveCollisionAlgorithm", "btConvexConvexAlgorithm",
+                "btDefaultMotionState", "btRigidBody", "btDiscreteCollisionDetectorInterface::ClosestPointInput",
+                "btEmptyAlgorithm", "btGjkConvexCast", "btGjkEpaPenetrationDepthSolver",
                 "btMinkowskiPenetrationDepthSolver", "btPointCollector",
+                "btMultiBodyDynamicsWorld",
                 "btDefaultVehicleRaycaster", "btRaycastVehicle", "btDefaultSerializer",
                 "btSoftBodyRigidBodyCollisionConfiguration", "btCPUVertexBufferDescriptor",
                 "btSoftRigidDynamicsWorld",
@@ -694,9 +689,47 @@ namespace BulletSharpGen
                 case "Matrix3x3":
                 case "Transform":
                     return "Matrix";
-                default:
-                    return type.ManagedName;
             }
+
+            if (type.IsConstantArray)
+            {
+                switch (type.Referenced.Name)
+                {
+                    case "bool":
+                        return "BoolArray";
+                    case "int":
+                        return "IntArray";
+                    case "unsigned int":
+                        return "UIntArray";
+                    case "unsigned short":
+                        return "UShortArray";
+                    case "btScalar":
+                        return "FloatArray";
+                    case "btVector3":
+                        return "Vector3Array";
+                    case "btDbvt":
+                        return "DbvtArray";
+                    case "btSoftBody::Body":
+                        return "BodyArray";
+                }
+
+                if (type.Referenced.Referenced != null)
+                {
+                    switch (type.Referenced.Referenced.Name)
+                    {
+                        case "btDbvtNode":
+                            return "DbvtNodePtrArray";
+                        case "btDbvtProxy":
+                            return "DbvtProxyPtrArray";
+                        case "btSoftBody::Node":
+                            return "NodePtrArray";
+                    }
+                }
+
+                return GetTypeNameCS(type.Referenced) + "[]";
+            }
+
+            return type.ManagedNameCS;
         }
 
         public static string GetTypeRefName(TypeRefDefinition type)
@@ -1145,6 +1178,21 @@ namespace BulletSharpGen
 
             if (type.Referenced != null && !type.IsBasic)
             {
+                if ("btScalar".Equals(type.Referenced.Name))
+                {
+                    if (type.IsPointer)
+                    {
+                        return type.ManagedNameCS + "[]";
+                    }
+                    else
+                    {
+                        // reference
+                        if (!(type.IsConst || type.Referenced.IsConst))
+                        {
+                            return "[Out] out " + type.ManagedNameCS;
+                        }
+                    }
+                }
                 return "IntPtr";
             }
 

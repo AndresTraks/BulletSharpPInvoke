@@ -23,6 +23,11 @@ void btMultiBodyConstraint_finalizeMultiDof(btMultiBodyConstraint* obj)
 	obj->finalizeMultiDof();
 }
 
+btScalar btMultiBodyConstraint_getAppliedImpulse(btMultiBodyConstraint* obj, int dof)
+{
+	return obj->getAppliedImpulse(dof);
+}
+
 int btMultiBodyConstraint_getIslandIdA(btMultiBodyConstraint* obj)
 {
 	return obj->getIslandIdA();
@@ -56,6 +61,11 @@ int btMultiBodyConstraint_getNumRows(btMultiBodyConstraint* obj)
 btScalar btMultiBodyConstraint_getPosition(btMultiBodyConstraint* obj, int row)
 {
 	return obj->getPosition(row);
+}
+
+void btMultiBodyConstraint_internalSetAppliedImpulse(btMultiBodyConstraint* obj, int dof, btScalar appliedImpulse)
+{
+	obj->internalSetAppliedImpulse(dof, appliedImpulse);
 }
 
 bool btMultiBodyConstraint_isUnilateral(btMultiBodyConstraint* obj)
