@@ -212,18 +212,21 @@ namespace BulletSharp
 
 		public DbvtNode Parent
 		{
-		    get
-		    {
+            get
+            {
                 IntPtr ptr = btDbvtNode_getParent(_native);
-		        return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
-		    }
-			set { btDbvtNode_setParent(_native, (value != null) ? value._native : IntPtr.Zero); }
+                return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
+            }
+            set { btDbvtNode_setParent(_native, (value != null) ? value._native : IntPtr.Zero); }
 		}
 
 		public DbvtVolume Volume
 		{
-			get { IntPtr ptr = btDbvtNode_getVolume(_native);
-		        return (ptr != IntPtr.Zero) ? new DbvtVolume(ptr) : null; }
+            get
+            {
+                IntPtr ptr = btDbvtNode_getVolume(_native);
+                return (ptr != IntPtr.Zero) ? new DbvtVolume(ptr) : null;
+            }
 			set { btDbvtNode_setVolume(_native, value._native); }
 		}
 
@@ -459,22 +462,22 @@ namespace BulletSharp
 
 			public DbvtNode Node
 			{
-		        get
-		        {
-		            IntPtr ptr = btDbvt_sStkCLN_getNode(_native);
-		            return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
-		        }
-		        set { btDbvt_sStkCLN_setNode(_native, (value != null) ? value._native : IntPtr.Zero); }
+                get
+                {
+                    IntPtr ptr = btDbvt_sStkCLN_getNode(_native);
+                    return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
+                }
+                set { btDbvt_sStkCLN_setNode(_native, (value != null) ? value._native : IntPtr.Zero); }
 			}
 
 			public DbvtNode Parent
 			{
 				get
-		        {
-		            IntPtr ptr = btDbvt_sStkCLN_getParent(_native);
-		            return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
-		        }
-		        set { btDbvt_sStkCLN_setParent(_native, (value != null) ? value._native : IntPtr.Zero); }
+                {
+                    IntPtr ptr = btDbvt_sStkCLN_getParent(_native);
+                    return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
+                }
+                set { btDbvt_sStkCLN_setParent(_native, (value != null) ? value._native : IntPtr.Zero); }
 			}
 
 			public void Dispose()
@@ -532,12 +535,12 @@ namespace BulletSharp
 
 			public DbvtNode A
 			{
-		        get
-		        {
-		            IntPtr ptr = btDbvt_sStkNN_getA(_native);
-		            return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
-		        }
-		        set { btDbvt_sStkNN_setA(_native, (value != null) ? value._native : IntPtr.Zero); }
+                get
+                {
+                    IntPtr ptr = btDbvt_sStkNN_getA(_native);
+                    return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
+                }
+                set { btDbvt_sStkNN_setA(_native, (value != null) ? value._native : IntPtr.Zero); }
 			}
 
 			public DbvtNode B
@@ -609,11 +612,11 @@ namespace BulletSharp
 			public DbvtNode Node
 			{
                 get
-		        {
-		            IntPtr ptr = btDbvt_sStkNP_getNode(_native);
-		            return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
-		        }
-		        set { btDbvt_sStkNP_setNode(_native, (value != null) ? value._native : IntPtr.Zero); }
+                {
+                    IntPtr ptr = btDbvt_sStkNP_getNode(_native);
+                    return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
+                }
+                set { btDbvt_sStkNP_setNode(_native, (value != null) ? value._native : IntPtr.Zero); }
 			}
 
 			public void Dispose()
@@ -677,12 +680,12 @@ namespace BulletSharp
 
 			public DbvtNode Node
 			{
-		        get
-		        {
-		            IntPtr ptr = btDbvt_sStkNPS_getNode(_native);
-		            return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
-		        }
-		        set { btDbvt_sStkNPS_setNode(_native, (value != null) ? value._native : IntPtr.Zero); }
+                get
+                {
+                    IntPtr ptr = btDbvt_sStkNPS_getNode(_native);
+                    return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
+                }
+                set { btDbvt_sStkNPS_setNode(_native, (value != null) ? value._native : IntPtr.Zero); }
 			}
 
 			public float Value
@@ -890,9 +893,9 @@ namespace BulletSharp
 			btDbvt_update2(_native, leaf._native);
 		}
 
-		public void Update(DbvtNode leaf, int lookahead)
+		public void Update(DbvtNode leaf, int lookAhead)
 		{
-			btDbvt_update3(_native, leaf._native, lookahead);
+			btDbvt_update3(_native, leaf._native, lookAhead);
 		}
 
 		public bool Update(DbvtNode leaf, DbvtVolume volume, float margin)
@@ -917,12 +920,12 @@ namespace BulletSharp
 
 		public DbvtNode Free
 		{
-	        get
-	        {
-	            IntPtr ptr = btDbvt_getFree(_native);
-	            return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
-	        }
-	        set { btDbvt_setFree(_native, (value != null) ? value._native : IntPtr.Zero); }
+            get
+            {
+                IntPtr ptr = btDbvt_getFree(_native);
+                return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
+            }
+            set { btDbvt_setFree(_native, (value != null) ? value._native : IntPtr.Zero); }
 		}
 
 		public int Leaves
@@ -950,14 +953,14 @@ namespace BulletSharp
         */
 		public DbvtNode Root
 		{
-	        get
-	        {
-	            IntPtr ptr = btDbvt_getRoot(_native);
-	            return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
-	        }
-	        set { btDbvt_setRoot(_native, (value != null) ? value._native : IntPtr.Zero); }
+            get
+            {
+                IntPtr ptr = btDbvt_getRoot(_native);
+                return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
+            }
+            set { btDbvt_setRoot(_native, (value != null) ? value._native : IntPtr.Zero); }
 		}
-	    /*
+        /*
         public AlignedStkNNArray StkStack
 		{
 			get { return btDbvt_getStkStack(_native); }

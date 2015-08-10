@@ -41,7 +41,7 @@ extern "C"
 	EXPORT void btMultiBody_getBaseOmega(btMultiBody* obj, btScalar* omega);
 	EXPORT void btMultiBody_getBasePos(btMultiBody* obj, btScalar* pos);
 	EXPORT void btMultiBody_getBaseTorque(btMultiBody* obj, btScalar* value);
-	EXPORT void btMultiBody_getBaseVel(btMultiBody* obj, const btScalar* vel);
+	EXPORT void btMultiBody_getBaseVel(btMultiBody* obj, btScalar* vel);
 	EXPORT void btMultiBody_getBaseWorldTransform(btMultiBody* obj, btScalar* tr);
 	EXPORT bool btMultiBody_getCanSleep(btMultiBody* obj);
 	EXPORT int btMultiBody_getCompanionId(btMultiBody* obj);

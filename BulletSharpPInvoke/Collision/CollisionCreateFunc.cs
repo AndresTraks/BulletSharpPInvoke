@@ -7,10 +7,12 @@ namespace BulletSharp
 	public class CollisionAlgorithmCreateFunc : IDisposable
 	{
 		internal IntPtr _native;
+		bool _preventDelete;
 
-		internal CollisionAlgorithmCreateFunc(IntPtr native)
+		internal CollisionAlgorithmCreateFunc(IntPtr native, bool preventDelete)
 		{
 			_native = native;
+			_preventDelete = preventDelete;
 		}
 
 		public CollisionAlgorithmCreateFunc()
@@ -39,7 +41,10 @@ namespace BulletSharp
 		{
 			if (_native != IntPtr.Zero)
 			{
-				btCollisionAlgorithmCreateFunc_delete(_native);
+				if (!_preventDelete)
+				{
+					btCollisionAlgorithmCreateFunc_delete(_native);
+				}
 				_native = IntPtr.Zero;
 			}
 		}

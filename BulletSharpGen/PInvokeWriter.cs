@@ -524,7 +524,12 @@ namespace BulletSharpGen
 
                 if (method.IsConstructor && method.Parent.BaseClass != null)
                 {
-                    WriteLine("))", WriteTo.CS);
+                    Write(")", WriteTo.CS);
+                    if (method.Parent.BaseClass.Target.HasPreventDelete)
+                    {
+                        Write(", false");
+                    }
+                    WriteLine(")", WriteTo.CS);
                     WriteTabs(level + 1, WriteTo.CS);
                     WriteLine('{', WriteTo.CS);
                 }
@@ -744,7 +749,8 @@ namespace BulletSharpGen
             if (c.BaseClass != null)
             {
                 Write(" : ", WriteTo.CS);
-                WriteLine(c.BaseClass.ManagedNameCS, WriteTo.CS);
+                WriteLine(c.BaseClass.Target.FullNameManaged.Replace("::", "."), WriteTo.CS);
+                //WriteLine(c.BaseClass.ManagedNameCS, WriteTo.CS);
             }
             else
             {
@@ -755,12 +761,9 @@ namespace BulletSharpGen
             hasCSWhiteSpace = true;
 
             // Write child classes
-            if (c.Classes.Count != 0)
+            foreach (ClassDefinition cl in c.Classes.OrderBy(x => x.FullNameManaged))
             {
-                foreach (ClassDefinition cl in c.Classes.OrderBy(x => x.FullNameManaged))
-                {
-                    WriteClass(cl, level + 1);
-                }
+                WriteClass(cl, level + 1);
             }
 
             if (!hasClassSeparatingWhitespace)
@@ -804,7 +807,24 @@ namespace BulletSharpGen
                 if (c.BaseClass != null)
                 {
                     WriteTabs(level + 2, WriteTo.CS);
-                    WriteLine(": base(native)", WriteTo.CS);
+                    Write(": base(native", WriteTo.CS);
+                    if (c.HasPreventDelete)
+                    {
+                        if (!c.BaseClass.Target.HasPreventDelete)
+                        {
+                            // Base class should also have preventDelete
+                            //throw new NotImplementedException();
+                        }
+                        Write(", preventDelete", WriteTo.CS);
+                    }
+                    else
+                    {
+                        if (c.BaseClass.Target.HasPreventDelete)
+                        {
+                            Write(", true", WriteTo.CS);
+                        }
+                    }
+                    WriteLine(')', WriteTo.CS);
                 }
                 WriteTabs(level + 1, WriteTo.CS);
                 WriteLine('{', WriteTo.CS);
@@ -827,16 +847,13 @@ namespace BulletSharpGen
             bool hasConstructors = false;
             if (!c.IsAbstract)
             {
-                foreach (MethodDefinition method in c.Methods)
+                foreach (MethodDefinition method in c.Methods.Where(m => m.IsConstructor))
                 {
-                    if (method.IsConstructor)
+                    if (!c.HidePublicConstructors)
                     {
-                        if (!c.HidePublicConstructors)
-                        {
-                            WriteMethod(method, level, ref overloadIndex);
-                        }
-                        hasConstructors = true;
+                        WriteMethod(method, level, ref overloadIndex);
                     }
+                    hasConstructors = true;
                 }
 
                 // Write default constructor
@@ -851,13 +868,8 @@ namespace BulletSharpGen
 
             // Write methods
             MethodDefinition previousMethod = null;
-            foreach (MethodDefinition method in c.Methods.OrderBy(m => m.Name))
+            foreach (MethodDefinition method in c.Methods.Where(m => !m.IsConstructor).OrderBy(m => m.Name))
             {
-                if (method.IsConstructor)
-                {
-                    continue;
-                }
-
                 if (previousMethod != null && previousMethod.Name != method.Name)
                 {
                     overloadIndex = 0;
@@ -885,8 +897,11 @@ namespace BulletSharpGen
             }
 
             // Write DllImport clauses
-            EnsureWhiteSpace(WriteTo.CS);
-            Write(bufferBuilder.ToString(), WriteTo.CS);
+            if (bufferBuilder.Length != 0)
+            {
+                EnsureWhiteSpace(WriteTo.CS);
+                Write(bufferBuilder.ToString(), WriteTo.CS);
+            }
 
             WriteTabs(level, WriteTo.CS);
             WriteLine("}", WriteTo.CS);
@@ -1311,7 +1326,8 @@ namespace BulletSharpGen
 
             foreach (var method in cl.Methods)
             {
-                if (method.ReturnType.ManagedName.Equals("Transform") ||
+                if (method.ReturnType.ManagedName.Equals("Quaternion") ||
+                    method.ReturnType.ManagedName.Equals("Transform") ||
                     method.ReturnType.ManagedName.Equals("Vector3"))
                 {
                     return true;
@@ -1319,7 +1335,8 @@ namespace BulletSharpGen
 
                 foreach (var param in method.Parameters)
                 {
-                    if (param.Type.ManagedName.Equals("Transform") ||
+                    if (param.Type.ManagedName.Equals("Quaternion") ||
+                        param.Type.ManagedName.Equals("Transform") ||
                         param.Type.ManagedName.Equals("Vector3"))
                     {
                         return true;

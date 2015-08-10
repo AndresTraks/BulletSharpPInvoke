@@ -7,11 +7,6 @@ namespace BulletSharp
 {
 	public class Generic6DofSpringConstraint : Generic6DofConstraint
 	{
-		internal Generic6DofSpringConstraint(IntPtr native)
-			: base(native)
-		{
-		}
-
 		public Generic6DofSpringConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix frameInA, Matrix frameInB, bool useLinearReferenceFrameA)
 			: base(btGeneric6DofSpringConstraint_new(rigidBodyA._native, rigidBodyB._native, ref frameInA, ref frameInB, useLinearReferenceFrameA))
 		{

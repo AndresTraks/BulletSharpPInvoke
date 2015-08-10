@@ -14,15 +14,15 @@ namespace BulletSharp
 
 		public DbvtNode Leaf
 		{
-	        get
-	        {
-	            IntPtr ptr = btDbvtProxy_getLeaf(_native);
-	            return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
-	        }
-	        set { btDbvtProxy_setLeaf(_native, (value != null) ? value._native : IntPtr.Zero); }
+            get
+            {
+                IntPtr ptr = btDbvtProxy_getLeaf(_native);
+                return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
+            }
+            set { btDbvtProxy_setLeaf(_native, (value != null) ? value._native : IntPtr.Zero); }
 		}
         /*
-	    public DbvtProxyArray Links
+		public DbvtProxyPtrArray Links
 		{
 			get { return btDbvtProxy_getLinks(_native); }
 		}
@@ -186,7 +186,7 @@ namespace BulletSharp
 			set { btDbvtBroadphase_setStageCurrent(_native, value); }
 		}
         /*
-        public DbvtProxyPtrArray StageRoots
+		public DbvtProxyPtrArray StageRoots
 		{
 			get { return btDbvtBroadphase_getStageRoots(_native); }
 		}

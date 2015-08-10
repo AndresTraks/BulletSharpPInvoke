@@ -87,7 +87,7 @@ namespace BulletSharp
         AlignedBroadphasePairArray _overlappingPairArray;
 
 		internal OverlappingPairCache(IntPtr native, bool preventDelete)
-            : base(native, preventDelete)
+			: base(native, preventDelete)
 		{
 		}
 

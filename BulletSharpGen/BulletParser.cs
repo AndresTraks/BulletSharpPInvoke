@@ -40,7 +40,7 @@ namespace BulletSharpGen
             "Quaternion", "Vector3", "LemkeAlgorithm", "CharacterControllerInterface", "TypedObject" };
 
             // Managed method names
-            methodNameMapping.Add("gimpact_vs_compoundshape", "GImpactVsCompoundshape");
+            methodNameMapping.Add("gimpact_vs_compoundshape", "GImpactVsCompoundShape");
             methodNameMapping.Add("gimpact_vs_concave", "GImpactVsConcave");
             methodNameMapping.Add("gimpact_vs_gimpact", "GImpactVsGImpact");
             methodNameMapping.Add("gimpact_vs_shape", "GImpactVsShape");
@@ -63,7 +63,6 @@ namespace BulletSharpGen
             parameterNameMapping.Add("idraw", "iDraw");
             parameterNameMapping.Add("indexstride", "indexStride");
             parameterNameMapping.Add("indicestype", "indicesType");
-            parameterNameMapping.Add("lookahead", "lookAhead");
             parameterNameMapping.Add("limot", "limitMotor");
             parameterNameMapping.Add("maxiterations", "maxIterations");
             parameterNameMapping.Add("maxdepth", "maxDepth");
@@ -170,7 +169,8 @@ namespace BulletSharpGen
                 "btCollisionWorld::AllHitsRayResultCallback", "btCollisionWorld::ContactResultCallback",
                 "btCollisionWorld::ClosestRayResultCallback", "btCollisionWorld::RayResultCallback",
                 "btJointFeedback", "btTypedConstraint::btConstraintInfo1", "btTypedConstraint::btConstraintInfo2",
-                "btConeTwistConstraint", "btFixedConstraint", "btGearConstraint", "btHinge2Constraint",
+                "btConeTwistConstraint", "btFixedConstraint", "btGearConstraint",
+                "btGeneric6DofSpringConstraint", "btHinge2Constraint",
                 "btHingeAccumulatedAngleConstraint", "btPoint2PointConstraint",
                 "btSliderConstraint", "btUniversalConstraint",
                 "btMLCPSolver", "btMultiBodyConstraintSolver", "btNNCGConstraintSolver",
@@ -192,7 +192,8 @@ namespace BulletSharpGen
                 "btConstraintSetting", "btSimulationIslandManager",
                 "btSolve2LinearConstraint", "btIndexedMesh", "btTriangleInfoMap",
                 "btAngularLimit", "btContactSolverInfo",
-                "btWheelInfo", "btManifoldPoint", "btCollisionWorld::LocalShapeInfo"};
+                "btWheelInfo", "btManifoldPoint", "btCollisionWorld::LocalShapeInfo",
+                "btSequentialImpulseConstraintSolver"};
 
             // Classes that have OnDisposing/OnDisposed events
             List<string> trackingDisposable = new List<string>() {

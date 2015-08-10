@@ -44,7 +44,7 @@ namespace BulletSharp
         MultiMaterialTriangleMesh,
 
         EmptyShape,
-        StaticPlane,
+        StaticPlaneShape,
         CUSTOM_CONCAVE_SHAPE_TYPE,
         CONCAVE_SHAPES_END_HERE,
 

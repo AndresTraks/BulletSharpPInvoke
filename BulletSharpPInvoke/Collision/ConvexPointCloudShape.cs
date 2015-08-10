@@ -16,27 +16,27 @@ namespace BulletSharp
 
         public ConvexPointCloudShape(Vector3Array points, int numPoints, Vector3 localScaling)
             : base(btConvexPointCloudShape_new2(points._native, numPoints, ref localScaling))
-        {
+		{
             _unscaledPoints = points;
-        }
+		}
 
         public ConvexPointCloudShape(Vector3Array points, int numPoints, Vector3 localScaling, bool computeAabb)
             : base(btConvexPointCloudShape_new3(points._native, numPoints, ref localScaling, computeAabb))
-        {
+		{
             _unscaledPoints = points;
-        }
+		}
 
 		public void GetScaledPoint(int index, out Vector3 value)
 		{
 			btConvexPointCloudShape_getScaledPoint(_native, index, out value);
 		}
 
-        public Vector3 GetScaledPoint(int index)
-        {
-            Vector3 value;
-            btConvexPointCloudShape_getScaledPoint(_native, index, out value);
-            return value;
-        }
+		public Vector3 GetScaledPoint(int index)
+		{
+			Vector3 value;
+			btConvexPointCloudShape_getScaledPoint(_native, index, out value);
+			return value;
+		}
 
         public void SetPoints(Vector3Array points, int numPoints)
 		{

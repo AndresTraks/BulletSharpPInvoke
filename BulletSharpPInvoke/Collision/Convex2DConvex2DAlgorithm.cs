@@ -11,8 +11,13 @@ namespace BulletSharp
             VoronoiSimplexSolver _simplexSolver;
             ConvexPenetrationDepthSolver _pdSolver;
 
+			internal CreateFunc(IntPtr native)
+				: base(native, true)
+			{
+			}
+
 			public CreateFunc(VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver pdSolver)
-				: base(btConvex2dConvex2dAlgorithm_CreateFunc_new(simplexSolver._native, pdSolver._native))
+				: base(btConvex2dConvex2dAlgorithm_CreateFunc_new(simplexSolver._native, pdSolver._native), false)
 			{
                 _simplexSolver = simplexSolver;
                 _pdSolver = pdSolver;

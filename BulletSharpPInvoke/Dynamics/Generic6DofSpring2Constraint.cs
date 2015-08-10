@@ -387,12 +387,12 @@ namespace BulletSharp
 			set { btTranslationalLimitMotor2_setCurrentLinearDiff(_native, ref value); }
 		}
         /*
-        public BoolArray EnableMotor
+		public BoolArray EnableMotor
 		{
             get { return new BoolArray(btTranslationalLimitMotor2_getEnableMotor(_native), 3); }
 		}
 
-        public BoolArray EnableSpring
+		public BoolArray EnableSpring
 		{
             get { return new BoolArray(btTranslationalLimitMotor2_getEnableSpring(_native), 3); }
 		}
@@ -479,7 +479,7 @@ namespace BulletSharp
 			set { btTranslationalLimitMotor2_setSpringDamping(_native, ref value); }
 		}
         /*
-		public bool SpringDampingLimited
+		public BoolArray SpringDampingLimited
 		{
 			get { return btTranslationalLimitMotor2_getSpringDampingLimited(_native); }
 		}
@@ -495,7 +495,7 @@ namespace BulletSharp
 			set { btTranslationalLimitMotor2_setSpringStiffness(_native, ref value); }
 		}
         /*
-		public bool SpringStiffnessLimited
+		public BoolArray SpringStiffnessLimited
 		{
 			get { return btTranslationalLimitMotor2_getSpringStiffnessLimited(_native); }
 		}

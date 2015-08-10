@@ -41,7 +41,7 @@ namespace BulletSharp
             stream.Position = Marshal.SizeOf(typeof(CollisionShapeFloatData));
             switch (type)
             {
-                case BroadphaseNativeType.StaticPlane:
+                case BroadphaseNativeType.StaticPlaneShape:
                     {
                         Vector3 localScaling = reader.ReadVector3();
                         Vector3 planeNormal = reader.ReadVector3();

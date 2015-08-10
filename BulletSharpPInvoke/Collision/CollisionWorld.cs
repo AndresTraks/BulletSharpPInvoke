@@ -315,14 +315,14 @@ namespace BulletSharp
 	public class LocalConvexResult : IDisposable
 	{
 		internal IntPtr _native;
-        private readonly bool _preventDelete;
-        private LocalShapeInfo _localShapeInfo;
+		bool _preventDelete;
+        LocalShapeInfo _localShapeInfo;
 
-        internal LocalConvexResult(IntPtr native, bool preventDelete)
-        {
-            _native = native;
-            _preventDelete = preventDelete;
-        }
+		internal LocalConvexResult(IntPtr native, bool preventDelete)
+		{
+			_native = native;
+			_preventDelete = preventDelete;
+		}
 
 		public LocalConvexResult(CollisionObject hitCollisionObject, LocalShapeInfo localShapeInfo, Vector3 hitNormalLocal, Vector3 hitPointLocal, float hitFraction)
 		{
@@ -396,10 +396,10 @@ namespace BulletSharp
 		{
 			if (_native != IntPtr.Zero)
 			{
-                if (!_preventDelete)
-                {
-                    btCollisionWorld_LocalConvexResult_delete(_native);
-                }
+				if (!_preventDelete)
+				{
+					btCollisionWorld_LocalConvexResult_delete(_native);
+				}
 				_native = IntPtr.Zero;
 			}
 		}
@@ -438,14 +438,14 @@ namespace BulletSharp
 	public class LocalRayResult : IDisposable
 	{
 		internal IntPtr _native;
-        private readonly bool _preventDelete;
-        private LocalShapeInfo _localShapeInfo;
+		bool _preventDelete;
+        LocalShapeInfo _localShapeInfo;
 
-        internal LocalRayResult(IntPtr native, bool preventDelete)
-        {
-            _native = native;
-            _preventDelete = preventDelete;
-        }
+		internal LocalRayResult(IntPtr native, bool preventDelete)
+		{
+			_native = native;
+			_preventDelete = preventDelete;
+		}
 
 		public LocalRayResult(CollisionObject collisionObject, LocalShapeInfo localShapeInfo, Vector3 hitNormalLocal, float hitFraction)
 		{
@@ -508,10 +508,10 @@ namespace BulletSharp
 		{
 			if (_native != IntPtr.Zero)
 			{
-                if (!_preventDelete)
-                {
-                    btCollisionWorld_LocalRayResult_delete(_native);
-                }
+				if (!_preventDelete)
+				{
+					btCollisionWorld_LocalRayResult_delete(_native);
+				}
 				_native = IntPtr.Zero;
 			}
 		}

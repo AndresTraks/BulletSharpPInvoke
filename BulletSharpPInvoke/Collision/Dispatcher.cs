@@ -223,7 +223,7 @@ namespace BulletSharp
 			get { return btDispatcher_getInternalManifoldPointer(_native); }
 		}
 
-		public btPoolAllocator InternalManifoldPool
+		public PoolAllocator InternalManifoldPool
 		{
 			get { return btDispatcher_getInternalManifoldPool(_native); }
 		}

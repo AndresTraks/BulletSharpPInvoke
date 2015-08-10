@@ -25,10 +25,10 @@ namespace BulletSharp
         {
         }
 
-        public void GetPlaneEquation(out Vector4 plane, int i)
-        {
-            btBox2dShape_getPlaneEquation(_native, out plane, i);
-        }
+		public void GetPlaneEquation(out Vector4 plane, int i)
+		{
+			btBox2dShape_getPlaneEquation(_native, out plane, i);
+		}
 
 		public Vector3 Centroid
 		{

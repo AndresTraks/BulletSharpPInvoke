@@ -44,7 +44,7 @@ namespace BulletSharp
 
 			public IDebugDraw DebugDrawer
 			{
-		        get { return BulletSharp.DebugDraw.GetManaged(btConvexCast_CastResult_getDebugDrawer(_native)); }
+                get { return BulletSharp.DebugDraw.GetManaged(btConvexCast_CastResult_getDebugDrawer(_native)); }
                 set { btConvexCast_CastResult_setDebugDrawer(_native, BulletSharp.DebugDraw.GetUnmanaged(value)); }
 			}
 

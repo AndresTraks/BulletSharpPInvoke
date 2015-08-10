@@ -9,12 +9,12 @@ namespace BulletSharp
 		public class CreateFunc : CollisionAlgorithmCreateFunc
 		{
 			internal CreateFunc(IntPtr native)
-				: base(native)
+				: base(native, true)
 			{
 			}
 
 			public CreateFunc()
-				: base(btGImpactCollisionAlgorithm_CreateFunc_new())
+				: base(btGImpactCollisionAlgorithm_CreateFunc_new(), false)
 			{
 			}
 
@@ -32,22 +32,22 @@ namespace BulletSharp
 		{
 		}
 
-		public void GimpactVsCompoundshape(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, GImpactShapeInterface shape0, CompoundShape shape1, bool swapped)
+		public void GImpactVsCompoundShape(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, GImpactShapeInterface shape0, CompoundShape shape1, bool swapped)
 		{
 			btGImpactCollisionAlgorithm_gimpact_vs_compoundshape(_native, body0Wrap._native, body1Wrap._native, shape0._native, shape1._native, swapped);
 		}
 
-		public void GimpactVsConcave(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, GImpactShapeInterface shape0, ConcaveShape shape1, bool swapped)
+		public void GImpactVsConcave(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, GImpactShapeInterface shape0, ConcaveShape shape1, bool swapped)
 		{
 			btGImpactCollisionAlgorithm_gimpact_vs_concave(_native, body0Wrap._native, body1Wrap._native, shape0._native, shape1._native, swapped);
 		}
 
-		public void GimpactVsGimpact(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, GImpactShapeInterface shape0, GImpactShapeInterface shape1)
+		public void GImpactVsGImpact(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, GImpactShapeInterface shape0, GImpactShapeInterface shape1)
 		{
 			btGImpactCollisionAlgorithm_gimpact_vs_gimpact(_native, body0Wrap._native, body1Wrap._native, shape0._native, shape1._native);
 		}
 
-		public void GimpactVsShape(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, GImpactShapeInterface shape0, CollisionShape shape1, bool swapped)
+		public void GImpactVsShape(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, GImpactShapeInterface shape0, CollisionShape shape1, bool swapped)
 		{
 			btGImpactCollisionAlgorithm_gimpact_vs_shape(_native, body0Wrap._native, body1Wrap._native, shape0._native, shape1._native, swapped);
 		}

@@ -8,8 +8,13 @@ namespace BulletSharp
 	{
 		public class CreateFunc : CollisionAlgorithmCreateFunc
 		{
+			internal CreateFunc(IntPtr native)
+				: base(native, true)
+			{
+			}
+
 			public CreateFunc()
-				: base(btEmptyAlgorithm_CreateFunc_new())
+				: base(btEmptyAlgorithm_CreateFunc_new(), false)
 			{
 			}
 

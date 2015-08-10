@@ -11,8 +11,13 @@ namespace BulletSharp
             VoronoiSimplexSolver _simplexSolver;
             ConvexPenetrationDepthSolver _pdSolver;
 
+			internal CreateFunc(IntPtr native)
+				: base(native, true)
+			{
+			}
+
 			public CreateFunc(VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver pdSolver)
-				: base(btConvexConvexAlgorithm_CreateFunc_new(simplexSolver._native, pdSolver._native))
+				: base(btConvexConvexAlgorithm_CreateFunc_new(simplexSolver._native, pdSolver._native), false)
 			{
 			}
 
@@ -28,25 +33,25 @@ namespace BulletSharp
 				set { btConvexConvexAlgorithm_CreateFunc_setNumPerturbationIterations(_native, value); }
 			}
 
-            public ConvexPenetrationDepthSolver PdSolver
-            {
+			public ConvexPenetrationDepthSolver PdSolver
+			{
                 get { return _pdSolver; }
                 set
                 {
                     _pdSolver = value;
                     btConvexConvexAlgorithm_CreateFunc_setPdSolver(_native, value._native);
                 }
-            }
+			}
 
-            public VoronoiSimplexSolver SimplexSolver
-            {
+			public VoronoiSimplexSolver SimplexSolver
+			{
                 get { return _simplexSolver; }
                 set
                 {
                     _simplexSolver = value;
                     btConvexConvexAlgorithm_CreateFunc_setSimplexSolver(_native, value._native);
                 }
-            }
+			}
 
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern IntPtr btConvexConvexAlgorithm_CreateFunc_new(IntPtr simplexSolver, IntPtr pdSolver);

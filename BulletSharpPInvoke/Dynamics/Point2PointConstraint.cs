@@ -53,14 +53,14 @@ namespace BulletSharp
 	public class Point2PointConstraint : TypedConstraint
 	{
 		public Point2PointConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 pivotInA, Vector3 pivotInB)
-            : base(btPoint2PointConstraint_new(rigidBodyA._native, rigidBodyB._native, ref pivotInA, ref pivotInB))
+			: base(btPoint2PointConstraint_new(rigidBodyA._native, rigidBodyB._native, ref pivotInA, ref pivotInB))
 		{
             _rigidBodyA = rigidBodyA;
             _rigidBodyB = rigidBodyB;
 		}
 
 		public Point2PointConstraint(RigidBody rigidBodyA, Vector3 pivotInA)
-            : base(btPoint2PointConstraint_new2(rigidBodyA._native, ref pivotInA))
+			: base(btPoint2PointConstraint_new2(rigidBodyA._native, ref pivotInA))
 		{
             _rigidBodyA = rigidBodyA;
             _rigidBodyB = GetFixedBody();
