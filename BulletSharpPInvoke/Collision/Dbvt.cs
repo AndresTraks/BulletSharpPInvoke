@@ -893,9 +893,9 @@ namespace BulletSharp
 			btDbvt_update2(_native, leaf._native);
 		}
 
-		public void Update(DbvtNode leaf, int lookAhead)
+		public void Update(DbvtNode leaf, int lookahead)
 		{
-			btDbvt_update3(_native, leaf._native, lookAhead);
+			btDbvt_update3(_native, leaf._native, lookahead);
 		}
 
 		public bool Update(DbvtNode leaf, DbvtVolume volume, float margin)

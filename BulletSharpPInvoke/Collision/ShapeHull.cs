@@ -8,12 +8,14 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
+        ConvexShape _shape;
         UIntArray _indices;
         Vector3Array _vertices;
 
 		public ShapeHull(ConvexShape shape)
 		{
 			_native = btShapeHull_new(shape._native);
+            _shape = shape;
 		}
 
 		public bool BuildHull(float margin)

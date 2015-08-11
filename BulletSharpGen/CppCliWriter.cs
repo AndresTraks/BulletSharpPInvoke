@@ -333,6 +333,8 @@ namespace BulletSharpGen
 
         void OutputMethod(MethodDefinition method, int level, int numOptionalParams = 0)
         {
+            var parentClass = method.Parent;
+
             // No whitespace between get/set methods
             if (!(method.Property != null &&
                 method.Equals(method.Property.Setter)))
@@ -347,7 +349,7 @@ namespace BulletSharpGen
             {
                 foreach (var param in method.Parameters)
                 {
-                    string typeConditional = GetTypeConditional(param.Type, method.Parent.Header);
+                    string typeConditional = GetTypeConditional(param.Type, parentClass.Header);
                     if (typeConditional != null)
                     {
                         Write("#ifndef ");
@@ -394,11 +396,11 @@ namespace BulletSharpGen
             }
 
             // Definition: name
-            SourceWrite(method.Parent.FullNameManaged);
+            SourceWrite(parentClass.FullNameManaged);
             SourceWrite("::");
             if (method.IsConstructor)
             {
-                Write(method.Parent.ManagedName);
+                Write(parentClass.ManagedName);
             }
             else
             {
@@ -471,7 +473,7 @@ namespace BulletSharpGen
 
             // Constructor chaining
             bool doConstructorChaining = false;
-            if (method.IsConstructor && method.Parent.BaseClass != null)
+            if (method.IsConstructor && parentClass.BaseClass != null)
             {
                 // If there is no need for marshalling code, we can chain constructors
                 doConstructorChaining = true;
@@ -486,13 +488,17 @@ namespace BulletSharpGen
 
                 WriteTabs(1, true);
                 SourceWrite(": ");
-                SourceWrite(method.Parent.BaseClass.ManagedName);
+                SourceWrite(parentClass.BaseClass.ManagedName);
                 SourceWrite('(');
 
                 if (doConstructorChaining)
                 {
                     SourceWrite("new ");
                     OutputMethodMarshal(method, numParameters);
+                    if (parentClass.BaseClass.Target.HasPreventDelete)
+                    {
+                        SourceWrite(", false");
+                    }
                 }
                 else
                 {
@@ -566,7 +572,7 @@ namespace BulletSharpGen
                 }
 
                 // Native is defined as static_cast<className*>(_native)
-                string nativePointer = (method.Parent.BaseClass != null) ? "Native" : "_native";
+                string nativePointer = (parentClass.BaseClass != null) ? "Native" : "_native";
 
                 if (method.Field != null)
                 {
@@ -618,7 +624,7 @@ namespace BulletSharpGen
                     {
                         if (method.IsStatic)
                         {
-                            SourceWrite(method.Parent.FullName);
+                            SourceWrite(parentClass.FullName);
                             SourceWrite("::");
                         }
                         else
