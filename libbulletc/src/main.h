@@ -536,8 +536,12 @@
 #endif
 
 #ifndef BT_MULTIBODY_LINK_H
+#define btMultiBodyJointFeedback void
 #define btMultibodyLink void
 #define btSpatialMotionVector void
+#define btMultibodyLink_eFeatherstoneJointType int
+#else
+#define btMultibodyLink_eFeatherstoneJointType btMultibodyLink::eFeatherstoneJointType
 #endif
 
 #ifndef BT_MULTIBODY_POINT2POINT_H

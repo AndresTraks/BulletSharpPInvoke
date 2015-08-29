@@ -222,7 +222,7 @@ namespace BulletSharp
             {
                 _callbackFunctionUnmanaged = CallbackFunctionUnmanaged;
                 _callbackFunction = value;
-                if (_callbackFunction != null)
+                if (value != null)
                 {
                     HACD_SetCallBack(_native, Marshal.GetFunctionPointerForDelegate(_callbackFunctionUnmanaged));
                 }

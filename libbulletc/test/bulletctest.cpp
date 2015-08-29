@@ -20,6 +20,12 @@ void test_hacd()
 {
 	cout << "Calculating HACD clusters..." << endl;
 
+	// Truncate to float precision
+	for (int i = 0; i < sizeof(points) / sizeof(points[0]); i++)
+	{
+		points[i] = (float)points[i];
+	}
+
 	HACD_HACD* myHACD = HACD_new();
 	HACD_SetPoints(myHACD, points);
 	HACD_SetNPoints(myHACD, sizeof(points) / (sizeof(points[0]) * 3));
@@ -77,7 +83,7 @@ int main(int argc, char* argv[])
 
 	test_hacd();
 
-	cout << "OK";
+	cout << "Done. Press enter to continue.";
 	cin.get();
 	return 0;
 }
