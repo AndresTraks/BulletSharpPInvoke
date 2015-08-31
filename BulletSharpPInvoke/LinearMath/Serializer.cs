@@ -289,7 +289,7 @@ namespace BulletSharp
             {
                 int length = getBulletDNAlen64();
                 dna64 = new byte[length];
-                Marshal.Copy(getBulletDNAstr64(), dna, 0, length);
+                Marshal.Copy(getBulletDNAstr64(), dna64, 0, length);
             }
             return dna64;
         }
