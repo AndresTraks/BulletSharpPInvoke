@@ -41,7 +41,7 @@ namespace BulletSharp
             {
                 _actions = new Dictionary<IAction, ActionInterfaceWrapper>();
             }
-            else if (!_actions.ContainsKey(action))
+            else if (_actions.ContainsKey(action))
             {
                 return;
             }
@@ -102,15 +102,13 @@ namespace BulletSharp
                 return;
             }
 
-            if (!_actions.ContainsKey(action))
+            ActionInterfaceWrapper wrapper;
+            if (_actions.TryGetValue(action, out wrapper))
             {
-                return;
+                btDynamicsWorld_removeAction(_native, wrapper._native);
+                _actions.Remove(action);
+                wrapper.Dispose();
             }
-
-            ActionInterfaceWrapper wrapper = _actions[action];
-            btDynamicsWorld_removeAction(_native, wrapper._native);
-            _actions.Remove(action);
-            wrapper.Dispose();
 		}
 
 		public void RemoveConstraint(TypedConstraint constraint)

@@ -13,8 +13,8 @@ namespace BulletSharp
     internal class ActionInterfaceWrapper : IDisposable
 	{
 		internal IntPtr _native;
-        internal IAction _actionInterface;
-        internal DynamicsWorld _world;
+        IAction _actionInterface;
+        DynamicsWorld _world;
 
         [UnmanagedFunctionPointerAttribute(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate void DebugDrawUnmanagedDelegate(IntPtr debugDrawer);
