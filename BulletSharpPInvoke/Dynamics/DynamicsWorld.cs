@@ -61,6 +61,23 @@ namespace BulletSharp
 		{
             _constraints.Add(constraint);
 			btDynamicsWorld_addConstraint2(_native, constraint._native, disableCollisionsBetweenLinkedBodies);
+
+            if (disableCollisionsBetweenLinkedBodies)
+            {
+                RigidBody rigidBody = constraint.RigidBodyA;
+                if (rigidBody._constraintRefs == null)
+                {
+                    rigidBody._constraintRefs = new List<TypedConstraint>();
+                }
+                rigidBody._constraintRefs.Add(constraint);
+
+                rigidBody = constraint.RigidBodyB;
+                if (rigidBody._constraintRefs == null)
+                {
+                    rigidBody._constraintRefs = new List<TypedConstraint>();
+                }
+                rigidBody._constraintRefs.Add(constraint);
+            }
 		}
 
 		public void AddRigidBody(RigidBody body)
@@ -113,6 +130,17 @@ namespace BulletSharp
 
 		public void RemoveConstraint(TypedConstraint constraint)
 		{
+            RigidBody rigidBody = constraint.RigidBodyA;
+            if (rigidBody._constraintRefs != null)
+            {
+                rigidBody._constraintRefs.Remove(constraint);
+            }
+            rigidBody = constraint.RigidBodyB;
+            if (rigidBody._constraintRefs != null)
+            {
+                rigidBody._constraintRefs.Remove(constraint);
+            }
+
             int itemIndex = _constraints.IndexOf(constraint);
             int lastIndex = _constraints.Count - 1;
             _constraints[itemIndex] = _constraints[lastIndex];

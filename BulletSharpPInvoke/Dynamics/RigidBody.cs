@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security;
 using BulletSharp.Math;
@@ -19,6 +20,7 @@ namespace BulletSharp
 	public class RigidBody : CollisionObject
 	{
         private MotionState _motionState;
+        internal List<TypedConstraint> _constraintRefs;
 
 		public RigidBody(RigidBodyConstructionInfo constructionInfo)
 			: base(btRigidBody_new(constructionInfo._native))
@@ -27,9 +29,14 @@ namespace BulletSharp
             _motionState = constructionInfo._motionState;
 		}
 
-		public void AddConstraintRef(TypedConstraint c)
+		public void AddConstraintRef(TypedConstraint constraint)
 		{
-			btRigidBody_addConstraintRef(_native, c._native);
+            if (_constraintRefs == null)
+            {
+                _constraintRefs = new List<TypedConstraint>();
+            }
+            _constraintRefs.Add(constraint);
+            btRigidBody_addConstraintRef(_native, constraint._native);
 		}
 
         public void ApplyCentralForceRef(ref Vector3 force)
@@ -150,7 +157,8 @@ namespace BulletSharp
 
 		public TypedConstraint GetConstraintRef(int index)
 		{
-			return TypedConstraint.GetManaged(btRigidBody_getConstraintRef(_native, index));
+            System.Diagnostics.Debug.Assert(_constraintRefs != null);
+            return _constraintRefs[index];
 		}
 
         public void GetVelocityInLocalPoint(ref Vector3 relPos, out Vector3 value)
@@ -185,9 +193,13 @@ namespace BulletSharp
 			btRigidBody_proceedToTransform(_native, ref newTrans);
 		}
 
-		public void RemoveConstraintRef(TypedConstraint c)
+		public void RemoveConstraintRef(TypedConstraint constraint)
 		{
-			btRigidBody_removeConstraintRef(_native, c._native);
+            if (_constraintRefs != null)
+            {
+                _constraintRefs.Remove(constraint);
+                btRigidBody_removeConstraintRef(_native, constraint._native);
+            }
 		}
 
 		public void SaveKinematicState(float step)
@@ -422,7 +434,7 @@ namespace BulletSharp
 
 		public int NumConstraintRefs
 		{
-			get { return btRigidBody_getNumConstraintRefs(_native); }
+            get { return (_constraintRefs != null) ? _constraintRefs.Count : 0; }
 		}
 
 		public Quaternion Orientation
@@ -503,8 +515,8 @@ namespace BulletSharp
 		static extern void btRigidBody_getCenterOfMassPosition(IntPtr obj, [Out] out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btRigidBody_getCenterOfMassTransform(IntPtr obj, [Out] out Matrix xform);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btRigidBody_getConstraintRef(IntPtr obj, int index);
+		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		//static extern IntPtr btRigidBody_getConstraintRef(IntPtr obj, int index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btRigidBody_getContactSolverType(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -531,8 +543,8 @@ namespace BulletSharp
 		static extern void btRigidBody_getLocalInertia(IntPtr obj, [Out] out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btRigidBody_getMotionState(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern int btRigidBody_getNumConstraintRefs(IntPtr obj);
+		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		//static extern int btRigidBody_getNumConstraintRefs(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btRigidBody_getOrientation(IntPtr obj, [Out] out Quaternion value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

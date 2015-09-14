@@ -363,28 +363,9 @@ namespace BulletSharp
         protected RigidBody _rigidBodyA;
         protected RigidBody _rigidBodyB;
 
-        internal static TypedConstraint GetManaged(IntPtr native)
-        {
-            if (native == IntPtr.Zero)
-            {
-                return null;
-            }
-
-            IntPtr handlePtr = btTypedConstraint_getUserConstraintPtr(native);
-            return GCHandle.FromIntPtr(handlePtr).Target as TypedConstraint;
-        }
-
 		internal TypedConstraint(IntPtr native)
 		{
             _native = native;
-
-            if (btTypedConstraint_getUserConstraintId(_native) != -1)
-            {
-                throw new InvalidOperationException();
-            }
-
-            GCHandle handle = GCHandle.Alloc(this, GCHandleType.Weak);
-            btTypedConstraint_setUserConstraintPtr(_native, GCHandle.ToIntPtr(handle));
 		}
 
 		public void BuildJacobian()
@@ -559,12 +540,7 @@ namespace BulletSharp
         {
             if (_native != IntPtr.Zero)
             {
-                if (btTypedConstraint_getUserConstraintId(_native) != -1)
-                {
-                    IntPtr handlePtr = btTypedConstraint_getUserConstraintPtr(_native);
-                    GCHandle.FromIntPtr(handlePtr).Free();
-                    btTypedConstraint_delete(_native);
-                }
+                btTypedConstraint_delete(_native);
                 _native = IntPtr.Zero;
             }
         }
