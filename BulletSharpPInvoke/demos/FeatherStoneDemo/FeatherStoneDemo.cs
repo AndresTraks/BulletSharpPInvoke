@@ -91,12 +91,12 @@ namespace FeatherStoneDemo
                         // using motionstate is recommended, it provides interpolation capabilities
                         // and only synchronizes 'active' objects
                         DefaultMotionState myMotionState = new DefaultMotionState(startTransform);
-                        RigidBodyConstructionInfo rbInfo =
-                            new RigidBodyConstructionInfo(mass, myMotionState, colShape, localInertia);
-                        RigidBody body = new RigidBody(rbInfo);
-                        rbInfo.Dispose();
-
-                        World.AddRigidBody(body);
+                        using (var rbInfo =
+                            new RigidBodyConstructionInfo(mass, myMotionState, colShape, localInertia))
+                        {
+                            RigidBody body = new RigidBody(rbInfo);
+                            World.AddRigidBody(body);
+                        }
                     }
                 }
             }
@@ -227,8 +227,11 @@ namespace FeatherStoneDemo
             //if (true)
             {
                 CollisionShape box = new BoxShape(halfExtents * Scaling);
-                var bodyInfo = new RigidBodyConstructionInfo(mass, null, box, inertia);
-                RigidBody bodyB = new RigidBody(bodyInfo);
+                RigidBody bodyB;
+                using (var bodyInfo = new RigidBodyConstructionInfo(mass, null, box, inertia))
+                {
+                    bodyB = new RigidBody(bodyInfo);
+                }
                 var collider = new MultiBodyLinkCollider(body, -1);
 
                 collider.CollisionShape = box;

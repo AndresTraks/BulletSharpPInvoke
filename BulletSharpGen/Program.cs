@@ -52,6 +52,7 @@ namespace BulletSharpGen
             OutputSolution(TargetVS.VS2010, externalHeaders);
             OutputSolution(TargetVS.VS2012, externalHeaders);
             OutputSolution(TargetVS.VS2013, externalHeaders);
+            OutputSolution(TargetVS.VS2015, externalHeaders);
 
             CMakeWriter cmake = new CMakeWriter(parser.ExternalHeaders, NamespaceName);
             cmake.Output();
@@ -76,6 +77,9 @@ namespace BulletSharpGen
                     break;
                 case TargetVS.VS2013:
                     targetVersionString = "2013";
+                    break;
+                case TargetVS.VS2015:
+                    targetVersionString = "2015";
                     break;
                 default:
                     throw new NotImplementedException();

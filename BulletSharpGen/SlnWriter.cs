@@ -11,7 +11,8 @@ namespace BulletSharpGen
         VS2008,
         VS2010,
         VS2012,
-        VS2013
+        VS2013,
+        VS2015
     }
 
     class SlnWriter
@@ -266,7 +267,7 @@ namespace BulletSharpGen
             WriteLine("    <CLRSupport>true</CLRSupport>");
             if (conf.IsDebug)
             {
-                if (targetVS == TargetVS.VS2012 || targetVS == TargetVS.VS2013)
+                if (targetVS == TargetVS.VS2012 || targetVS == TargetVS.VS2013 || targetVS == TargetVS.VS2015)
                 {
                     WriteLine("    <UseDebugLibraries>true</UseDebugLibraries>");
                 }
@@ -282,6 +283,10 @@ namespace BulletSharpGen
             else if (targetVS == TargetVS.VS2013)
             {
                 WriteLine("    <PlatformToolset>v120</PlatformToolset>");
+            }
+            else if (targetVS == TargetVS.VS2015)
+            {
+                WriteLine("    <PlatformToolset>v140</PlatformToolset>");
             }
             WriteLine("  </PropertyGroup>");
         }
@@ -487,6 +492,12 @@ namespace BulletSharpGen
                     WriteLineSln("VisualStudioVersion = 12.0.21005.1");
                     //WriteLineSln("MinimumVisualStudioVersion = 10.0.40219.1");
                     break;
+                case TargetVS.VS2015:
+                    WriteLineSln("12.00");
+                    WriteLineSln("# Visual Studio 14");
+                    WriteLineSln("VisualStudioVersion = 14.0.23107.0");
+                    //WriteLineSln("MinimumVisualStudioVersion = 10.0.40219.1");
+                    break;
                 default:
                     throw new NotImplementedException();
             }
@@ -624,6 +635,9 @@ namespace BulletSharpGen
                     case TargetVS.VS2013:
                         Write("12.0");
                         break;
+                    case TargetVS.VS2015:
+                        Write("14.0");
+                        break;
                     default:
                         throw new NotImplementedException();
                 }
@@ -672,9 +686,13 @@ namespace BulletSharpGen
                     {
                         WriteLine("    <TargetFrameworkVersion Condition=\"\'$(TargetFrameworkVersion)\'==\'\'\">v4.5</TargetFrameworkVersion>");
                     }
-                    else // if (targetVS == TargetVS.VS2013)
+                    else if (targetVS == TargetVS.VS2013)
                     {
                         WriteLine("    <TargetFrameworkVersion Condition=\"\'$(TargetFrameworkVersion)\'==\'\'\">v4.5.1</TargetFrameworkVersion>");
+                    }
+                    else // if (targetVS == TargetVS.VS2015)
+                    {
+                        WriteLine("    <TargetFrameworkVersion Condition=\"\'$(TargetFrameworkVersion)\'==\'\'\">v4.5.2</TargetFrameworkVersion>");
                     }
                 }
                 Write("    <RootNamespace>");
