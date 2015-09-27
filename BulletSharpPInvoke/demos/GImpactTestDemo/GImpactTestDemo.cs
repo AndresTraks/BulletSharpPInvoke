@@ -201,6 +201,7 @@ namespace GImpactTestDemo
 #else
             //trimeshShape = new GImpactMeshData(indexVertexArrays);
 #endif
+            CollisionShapes.Add(trimeshShape);
 
 
             // Create Bunny Shape
@@ -227,6 +228,7 @@ namespace GImpactTestDemo
 #else
             //trimeshShape2 = new GImpactMeshData(indexVertexArrays2);
 #endif
+            CollisionShapes.Add(trimeshShape2);
 
             //register GIMPACT algorithm
 #if BULLET_GIMPACT
@@ -266,6 +268,14 @@ namespace GImpactTestDemo
 
             base.OnHandleInput();
         }
+
+        public override void ExitPhysics()
+        {
+            base.ExitPhysics();
+
+            indexVertexArrays.Dispose();
+            indexVertexArrays2.Dispose();
+        }
     }
 
     static class Program
@@ -275,7 +285,7 @@ namespace GImpactTestDemo
         {
             using (Demo demo = new GImpactTestDemo())
             {
-                LibraryManager.Initialize(demo);
+                GraphicsLibraryManager.Run(demo);
             }
         }
     }

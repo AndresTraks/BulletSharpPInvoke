@@ -16,7 +16,7 @@ namespace FeatherStoneDemo
         public bool UsePrismatic { get; set; }
     }
 
-    class FeatherStoneDemo: Demo
+    class FeatherStoneDemo : Demo
     {
         Vector3 eye = new Vector3(-50, 25, 35);
         Vector3 target = new Vector3(0, 5, -10);
@@ -91,10 +91,9 @@ namespace FeatherStoneDemo
                         // using motionstate is recommended, it provides interpolation capabilities
                         // and only synchronizes 'active' objects
                         DefaultMotionState myMotionState = new DefaultMotionState(startTransform);
-                        using (var rbInfo =
-                            new RigidBodyConstructionInfo(mass, myMotionState, colShape, localInertia))
+                        using (var rbInfo = new RigidBodyConstructionInfo(mass, myMotionState, colShape, localInertia))
                         {
-                            RigidBody body = new RigidBody(rbInfo);
+                            var body = new RigidBody(rbInfo);
                             World.AddRigidBody(body);
                         }
                     }
@@ -227,11 +226,8 @@ namespace FeatherStoneDemo
             //if (true)
             {
                 CollisionShape box = new BoxShape(halfExtents * Scaling);
-                RigidBody bodyB;
-                using (var bodyInfo = new RigidBodyConstructionInfo(mass, null, box, inertia))
-                {
-                    bodyB = new RigidBody(bodyInfo);
-                }
+                var bodyInfo = new RigidBodyConstructionInfo(mass, null, box, inertia);
+                RigidBody bodyB = new RigidBody(bodyInfo);
                 var collider = new MultiBodyLinkCollider(body, -1);
 
                 collider.CollisionShape = box;
@@ -284,11 +280,13 @@ namespace FeatherStoneDemo
 
             //using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
 
-            RigidBodyConstructionInfo rbInfo = new RigidBodyConstructionInfo(mass, null, shape, localInertia);
-            RigidBody body = new RigidBody(rbInfo);
-            rbInfo.Dispose();
+            RigidBody body;
+            using (var rbInfo = new RigidBodyConstructionInfo(mass, null, shape, localInertia))
+            {
+                body = new RigidBody(rbInfo);
+            }
+            
             body.WorldTransform = startTransform;
-
             World.AddRigidBody(body, CollisionFilterGroups.DefaultFilter,
                 CollisionFilterGroups.DefaultFilter | CollisionFilterGroups.StaticFilter);
 
@@ -303,7 +301,7 @@ namespace FeatherStoneDemo
         {
             using (Demo demo = new FeatherStoneDemo())
             {
-                LibraryManager.Initialize(demo);
+                GraphicsLibraryManager.Run(demo);
             }
         }
     }

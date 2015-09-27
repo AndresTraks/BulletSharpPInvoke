@@ -83,7 +83,7 @@ namespace BspDemo
         {
             using (Demo demo = new BspDemo())
             {
-                LibraryManager.Initialize(demo);
+                GraphicsLibraryManager.Run(demo);
             }
         }
     }

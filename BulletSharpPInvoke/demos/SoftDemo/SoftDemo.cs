@@ -107,6 +107,7 @@ namespace SoftDemo
             softBodyWorldInfo.WaterNormal = Vector3.Zero;
             softBodyWorldInfo.Gravity = new Vector3(0, -10, 0);
 
+            Graphics.CullingEnabled = true;
             demos[demo]();
         }
 
@@ -272,6 +273,8 @@ namespace SoftDemo
             psb.AppendAnchor(r - 1, body);
             body.UserObject = "LargeBox";
             cutting = true;
+
+            Graphics.CullingEnabled = false;
         }
 
         void Create_LinearStair(int count, Vector3 origin, Vector3 sizes)
@@ -327,6 +330,8 @@ namespace SoftDemo
             //	psb->appendAnchor(0,body);
             //	psb->appendAnchor(r-1,body);
             //	pdemo->m_cutting=true;
+
+            Graphics.CullingEnabled = false;
         }
 
         void Init_Collide()
@@ -373,37 +378,36 @@ namespace SoftDemo
 
         void Init_Collide3()
         {
-            {
-                const float s = 8;
-                SoftBody psb = SoftBodyHelpers.CreatePatch(softBodyWorldInfo, new Vector3(-s, 0, -s),
+            float s = 8;
+            SoftBody psb = SoftBodyHelpers.CreatePatch(softBodyWorldInfo, new Vector3(-s, 0, -s),
                 new Vector3(+s, 0, -s),
                 new Vector3(-s, 0, +s),
                 new Vector3(+s, 0, +s),
                 15, 15, 1 + 2 + 4 + 8, true);
-                psb.Materials[0].Lst = 0.4f;
-                psb.Cfg.Collisions |= Collisions.VFSS;
-                psb.TotalMass = 150;
-                SoftWorld.AddSoftBody(psb);
-            }
-            {
-                const float s = 4;
-                Vector3 o = new Vector3(5, 10, 0);
-                SoftBody psb = SoftBodyHelpers.CreatePatch(softBodyWorldInfo,
+            psb.Materials[0].Lst = 0.4f;
+            psb.Cfg.Collisions |= Collisions.VFSS;
+            psb.TotalMass = 150;
+            SoftWorld.AddSoftBody(psb);
+
+            s = 4;
+            Vector3 o = new Vector3(5, 10, 0);
+            psb = SoftBodyHelpers.CreatePatch(softBodyWorldInfo,
                 new Vector3(-s, 0, -s) + o,
                 new Vector3(+s, 0, -s) + o,
                 new Vector3(-s, 0, +s) + o,
                 new Vector3(+s, 0, +s) + o,
                 7, 7, 0, true);
-                Material pm = psb.AppendMaterial();
-                pm.Lst = 0.1f;
-                pm.Flags -= FMaterial.DebugDraw;
-                psb.GenerateBendingConstraints(2, pm);
-                psb.Materials[0].Lst = 0.5f;
-                psb.Cfg.Collisions |= Collisions.VFSS;
-                psb.TotalMass = 150;
-                SoftWorld.AddSoftBody(psb);
-                cutting = true;
-            }
+            Material pm = psb.AppendMaterial();
+            pm.Lst = 0.1f;
+            pm.Flags -= FMaterial.DebugDraw;
+            psb.GenerateBendingConstraints(2, pm);
+            psb.Materials[0].Lst = 0.5f;
+            psb.Cfg.Collisions |= Collisions.VFSS;
+            psb.TotalMass = 150;
+            SoftWorld.AddSoftBody(psb);
+            cutting = true;
+
+            Graphics.CullingEnabled = false;
         }
 
         // Aerodynamic forces, 50x1g flyers
@@ -437,6 +441,8 @@ namespace SoftDemo
                 psb.AddForce(new Vector3(0, (float)random.NextDouble(), 0), 0);
                 SoftWorld.AddSoftBody(psb);
             }
+
+            Graphics.CullingEnabled = false;
         }
 
         void Init_Aero2()
@@ -484,6 +490,8 @@ namespace SoftDemo
 
                 SoftWorld.AddSoftBody(psb);
             }
+
+            Graphics.CullingEnabled = false;
         }
 
         void Init_Friction()
@@ -516,6 +524,8 @@ namespace SoftDemo
             psb.GenerateClusters(0);
             //psb.Materials[0].Lst = 0.2f;
             psb.Cfg.DF = 10;
+
+            Graphics.CullingEnabled = false;
         }
 
         void Init_TetraCube()
@@ -542,6 +552,8 @@ namespace SoftDemo
             // | Collision.CLSelf;
             psb.Materials[0].Lst = 0.8f;
             cutting = false;
+
+            Graphics.CullingEnabled = false;
         }
 
         void Init_Volume()
@@ -628,6 +640,8 @@ namespace SoftDemo
 
             Create_RbUpStack(10);
             cutting = true;
+
+            Graphics.CullingEnabled = false;
         }
 
         void Init_Bunny()
@@ -705,6 +719,8 @@ namespace SoftDemo
             SoftWorld.AddSoftBody(psb);
             psb.Cfg.PIterations = 1;
             cutting = true;
+
+            Graphics.CullingEnabled = false;
         }
 
         void CreateGear(Vector3 pos, float speed)
@@ -805,6 +821,8 @@ namespace SoftDemo
             SoftWorld.AddSoftBody(psb);
 
             Create_RbUpStack(10);
+
+            Graphics.CullingEnabled = false;
         }
 
         void Init_ClusterCollide2()
@@ -1299,7 +1317,7 @@ namespace SoftDemo
         {
             using (Demo demo = new SoftDemo())
             {
-                LibraryManager.Initialize(demo);
+                GraphicsLibraryManager.Run(demo);
             }
         }
     }

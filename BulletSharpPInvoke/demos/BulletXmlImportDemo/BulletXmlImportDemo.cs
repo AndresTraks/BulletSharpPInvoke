@@ -48,7 +48,7 @@ namespace BulletXmlImportDemo
         {
             using (Demo demo = new BulletXmlImportDemo())
             {
-                LibraryManager.Initialize(demo);
+                GraphicsLibraryManager.Run(demo);
             }
         }
     }

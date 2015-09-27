@@ -47,6 +47,8 @@ namespace CharacterDemo
 
         PairCachingGhostObject ghostObject;
         KinematicCharacterController character;
+        ClosestConvexResultCallback convexResultCallback;
+        SphereShape cameraSphere;
 
         protected override void OnInitialize()
         {
@@ -57,7 +59,7 @@ namespace CharacterDemo
             Graphics.SetInfoText("Move using arrow keys\n" +
                 "F3 - Toggle debug\n" +
                 //"F11 - Toggle fullscreen\n" +
-                "Space - Shoot box");
+                "Space - Jump");
         }
 
         protected override void OnInitializePhysics()
@@ -95,6 +97,11 @@ namespace CharacterDemo
             World.AddCollisionObject(ghostObject, CollisionFilterGroups.CharacterFilter, CollisionFilterGroups.StaticFilter | CollisionFilterGroups.DefaultFilter);
 
             World.AddAction(character);
+
+            Vector3 zero = Vector3.Zero;
+            convexResultCallback = new ClosestConvexResultCallback(ref zero, ref zero);
+            convexResultCallback.CollisionFilterMask = (short)CollisionFilterGroups.StaticFilter;
+            cameraSphere = new SphereShape(0.2f);
         }
 
         public override void ClientResetScene()
@@ -102,7 +109,6 @@ namespace CharacterDemo
             World.Broadphase.OverlappingPairCache.CleanProxyFromPairs(ghostObject.BroadphaseHandle, World.Dispatcher);
 
             character.Reset(World);
-            // WTF
             Vector3 warp = new Vector3(10.210001f, -2.0306311f, 16.576973f);
             character.Warp(ref warp);
         }
@@ -152,23 +158,32 @@ namespace CharacterDemo
             Vector3 cameraPos = pos - forwardDir * 12 + upDir * 5;
 
             //use the convex sweep test to find a safe position for the camera (not blocked by static geometry)
-            SphereShape cameraSphere = new SphereShape(0.2f);
-            ClosestConvexResultCallback cb = new ClosestConvexResultCallback(ref pos, ref cameraPos);
-            cb.CollisionFilterMask = (short)CollisionFilterGroups.StaticFilter;
-            Matrix posMatrix = Matrix.Translation(pos);
-            Matrix cameraPosMatrix = Matrix.Translation(cameraPos);
-            World.ConvexSweepTestRef(cameraSphere, ref posMatrix, ref cameraPosMatrix, cb);
-            cameraSphere.Dispose();
-            if (cb.HasHit)
+            convexResultCallback.ConvexFromWorld = pos;
+            convexResultCallback.ConvexToWorld = cameraPos;
+            convexResultCallback.ClosestHitFraction = 1.0f;
+            World.ConvexSweepTest(cameraSphere, Matrix.Translation(pos), Matrix.Translation(cameraPos), convexResultCallback);
+            if (convexResultCallback.HasHit)
             {
-                cameraPos = Vector3.Lerp(pos, cameraPos, cb.ClosestHitFraction);
+                cameraPos = Vector3.Lerp(pos, cameraPos, convexResultCallback.ClosestHitFraction);
             }
-            cb.Dispose();
             Freelook.SetEyeTarget(cameraPos, pos);
 
             character.SetWalkDirection(walkDirection * walkSpeed);
 
+            if (Input.KeysDown.Contains(Keys.Space))
+            {
+                character.Jump();
+                return;
+            }
+
             base.OnHandleInput();
+        }
+
+        public override void ExitPhysics()
+        {
+            cameraSphere.Dispose();
+
+            base.ExitPhysics();
         }
     }
 
@@ -179,7 +194,7 @@ namespace CharacterDemo
         {
             using (Demo demo = new CharacterDemo())
             {
-                LibraryManager.Initialize(demo);
+                GraphicsLibraryManager.Run(demo);
             }
         }
     }

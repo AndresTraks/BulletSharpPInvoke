@@ -191,9 +191,6 @@ namespace DemoFramework.SlimDX
                 case BroadphaseNativeType.ConeShape:
                     mesh = CreateConeShape(shape as ConeShape);
                     break;
-                case BroadphaseNativeType.Convex2DShape:
-                    Render((shape as Convex2DShape).ChildShape);
-                    return;
                 case BroadphaseNativeType.StaticPlaneShape:
                     mesh = CreateStaticPlaneShape(shape as StaticPlaneShape);
                     RenderStaticPlaneShape(mesh);
@@ -264,12 +261,12 @@ namespace DemoFramework.SlimDX
                     Node n0 = nodes[0];
                     Node n1 = nodes[1];
                     Node n2 = nodes[2];
-                    n0.GetX(out vectors[v].Position);
-                    n0.GetNormal(out vectors[v].Normal);
-                    n1.GetX(out vectors[v + 1].Position);
-                    n1.GetNormal(out vectors[v + 1].Normal);
-                    n2.GetX(out vectors[v + 2].Position);
-                    n2.GetNormal(out vectors[v + 2].Normal);
+                    n0.Position = vectors[v].Position;
+                    n0.Normal = vectors[v].Normal;
+                    n1.Position = vectors[v + 1].Position;
+                    n1.Normal = vectors[v + 1].Normal;
+                    n2.Position = vectors[v + 2].Position;
+                    n2.Normal = vectors[v + 2].Normal;
                     v += 3;
                 }
 
@@ -360,7 +357,7 @@ namespace DemoFramework.SlimDX
 
             device.SetRenderState(RenderState.CullMode, cullMode);
         }
-
+        /*
         public void RenderSoftBodyTextured(SoftBody softBody)
         {
             if (!(softBody.UserObject is Array))
@@ -404,6 +401,6 @@ namespace DemoFramework.SlimDX
                 mesh.DrawSubset(0);
                 mesh.Dispose();
             }
-        }
+        }*/
     }
 }

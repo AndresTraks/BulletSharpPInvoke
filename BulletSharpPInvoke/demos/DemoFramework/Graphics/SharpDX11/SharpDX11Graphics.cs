@@ -50,7 +50,6 @@ namespace DemoFramework.SharpDX11
         EffectMatrixVariable lightInverseViewProjectionVar;
         EffectVectorVariable lightPositionVar;
         EffectVectorVariable eyePositionVar;
-        EffectVectorVariable eyeZAxisVar;
         EffectScalarVariable tanHalfFOVXVar;
         EffectScalarVariable tanHalfFOVYVar;
         EffectScalarVariable projectionAVar;
@@ -99,6 +98,7 @@ namespace DemoFramework.SharpDX11
         ShaderSceneConstants sceneConstants;
         Buffer sceneConstantsBuffer;
         BlendState alphaBlendState;
+        RasterizerStateDescription _rasterizerStateDesc;
 
         InfoText info;
 
@@ -129,6 +129,25 @@ namespace DemoFramework.SharpDX11
             set
             {
                 _swapChain.SetFullscreenState(value, null);
+            }
+        }
+
+        public override bool CullingEnabled
+        {
+            get
+            {
+                return base.CullingEnabled;
+            }
+            set
+            {
+                if (_immediateContext != null)
+                {
+                    _rasterizerStateDesc.CullMode = value ? CullMode.Back : CullMode.None;
+                    _immediateContext.Rasterizer.State.Dispose();
+                    _immediateContext.Rasterizer.State = new RasterizerState(_device, _rasterizerStateDesc);
+                }
+
+                base.CullingEnabled = value;
             }
         }
 
@@ -339,7 +358,6 @@ namespace DemoFramework.SharpDX11
             lightInverseViewProjectionVar = effect2.GetVariableByName("LightInverseViewProjection").AsMatrix();
             lightPositionVar = effect2.GetVariableByName("LightPosition").AsVector();
             eyePositionVar = effect2.GetVariableByName("EyePosition").AsVector();
-            eyeZAxisVar = effect2.GetVariableByName("EyeZAxis").AsVector();
 
             tanHalfFOVXVar = effect2.GetVariableByName("TanHalfFOVX").AsScalar();
             tanHalfFOVYVar = effect2.GetVariableByName("TanHalfFOVY").AsScalar();
@@ -423,17 +441,16 @@ namespace DemoFramework.SharpDX11
             EffectConstantBuffer effectConstantBuffer = effect.GetConstantBufferByName("scene");
             effectConstantBuffer.SetConstantBuffer(sceneConstantsBuffer);
 
-            RasterizerStateDescription desc = new RasterizerStateDescription()
+            _rasterizerStateDesc = new RasterizerStateDescription()
             {
-                CullMode = CullMode.None,
+                CullMode = CullingEnabled ? CullMode.Back : CullMode.None,
                 FillMode = FillMode.Solid,
-                IsFrontCounterClockwise = true,
                 DepthBias = 0,
                 DepthBiasClamp = 0,
                 SlopeScaledDepthBias = 0,
                 IsDepthClipEnabled = true,
             };
-            _immediateContext.Rasterizer.State = new RasterizerState(_device, desc);
+            _immediateContext.Rasterizer.State = new RasterizerState(_device, _rasterizerStateDesc);
 
             DepthStencilStateDescription depthDesc = new DepthStencilStateDescription()
             {
@@ -468,7 +485,7 @@ namespace DemoFramework.SharpDX11
             MeshFactory = _meshFactory;
 
             CreateBuffers();
-            LibraryManager.LibraryStarted();
+            GraphicsLibraryManager.LibraryStarted();
         }
 
         void SetSceneConstants()
@@ -496,7 +513,6 @@ namespace DemoFramework.SharpDX11
             lightInverseViewProjectionVar.SetMatrix(Matrix.Invert(sceneConstants.LightViewProjection));
             lightPositionVar.Set(new Vector4(light, 1));
             eyePositionVar.Set(new Vector4(MathHelper.Convert(freelook.Eye), 1));
-            eyeZAxisVar.Set(new Vector4(Vector3.Normalize(MathHelper.Convert(freelook.Target - freelook.Eye)), 1));
 
             float tanHalfFOVY = (float)Math.Tan(FieldOfView * 0.5f);
             tanHalfFOVXVar.Set(tanHalfFOVY * AspectRatio);

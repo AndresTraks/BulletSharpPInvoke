@@ -165,7 +165,7 @@ namespace SerializeDemo
         {
             using (Demo demo = new SerializeDemo())
             {
-                LibraryManager.Initialize(demo);
+                GraphicsLibraryManager.Run(demo);
             }
         }
     }

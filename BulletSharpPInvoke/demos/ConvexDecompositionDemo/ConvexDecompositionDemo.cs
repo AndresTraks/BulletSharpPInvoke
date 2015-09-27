@@ -215,8 +215,8 @@ namespace ConvexDecompositionDemo
             for (i = 0; i < convexDecomposition.convexShapes.Count; i++)
             {
                 Vector3 centroid = convexDecomposition.convexCentroids[i];
+                var convexShape2 = convexDecomposition.convexShapes[i];
                 Matrix trans = Matrix.Translation(centroid);
-                var convexShape2 = convexDecomposition.convexShapes[i] as ConvexHullShape;
                 if (sEnableSAT)
                 {
                     convexShape2.InitializePolyhedralFeatures();
@@ -282,7 +282,7 @@ namespace ConvexDecompositionDemo
         {
             using (Demo demo = new ConvexDecompositionDemo())
             {
-                LibraryManager.Initialize(demo);
+                GraphicsLibraryManager.Run(demo);
             }
         }
     }

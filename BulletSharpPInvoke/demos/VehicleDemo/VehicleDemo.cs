@@ -64,6 +64,7 @@ namespace VehicleDemo
 
             Graphics.FarPlane = 600.0f;
             //DebugDrawMode = DebugDrawModes.DrawAabb;
+            IsDebugDrawEnabled = true;
         }
 
         protected override void OnInitializePhysics()
@@ -81,7 +82,6 @@ namespace VehicleDemo
             //Broadphase = new DbvtBroadphase();
 
             World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConf);
-            IsDebugDrawEnabled = true;
 
             int i;
             Matrix tr;
@@ -407,7 +407,7 @@ namespace VehicleDemo
         {
             using (Demo demo = new VehicleDemo())
             {
-                LibraryManager.Initialize(demo);
+                GraphicsLibraryManager.Run(demo);
             }
         }
     }

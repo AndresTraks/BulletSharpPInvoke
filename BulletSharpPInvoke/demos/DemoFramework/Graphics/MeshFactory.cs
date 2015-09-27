@@ -66,6 +66,8 @@ namespace DemoFramework
                     return CreateBox2DShape(shape as Box2DShape);
                 case BroadphaseNativeType.CapsuleShape:
                     return CreateCapsule(shape as CapsuleShape, out indices);
+                case BroadphaseNativeType.Convex2DShape:
+                    return CreateShape((shape as Convex2DShape).ChildShape, out indices);
                 case BroadphaseNativeType.ConvexHullShape:
                     indices = null;
                     return CreateConvexHull(shape as ConvexHullShape);
@@ -733,7 +735,7 @@ namespace DemoFramework
             PlaneSpace1(shape.PlaneNormal, out vec0, out vec1);
             const float size = 1000;
 
-            indices = new uint[] { 1, 2, 0, 1, 3, 0 };
+            indices = new uint[] { 0, 2, 1, 0, 1, 3 };
 
             return new Vector3[]
             {
@@ -792,12 +794,6 @@ namespace DemoFramework
         }
 
         /*
-        public ShapeData CreateSoftBody()
-        {
-            // Soft body geometry is recreated each frame. Nothing to do here.
-            return new ShapeData();
-        }
-
         public void UpdateSoftBody(SoftBody softBody, ShapeData shapeData)
         {
             AlignedFaceArray faces = softBody.Faces;

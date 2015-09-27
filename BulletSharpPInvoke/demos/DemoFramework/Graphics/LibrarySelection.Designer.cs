@@ -39,7 +39,7 @@
             this.libraryList.FormattingEnabled = true;
             this.libraryList.Location = new System.Drawing.Point(13, 13);
             this.libraryList.Name = "libraryList";
-            this.libraryList.Size = new System.Drawing.Size(318, 160);
+            this.libraryList.Size = new System.Drawing.Size(266, 160);
             this.libraryList.TabIndex = 0;
             // 
             // runButton
@@ -55,7 +55,7 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(256, 244);
+            this.cancelButton.Location = new System.Drawing.Point(204, 244);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 43);
             this.cancelButton.TabIndex = 2;
@@ -69,14 +69,14 @@
             this.logText.Multiline = true;
             this.logText.Name = "logText";
             this.logText.ReadOnly = true;
-            this.logText.Size = new System.Drawing.Size(318, 58);
+            this.logText.Size = new System.Drawing.Size(266, 58);
             this.logText.TabIndex = 3;
             // 
             // LibrarySelection
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(343, 293);
+            this.ClientSize = new System.Drawing.Size(291, 293);
             this.Controls.Add(this.logText);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.runButton);

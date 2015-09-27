@@ -123,30 +123,33 @@ namespace ConcaveConvexCastDemo
 
         public void Cast(CollisionWorld cw)
         {
+            Vector3 zero = Vector3.Zero;
+            var cb = new ClosestConvexResultCallback(ref zero, ref zero);
             for (int i = 0; i < NUMRAYS_IN_BAR; i++)
             {
-                using (var cb = new ClosestConvexResultCallback(ref source[i], ref dest[i]))
+                cb.ClosestHitFraction = 1.0f;
+                cb.ConvexFromWorld = source[i];
+                cb.ConvexToWorld = dest[i];
+
+                Quaternion qFrom = Quaternion.RotationAxis(new Vector3(1.0f, 0.0f, 0.0f), 0.0f);
+                Quaternion qTo = Quaternion.RotationAxis(new Vector3(1.0f, 0.0f, 0.0f), 0.7f);
+                Matrix from = Matrix.RotationQuaternion(qFrom) * Matrix.Translation(source[i]);
+                Matrix to = Matrix.RotationQuaternion(qTo) * Matrix.Translation(dest[i]);
+                cw.ConvexSweepTest(boxShape, from, to, cb);
+                if (cb.HasHit)
                 {
-                    Quaternion qFrom = Quaternion.RotationAxis(new Vector3(1.0f, 0.0f, 0.0f), 0.0f);
-                    Quaternion qTo = Quaternion.RotationAxis(new Vector3(1.0f, 0.0f, 0.0f), 0.7f);
-                    Matrix from = Matrix.RotationQuaternion(qFrom) * Matrix.Translation(source[i]);
-                    Matrix to = Matrix.RotationQuaternion(qTo) * Matrix.Translation(dest[i]);
-                    cw.ConvexSweepTestRef(boxShape, ref from, ref to, cb);
-                    if (cb.HasHit)
-                    {
-                        hit_surface[i] = cb.HitPointWorld;
-                        hit_com[i] = Vector3.Lerp(source[i], dest[i], cb.ClosestHitFraction);
-                        hit_fraction[i] = cb.ClosestHitFraction;
-                        normal[i] = cb.HitNormalWorld;
-                        normal[i].Normalize();
-                    }
-                    else
-                    {
-                        hit_com[i] = dest[i];
-                        hit_surface[i] = dest[i];
-                        hit_fraction[i] = 1.0f;
-                        normal[i] = new Vector3(1.0f, 0.0f, 0.0f);
-                    }
+                    hit_surface[i] = cb.HitPointWorld;
+                    hit_com[i] = Vector3.Lerp(source[i], dest[i], cb.ClosestHitFraction);
+                    hit_fraction[i] = cb.ClosestHitFraction;
+                    normal[i] = cb.HitNormalWorld;
+                    normal[i].Normalize();
+                }
+                else
+                {
+                    hit_com[i] = dest[i];
+                    hit_surface[i] = dest[i];
+                    hit_fraction[i] = 1.0f;
+                    normal[i] = new Vector3(1.0f, 0.0f, 0.0f);
                 }
             }
 
@@ -230,6 +233,7 @@ namespace ConcaveConvexCastDemo
                 //"F11 - Toggle fullscreen\n" +
                 "Space - Shoot box");
 
+            IsDebugDrawEnabled = true;
             DebugDrawMode = debugMode;
 
             const int totalVerts = NumVertsX * NumVertsY;
@@ -297,7 +301,6 @@ namespace ConcaveConvexCastDemo
             World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConf);
             World.SolverInfo.SplitImpulse = 1;
             World.Gravity = new Vector3(0, -10, 0);
-            IsDebugDrawEnabled = true;
 
 
             CollisionShape colShape = new BoxShape(1);
@@ -375,7 +378,7 @@ namespace ConcaveConvexCastDemo
         {
             using (Demo demo = new ConcaveConvexCastDemo())
             {
-                LibraryManager.Initialize(demo);
+                GraphicsLibraryManager.Run(demo);
             }
         }
     }

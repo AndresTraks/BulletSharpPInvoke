@@ -13,7 +13,9 @@ namespace CollisionInterfaceDemo
             this.world = world;
         }
 
-        public override float AddSingleResult(ManifoldPoint cp, CollisionObjectWrapper colObj0Wrap, int partId0, int index0, CollisionObjectWrapper colObj1Wrap, int partId1, int index1)
+        public override float AddSingleResult(ManifoldPoint cp,
+            CollisionObjectWrapper colObj0Wrap, int partId0, int index0,
+            CollisionObjectWrapper colObj1Wrap, int partId1, int index1)
         {
             Vector3 ptA = cp.PositionWorldOnA;
             Vector3 ptB = cp.PositionWorldOnB;
@@ -28,6 +30,11 @@ namespace CollisionInterfaceDemo
         Vector3 target = new Vector3(0, 3, 0);
 
         CollisionObject[] objects = new CollisionObject[2];
+        DrawingResult renderCallback;
+
+        Vector3 boxMin = new Vector3(-1, -1, -1);
+        Vector3 boxMax = new Vector3(1, 1, 1);
+        Vector3 white = new Vector3(1, 1, 1);
 
         protected override void OnInitialize()
         {
@@ -38,23 +45,12 @@ namespace CollisionInterfaceDemo
                 "F3 - Toggle debug\n" +
                 //"F11 - Toggle fullscreen\n" +
                 "Space - Shoot box");
+
+            IsDebugDrawEnabled = true;
         }
 
         protected override void OnInitializePhysics()
         {
-            BoxShape boxA = new BoxShape(new Vector3(1, 1, 1));
-            boxA.Margin = 0;
-
-            BoxShape boxB = new BoxShape(new Vector3(0.5f, 0.5f, 0.5f));
-            boxB.Margin = 0;
-
-            objects[0] = new CollisionObject();
-            objects[1] = new CollisionObject();
-
-            objects[0].CollisionShape = boxA;
-            objects[1].CollisionShape = boxB;
-
-
             // collision configuration contains default setup for memory, collision setup
             CollisionConf = new DefaultCollisionConfiguration();
             Dispatcher = new CollisionDispatcher(CollisionConf);
@@ -63,7 +59,24 @@ namespace CollisionInterfaceDemo
 
             World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConf);
             World.Gravity = new Vector3(0, -10, 0);
-            IsDebugDrawEnabled = true;
+
+            renderCallback = new DrawingResult(World);
+
+
+            BoxShape boxA = new BoxShape(new Vector3(1, 1, 1));
+            boxA.Margin = 0;
+
+            BoxShape boxB = new BoxShape(new Vector3(0.5f, 0.5f, 0.5f));
+            boxB.Margin = 0;
+
+            CollisionShapes.Add(boxA);
+            CollisionShapes.Add(boxB);
+
+            objects[0] = new CollisionObject();
+            objects[1] = new CollisionObject();
+
+            objects[0].CollisionShape = boxA;
+            objects[1].CollisionShape = boxB;
 
             //World.AddCollisionObject(objects[0]);
             World.AddCollisionObject(objects[1]);
@@ -79,9 +92,6 @@ namespace CollisionInterfaceDemo
         {
             base.OnUpdate();
 
-            DrawingResult renderCallback = new DrawingResult(World);
-            World.ContactTest(objects[0], renderCallback);
-
             Matrix t = objects[0].WorldTransform;
             Vector4 pos = t.Row4;
             t.Row4 = new Vector4(0, 0, 0, 1);
@@ -89,9 +99,11 @@ namespace CollisionInterfaceDemo
             t.Row4 = pos;
             objects[0].WorldTransform = t;
 
-            Vector3 min = new Vector3(-1, -1, -1);
-            Vector3 max = new Vector3(1, 1, 1);
-            World.DebugDrawer.DrawBox(ref min, ref max, ref t, ref min);
+            if (IsDebugDrawEnabled)
+            {
+                World.DebugDrawer.DrawBox(ref boxMin, ref boxMax, ref t, ref white);
+                World.ContactTest(objects[0], renderCallback);
+            }
         }
     }
 
@@ -102,7 +114,7 @@ namespace CollisionInterfaceDemo
         {
             using (Demo demo = new CollisionInterfaceDemo())
             {
-                LibraryManager.Initialize(demo);
+                GraphicsLibraryManager.Run(demo);
             }
         }
     }

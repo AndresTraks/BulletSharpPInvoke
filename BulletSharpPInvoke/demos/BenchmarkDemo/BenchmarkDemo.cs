@@ -332,9 +332,6 @@ namespace BenchmarkDemo
             BoxShape blockShape = new BoxShape(boxSize[0] - collisionRadius, boxSize[1] - collisionRadius, boxSize[2] - collisionRadius);
 
             float mass = 1.0f;
-            Vector3 localInertia;
-            blockShape.CalculateLocalInertia(mass, out localInertia);
-
             float radius = 1.3f * rotSize * boxSize[0] / (float)Math.PI;
 
             // create active boxes
@@ -388,7 +385,7 @@ namespace BenchmarkDemo
         {
             using (Demo demo = new BenchmarkDemo())
             {
-                LibraryManager.Initialize(demo);
+                GraphicsLibraryManager.Run(demo);
             }
         }
     }

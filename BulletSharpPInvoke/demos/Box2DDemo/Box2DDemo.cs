@@ -134,7 +134,7 @@ namespace Box2DDemo
         {
             using (Demo demo = new Box2DDemo())
             {
-                LibraryManager.Initialize(demo);
+                GraphicsLibraryManager.Run(demo);
             }
         }
     }
