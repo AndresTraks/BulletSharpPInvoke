@@ -752,43 +752,68 @@ namespace DemoFramework
 
         static Vector3[] CreateTriangleMesh(StridingMeshInterface meshInterface)
         {
-            var indexStream = meshInterface.GetIndexStream();
-            var vertexStream = meshInterface.GetVertexStream();
-            var indexReader = new BinaryReader(indexStream);
-            var vertexReader = new BinaryReader(vertexStream);
-
-            int numVertices = (int)indexStream.Length / 4;
-            const int vertexStride = 12;
+            // StridingMeshInterface can only be TriangleIndexVertexArray
+            var meshes = (meshInterface as TriangleIndexVertexArray).IndexedMeshArray;
+            int numTriangles = 0;
+            foreach (var mesh in meshes)
+            {
+                numTriangles += mesh.NumTriangles;
+            }
+            int numVertices = numTriangles * 3;
             Vector3[] vertices = new Vector3[numVertices * 2];
 
             int v = 0;
-            while (indexStream.Position < indexStream.Length)
+            for (int part = 0; part < meshInterface.NumSubParts; part++)
             {
-                uint i = indexReader.ReadUInt32();
-                vertexStream.Position = vertexStride * i;
-                Vector3 v0 = new Vector3(vertexReader.ReadSingle(), vertexReader.ReadSingle(), vertexReader.ReadSingle());
-                i = indexReader.ReadUInt32();
-                vertexStream.Position = vertexStride * i;
-                Vector3 v1 = new Vector3(vertexReader.ReadSingle(), vertexReader.ReadSingle(), vertexReader.ReadSingle());
-                i = indexReader.ReadUInt32();
-                vertexStream.Position = vertexStride * i;
-                Vector3 v2 = new Vector3(vertexReader.ReadSingle(), vertexReader.ReadSingle(), vertexReader.ReadSingle());
+                var mesh = meshes[part];
 
-                Vector3 v01 = v0 - v1;
-                Vector3 v02 = v0 - v2;
-                Vector3 normal = Vector3.Cross(v01, v02);
-                normal.Normalize();
+                var indexStream = mesh.GetTriangleStream();
+                var vertexStream = mesh.GetVertexStream();
+                var indexReader = new BinaryReader(indexStream);
+                var vertexReader = new BinaryReader(vertexStream);
 
-                vertices[v++] = v0;
-                vertices[v++] = normal;
-                vertices[v++] = v1;
-                vertices[v++] = normal;
-                vertices[v++] = v2;
-                vertices[v++] = normal;
+                int vertexStride = mesh.VertexStride;
+                int triangleStrideDelta = mesh.TriangleIndexStride - 3 * sizeof(int);
+
+                while (indexStream.Position < indexStream.Length)
+                {
+                    uint i = indexReader.ReadUInt32();
+                    vertexStream.Position = vertexStride * i;
+                    float f1 = vertexReader.ReadSingle();
+                    float f2 = vertexReader.ReadSingle();
+                    float f3 = vertexReader.ReadSingle();
+                    Vector3 v0 = new Vector3(f1, f2, f3);
+                    i = indexReader.ReadUInt32();
+                    vertexStream.Position = vertexStride * i;
+                    f1 = vertexReader.ReadSingle();
+                    f2 = vertexReader.ReadSingle();
+                    f3 = vertexReader.ReadSingle();
+                    Vector3 v1 = new Vector3(f1, f2, f3);
+                    i = indexReader.ReadUInt32();
+                    vertexStream.Position = vertexStride * i;
+                    f1 = vertexReader.ReadSingle();
+                    f2 = vertexReader.ReadSingle();
+                    f3 = vertexReader.ReadSingle();
+                    Vector3 v2 = new Vector3(f1, f2, f3);
+
+                    Vector3 v01 = v0 - v1;
+                    Vector3 v02 = v0 - v2;
+                    Vector3 normal = Vector3.Cross(v01, v02);
+                    normal.Normalize();
+
+                    vertices[v++] = v0;
+                    vertices[v++] = normal;
+                    vertices[v++] = v1;
+                    vertices[v++] = normal;
+                    vertices[v++] = v2;
+                    vertices[v++] = normal;
+
+                    indexStream.Position += triangleStrideDelta;
+                }
+
+                indexStream.Dispose();
+                vertexStream.Dispose();
             }
-
-            indexStream.Dispose();
-            vertexStream.Dispose();
 
             return vertices;
         }

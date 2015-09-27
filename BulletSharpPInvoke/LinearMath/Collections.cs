@@ -379,7 +379,7 @@ namespace BulletSharp
 
         public void Insert(int index, Vector3 item)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public Vector3 this[int index]
@@ -409,7 +409,20 @@ namespace BulletSharp
 
         public void CopyTo(Vector3[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            if (array == null)
+                throw new ArgumentNullException("array");
+
+            if (arrayIndex < 0)
+                throw new ArgumentOutOfRangeException("array");
+
+            int count = Count;
+            if (arrayIndex + count > array.Length)
+                throw new ArgumentException("Array too small.");
+
+            for (int i = 0; i < count; i++)
+            {
+                btVector3_array_at(_native, i, out array[arrayIndex + i]);
+            }
         }
 
         public bool Remove(Vector3 item)
