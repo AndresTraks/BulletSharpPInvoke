@@ -325,7 +325,10 @@ namespace ConcaveRaycastDemo
 
             raycastBar.Move(FrameDelta);
             raycastBar.Cast(World);
-            raycastBar.Draw(World.DebugDrawer);
+            if (IsDebugDrawEnabled)
+            {
+                raycastBar.Draw(World.DebugDrawer);
+            }
 
             base.OnUpdate();
         }

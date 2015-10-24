@@ -346,7 +346,10 @@ namespace ConcaveConvexCastDemo
 
             convexcastBatch.Move(FrameDelta);
             convexcastBatch.Cast(World);
-            convexcastBatch.Draw(World.DebugDrawer);
+            if (IsDebugDrawEnabled)
+            {
+                convexcastBatch.Draw(World.DebugDrawer);
+            }
 
             base.OnUpdate();
         }

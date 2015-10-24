@@ -26,9 +26,8 @@ struct VS_OUT
 
 struct PS_OUT_MRT
 {
-	float4 Light : SV_Target0;
-	float4 Normal : SV_Target1;
-	float4 Diffuse : SV_Target2;
+	float4 Normal : SV_Target0;
+	float4 Diffuse : SV_Target1;
 };
 
 struct VS_DEBUG_IN
@@ -45,7 +44,8 @@ struct VS_DEBUG_OUT
 
 struct PS_DEBUG_OUT_MRT
 {
-	float4 Diffuse : SV_Target2;
+	float4 Normal : SV_Target0;
+	float4 Diffuse : SV_Target1;
 };
 
 float4 shadowGenVS(VS_IN input) : SV_POSITION
@@ -58,7 +58,7 @@ float4 shadowGenVS(VS_IN input) : SV_POSITION
 
 VS_OUT VS(VS_IN input)
 {
-	VS_OUT output = (VS_OUT)0;
+	VS_OUT output;
 
 	float4x4 world = float4x4(input.World0, input.World1, input.World2, input.World3);
 	output.Pos = mul(Projection, mul(View, mul(input.Pos, world)));
@@ -66,12 +66,12 @@ VS_OUT VS(VS_IN input)
 	output.Normal = mul(input.Normal, (float3x3)world);
 	output.Color = input.Color;
 
-    return output;
+	return output;
 }
 
 PS_OUT_MRT PS_MRT( VS_OUT input )
 {
-	PS_OUT_MRT output = (PS_OUT_MRT)0;
+	PS_OUT_MRT output;
 
 	float3 normal = normalize(input.Normal);
 	normal = normal * 0.5 + 0.5; // from -1...1 to 0...1 range
@@ -84,7 +84,7 @@ PS_OUT_MRT PS_MRT( VS_OUT input )
 
 VS_DEBUG_OUT VS_DEBUG(VS_DEBUG_IN input)
 {
-	VS_DEBUG_OUT output = (VS_DEBUG_OUT)0;
+	VS_DEBUG_OUT output;
 
 	output.Pos = mul(View, input.Pos);
 	output.Pos = mul(Projection, output.Pos);
@@ -95,7 +95,8 @@ VS_DEBUG_OUT VS_DEBUG(VS_DEBUG_IN input)
 
 PS_DEBUG_OUT_MRT PS_DEBUG_MRT( VS_DEBUG_OUT input )
 {
-	PS_DEBUG_OUT_MRT output = (PS_DEBUG_OUT_MRT)0;
+	PS_DEBUG_OUT_MRT output;
+	output.Normal = 0;
 	output.Diffuse = float4(input.Color.rgb, 1);
 	return output;
 }

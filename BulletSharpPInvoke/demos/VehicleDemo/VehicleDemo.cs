@@ -99,12 +99,11 @@ namespace VehicleDemo
 
                 TriangleIndexVertexArray vertexArray = new TriangleIndexVertexArray();
                 IndexedMesh mesh = new IndexedMesh();
+                mesh.Allocate(totalTriangles, totalVerts);
                 mesh.NumTriangles = totalTriangles;
                 mesh.NumVertices = totalVerts;
                 mesh.TriangleIndexStride = 3 * sizeof(int);
                 mesh.VertexStride = Vector3.SizeInBytes;
-                mesh.TriangleIndexBase = Marshal.AllocHGlobal(mesh.TriangleIndexStride * totalTriangles);
-                mesh.VertexBase = Marshal.AllocHGlobal(mesh.VertexStride * totalVerts);
                 using (var indicesStream = mesh.GetTriangleStream())
                 {
                     var indices = new BinaryWriter(indicesStream);

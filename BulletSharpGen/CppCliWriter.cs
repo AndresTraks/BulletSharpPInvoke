@@ -866,10 +866,10 @@ namespace BulletSharpGen
             // Write destructor & finalizer
             if (c.BaseClass == null && !c.IsStaticClass)
             {
-                EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Public);
+                // ECMA-372 19.13.2: "The access-specifier of a finalizer in a ref class is ignored."
                 WriteTabs(level + 1);
                 HeaderWriteLine(string.Format("!{0}();", c.ManagedName));
-                EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Protected);
+                // ECMA-372 19.13.1: "The access-specifier of a destructor in a ref class is ignored."
                 WriteTabs(level + 1);
                 HeaderWriteLine(string.Format("~{0}();", c.ManagedName));
                 hasHeaderWhiteSpace = false;

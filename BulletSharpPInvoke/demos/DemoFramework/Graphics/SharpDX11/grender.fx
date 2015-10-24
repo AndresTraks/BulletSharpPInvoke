@@ -1,27 +1,18 @@
 SamplerState defaultSampler
 {
-    Filter = MIN_MAG_MIP_LINEAR;
-    AddressU = Clamp;
-    AddressV = Clamp;
+    Filter = MIN_MAG_MIP_POINT;
 };
 
 Texture2D lightBuffer;
 Texture2D normalBuffer;
 Texture2D diffuseBuffer;
-
-Texture2D depthMap;
-Texture2D lightDepthMap;
+//Texture2D depthMap;
+//Texture2D lightDepthMap;
 
 matrix OverlayViewProjection;
-matrix InverseProjection;
-matrix InverseView;
-matrix LightInverseViewProjection;
-float4 LightPosition;
-float4 EyePosition;
-float TanHalfFOVX;
-float TanHalfFOVY;
-float ProjectionA;
-float ProjectionB;
+//matrix InverseProjection;
+//matrix LightInverseViewProjection;
+float4 SunLightDirection;
 
 struct VS_OUT
 {
@@ -42,48 +33,35 @@ VS_OUT VS(uint id : SV_VertexID)
 
 float4 PS( VS_OUT input ) : SV_Target
 {
-	float4 lightSample = lightBuffer.Sample(defaultSampler, input.texCoord);
-	float4 normalSample = normalBuffer.Sample(defaultSampler, input.texCoord);
 	float3 diffuseSample = diffuseBuffer.Sample(defaultSampler, input.texCoord).rgb;
-	float depthSample = depthMap.Sample(defaultSampler, input.texCoord).x;
-	float lightDepthSample = lightDepthMap.Sample(defaultSampler, input.texCoord).x;
+	float4 normalSample = normalBuffer.Sample(defaultSampler, input.texCoord);
 
-	// from 0...1 to -1...1
-	float2 screenPos = (input.texCoord * float2(2,-2)) + float2(-1,1);
+	// Skip lighting if normal.w == 0
+	if (normalSample.w == 0)
+	{
+		return float4(diffuseSample, 1);
+	}
 
-	float linearDepth = ProjectionB / (depthSample - ProjectionA);
-
-	float4 viewSpacePosition = float4(
-		linearDepth * screenPos.x*TanHalfFOVX,
-		linearDepth * screenPos.y*TanHalfFOVY,
-		linearDepth, 1);
-	float3 worldPosition = mul(viewSpacePosition, InverseView).xyz;
+	float4 lightSample = lightBuffer.Sample(defaultSampler, input.texCoord);
+	//float depthSample = depthMap.Sample(defaultSampler, input.texCoord).x;
+	//float lightDepthSample = lightDepthMap.Sample(defaultSampler, input.texCoord).x;
 
 	float3 normal = normalize((normalSample.xyz - 0.5) * 2); // from 0...1 to -1...1
-	float3 lightDirection = normalize(LightPosition.xyz - worldPosition);
-	float3 viewDirection = normalize(EyePosition.xyz - worldPosition);
 
 	// Ambient term
-	float3 ambientColor = 0.15 * diffuseSample;//float3(1,1,1);
-	float3 ambient = ambientColor;
+	float3 ambientColor = float3(0.4, 0.4, 0.4);
+	float3 ambient = ambientColor * diffuseSample;
 
-	// Diffuse term
-	float3 diffuse = saturate(dot(normal, lightDirection)) * diffuseSample;
-
-	// Specular term
-	float3 specularColor = float3(1.0, 1.0, 1.0);
-	float specularIntensity = saturate(dot(reflect(-lightDirection, normal), viewDirection));
-	specularIntensity = pow(specularIntensity, 64);
-	float3 specular = specularIntensity * specularColor;
+	float3 dirLight = 0.5 * saturate(dot(normal, -SunLightDirection.xyz)) * diffuseSample;
 
 	//float shade *= GetShadowAmount(input.LPos);
 	//diffuse *= shade;
 
 	// Debugging
-	//return float4(worldPosition * 0.01 + 0.25, 1);
+	//return float4(depthSample, depthSample, depthSample, 1);
 	//return float4(normal, 1);
 
-	return float4(ambient + diffuse + 0.2 * specular, 1);
+	return float4(lightSample.xyz + ambient + dirLight, 1);
 }
 
 VS_OUT Overlay_VS(uint id : SV_VertexID)

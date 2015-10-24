@@ -206,27 +206,28 @@ namespace BulletSharp
 		{
 		}
 
-        public TriangleIndexVertexArray(int[] triangles, float[] vertices)
-            : base(btTriangleIndexVertexArray_new())
-        {
-            _initialMesh = new IndexedMesh();
-            _initialMesh.Allocate(triangles.Length / 3, vertices.Length / 3);
-            Marshal.Copy(triangles, 0, _initialMesh.TriangleIndexBase, triangles.Length);
-            Marshal.Copy(vertices, 0, _initialMesh.VertexBase, vertices.Length);
-            AddIndexedMesh(_initialMesh);
-        }
-
         public TriangleIndexVertexArray(ICollection<int> triangles, ICollection<float> vertices)
             : base(btTriangleIndexVertexArray_new())
         {
             _initialMesh = new IndexedMesh();
             _initialMesh.Allocate(triangles.Count / 3, vertices.Count / 3);
-            int[] triangleArray = new int[triangles.Count];
-            triangles.CopyTo(triangleArray, 0);
+            
+            int[] triangleArray = triangles as int[];
+            if (triangleArray == null)
+            {
+                triangleArray = new int[triangles.Count];
+                triangles.CopyTo(triangleArray, 0);
+            }
             Marshal.Copy(triangleArray, 0, _initialMesh.TriangleIndexBase, triangles.Count);
-            float[] vertexArray = new float[vertices.Count];
-            vertices.CopyTo(vertexArray, 0);
+            
+            float[] vertexArray = vertices as float[];
+            if (vertexArray == null)
+            {
+                vertexArray = new float[vertices.Count];
+                vertices.CopyTo(vertexArray, 0);
+            }
             Marshal.Copy(vertexArray, 0, _initialMesh.VertexBase, vertices.Count);
+            
             AddIndexedMesh(_initialMesh);
         }
 
@@ -235,10 +236,14 @@ namespace BulletSharp
         {
             _initialMesh = new IndexedMesh();
             _initialMesh.Allocate(triangles.Count / 3, vertices.Count);
-            int[] triangleArray = new int[triangles.Count];
-            triangles.CopyTo(triangleArray, 0);
+            int[] triangleArray = triangles as int[];
+            if (triangleArray == null)
+            {
+                triangleArray = new int[triangles.Count];
+                triangles.CopyTo(triangleArray, 0);
+            }
             Marshal.Copy(triangleArray, 0, _initialMesh.TriangleIndexBase, triangles.Count);
-            float[] vertexArray = new float[vertices.Count];
+            float[] vertexArray = new float[vertices.Count * 3];
             int i = 0;
             foreach (Vector3 v in vertices)
             {

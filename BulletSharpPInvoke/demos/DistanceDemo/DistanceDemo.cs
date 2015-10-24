@@ -90,7 +90,7 @@ namespace DistanceDemo
             PointCollector result = new PointCollector();
             detector.GetClosestPoints(input, result, null);
 
-            if (result.HasResult)
+            if (result.HasResult && IsDebugDrawEnabled)
             {
                 distanceFrom = result.PointInWorld;
                 distanceTo = result.PointInWorld + result.NormalOnBInWorld * result.Distance;

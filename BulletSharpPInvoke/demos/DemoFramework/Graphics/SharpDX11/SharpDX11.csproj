@@ -56,6 +56,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="InfoText.cs" />
+    <Compile Include="Light.cs" />
     <Compile Include="MathHelper.cs" />
     <Compile Include="MeshFactory.cs" />
     <Compile Include="PhysicsDebugDraw.cs" />
@@ -105,6 +106,7 @@
     <EmbeddedResource Include="shader.fx" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="light.fx" />
     <Content Include="sharpdx_direct3d11_effects_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
