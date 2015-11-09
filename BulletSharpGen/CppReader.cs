@@ -49,6 +49,8 @@ namespace BulletSharpGen
             clangOptions.Add("-x");
             clangOptions.Add("c++-header");
 
+            //clangOptions.Add("-DUSE_DOUBLE_PRECISION");
+
             // Exclude irrelevant methods
             excludedMethods.Add("operator new", null);
             excludedMethods.Add("operator delete", null);
@@ -440,19 +442,11 @@ namespace BulletSharpGen
             Console.Write('.');
 
             var unsavedFiles = new UnsavedFile[] { };
-            if (headerFile.EndsWith("PosixThreadSupport.h"))
+            using (currentTU = index.CreateTranslationUnit(headerFile, clangOptions.ToArray(), unsavedFiles, TranslationUnitFlags.SkipFunctionBodies))
             {
-                List<string> clangOptionsPThread = new List<string>(clangOptions);
-                clangOptionsPThread.Add("-DUSE_PTHREADS");
-                currentTU = index.CreateTranslationUnit(headerFile, clangOptionsPThread.ToArray(), unsavedFiles, TranslationUnitFlags.SkipFunctionBodies);
+                var cur = currentTU.Cursor;
+                cur.VisitChildren(HeaderVisitor);
             }
-            else
-            {
-                currentTU = index.CreateTranslationUnit(headerFile, clangOptions.ToArray(), unsavedFiles, TranslationUnitFlags.SkipFunctionBodies);
-            }
-            var cur = currentTU.Cursor;
-            cur.VisitChildren(HeaderVisitor);
-            currentTU.Dispose();
             currentTU = null;
             headerQueue.Remove(headerFile);
         }

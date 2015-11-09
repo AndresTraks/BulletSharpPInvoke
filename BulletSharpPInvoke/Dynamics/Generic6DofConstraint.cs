@@ -5,6 +5,15 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
+	[Flags]
+	public enum SixDofFlags
+	{
+		None = 0,
+		CfmNormal = 1,
+		CfmStop = 2,
+		ErpStop = 4
+	}
+
 	public class RotationalLimitMotor : IDisposable
 	{
 		internal IntPtr _native;
@@ -475,6 +484,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btTranslationalLimitMotor_getDamping(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
 		static extern IntPtr btTranslationalLimitMotor_getEnableMotor(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btTranslationalLimitMotor_getLimitSoftness(IntPtr obj);
@@ -701,6 +711,11 @@ namespace BulletSharp
 			}
 		}
 
+		public SixDofFlags Flags
+		{
+			get { return btGeneric6DofConstraint_getFlags(_native); }
+		}
+
 		public Matrix FrameOffsetA
 		{
 			get
@@ -761,6 +776,12 @@ namespace BulletSharp
 			set { btGeneric6DofConstraint_setUseFrameOffset(_native, value); }
 		}
 
+		public bool UseLinearReferenceFrameA
+		{
+			get { return btGeneric6DofConstraint_getUseLinearReferenceFrameA(_native); }
+			set { btGeneric6DofConstraint_setUseLinearReferenceFrameA(_native, value); }
+		}
+
 		public bool UseSolveConstraintObsolete
 		{
 			get { return btGeneric6DofConstraint_getUseSolveConstraintObsolete(_native); }
@@ -794,6 +815,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofConstraint_getCalculatedTransformB(IntPtr obj, [Out] out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern SixDofFlags btGeneric6DofConstraint_getFlags(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofConstraint_getFrameOffsetA(IntPtr obj, [Out] out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofConstraint_getFrameOffsetB(IntPtr obj, [Out] out Matrix value);
@@ -816,6 +839,9 @@ namespace BulletSharp
 		static extern bool btGeneric6DofConstraint_getUseFrameOffset(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
+		static extern bool btGeneric6DofConstraint_getUseLinearReferenceFrameA(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btGeneric6DofConstraint_getUseSolveConstraintObsolete(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
@@ -836,6 +862,8 @@ namespace BulletSharp
 		static extern void btGeneric6DofConstraint_setLinearUpperLimit(IntPtr obj, [In] ref Vector3 linearUpper);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofConstraint_setUseFrameOffset(IntPtr obj, bool frameOffsetOnOff);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btGeneric6DofConstraint_setUseLinearReferenceFrameA(IntPtr obj, bool linearReferenceFrameA);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofConstraint_setUseSolveConstraintObsolete(IntPtr obj, bool value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

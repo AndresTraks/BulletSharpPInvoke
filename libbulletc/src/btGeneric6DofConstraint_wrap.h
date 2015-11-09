@@ -91,6 +91,7 @@ extern "C"
 	EXPORT void btGeneric6DofConstraint_getAxis(btGeneric6DofConstraint* obj, int axis_index, btScalar* value);
 	EXPORT void btGeneric6DofConstraint_getCalculatedTransformA(btGeneric6DofConstraint* obj, btScalar* value);
 	EXPORT void btGeneric6DofConstraint_getCalculatedTransformB(btGeneric6DofConstraint* obj, btScalar* value);
+	EXPORT int btGeneric6DofConstraint_getFlags(btGeneric6DofConstraint* obj);
 	EXPORT void btGeneric6DofConstraint_getFrameOffsetA(btGeneric6DofConstraint* obj, btScalar* value);
 	EXPORT void btGeneric6DofConstraint_getFrameOffsetB(btGeneric6DofConstraint* obj, btScalar* value);
 	EXPORT void btGeneric6DofConstraint_getInfo1NonVirtual(btGeneric6DofConstraint* obj, btTypedConstraint_btConstraintInfo1* info);
@@ -101,6 +102,7 @@ extern "C"
 	EXPORT btRotationalLimitMotor* btGeneric6DofConstraint_getRotationalLimitMotor(btGeneric6DofConstraint* obj, int index);
 	EXPORT btTranslationalLimitMotor* btGeneric6DofConstraint_getTranslationalLimitMotor(btGeneric6DofConstraint* obj);
 	EXPORT bool btGeneric6DofConstraint_getUseFrameOffset(btGeneric6DofConstraint* obj);
+	EXPORT bool btGeneric6DofConstraint_getUseLinearReferenceFrameA(btGeneric6DofConstraint* obj);
 	EXPORT bool btGeneric6DofConstraint_getUseSolveConstraintObsolete(btGeneric6DofConstraint* obj);
 	EXPORT bool btGeneric6DofConstraint_isLimited(btGeneric6DofConstraint* obj, int limitIndex);
 	EXPORT void btGeneric6DofConstraint_setAngularLowerLimit(btGeneric6DofConstraint* obj, const btScalar* angularLower);
@@ -111,6 +113,7 @@ extern "C"
 	EXPORT void btGeneric6DofConstraint_setLinearLowerLimit(btGeneric6DofConstraint* obj, const btScalar* linearLower);
 	EXPORT void btGeneric6DofConstraint_setLinearUpperLimit(btGeneric6DofConstraint* obj, const btScalar* linearUpper);
 	EXPORT void btGeneric6DofConstraint_setUseFrameOffset(btGeneric6DofConstraint* obj, bool frameOffsetOnOff);
+	EXPORT void btGeneric6DofConstraint_setUseLinearReferenceFrameA(btGeneric6DofConstraint* obj, bool linearReferenceFrameA);
 	EXPORT void btGeneric6DofConstraint_setUseSolveConstraintObsolete(btGeneric6DofConstraint* obj, bool value);
 	EXPORT bool btGeneric6DofConstraint_testAngularLimitMotor(btGeneric6DofConstraint* obj, int axis_index);
 	EXPORT void btGeneric6DofConstraint_updateRHS(btGeneric6DofConstraint* obj, btScalar timeStep);

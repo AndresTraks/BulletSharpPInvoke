@@ -7,7 +7,7 @@ namespace BulletSharpGen
 {
     class PInvokeWriter : WrapperWriter
     {
-        bool hasClassSeparatingWhitespace;
+        bool hasCppClassSeparatingWhitespace;
         Dictionary<string, string> wrapperHeaderGuards = new Dictionary<string, string>();
 
         public PInvokeWriter(IEnumerable<HeaderDefinition> headerDefinitions, string namespaceName)
@@ -166,6 +166,16 @@ namespace BulletSharpGen
         {
             // Skip methods wrapped by C# properties
             WriteTo cs = (method.Property == null) ? WriteTo.CS : WriteTo.None;
+
+            // Skip delete methods in classes that can't be constructed (including all subclasses).
+            if (method.Name.Equals("delete"))
+            {
+                if (method.Parent.HidePublicConstructors)
+                {
+                    // TODO: Check all subclasses
+                    //return;
+                }
+            }
 
             WriteTabs(1);
             Write("EXPORT ", WriteTo.Header);
@@ -527,7 +537,7 @@ namespace BulletSharpGen
                     Write(")", WriteTo.CS);
                     if (method.Parent.BaseClass.Target.HasPreventDelete)
                     {
-                        Write(", false");
+                        Write(", false", WriteTo.CS);
                     }
                     WriteLine(")", WriteTo.CS);
                     WriteTabs(level + 1, WriteTo.CS);
@@ -608,7 +618,7 @@ namespace BulletSharpGen
                 WriteMethod(method2, level, ref overloadIndex, numOptionalParams, method);
                 return;
             }
-            
+
             EnsureWhiteSpace(WriteTo.Source | WriteTo.CS);
 
             // Skip methods wrapped by C# properties
@@ -725,7 +735,6 @@ namespace BulletSharpGen
             WriteTabs(level, WriteTo.CS);
             WriteLine('}', WriteTo.CS);
             hasCSWhiteSpace = false;
-            hasClassSeparatingWhitespace = false;
         }
 
         void WriteClass(ClassDefinition c, int level)
@@ -766,10 +775,10 @@ namespace BulletSharpGen
                 WriteClass(cl, level + 1);
             }
 
-            if (!hasClassSeparatingWhitespace)
+            if (!hasCppClassSeparatingWhitespace)
             {
                 WriteLine(WriteTo.Header | WriteTo.Source);
-                hasClassSeparatingWhitespace = true;
+                hasCppClassSeparatingWhitespace = true;
             }
 
             // Write native pointer
@@ -906,7 +915,7 @@ namespace BulletSharpGen
             WriteTabs(level, WriteTo.CS);
             WriteLine("}", WriteTo.CS);
             hasCSWhiteSpace = false;
-            hasClassSeparatingWhitespace = false;
+            hasCppClassSeparatingWhitespace = false;
         }
 
         public void WriteClassWrapperMethodPointers(ClassDefinition cl)
@@ -945,10 +954,10 @@ namespace BulletSharpGen
                 baseAbstractMethods = new List<MethodDefinition>();
             }
 
-            if (!hasClassSeparatingWhitespace)
+            if (!hasCppClassSeparatingWhitespace)
             {
                 WriteLine(WriteTo.Header);
-                hasClassSeparatingWhitespace = true;
+                hasCppClassSeparatingWhitespace = true;
             }
 
             string headerGuard = wrapperHeaderGuards[cl.Name];
@@ -1021,7 +1030,7 @@ namespace BulletSharpGen
             }
 
             WriteLine("};", WriteTo.Header);
-            hasClassSeparatingWhitespace = false;
+            hasCppClassSeparatingWhitespace = false;
         }
 
         public void WriteClassWrapperDefinition(ClassDefinition cl)
@@ -1120,10 +1129,10 @@ namespace BulletSharpGen
                 baseAbstractMethods = new List<MethodDefinition>();
             }
 
-            if (!hasClassSeparatingWhitespace)
+            if (!hasCppClassSeparatingWhitespace)
             {
                 WriteLine(WriteTo.Header | WriteTo.Source);
-                hasClassSeparatingWhitespace = true;
+                hasCppClassSeparatingWhitespace = true;
             }
             EnsureWhiteSpace(WriteTo.Source);
 
@@ -1156,7 +1165,7 @@ namespace BulletSharpGen
             }
             WriteLine(");", WriteTo.Source);
             WriteLine('}', WriteTo.Source);
-            hasClassSeparatingWhitespace = false;
+            hasCppClassSeparatingWhitespace = false;
             hasSourceWhiteSpace = false;
         }
 
@@ -1215,7 +1224,7 @@ namespace BulletSharpGen
                 csWriter.WriteLine();
 
                 // Write wrapper class headers
-                hasClassSeparatingWhitespace = true;
+                hasCppClassSeparatingWhitespace = true;
                 var wrappedClasses = header.AllSubClasses.Where(x => wrapperHeaderGuards.ContainsKey(x.Name)).OrderBy(x => x.FullNameCS).ToList();
                 if (wrappedClasses.Count != 0)
                 {
@@ -1247,7 +1256,7 @@ namespace BulletSharpGen
                 csWriter.WriteLine(NamespaceName);
                 csWriter.WriteLine("{");
                 hasCSWhiteSpace = true;
-                hasClassSeparatingWhitespace = true;
+                hasCppClassSeparatingWhitespace = true;
 
                 foreach (EnumDefinition e in header.Enums.OrderBy(x => x.Name))
                 {

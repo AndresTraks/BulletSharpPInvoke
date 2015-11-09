@@ -7,11 +7,6 @@
 
 #include "btDispatcher_wrap.h"
 
-btDispatcherInfo* btDispatcherInfo_new()
-{
-	return new btDispatcherInfo();
-}
-
 btScalar btDispatcherInfo_getAllowedCcdPenetration(btDispatcherInfo* obj)
 {
 	return obj->m_allowedCcdPenetration;
@@ -130,11 +125,6 @@ void btDispatcherInfo_setUseConvexConservativeDistanceUtil(btDispatcherInfo* obj
 void btDispatcherInfo_setUseEpa(btDispatcherInfo* obj, bool value)
 {
 	obj->m_useEpa = value;
-}
-
-void btDispatcherInfo_delete(btDispatcherInfo* obj)
-{
-	delete obj;
 }
 
 

@@ -91,6 +91,11 @@ bool btHingeConstraint_getEnableAngularMotor(btHingeConstraint* obj)
 	return obj->getEnableAngularMotor();
 }
 
+int btHingeConstraint_getFlags(btHingeConstraint* obj)
+{
+	return obj->getFlags();
+}
+
 void btHingeConstraint_getFrameOffsetA(btHingeConstraint* obj, btScalar* value)
 {
 	TRANSFORM_OUT(&obj->getFrameOffsetA(), value);
@@ -145,9 +150,24 @@ void btHingeConstraint_getInfo2NonVirtual(btHingeConstraint* obj, btTypedConstra
 	obj->getInfo2NonVirtual(info, TRANSFORM_USE(transA), TRANSFORM_USE(transB), VECTOR3_USE(angVelA), VECTOR3_USE(angVelB));
 }
 
+btScalar btHingeConstraint_getLimitBiasFactor(btHingeConstraint* obj)
+{
+	return obj->getLimitBiasFactor();
+}
+
+btScalar btHingeConstraint_getLimitRelaxationFactor(btHingeConstraint* obj)
+{
+	return obj->getLimitRelaxationFactor();
+}
+
 btScalar btHingeConstraint_getLimitSign(btHingeConstraint* obj)
 {
 	return obj->getLimitSign();
+}
+
+btScalar btHingeConstraint_getLimitSoftness(btHingeConstraint* obj)
+{
+	return obj->getLimitSoftness();
 }
 
 btScalar btHingeConstraint_getLowerLimit(btHingeConstraint* obj)
@@ -178,6 +198,11 @@ btScalar btHingeConstraint_getUpperLimit(btHingeConstraint* obj)
 bool btHingeConstraint_getUseFrameOffset(btHingeConstraint* obj)
 {
 	return obj->getUseFrameOffset();
+}
+
+bool btHingeConstraint_getUseReferenceFrameA(btHingeConstraint* obj)
+{
+	return obj->getUseReferenceFrameA();
 }
 
 bool btHingeConstraint_hasLimit(btHingeConstraint* obj)
@@ -239,9 +264,19 @@ void btHingeConstraint_setMotorTarget2(btHingeConstraint* obj, const btScalar* q
 	obj->setMotorTarget(QUATERNION_USE(qAinB), dt);
 }
 
+void btHingeConstraint_setMotorTargetVelocity(btHingeConstraint* obj, btScalar motorTargetVelocity)
+{
+	obj->setMotorTargetVelocity(motorTargetVelocity);
+}
+
 void btHingeConstraint_setUseFrameOffset(btHingeConstraint* obj, bool frameOffsetOnOff)
 {
 	obj->setUseFrameOffset(frameOffsetOnOff);
+}
+
+void btHingeConstraint_setUseReferenceFrameA(btHingeConstraint* obj, bool useReferenceFrameA)
+{
+	obj->setUseReferenceFrameA(useReferenceFrameA);
 }
 
 void btHingeConstraint_testLimit(btHingeConstraint* obj, const btScalar* transA, const btScalar* transB)

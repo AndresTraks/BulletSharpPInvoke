@@ -322,7 +322,7 @@ namespace BulletSharp
                             reader.ReadSingle(ConeTwistConstraintFloatData.Offset("LimitSoftness")),
                             reader.ReadSingle(ConeTwistConstraintFloatData.Offset("BiasFactor")),
                             reader.ReadSingle(ConeTwistConstraintFloatData.Offset("RelaxationFactor")));
-                        coneTwist.SetDamping(reader.ReadSingle(ConeTwistConstraintFloatData.Offset("Damping")));
+                        coneTwist.Damping = reader.ReadSingle(ConeTwistConstraintFloatData.Offset("Damping"));
 
                         constraint = coneTwist;
                         break;

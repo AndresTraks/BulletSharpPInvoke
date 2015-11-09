@@ -5,6 +5,14 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
+	[Flags]
+	public enum Point2PointFlags
+	{
+        None = 0,
+		Erp = 1,
+		Cfm = 2
+	}
+
 	public class ConstraintSetting
 	{
 		internal IntPtr _native;
@@ -81,6 +89,11 @@ namespace BulletSharp
 			btPoint2PointConstraint_updateRHS(_native, timeStep);
 		}
 
+		public Point2PointFlags Flags
+		{
+			get { return btPoint2PointConstraint_getFlags(_native); }
+		}
+
 		public Vector3 PivotInA
 		{
 			get
@@ -118,6 +131,8 @@ namespace BulletSharp
 		static extern IntPtr btPoint2PointConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btPoint2PointConstraint_new2(IntPtr rbA, [In] ref Vector3 pivotInA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern Point2PointFlags btPoint2PointConstraint_getFlags(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btPoint2PointConstraint_getInfo1NonVirtual(IntPtr obj, IntPtr info);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

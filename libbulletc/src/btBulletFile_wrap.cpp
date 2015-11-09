@@ -2,6 +2,8 @@
 
 #include "btBulletFile_wrap.h"
 
+#ifndef BULLETC_DISABLE_WORLD_IMPORTERS
+
 bParse_btBulletFile* btBulletFile_new()
 {
 	return new bParse_btBulletFile();
@@ -71,3 +73,5 @@ void btBulletFile_parseData(bParse_btBulletFile* obj)
 {
 	obj->parseData();
 }
+
+#endif

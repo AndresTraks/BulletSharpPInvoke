@@ -2,7 +2,6 @@
 
 extern "C"
 {
-	EXPORT btDispatcherInfo* btDispatcherInfo_new();
 	EXPORT btScalar btDispatcherInfo_getAllowedCcdPenetration(btDispatcherInfo* obj);
 	EXPORT btScalar btDispatcherInfo_getConvexConservativeDistanceThreshold(btDispatcherInfo* obj);
 	EXPORT btIDebugDraw* btDispatcherInfo_getDebugDraw(btDispatcherInfo* obj);
@@ -27,7 +26,6 @@ extern "C"
 	EXPORT void btDispatcherInfo_setUseContinuous(btDispatcherInfo* obj, bool value);
 	EXPORT void btDispatcherInfo_setUseConvexConservativeDistanceUtil(btDispatcherInfo* obj, bool value);
 	EXPORT void btDispatcherInfo_setUseEpa(btDispatcherInfo* obj, bool value);
-	EXPORT void btDispatcherInfo_delete(btDispatcherInfo* obj);
 
 	EXPORT void* btDispatcher_allocateCollisionAlgorithm(btDispatcher* obj, int size);
 	EXPORT void btDispatcher_clearManifold(btDispatcher* obj, btPersistentManifold* manifold);

@@ -4,13 +4,6 @@
 #include "conversion.h"
 #include "btDbvtBroadphase_wrap.h"
 
-btDbvtProxy* btDbvtProxy_new(const btScalar* aabbMin, const btScalar* aabbMax, void* userPtr, short collisionFilterGroup, short collisionFilterMask)
-{
-	VECTOR3_CONV(aabbMin);
-	VECTOR3_CONV(aabbMax);
-	return new btDbvtProxy(VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), userPtr, collisionFilterGroup, collisionFilterMask);
-}
-
 btDbvtNode* btDbvtProxy_getLeaf(btDbvtProxy* obj)
 {
 	return obj->leaf;

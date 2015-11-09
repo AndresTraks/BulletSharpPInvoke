@@ -2,7 +2,6 @@
 
 extern "C"
 {
-	EXPORT btUsageBitfield* btUsageBitfield_new();
 	EXPORT bool btUsageBitfield_getUnused1(btUsageBitfield* obj);
 	EXPORT bool btUsageBitfield_getUnused2(btUsageBitfield* obj);
 	EXPORT bool btUsageBitfield_getUnused3(btUsageBitfield* obj);
@@ -20,7 +19,6 @@ extern "C"
 	EXPORT void btUsageBitfield_setUsedVertexB(btUsageBitfield* obj, bool value);
 	EXPORT void btUsageBitfield_setUsedVertexC(btUsageBitfield* obj, bool value);
 	EXPORT void btUsageBitfield_setUsedVertexD(btUsageBitfield* obj, bool value);
-	EXPORT void btUsageBitfield_delete(btUsageBitfield* obj);
 
 	EXPORT btSubSimplexClosestResult* btSubSimplexClosestResult_new();
 	EXPORT btScalar* btSubSimplexClosestResult_getBarycentricCoords(btSubSimplexClosestResult* obj);

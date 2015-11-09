@@ -28,29 +28,24 @@ namespace BulletSharp
 			return value;
 		}
 
-		public void SetAxisBottom(int dof, Vector3 axis)
-		{
-			btMultibodyLink_setAxisBottom(_native, dof, ref axis);
-		}
-
 		public void SetAxisBottom(int dof, float x, float y, float z)
 		{
-			btMultibodyLink_setAxisBottom2(_native, dof, x, y, z);
+			btMultibodyLink_setAxisBottom(_native, dof, x, y, z);
 		}
 
-		public void SetAxisTop(int dof, Vector3 axis)
+		public void SetAxisBottom(int dof, Vector3 axis)
 		{
-			btMultibodyLink_setAxisTop(_native, dof, ref axis);
+			btMultibodyLink_setAxisBottom2(_native, dof, ref axis);
 		}
 
 		public void SetAxisTop(int dof, float x, float y, float z)
 		{
-			btMultibodyLink_setAxisTop2(_native, dof, x, y, z);
+			btMultibodyLink_setAxisTop(_native, dof, x, y, z);
 		}
 
-		public void UpdateCache()
+		public void SetAxisTop(int dof, Vector3 axis)
 		{
-			btMultibodyLink_updateCache(_native);
+			btMultibodyLink_setAxisTop2(_native, dof, ref axis);
 		}
 
 		public void UpdateCacheMultiDof()
@@ -358,13 +353,13 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setAppliedTorque(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_setAxisBottom(IntPtr obj, int dof, [In] ref Vector3 axis);
+        static extern void btMultibodyLink_setAxisBottom(IntPtr obj, int dof, float x, float y, float z);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btMultibodyLink_setAxisBottom2(IntPtr obj, int dof, float x, float y, float z);
+        static extern void btMultibodyLink_setAxisBottom2(IntPtr obj, int dof, [In] ref Vector3 axis);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_setAxisTop(IntPtr obj, int dof, [In] ref Vector3 axis);
+        static extern void btMultibodyLink_setAxisTop(IntPtr obj, int dof, float x, float y, float z);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btMultibodyLink_setAxisTop2(IntPtr obj, int dof, float x, float y, float z);
+        static extern void btMultibodyLink_setAxisTop2(IntPtr obj, int dof, [In] ref Vector3 axis);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setCachedRotParentToThis(IntPtr obj, [In] ref Quaternion value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

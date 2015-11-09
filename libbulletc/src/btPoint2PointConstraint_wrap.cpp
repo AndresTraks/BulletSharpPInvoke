@@ -57,6 +57,11 @@ btPoint2PointConstraint* btPoint2PointConstraint_new2(btRigidBody* rbA, const bt
 	return new btPoint2PointConstraint(*rbA, VECTOR3_USE(pivotInA));
 }
 
+int btPoint2PointConstraint_getFlags(btPoint2PointConstraint* obj)
+{
+	return obj->getFlags();
+}
+
 void btPoint2PointConstraint_getInfo1NonVirtual(btPoint2PointConstraint* obj, btTypedConstraint::btConstraintInfo1* info)
 {
 	obj->getInfo1NonVirtual(info);

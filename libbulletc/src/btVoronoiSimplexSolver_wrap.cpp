@@ -3,11 +3,6 @@
 #include "conversion.h"
 #include "btVoronoiSimplexSolver_wrap.h"
 
-btUsageBitfield* btUsageBitfield_new()
-{
-	return new btUsageBitfield();
-}
-
 bool btUsageBitfield_getUnused1(btUsageBitfield* obj)
 {
 	return obj->unused1;
@@ -91,11 +86,6 @@ void btUsageBitfield_setUsedVertexC(btUsageBitfield* obj, bool value)
 void btUsageBitfield_setUsedVertexD(btUsageBitfield* obj, bool value)
 {
 	obj->usedVertexD = value;
-}
-
-void btUsageBitfield_delete(btUsageBitfield* obj)
-{
-	delete obj;
 }
 
 

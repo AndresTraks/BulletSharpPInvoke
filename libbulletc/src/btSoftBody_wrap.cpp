@@ -209,14 +209,9 @@ void btSoftBody_AJoint_Specs_setIcontrol(btSoftBody::AJoint::Specs* obj, btSoftB
 }
 
 
-btSoftBody::AJoint* btSoftBody_AJoint_new()
+void btSoftBody_AJoint_getAxis(btSoftBody::AJoint* obj, btScalar* value)
 {
-	return new btSoftBody::AJoint();
-}
-
-btVector3* btSoftBody_AJoint_getAxis(btSoftBody::AJoint* obj)
-{
-	return obj->m_axis;
+	VECTOR3_OUT_VAL(obj->m_axis, value);
 }
 
 btSoftBody::AJoint::IControl* btSoftBody_AJoint_getIcontrol(btSoftBody::AJoint* obj)
@@ -229,11 +224,6 @@ void btSoftBody_AJoint_setIcontrol(btSoftBody::AJoint* obj, btSoftBody::AJoint::
 	obj->m_icontrol = value;
 }
 
-
-btSoftBody::Anchor* btSoftBody_Anchor_new()
-{
-	return new btSoftBody::Anchor();
-}
 
 btRigidBody* btSoftBody_Anchor_getBody(btSoftBody::Anchor* obj)
 {
@@ -447,11 +437,6 @@ void btSoftBody_Body_delete(btSoftBody::Body* obj)
 }
 
 
-btSoftBody::CJoint* btSoftBody_CJoint_new()
-{
-	return new btSoftBody::CJoint();
-}
-
 btScalar btSoftBody_CJoint_getFriction(btSoftBody::CJoint* obj)
 {
 	return obj->m_friction;
@@ -497,11 +482,6 @@ void btSoftBody_CJoint_setNormal(btSoftBody::CJoint* obj, const btScalar* value)
 	VECTOR3_IN(value, &obj->m_normal);
 }
 
-
-btSoftBody::Cluster* btSoftBody_Cluster_new()
-{
-	return new btSoftBody::Cluster();
-}
 
 btScalar btSoftBody_Cluster_getAdamping(btSoftBody::Cluster* obj)
 {
@@ -733,11 +713,6 @@ void btSoftBody_Cluster_delete(btSoftBody::Cluster* obj)
 	delete obj;
 }
 
-
-btSoftBody::Config* btSoftBody_Config_new()
-{
-	return new btSoftBody::Config();
-}
 
 btSoftBody::eAeroModel::_ btSoftBody_Config_getAeromodel(btSoftBody::Config* obj)
 {
@@ -1014,16 +989,6 @@ void btSoftBody_Config_setViterations(btSoftBody::Config* obj, int value)
 	obj->viterations = value;
 }
 
-void btSoftBody_Config_delete(btSoftBody::Config* obj)
-{
-	delete obj;
-}
-
-
-btSoftBody::Element* btSoftBody_Element_new()
-{
-	return new btSoftBody::Element();
-}
 
 void* btSoftBody_Element_getTag(btSoftBody::Element* obj)
 {
@@ -1038,12 +1003,6 @@ void btSoftBody_Element_setTag(btSoftBody::Element* obj, void* value)
 void btSoftBody_Element_delete(btSoftBody::Element* obj)
 {
 	delete obj;
-}
-
-
-btSoftBody::Face* btSoftBody_Face_new()
-{
-	return new btSoftBody::Face();
 }
 
 btDbvtNode* btSoftBody_Face_getLeaf(btSoftBody::Face* obj)
@@ -1081,11 +1040,6 @@ void btSoftBody_Face_setRa(btSoftBody::Face* obj, btScalar value)
 	obj->m_ra = value;
 }
 
-
-btSoftBody::Feature* btSoftBody_Feature_new()
-{
-	return new btSoftBody::Feature();
-}
 
 btSoftBody::Material* btSoftBody_Feature_getMaterial(btSoftBody::Feature* obj)
 {
@@ -1420,11 +1374,6 @@ void btSoftBody_LJoint_Specs_setPosition(btSoftBody::LJoint::Specs* obj, const b
 }
 
 
-btSoftBody::LJoint* btSoftBody_LJoint_new()
-{
-	return new btSoftBody::LJoint();
-}
-
 btVector3* btSoftBody_LJoint_getRpos(btSoftBody::LJoint* obj)
 {
 	return obj->m_rpos;
@@ -1476,11 +1425,6 @@ void btSoftBody_Material_setKVST(btSoftBody::Material* obj, btScalar value)
 	obj->m_kVST = value;
 }
 
-
-btSoftBody::Node* btSoftBody_Node_new()
-{
-	return new btSoftBody::Node();
-}
 
 btScalar btSoftBody_Node_getArea(btSoftBody::Node* obj)
 {
@@ -1573,11 +1517,6 @@ void btSoftBody_Node_setX(btSoftBody::Node* obj, const btScalar* value)
 }
 
 
-btSoftBody::Note* btSoftBody_Note_new()
-{
-	return new btSoftBody::Note();
-}
-
 btScalar* btSoftBody_Note_getCoords(btSoftBody::Note* obj)
 {
 	return obj->m_coords;
@@ -1618,11 +1557,6 @@ void btSoftBody_Note_setText(btSoftBody::Note* obj, const char* value)
 	obj->m_text = value;
 }
 
-
-btSoftBody::Pose* btSoftBody_Pose_new()
-{
-	return new btSoftBody::Pose();
-}
 
 void btSoftBody_Pose_getAqq(btSoftBody::Pose* obj, btScalar* value)
 {
@@ -1702,11 +1636,6 @@ void btSoftBody_Pose_setScl(btSoftBody::Pose* obj, const btScalar* value)
 void btSoftBody_Pose_setVolume(btSoftBody::Pose* obj, btScalar value)
 {
 	obj->m_volume = value;
-}
-
-void btSoftBody_Pose_delete(btSoftBody::Pose* obj)
-{
-	delete obj;
 }
 
 
@@ -2034,11 +1963,6 @@ void btSoftBody_sMedium_delete(btSoftBody::sMedium* obj)
 }
 
 
-btSoftBody::SolverState* btSoftBody_SolverState_new()
-{
-	return new btSoftBody::SolverState();
-}
-
 btScalar btSoftBody_SolverState_getIsdt(btSoftBody::SolverState* obj)
 {
 	return obj->isdt;
@@ -2087,11 +2011,6 @@ void btSoftBody_SolverState_setUpdmrg(btSoftBody::SolverState* obj, btScalar val
 void btSoftBody_SolverState_setVelmrg(btSoftBody::SolverState* obj, btScalar value)
 {
 	obj->velmrg = value;
-}
-
-void btSoftBody_SolverState_delete(btSoftBody::SolverState* obj)
-{
-	delete obj;
 }
 
 
@@ -2145,11 +2064,6 @@ void btSoftBody_sRayCast_delete(btSoftBody::sRayCast* obj)
 	delete obj;
 }
 
-
-btSoftBody::Tetra* btSoftBody_Tetra_new()
-{
-	return new btSoftBody::Tetra();
-}
 
 btVector3* btSoftBody_Tetra_getC0(btSoftBody::Tetra* obj)
 {

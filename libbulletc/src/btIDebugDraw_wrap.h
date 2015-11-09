@@ -1,59 +1,59 @@
 #include "main.h"
 
 #ifndef BT_IDEBUG_DRAW__H
-#define pDrawAabb void*
-#define pDrawArc void*
-#define pDrawBox void*
-#define pDrawCapsule void*
-#define pDrawCone void*
-#define pDrawContactPoint void*
-#define pDrawCylinder void*
-#define pDrawLine void*
-#define pDrawPlane void*
-#define pDrawSphere void*
-#define pDrawSpherePatch void*
-#define pDrawTransform void*
-#define pDrawTriangle void*
-#define pGetDebugMode void*
+#define pIDebugDraw_DrawAabb void*
+#define pIDebugDraw_DrawArc void*
+#define pIDebugDraw_DrawBox void*
+#define pIDebugDraw_DrawCapsule void*
+#define pIDebugDraw_DrawCone void*
+#define pIDebugDraw_DrawContactPoint void*
+#define pIDebugDraw_DrawCylinder void*
+#define pIDebugDraw_DrawLine void*
+#define pIDebugDraw_DrawPlane void*
+#define pIDebugDraw_DrawSphere void*
+#define pIDebugDraw_DrawSpherePatch void*
+#define pIDebugDraw_DrawTransform void*
+#define pIDebugDraw_DrawTriangle void*
+#define pIDebugDraw_GetDebugMode void*
 #define pSimpleCallback void*
 
 #define btIDebugDrawWrapper void
 #else
-typedef void (*pDrawAabb)(const btScalar* from, const btScalar* to, const btScalar* color);
-typedef void (*pDrawArc)(const btScalar* center, const btScalar* normal, const btScalar* axis,
+typedef void (*pIDebugDraw_DrawAabb)(const btScalar* from, const btScalar* to, const btScalar* color);
+typedef void (*pIDebugDraw_DrawArc)(const btScalar* center, const btScalar* normal, const btScalar* axis,
 	btScalar radiusA, btScalar radiusB, btScalar minAngle, btScalar maxAngle, const btScalar* color, bool drawSect, btScalar stepDegrees);
-typedef void (*pDrawBox)(const btScalar* bbMin, const btScalar* bbMax, const btScalar* trans, const btScalar* color);
-typedef void (*pDrawCapsule)(btScalar radius, btScalar halfHeight, int upAxis, const btScalar* transform, const btScalar* color);
-typedef void (*pDrawCone)(btScalar radius, btScalar height, int upAxis, const btScalar* transform, const btScalar* color);
-typedef void (*pDrawContactPoint)(const btScalar* PointOnB, const btScalar* normalOnB, btScalar distance, int lifeTime, const btScalar* color);
-typedef void (*pDrawCylinder)(btScalar radius, btScalar halfHeight, int upAxis, const btScalar* transform, const btScalar* color);
-typedef void (*pDrawLine)(const btScalar* from, const btScalar* to, const btScalar* color);
-typedef void (*pDrawPlane)(const btScalar* planeNormal, btScalar planeConst, const btScalar* transform, const btScalar* color);
-typedef void (*pDrawSphere)(btScalar radius, const btScalar* transform, const btScalar* color);
-typedef void (*pDrawSpherePatch)(const btScalar* center, const btScalar* up, const btScalar* axis, btScalar radius,
+typedef void (*pIDebugDraw_DrawBox)(const btScalar* bbMin, const btScalar* bbMax, const btScalar* trans, const btScalar* color);
+typedef void (*pIDebugDraw_DrawCapsule)(btScalar radius, btScalar halfHeight, int upAxis, const btScalar* transform, const btScalar* color);
+typedef void (*pIDebugDraw_DrawCone)(btScalar radius, btScalar height, int upAxis, const btScalar* transform, const btScalar* color);
+typedef void (*pIDebugDraw_DrawContactPoint)(const btScalar* PointOnB, const btScalar* normalOnB, btScalar distance, int lifeTime, const btScalar* color);
+typedef void (*pIDebugDraw_DrawCylinder)(btScalar radius, btScalar halfHeight, int upAxis, const btScalar* transform, const btScalar* color);
+typedef void (*pIDebugDraw_DrawLine)(const btScalar* from, const btScalar* to, const btScalar* color);
+typedef void (*pIDebugDraw_DrawPlane)(const btScalar* planeNormal, btScalar planeConst, const btScalar* transform, const btScalar* color);
+typedef void (*pIDebugDraw_DrawSphere)(btScalar radius, const btScalar* transform, const btScalar* color);
+typedef void (*pIDebugDraw_DrawSpherePatch)(const btScalar* center, const btScalar* up, const btScalar* axis, btScalar radius,
 	btScalar minTh, btScalar maxTh, btScalar minPs, btScalar maxPs, const btScalar* color, btScalar stepDegrees);
-typedef void (*pDrawTransform)(const btScalar* transform, btScalar orthoLen);
-typedef void (*pDrawTriangle)(const btScalar* v0, const btScalar* v1, const btScalar* v2, const btScalar* color, btScalar);
-typedef int(*pGetDebugMode)();
+typedef void (*pIDebugDraw_DrawTransform)(const btScalar* transform, btScalar orthoLen);
+typedef void (*pIDebugDraw_DrawTriangle)(const btScalar* v0, const btScalar* v1, const btScalar* v2, const btScalar* color, btScalar __unnamed4);
+typedef int (*pIDebugDraw_GetDebugMode)();
 typedef void (*pSimpleCallback)(int x);
 
 class btIDebugDrawWrapper : public btIDebugDraw
 {
 private:
-	pDrawAabb _drawAabbCallback;
-	pDrawArc _drawArcCallback;
-	pDrawBox _drawBoxCallback;
-	pDrawCapsule _drawCapsuleCallback;
-	pDrawCone _drawConeCallback;
-	pDrawContactPoint _drawContactPointCallback;
-	pDrawCylinder _drawCylinderCallback;
-	pDrawLine _drawLineCallback;
-	pDrawPlane _drawPlaneCallback;
-	pDrawSphere _drawSphereCallback;
-	pDrawSpherePatch _drawSpherePatchCallback;
-	pDrawTransform _drawTransformCallback;
-	pDrawTriangle _drawTriangleCallback;
-	pGetDebugMode _getDebugModeCallback;
+	pIDebugDraw_DrawAabb _drawAabbCallback;
+	pIDebugDraw_DrawArc _drawArcCallback;
+	pIDebugDraw_DrawBox _drawBoxCallback;
+	pIDebugDraw_DrawCapsule _drawCapsuleCallback;
+	pIDebugDraw_DrawCone _drawConeCallback;
+	pIDebugDraw_DrawContactPoint _drawContactPointCallback;
+	pIDebugDraw_DrawCylinder _drawCylinderCallback;
+	pIDebugDraw_DrawLine _drawLineCallback;
+	pIDebugDraw_DrawPlane _drawPlaneCallback;
+	pIDebugDraw_DrawSphere _drawSphereCallback;
+	pIDebugDraw_DrawSpherePatch _drawSpherePatchCallback;
+	pIDebugDraw_DrawTransform _drawTransformCallback;
+	pIDebugDraw_DrawTriangle _drawTriangleCallback;
+	pIDebugDraw_GetDebugMode _getDebugModeCallback;
 
 public:
 	void* _debugDrawGCHandle;
@@ -61,10 +61,10 @@ public:
 	
 	pSimpleCallback _cb;
 
-	btIDebugDrawWrapper(void* debugDrawGCHandle, pDrawAabb drawAabbCallback, pDrawArc drawArcCallback, pDrawBox drawBoxCallback,
-		pDrawCapsule drawCapsuleCallback, pDrawCone drawConeCallback, pDrawContactPoint drawContactPointCallback, pDrawCylinder drawCylinderCallback, pDrawLine drawLineCallback,
-		pDrawPlane drawPlaneCallback, pDrawSphere drawSphereCallback, pDrawSpherePatch drawSpherePatch, pDrawTransform drawTransformCallback,
-		pDrawTriangle drawTriangleCallback, pGetDebugMode getDebugModeCallback, pSimpleCallback cb);
+	btIDebugDrawWrapper(void* debugDrawGCHandle, pIDebugDraw_DrawAabb drawAabbCallback, pIDebugDraw_DrawArc drawArcCallback, pIDebugDraw_DrawBox drawBoxCallback,
+		pIDebugDraw_DrawCapsule drawCapsuleCallback, pIDebugDraw_DrawCone drawConeCallback, pIDebugDraw_DrawContactPoint drawContactPointCallback, pIDebugDraw_DrawCylinder drawCylinderCallback, pIDebugDraw_DrawLine drawLineCallback,
+		pIDebugDraw_DrawPlane drawPlaneCallback, pIDebugDraw_DrawSphere drawSphereCallback, pIDebugDraw_DrawSpherePatch drawSpherePatchCallback, pIDebugDraw_DrawTransform drawTransformCallback,
+		pIDebugDraw_DrawTriangle drawTriangleCallback, pIDebugDraw_GetDebugMode getDebugModeCallback, pSimpleCallback cb);
 
 	virtual void draw3dText(const btVector3& location, const char* textString);
 	virtual void drawAabb(const btVector3& from, const btVector3& to, const btVector3& color);
@@ -113,10 +113,10 @@ public:
 
 extern "C"
 {
-	EXPORT btIDebugDrawWrapper* btIDebugDrawWrapper_new(void* debugDrawGCHandle, pDrawAabb drawAabbCallback,
-		pDrawArc drawArcCallback, pDrawBox drawBoxCallback, pDrawCapsule drawCapsule, pDrawCone drawCone, pDrawContactPoint drawContactPointCallback,
-		pDrawCylinder drawCylinderCallback, pDrawLine drawLineCallback, pDrawPlane drawPlaneCallback, pDrawSphere drawSphereCallback,
-		pDrawSpherePatch drawSpherePatchCallback, pDrawTransform drawTransformCallback, pDrawTriangle drawTriangleCallback, pGetDebugMode getDebugModeCallback, pSimpleCallback cb);
+	EXPORT btIDebugDrawWrapper* btIDebugDrawWrapper_new(void* debugDrawGCHandle, pIDebugDraw_DrawAabb drawAabbCallback,
+		pIDebugDraw_DrawArc drawArcCallback, pIDebugDraw_DrawBox drawBoxCallback, pIDebugDraw_DrawCapsule drawCapsule, pIDebugDraw_DrawCone drawCone, pIDebugDraw_DrawContactPoint drawContactPointCallback,
+		pIDebugDraw_DrawCylinder drawCylinderCallback, pIDebugDraw_DrawLine drawLineCallback, pIDebugDraw_DrawPlane drawPlaneCallback, pIDebugDraw_DrawSphere drawSphereCallback,
+		pIDebugDraw_DrawSpherePatch drawSpherePatchCallback, pIDebugDraw_DrawTransform drawTransformCallback, pIDebugDraw_DrawTriangle drawTriangleCallback, pIDebugDraw_GetDebugMode getDebugModeCallback, pSimpleCallback cb);
 	EXPORT void* btIDebugDrawWrapper_getGCHandle(btIDebugDrawWrapper* obj);
 
 	EXPORT void btIDebugDraw_delete(btIDebugDraw* obj);

@@ -3,71 +3,6 @@
 #include "conversion.h"
 #include "btBoxCollision_wrap.h"
 
-BT_BOX_BOX_TRANSFORM_CACHE* BT_BOX_BOX_TRANSFORM_CACHE_new()
-{
-	return new BT_BOX_BOX_TRANSFORM_CACHE();
-}
-
-void BT_BOX_BOX_TRANSFORM_CACHE_calc_absolute_matrix(BT_BOX_BOX_TRANSFORM_CACHE* obj)
-{
-	obj->calc_absolute_matrix();
-}
-
-void BT_BOX_BOX_TRANSFORM_CACHE_calc_from_full_invert(BT_BOX_BOX_TRANSFORM_CACHE* obj, const btScalar* trans0, const btScalar* trans1)
-{
-	TRANSFORM_CONV(trans0);
-	TRANSFORM_CONV(trans1);
-	obj->calc_from_full_invert(TRANSFORM_USE(trans0), TRANSFORM_USE(trans1));
-}
-
-void BT_BOX_BOX_TRANSFORM_CACHE_calc_from_homogenic(BT_BOX_BOX_TRANSFORM_CACHE* obj, const btScalar* trans0, const btScalar* trans1)
-{
-	TRANSFORM_CONV(trans0);
-	TRANSFORM_CONV(trans1);
-	obj->calc_from_homogenic(TRANSFORM_USE(trans0), TRANSFORM_USE(trans1));
-}
-
-void BT_BOX_BOX_TRANSFORM_CACHE_getAR(BT_BOX_BOX_TRANSFORM_CACHE* obj, btScalar* value)
-{
-	MATRIX3X3_OUT(&obj->m_AR, value);
-}
-
-void BT_BOX_BOX_TRANSFORM_CACHE_getR1to0(BT_BOX_BOX_TRANSFORM_CACHE* obj, btScalar* value)
-{
-	MATRIX3X3_OUT(&obj->m_R1to0, value);
-}
-
-void BT_BOX_BOX_TRANSFORM_CACHE_getT1to0(BT_BOX_BOX_TRANSFORM_CACHE* obj, btScalar* value)
-{
-	VECTOR3_OUT(&obj->m_T1to0, value);
-}
-
-void BT_BOX_BOX_TRANSFORM_CACHE_setAR(BT_BOX_BOX_TRANSFORM_CACHE* obj, const btScalar* value)
-{
-	MATRIX3X3_IN(value, &obj->m_AR);
-}
-
-void BT_BOX_BOX_TRANSFORM_CACHE_setR1to0(BT_BOX_BOX_TRANSFORM_CACHE* obj, const btScalar* value)
-{
-	MATRIX3X3_IN(value, &obj->m_R1to0);
-}
-
-void BT_BOX_BOX_TRANSFORM_CACHE_setT1to0(BT_BOX_BOX_TRANSFORM_CACHE* obj, const btScalar* value)
-{
-	VECTOR3_IN(value, &obj->m_T1to0);
-}
-
-void BT_BOX_BOX_TRANSFORM_CACHE_transform(BT_BOX_BOX_TRANSFORM_CACHE* obj, const btScalar* point, btScalar* value)
-{
-	VECTOR3_CONV(point);
-	VECTOR3_OUT_VAL(obj->transform(VECTOR3_USE(point)), value);
-}
-
-void BT_BOX_BOX_TRANSFORM_CACHE_delete(BT_BOX_BOX_TRANSFORM_CACHE* obj)
-{
-	delete obj;
-}
-
 
 btAABB* btAABB_new()
 {
@@ -129,7 +64,7 @@ bool btAABB_collide_triangle_exact(btAABB* obj, const btScalar* p1, const btScal
 	VECTOR3_CONV(p1);
 	VECTOR3_CONV(p2);
 	VECTOR3_CONV(p3);
-	VECTOR4_DEF(triangle_plane);
+	VECTOR4_CONV(triangle_plane);
 	return obj->collide_triangle_exact(VECTOR3_USE(p1), VECTOR3_USE(p2), VECTOR3_USE(p3), VECTOR4_USE(triangle_plane));
 }
 

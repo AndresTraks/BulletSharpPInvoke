@@ -5,6 +5,24 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
+	[Flags]
+	public enum SliderFlags
+	{
+        None = 0,
+		CfmDirLinear = 1,
+		ErpDirLinear = 2,
+		CfmDirAngular = 4,
+		ErpDirAngular = 8,
+		CfmOrthoLinear = 16,
+		ErpOrthoLinear = 32,
+		CfmOrthoAngular = 64,
+		ErpOrthoAngular = 128,
+		CfmLimitLinear = 512,
+		ErpLimitLinear = 1024,
+		CfmLimitAngular = 2048,
+		ErpLimitAngular = 4096
+	}
+
 	public class SliderConstraint : TypedConstraint
 	{
 		public SliderConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix frameInA, Matrix frameInB, bool useLinearReferenceFrameA)
@@ -145,6 +163,11 @@ namespace BulletSharp
 		{
 			get { return btSliderConstraint_getDampingOrthoLin(_native); }
 			set { btSliderConstraint_setDampingOrthoLin(_native, value); }
+		}
+
+		public SliderFlags Flags
+		{
+			get { return btSliderConstraint_getFlags(_native); }
 		}
 
 		public Matrix FrameOffsetA
@@ -360,6 +383,8 @@ namespace BulletSharp
 		static extern float btSliderConstraint_getDampingOrthoAng(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSliderConstraint_getDampingOrthoLin(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern SliderFlags btSliderConstraint_getFlags(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSliderConstraint_getFrameOffsetA(IntPtr obj, [Out] out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

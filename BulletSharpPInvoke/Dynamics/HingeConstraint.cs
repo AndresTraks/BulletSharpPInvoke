@@ -5,6 +5,16 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
+	[Flags]
+	public enum HingeFlags
+	{
+        None = 0,
+		CfmStop = 1,
+		ErpStop = 2,
+		CfmNormal = 4,
+		ErpNormal = 8
+	}
+
 	public class HingeConstraint : TypedConstraint
 	{
 		public HingeConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 pivotInA, Vector3 pivotInB, Vector3 axisInA, Vector3 axisInB, bool useReferenceFrameA = false)
@@ -110,19 +120,19 @@ namespace BulletSharp
 			btHingeConstraint_setLimit4(_native, low, high, softness, biasFactor, relaxationFactor);
 		}
 
-		public void SetMotorTarget(float targetAngle, float dt)
+		public void SetMotorTarget(float targetAngle, float deltaTime)
 		{
-			btHingeConstraint_setMotorTarget(_native, targetAngle, dt);
+			btHingeConstraint_setMotorTarget(_native, targetAngle, deltaTime);
 		}
 
-        public void SetMotorTargetRef(ref Quaternion qAinB, float dt)
+        public void SetMotorTargetRef(ref Quaternion qAinB, float deltaTime)
         {
-            btHingeConstraint_setMotorTarget2(_native, ref qAinB, dt);
+            btHingeConstraint_setMotorTarget2(_native, ref qAinB, deltaTime);
         }
 
-		public void SetMotorTarget(Quaternion qAinB, float dt)
+		public void SetMotorTarget(Quaternion qAinB, float deltaTime)
 		{
-			btHingeConstraint_setMotorTarget2(_native, ref qAinB, dt);
+			btHingeConstraint_setMotorTarget2(_native, ref qAinB, deltaTime);
 		}
 
         public void TestLimitRef(ref Matrix transA, ref Matrix transB)
@@ -172,6 +182,11 @@ namespace BulletSharp
             set { btHingeConstraint_enableMotor(_native, value); }
 		}
 
+		public HingeFlags Flags
+		{
+			get { return btHingeConstraint_getFlags(_native); }
+		}
+
 		public Matrix FrameOffsetA
 		{
 			get
@@ -202,9 +217,24 @@ namespace BulletSharp
 			get { return btHingeConstraint_getHingeAngle2(_native); }
 		}
 
+		public float LimitBiasFactor
+		{
+			get { return btHingeConstraint_getLimitBiasFactor(_native); }
+		}
+
+		public float LimitRelaxationFactor
+		{
+			get { return btHingeConstraint_getLimitRelaxationFactor(_native); }
+		}
+
 		public float LimitSign
 		{
 			get { return btHingeConstraint_getLimitSign(_native); }
+		}
+
+		public float LimitSoftness
+		{
+			get { return btHingeConstraint_getLimitSoftness(_native); }
 		}
 
 		public float LowerLimit
@@ -239,6 +269,12 @@ namespace BulletSharp
 			set { btHingeConstraint_setUseFrameOffset(_native, value); }
 		}
 
+		public bool UseReferenceFrameA
+		{
+			get { return btHingeConstraint_getUseReferenceFrameA(_native); }
+			set { btHingeConstraint_setUseReferenceFrameA(_native, value); }
+		}
+
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btHingeConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB, [In] ref Vector3 axisInA, [In] ref Vector3 axisInB);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -270,6 +306,8 @@ namespace BulletSharp
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btHingeConstraint_getEnableAngularMotor(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern HingeFlags btHingeConstraint_getFlags(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btHingeConstraint_getFrameOffsetA(IntPtr obj, [Out] out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btHingeConstraint_getFrameOffsetB(IntPtr obj, [Out] out Matrix value);
@@ -286,7 +324,13 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btHingeConstraint_getInfo2NonVirtual(IntPtr obj, IntPtr info, [In] ref Matrix transA, [In] ref Matrix transB, [In] ref Vector3 angVelA, [In] ref Vector3 angVelB);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btHingeConstraint_getLimitBiasFactor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btHingeConstraint_getLimitRelaxationFactor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btHingeConstraint_getLimitSign(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btHingeConstraint_getLimitSoftness(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btHingeConstraint_getLowerLimit(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -300,6 +344,9 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btHingeConstraint_getUseFrameOffset(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
+		static extern bool btHingeConstraint_getUseReferenceFrameA(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btHingeConstraint_hasLimit(IntPtr obj);
@@ -324,7 +371,11 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btHingeConstraint_setMotorTarget2(IntPtr obj, [In] ref Quaternion qAinB, float dt);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btHingeConstraint_setMotorTargetVelocity(IntPtr obj, float motorTargetVelocity);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btHingeConstraint_setUseFrameOffset(IntPtr obj, bool frameOffsetOnOff);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btHingeConstraint_setUseReferenceFrameA(IntPtr obj, bool useReferenceFrameA);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btHingeConstraint_testLimit(IntPtr obj, [In] ref Matrix transA, [In] ref Matrix transB);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

@@ -40,14 +40,34 @@ void btConeTwistConstraint_getAFrame(btConeTwistConstraint* obj, btScalar* value
 	TRANSFORM_OUT(&obj->getAFrame(), value);
 }
 
+bool btConeTwistConstraint_getAngularOnly(btConeTwistConstraint* obj)
+{
+	return obj->getAngularOnly();
+}
+
 void btConeTwistConstraint_getBFrame(btConeTwistConstraint* obj, btScalar* value)
 {
 	TRANSFORM_OUT(&obj->getBFrame(), value);
 }
 
+btScalar btConeTwistConstraint_getBiasFactor(btConeTwistConstraint* obj)
+{
+	return obj->getBiasFactor();
+}
+
+btScalar btConeTwistConstraint_getDamping(btConeTwistConstraint* obj)
+{
+	return obj->getDamping();
+}
+
 btScalar btConeTwistConstraint_getFixThresh(btConeTwistConstraint* obj)
 {
 	return obj->getFixThresh();
+}
+
+int btConeTwistConstraint_getFlags(btConeTwistConstraint* obj)
+{
+	return obj->getFlags();
 }
 
 void btConeTwistConstraint_getFrameOffsetA(btConeTwistConstraint* obj, btScalar* value)
@@ -74,9 +94,34 @@ void btConeTwistConstraint_getInfo2NonVirtual(btConeTwistConstraint* obj, btType
 	obj->getInfo2NonVirtual(info, TRANSFORM_USE(transA), TRANSFORM_USE(transB), MATRIX3X3_USE(invInertiaWorldA), MATRIX3X3_USE(invInertiaWorldB));
 }
 
+btScalar btConeTwistConstraint_getLimit(btConeTwistConstraint* obj, int limitIndex)
+{
+	return obj->getLimit(limitIndex);
+}
+
+btScalar btConeTwistConstraint_getLimitSoftness(btConeTwistConstraint* obj)
+{
+	return obj->getLimitSoftness();
+}
+
+btScalar btConeTwistConstraint_getMaxMotorImpulse(btConeTwistConstraint* obj)
+{
+	return obj->getMaxMotorImpulse();
+}
+
+void btConeTwistConstraint_getMotorTarget(btConeTwistConstraint* obj, btScalar* q)
+{
+	QUATERNION_OUT(&obj->getMotorTarget(), q);
+}
+
 void btConeTwistConstraint_GetPointForAngle(btConeTwistConstraint* obj, btScalar fAngleInRadians, btScalar fLength, btScalar* value)
 {
 	VECTOR3_OUT_VAL(obj->GetPointForAngle(fAngleInRadians, fLength), value);
+}
+
+btScalar btConeTwistConstraint_getRelaxationFactor(btConeTwistConstraint* obj)
+{
+	return obj->getRelaxationFactor();
 }
 
 int btConeTwistConstraint_getSolveSwingLimit(btConeTwistConstraint* obj)
@@ -114,6 +159,16 @@ btScalar btConeTwistConstraint_getTwistSpan(btConeTwistConstraint* obj)
 	return obj->getTwistSpan();
 }
 
+bool btConeTwistConstraint_isMaxMotorImpulseNormalized(btConeTwistConstraint* obj)
+{
+	return obj->isMaxMotorImpulseNormalized();
+}
+
+bool btConeTwistConstraint_isMotorEnabled(btConeTwistConstraint* obj)
+{
+	return obj->isMotorEnabled();
+}
+
 bool btConeTwistConstraint_isPastSwingLimit(btConeTwistConstraint* obj)
 {
 	return obj->isPastSwingLimit();
@@ -141,29 +196,29 @@ void btConeTwistConstraint_setFrames(btConeTwistConstraint* obj, const btScalar*
 	obj->setFrames(TRANSFORM_USE(frameA), TRANSFORM_USE(frameB));
 }
 
-void btConeTwistConstraint_setLimit(btConeTwistConstraint* obj, btScalar _swingSpan1, btScalar _swingSpan2, btScalar _twistSpan)
+void btConeTwistConstraint_setLimit(btConeTwistConstraint* obj, int limitIndex, btScalar limitValue)
+{
+	obj->setLimit(limitIndex, limitValue);
+}
+
+void btConeTwistConstraint_setLimit2(btConeTwistConstraint* obj, btScalar _swingSpan1, btScalar _swingSpan2, btScalar _twistSpan)
 {
 	obj->setLimit(_swingSpan1, _swingSpan2, _twistSpan);
 }
 
-void btConeTwistConstraint_setLimit2(btConeTwistConstraint* obj, btScalar _swingSpan1, btScalar _swingSpan2, btScalar _twistSpan, btScalar _softness)
+void btConeTwistConstraint_setLimit3(btConeTwistConstraint* obj, btScalar _swingSpan1, btScalar _swingSpan2, btScalar _twistSpan, btScalar _softness)
 {
 	obj->setLimit(_swingSpan1, _swingSpan2, _twistSpan, _softness);
 }
 
-void btConeTwistConstraint_setLimit3(btConeTwistConstraint* obj, btScalar _swingSpan1, btScalar _swingSpan2, btScalar _twistSpan, btScalar _softness, btScalar _biasFactor)
+void btConeTwistConstraint_setLimit4(btConeTwistConstraint* obj, btScalar _swingSpan1, btScalar _swingSpan2, btScalar _twistSpan, btScalar _softness, btScalar _biasFactor)
 {
 	obj->setLimit(_swingSpan1, _swingSpan2, _twistSpan, _softness, _biasFactor);
 }
 
-void btConeTwistConstraint_setLimit4(btConeTwistConstraint* obj, btScalar _swingSpan1, btScalar _swingSpan2, btScalar _twistSpan, btScalar _softness, btScalar _biasFactor, btScalar _relaxationFactor)
+void btConeTwistConstraint_setLimit5(btConeTwistConstraint* obj, btScalar _swingSpan1, btScalar _swingSpan2, btScalar _twistSpan, btScalar _softness, btScalar _biasFactor, btScalar _relaxationFactor)
 {
 	obj->setLimit(_swingSpan1, _swingSpan2, _twistSpan, _softness, _biasFactor, _relaxationFactor);
-}
-
-void btConeTwistConstraint_setLimit5(btConeTwistConstraint* obj, int limitIndex, btScalar limitValue)
-{
-	obj->setLimit(limitIndex, limitValue);
 }
 
 void btConeTwistConstraint_setMaxMotorImpulse(btConeTwistConstraint* obj, btScalar maxMotorImpulse)

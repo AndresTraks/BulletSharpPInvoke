@@ -192,8 +192,7 @@ namespace BulletSharpGen
                 "btConstraintSetting", "btSimulationIslandManager",
                 "btSolve2LinearConstraint", "btIndexedMesh", "btTriangleInfoMap",
                 "btAngularLimit", "btContactSolverInfo",
-                "btWheelInfo", "btManifoldPoint", "btCollisionWorld::LocalShapeInfo",
-                "btSequentialImpulseConstraintSolver"};
+                "btWheelInfo", "btManifoldPoint", "btCollisionWorld::LocalShapeInfo"};
 
             // Classes that have OnDisposing/OnDisposed events
             List<string> trackingDisposable = new List<string>() {

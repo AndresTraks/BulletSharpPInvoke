@@ -656,6 +656,9 @@
 
 #ifndef BT_SIMD__QUATERNION_H_
 #define btQuaternion void
+#define btAlignedQuaternionArray void
+#else
+#define btAlignedQuaternionArray btAlignedObjectArray<btQuaternion>
 #endif
 
 #ifndef BT_RAYCASTVEHICLE_H

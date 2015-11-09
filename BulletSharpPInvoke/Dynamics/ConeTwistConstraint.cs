@@ -53,16 +53,6 @@ namespace BulletSharp
 			return value;
 		}
 
-		public void SetAngularOnly(bool angularOnly)
-		{
-			btConeTwistConstraint_setAngularOnly(_native, angularOnly);
-		}
-
-		public void SetDamping(float damping)
-		{
-			btConeTwistConstraint_setDamping(_native, damping);
-		}
-
         public void SetFramesRef(ref Matrix frameA, ref Matrix frameB)
         {
             btConeTwistConstraint_setFrames(_native, ref frameA, ref frameB);
@@ -73,55 +63,35 @@ namespace BulletSharp
 			btConeTwistConstraint_setFrames(_native, ref frameA, ref frameB);
 		}
 
+		public void SetLimit(int limitIndex, float limitValue)
+		{
+			btConeTwistConstraint_setLimit(_native, limitIndex, limitValue);
+		}
+
 		public void SetLimit(float swingSpan1, float swingSpan2, float twistSpan)
 		{
-			btConeTwistConstraint_setLimit(_native, swingSpan1, swingSpan2, twistSpan);
+			btConeTwistConstraint_setLimit2(_native, swingSpan1, swingSpan2, twistSpan);
 		}
 
 		public void SetLimit(float swingSpan1, float swingSpan2, float twistSpan, float softness)
 		{
-			btConeTwistConstraint_setLimit2(_native, swingSpan1, swingSpan2, twistSpan, softness);
+			btConeTwistConstraint_setLimit3(_native, swingSpan1, swingSpan2, twistSpan, softness);
 		}
 
 		public void SetLimit(float swingSpan1, float swingSpan2, float twistSpan, float softness, float biasFactor)
 		{
-			btConeTwistConstraint_setLimit3(_native, swingSpan1, swingSpan2, twistSpan, softness, biasFactor);
+			btConeTwistConstraint_setLimit4(_native, swingSpan1, swingSpan2, twistSpan, softness, biasFactor);
 		}
 
 		public void SetLimit(float swingSpan1, float swingSpan2, float twistSpan, float softness, float biasFactor, float relaxationFactor)
 		{
-			btConeTwistConstraint_setLimit4(_native, swingSpan1, swingSpan2, twistSpan, softness, biasFactor, relaxationFactor);
-		}
-
-		public void SetLimit(int limitIndex, float limitValue)
-		{
-			btConeTwistConstraint_setLimit5(_native, limitIndex, limitValue);
-		}
-
-		public void SetMaxMotorImpulse(float maxMotorImpulse)
-		{
-			btConeTwistConstraint_setMaxMotorImpulse(_native, maxMotorImpulse);
+			btConeTwistConstraint_setLimit5(_native, swingSpan1, swingSpan2, twistSpan, softness, biasFactor, relaxationFactor);
 		}
 
 		public void SetMaxMotorImpulseNormalized(float maxMotorImpulse)
 		{
 			btConeTwistConstraint_setMaxMotorImpulseNormalized(_native, maxMotorImpulse);
 		}
-
-        public void SetMotorTargetRef(ref Quaternion q)
-        {
-            btConeTwistConstraint_setMotorTarget(_native, ref q);
-        }
-
-		public void SetMotorTarget(Quaternion q)
-		{
-			btConeTwistConstraint_setMotorTarget(_native, ref q);
-		}
-
-        public void SetMotorTargetInConstraintSpaceRef(ref Quaternion q)
-        {
-            btConeTwistConstraint_setMotorTargetInConstraintSpace(_native, ref q);
-        }
 
 		public void SetMotorTargetInConstraintSpace(Quaternion q)
 		{
@@ -143,6 +113,12 @@ namespace BulletSharp
 			}
 		}
 
+		public bool AngularOnly
+		{
+			get { return btConeTwistConstraint_getAngularOnly(_native); }
+			set { btConeTwistConstraint_setAngularOnly(_native, value); }
+		}
+
 		public Matrix BFrame
 		{
 			get
@@ -153,10 +129,26 @@ namespace BulletSharp
 			}
 		}
 
+		public float BiasFactor
+		{
+			get { return btConeTwistConstraint_getBiasFactor(_native); }
+		}
+
+		public float Damping
+		{
+			get { return btConeTwistConstraint_getDamping(_native); }
+			set { btConeTwistConstraint_setDamping(_native, value); }
+		}
+
 		public float FixThresh
 		{
 			get { return btConeTwistConstraint_getFixThresh(_native); }
 			set { btConeTwistConstraint_setFixThresh(_native, value); }
+		}
+
+		public int Flags
+		{
+			get { return btConeTwistConstraint_getFlags(_native); }
 		}
 
 		public Matrix FrameOffsetA
@@ -179,9 +171,46 @@ namespace BulletSharp
 			}
 		}
 
+		public bool IsMaxMotorImpulseNormalized
+		{
+			get { return btConeTwistConstraint_isMaxMotorImpulseNormalized(_native); }
+		}
+
+		public bool IsMotorEnabled
+		{
+			get { return btConeTwistConstraint_isMotorEnabled(_native); }
+		}
+
 		public bool IsPastSwingLimit
 		{
 			get { return btConeTwistConstraint_isPastSwingLimit(_native); }
+		}
+
+		public float LimitSoftness
+		{
+			get { return btConeTwistConstraint_getLimitSoftness(_native); }
+		}
+
+		public float MaxMotorImpulse
+		{
+			get { return btConeTwistConstraint_getMaxMotorImpulse(_native); }
+			set { btConeTwistConstraint_setMaxMotorImpulse(_native, value); }
+		}
+
+		public Quaternion MotorTarget
+		{
+			get
+			{
+				Quaternion value;
+				btConeTwistConstraint_getMotorTarget(_native, out value);
+				return value;
+			}
+			set { btConeTwistConstraint_setMotorTarget(_native, ref value); }
+		}
+
+		public float RelaxationFactor
+		{
+			get { return btConeTwistConstraint_getRelaxationFactor(_native); }
 		}
 
 		public int SolveSwingLimit
@@ -232,9 +261,18 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConeTwistConstraint_getAFrame(IntPtr obj, [Out] out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
+		static extern bool btConeTwistConstraint_getAngularOnly(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConeTwistConstraint_getBFrame(IntPtr obj, [Out] out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btConeTwistConstraint_getBiasFactor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btConeTwistConstraint_getDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btConeTwistConstraint_getFixThresh(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern int btConeTwistConstraint_getFlags(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConeTwistConstraint_getFrameOffsetA(IntPtr obj, [Out] out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -244,7 +282,17 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConeTwistConstraint_getInfo2NonVirtual(IntPtr obj, IntPtr info, [In] ref Matrix transA, [In] ref Matrix transB, [In] ref Matrix invInertiaWorldA, [In] ref Matrix invInertiaWorldB);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btConeTwistConstraint_getLimit(IntPtr obj, int limitIndex);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btConeTwistConstraint_getLimitSoftness(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btConeTwistConstraint_getMaxMotorImpulse(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btConeTwistConstraint_getMotorTarget(IntPtr obj, [Out] out Quaternion q);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConeTwistConstraint_GetPointForAngle(IntPtr obj, float fAngleInRadians, float fLength, [Out] out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btConeTwistConstraint_getRelaxationFactor(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btConeTwistConstraint_getSolveSwingLimit(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -261,6 +309,12 @@ namespace BulletSharp
 		static extern float btConeTwistConstraint_getTwistSpan(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
+		static extern bool btConeTwistConstraint_isMaxMotorImpulseNormalized(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
+		static extern bool btConeTwistConstraint_isMotorEnabled(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btConeTwistConstraint_isPastSwingLimit(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConeTwistConstraint_setAngularOnly(IntPtr obj, bool angularOnly);
@@ -271,15 +325,15 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConeTwistConstraint_setFrames(IntPtr obj, [In] ref Matrix frameA, [In] ref Matrix frameB);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConeTwistConstraint_setLimit(IntPtr obj, float _swingSpan1, float _swingSpan2, float _twistSpan);
+		static extern void btConeTwistConstraint_setLimit(IntPtr obj, int limitIndex, float limitValue);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConeTwistConstraint_setLimit2(IntPtr obj, float _swingSpan1, float _swingSpan2, float _twistSpan, float _softness);
+		static extern void btConeTwistConstraint_setLimit2(IntPtr obj, float _swingSpan1, float _swingSpan2, float _twistSpan);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConeTwistConstraint_setLimit3(IntPtr obj, float _swingSpan1, float _swingSpan2, float _twistSpan, float _softness, float _biasFactor);
+		static extern void btConeTwistConstraint_setLimit3(IntPtr obj, float _swingSpan1, float _swingSpan2, float _twistSpan, float _softness);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConeTwistConstraint_setLimit4(IntPtr obj, float _swingSpan1, float _swingSpan2, float _twistSpan, float _softness, float _biasFactor, float _relaxationFactor);
+		static extern void btConeTwistConstraint_setLimit4(IntPtr obj, float _swingSpan1, float _swingSpan2, float _twistSpan, float _softness, float _biasFactor);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConeTwistConstraint_setLimit5(IntPtr obj, int limitIndex, float limitValue);
+		static extern void btConeTwistConstraint_setLimit5(IntPtr obj, float _swingSpan1, float _swingSpan2, float _twistSpan, float _softness, float _biasFactor, float _relaxationFactor);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConeTwistConstraint_setMaxMotorImpulse(IntPtr obj, float maxMotorImpulse);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

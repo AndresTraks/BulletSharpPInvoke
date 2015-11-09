@@ -26,6 +26,26 @@ namespace BulletSharp
 			btGeneric6DofSpringConstraint_enableSpring(_native, index, onOff);
 		}
 
+		public float GetDamping(int index)
+		{
+			return btGeneric6DofSpringConstraint_getDamping(_native, index);
+		}
+
+		public float GetEquilibriumPoint(int index)
+		{
+			return btGeneric6DofSpringConstraint_getEquilibriumPoint(_native, index);
+		}
+
+		public float GetStiffness(int index)
+		{
+			return btGeneric6DofSpringConstraint_getStiffness(_native, index);
+		}
+
+		public bool IsSpringEnabled(int index)
+		{
+			return btGeneric6DofSpringConstraint_isSpringEnabled(_native, index);
+		}
+
 		public void SetDamping(int index, float damping)
 		{
 			btGeneric6DofSpringConstraint_setDamping(_native, index, damping);
@@ -57,6 +77,15 @@ namespace BulletSharp
 		static extern IntPtr btGeneric6DofSpringConstraint_new2(IntPtr rbB, [In] ref Matrix frameInB, bool useLinearReferenceFrameB);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpringConstraint_enableSpring(IntPtr obj, int index, bool onOff);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btGeneric6DofSpringConstraint_getDamping(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btGeneric6DofSpringConstraint_getEquilibriumPoint(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btGeneric6DofSpringConstraint_getStiffness(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
+		static extern bool btGeneric6DofSpringConstraint_isSpringEnabled(IntPtr obj, int index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpringConstraint_setDamping(IntPtr obj, int index, float damping);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

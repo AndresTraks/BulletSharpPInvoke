@@ -2,21 +2,6 @@
 
 extern "C"
 {
-	EXPORT btConstraintRow* btConstraintRow_new();
-	EXPORT btScalar btConstraintRow_getAccumImpulse(btConstraintRow* obj);
-	EXPORT btScalar btConstraintRow_getJacDiagInv(btConstraintRow* obj);
-	EXPORT btScalar btConstraintRow_getLowerLimit(btConstraintRow* obj);
-	EXPORT void btConstraintRow_getNormal(btConstraintRow* obj, btScalar* value);
-	EXPORT btScalar btConstraintRow_getRhs(btConstraintRow* obj);
-	EXPORT btScalar btConstraintRow_getUpperLimit(btConstraintRow* obj);
-	EXPORT void btConstraintRow_setAccumImpulse(btConstraintRow* obj, btScalar value);
-	EXPORT void btConstraintRow_setJacDiagInv(btConstraintRow* obj, btScalar value);
-	EXPORT void btConstraintRow_setLowerLimit(btConstraintRow* obj, btScalar value);
-	EXPORT void btConstraintRow_setNormal(btConstraintRow* obj, btScalar* value);
-	EXPORT void btConstraintRow_setRhs(btConstraintRow* obj, btScalar value);
-	EXPORT void btConstraintRow_setUpperLimit(btConstraintRow* obj, btScalar value);
-	EXPORT void btConstraintRow_delete(btConstraintRow* obj);
-
 	EXPORT btManifoldPoint* btManifoldPoint_new();
 	EXPORT btManifoldPoint* btManifoldPoint_new2(const btScalar* pointA, const btScalar* pointB, const btScalar* normal, btScalar distance);
 	EXPORT btScalar btManifoldPoint_getAppliedImpulse(btManifoldPoint* obj);

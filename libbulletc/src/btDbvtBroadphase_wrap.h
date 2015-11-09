@@ -4,7 +4,6 @@
 
 extern "C"
 {
-	EXPORT btDbvtProxy* btDbvtProxy_new(const btScalar* aabbMin, const btScalar* aabbMax, void* userPtr, short collisionFilterGroup, short collisionFilterMask);
 	EXPORT btDbvtNode* btDbvtProxy_getLeaf(btDbvtProxy* obj);
 	EXPORT btDbvtProxy** btDbvtProxy_getLinks(btDbvtProxy* obj);
 	EXPORT int btDbvtProxy_getStage(btDbvtProxy* obj);

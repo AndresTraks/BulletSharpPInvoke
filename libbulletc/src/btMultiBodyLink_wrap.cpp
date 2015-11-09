@@ -4,7 +4,6 @@
 #include "conversion.h"
 #include "btMultiBodyLink_wrap.h"
 
-
 btSpatialMotionVector* btMultibodyLink_getAbsFrameLocVelocity(btMultibodyLink* obj)
 {
 	return &obj->m_absFrameLocVelocity;
@@ -185,26 +184,26 @@ void btMultibodyLink_setAppliedTorque(btMultibodyLink* obj, const btScalar* valu
 	VECTOR3_IN(value, &obj->m_appliedTorque);
 }
 
-void btMultibodyLink_setAxisBottom(btMultibodyLink* obj, int dof, const btScalar* axis)
+void btMultibodyLink_setAxisBottom(btMultibodyLink* obj, int dof, const btScalar* x, const btScalar* y, const btScalar* z)
+{
+	obj->setAxisBottom(dof, *x, *y, *z);
+}
+
+void btMultibodyLink_setAxisBottom2(btMultibodyLink* obj, int dof, const btScalar* axis)
 {
 	VECTOR3_CONV(axis);
 	obj->setAxisBottom(dof, VECTOR3_USE(axis));
 }
 
-void btMultibodyLink_setAxisBottom2(btMultibodyLink* obj, int dof, const btScalar* x, const btScalar* y, const btScalar* z)
+void btMultibodyLink_setAxisTop(btMultibodyLink* obj, int dof, const btScalar* x, const btScalar* y, const btScalar* z)
 {
-	obj->setAxisBottom(dof, *x, *y, *z);
+	obj->setAxisTop(dof, *x, *y, *z);
 }
 
-void btMultibodyLink_setAxisTop(btMultibodyLink* obj, int dof, const btScalar* axis)
+void btMultibodyLink_setAxisTop2(btMultibodyLink* obj, int dof, const btScalar* axis)
 {
 	VECTOR3_CONV(axis);
 	obj->setAxisTop(dof, VECTOR3_USE(axis));
-}
-
-void btMultibodyLink_setAxisTop2(btMultibodyLink* obj, int dof, const btScalar* x, const btScalar* y, const btScalar* z)
-{
-	obj->setAxisTop(dof, *x, *y, *z);
 }
 
 void btMultibodyLink_setCachedRotParentToThis(btMultibodyLink* obj, const btScalar* value)
@@ -300,11 +299,6 @@ void btMultibodyLink_setPosVarCount(btMultibodyLink* obj, int value)
 void btMultibodyLink_setZeroRotParentToThis(btMultibodyLink* obj, const btScalar* value)
 {
 	QUATERNION_IN(value, &obj->m_zeroRotParentToThis);
-}
-
-void btMultibodyLink_updateCache(btMultibodyLink* obj)
-{
-	obj->updateCache();
 }
 
 void btMultibodyLink_updateCacheMultiDof(btMultibodyLink* obj)
