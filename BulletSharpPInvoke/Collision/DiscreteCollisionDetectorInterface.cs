@@ -181,7 +181,7 @@ namespace BulletSharp
 		static extern void btDiscreteCollisionDetectorInterface_delete(IntPtr obj);
 	}
 
-    public class StorageResult : DiscreteCollisionDetectorInterface.Result
+	public class StorageResult : DiscreteCollisionDetectorInterface.Result
 	{
 		internal StorageResult(IntPtr native)
 			: base(native)

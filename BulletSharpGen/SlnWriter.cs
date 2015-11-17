@@ -680,8 +680,8 @@ namespace BulletSharpGen
                 WriteLine("}</ProjectGuid>");
                 if (targetVS != TargetVS.VS2010)
                 {
-                    WriteLine("    <TargetFrameworkVersion Condition=\"\'$(Configuration)\'==\'Debug XNA 3.1\' OR \'$(Configuration)\'==\'Release XNA 3.1\'\">v2.0</TargetFrameworkVersion>");
-                    WriteLine("    <TargetFrameworkVersion Condition=\"\'$(Configuration)\'==\'Debug XNA 4.0\' OR \'$(Configuration)\'==\'Release XNA 4.0\'\">v4.0</TargetFrameworkVersion>");
+                    //WriteLine("    <TargetFrameworkVersion Condition=\"\'$(Configuration)\'==\'Debug XNA 3.1\' OR \'$(Configuration)\'==\'Release XNA 3.1\'\">v2.0</TargetFrameworkVersion>");
+                    //WriteLine("    <TargetFrameworkVersion Condition=\"\'$(Configuration)\'==\'Debug XNA 4.0\' OR \'$(Configuration)\'==\'Release XNA 4.0\'\">v4.0</TargetFrameworkVersion>");
                     if (targetVS == TargetVS.VS2012)
                     {
                         WriteLine("    <TargetFrameworkVersion Condition=\"\'$(TargetFrameworkVersion)\'==\'\'\">v4.5</TargetFrameworkVersion>");
@@ -692,6 +692,7 @@ namespace BulletSharpGen
                     }
                     else // if (targetVS == TargetVS.VS2015)
                     {
+                        WriteLine("    <TargetFrameworkVersion Condition=\"\'$(Configuration)\'==\'Debug Numerics\' OR \'$(Configuration)\'==\'Release Numerics\'\">v4.6</TargetFrameworkVersion>");
                         WriteLine("    <TargetFrameworkVersion Condition=\"\'$(TargetFrameworkVersion)\'==\'\'\">v4.5.2</TargetFrameworkVersion>");
                     }
                 }

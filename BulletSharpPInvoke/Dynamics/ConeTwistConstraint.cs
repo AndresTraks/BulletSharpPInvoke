@@ -5,6 +5,15 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
+	[Flags]
+	public enum ConeTwistFlags
+	{
+		None = 0,
+		LinearCfm = 1,
+		LinearErp = 2,
+		AngularCfm = 4
+	}
+
 	public class ConeTwistConstraint : TypedConstraint
 	{
 		public ConeTwistConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix rigidBodyAFrame, Matrix rigidBodyBFrame)
@@ -44,6 +53,11 @@ namespace BulletSharp
 		public void GetInfo2NonVirtual(ConstraintInfo2 info, Matrix transA, Matrix transB, Matrix invInertiaWorldA, Matrix invInertiaWorldB)
 		{
 			btConeTwistConstraint_getInfo2NonVirtual(_native, info._native, ref transA, ref transB, ref invInertiaWorldA, ref invInertiaWorldB);
+		}
+
+		public float GetLimit(int limitIndex)
+		{
+			return btConeTwistConstraint_getLimit(_native, limitIndex);
 		}
 
 		public Vector3 GetPointForAngle(float fAngleInRadians, float fLength)
@@ -146,7 +160,7 @@ namespace BulletSharp
 			set { btConeTwistConstraint_setFixThresh(_native, value); }
 		}
 
-		public int Flags
+		public ConeTwistFlags Flags
 		{
 			get { return btConeTwistConstraint_getFlags(_native); }
 		}
@@ -272,7 +286,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btConeTwistConstraint_getFixThresh(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern int btConeTwistConstraint_getFlags(IntPtr obj);
+		static extern ConeTwistFlags btConeTwistConstraint_getFlags(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConeTwistConstraint_getFrameOffsetA(IntPtr obj, [Out] out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

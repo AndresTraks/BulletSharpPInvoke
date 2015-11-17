@@ -138,10 +138,10 @@ namespace BulletSharp
 			return value;
 		}
 
-		public Vector3 ComputeGyroscopicImpulseImplicitWorld(float dt)
+		public Vector3 ComputeGyroscopicImpulseImplicitWorld(float deltaTime)
 		{
 			Vector3 value;
-			btRigidBody_computeGyroscopicImpulseImplicit_World(_native, dt, out value);
+			btRigidBody_computeGyroscopicImpulseImplicit_World(_native, deltaTime, out value);
 			return value;
 		}
 

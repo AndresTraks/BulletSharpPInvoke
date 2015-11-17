@@ -7,6 +7,28 @@ using System.Diagnostics;
 
 namespace BulletSharp
 {
+    internal class ListDebugView
+	{
+        private System.Collections.IEnumerable _list;
+
+        public ListDebugView(System.Collections.IEnumerable list)
+        {
+            _list = list;
+        }
+
+		[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+		public System.Collections.ArrayList Items
+		{
+            get
+            {
+                var list = new System.Collections.ArrayList();
+                foreach (var o in _list)
+                    list.Add(o);
+                return list;
+            }
+		}
+	};
+
     internal class Vector3ListDebugView
 	{
 		private IList<Vector3> _list;
@@ -299,6 +321,7 @@ namespace BulletSharp
         static extern IntPtr btCompoundShapeChild_array_at(IntPtr obj, int n);
     }
 
+    [DebuggerTypeProxy(typeof(ListDebugView))]
     public class UIntArray : FixedSizeArray, IList<uint>
     {
         internal UIntArray(IntPtr native, int count)
@@ -417,11 +440,11 @@ namespace BulletSharp
 
             int count = Count;
             if (arrayIndex + count > array.Length)
-                throw new ArgumentException("Array too small.");
+                throw new ArgumentException("Array too small.", "array");
 
             for (int i = 0; i < count; i++)
             {
-                btVector3_array_at(_native, i, out array[arrayIndex + i]);
+                array[arrayIndex + i] = this[i];
             }
         }
 

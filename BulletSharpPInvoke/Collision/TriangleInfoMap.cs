@@ -86,18 +86,18 @@ namespace BulletSharp
 
 	public class TriangleInfoMap : IDisposable
 	{
-        internal IntPtr _native;
-        private bool _preventDelete;
+		internal IntPtr _native;
+		bool _preventDelete;
 
 		internal TriangleInfoMap(IntPtr native, bool preventDelete)
 		{
-            _native = native;
-            _preventDelete = preventDelete;
+			_native = native;
+			_preventDelete = preventDelete;
 		}
 
 		public TriangleInfoMap()
 		{
-		    _native = btTriangleInfoMap_new();
+			_native = btTriangleInfoMap_new();
 		}
 
 		public int CalculateSerializeBufferSize()
@@ -151,7 +151,7 @@ namespace BulletSharp
 			set { btTriangleInfoMap_setZeroAreaThreshold(_native, value); }
 		}
 
-        public void Dispose()
+		public void Dispose()
 		{
 			Dispose(true);
 			GC.SuppressFinalize(this);
@@ -161,10 +161,10 @@ namespace BulletSharp
 		{
 			if (_native != IntPtr.Zero)
 			{
-                if (!_preventDelete)
-                {
-                    btTriangleInfoMap_delete(_native);
-                }
+				if (!_preventDelete)
+				{
+					btTriangleInfoMap_delete(_native);
+				}
 				_native = IntPtr.Zero;
 			}
 		}
@@ -206,7 +206,7 @@ namespace BulletSharp
 		static extern void btTriangleInfoMap_setPlanarEpsilon(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btTriangleInfoMap_setZeroAreaThreshold(IntPtr obj, float value);
-        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btTriangleInfoMap_delete(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btTriangleInfoMap_delete(IntPtr obj);
 	}
 }

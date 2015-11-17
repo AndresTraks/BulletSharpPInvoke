@@ -20,7 +20,7 @@ namespace BulletSharpGen
             //subset.LoadAssembly("..\\..\\..\\bulletsharp\\demos\\Generic\\bin\\Release\\DemoFramework.dll", "BulletSharp");
 
             string sourceFolder = "D:\\src\\bullet3\\src\\";
-            //sourceFolder = "..\\..\\..\\bullet\\src\\";
+            //sourceFolder = "..\\..\\..\\..\\.\\bullet3\\src\\";
 
             if (!Directory.Exists(sourceFolder))
             {
@@ -99,6 +99,11 @@ namespace BulletSharpGen
             {
                 confs.Add(new ProjectConfiguration("MonoGame", true, "GRAPHICS_MONOGAME", "$(ProgramFiles)\\MonoGame\\v3.0\\Assemblies\\WindowsGL\\;$(ProgramFiles(x86))\\MonoGame\\v3.0\\Assemblies\\WindowsGL\\"));
                 confs.Add(new ProjectConfiguration("MonoGame", false, "GRAPHICS_MONOGAME", "$(ProgramFiles)\\MonoGame\\v3.0\\Assemblies\\WindowsGL\\;$(ProgramFiles(x86))\\MonoGame\\v3.0\\Assemblies\\WindowsGL\\"));
+            }
+            if (targetVS != TargetVS.VS2008 && targetVS != TargetVS.VS2010)
+            {
+                confs.Add(new ProjectConfiguration("Numerics", true, "GRAPHICS_NUMERICS"));
+                confs.Add(new ProjectConfiguration("Numerics", false, "GRAPHICS_NUMERICS"));
             }
             if (targetVS == TargetVS.VS2008)
             {

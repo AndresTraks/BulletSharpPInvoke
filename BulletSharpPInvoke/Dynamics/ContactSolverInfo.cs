@@ -7,6 +7,7 @@ namespace BulletSharp
     [Flags]
     public enum SolverModes
     {
+		None = 0,
         RandomizeOrder = 1,
         FrictionSeparate = 2,
         UseWarmStarting = 4,
