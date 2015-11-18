@@ -20,7 +20,6 @@ namespace BulletSharpGen
         ParameterDefinition currentParameter;
         EnumDefinition currentEnum;
         FieldDefinition currentField;
-        bool currentFieldHasSpecializedParameter;
         TranslationUnit currentTU;
 
         public Dictionary<string, ClassDefinition> ClassDefinitions = new Dictionary<string, ClassDefinition>();
@@ -206,13 +205,13 @@ namespace BulletSharpGen
                 return;
             }
 
-            if (currentClass != null)
+            if (cursor.Kind == CursorKind.ClassTemplate)
             {
-                currentClass = new ClassDefinition(className, currentClass);
+                currentClass = new ClassTemplateDefinition(className, currentHeader, currentClass);
             }
             else
             {
-                currentClass = new ClassDefinition(className, currentHeader);
+                currentClass = new ClassDefinition(className, currentHeader, currentClass);
             }
 
             // Unnamed struct escapes to the surrounding scope
@@ -244,7 +243,6 @@ namespace BulletSharpGen
             }
             else if (cursor.Kind == CursorKind.ClassTemplate)
             {
-                currentClass.IsTemplate = true;
                 if (cursor.TemplateCursorKind != CursorKind.ClassDecl)
                 {
                     currentMemberAccess = AccessSpecifier.Private;
@@ -312,45 +310,46 @@ namespace BulletSharpGen
 
         Cursor.ChildVisitResult FieldTemplateTypeVisitor(Cursor cursor, Cursor parent)
         {
-            if (cursor.Kind == CursorKind.TypeRef)
+            switch (cursor.Kind)
             {
-                if (cursor.Referenced.Kind == CursorKind.TemplateTypeParameter)
-                {
-                    currentField.Type.HasTemplateTypeParameter = true;
-                }
-                else if (currentFieldHasSpecializedParameter)
-                {
-                    currentField.Type.SpecializedTemplateType = new TypeRefDefinition(cursor.Type);
-                }
-                return Cursor.ChildVisitResult.Break;
-            }
-            else if (cursor.Kind == CursorKind.TemplateRef)
-            {
-                if (!parent.Type.Declaration.SpecializedCursorTemplate.IsInvalid)
-                {
-                    currentFieldHasSpecializedParameter = true;
-                    return Cursor.ChildVisitResult.Continue;
-                }
-                else if (parent.Type.Declaration.Kind == CursorKind.ClassTemplate)
-                {
-                    currentField.Type.HasTemplateTypeParameter = true;
+                case CursorKind.TypeRef:
+                    if (cursor.Referenced.Kind == CursorKind.TemplateTypeParameter)
+                    {
+                        currentField.Type.HasTemplateTypeParameter = true;
+                    }
                     return Cursor.ChildVisitResult.Break;
-                }
+
+                case CursorKind.TemplateRef:
+                    if (parent.Type.Declaration.Kind == CursorKind.ClassTemplate)
+                    {
+                        currentField.Type.HasTemplateTypeParameter = true;
+                        return Cursor.ChildVisitResult.Break;
+                    }
+                    return Cursor.ChildVisitResult.Continue;
+
+                default:
+                    return Cursor.ChildVisitResult.Continue;
             }
-            return Cursor.ChildVisitResult.Continue;
         }
 
         Cursor.ChildVisitResult ClassVisitor(Cursor cursor, Cursor parent)
         {
-            if (cursor.Kind == CursorKind.CxxAccessSpecifier)
+            switch (cursor.Kind)
             {
-                currentMemberAccess = cursor.AccessSpecifier;
-                return Cursor.ChildVisitResult.Continue;
-            }
-            else if (cursor.Kind == CursorKind.CxxBaseSpecifier)
-            {
-                currentClass.BaseClass = new TypeRefDefinition(cursor.Type);
-                return Cursor.ChildVisitResult.Continue;
+                case CursorKind.CxxAccessSpecifier:
+                    currentMemberAccess = cursor.AccessSpecifier;
+                    return Cursor.ChildVisitResult.Continue;
+                case CursorKind.CxxBaseSpecifier:
+                    currentClass.BaseClass = new TypeRefDefinition(cursor.Type);
+                    return Cursor.ChildVisitResult.Continue;
+                case CursorKind.TemplateTypeParameter:
+                    var classTemplate = currentClass as ClassTemplateDefinition;
+                    if (classTemplate.TemplateTypeParameters == null)
+                    {
+                        classTemplate.TemplateTypeParameters = new List<string>();
+                    }
+                    classTemplate.TemplateTypeParameters.Add(cursor.Spelling);
+                    return Cursor.ChildVisitResult.Continue;
             }
 
             if (currentMemberAccess != AccessSpecifier.Public)
@@ -422,8 +421,38 @@ namespace BulletSharpGen
             {
                 currentField = new FieldDefinition(cursor.Spelling,
                     new TypeRefDefinition(cursor.Type), currentClass);
-                currentFieldHasSpecializedParameter = false;
-                cursor.VisitChildren(FieldTemplateTypeVisitor);
+                if (!cursor.Type.Declaration.SpecializedCursorTemplate.IsInvalid)
+                {
+                    if (cursor.Children[0].Kind != CursorKind.TemplateRef)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    if (cursor.Children.Count == 1)
+                    {
+                        string displayName = cursor.Type.Declaration.DisplayName;
+                        int typeStart = displayName.IndexOf('<') + 1;
+                        int typeEnd = displayName.LastIndexOf('>');
+                        displayName = displayName.Substring(typeStart, typeEnd - typeStart);
+                        var specializationTypeRef = new TypeRefDefinition()
+                        {
+                            IsBasic = true,
+                            Name = displayName
+                        };
+                        currentField.Type.SpecializedTemplateType = specializationTypeRef;
+                    }
+                    if (cursor.Children.Count == 2)
+                    {
+                        if (cursor.Children[1].Type.TypeKind != ClangSharp.Type.Kind.Invalid)
+                        {
+                            currentField.Type.SpecializedTemplateType = new TypeRefDefinition(cursor.Children[1].Type);
+                        }
+                        else
+                        {
+                            // TODO
+                        }
+                    }
+                }
+                //cursor.VisitChildren(FieldTemplateTypeVisitor);
                 currentField = null;
             }
             else if (cursor.Kind == CursorKind.UnionDecl)

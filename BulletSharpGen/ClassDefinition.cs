@@ -15,7 +15,6 @@ namespace BulletSharpGen
         public List<FieldDefinition> Fields { get; private set; }
         public bool IsAbstract { get; set; }
         public bool IsStruct { get; set; }
-        public bool IsTemplate { get; set; }
 
         public bool HidePublicConstructors { get; set; }
         public bool NoInternalConstructor { get; set; }
@@ -92,16 +91,11 @@ namespace BulletSharpGen
             }
         }
 
-        public ClassDefinition(string name, ClassDefinition parent)
-            : this(name, parent.Header)
-        {
-            Parent = parent;
-        }
-
-        public ClassDefinition(string name, HeaderDefinition header)
+        public ClassDefinition(string name, HeaderDefinition header, ClassDefinition parent = null)
         {
             Name = name;
             Header = header;
+            Parent = parent;
 
             Classes = new List<ClassDefinition>();
             Methods = new List<MethodDefinition>();

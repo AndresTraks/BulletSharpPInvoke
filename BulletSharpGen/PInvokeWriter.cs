@@ -553,6 +553,27 @@ namespace BulletSharpGen
                 }
             }
 
+            // Check if any parameters should be assigned to properties
+            // in constructors (this can't always work)
+            // Move this to BulletParser?
+            if (method.IsConstructor)
+            {
+                foreach (var param in method.Parameters)
+                {
+                    foreach (var property in method.Parent.Properties)
+                    {
+                        if (param.ManagedName.ToLower() == property.Name.ToLower()
+                            && !param.Type.IsBasic)
+                        {
+                            // if (IsCacheableType) {
+                            //Console.WriteLine("caching");
+                            //Console.WriteLine(method.Parent.ManagedName);
+                            //Console.WriteLine(param.Type.ToString() + " " + param.ManagedName);
+                        }
+                    }
+                }
+            }
+
             // Return temporary variable
             if (returnParamMethod != null)
             {
@@ -739,7 +760,7 @@ namespace BulletSharpGen
 
         void WriteClass(ClassDefinition c, int level)
         {
-            if (c.IsExcluded || c.IsTypedef || c.IsPureEnum)
+            if (c.IsExcluded || c.IsTypedef || c.IsPureEnum || c is ClassTemplateDefinition)
             {
                 return;
             }

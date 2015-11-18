@@ -206,7 +206,9 @@ namespace BulletSharpGen
             }
 
             // Resolve references (match TypeRefDefinitions to ClassDefinitions)
-            foreach (ClassDefinition c in classDefinitions.Values)
+            // List might be modified with template specialization classes, so make a copy
+            var classDefinitionsList = new List<ClassDefinition>(classDefinitions.Values);
+            foreach (ClassDefinition c in classDefinitionsList)
             {
                 // Resolve base class type
                 if (c.BaseClass != null)
@@ -654,6 +656,21 @@ namespace BulletSharpGen
             if (typeRef.SpecializedTemplateType != null)
             {
                 ResolveTypeRef(typeRef.SpecializedTemplateType);
+
+                // Create template specialization class
+                string name = string.Format("{0}<{1}>", typeRef.Name, typeRef.SpecializedTemplateType.Name);
+                if (!classDefinitions.ContainsKey(name))
+                {
+                    var templateClass = typeRef.Target;
+                    if (templateClass != null)
+                    {
+                        var header = templateClass.Header;
+                        var specializedClass = new ClassDefinition(name, header);
+                        specializedClass.BaseClass = templateClass.BaseClass;
+                        header.Classes.Add(specializedClass);
+                        classDefinitions.Add(name, specializedClass);
+                    }
+                }
             }
         }
 

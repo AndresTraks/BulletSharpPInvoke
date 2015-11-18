@@ -4,7 +4,7 @@ namespace BulletSharpGen
 {
     class TypeRefDefinition
     {
-        public string Name { get; private set; }
+        public string Name { get; set; }
         public bool IsBasic { get; set; }
         public bool IsPointer { get; set; }
         public bool IsReference { get; set; }
