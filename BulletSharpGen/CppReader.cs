@@ -340,7 +340,14 @@ namespace BulletSharpGen
                     currentMemberAccess = cursor.AccessSpecifier;
                     return Cursor.ChildVisitResult.Continue;
                 case CursorKind.CxxBaseSpecifier:
-                    currentClass.BaseClass = new TypeRefDefinition(cursor.Type);
+                    string baseName = TypeRefDefinition.GetFullyQualifiedName(cursor.Type);
+                    ClassDefinition baseClass;
+                    if (!ClassDefinitions.TryGetValue(baseName, out baseClass))
+                    {
+                        Console.WriteLine("Base {0} for {1} not found! Missing header?", baseName, currentClass.Name);
+                        return Cursor.ChildVisitResult.Continue;
+                    }
+                    currentClass.BaseClass = baseClass;
                     return Cursor.ChildVisitResult.Continue;
                 case CursorKind.TemplateTypeParameter:
                     var classTemplate = currentClass as ClassTemplateDefinition;

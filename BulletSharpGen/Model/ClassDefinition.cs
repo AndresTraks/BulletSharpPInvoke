@@ -7,7 +7,7 @@ namespace BulletSharpGen
     {
         public string Name { get; private set; }
         public List<ClassDefinition> Classes { get; private set; }
-        public TypeRefDefinition BaseClass { get; set; }
+        public ClassDefinition BaseClass { get; set; }
         public ClassDefinition Parent { get; private set; }
         public HeaderDefinition Header { get; private set; }
         public List<MethodDefinition> Methods { get; private set; }

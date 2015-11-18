@@ -535,7 +535,7 @@ namespace BulletSharpGen
                 if (method.IsConstructor && method.Parent.BaseClass != null)
                 {
                     Write(")", WriteTo.CS);
-                    if (method.Parent.BaseClass.Target.HasPreventDelete)
+                    if (method.Parent.BaseClass.HasPreventDelete)
                     {
                         Write(", false", WriteTo.CS);
                     }
@@ -779,7 +779,7 @@ namespace BulletSharpGen
             if (c.BaseClass != null)
             {
                 Write(" : ", WriteTo.CS);
-                WriteLine(c.BaseClass.Target.FullNameManaged.Replace("::", "."), WriteTo.CS);
+                WriteLine(c.BaseClass.FullNameManaged.Replace("::", "."), WriteTo.CS);
                 //WriteLine(c.BaseClass.ManagedNameCS, WriteTo.CS);
             }
             else
@@ -840,7 +840,7 @@ namespace BulletSharpGen
                     Write(": base(native", WriteTo.CS);
                     if (c.HasPreventDelete)
                     {
-                        if (!c.BaseClass.Target.HasPreventDelete)
+                        if (!c.BaseClass.HasPreventDelete)
                         {
                             // Base class should also have preventDelete
                             //throw new NotImplementedException();
@@ -849,7 +849,7 @@ namespace BulletSharpGen
                     }
                     else
                     {
-                        if (c.BaseClass.Target.HasPreventDelete)
+                        if (c.BaseClass.HasPreventDelete)
                         {
                             Write(", true", WriteTo.CS);
                         }
@@ -946,7 +946,7 @@ namespace BulletSharpGen
             List<MethodDefinition> abstractMethods = thisAbstractMethods.ToList();
             if (cl.BaseClass != null)
             {
-                baseAbstractMethods = cl.BaseClass.Target.Methods.Where(x => x.IsVirtual).ToList();
+                baseAbstractMethods = cl.BaseClass.Methods.Where(x => x.IsVirtual).ToList();
                 abstractMethods.AddRange(baseAbstractMethods);
             }
             else
@@ -967,7 +967,7 @@ namespace BulletSharpGen
             List<MethodDefinition> abstractMethods = thisAbstractMethods.ToList();
             if (cl.BaseClass != null)
             {
-                baseAbstractMethods = cl.BaseClass.Target.Methods.Where(x => x.IsVirtual).ToList();
+                baseAbstractMethods = cl.BaseClass.Methods.Where(x => x.IsVirtual).ToList();
                 abstractMethods.AddRange(baseAbstractMethods);
             }
             else
@@ -1061,7 +1061,7 @@ namespace BulletSharpGen
             List<MethodDefinition> abstractMethods = thisAbstractMethods.ToList();
             if (cl.BaseClass != null)
             {
-                baseAbstractMethods = cl.BaseClass.Target.Methods.Where(x => x.IsVirtual).ToList();
+                baseAbstractMethods = cl.BaseClass.Methods.Where(x => x.IsVirtual).ToList();
                 abstractMethods.AddRange(baseAbstractMethods);
             }
             else
@@ -1142,7 +1142,7 @@ namespace BulletSharpGen
             List<MethodDefinition> abstractMethods = thisAbstractMethods.ToList();
             if (cl.BaseClass != null)
             {
-                baseAbstractMethods = cl.BaseClass.Target.Methods.Where(x => x.IsVirtual).ToList();
+                baseAbstractMethods = cl.BaseClass.Methods.Where(x => x.IsVirtual).ToList();
                 abstractMethods.AddRange(baseAbstractMethods);
             }
             else

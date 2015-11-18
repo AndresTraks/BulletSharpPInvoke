@@ -210,22 +210,10 @@ namespace BulletSharpGen
             var classDefinitionsList = new List<ClassDefinition>(classDefinitions.Values);
             foreach (ClassDefinition c in classDefinitionsList)
             {
-                // Resolve base class type
-                if (c.BaseClass != null)
+                // Include header for the base if necessary
+                if (c.BaseClass != null && c.Header != c.BaseClass.Header)
                 {
-                    ResolveTypeRef(c.BaseClass);
-                    if (c.BaseClass.Target == null)
-                    {
-                        Console.WriteLine("Base class " + c.BaseClass.Name + " not found!");
-                    }
-                    else
-                    {
-                        var targetHeader = c.BaseClass.Target.Header;
-                        if (c.Header != targetHeader && !c.Header.Includes.Contains(targetHeader))
-                        {
-                            c.Header.Includes.Add(targetHeader);
-                        }
-                    }
+                    c.Header.Includes.Add(c.BaseClass.Header);
                 }
 
                 // Resolve typedef
@@ -260,9 +248,9 @@ namespace BulletSharpGen
                     var method = c.Methods[i];
                     // Check if the method already exists in base classes
                     var baseClass = c.BaseClass;
-                    while (baseClass != null && baseClass.Target != null)
+                    while (baseClass != null)
                     {
-                        foreach (MethodDefinition m in baseClass.Target.Methods)
+                        foreach (MethodDefinition m in baseClass.Methods)
                         {
                             if (method.Equals(m))
                             {
@@ -275,7 +263,7 @@ namespace BulletSharpGen
                         {
                             break;
                         }
-                        baseClass = baseClass.Target.BaseClass;
+                        baseClass = baseClass.BaseClass;
                     }
                     if (method != null)
                     {
@@ -594,13 +582,13 @@ namespace BulletSharpGen
                 {
                     var thisClass = classesOrdered[i];
                     var baseClass = thisClass.BaseClass;
-                    if (baseClass != null && classesOrdered.Contains(baseClass.Target))
+                    if (baseClass != null && classesOrdered.Contains(baseClass))
                     {
                         int thisIndex = classesOrdered.IndexOf(thisClass);
-                        if (thisIndex < classesOrdered.IndexOf(baseClass.Target))
+                        if (thisIndex < classesOrdered.IndexOf(baseClass))
                         {
-                            classesOrdered.Remove(baseClass.Target);
-                            classesOrdered.Insert(thisIndex, baseClass.Target);
+                            classesOrdered.Remove(baseClass);
+                            classesOrdered.Insert(thisIndex, baseClass);
                         }
                     }
                 }
