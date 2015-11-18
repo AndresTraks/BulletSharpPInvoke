@@ -50,20 +50,20 @@
     <Compile Include="CppCliWriter.cs" />
     <Compile Include="ExtensionsWriter.cs" />
     <Compile Include="FilterWriter.cs" />
+    <Compile Include="Model\ClassDefinition.cs" />
     <Compile Include="Model\ClassTemplateDefinition.cs" />
+    <Compile Include="Model\EnumDefinition.cs" />
+    <Compile Include="Model\FieldDefinition.cs" />
+    <Compile Include="Model\HeaderDefinition.cs" />
+    <Compile Include="Model\MethodDefinition.cs" />
+    <Compile Include="Model\ParameterDefinition.cs" />
+    <Compile Include="Model\PropertyDefinition.cs" />
+    <Compile Include="Model\TypeRefDefinition.cs" />
     <Compile Include="PInvokeWriter.cs" />
     <Compile Include="ProjectConfiguration.cs" />
     <Compile Include="SlnWriter.cs" />
     <Compile Include="CppReader.cs" />
-    <Compile Include="ClassDefinition.cs" />
-    <Compile Include="EnumDefinition.cs" />
-    <Compile Include="FieldDefinition.cs" />
-    <Compile Include="HeaderDefinition.cs" />
-    <Compile Include="MethodDefinition.cs" />
-    <Compile Include="ParameterDefinition.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="PropertyDefinition.cs" />
-    <Compile Include="TypeRefDefinition.cs" />
     <Compile Include="WrapperWriter.cs" />
   </ItemGroup>
   <ItemGroup>
