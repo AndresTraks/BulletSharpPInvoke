@@ -551,25 +551,27 @@ namespace BulletSharpGen
                     }
                     WriteLine(");", WriteTo.CS);
                 }
-            }
 
-            // Check if any parameters should be assigned to properties
-            // in constructors (this can't always work)
-            // Move this to BulletParser?
-            if (method.IsConstructor)
-            {
-                foreach (var param in method.Parameters)
+                // Cache property values
+                if (method.IsConstructor)
                 {
-                    foreach (var property in method.Parent.Properties)
+                    var methodParent = method.Parent;
+                    while (methodParent != null)
                     {
-                        if (param.ManagedName.ToLower() == property.Name.ToLower()
-                            && !param.Type.IsBasic)
+                        foreach (var cachedProperty in methodParent.CachedProperties.OrderBy(p => p.Key))
                         {
-                            // if (IsCacheableType) {
-                            //Console.WriteLine("caching");
-                            //Console.WriteLine(method.Parent.ManagedName);
-                            //Console.WriteLine(param.Type.ToString() + " " + param.ManagedName);
+                            foreach (var param in method.Parameters)
+                            {
+                                if (param.ManagedName.ToLower() == cachedProperty.Key.ToLower()
+                                    && !param.Type.IsBasic
+                                    && param.Type.ManagedName == cachedProperty.Value.Property.Type.ManagedName)
+                                {
+                                    WriteTabs(level + 2, WriteTo.CS);
+                                    WriteLine(string.Format("{0} = {1};", cachedProperty.Value.CacheFieldName, param.ManagedName), WriteTo.CS);
+                                }
+                            }
                         }
+                        methodParent = methodParent.BaseClass;
                     }
                 }
             }
@@ -615,7 +617,7 @@ namespace BulletSharpGen
             {
                 var method2 = method.Copy();
                 var paras = method2.Parameters;
-                Array.Resize<ParameterDefinition>(ref paras, paras.Length + 1);
+                Array.Resize(ref paras, paras.Length + 1);
                 string paramName;
                 if (method.Property != null && method.Property.Setter != null)
                 {
@@ -817,8 +819,22 @@ namespace BulletSharpGen
                 hasCSWhiteSpace = false;
             }
 
+            // Write cached property fields
+            if (c.CachedProperties.Count != 0)
+            {
+                EnsureWhiteSpace(WriteTo.CS);
+            }
+            foreach (var cachedProperty in c.CachedProperties.OrderBy(p => p.Key))
+            {
+                WriteTabs(level + 1, WriteTo.CS);
+                string name = cachedProperty.Key;
+                name = name.Substring(0, 1).ToLower() + name.Substring(1);
+                WriteLine(string.Format("{0} {1} _{2};", cachedProperty.Value.Access.ToString().ToLower(),
+                    cachedProperty.Value.Property.Type.ManagedNameCS, name), WriteTo.CS);
+                hasCSWhiteSpace = false;
+            }
+
             // Write methods
-            int overloadIndex = 0;
             bufferBuilder.Clear();
 
             // Write C# internal constructor
@@ -873,42 +889,34 @@ namespace BulletSharpGen
                 hasCSWhiteSpace = false;
             }
 
-            // Write constructors
-            bool hasConstructors = false;
-            if (!c.IsAbstract)
+            // Write public constructors
+            if (!c.HidePublicConstructors && !c.IsAbstract)
             {
-                foreach (MethodDefinition method in c.Methods.Where(m => m.IsConstructor))
-                {
-                    if (!c.HidePublicConstructors)
-                    {
-                        WriteMethod(method, level, ref overloadIndex);
-                    }
-                    hasConstructors = true;
-                }
-
-                // Write default constructor
-                if (!hasConstructors && !c.IsAbstract && !c.HidePublicConstructors)
+                int overloadIndex = 0;
+                if (c.HasCppDefaultConstructor)
                 {
                     var constructor = new MethodDefinition(c.Name, c, 0);
                     constructor.IsConstructor = true;
                     WriteMethod(constructor, level, ref overloadIndex);
                 }
-                overloadIndex = 0;
+                else
+                {
+                    foreach (MethodDefinition method in c.Methods.Where(m => m.IsConstructor))
+                    {
+                        WriteMethod(method, level, ref overloadIndex);
+                    }
+                }
             }
 
             // Write methods
-            MethodDefinition previousMethod = null;
-            foreach (MethodDefinition method in c.Methods.Where(m => !m.IsConstructor).OrderBy(m => m.Name))
+            foreach (var groupByName in c.Methods.Where(m => !m.IsConstructor).OrderBy(m => m.Name).GroupBy(m => m.Name))
             {
-                if (previousMethod != null && previousMethod.Name != method.Name)
+                int overloadIndex = 0;
+                foreach (var method in groupByName)
                 {
-                    overloadIndex = 0;
+                    WriteMethod(method, level, ref overloadIndex);
                 }
-
-                WriteMethod(method, level, ref overloadIndex);
-                previousMethod = method;
             }
-            overloadIndex = 0;
 
             // Write properties
             foreach (PropertyDefinition prop in c.Properties)
@@ -919,11 +927,11 @@ namespace BulletSharpGen
             // Write delete method
             if (c.BaseClass == null)
             {
+                int overloadIndex = 0;
                 var del = new MethodDefinition("delete", c, 0);
                 del.ReturnType = new TypeRefDefinition();
                 WriteMethod(del, level, ref overloadIndex);
                 c.Methods.Remove(del);
-                overloadIndex = 0;
             }
 
             // Write DllImport clauses
@@ -1236,8 +1244,11 @@ namespace BulletSharpGen
                 var csFile = new FileStream(outDirectoryPInvoke + "\\" + header.ManagedName + ".cs", FileMode.Create, FileAccess.Write);
                 csWriter = new StreamWriter(csFile);
                 csWriter.WriteLine("using System;");
-                csWriter.WriteLine("using System.Runtime.InteropServices;");
-                csWriter.WriteLine("using System.Security;");
+                if (RequiresInterop(header))
+                {
+                    csWriter.WriteLine("using System.Runtime.InteropServices;");
+                    csWriter.WriteLine("using System.Security;");
+                }
                 if (RequiresMathNamespace(header))
                 {
                     csWriter.WriteLine("using BulletSharp.Math;");
@@ -1342,20 +1353,52 @@ namespace BulletSharpGen
             return false;
         }
 
+        private static bool RequiresInterop(HeaderDefinition header)
+        {
+            return header.Classes.Any(RequiresInterop);
+        }
+
+        private static bool RequiresInterop(ClassDefinition @class)
+        {
+            if (@class.HasCppDefaultConstructor && !@class.IsAbstract)
+            {
+                return true;
+            }
+            if (@class.Methods.Count == 0)
+            {
+                return false;
+            }
+            if (@class.HidePublicConstructors && @class.Methods.All(m => m.IsConstructor))
+            {
+                return false;
+            }
+            return true;
+        }
+
         private static bool RequiresMathNamespace(HeaderDefinition header)
         {
             return header.Classes.Any(RequiresMathNamespace);
         }
 
-        private static bool RequiresMathNamespace(ClassDefinition cl)
+        private static bool RequiresMathNamespace(ClassDefinition @class)
         {
-            if (cl.Classes.Any(RequiresMathNamespace))
+            if (@class.Classes.Any(RequiresMathNamespace))
             {
                 return true;
             }
 
-            foreach (var method in cl.Methods)
+            if (@class.IsExcluded)
             {
+                return false;
+            }
+
+            foreach (var method in @class.Methods)
+            {
+                if (@class.HidePublicConstructors && method.IsConstructor)
+                {
+                    continue;
+                }
+
                 if (method.ReturnType.ManagedName.Equals("Quaternion") ||
                     method.ReturnType.ManagedName.Equals("Transform") ||
                     method.ReturnType.ManagedName.Equals("Vector3"))

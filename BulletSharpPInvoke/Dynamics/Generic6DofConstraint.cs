@@ -557,15 +557,15 @@ namespace BulletSharp
 		public Generic6DofConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix frameInA, Matrix frameInB, bool useLinearReferenceFrameA)
 			: base(btGeneric6DofConstraint_new(rigidBodyA._native, rigidBodyB._native, ref frameInA, ref frameInB, useLinearReferenceFrameA))
 		{
-            _rigidBodyA = rigidBodyA;
-            _rigidBodyB = rigidBodyB;
+			_rigidBodyA = rigidBodyA;
+			_rigidBodyB = rigidBodyB;
 		}
 
 		public Generic6DofConstraint(RigidBody rigidBodyB, Matrix frameInB, bool useLinearReferenceFrameB)
 			: base(btGeneric6DofConstraint_new2(rigidBodyB._native, ref frameInB, useLinearReferenceFrameB))
 		{
             _rigidBodyA = GetFixedBody();
-            _rigidBodyB = rigidBodyB;
+			_rigidBodyB = rigidBodyB;
 		}
 
 		public void CalcAnchorPos()

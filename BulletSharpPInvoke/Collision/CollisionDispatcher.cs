@@ -21,8 +21,8 @@ namespace BulletSharp
         private delegate void NearCallbackUnmanagedDelegate(IntPtr collisionPair, IntPtr dispatcher, IntPtr dispatchInfo);
 
         protected CollisionConfiguration _collisionConfiguration;
+		private NearCallback _nearCallback;
         private List<CollisionAlgorithmCreateFunc> _collisionCreateFuncs;
-        private NearCallback _nearCallback;
         private NearCallbackUnmanagedDelegate _nearCallbackUnmanaged;
         private IntPtr _nearCallbackUnmanagedPtr;
 
@@ -34,7 +34,7 @@ namespace BulletSharp
 		public CollisionDispatcher(CollisionConfiguration collisionConfiguration)
 			: base(btCollisionDispatcher_new(collisionConfiguration._native))
 		{
-            _collisionConfiguration = collisionConfiguration;
+			_collisionConfiguration = collisionConfiguration;
 		}
 
 		public static void DefaultNearCallback(BroadphasePair collisionPair, CollisionDispatcher dispatcher, DispatcherInfo dispatchInfo)

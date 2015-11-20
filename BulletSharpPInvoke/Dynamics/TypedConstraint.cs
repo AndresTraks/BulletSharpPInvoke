@@ -357,11 +357,11 @@ namespace BulletSharp
 
         internal IntPtr _native;
 
-        static RigidBody _fixedBody;
-        JointFeedback _jointFeedback;
+		private JointFeedback _jointFeedback;
+		protected RigidBody _rigidBodyA;
+		protected RigidBody _rigidBodyB;
 
-        protected RigidBody _rigidBodyA;
-        protected RigidBody _rigidBodyB;
+        static RigidBody _fixedBody;
 
 		internal TypedConstraint(IntPtr native)
 		{
@@ -502,12 +502,12 @@ namespace BulletSharp
 
 		public RigidBody RigidBodyA
 		{
-            get { return _rigidBodyA; }
+			get { return _rigidBodyA; }
 		}
 
 		public RigidBody RigidBodyB
 		{
-            get { return _rigidBodyB; }
+			get { return _rigidBodyB; }
 		}
 
 		public int Uid

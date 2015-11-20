@@ -8,8 +8,8 @@ namespace BulletSharp
 	{
 		public class CreateFunc : CollisionAlgorithmCreateFunc
 		{
-            VoronoiSimplexSolver _simplexSolver;
-            ConvexPenetrationDepthSolver _pdSolver;
+			private ConvexPenetrationDepthSolver _pdSolver;
+			private VoronoiSimplexSolver _simplexSolver;
 
 			internal CreateFunc(IntPtr native)
 				: base(native, true)
@@ -19,6 +19,8 @@ namespace BulletSharp
 			public CreateFunc(VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver pdSolver)
 				: base(btConvexConvexAlgorithm_CreateFunc_new(simplexSolver._native, pdSolver._native), false)
 			{
+				_pdSolver = pdSolver;
+				_simplexSolver = simplexSolver;
 			}
 
 			public int MinimumPointsPerturbationThreshold

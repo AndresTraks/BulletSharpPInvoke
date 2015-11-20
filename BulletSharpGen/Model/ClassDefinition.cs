@@ -3,6 +3,30 @@ using System.Linq;
 
 namespace BulletSharpGen
 {
+    class CachedProperty
+    {
+        public PropertyDefinition Property { get; private set; }
+        public string CacheFieldName { get; private set; }
+        public RefAccessSpecifier Access { get; set; }
+
+        public CachedProperty(PropertyDefinition property, string cacheFieldName = null)
+        {
+            Property = property;
+
+            if (cacheFieldName != null)
+            {
+                CacheFieldName = cacheFieldName;
+            }
+            else
+            {
+                string name = property.Name;
+                CacheFieldName = "_" + name.Substring(0, 1).ToLower() + name.Substring(1);
+            }
+
+            Access = RefAccessSpecifier.Private;
+        }
+    }
+
     class ClassDefinition
     {
         public string Name { get; private set; }
@@ -37,6 +61,11 @@ namespace BulletSharpGen
         public bool IsStaticClass
         {
             get { return Methods.Count != 0 && Methods.All(x => x.IsStatic); }
+        }
+
+        public bool HasCppDefaultConstructor
+        {
+            get { return !HidePublicConstructors && Methods.Count(m => m.IsConstructor) == 0; }
         }
 
         public string ManagedName { get; set; }
@@ -91,6 +120,8 @@ namespace BulletSharpGen
             }
         }
 
+        public Dictionary<string, CachedProperty> CachedProperties { get; private set; }
+
         public ClassDefinition(string name, HeaderDefinition header, ClassDefinition parent = null)
         {
             Name = name;
@@ -101,6 +132,7 @@ namespace BulletSharpGen
             Methods = new List<MethodDefinition>();
             Properties = new List<PropertyDefinition>();
             Fields = new List<FieldDefinition>();
+            CachedProperties = new Dictionary<string, CachedProperty>();
         }
 
         public override string ToString()

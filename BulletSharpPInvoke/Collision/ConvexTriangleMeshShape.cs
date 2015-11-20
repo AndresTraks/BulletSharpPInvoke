@@ -7,7 +7,7 @@ namespace BulletSharp
 {
 	public class ConvexTriangleMeshShape : PolyhedralConvexAabbCachingShape
 	{
-        StridingMeshInterface _meshInterface;
+		private StridingMeshInterface _meshInterface;
 
 		internal ConvexTriangleMeshShape(IntPtr native)
 			: base(native)
@@ -17,13 +17,13 @@ namespace BulletSharp
 		public ConvexTriangleMeshShape(StridingMeshInterface meshInterface)
 			: base(btConvexTriangleMeshShape_new(meshInterface._native))
 		{
-            _meshInterface = meshInterface;
+			_meshInterface = meshInterface;
 		}
 
 		public ConvexTriangleMeshShape(StridingMeshInterface meshInterface, bool calcAabb)
 			: base(btConvexTriangleMeshShape_new2(meshInterface._native, calcAabb))
 		{
-            _meshInterface = meshInterface;
+			_meshInterface = meshInterface;
 		}
 
 		public void CalculatePrincipalAxisTransform(ref Matrix principal, out Vector3 inertia, out float volume)
@@ -33,7 +33,7 @@ namespace BulletSharp
 
 		public StridingMeshInterface MeshInterface
 		{
-            get { return _meshInterface; }
+			get { return _meshInterface; }
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

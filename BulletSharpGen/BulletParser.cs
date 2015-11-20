@@ -273,13 +273,8 @@ namespace BulletSharpGen
             }
 
             // Exclude constructors of abstract classes
-            foreach (ClassDefinition c in classDefinitions.Values)
+            foreach (ClassDefinition c in classDefinitions.Values.Where(c => c.IsAbstract))
             {
-                if (!c.IsAbstract)
-                {
-                    continue;
-                }
-
                 int i;
                 for (i = 0; i < c.Methods.Count; )
                 {
@@ -333,16 +328,13 @@ namespace BulletSharpGen
             }
 
             // Set managed method/parameter names
-            foreach (ClassDefinition c in classDefinitions.Values)
+            foreach (var method in classDefinitions.Values.SelectMany(c => c.Methods))
             {
-                foreach (var method in c.Methods)
-                {
-                    method.ManagedName = GetManagedMethodName(method);
+                method.ManagedName = GetManagedMethodName(method);
 
-                    foreach (var param in method.Parameters)
-                    {
-                        param.ManagedName = GetManagedParameterName(param);
-                    }
+                foreach (var param in method.Parameters)
+                {
+                    param.ManagedName = GetManagedParameterName(param);
                 }
             }
 
@@ -515,6 +507,55 @@ namespace BulletSharpGen
                 }
             }
 
+            // Check if any property values can be cached in
+            // in constructors or property setters
+            foreach (var @class in classDefinitions.Values)
+            {
+                foreach (var constructor in @class.Methods.Where(m => m.IsConstructor))
+                {
+                    foreach (var param in constructor.Parameters)
+                    {
+                        var methodParent = constructor.Parent;
+                        while (methodParent != null)
+                        {
+                            foreach (var property in methodParent.Properties)
+                            {
+                                if (param.ManagedName.ToLower() == property.Name.ToLower()
+                                    && IsCacheableType(param.Type)
+                                    && param.Type.ManagedName == property.Type.ManagedName)
+                                {
+                                    CachedProperty cachedProperty;
+                                    if (methodParent.CachedProperties.TryGetValue(property.Name, out cachedProperty))
+                                    {
+                                        if (methodParent != constructor.Parent)
+                                        {
+                                            cachedProperty.Access = RefAccessSpecifier.Protected;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        cachedProperty = new CachedProperty(property);
+                                        methodParent.CachedProperties.Add(property.Name, cachedProperty);
+                                    }
+                                }
+                            }
+                            methodParent = methodParent.BaseClass;
+                        }
+                    }
+                }
+
+                foreach (var property in @class.Properties.Where(p => p.Setter != null))
+                {
+                    if (IsCacheableType(property.Type))
+                    {
+                        if (!@class.CachedProperties.ContainsKey(property.Name))
+                        {
+                            @class.CachedProperties.Add(property.Name, new CachedProperty(property));
+                        }
+                    }
+                }
+            }
+
             // Get managed header names
             foreach (HeaderDefinition header in ExternalHeaders.Values)
             {
@@ -598,15 +639,33 @@ namespace BulletSharpGen
             }
 
             // Mark excluded classes
-            foreach (ClassDefinition c in classDefinitions.Values)
+            foreach (ClassDefinition c in classDefinitions.Values.Where(c => IsExcludedClass(c)))
             {
-                if (IsExcludedClass(c))
-                {
-                    c.IsExcluded = true;
-                }
+                c.IsExcluded = true;
             }
 
             Console.WriteLine("Parsing complete");
+        }
+
+        bool IsCacheableType(TypeRefDefinition t)
+        {
+            if (t.IsBasic)
+            {
+                return false;
+            }
+            if (t.Referenced != null)
+            {
+                return IsCacheableType(t.Referenced);
+            }
+            switch (t.Name)
+            {
+                case "btTransform":
+                case "btQuaternion":
+                case "btVector3":
+                case "btVector4":
+                    return false;
+            }
+            return true;
         }
 
         void ResolveTypeRef(TypeRefDefinition typeRef)
@@ -654,7 +713,7 @@ namespace BulletSharpGen
                     {
                         var header = templateClass.Header;
                         var specializedClass = new ClassDefinition(name, header);
-                        specializedClass.BaseClass = templateClass.BaseClass;
+                        specializedClass.BaseClass = templateClass;
                         header.Classes.Add(specializedClass);
                         classDefinitions.Add(name, specializedClass);
                     }
@@ -1244,6 +1303,19 @@ namespace BulletSharpGen
             StringBuilder output = new StringBuilder();
             TypeRefDefinition type = prop.Type;
 
+            // If cached property can only be set in constructor,
+            // the getter can simply return the cached value
+            // TODO: check if cached value is initialized in all constructors
+            CachedProperty cachedProperty;
+            if (prop.Parent.CachedProperties.TryGetValue(prop.Name, out cachedProperty))
+            {
+                if (cachedProperty.Property.Setter == null)
+                {
+                    output.AppendLine(GetTabs(level + 2) + string.Format("get {{ return {0}; }}", cachedProperty.CacheFieldName));
+                    return output.ToString();
+                }
+            }
+
             if (!type.IsBasic)
             {
                 switch (type.ManagedNameCS)
@@ -1256,17 +1328,17 @@ namespace BulletSharpGen
                         output.AppendLine(GetTabs(level + 2) + "get");
                         output.AppendLine(GetTabs(level + 2) + "{");
                         output.AppendLine(GetTabs(level + 3) + GetTypeNameCS(type) + " value;");
-                        output.AppendLine(GetTabs(level + 3) + prop.Parent.FullNameCS + '_' + prop.Getter.Name + "(_native, out value);");
+                        output.AppendLine(GetTabs(level + 3) + string.Format("{0}_{1}(_native, out value);", prop.Parent.FullNameCS, prop.Getter.Name));
                         output.AppendLine(GetTabs(level + 3) + "return value;");
                         output.AppendLine(GetTabs(level + 2) + '}');
                         return output.ToString();
                 }
             }
 
-            output.AppendLine(GetTabs(level + 2) + "get { return " +
-                BulletParser.GetTypeMarshalConstructorStartCS(prop.Getter) +
-                prop.Parent.FullNameCS + '_' + prop.Getter.Name + "(_native)" +
-                BulletParser.GetTypeMarshalConstructorEndCS(prop.Getter) + "; }");
+            output.AppendLine(GetTabs(level + 2) + string.Format("get {{ return {0}{1}_{2}(_native){3}; }}",
+                GetTypeMarshalConstructorStartCS(prop.Getter),
+                prop.Parent.FullNameCS, prop.Getter.Name,
+                GetTypeMarshalConstructorEndCS(prop.Getter)));
             return output.ToString();
         }
 

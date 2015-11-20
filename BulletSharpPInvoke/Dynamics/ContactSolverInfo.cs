@@ -11,13 +11,13 @@ namespace BulletSharp
         RandomizeOrder = 1,
         FrictionSeparate = 2,
         UseWarmStarting = 4,
-        UseFrictionWarmStarting = 8,
         Use2FrictionDirections = 16,
         EnableFrictionDirectionCaching = 32,
         DisableVelocityDependentFrictionDirection = 64,
         CacheFriendly = 128,
         Simd = 256,
-        Cuda = 512
+        InterleaveContactAndFrictionConstraints = 512,
+        AllowZeroLengthFrictionDirections = 1024
     }
 
 	public class ContactSolverInfoData : IDisposable

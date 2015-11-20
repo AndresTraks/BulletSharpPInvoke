@@ -9,7 +9,7 @@ namespace BulletSharp
 		internal IntPtr _native;
 
         private Dispatcher _dispatcher;
-        private PersistentManifold _manifold;
+		private PersistentManifold _manifold;
 
 		public CollisionAlgorithmConstructionInfo()
 		{

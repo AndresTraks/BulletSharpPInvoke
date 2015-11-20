@@ -495,7 +495,7 @@ namespace BulletSharpGen
                 {
                     SourceWrite("new ");
                     OutputMethodMarshal(method, numParameters);
-                    if (parentClass.BaseClass.Target.HasPreventDelete)
+                    if (parentClass.BaseClass.HasPreventDelete)
                     {
                         SourceWrite(", false");
                     }
@@ -1011,7 +1011,7 @@ namespace BulletSharpGen
 
             foreach (HeaderDefinition header in headerDefinitions)
             {
-                if (header.Classes.Count(x => !IsExcludedClass(x)) == 0)
+                if (header.Classes.All(c => IsExcludedClass(c)))
                 {
                     continue;
                 }

@@ -674,29 +674,29 @@ namespace BulletSharp
 		public Generic6DofSpring2Constraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix frameInA, Matrix frameInB)
 			: base(btGeneric6DofSpring2Constraint_new(rigidBodyA._native, rigidBodyB._native, ref frameInA, ref frameInB))
 		{
-            _rigidBodyA = rigidBodyA;
-            _rigidBodyB = rigidBodyB;
+			_rigidBodyA = rigidBodyA;
+			_rigidBodyB = rigidBodyB;
 		}
 
 		public Generic6DofSpring2Constraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix frameInA, Matrix frameInB, RotateOrder rotOrder)
 			: base(btGeneric6DofSpring2Constraint_new2(rigidBodyA._native, rigidBodyB._native, ref frameInA, ref frameInB, rotOrder))
 		{
-            _rigidBodyA = rigidBodyA;
-            _rigidBodyB = rigidBodyB;
+			_rigidBodyA = rigidBodyA;
+			_rigidBodyB = rigidBodyB;
 		}
 
 		public Generic6DofSpring2Constraint(RigidBody rigidBodyB, Matrix frameInB)
 			: base(btGeneric6DofSpring2Constraint_new3(rigidBodyB._native, ref frameInB))
 		{
             _rigidBodyA = GetFixedBody();
-            _rigidBodyB = rigidBodyB;
+			_rigidBodyB = rigidBodyB;
 		}
 
 		public Generic6DofSpring2Constraint(RigidBody rigidBodyB, Matrix frameInB, RotateOrder rotOrder)
 			: base(btGeneric6DofSpring2Constraint_new4(rigidBodyB._native, ref frameInB, rotOrder))
 		{
             _rigidBodyA = GetFixedBody();
-            _rigidBodyB = rigidBodyB;
+			_rigidBodyB = rigidBodyB;
 		}
 
 		public void CalculateTransforms(Matrix transA, Matrix transB)

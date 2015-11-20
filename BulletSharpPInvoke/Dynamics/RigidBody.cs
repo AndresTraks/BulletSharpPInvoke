@@ -19,7 +19,7 @@ namespace BulletSharp
 
 	public class RigidBody : CollisionObject
 	{
-        private MotionState _motionState;
+		private MotionState _motionState;
         internal List<TypedConstraint> _constraintRefs;
 
 		public RigidBody(RigidBodyConstructionInfo constructionInfo)

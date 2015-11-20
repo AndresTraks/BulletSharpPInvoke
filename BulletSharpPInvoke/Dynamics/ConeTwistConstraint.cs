@@ -19,14 +19,14 @@ namespace BulletSharp
 		public ConeTwistConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix rigidBodyAFrame, Matrix rigidBodyBFrame)
 			: base(btConeTwistConstraint_new(rigidBodyA._native, rigidBodyB._native, ref rigidBodyAFrame, ref rigidBodyBFrame))
 		{
-            _rigidBodyA = rigidBodyA;
-            _rigidBodyB = rigidBodyB;
+			_rigidBodyA = rigidBodyA;
+			_rigidBodyB = rigidBodyB;
 		}
 
 		public ConeTwistConstraint(RigidBody rigidBodyA, Matrix rigidBodyAFrame)
 			: base(btConeTwistConstraint_new2(rigidBodyA._native, ref rigidBodyAFrame))
 		{
-            _rigidBodyA = rigidBodyA;
+			_rigidBodyA = rigidBodyA;
             _rigidBodyB = GetFixedBody();
 		}
 

@@ -10,8 +10,8 @@ namespace BulletSharp
 		public FixedConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix frameInA, Matrix frameInB)
 			: base(btFixedConstraint_new(rigidBodyA._native, rigidBodyB._native, ref frameInA, ref frameInB))
 		{
-            _rigidBodyA = rigidBodyA;
-            _rigidBodyB = rigidBodyB;
+			_rigidBodyA = rigidBodyA;
+			_rigidBodyB = rigidBodyB;
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

@@ -51,7 +51,7 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
         private bool _isDisposed;
-        private BroadphaseProxy _broadphaseHandle;
+		private BroadphaseProxy _broadphaseHandle;
         protected CollisionShape _collisionShape;
 
         internal static CollisionObject GetManaged(IntPtr obj)

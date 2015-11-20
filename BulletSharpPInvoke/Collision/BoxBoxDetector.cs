@@ -6,14 +6,14 @@ namespace BulletSharp
 {
 	public class BoxBoxDetector : DiscreteCollisionDetectorInterface
 	{
-        private BoxShape _box1;
-        private BoxShape _box2;
+		private BoxShape _box1;
+		private BoxShape _box2;
 
 		public BoxBoxDetector(BoxShape box1, BoxShape box2)
 			: base(btBoxBoxDetector_new(box1._native, box2._native))
 		{
-            _box1 = box1;
-            _box2 = box2;
+			_box1 = box1;
+			_box2 = box2;
 		}
 
 		public BoxShape Box1

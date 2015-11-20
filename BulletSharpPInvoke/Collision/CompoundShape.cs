@@ -9,7 +9,7 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
-        private CollisionShape _childShape;
+		private CollisionShape _childShape;
 
         internal CompoundShapeChild(IntPtr native, CollisionShape childShape)
 		{

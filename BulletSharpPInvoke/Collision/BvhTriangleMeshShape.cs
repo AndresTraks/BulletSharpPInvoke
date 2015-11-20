@@ -8,7 +8,7 @@ namespace BulletSharp
 	public class BvhTriangleMeshShape : TriangleMeshShape
 	{
         private OptimizedBvh _optimizedBvh;
-        private TriangleInfoMap _triangleInfoMap;
+		private TriangleInfoMap _triangleInfoMap;
 
 		internal BvhTriangleMeshShape(IntPtr native)
 			: base(native)
