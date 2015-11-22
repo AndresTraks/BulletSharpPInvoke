@@ -1,67 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace BulletSharpGen
 {
     class Program
     {
-        const string NamespaceName = "BulletSharp";
-
         static void Main(string[] args)
         {
             // If true, outputs C++/CLI wrapper,
             // if false, outputs C wrapper with C# code.
             bool cppCliMode = false;
 
-            //var subset = new AssemblySubset();
-            //subset.LoadAssembly("..\\..\\..\\bulletsharp\\demos\\Generic\\bin\\Release\\BasicDemo.exe", "BulletSharp");
-            //subset.LoadAssembly("..\\..\\..\\bulletsharp\\demos\\Generic\\bin\\Release\\DemoFramework.dll", "BulletSharp");
-
-            string sourceFolder = "D:\\src\\bullet3\\src\\";
-            //sourceFolder = "..\\..\\..\\..\\.\\bullet3\\src\\";
-
-            if (!Directory.Exists(sourceFolder))
+            var project = WrapperProject.FromFile("bullet3.xml");
+            if (!project.VerifyFiles())
             {
-                Console.WriteLine("Source folder \"" + sourceFolder + "\" not found");
-                Console.Write("Press any key to continue...");
                 Console.ReadKey();
                 return;
             }
 
-            var reader = new CppReader(sourceFolder);
-            var parser = new BulletParser(reader.ClassDefinitions, reader.HeaderDefinitions);
-            var externalHeaders = parser.ExternalHeaders.Values;
+            var reader = new CppReader(project);
+            var parser = new BulletParser(project);
+
+            WrapperWriter writer;
             if (cppCliMode)
             {
-                var writer = new CppCliWriter(externalHeaders, NamespaceName);
-                writer.Output();
+                writer = new CppCliWriter(project.HeaderDefinitions.Values, project.NamespaceName);
             }
             else
             {
-                var writer = new PInvokeWriter(externalHeaders, NamespaceName);
-                writer.Output();
+                writer = new PInvokeWriter(project.HeaderDefinitions.Values, project.NamespaceName);
 
-                var extensionWriter = new ExtensionsWriter(externalHeaders, NamespaceName);
+                var extensionWriter = new ExtensionsWriter(project.HeaderDefinitions.Values, project.NamespaceName);
                 extensionWriter.Output();
             }
+            writer.Output();
 
+            OutputSolution(TargetVS.VS2008, project);
+            OutputSolution(TargetVS.VS2010, project);
+            OutputSolution(TargetVS.VS2012, project);
+            OutputSolution(TargetVS.VS2013, project);
+            OutputSolution(TargetVS.VS2015, project);
 
-            OutputSolution(TargetVS.VS2008, externalHeaders);
-            OutputSolution(TargetVS.VS2010, externalHeaders);
-            OutputSolution(TargetVS.VS2012, externalHeaders);
-            OutputSolution(TargetVS.VS2013, externalHeaders);
-            OutputSolution(TargetVS.VS2015, externalHeaders);
-
-            CMakeWriter cmake = new CMakeWriter(parser.ExternalHeaders, NamespaceName);
+            CMakeWriter cmake = new CMakeWriter(project.HeaderDefinitions, project.NamespaceName);
             cmake.Output();
 
             Console.Write("Press any key to continue...");
             Console.ReadKey();
         }
 
-        static void OutputSolution(TargetVS targetVS, IEnumerable<HeaderDefinition> headerDefinitions)
+        static void OutputSolution(TargetVS targetVS, WrapperProject project)
         {
             string targetVersionString;
             switch (targetVS)
@@ -152,7 +139,7 @@ namespace BulletSharpGen
             }
             */
 
-            var filterWriter = new FilterWriter(NamespaceName);
+            var filterWriter = new FilterWriter(project.NamespaceName);
             var sourceFilter = new Filter("Source Files", "4FC737F1-C7A5-4376-A066-2A32D752A2FF", "cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx");
             var headerFilter = new Filter("Header Files", "93995380-89BD-4b04-88EB-625FBE52EBFB", "h;hh;hpp;hxx;hm;inl;inc;xsd");
             var resourceFilter = new Filter("Resource Files", "67DA6AB6-F800-4c08-8B7A-83BB121AAD01", "rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms");
@@ -186,7 +173,7 @@ namespace BulletSharpGen
             headerFilter.AddFile("", rootFolder + "Vector3");
             headerFilter.AddFile("", rootFolder + "Vector4");
 
-            foreach (HeaderDefinition header in headerDefinitions)
+            foreach (HeaderDefinition header in project.HeaderDefinitions.Values)
             {
                 if (header.Classes.Count == 0)
                 {
@@ -216,7 +203,7 @@ namespace BulletSharpGen
 
             string bulletRoot = "..\\bullet3";
 
-            var slnWriter = new SlnWriter(filterWriter, NamespaceName)
+            var slnWriter = new SlnWriter(filterWriter, project.NamespaceName)
             {
                 IncludeDirectories = string.Format("{0}\\src;{0}\\Extras\\HACD;{0}\\Extras\\Serialize\\BulletWorldImporter;", slnRelDir + bulletRoot),
                 FilterWriter = filterWriter

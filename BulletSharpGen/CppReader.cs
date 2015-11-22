@@ -22,11 +22,13 @@ namespace BulletSharpGen
         FieldDefinition currentField;
         TranslationUnit currentTU;
 
-        public Dictionary<string, ClassDefinition> ClassDefinitions = new Dictionary<string, ClassDefinition>();
-        public Dictionary<string, HeaderDefinition> HeaderDefinitions = new Dictionary<string, HeaderDefinition>();
+        WrapperProject project;
 
-        public CppReader(string sourceDirectory)
+        public CppReader(WrapperProject project)
         {
+            this.project = project;
+
+            string sourceDirectory = project.SourceRootFolders[0];
             src = Path.GetFullPath(sourceDirectory);
             src = src.Replace('\\', '/');
 
@@ -112,7 +114,8 @@ namespace BulletSharpGen
             index.Dispose();
 
             Console.WriteLine();
-            Console.WriteLine("Read complete - headers: " + HeaderDefinitions.Count + ", classes: " + ClassDefinitions.Count);
+            Console.WriteLine("Read complete - headers: " + project.HeaderDefinitions.Count +
+                ", classes: " + project.ClassDefinitions.Count);
         }
 
         Cursor.ChildVisitResult HeaderVisitor(Cursor cursor, Cursor parent)
@@ -124,16 +127,16 @@ namespace BulletSharpGen
             }
 
             // Have we visited this header already?
-            if (HeaderDefinitions.ContainsKey(filename))
+            if (project.HeaderDefinitions.ContainsKey(filename))
             {
-                currentHeader = HeaderDefinitions[filename];
+                currentHeader = project.HeaderDefinitions[filename];
             }
             else
             {
                 // No, define a new one
                 string relativeFilename = filename.Substring(src.Length);
                 currentHeader = new HeaderDefinition(relativeFilename);
-                HeaderDefinitions.Add(filename, currentHeader);
+                project.HeaderDefinitions.Add(filename, currentHeader);
                 headerQueue.Remove(filename);
             }
 
@@ -195,7 +198,7 @@ namespace BulletSharpGen
                 fullyQualifiedName = className;
             }
 
-            if (ClassDefinitions.ContainsKey(fullyQualifiedName))
+            if (project.ClassDefinitions.ContainsKey(fullyQualifiedName))
             {
                 return;
             }
@@ -217,7 +220,7 @@ namespace BulletSharpGen
             // Unnamed struct escapes to the surrounding scope
             if (!(string.IsNullOrEmpty(className) && cursor.Kind == CursorKind.StructDecl))
             {
-                ClassDefinitions.Add(fullyQualifiedName, currentClass);
+                project.ClassDefinitions.Add(fullyQualifiedName, currentClass);
 
                 if (currentClass.Parent != null)
                 {
@@ -342,7 +345,7 @@ namespace BulletSharpGen
                 case CursorKind.CxxBaseSpecifier:
                     string baseName = TypeRefDefinition.GetFullyQualifiedName(cursor.Type);
                     ClassDefinition baseClass;
-                    if (!ClassDefinitions.TryGetValue(baseName, out baseClass))
+                    if (!project.ClassDefinitions.TryGetValue(baseName, out baseClass))
                     {
                         Console.WriteLine("Base {0} for {1} not found! Missing header?", baseName, currentClass.Name);
                         return Cursor.ChildVisitResult.Continue;

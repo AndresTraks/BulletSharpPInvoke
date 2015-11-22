@@ -1005,7 +1005,7 @@ namespace BulletSharpGen
             hasHeaderWhiteSpace = false;
         }
 
-        public void Output()
+        public override void Output()
         {
             string outDirectory = NamespaceName + "_cppcli";
 

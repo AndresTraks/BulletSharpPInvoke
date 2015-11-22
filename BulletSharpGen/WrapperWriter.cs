@@ -16,7 +16,7 @@ namespace BulletSharpGen
         AllFiles = Header | Source | CS
     }
 
-    class WrapperWriter
+    abstract class WrapperWriter
     {
         protected IEnumerable<HeaderDefinition> headerDefinitions;
         protected string NamespaceName { get; private set; }
@@ -32,6 +32,8 @@ namespace BulletSharpGen
             this.headerDefinitions = headerDefinitions;
             this.NamespaceName = namespaceName;
         }
+
+        public abstract void Output();
 
         protected void Write(string s, WriteTo to = WriteTo.AllFiles)
         {

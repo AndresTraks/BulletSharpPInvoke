@@ -122,7 +122,7 @@ namespace BulletSharpGen
 
         public Dictionary<string, CachedProperty> CachedProperties { get; private set; }
 
-        public ClassDefinition(string name, HeaderDefinition header, ClassDefinition parent = null)
+        public ClassDefinition(string name, HeaderDefinition header = null, ClassDefinition parent = null)
         {
             Name = name;
             Header = header;

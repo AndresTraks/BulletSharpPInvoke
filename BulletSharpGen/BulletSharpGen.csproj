@@ -42,6 +42,7 @@
       <HintPath>.\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblySubset.cs" />
@@ -60,6 +61,9 @@
     <Compile Include="Model\PropertyDefinition.cs" />
     <Compile Include="Model\TypeRefDefinition.cs" />
     <Compile Include="PInvokeWriter.cs" />
+    <Compile Include="Project\WrapperProjectXmlReader.cs" />
+    <Compile Include="Project\WrapperProjectXmlWriter.cs" />
+    <Compile Include="Project\WrapperProject.cs" />
     <Compile Include="ProjectConfiguration.cs" />
     <Compile Include="SlnWriter.cs" />
     <Compile Include="CppReader.cs" />
@@ -67,6 +71,9 @@
     <Compile Include="WrapperWriter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bullet3.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="libclang.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

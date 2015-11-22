@@ -6,7 +6,7 @@ namespace BulletSharpGen
     {
         public List<string> TemplateTypeParameters { get; set; }
 
-        public ClassTemplateDefinition(string name, HeaderDefinition header, ClassDefinition parent = null)
+        public ClassTemplateDefinition(string name, HeaderDefinition header = null, ClassDefinition parent = null)
             : base(name, header, parent)
         {
         }

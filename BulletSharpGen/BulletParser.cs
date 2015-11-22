@@ -8,36 +8,15 @@ namespace BulletSharpGen
     class BulletParser
     {
         Dictionary<string, ClassDefinition> classDefinitions = new Dictionary<string, ClassDefinition>();
-        public Dictionary<string, HeaderDefinition> ExternalHeaders = new Dictionary<string, HeaderDefinition>();
+        Dictionary<string, HeaderDefinition> ExternalHeaders = new Dictionary<string, HeaderDefinition>();
 
         Dictionary<string, string> methodNameMapping = new Dictionary<string, string>();
         Dictionary<string, string> parameterNameMapping = new Dictionary<string, string>();
-        Dictionary<string, string> excludedClassNames;
 
-        public BulletParser(Dictionary<string, ClassDefinition> classDefinitions, Dictionary<string, HeaderDefinition> headerDefinitions)
+        public BulletParser(WrapperProject project)
         {
-            this.classDefinitions = classDefinitions;
-            ExternalHeaders = headerDefinitions;
-
-            // Excluded classes
-            string[] excludedClassArray = new string[] { "ActionInterface", "AlignedAllocator", "bChunk", "bCommon",
-            "bFile", "Box", "BulletFile", "cl_MiniCL_Defs", "cl_platform", "ContactProcessing", "ConvexHull",
-            "ConvexHullComputer", "DantzigLCP", "GenericPoolAllocator",
-            "gim_array", "gim_bitset", "gim_box_collision", "gim_box_set", "gim_clip_polygon", "gim_contact",
-            "gim_geom_types", "gim_hash_table", "gim_memory", "gim_radixsort", "gim_tri_collision", "GjkEpa2",
-            "Gpu3DGridBroadphase", "Gpu3DGridBroadphaseSharedTypes", "GpuDefines", "GrahamScan2dConvexHull",
-            "HashedSimplePairCache", "HashMap", "HeapManager", "IDebugDraw", "JacobianEntry", "List", "Material",
-            "Matrix3x3", "MatrixX", "MiniCLTask", "MiniCLTaskScheduler", "MultiSapBroadphase", "PlatformDefinitions",
-            "PolarDecomposition", "PolyhedralContactClipping", "PosixThreadSupport", "PpuAddressSpace", "QuadWord",
-            "RaycastCallback", "SequentialThreadSupport", "SimpleDynamicsWorld", "SoftBodyData", "SoftBodyInternals",
-            "SoftBodySolvers", "SoftRigidCollisionAlgorithm", "SoftSoftCollisionAlgorithm", "SolveProjectedGaussSeidel",
-            "SolverBody", "SolverConstraint", "SpuCollisionObjectWrapper", "SpuCollisionShapes",
-            "SpuCollisionTaskProcess", "SpuContactManifoldCollisionAlgorithm", "SpuContactResult",
-            "SpuConvexPenetrationDepthSolver", "SpuDoubleBuffer", "SpuGatheringCollisionTask",
-            "SpuMinkowskiPenetrationDepthSolver", "SpuSampleTask", "SpuSampleTaskProcess", "SpuSync", "StackAlloc",
-            "SubSimplexConvexCast", "Transform", "TrbDynBody", "TrbStateVec", "vectormath_aos", "vmInclude",
-            "HacdCircularList", "HacdGraph", "HacdICHull", "HacdManifoldMesh", "HacdVector",
-            "Quaternion", "Vector3", "LemkeAlgorithm", "CharacterControllerInterface", "TypedObject" };
+            classDefinitions = project.ClassDefinitions;
+            ExternalHeaders = project.HeaderDefinitions;
 
             // Managed method names
             methodNameMapping.Add("gimpact_vs_compoundshape", "GImpactVsCompoundShape");
@@ -198,12 +177,6 @@ namespace BulletSharpGen
             List<string> trackingDisposable = new List<string>() {
                 "btCollisionObject", "btCollisionShape", "btCollisionWorld",
                 "btDbvt", "btRaycastVehicle", "btTypedConstraint"};
-
-            excludedClassNames = new Dictionary<string, string>();
-            foreach (string c in excludedClassArray)
-            {
-                excludedClassNames.Add(c, c);
-            }
 
             // Resolve references (match TypeRefDefinitions to ClassDefinitions)
             // List might be modified with template specialization classes, so make a copy
@@ -709,7 +682,7 @@ namespace BulletSharpGen
                 if (!classDefinitions.ContainsKey(name))
                 {
                     var templateClass = typeRef.Target;
-                    if (templateClass != null)
+                    if (templateClass != null && !templateClass.IsExcluded)
                     {
                         var header = templateClass.Header;
                         var specializedClass = new ClassDefinition(name, header);
@@ -1173,36 +1146,26 @@ namespace BulletSharpGen
             switch (method.ReturnType.ManagedName)
             {
                 case "BroadphaseProxy":
-                    return "BroadphaseProxy.GetManaged(";
                 case "CollisionObject":
-                    return "CollisionObject.GetManaged(";
-                case "CollisionObjectWrapper":
-                    return "new CollisionObjectWrapper(";
                 case "CollisionShape":
-                    return "CollisionShape.GetManaged(";
+                case "OverlappingPairCache":
+                    return string.Format("{0}.GetManaged(", method.ReturnType.ManagedName);
                 case "IDebugDraw":
                     return "DebugDraw.GetManaged(";
-                case "OverlappingPairCache":
-                    return "OverlappingPairCache.GetManaged(";
+                case "CollisionObjectWrapper":
+                    return string.Format("new {0}(", method.ReturnType.ManagedName);
                 default:
-                    return string.Empty;
+                    return "";
             }
         }
 
         public static string GetTypeMarshalConstructorEndCS(MethodDefinition method)
         {
-            switch (method.ReturnType.ManagedName)
+            if (GetTypeMarshalConstructorStartCS(method) != "")
             {
-                case "BroadphaseProxy":
-                case "CollisionObject":
-                case "CollisionObjectWrapper":
-                case "CollisionShape":
-                case "IDebugDraw":
-                case "OverlappingPairCache":
-                    return ")";
-                default:
-                    return string.Empty;
+                return ")";
             }
+            return "";
         }
 
         public static string GetTypeMarshalFieldSetCppCli(FieldDefinition field, ParameterDefinition parameter, string nativePointer)
@@ -1367,53 +1330,9 @@ namespace BulletSharpGen
 
         private bool IsExcludedClass(ClassDefinition cl)
         {
-            if (excludedClassNames.ContainsKey(cl.ManagedName))
-            {
-                return true;
-            }
-
             if (cl.Name.StartsWith("b3"))
             {
                 return true;
-            }
-
-            switch (cl.Name)
-            {
-                case "btBroadphasePairSortPredicate":
-                    return true;
-            }
-
-            switch (cl.FullName)
-            {
-                case "btAxisSweep3Internal::Edge":
-                case "btAxisSweep3Internal::Handle":
-                case "BT_BOX_BOX_TRANSFORM_CACHE":
-                case "btChunk":
-                case "btPointerUid":
-                case "btSoftBodyTriangleCallback":
-                case "btTriIndex":
-                case "btBarrier":
-                case "btCriticalSection":
-                case "GraphEdgePriorityQueue":
-                case "btConstraintRow":
-                case "btSpatialForceVector":
-                case "btSpatialMotionVector":
-                case "btSymmetricSpatialDyad":
-                case "btSpatialTransformationMatrix":
-                case "btPositionAndRadius":
-                case "PfxParallelBatch":
-                case "PfxParallelGroup":
-                case "PfxSortData16":
-                case "PfxSolverBody":
-                case "PfxSetupContactConstraintsIO":
-                case "PfxSolveConstraintsIO":
-                case "PfxPostSolverIO":
-                case "ConstraintSolverIO":
-                case "btBvhSubtreeInfo":
-                case "btInfMaskConverter":
-                case "btRaycastVehicle":
-                case "btDefaultVehicleRaycaster":
-                    return true;
             }
 
             // Exclude all "FloatData/DoubleData" serialization classes

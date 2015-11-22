@@ -70,7 +70,7 @@ namespace BulletSharpGen
             return false;
         }
 
-        public void Output()
+        public override void Output()
         {
             string outDirectory = NamespaceName + "_extensions";
 

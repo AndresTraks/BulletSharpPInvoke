@@ -1198,7 +1198,7 @@ namespace BulletSharpGen
             hasSourceWhiteSpace = false;
         }
 
-        public void Output()
+        public override void Output()
         {
             string outDirectoryPInvoke = NamespaceName + "_pinvoke";
             string outDirectoryC = NamespaceName + "_c";
