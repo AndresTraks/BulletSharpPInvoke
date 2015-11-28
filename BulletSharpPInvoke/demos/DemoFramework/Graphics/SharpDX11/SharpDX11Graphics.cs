@@ -39,6 +39,7 @@ namespace DemoFramework.SharpDX11
         Texture2D gBufferDiffuse;
         Texture2D depthTexture;
         Texture2D lightDepthTexture;
+        //int shadowMapWidth = 2048, shadowMapHeight = 2048;
 
         EffectShaderResourceVariable lightBufferVar;
         EffectShaderResourceVariable normalBufferVar;
@@ -46,10 +47,13 @@ namespace DemoFramework.SharpDX11
         EffectShaderResourceVariable depthMapVar;
         EffectShaderResourceVariable shadowLightDepthBufferVar;
 
-        //EffectMatrixVariable inverseProjectionVar;
-        //EffectMatrixVariable lightInverseViewProjectionVar;
+        EffectMatrixVariable lightViewProjectionVar;
         EffectVectorVariable sunLightDirectionVar;
         EffectMatrixVariable overlayViewProjectionVar;
+        EffectMatrixVariable viewInverseVar;
+        EffectScalarVariable viewportWidthVar;
+        EffectScalarVariable viewportHeightVar;
+        EffectVectorVariable viewParametersVar;
 
         RenderTargetView renderView;
         DepthStencilView depthView;
@@ -62,7 +66,7 @@ namespace DemoFramework.SharpDX11
         DepthStencilState insideLightVolumeDepthState;
         DepthStencilState outsideLightVolumeDepthState;
         DepthStencilState lightDepthStencilState;
-        bool shadowsEnabled = false;
+        bool shadowsEnabled = true;
 
         Effect effect;
         Effect effect2;
@@ -93,10 +97,7 @@ namespace DemoFramework.SharpDX11
         EffectPass lightAccumulationPass;
         EffectShaderResourceVariable lightNormalBufferVar;
         EffectShaderResourceVariable lightDepthBufferVar;
-        EffectScalarVariable tanHalfFOVXVar;
-        EffectScalarVariable tanHalfFOVYVar;
-        EffectScalarVariable projectionAVar;
-        EffectScalarVariable projectionBVar;
+        EffectVectorVariable lightViewParametersVar;
         EffectMatrixVariable lightWorldVar;
         EffectVectorVariable lightPositionRadiusVar;
         EffectVectorVariable lightColorVar;
@@ -375,6 +376,8 @@ namespace DemoFramework.SharpDX11
             depthView = new DepthStencilView(_device, depthTexture, depthViewDesc);
             depthBufferRes = new ShaderResourceView(_device, depthTexture, resourceDesc);
 
+            //depthDesc.Width = shadowMapWidth;
+            //depthDesc.Height = shadowMapHeight;
             lightDepthTexture = new Texture2D(_device, depthDesc);
             lightDepthView = new DepthStencilView(_device, lightDepthTexture, depthViewDesc);
             lightDepthRes = new ShaderResourceView(_device, lightDepthTexture, resourceDesc);
@@ -385,7 +388,7 @@ namespace DemoFramework.SharpDX11
         ShaderBytecode LoadShader(string name, ShaderFlags flags)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            StreamReader reader = new StreamReader(assembly.GetManifestResourceStream("DemoFramework.SharpDX11." + name));
+            StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(string.Format("{0}.{1}", assembly.GetName().Name, name)));
             string shaderSource = reader.ReadToEnd();
             return ShaderBytecode.Compile(shaderSource, "fx_5_0", flags, EffectFlags.None);
         }
@@ -509,9 +512,12 @@ namespace DemoFramework.SharpDX11
             depthMapVar = effect2.GetVariableByName("depthMap").AsShaderResource();
             shadowLightDepthBufferVar = effect2.GetVariableByName("lightDepthMap").AsShaderResource();
 
-            //inverseProjectionVar = effect2.GetVariableByName("InverseProjection").AsMatrix();
-            //lightInverseViewProjectionVar = effect2.GetVariableByName("LightInverseViewProjection").AsMatrix();
+            lightViewProjectionVar = effect2.GetVariableByName("LightViewProjection").AsMatrix();
             sunLightDirectionVar = effect2.GetVariableByName("SunLightDirection").AsVector();
+            viewInverseVar = effect2.GetVariableByName("ViewInverse").AsMatrix();
+            viewportWidthVar = effect2.GetVariableByName("ViewportWidth").AsScalar();
+            viewportHeightVar = effect2.GetVariableByName("ViewportHeight").AsScalar();
+            viewParametersVar = effect2.GetVariableByName("ViewParameters").AsVector();
 
             overlayViewProjectionVar = effect2.GetVariableByName("OverlayViewProjection").AsMatrix();
 
@@ -535,11 +541,7 @@ namespace DemoFramework.SharpDX11
             lightViewportWidthVar = lightShader.GetVariableByName("ViewportWidth").AsScalar();
             lightViewportHeightVar = lightShader.GetVariableByName("ViewportHeight").AsScalar();
             lightEyePositionVar = lightShader.GetVariableByName("EyePosition").AsVector();
-
-            tanHalfFOVXVar = lightShader.GetVariableByName("TanHalfFOVX").AsScalar();
-            tanHalfFOVYVar = lightShader.GetVariableByName("TanHalfFOVY").AsScalar();
-            projectionAVar = lightShader.GetVariableByName("ProjectionA").AsScalar();
-            projectionBVar = lightShader.GetVariableByName("ProjectionB").AsScalar();
+            lightViewParametersVar = lightShader.GetVariableByName("ViewParameters").AsVector();
 
             InputElement[] elements = new InputElement[]
             {
@@ -579,8 +581,11 @@ namespace DemoFramework.SharpDX11
             lightDepthBufferVar = lightShader.GetVariableByName("depthBuffer").AsShaderResource();
             lightNormalBufferVar = lightShader.GetVariableByName("normalBuffer").AsShaderResource();
 
-            lights.Add(new Light(pointLightPosition, 60, new Vector4(1, 1, 1, 1)));
-            //lights.Add(new Light(new Vector3(5,10,-10), 20, new Vector4(0.5f, 0.5f, 1, 1)));
+            lights.Add(new Light(pointLightPosition, 60, new Vector4(1, 0.95f, 0.9f, 1)));
+            //lights.Add(new Light(pointLightPosition, 60, new Vector4(0, 0, 1, 1)));
+            //lights.Add(new Light(new Vector3(-10, 10, 10), 30, new Vector4(1, 0, 0, 1)));
+            //lights.Add(new Light(new Vector3(10, 5, -10), 20, new Vector4(0, 1, 0, 1)));
+            //lights.Add(new Light(new Vector3(-10, 5, -10), 20, new Vector4(1, 0, 1, 1)));
 
 
             info = new InfoText(_device);
@@ -600,20 +605,20 @@ namespace DemoFramework.SharpDX11
             sceneConstants.View = Matrix.LookAtLH(MathHelper.Convert(freelook.Eye), MathHelper.Convert(freelook.Target), up);
             Matrix.PerspectiveFovLH(FieldOfView, AspectRatio, _nearPlane, FarPlane, out sceneConstants.Projection);
             Matrix.Invert(ref sceneConstants.View, out sceneConstants.ViewInverse);
-            /*
+
             Texture2DDescription depthBuffer = lightDepthTexture.Description;
-            Matrix lightView = Matrix.LookAtLH(sunLightDirection, Vector3.Zero, up);
-            Matrix lightProjection = Matrix.OrthoLH(depthBuffer.Width / 8.0f, depthBuffer.Height / 8.0f, _nearPlane, FarPlane);
+            Vector3 lightPosition = sunLightDirection * -60;
+            Matrix lightView = Matrix.LookAtLH(lightPosition, Vector3.Zero, up);
+            //Matrix lightProjection = Matrix.OrthoLH(depthBuffer.Width / 8.0f, depthBuffer.Height / 8.0f, _nearPlane, FarPlane);
+            Matrix lightProjection = Matrix.PerspectiveFovLH(FieldOfView, (float)depthBuffer.Width / (float)depthBuffer.Height, _nearPlane, FarPlane);
             sceneConstants.LightViewProjection = lightView * lightProjection;
-            */
+
             DataStream data;
             _immediateContext.MapSubresource(sceneConstantsBuffer, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
             Marshal.StructureToPtr(sceneConstants, data.DataPointer, false);
             _immediateContext.UnmapSubresource(sceneConstantsBuffer, 0);
             data.Dispose();
 
-            //inverseProjectionVar.SetMatrix(Matrix.Invert(sceneConstants.Projection));
-            //lightInverseViewProjectionVar.SetMatrix(Matrix.Invert(sceneConstants.LightViewProjection));
             sunLightDirectionVar.Set(new Vector4(sunLightDirection, 1));
 
             Matrix overlayMatrix = Matrix.Scaling(info.Width / _width, info.Height / _height, 1.0f);
@@ -629,12 +634,18 @@ namespace DemoFramework.SharpDX11
             lightEyePositionVar.Set(ref eyePosition);
 
             float tanHalfFOVY = (float)Math.Tan(FieldOfView * 0.5f);
-            tanHalfFOVXVar.Set(tanHalfFOVY * AspectRatio);
-            tanHalfFOVYVar.Set(tanHalfFOVY);
+            float tanHalfFOVX = tanHalfFOVY * AspectRatio;
             float projectionA = FarPlane / (FarPlane - _nearPlane);
             float projectionB = -projectionA * _nearPlane;
-            projectionAVar.Set(projectionA);
-            projectionBVar.Set(projectionB);
+            Vector4 viewParameters = new Vector4(tanHalfFOVX, tanHalfFOVY, projectionA, projectionB);
+            lightViewParametersVar.Set(ref viewParameters);
+
+
+            lightViewProjectionVar.SetMatrixTranspose(sceneConstants.LightViewProjection);
+            viewInverseVar.SetMatrix(ref sceneConstants.ViewInverse);
+            viewportWidthVar.Set(_width);
+            viewportHeightVar.Set(_height);
+            viewParametersVar.Set(ref viewParameters);
         }
 
         void RenderLights()
@@ -656,8 +667,9 @@ namespace DemoFramework.SharpDX11
             outputMerger.SetDepthStencilState(outsideLightVolumeDepthState);
             foreach (var light in lights)
             {
-                float bias = light.Radius * 2;
-                if ((light.Position - eyePosition).LengthSquared() >= (light.Radius * light.Radius) + bias)
+                float radius = light.Radius;
+                float bias = radius * 2;
+                if ((light.Position - eyePosition).LengthSquared() >= (radius * radius) + bias)
                 {
                     RenderLight(light);
                 }
@@ -695,7 +707,7 @@ namespace DemoFramework.SharpDX11
             //_immediateContext.ClearRenderTargetView(renderView, ambient);
             _immediateContext.ClearRenderTargetView(gBufferLightView, Color4.Black);
             _immediateContext.ClearRenderTargetView(gBufferNormalView, Color4.Black);
-            _immediateContext.ClearRenderTargetView(gBufferDiffuseView, ambient);
+            _immediateContext.ClearRenderTargetView(gBufferDiffuseView, Color4.Black);
 
 
             // Read collision object transforms, create geometry, etc.
@@ -744,8 +756,7 @@ namespace DemoFramework.SharpDX11
             lightBufferVar.SetResource(lightBufferRes);
             normalBufferVar.SetResource(normalBufferRes);
             diffuseBufferVar.SetResource(diffuseBufferRes);
-            //depthMapVar.SetResource(depthBufferRes);
-            //shadowLightDepthBufferVar.SetResource(lightDepthRes);
+            depthMapVar.SetResource(depthBufferRes);
 
             gBufferRenderPass.Apply(_immediateContext);
             _immediateContext.Draw(3, 0);

@@ -2,17 +2,27 @@ SamplerState defaultSampler
 {
     Filter = MIN_MAG_MIP_POINT;
 };
+SamplerState shadowSampler
+{
+    Filter = MIN_MAG_LINEAR_MIP_POINT;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
 
 Texture2D lightBuffer;
 Texture2D normalBuffer;
 Texture2D diffuseBuffer;
-//Texture2D depthMap;
-//Texture2D lightDepthMap;
+Texture2D depthMap;
+Texture2D lightDepthMap;
 
 matrix OverlayViewProjection;
-//matrix InverseProjection;
-//matrix LightInverseViewProjection;
+matrix LightViewProjection;
 float4 SunLightDirection;
+
+matrix ViewInverse;
+float ViewportWidth;
+float ViewportHeight;
+float4 ViewParameters; //TanHalfFOVX, TanHalfFOVY, ProjectionA, ProjectionB
 
 struct VS_OUT
 {
@@ -42,20 +52,37 @@ float4 PS( VS_OUT input ) : SV_Target
 		return float4(diffuseSample, 1);
 	}
 
-	float4 lightSample = lightBuffer.Sample(defaultSampler, input.texCoord);
-	//float depthSample = depthMap.Sample(defaultSampler, input.texCoord).x;
-	//float lightDepthSample = lightDepthMap.Sample(defaultSampler, input.texCoord).x;
-
 	float3 normal = normalize((normalSample.xyz - 0.5) * 2); // from 0...1 to -1...1
 
 	// Ambient term
 	float3 ambientColor = float3(0.4, 0.4, 0.4);
 	float3 ambient = ambientColor * diffuseSample;
 
+	float4 lightSample = lightBuffer.Sample(defaultSampler, input.texCoord);
 	float3 dirLight = 0.5 * saturate(dot(normal, -SunLightDirection.xyz)) * diffuseSample;
 
-	//float shade *= GetShadowAmount(input.LPos);
-	//diffuse *= shade;
+	// Shadow
+	float depthSample = depthMap.Sample(defaultSampler, input.texCoord).x;
+	float2 projection = ViewParameters.zw;
+	float linearDepth = projection.y / (depthSample - projection.x);
+
+	float2 screenPos = (input.texCoord * float2(2,-2)) + float2(-1,1); // from 0...1 to -1...1
+	float2 tanHalfFOV = ViewParameters.xy;
+	float4 viewSpacePosition = float4(linearDepth * float3(screenPos * tanHalfFOV, 1), 1);
+	float3 worldPosition = mul(viewSpacePosition, ViewInverse).xyz;
+	float4 lightScreenPosition = mul(LightViewProjection, float4(worldPosition, 1));
+
+	float lightDepthActual = lightScreenPosition.z / lightScreenPosition.w;
+	float2 lightScreenPos = lightScreenPosition.xy / lightScreenPosition.w;
+
+	if (lightScreenPos.x >= -1 && lightScreenPos.x <= 1 && lightScreenPos.y >= -1 && lightScreenPos.y <= 1)
+	{
+		lightScreenPos = (lightScreenPos - float2(-1, 1)) * float2(0.5, -0.5); // from -1...1 to 0...1
+		float lightDepthSample = lightDepthMap.Sample(shadowSampler, lightScreenPos).x;
+
+		float shadowMul = ((lightDepthActual - lightDepthSample) > 0.00006) ? 0.8 : 1;
+		dirLight *= shadowMul;
+	}
 
 	// Debugging
 	//return float4(depthSample, depthSample, depthSample, 1);

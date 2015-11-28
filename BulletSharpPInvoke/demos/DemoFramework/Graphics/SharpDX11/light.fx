@@ -16,10 +16,7 @@ matrix ViewInverse;
 float ViewportWidth;
 float ViewportHeight;
 float4 EyePosition;
-float TanHalfFOVX;
-float TanHalfFOVY;
-float ProjectionA;
-float ProjectionB;
+float4 ViewParameters; //TanHalfFOVX, TanHalfFOVY, ProjectionA, ProjectionB
 
 float4 VS(float4 Pos : POSITION) : SV_POSITION
 {
@@ -31,15 +28,12 @@ float4 PS( float4 Pos : SV_POSITION ) : SV_Target0
 	float2 texCoords = Pos.xy / float2(ViewportWidth, ViewportHeight);
 	float depthSample = depthBuffer.Sample(defaultSampler, texCoords).x;
 
-	// from 0...1 to -1...1
-	float2 screenPos = (texCoords * float2(2,-2)) + float2(-1,1);
+	float2 projection = ViewParameters.zw;
+	float linearDepth = projection.y / (depthSample - projection.x);
 
-	//float linearDepth = ProjectionB / (depthSample - ProjectionA);
-	float linearDepth = ProjectionB / (depthSample - ProjectionA);
-	float4 viewSpacePosition = float4(
-		linearDepth * screenPos.x*TanHalfFOVX,
-		linearDepth * screenPos.y*TanHalfFOVY,
-		linearDepth, 1);
+	float2 screenPos = (texCoords * float2(2,-2)) + float2(-1,1); // from 0...1 to -1...1
+	float2 tanHalfFOV = ViewParameters.xy;
+	float4 viewSpacePosition = float4(linearDepth * float3(screenPos * tanHalfFOV, 1), 1);
 	float3 worldPosition = mul(viewSpacePosition, ViewInverse).xyz;
 
 	float3 normalSample = normalBuffer.Sample(defaultSampler, texCoords).xyz;

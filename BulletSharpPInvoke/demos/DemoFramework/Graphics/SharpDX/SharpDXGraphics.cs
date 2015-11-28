@@ -359,7 +359,7 @@ namespace DemoFramework.SharpDX
         static ShaderBytecode LoadShader(string name, ShaderFlags flags)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            StreamReader reader = new StreamReader(assembly.GetManifestResourceStream("DemoFramework.SharpDX." + name));
+            StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(string.Format("{0}.{1}", assembly.GetName().Name, name)));
             string shaderSource = reader.ReadToEnd();
             return ShaderBytecode.Compile(shaderSource, "fx_4_0", flags, EffectFlags.None);
         }

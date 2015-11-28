@@ -51,9 +51,7 @@ struct PS_DEBUG_OUT_MRT
 float4 shadowGenVS(VS_IN input) : SV_POSITION
 {
 	float4x4 world = float4x4(input.World0, input.World1, input.World2, input.World3);
-	float4 Pw = mul(input.Pos,world);
-	float4 Pl = mul(LightViewProjection,Pw);  // "P" in light coords
-	return Pl;
+	return mul(LightViewProjection, mul(input.Pos, world));  // "P" in light coords
 }
 
 VS_OUT VS(VS_IN input)
