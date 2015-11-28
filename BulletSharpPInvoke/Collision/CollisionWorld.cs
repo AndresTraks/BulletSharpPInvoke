@@ -738,11 +738,11 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
+        protected BroadphaseInterface _broadphase;
 		protected AlignedCollisionObjectArray _collisionObjectArray;
-		protected Dispatcher _dispatcher;
-		protected BroadphaseInterface _broadphase;
-        private DispatcherInfo _dispatchInfo;
         internal IDebugDraw _debugDrawer;
+		protected Dispatcher _dispatcher;
+        private DispatcherInfo _dispatchInfo;
 
 		internal CollisionWorld(IntPtr native)
 		{

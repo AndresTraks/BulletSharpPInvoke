@@ -12,20 +12,20 @@ namespace BulletSharp
 		public AxisSweep3(Vector3 worldAabbMin, Vector3 worldAabbMax)
             : base(btAxisSweep3_new(ref worldAabbMin, ref worldAabbMax))
 		{
-            _pairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
+            _overlappingPairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
 		}
 
 		public AxisSweep3(Vector3 worldAabbMin, Vector3 worldAabbMax, ushort maxHandles)
             : base(btAxisSweep3_new2(ref worldAabbMin, ref worldAabbMax, maxHandles))
 		{
-            _pairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
+            _overlappingPairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
 		}
 
 		public AxisSweep3(Vector3 worldAabbMin, Vector3 worldAabbMax, ushort maxHandles, OverlappingPairCache pairCache)
             : base(btAxisSweep3_new3(ref worldAabbMin, ref worldAabbMax, maxHandles,
             (pairCache != null) ? pairCache._native : IntPtr.Zero))
 		{
-            _pairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
+            _overlappingPairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
                 btBroadphaseInterface_getOverlappingPairCache(_native), true);
 		}
 
@@ -33,7 +33,7 @@ namespace BulletSharp
             : base(btAxisSweep3_new4(ref worldAabbMin, ref worldAabbMax, maxHandles,
             (pairCache != null) ? pairCache._native : IntPtr.Zero, disableRaycastAccelerator))
 		{
-            _pairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
+            _overlappingPairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
                 btBroadphaseInterface_getOverlappingPairCache(_native), true);
 		}
 
@@ -148,20 +148,20 @@ namespace BulletSharp
 		public AxisSweep3_32Bit(Vector3 worldAabbMin, Vector3 worldAabbMax)
             : base(bt32BitAxisSweep3_new(ref worldAabbMin, ref worldAabbMax))
 		{
-            _pairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
+            _overlappingPairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
 		}
 
 		public AxisSweep3_32Bit(Vector3 worldAabbMin, Vector3 worldAabbMax, uint maxHandles)
             : base(bt32BitAxisSweep3_new2(ref worldAabbMin, ref worldAabbMax, maxHandles))
 		{
-            _pairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
+            _overlappingPairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
 		}
 
 		public AxisSweep3_32Bit(Vector3 worldAabbMin, Vector3 worldAabbMax, uint maxHandles, OverlappingPairCache pairCache)
             : base(bt32BitAxisSweep3_new3(ref worldAabbMin, ref worldAabbMax, maxHandles,
             (pairCache != null) ? pairCache._native : IntPtr.Zero))
 		{
-            _pairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
+            _overlappingPairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
                 btBroadphaseInterface_getOverlappingPairCache(_native), true);
 		}
 
@@ -169,7 +169,7 @@ namespace BulletSharp
             : base(bt32BitAxisSweep3_new4(ref worldAabbMin, ref worldAabbMax, maxHandles,
             (pairCache != null) ? pairCache._native : IntPtr.Zero, disableRaycastAccelerator))
 		{
-            _pairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
+            _overlappingPairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
                 btBroadphaseInterface_getOverlappingPairCache(_native), true);
 		}
 

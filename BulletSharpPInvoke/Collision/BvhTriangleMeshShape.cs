@@ -18,25 +18,25 @@ namespace BulletSharp
 		public BvhTriangleMeshShape(StridingMeshInterface meshInterface, bool useQuantizedAabbCompression)
 			: base(btBvhTriangleMeshShape_new(meshInterface._native, useQuantizedAabbCompression))
 		{
-            _meshInterface = meshInterface;
+			_meshInterface = meshInterface;
 		}
 
 		public BvhTriangleMeshShape(StridingMeshInterface meshInterface, bool useQuantizedAabbCompression, bool buildBvh)
 			: base(btBvhTriangleMeshShape_new2(meshInterface._native, useQuantizedAabbCompression, buildBvh))
 		{
-            _meshInterface = meshInterface;
+			_meshInterface = meshInterface;
 		}
 
 		public BvhTriangleMeshShape(StridingMeshInterface meshInterface, bool useQuantizedAabbCompression, Vector3 bvhAabbMin, Vector3 bvhAabbMax)
 			: base(btBvhTriangleMeshShape_new3(meshInterface._native, useQuantizedAabbCompression, ref bvhAabbMin, ref bvhAabbMax))
 		{
-            _meshInterface = meshInterface;
+			_meshInterface = meshInterface;
 		}
 
 		public BvhTriangleMeshShape(StridingMeshInterface meshInterface, bool useQuantizedAabbCompression, Vector3 bvhAabbMin, Vector3 bvhAabbMax, bool buildBvh)
 			: base(btBvhTriangleMeshShape_new4(meshInterface._native, useQuantizedAabbCompression, ref bvhAabbMin, ref bvhAabbMax, buildBvh))
 		{
-            _meshInterface = meshInterface;
+			_meshInterface = meshInterface;
 		}
 
 		public void BuildOptimizedBvh()

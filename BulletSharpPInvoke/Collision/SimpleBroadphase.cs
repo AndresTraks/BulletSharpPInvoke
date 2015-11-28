@@ -29,19 +29,19 @@ namespace BulletSharp
 		public SimpleBroadphase()
 			: base(btSimpleBroadphase_new())
 		{
-            _pairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
+            _overlappingPairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
 		}
 
 		public SimpleBroadphase(int maxProxies)
 			: base(btSimpleBroadphase_new2(maxProxies))
 		{
-            _pairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
+            _overlappingPairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
 		}
 
 		public SimpleBroadphase(int maxProxies, OverlappingPairCache overlappingPairCache)
 			: base(btSimpleBroadphase_new3(maxProxies, overlappingPairCache._native))
 		{
-            _pairCache = (overlappingPairCache != null) ? overlappingPairCache : new HashedOverlappingPairCache(
+            _overlappingPairCache = (overlappingPairCache != null) ? overlappingPairCache : new HashedOverlappingPairCache(
                 btBroadphaseInterface_getOverlappingPairCache(_native), true);
 		}
 

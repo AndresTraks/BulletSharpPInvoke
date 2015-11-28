@@ -7,7 +7,7 @@ namespace BulletSharp
 {
 	public class TriangleMeshShape : ConcaveShape
 	{
-        protected StridingMeshInterface _meshInterface;
+		protected StridingMeshInterface _meshInterface;
 
 		internal TriangleMeshShape(IntPtr native)
 			: base(native)

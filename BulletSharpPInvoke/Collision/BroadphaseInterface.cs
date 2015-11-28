@@ -119,7 +119,7 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
-        protected OverlappingPairCache _pairCache;
+        protected OverlappingPairCache _overlappingPairCache;
         internal List<CollisionWorld> _worldRefs = new List<CollisionWorld>(1);
         internal bool _worldDeferredCleanup;
 
@@ -202,7 +202,7 @@ namespace BulletSharp
 
 		public OverlappingPairCache OverlappingPairCache
 		{
-            get { return _pairCache; }
+			get { return _overlappingPairCache; }
 		}
 
 		public void Dispose()

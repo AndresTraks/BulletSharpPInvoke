@@ -23,8 +23,8 @@ namespace BulletSharp
         }
 
         internal CollisionShape(IntPtr native, bool preventDelete = false)
-        {
-            _native = native;
+		{
+			_native = native;
             if (preventDelete)
             {
                 _preventDelete = true;
@@ -34,7 +34,7 @@ namespace BulletSharp
                 GCHandle handle = GCHandle.Alloc(this, GCHandleType.Weak);
                 btCollisionShape_setUserPointer(native, GCHandle.ToIntPtr(handle));
             }
-        }
+		}
 
         public Vector3 CalculateLocalInertia(float mass)
         {

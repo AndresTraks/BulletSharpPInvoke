@@ -8,7 +8,7 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
-        private Dispatcher _dispatcher;
+		private Dispatcher _dispatcher1;
 		private PersistentManifold _manifold;
 
 		public CollisionAlgorithmConstructionInfo()
@@ -18,16 +18,16 @@ namespace BulletSharp
 
 		public CollisionAlgorithmConstructionInfo(Dispatcher dispatcher, int temp)
 		{
-            _dispatcher = dispatcher;
+            _dispatcher1 = dispatcher;
             _native = btCollisionAlgorithmConstructionInfo_new2((dispatcher != null) ? dispatcher._native : IntPtr.Zero, temp);
 		}
 
         public Dispatcher Dispatcher
 		{
-            get { return _dispatcher; }
+            get { return _dispatcher1; }
             set
             {
-                _dispatcher = value;
+                _dispatcher1 = value;
                 btCollisionAlgorithmConstructionInfo_setDispatcher1(_native, (value != null) ? value._native : IntPtr.Zero);
             }
 		}

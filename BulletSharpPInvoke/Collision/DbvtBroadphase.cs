@@ -50,13 +50,13 @@ namespace BulletSharp
 		public DbvtBroadphase()
 			: base(btDbvtBroadphase_new())
 		{
-            _pairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
+            _overlappingPairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
 		}
 
 		public DbvtBroadphase(OverlappingPairCache pairCache)
             : base(btDbvtBroadphase_new2((pairCache != null) ? pairCache._native : IntPtr.Zero))
 		{
-            _pairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
+            _overlappingPairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
                 btBroadphaseInterface_getOverlappingPairCache(_native), true);
 		}
 
@@ -152,7 +152,7 @@ namespace BulletSharp
             }
             set
             {
-                _pairCache = value;
+                _overlappingPairCache = value;
                 btDbvtBroadphase_setPaircache(_native, value._native);
             }
 		}
