@@ -7,7 +7,7 @@ using BulletSharp.Math;
 namespace BulletSharp
 {
 	[Flags]
-    public enum RigidBodyFlags
+	public enum RigidBodyFlags
 	{
 		None = 0,
 		DisableWorldGravity = 1,

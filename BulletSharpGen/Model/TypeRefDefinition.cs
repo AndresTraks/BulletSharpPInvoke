@@ -23,7 +23,7 @@ namespace BulletSharpGen
             {
                 if (Target != null)
                 {
-                    return Target.FullName;
+                    return Target.FullyQualifiedName;
                 }
                 return Name;
             }
@@ -230,6 +230,28 @@ namespace BulletSharpGen
                 {
                     name = decl.SemanticParent.Spelling + "::" + name;
                     decl = decl.SemanticParent;
+                }
+            }
+            return name;
+        }
+
+        public static string GetFullyQualifiedName(ClangSharp.Cursor cursor)
+        {
+            string name;
+            if (cursor.Type.TypeKind != ClangSharp.Type.Kind.Invalid)
+            {
+                return GetFullyQualifiedName(cursor.Type);
+            }
+            else
+            {
+                name = cursor.Spelling;
+                while (cursor.SemanticParent.Kind == ClangSharp.CursorKind.ClassDecl ||
+                    cursor.SemanticParent.Kind == ClangSharp.CursorKind.StructDecl ||
+                    cursor.SemanticParent.Kind == ClangSharp.CursorKind.ClassTemplate ||
+                    cursor.SemanticParent.Kind == ClangSharp.CursorKind.Namespace)
+                {
+                    name = cursor.SemanticParent.Spelling + "::" + name;
+                    cursor = cursor.SemanticParent;
                 }
             }
             return name;

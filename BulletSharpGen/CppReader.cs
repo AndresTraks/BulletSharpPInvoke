@@ -6,6 +6,20 @@ using ClangSharp;
 
 namespace BulletSharpGen
 {
+    class ReaderContext
+    {
+        public TranslationUnit TranslationUnit { get; set; }
+        public HeaderDefinition Header { get; set; }
+        public string Namespace { get; set; }
+        public ClassDefinition Class { get; set; }
+        public MethodDefinition Method { get; set; }
+        public ParameterDefinition Parameter { get; set; }
+        public EnumDefinition Enum { get; set; }
+        public FieldDefinition Field { get; set; }
+
+        public AccessSpecifier MemberAccess { get; set; }
+    }
+
     class CppReader
     {
         string src;
@@ -13,15 +27,8 @@ namespace BulletSharpGen
         List<string> headerQueue = new List<string>();
         List<string> clangOptions = new List<string>();
         Dictionary<string, string> excludedMethods = new Dictionary<string, string>();
-        AccessSpecifier currentMemberAccess;
-        HeaderDefinition currentHeader;
-        ClassDefinition currentClass;
-        MethodDefinition currentMethod;
-        ParameterDefinition currentParameter;
-        EnumDefinition currentEnum;
-        FieldDefinition currentField;
-        TranslationUnit currentTU;
 
+        ReaderContext _context = new ReaderContext();
         WrapperProject project;
 
         public CppReader(WrapperProject project)
@@ -114,8 +121,17 @@ namespace BulletSharpGen
             index.Dispose();
 
             Console.WriteLine();
-            Console.WriteLine("Read complete - headers: " + project.HeaderDefinitions.Count +
-                ", classes: " + project.ClassDefinitions.Count);
+            Console.WriteLine("Read complete - headers: {0}, classes: {1}",
+                project.HeaderDefinitions.Count, project.ClassDefinitions.Count);
+
+
+            foreach (var @class in project.ClassDefinitions.Values)
+            {
+                if (!@class.IsParsed)
+                {
+                    Console.WriteLine("Class removed: {0}", @class.FullyQualifiedName);
+                }
+            }
         }
 
         Cursor.ChildVisitResult HeaderVisitor(Cursor cursor, Cursor parent)
@@ -129,15 +145,20 @@ namespace BulletSharpGen
             // Have we visited this header already?
             if (project.HeaderDefinitions.ContainsKey(filename))
             {
-                currentHeader = project.HeaderDefinitions[filename];
+                _context.Header = project.HeaderDefinitions[filename];
             }
             else
             {
                 // No, define a new one
                 string relativeFilename = filename.Substring(src.Length);
-                currentHeader = new HeaderDefinition(relativeFilename);
-                project.HeaderDefinitions.Add(filename, currentHeader);
+                _context.Header = new HeaderDefinition(relativeFilename);
+                project.HeaderDefinitions.Add(filename, _context.Header);
                 headerQueue.Remove(filename);
+            }
+
+            if (cursor.Kind == CursorKind.Namespace)
+            {
+                _context.Namespace = cursor.Spelling;
             }
 
             if ((cursor.Kind == CursorKind.ClassDecl || cursor.Kind == CursorKind.StructDecl ||
@@ -147,12 +168,12 @@ namespace BulletSharpGen
             }
             else if (cursor.Kind == CursorKind.EnumDecl)
             {
-                if (!currentHeader.Enums.Any(x => x.Name.Equals(cursor.Spelling)))
+                if (!_context.Header.Enums.Any(x => x.Name.Equals(cursor.Spelling)))
                 {
-                    currentEnum = new EnumDefinition(cursor.Spelling, cursor.Spelling);
-                    currentHeader.Enums.Add(currentEnum);
+                    _context.Enum = new EnumDefinition(cursor.Spelling, cursor.Spelling);
+                    _context.Header.Enums.Add(_context.Enum);
                     cursor.VisitChildren(EnumVisitor);
-                    currentEnum = null;
+                    _context.Enum = null;
                 }
             }
             else if (cursor.Kind == CursorKind.Namespace)
@@ -166,12 +187,12 @@ namespace BulletSharpGen
         {
             if (cursor.Kind == CursorKind.EnumConstantDecl)
             {
-                currentEnum.EnumConstants.Add(cursor.Spelling);
-                currentEnum.EnumConstantValues.Add("");
+                _context.Enum.EnumConstants.Add(cursor.Spelling);
+                _context.Enum.EnumConstantValues.Add("");
             }
             else if (cursor.Kind == CursorKind.IntegerLiteral)
             {
-                //currentEnum.EnumConstantValues[currentEnum.EnumConstants.Count - 1] = ".";
+                //_context.Enum.EnumConstantValues[_context.Enum.EnumConstants.Count - 1] = ".";
             }
             else if (cursor.Kind == CursorKind.ParenExpr)
             {
@@ -183,97 +204,103 @@ namespace BulletSharpGen
         void ParseClassCursor(Cursor cursor)
         {
             string className = cursor.Spelling;
-            string fullyQualifiedName;
 
-            if (cursor.Type.TypeKind != ClangSharp.Type.Kind.Invalid)
+            // Unnamed struct
+            // A combined "typedef struct {}" definition is split into separate struct and typedef statements
+            // where the struct is also a child of the typedef, so the struct can be skipped for now.
+            if (string.IsNullOrEmpty(className) && cursor.Kind == CursorKind.StructDecl)
             {
-                fullyQualifiedName = TypeRefDefinition.GetFullyQualifiedName(cursor.Type);
-            }
-            else if (currentClass != null)
-            {
-                fullyQualifiedName = currentClass.FullName + "::" + className;
-            }
-            else
-            {
-                fullyQualifiedName = className;
+                return;
             }
 
+            string fullyQualifiedName = TypeRefDefinition.GetFullyQualifiedName(cursor);
             if (project.ClassDefinitions.ContainsKey(fullyQualifiedName))
             {
-                return;
-            }
-
-            if (string.IsNullOrEmpty(className) && cursor.Kind == CursorKind.StructDecl && currentClass == null)
-            {
-                return;
-            }
-
-            if (cursor.Kind == CursorKind.ClassTemplate)
-            {
-                currentClass = new ClassTemplateDefinition(className, currentHeader, currentClass);
+                if (project.ClassDefinitions[fullyQualifiedName].IsParsed)
+                {
+                    return;
+                }
+                var parent = _context.Class;
+                _context.Class = project.ClassDefinitions[fullyQualifiedName];
+                _context.Class.Parent = parent;
             }
             else
             {
-                currentClass = new ClassDefinition(className, currentHeader, currentClass);
+                if (cursor.Kind == CursorKind.ClassTemplate)
+                {
+                    _context.Class = new ClassTemplateDefinition(className, _context.Header, _context.Class);
+                }
+                else
+                {
+                    _context.Class = new ClassDefinition(className, _context.Header, _context.Class);
+                }
+
+                _context.Class.NamespaceName = _context.Namespace;
+
+                if (_context.Class.FullyQualifiedName != fullyQualifiedName)
+                {
+                    // TODO
+                }
+                project.ClassDefinitions.Add(fullyQualifiedName, _context.Class);
             }
+
+            _context.Class.IsParsed = true;
 
             // Unnamed struct escapes to the surrounding scope
             if (!(string.IsNullOrEmpty(className) && cursor.Kind == CursorKind.StructDecl))
             {
-                project.ClassDefinitions.Add(fullyQualifiedName, currentClass);
-
-                if (currentClass.Parent != null)
+                if (_context.Class.Parent != null)
                 {
-                    currentClass.Parent.Classes.Add(currentClass);
+                    _context.Class.Parent.Classes.Add(_context.Class);
                 }
                 else
                 {
-                    currentHeader.Classes.Add(currentClass);
+                    _context.Header.Classes.Add(_context.Class);
                 }
             }
 
-            AccessSpecifier parentMemberAccess = currentMemberAccess;
+            AccessSpecifier parentMemberAccess = _context.MemberAccess;
 
             // Default class/struct access specifier
             if (cursor.Kind == CursorKind.ClassDecl)
             {
-                currentMemberAccess = AccessSpecifier.Private;
+                _context.MemberAccess = AccessSpecifier.Private;
             }
             else if (cursor.Kind == CursorKind.StructDecl)
             {
-                currentClass.IsStruct = true;
-                currentMemberAccess = AccessSpecifier.Public;
+                _context.Class.IsStruct = true;
+                _context.MemberAccess = AccessSpecifier.Public;
             }
             else if (cursor.Kind == CursorKind.ClassTemplate)
             {
                 if (cursor.TemplateCursorKind != CursorKind.ClassDecl)
                 {
-                    currentMemberAccess = AccessSpecifier.Private;
+                    _context.MemberAccess = AccessSpecifier.Private;
                 }
                 else
                 {
-                    currentMemberAccess = AccessSpecifier.Public;
+                    _context.MemberAccess = AccessSpecifier.Public;
                 }
             }
 
             if (cursor.Kind == CursorKind.EnumDecl)
             {
-                currentEnum = new EnumDefinition(fullyQualifiedName, cursor.Spelling);
-                currentHeader.Enums.Add(currentEnum);
+                _context.Enum = new EnumDefinition(fullyQualifiedName, cursor.Spelling);
+                _context.Header.Enums.Add(_context.Enum);
                 cursor.VisitChildren(EnumVisitor);
-                if (currentClass != null)
+                if (_context.Class != null)
                 {
                     // Enum wrapped in a struct
-                    currentClass.Enum = currentEnum;
+                    _context.Class.Enum = _context.Enum;
                 }
-                currentEnum = null;
+                _context.Enum = null;
             }
             else if (cursor.Kind == CursorKind.TypedefDecl)
             {
-                currentClass.IsTypedef = true;
+                _context.Class.IsTypedef = true;
                 if (cursor.TypedefDeclUnderlyingType.Canonical.TypeKind != ClangSharp.Type.Kind.FunctionProto)
                 {
-                    currentClass.TypedefUnderlyingType = new TypeRefDefinition(cursor.TypedefDeclUnderlyingType);
+                    _context.Class.TypedefUnderlyingType = new TypeRefDefinition(cursor.TypedefDeclUnderlyingType);
                 }
             }
             else
@@ -282,8 +309,8 @@ namespace BulletSharpGen
             }
 
             // Restore parent state
-            currentClass = currentClass.Parent;
-            currentMemberAccess = parentMemberAccess;
+            _context.Class = _context.Class.Parent;
+            _context.MemberAccess = parentMemberAccess;
         }
 
         Cursor.ChildVisitResult MethodTemplateTypeVisitor(Cursor cursor, Cursor parent)
@@ -292,13 +319,13 @@ namespace BulletSharpGen
             {
                 if (cursor.Referenced.Kind == CursorKind.TemplateTypeParameter)
                 {
-                    if (currentParameter != null)
+                    if (_context.Parameter != null)
                     {
-                        currentParameter.Type.HasTemplateTypeParameter = true;
+                        _context.Parameter.Type.HasTemplateTypeParameter = true;
                     }
                     else
                     {
-                        currentMethod.ReturnType.HasTemplateTypeParameter = true;
+                        _context.Method.ReturnType.HasTemplateTypeParameter = true;
                     }
                     return Cursor.ChildVisitResult.Break;
                 }
@@ -318,14 +345,14 @@ namespace BulletSharpGen
                 case CursorKind.TypeRef:
                     if (cursor.Referenced.Kind == CursorKind.TemplateTypeParameter)
                     {
-                        currentField.Type.HasTemplateTypeParameter = true;
+                        _context.Field.Type.HasTemplateTypeParameter = true;
                     }
                     return Cursor.ChildVisitResult.Break;
 
                 case CursorKind.TemplateRef:
                     if (parent.Type.Declaration.Kind == CursorKind.ClassTemplate)
                     {
-                        currentField.Type.HasTemplateTypeParameter = true;
+                        _context.Field.Type.HasTemplateTypeParameter = true;
                         return Cursor.ChildVisitResult.Break;
                     }
                     return Cursor.ChildVisitResult.Continue;
@@ -340,20 +367,20 @@ namespace BulletSharpGen
             switch (cursor.Kind)
             {
                 case CursorKind.CxxAccessSpecifier:
-                    currentMemberAccess = cursor.AccessSpecifier;
+                    _context.MemberAccess = cursor.AccessSpecifier;
                     return Cursor.ChildVisitResult.Continue;
                 case CursorKind.CxxBaseSpecifier:
                     string baseName = TypeRefDefinition.GetFullyQualifiedName(cursor.Type);
                     ClassDefinition baseClass;
                     if (!project.ClassDefinitions.TryGetValue(baseName, out baseClass))
                     {
-                        Console.WriteLine("Base {0} for {1} not found! Missing header?", baseName, currentClass.Name);
+                        Console.WriteLine("Base {0} for {1} not found! Missing header?", baseName, _context.Class.Name);
                         return Cursor.ChildVisitResult.Continue;
                     }
-                    currentClass.BaseClass = baseClass;
+                    _context.Class.BaseClass = baseClass;
                     return Cursor.ChildVisitResult.Continue;
                 case CursorKind.TemplateTypeParameter:
-                    var classTemplate = currentClass as ClassTemplateDefinition;
+                    var classTemplate = _context.Class as ClassTemplateDefinition;
                     if (classTemplate.TemplateTypeParameters == null)
                     {
                         classTemplate.TemplateTypeParameters = new List<string>();
@@ -362,7 +389,7 @@ namespace BulletSharpGen
                     return Cursor.ChildVisitResult.Continue;
             }
 
-            if (currentMemberAccess != AccessSpecifier.Public)
+            if (_context.MemberAccess != AccessSpecifier.Public)
             {
                 return Cursor.ChildVisitResult.Continue;
             }
@@ -381,18 +408,20 @@ namespace BulletSharpGen
                     return Cursor.ChildVisitResult.Continue;
                 }
 
-                currentMethod = new MethodDefinition(methodName, currentClass, cursor.NumArguments);
-                currentMethod.ReturnType = new TypeRefDefinition(cursor.ResultType);
-                currentMethod.IsStatic = cursor.IsStaticCxxMethod;
-                currentMethod.IsConstructor = cursor.Kind == CursorKind.Constructor;
+                _context.Method = new MethodDefinition(methodName, _context.Class, cursor.NumArguments)
+                {
+                    ReturnType = new TypeRefDefinition(cursor.ResultType),
+                    IsStatic = cursor.IsStaticCxxMethod,
+                    IsConstructor = cursor.Kind == CursorKind.Constructor
+                };
 
                 if (cursor.IsVirtualCxxMethod)
                 {
-                    currentMethod.IsVirtual = true;
+                    _context.Method.IsVirtual = true;
                     if (cursor.IsPureVirtualCxxMethod)
                     {
-                        currentMethod.IsAbstract = true;
-                        currentClass.IsAbstract = true;
+                        _context.Method.IsAbstract = true;
+                        _context.Class.IsAbstract = true;
                     }
                 }
 
@@ -409,28 +438,28 @@ namespace BulletSharpGen
                     {
                         parameterName = "__unnamed" + i;
                     }
-                    currentParameter = new ParameterDefinition(parameterName, new TypeRefDefinition(arg.Type));
-                    currentMethod.Parameters[i] = currentParameter;
+                    _context.Parameter = new ParameterDefinition(parameterName, new TypeRefDefinition(arg.Type));
+                    _context.Method.Parameters[i] = _context.Parameter;
                     arg.VisitChildren(MethodTemplateTypeVisitor);
-                    currentParameter = null;
+                    _context.Parameter = null;
 
                     // Check if it's a const or optional parameter
-                    IEnumerable<Token> argTokens = currentTU.Tokenize(arg.Extent);
+                    IEnumerable<Token> argTokens = _context.TranslationUnit.Tokenize(arg.Extent);
                     foreach (Token token in argTokens)
                     {
                         if (token.Spelling.Equals("="))
                         {
-                            currentMethod.Parameters[i].IsOptional = true;
+                            _context.Method.Parameters[i].IsOptional = true;
                         }
                     }
                 }
 
-                currentMethod = null;
+                _context.Method = null;
             }
             else if (cursor.Kind == CursorKind.FieldDecl)
             {
-                currentField = new FieldDefinition(cursor.Spelling,
-                    new TypeRefDefinition(cursor.Type), currentClass);
+                _context.Field = new FieldDefinition(cursor.Spelling,
+                    new TypeRefDefinition(cursor.Type), _context.Class);
                 if (!cursor.Type.Declaration.SpecializedCursorTemplate.IsInvalid)
                 {
                     if (cursor.Children[0].Kind != CursorKind.TemplateRef)
@@ -448,13 +477,13 @@ namespace BulletSharpGen
                             IsBasic = true,
                             Name = displayName
                         };
-                        currentField.Type.SpecializedTemplateType = specializationTypeRef;
+                        _context.Field.Type.SpecializedTemplateType = specializationTypeRef;
                     }
                     if (cursor.Children.Count == 2)
                     {
                         if (cursor.Children[1].Type.TypeKind != ClangSharp.Type.Kind.Invalid)
                         {
-                            currentField.Type.SpecializedTemplateType = new TypeRefDefinition(cursor.Children[1].Type);
+                            _context.Field.Type.SpecializedTemplateType = new TypeRefDefinition(cursor.Children[1].Type);
                         }
                         else
                         {
@@ -463,7 +492,7 @@ namespace BulletSharpGen
                     }
                 }
                 //cursor.VisitChildren(FieldTemplateTypeVisitor);
-                currentField = null;
+                _context.Field = null;
             }
             else if (cursor.Kind == CursorKind.UnionDecl)
             {
@@ -481,12 +510,13 @@ namespace BulletSharpGen
             Console.Write('.');
 
             var unsavedFiles = new UnsavedFile[] { };
-            using (currentTU = index.CreateTranslationUnit(headerFile, clangOptions.ToArray(), unsavedFiles, TranslationUnitFlags.SkipFunctionBodies))
+            using (_context.TranslationUnit = index.CreateTranslationUnit(headerFile, clangOptions.ToArray(), unsavedFiles, TranslationUnitFlags.SkipFunctionBodies))
             {
-                var cur = currentTU.Cursor;
+                var cur = _context.TranslationUnit.Cursor;
+                _context.Namespace = "";
                 cur.VisitChildren(HeaderVisitor);
             }
-            currentTU = null;
+            _context.TranslationUnit = null;
             headerQueue.Remove(headerFile);
         }
     }

@@ -267,7 +267,7 @@ namespace BulletSharpGen
         {
             if (method.IsConstructor)
             {
-                SourceWrite(method.Parent.FullName);
+                SourceWrite(method.Parent.FullyQualifiedName);
             }
             else
             {
@@ -624,7 +624,7 @@ namespace BulletSharpGen
                     {
                         if (method.IsStatic)
                         {
-                            SourceWrite(parentClass.FullName);
+                            SourceWrite(parentClass.FullyQualifiedName);
                             SourceWrite("::");
                         }
                         else
@@ -781,7 +781,7 @@ namespace BulletSharpGen
             if (c.BaseClass != null && c.Methods.Any(m => !m.IsConstructor && !m.IsStatic))
             {
                 EnsureSourceWhiteSpace();
-                SourceWriteLine(string.Format("#define Native static_cast<{0}*>(_native)", c.FullName));
+                SourceWriteLine(string.Format("#define Native static_cast<{0}*>(_native)", c.FullyQualifiedName));
                 hasSourceWhiteSpace = false;
             }
 
@@ -804,7 +804,7 @@ namespace BulletSharpGen
                 EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Internal);
 
                 WriteTabs(level + 1);
-                HeaderWrite(c.FullName);
+                HeaderWrite(c.FullyQualifiedName);
                 HeaderWriteLine("* _native;");
                 hasHeaderWhiteSpace = false;
             }
@@ -841,7 +841,7 @@ namespace BulletSharpGen
                 SourceWrite("::");
                 Write(c.ManagedName);
                 Write('(');
-                Write(c.FullName);
+                Write(c.FullyQualifiedName);
                 Write("* native)");
                 HeaderWriteLine(';');
                 SourceWriteLine();

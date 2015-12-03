@@ -6,12 +6,12 @@ namespace BulletSharp
 {
 	public class MultiBodyLinkCollider : CollisionObject
 	{
-        private MultiBody _multiBody;
+		private MultiBody _multiBody;
 
 		public MultiBodyLinkCollider(MultiBody multiBody, int link)
 			: base(btMultiBodyLinkCollider_new(multiBody._native, link))
 		{
-            _multiBody = multiBody;
+			_multiBody = multiBody;
 		}
 
 		public static MultiBodyLinkCollider Upcast(CollisionObject colObj)

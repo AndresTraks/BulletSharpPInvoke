@@ -529,7 +529,7 @@ namespace BulletSharpGen
                 }
             }
 
-            // Get managed header names
+            // Get managed header and enum names
             foreach (HeaderDefinition header in ExternalHeaders.Values)
             {
                 string name = header.Name;
@@ -545,6 +545,18 @@ namespace BulletSharpGen
                 else if (name.StartsWith("hacd"))
                 {
                     header.ManagedName = "Hacd" + name.Substring(4);
+                }
+
+                foreach (var e in header.Enums)
+                {
+                    if (e.Name.StartsWith("bt"))
+                    {
+                        e.ManagedName = e.Name.Substring(2);
+                    }
+                    else
+                    {
+                        e.ManagedName = e.Name;
+                    }
                 }
             }
 
@@ -567,20 +579,20 @@ namespace BulletSharpGen
                     c.ManagedName = name;
                 }
 
-                if (hidePublicConstructors.Contains(c.FullName))
+                if (hidePublicConstructors.Contains(c.FullyQualifiedName))
                 {
                     c.HidePublicConstructors = true;
                 }
 
-                if (hideInternalConstructor.Contains(c.FullName))
+                if (hideInternalConstructor.Contains(c.FullyQualifiedName))
                 {
                     c.NoInternalConstructor = true;
                 }
-                if (preventDelete.Contains(c.FullName))
+                if (preventDelete.Contains(c.FullyQualifiedName))
                 {
                     c.HasPreventDelete = true;
                 }
-                if (trackingDisposable.Contains(c.FullName))
+                if (trackingDisposable.Contains(c.FullyQualifiedName))
                 {
                     c.IsTrackingDisposable = true;
                 }
@@ -657,7 +669,7 @@ namespace BulletSharpGen
                 bool resolvedEnum = false;
                 foreach (var c in classDefinitions.Values.Where(c => c.Enum != null))
                 {
-                    if (typeRef.Name.Equals(c.FullName + "::" + c.Enum.Name))
+                    if (typeRef.Name.Equals(c.FullyQualifiedName + "::" + c.Enum.Name))
                     {
                         typeRef.Target = c;
                         resolvedEnum = true;

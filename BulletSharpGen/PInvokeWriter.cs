@@ -198,7 +198,7 @@ namespace BulletSharpGen
             if (method.IsConstructor)
             {
                 Write(method.Parent.FullNameCS, WriteTo.Header);
-                Write(method.Parent.FullName, WriteTo.Source);
+                Write(method.Parent.FullyQualifiedName, WriteTo.Source);
                 Write("* ", WriteTo.Header | WriteTo.Source);
                 Write("IntPtr ", WriteTo.Buffer);
             }
@@ -273,7 +273,7 @@ namespace BulletSharpGen
             if (!method.IsConstructor && !method.IsStatic)
             {
                 Write(method.Parent.FullNameCS, WriteTo.Header);
-                Write(method.Parent.FullName, WriteTo.Source);
+                Write(method.Parent.FullyQualifiedName, WriteTo.Source);
                 Write("* obj", WriteTo.Header | WriteTo.Source);
                 Write("IntPtr obj", WriteTo.Buffer);
 
@@ -400,7 +400,7 @@ namespace BulletSharpGen
             if (method.IsConstructor)
             {
                 Write("return new ", WriteTo.Source);
-                Write(method.Parent.FullName, WriteTo.Source);
+                Write(method.Parent.FullyQualifiedName, WriteTo.Source);
                 if (method.Parent.BaseClass == null)
                 {
                     Write("_native = ", WriteTo.CS);
@@ -740,15 +740,14 @@ namespace BulletSharpGen
             }
 
             WriteTabs(level, WriteTo.CS);
-            WriteLine(string.Format("public enum {0}", e.Name), WriteTo.CS);
+            WriteLine(string.Format("public enum {0}", e.ManagedName), WriteTo.CS);
             WriteTabs(level, WriteTo.CS);
             WriteLine('{', WriteTo.CS);
+            var enumConstants = e.GetManagedConstants();
             for (int i = 0; i < e.EnumConstants.Count; i++)
             {
                 WriteTabs(level + 1, WriteTo.CS);
-                Write(e.EnumConstants[i], WriteTo.CS);
-                Write(" = ", WriteTo.CS);
-                Write(e.EnumConstantValues[i], WriteTo.CS);
+                Write(string.Format("{0} = {1}", enumConstants[i], e.EnumConstantValues[i]), WriteTo.CS);
                 if (i < e.EnumConstants.Count - 1)
                 {
                     Write(',', WriteTo.CS);

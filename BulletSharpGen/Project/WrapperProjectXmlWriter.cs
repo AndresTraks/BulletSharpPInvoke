@@ -28,9 +28,30 @@ namespace BulletSharpGen.Project
             return relativePath;
         }
 
+        public static void WriteClassDefinition(XmlWriter writer, ClassDefinition @class)
+        {
+            writer.WriteStartElement(@class.GetType().Name);
+            writer.WriteAttributeString("Name", @class.Name);
+            if (@class.NamespaceName != "")
+            {
+                writer.WriteAttributeString("Namespace", @class.NamespaceName);
+            }
+            if (@class.IsExcluded)
+            {
+                writer.WriteAttributeString("IsExcluded", "True");
+            }
+
+            foreach (var childClass in @class.Classes)
+            {
+                WriteClassDefinition(writer, childClass);
+            }
+
+            writer.WriteEndElement();
+        }
+
         public static void Write(WrapperProject project)
         {
-            using (var writer = XmlWriter.Create(project.ProjectPath))
+            using (var writer = XmlWriter.Create(project.ProjectPath, new XmlWriterSettings() { Indent = true }))
             {
                 writer.WriteStartElement("Project");
                 foreach (string sourceRootFolder in project.SourceRootFolders)
@@ -39,16 +60,29 @@ namespace BulletSharpGen.Project
                     writer.WriteString("BulletSharp");
                     writer.WriteEndElement();
 
-                    foreach (var @class in project.ClassDefinitions.Where(c => c.Value.IsExcluded))
+                    writer.WriteStartElement("SourceRootFolder");
+                    string sourceRootFolderRelative = MakeRelativePath(project.ProjectPath, sourceRootFolder);
+                    sourceRootFolderRelative = sourceRootFolderRelative.Replace('\\', '/');
+                    writer.WriteAttributeString("Path", sourceRootFolderRelative);
+
+                    foreach (var header in project.HeaderDefinitions)
                     {
-                        writer.WriteStartElement(@class.Value.GetType().Name);
-                        writer.WriteAttributeString("Name", @class.Key);
-                        writer.WriteAttributeString("IsExcluded", @class.Value.IsExcluded.ToString());
+                        writer.WriteStartElement("HeaderDefinition");
+                        string headerRelativePath = MakeRelativePath(sourceRootFolder, header.Key);
+                        headerRelativePath = headerRelativePath.Replace('\\', '/');
+                        writer.WriteAttributeString("Path", headerRelativePath);
+                        if (header.Value.IsExcluded)
+                        {
+                            writer.WriteAttributeString("IsExcluded", "True");
+                        }
+
+                        foreach (var @class in header.Value.Classes)
+                        {
+                            WriteClassDefinition(writer, @class);
+                        }
+
                         writer.WriteEndElement();
                     }
-
-                    writer.WriteStartElement("SourceRootFolder");
-                    writer.WriteAttributeString("Name", MakeRelativePath(project.ProjectPath, sourceRootFolder));
                 }
             }
         }

@@ -6,14 +6,14 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
-    public enum DynamicsWorldType
-    {
+	public enum DynamicsWorldType
+	{
         Simple = 1,
         Discrete = 2,
         Continuous = 3,
         SoftRigid = 4,
         Gpu = 5
-    }
+	}
 
 	public abstract class DynamicsWorld : CollisionWorld
 	{
@@ -24,7 +24,7 @@ namespace BulletSharp
 
         InternalTickCallback _callback;
         InternalTickCallbackUnmanaged _callbackUnmanaged;
-        protected ConstraintSolver _constraintSolver;
+		protected ConstraintSolver _constraintSolver;
         ContactSolverInfo _solverInfo;
 
         Dictionary<IAction, ActionInterfaceWrapper> _actions;

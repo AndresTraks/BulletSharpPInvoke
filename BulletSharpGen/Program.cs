@@ -40,6 +40,7 @@ namespace BulletSharpGen
             OutputSolution(TargetVS.VS2012, project);
             OutputSolution(TargetVS.VS2013, project);
             OutputSolution(TargetVS.VS2015, project);
+            //project.Save();
 
             CMakeWriter cmake = new CMakeWriter(project.HeaderDefinitions, project.NamespaceName);
             cmake.Output();

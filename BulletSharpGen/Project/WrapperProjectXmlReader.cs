@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml;
 
 namespace BulletSharpGen.Project
@@ -21,12 +22,35 @@ namespace BulletSharpGen.Project
 
         static void ReadClassDefinition(WrapperProject project, ClassDefinition @class, XmlReader reader)
         {
-            @class.IsExcluded = bool.Parse(reader.GetAttribute("IsExcluded"));
-            project.ClassDefinitions.Add(@class.Name, @class);
+            string isExcluded = reader.GetAttribute("IsExcluded");
+
+            string namespaceName = reader.GetAttribute("Namespace");
+            if (namespaceName != null)
+            {
+                @class.NamespaceName = namespaceName;
+            }
+
+            if ("True".Equals(isExcluded))
+            {
+                @class.IsExcluded = true;
+            }
+            project.ClassDefinitions.Add(@class.FullyQualifiedName, @class);
+
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.EndElement)
+                {
+                    break;
+                }
+            }
+
         }
 
         static void ReadProject(WrapperProject project, XmlReader reader)
         {
+            string sourceRootFolder = null;
+            HeaderDefinition currentHeader = null;
+
             while (reader.Read())
             {
                 if (reader.NodeType != XmlNodeType.Element)
@@ -39,7 +63,7 @@ namespace BulletSharpGen.Project
                     case "ClassDefinition":
                         {
                             string className = reader.GetAttribute("Name");
-                            var @class = new ClassDefinition(className);
+                            var @class = new ClassDefinition(className, currentHeader);
                             ReadClassDefinition(project, @class, reader);
                         }
                         break;
@@ -47,8 +71,17 @@ namespace BulletSharpGen.Project
                     case "ClassTemplateDefinition":
                         {
                             string className = reader.GetAttribute("Name");
-                            var @class = new ClassTemplateDefinition(className);
+                            var @class = new ClassTemplateDefinition(className, currentHeader);
                             ReadClassDefinition(project, @class, reader);
+                        }
+                        break;
+
+                    case "HeaderDefinition":
+                        {
+                            string headerPath = sourceRootFolder + reader.GetAttribute("Path");
+                            headerPath = headerPath.Replace('\\', '/');
+                            currentHeader = new HeaderDefinition(headerPath);
+                            project.HeaderDefinitions.Add(headerPath, currentHeader);
                         }
                         break;
 
@@ -61,7 +94,7 @@ namespace BulletSharpGen.Project
 
                     case "SourceRootFolder":
                         {
-                            string sourceRootFolder = reader.GetAttribute("Name");
+                            sourceRootFolder = reader.GetAttribute("Path");
                             sourceRootFolder = Path.Combine(Path.GetDirectoryName(project.ProjectPath), sourceRootFolder);
                             sourceRootFolder = Path.GetFullPath(sourceRootFolder);
                             project.SourceRootFolders.Add(sourceRootFolder);

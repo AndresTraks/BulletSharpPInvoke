@@ -13,8 +13,8 @@ namespace BulletSharp
         StopCfm
     }
 
-    public enum TypedConstraintType
-    {
+	public enum TypedConstraintType
+	{
         Point2Point = 3,
         Hinge,
         ConeTwist,
@@ -26,7 +26,7 @@ namespace BulletSharp
         Fixed,
         D6Spring2,
         Max
-    }
+	}
 
 	public class JointFeedback : IDisposable
 	{

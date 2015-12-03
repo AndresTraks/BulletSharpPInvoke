@@ -4,7 +4,7 @@ using System.Security;
 
 namespace BulletSharp
 {
-    public enum ConstraintSolverType
+	public enum ConstraintSolverType
 	{
         SequentialImpulse = 1,
         Mlcp = 2,

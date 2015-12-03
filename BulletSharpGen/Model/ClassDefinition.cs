@@ -30,15 +30,18 @@ namespace BulletSharpGen
     class ClassDefinition
     {
         public string Name { get; private set; }
+        public string NamespaceName { get; set; }
         public List<ClassDefinition> Classes { get; private set; }
         public ClassDefinition BaseClass { get; set; }
-        public ClassDefinition Parent { get; private set; }
+        public ClassDefinition Parent { get; set; }
         public HeaderDefinition Header { get; private set; }
         public List<MethodDefinition> Methods { get; private set; }
         public List<PropertyDefinition> Properties { get; private set; }
         public List<FieldDefinition> Fields { get; private set; }
         public bool IsAbstract { get; set; }
         public bool IsStruct { get; set; }
+
+        public bool IsParsed { get; set; }
 
         public bool HidePublicConstructors { get; set; }
         public bool NoInternalConstructor { get; set; }
@@ -84,13 +87,29 @@ namespace BulletSharpGen
             }
         }
 
+        public string FullyQualifiedName
+        {
+            get
+            {
+                if (Parent != null)
+                {
+                    return string.Format("{0}::{1}", Parent.FullyQualifiedName, Name);
+                }
+                if (NamespaceName != "")
+                {
+                    return string.Format("{0}::{1}", NamespaceName, Name);
+                }
+                return Name;
+            }
+        }
+
         public string FullName
         {
             get
             {
                 if (Parent != null)
                 {
-                    return Parent.FullName + "::" + Name;
+                    return string.Format("{0}::{1}", Parent.FullName, Name);
                 }
                 return Name;
             }
@@ -127,6 +146,8 @@ namespace BulletSharpGen
             Name = name;
             Header = header;
             Parent = parent;
+
+            NamespaceName = "";
 
             Classes = new List<ClassDefinition>();
             Methods = new List<MethodDefinition>();
