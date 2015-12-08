@@ -113,7 +113,7 @@ namespace RollingFrictionDemo
 
                         body.Friction = 1;
                         body.RollingFriction = 0.3f;
-                        body.SetAnisotropicFriction(colShape.AnisotropicRollingFrictionDirection, AnisotropicFrictionFlags.AnisotropicRollingFriction);
+                        body.SetAnisotropicFriction(colShape.AnisotropicRollingFrictionDirection, AnisotropicFrictionFlags.RollingFriction);
 
                         World.AddRigidBody(body);
                     }

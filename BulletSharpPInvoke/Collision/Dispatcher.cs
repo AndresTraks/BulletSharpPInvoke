@@ -7,8 +7,8 @@ namespace BulletSharp
 {
 	public enum DispatchFunc
 	{
-        Discrete = 1,
-        Continuous
+		Discrete = 1,
+		Continuous
 	}
 
 	public class DispatcherInfo

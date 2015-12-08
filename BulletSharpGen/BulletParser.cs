@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BulletSharpGen
 {
-    class BulletParser
+    class BulletParser : DefaultParser
     {
         Dictionary<string, ClassDefinition> classDefinitions = new Dictionary<string, ClassDefinition>();
         Dictionary<string, HeaderDefinition> ExternalHeaders = new Dictionary<string, HeaderDefinition>();
@@ -104,6 +104,10 @@ namespace BulletSharpGen
             classNameMapping.Add("sRayCast", "SRayCast");
             classNameMapping.Add("RContact", "RigidContact");
             classNameMapping.Add("SContact", "SoftContact");
+            classNameMapping.Add("PHY_ScalarType", "PhyScalarType");
+            classNameMapping.Add("BroadphaseNativeTypes", "BroadphaseNativeType");
+            classNameMapping.Add("SolverMode", "SolverModes");
+            classNameMapping.Add("ConstraintParams", "ConstraintParam");
 
             // Classes that shouldn't be instantiated by users
             List<string> hidePublicConstructors = new List<string>() {
@@ -323,7 +327,7 @@ namespace BulletSharpGen
                     {
                         name = name.Substring(2);
                     }
-                    name = name.Substring(0, 1).ToUpper() + name.Substring(1); // capitalize
+                    name = char.ToUpper(name[0]) + name.Substring(1); // capitalize
 
                     // one_two_three -> oneTwoThree
                     string managedName = name;
@@ -546,55 +550,84 @@ namespace BulletSharpGen
                 {
                     header.ManagedName = "Hacd" + name.Substring(4);
                 }
-
-                foreach (var e in header.Enums)
-                {
-                    if (e.Name.StartsWith("bt"))
-                    {
-                        e.ManagedName = e.Name.Substring(2);
-                    }
-                    else
-                    {
-                        e.ManagedName = e.Name;
-                    }
-                }
             }
 
 
             // Apply class properties
-            foreach (ClassDefinition c in classDefinitions.Values)
+            foreach (ClassDefinition @class in classDefinitions.Values)
             {
-                string name = c.Name;
+                string name = @class.Name;
                 string mapping;
                 if (classNameMapping.TryGetValue(name, out mapping))
                 {
-                    c.ManagedName = mapping;
+                    @class.ManagedName = mapping;
                 }
                 else if (name.StartsWith("bt") && !name.Equals("btScalar"))
                 {
-                    c.ManagedName = name.Substring(2);
+                    @class.ManagedName = name.Substring(2);
                 }
                 else
                 {
-                    c.ManagedName = name;
+                    @class.ManagedName = name;
                 }
 
-                if (hidePublicConstructors.Contains(c.FullyQualifiedName))
+                if (hidePublicConstructors.Contains(@class.FullyQualifiedName))
                 {
-                    c.HidePublicConstructors = true;
+                    @class.HidePublicConstructors = true;
                 }
 
-                if (hideInternalConstructor.Contains(c.FullyQualifiedName))
+                if (hideInternalConstructor.Contains(@class.FullyQualifiedName))
                 {
-                    c.NoInternalConstructor = true;
+                    @class.NoInternalConstructor = true;
                 }
-                if (preventDelete.Contains(c.FullyQualifiedName))
+                if (preventDelete.Contains(@class.FullyQualifiedName))
                 {
-                    c.HasPreventDelete = true;
+                    @class.HasPreventDelete = true;
                 }
-                if (trackingDisposable.Contains(c.FullyQualifiedName))
+                if (trackingDisposable.Contains(@class.FullyQualifiedName))
                 {
-                    c.IsTrackingDisposable = true;
+                    @class.IsTrackingDisposable = true;
+                }
+
+                if (@class is EnumDefinition)
+                {
+                    var @enum = @class as EnumDefinition;
+
+                    int prefixLength = @enum.GetCommonPrefix().Length;
+                    @enum.GetCommonSuffix();
+                    for (int i = 0; i< @enum.EnumConstants.Count; i++)
+                    {
+                        string enumConstant = @enum.EnumConstants[i];
+                        enumConstant = enumConstant.Substring(prefixLength);
+                        @enum.EnumConstants[i] = RemoveUnderscoresFromUpper(enumConstant);
+                    }
+
+                    if (@enum.Name.EndsWith("Flags"))
+                    {
+                        @enum.IsFlags = true;
+                    }
+                    else
+                    {
+                        // If all values are powers of 2, then it is considered a Flags enum.
+                        @enum.IsFlags = @enum.EnumConstantValues.All(value =>
+                        {
+                            int x;
+                            if (int.TryParse(value, out x))
+                            {
+                                return (x != 0) && ((x & (~x + 1)) == x);
+                            }
+                            return false;
+                        });
+                    }
+
+                    if (@enum.IsFlags)
+                    {
+                        if (!@enum.EnumConstantValues.Any(value => value.Equals("0")))
+                        {
+                            @enum.EnumConstants.Insert(0, "None");
+                            @enum.EnumConstantValues.Insert(0, "0");
+                        }
+                    }
                 }
             }
 
@@ -667,9 +700,9 @@ namespace BulletSharpGen
             {
                 // Search for unscoped enums
                 bool resolvedEnum = false;
-                foreach (var c in classDefinitions.Values.Where(c => c.Enum != null))
+                foreach (var c in classDefinitions.Values.Where(c => c is EnumDefinition))
                 {
-                    if (typeRef.Name.Equals(c.FullyQualifiedName + "::" + c.Enum.Name))
+                    if (typeRef.Name.Equals(c.FullyQualifiedName + "::" + c.Name))
                     {
                         typeRef.Target = c;
                         resolvedEnum = true;
@@ -704,16 +737,6 @@ namespace BulletSharpGen
                     }
                 }
             }
-        }
-
-        static string GetTabs(int n)
-        {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < n; i++)
-            {
-                builder.Append('\t');
-            }
-            return builder.ToString();
         }
 
         public static string GetTypeName(TypeRefDefinition type)
@@ -942,7 +965,7 @@ namespace BulletSharpGen
                 managedName = managedName.Substring(0, pos) + managedName.Substring(pos + 1, 1).ToUpper() + managedName.Substring(pos + 2);
             }
 
-            return managedName.Substring(0, 1).ToUpper() + managedName.Substring(1);
+            return char.ToUpper(managedName[0]) + managedName.Substring(1);
         }
 
         public string GetManagedParameterName(ParameterDefinition param)

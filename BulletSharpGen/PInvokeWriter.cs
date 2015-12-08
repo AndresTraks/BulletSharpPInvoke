@@ -62,7 +62,7 @@ namespace BulletSharpGen
                 }
                 if (type.Target != null && type.Target.IsPureEnum)
                 {
-                    Write(typeName + "::" + type.Target.Enum.Name, writeTo & WriteTo.Source);
+                    Write(typeName + "::" + type.Target.Name, writeTo & WriteTo.Source);
                     Write(typeName.Replace("::", "_"), writeTo & WriteTo.Header);
                 }
                 else
@@ -729,26 +729,43 @@ namespace BulletSharpGen
             hasCSWhiteSpace = false;
         }
 
-        void WriteEnumClass(EnumDefinition e, int level)
+        // Accepts a ClassDefinition for recursion
+        void WriteEnumClass(ClassDefinition @class, int level)
         {
+            EnumDefinition @enum = @class as EnumDefinition;
+            if (@enum == null)
+            {
+                foreach (ClassDefinition childClass in @class.Classes)
+                {
+                    WriteEnumClass(childClass, level);
+                }
+                return;
+            }
+
             EnsureWhiteSpace(WriteTo.CS);
 
-            if (e.Name.EndsWith("Flags"))
+            if (@enum.IsFlags)
             {
                 WriteTabs(level, WriteTo.CS);
                 WriteLine("[Flags]", WriteTo.CS);
             }
 
             WriteTabs(level, WriteTo.CS);
-            WriteLine(string.Format("public enum {0}", e.ManagedName), WriteTo.CS);
+            WriteLine(string.Format("public enum {0}", @enum.ManagedName), WriteTo.CS);
             WriteTabs(level, WriteTo.CS);
             WriteLine('{', WriteTo.CS);
-            var enumConstants = e.GetManagedConstants();
-            for (int i = 0; i < e.EnumConstants.Count; i++)
+            for (int i = 0; i < @enum.EnumConstants.Count; i++)
             {
                 WriteTabs(level + 1, WriteTo.CS);
-                Write(string.Format("{0} = {1}", enumConstants[i], e.EnumConstantValues[i]), WriteTo.CS);
-                if (i < e.EnumConstants.Count - 1)
+                if (@enum.EnumConstantValues[i].Equals(""))
+                {
+                    Write(@enum.EnumConstants[i], WriteTo.CS);
+                }
+                else
+                {
+                    Write(string.Format("{0} = {1}", @enum.EnumConstants[i], @enum.EnumConstantValues[i]), WriteTo.CS);
+                }
+                if (i < @enum.EnumConstants.Count - 1)
                 {
                     Write(',', WriteTo.CS);
                 }
@@ -827,7 +844,7 @@ namespace BulletSharpGen
             {
                 WriteTabs(level + 1, WriteTo.CS);
                 string name = cachedProperty.Key;
-                name = name.Substring(0, 1).ToLower() + name.Substring(1);
+                name = char.ToLower(name[0]) + name.Substring(1);
                 WriteLine(string.Format("{0} {1} _{2};", cachedProperty.Value.Access.ToString().ToLower(),
                     cachedProperty.Value.Property.Type.ManagedNameCS, name), WriteTo.CS);
                 hasCSWhiteSpace = false;
@@ -1289,9 +1306,9 @@ namespace BulletSharpGen
                 hasCSWhiteSpace = true;
                 hasCppClassSeparatingWhitespace = true;
 
-                foreach (EnumDefinition e in header.Enums.OrderBy(x => x.Name))
+                foreach (ClassDefinition @class in header.Classes)
                 {
-                    WriteEnumClass(e, 1);
+                    WriteEnumClass(@class, 1);
                 }
 
                 foreach (ClassDefinition c in header.Classes)

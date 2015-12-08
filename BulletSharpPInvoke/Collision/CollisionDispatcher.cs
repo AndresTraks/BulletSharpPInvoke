@@ -8,8 +8,9 @@ namespace BulletSharp
 	[Flags]
 	public enum DispatcherFlags
 	{
-        StaticStaticReported = 1,
-        UseRelativeContactBreakingThreshold = 2,
+		None = 0,
+		StaticStaticReported = 1,
+		UseRelativeContactBreakingThreshold = 2,
         DisableContactPoolDynamicAllocation = 4
 	}
 

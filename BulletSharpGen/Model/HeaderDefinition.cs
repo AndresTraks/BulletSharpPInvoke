@@ -10,7 +10,6 @@ namespace BulletSharpGen
         public string Filename { get; set; }
         public List<ClassDefinition> Classes { get; set; }
         public List<HeaderDefinition> Includes { get; set; }
-        public List<EnumDefinition> Enums { get; set; }
 
         string _managedName;
         public string ManagedName
@@ -44,7 +43,6 @@ namespace BulletSharpGen
             Filename = filename;
             Classes = new List<ClassDefinition>();
             Includes = new List<HeaderDefinition>();
-            Enums = new List<EnumDefinition>();
         }
 
         public override string ToString()

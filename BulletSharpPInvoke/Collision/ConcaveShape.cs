@@ -5,14 +5,14 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
-    public enum PhyScalarType
+	public enum PhyScalarType
 	{
-        Float = 0,
-        Double = 1,
-        Integer = 2,
-        Short = 3,
-        FixedPoint88 = 4,
-        UChar = 5
+		Float,
+		Double,
+		Integer,
+		Short,
+		FixedPoint88,
+		UChar
 	}
 
 	public class ConcaveShape : CollisionShape

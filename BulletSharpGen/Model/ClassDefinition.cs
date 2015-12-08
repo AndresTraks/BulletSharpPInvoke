@@ -20,7 +20,7 @@ namespace BulletSharpGen
             else
             {
                 string name = property.Name;
-                CacheFieldName = "_" + name.Substring(0, 1).ToLower() + name.Substring(1);
+                CacheFieldName = "_" + char.ToLower(name[0]) + name.Substring(1);
             }
 
             Access = RefAccessSpecifier.Private;
@@ -54,10 +54,9 @@ namespace BulletSharpGen
         public TypeRefDefinition TypedefUnderlyingType { get; set; }
 
         // Pure enum = enum wrapped in a struct
-        public EnumDefinition Enum { get; set; }
         public bool IsPureEnum
         {
-            get { return Enum != null && Methods.Count == 0; }
+            get { return this is EnumDefinition && Methods.Count == 0; }
         }
 
         // static class contains only static methods

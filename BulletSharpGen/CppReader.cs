@@ -14,7 +14,6 @@ namespace BulletSharpGen
         public ClassDefinition Class { get; set; }
         public MethodDefinition Method { get; set; }
         public ParameterDefinition Parameter { get; set; }
-        public EnumDefinition Enum { get; set; }
         public FieldDefinition Field { get; set; }
 
         public AccessSpecifier MemberAccess { get; set; }
@@ -156,28 +155,15 @@ namespace BulletSharpGen
                 headerQueue.Remove(filename);
             }
 
-            if (cursor.Kind == CursorKind.Namespace)
-            {
-                _context.Namespace = cursor.Spelling;
-            }
-
             if ((cursor.Kind == CursorKind.ClassDecl || cursor.Kind == CursorKind.StructDecl ||
-                cursor.Kind == CursorKind.ClassTemplate || cursor.Kind == CursorKind.TypedefDecl) && cursor.IsDefinition)
+                cursor.Kind == CursorKind.ClassTemplate || cursor.Kind == CursorKind.TypedefDecl ||
+                cursor.Kind == CursorKind.EnumDecl) && cursor.IsDefinition)
             {
                 ParseClassCursor(cursor);
             }
-            else if (cursor.Kind == CursorKind.EnumDecl)
-            {
-                if (!_context.Header.Enums.Any(x => x.Name.Equals(cursor.Spelling)))
-                {
-                    _context.Enum = new EnumDefinition(cursor.Spelling, cursor.Spelling);
-                    _context.Header.Enums.Add(_context.Enum);
-                    cursor.VisitChildren(EnumVisitor);
-                    _context.Enum = null;
-                }
-            }
             else if (cursor.Kind == CursorKind.Namespace)
             {
+                _context.Namespace = cursor.Spelling;
                 return Cursor.ChildVisitResult.Recurse;
             }
             return Cursor.ChildVisitResult.Continue;
@@ -187,12 +173,15 @@ namespace BulletSharpGen
         {
             if (cursor.Kind == CursorKind.EnumConstantDecl)
             {
-                _context.Enum.EnumConstants.Add(cursor.Spelling);
-                _context.Enum.EnumConstantValues.Add("");
+                var @enum = _context.Class as EnumDefinition;
+                @enum.EnumConstants.Add(cursor.Spelling);
+                @enum.EnumConstantValues.Add("");
             }
             else if (cursor.Kind == CursorKind.IntegerLiteral)
             {
-                //_context.Enum.EnumConstantValues[_context.Enum.EnumConstants.Count - 1] = ".";
+                var @enum = _context.Class as EnumDefinition;
+                Token intLiteralToken = _context.TranslationUnit.Tokenize(cursor.Extent).First();
+                @enum.EnumConstantValues[@enum.EnumConstants.Count - 1] = intLiteralToken.Spelling;
             }
             else if (cursor.Kind == CursorKind.ParenExpr)
             {
@@ -229,6 +218,10 @@ namespace BulletSharpGen
                 if (cursor.Kind == CursorKind.ClassTemplate)
                 {
                     _context.Class = new ClassTemplateDefinition(className, _context.Header, _context.Class);
+                }
+                else if (cursor.Kind == CursorKind.EnumDecl)
+                {
+                    _context.Class = new EnumDefinition(className, _context.Header, _context.Class);
                 }
                 else
                 {
@@ -285,15 +278,7 @@ namespace BulletSharpGen
 
             if (cursor.Kind == CursorKind.EnumDecl)
             {
-                _context.Enum = new EnumDefinition(fullyQualifiedName, cursor.Spelling);
-                _context.Header.Enums.Add(_context.Enum);
                 cursor.VisitChildren(EnumVisitor);
-                if (_context.Class != null)
-                {
-                    // Enum wrapped in a struct
-                    _context.Class.Enum = _context.Enum;
-                }
-                _context.Enum = null;
             }
             else if (cursor.Kind == CursorKind.TypedefDecl)
             {

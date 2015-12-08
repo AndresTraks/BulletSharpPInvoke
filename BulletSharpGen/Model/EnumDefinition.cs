@@ -3,19 +3,16 @@ using System.Linq;
 
 namespace BulletSharpGen
 {
-    class EnumDefinition
+    class EnumDefinition : ClassDefinition
     {
-        public string FullName { get; private set; }
-        public string Name { get; private set; }
         public List<string> EnumConstants { get; private set; }
         public List<string> EnumConstantValues { get; private set; }
 
-        public string ManagedName { get; set; }
+        public bool IsFlags { get; set; }
 
-        public EnumDefinition(string fullName, string name)
+        public EnumDefinition(string name, HeaderDefinition header = null, ClassDefinition parent = null)
+            : base(name, header, parent)
         {
-            FullName = fullName;
-            Name = name;
             EnumConstants = new List<string>();
             EnumConstantValues = new List<string>();
         }
@@ -48,20 +45,32 @@ namespace BulletSharpGen
             return prefix;
         }
 
-        public IList<string> GetManagedConstants()
+        public string GetCommonSuffix()
         {
-            int prefixLength = GetCommonPrefix().Length;
-            List<string> enumConstants = new List<string>(EnumConstants.Count);
-            foreach (var c in EnumConstants)
+            if (EnumConstants.Count < 2)
             {
-                enumConstants.Add(c.Substring(prefixLength));
+                return "";
             }
-            return enumConstants;
+
+            string suffix = "";
+            int i = 1;
+            while (true)
+            {
+                string enumConstant = EnumConstants[0];
+                char c = enumConstant[enumConstant.Length - i];
+                if (!EnumConstants.All(e => e[e.Length - i] == c))
+                {
+                    break;
+                }
+                i++;
+                suffix = c + suffix;
+            }
+            return suffix;
         }
 
         public override string ToString()
         {
-            return FullName;
+            return FullyQualifiedName;
         }
     }
 }

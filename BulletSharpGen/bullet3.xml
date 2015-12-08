@@ -64,9 +64,9 @@
     <HeaderDefinition Path="BulletCollision/CollisionDispatch/btCollisionObject.h">
       <ClassDefinition Name="btCollisionObjectArray" />
       <ClassDefinition Name="btCollisionObject">
-        <ClassDefinition Name="AnisotropicFrictionFlags" />
-        <ClassDefinition Name="CollisionFlags" />
-        <ClassDefinition Name="CollisionObjectTypes" />
+        <EnumDefinition Name="AnisotropicFrictionFlags" />
+        <EnumDefinition Name="CollisionFlags" />
+        <EnumDefinition Name="CollisionObjectTypes" />
       </ClassDefinition>
       <ClassDefinition Name="btCollisionObjectDoubleData" IsExcluded="True" />
       <ClassDefinition Name="btCollisionObjectFloatData" IsExcluded="True" />
@@ -78,42 +78,11 @@
       <ClassTemplateDefinition Name="btAlignedObjectArray">
         <ClassDefinition Name="less" />
       </ClassTemplateDefinition>
-      <ClassDefinition Name="btAlignedObjectArray&lt;btQuantizedBvhDoubleData&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btQuantizedBvhFloatData&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btCollisionShapeData&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btDynamicsWorldDoubleData&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btDynamicsWorldFloatData&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btRigidBodyDoubleData&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btRigidBodyFloatData&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btCollisionObjectDoubleData&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btCollisionObjectFloatData&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btTypedConstraintFloatData&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btTypedConstraintDoubleData&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btTypedConstraintData&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btSoftBodyFloatData&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btSoftBodyDoubleData&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btDbvt::sStkNN&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btDbvtNode&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btWheelInfo&gt;" />
       <ClassDefinition Name="btAlignedObjectArray&lt;int&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btVector3&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btFace&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btScalar&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btMatrix3x3&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;bool&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btCollisionObject&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;unsigned int&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;ConvexH::HalfEdge&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btPlane&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btConvexHullComputer::Edge&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;bParse::bStructHandle&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;char *&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btMultiSapBroadphase::btBridgeProxy&gt;" />
-      <ClassDefinition Name="btAlignedObjectArray&lt;btSoftBody::Node&gt;" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/BroadphaseCollision/btDispatcher.h">
       <ClassDefinition Name="btDispatcherInfo">
-        <ClassDefinition Name="DispatchFunc" />
+        <EnumDefinition Name="DispatchFunc" />
       </ClassDefinition>
       <ClassDefinition Name="btDispatcher" />
     </HeaderDefinition>
@@ -129,6 +98,7 @@
     <HeaderDefinition Path="BulletCollision/NarrowPhaseCollision/btPersistentManifold.h">
       <ClassDefinition Name="ContactDestroyedCallback" />
       <ClassDefinition Name="ContactProcessedCallback" />
+      <EnumDefinition Name="btContactManifoldTypes" />
       <ClassDefinition Name="btPersistentManifold" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionDispatch/btManifoldResult.h">
@@ -146,16 +116,17 @@
       <ClassDefinition Name="btCollisionObjectWrapper" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/BroadphaseCollision/btBroadphaseProxy.h">
+      <EnumDefinition Name="BroadphaseNativeTypes" />
       <ClassDefinition Name="btBroadphaseProxy">
-        <ClassDefinition Name="CollisionFilterGroups" />
+        <EnumDefinition Name="CollisionFilterGroups" />
       </ClassDefinition>
       <ClassDefinition Name="btBroadphasePair" />
-      <ClassDefinition Name="btBroadphasePairSortPredicate" />
+      <ClassDefinition Name="btBroadphasePairSortPredicate" IsExcluded="True" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionDispatch/btCollisionDispatcher.h">
       <ClassDefinition Name="btNearCallback" />
       <ClassDefinition Name="btCollisionDispatcher">
-        <ClassDefinition Name="DispatcherFlags" />
+        <EnumDefinition Name="DispatcherFlags" />
       </ClassDefinition>
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionDispatch/btCollisionCreateFunc.h">
@@ -224,7 +195,7 @@
       <ClassDefinition Name="btInternalTriangleIndexCallback" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionShapes/btConcaveShape.h">
-      <ClassDefinition Name="PHY_ScalarType" />
+      <EnumDefinition Name="PHY_ScalarType" />
       <ClassDefinition Name="btConcaveShape" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionShapes/btStaticPlaneShape.h">
@@ -267,7 +238,7 @@
       <ClassDefinition Name="QuantizedNodeArray" />
       <ClassDefinition Name="BvhSubtreeInfoArray" />
       <ClassDefinition Name="btQuantizedBvh">
-        <ClassDefinition Name="btTraversalMode" />
+        <EnumDefinition Name="btTraversalMode" />
       </ClassDefinition>
       <ClassDefinition Name="btBvhSubtreeInfoData" IsExcluded="True" />
       <ClassDefinition Name="btOptimizedBvhNodeFloatData" IsExcluded="True" />
@@ -286,10 +257,10 @@
       <ClassTemplateDefinition Name="btHashKeyPtr" />
       <ClassTemplateDefinition Name="btHashKey" />
       <ClassTemplateDefinition Name="btHashMap" />
-      <ClassDefinition Name="btHashMap&lt;btHashPtr&gt;" />
     </HeaderDefinition>
     <HeaderDefinition Path="LinearMath/btSerializer.h">
       <ClassDefinition Name="btChunk" />
+      <EnumDefinition Name="btSerializationFlags" />
       <ClassDefinition Name="btSerializer" />
       <ClassDefinition Name="btPointerUid" />
       <ClassDefinition Name="btBulletSerializedArrays" />
@@ -359,7 +330,7 @@
       <ClassDefinition Name="btDbvtVolume" />
       <ClassDefinition Name="btDbvtNode" />
       <ClassDefinition Name="btDbvt">
-        <ClassDefinition Name="" />
+        <EnumDefinition Name="" />
         <ClassDefinition Name="IClone" />
         <ClassDefinition Name="ICollide" />
         <ClassDefinition Name="IWriter" />
@@ -373,7 +344,7 @@
       <ClassDefinition Name="btDbvtProxy" />
       <ClassDefinition Name="btDbvtProxyArray" />
       <ClassDefinition Name="btDbvtBroadphase">
-        <ClassDefinition Name="" />
+        <EnumDefinition Name="" />
       </ClassDefinition>
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/BroadphaseCollision/btAxisSweep3.h">
@@ -402,11 +373,12 @@
     </HeaderDefinition>
     <HeaderDefinition Path="LinearMath/btIDebugDraw.h">
       <ClassDefinition Name="btIDebugDraw">
-        <ClassDefinition Name="DebugDrawModes" />
+        <EnumDefinition Name="DebugDrawModes" />
         <ClassDefinition Name="DefaultColors" />
       </ClassDefinition>
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btContactSolverInfo.h">
+      <EnumDefinition Name="btSolverMode" />
       <ClassDefinition Name="btContactSolverInfoData" />
       <ClassDefinition Name="btContactSolverInfo" />
       <ClassDefinition Name="btContactSolverInfoDoubleData" IsExcluded="True" />
@@ -414,6 +386,7 @@
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/Dynamics/btDynamicsWorld.h">
       <ClassDefinition Name="btInternalTickCallback" />
+      <EnumDefinition Name="btDynamicsWorldType" />
       <ClassDefinition Name="btDynamicsWorld" />
       <ClassDefinition Name="btDynamicsWorldDoubleData" IsExcluded="True" />
       <ClassDefinition Name="btDynamicsWorldFloatData" IsExcluded="True" />
@@ -425,6 +398,7 @@
       <ClassDefinition Name="btSimpleDynamicsWorld" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/Dynamics/btRigidBody.h">
+      <EnumDefinition Name="btRigidBodyFlags" />
       <ClassDefinition Name="btRigidBody">
         <ClassDefinition Name="btRigidBodyConstructionInfo" />
       </ClassDefinition>
@@ -436,7 +410,7 @@
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btSolverConstraint.h">
       <ClassDefinition Name="btSolverConstraint">
-        <ClassDefinition Name="btSolverConstraintType" />
+        <EnumDefinition Name="btSolverConstraintType" />
       </ClassDefinition>
       <ClassDefinition Name="btConstraintArray" />
     </HeaderDefinition>
@@ -444,6 +418,8 @@
       <ClassDefinition Name="btSolverBody" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btTypedConstraint.h">
+      <EnumDefinition Name="btTypedConstraintType" />
+      <EnumDefinition Name="btConstraintParams" />
       <ClassDefinition Name="btJointFeedback" />
       <ClassDefinition Name="btTypedConstraint">
         <ClassDefinition Name="btConstraintInfo1" />
@@ -456,12 +432,14 @@
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btPoint2PointConstraint.h">
       <ClassDefinition Name="btConstraintSetting" />
+      <EnumDefinition Name="btPoint2PointFlags" />
       <ClassDefinition Name="btPoint2PointConstraint" />
       <ClassDefinition Name="btPoint2PointConstraintFloatData" IsExcluded="True" />
       <ClassDefinition Name="btPoint2PointConstraintDoubleData2" IsExcluded="True" />
       <ClassDefinition Name="btPoint2PointConstraintDoubleData" IsExcluded="True" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btHingeConstraint.h">
+      <EnumDefinition Name="btHingeFlags" />
       <ClassDefinition Name="btHingeConstraint" />
       <ClassDefinition Name="btHingeConstraintDoubleData" IsExcluded="True" />
       <ClassDefinition Name="btHingeAccumulatedAngleConstraint" />
@@ -469,6 +447,7 @@
       <ClassDefinition Name="btHingeConstraintDoubleData2" IsExcluded="True" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btConeTwistConstraint.h">
+      <EnumDefinition Name="btConeTwistFlags" />
       <ClassDefinition Name="btConeTwistConstraint" />
       <ClassDefinition Name="btConeTwistConstraintDoubleData" IsExcluded="True" />
       <ClassDefinition Name="btConeTwistConstraintData" IsExcluded="True" />
@@ -476,11 +455,13 @@
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btGeneric6DofConstraint.h">
       <ClassDefinition Name="btRotationalLimitMotor" />
       <ClassDefinition Name="btTranslationalLimitMotor" />
+      <EnumDefinition Name="bt6DofFlags" />
       <ClassDefinition Name="btGeneric6DofConstraint" />
       <ClassDefinition Name="btGeneric6DofConstraintData" IsExcluded="True" />
       <ClassDefinition Name="btGeneric6DofConstraintDoubleData2" IsExcluded="True" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btSliderConstraint.h">
+      <EnumDefinition Name="btSliderFlags" />
       <ClassDefinition Name="btSliderConstraint" />
       <ClassDefinition Name="btSliderConstraintData" IsExcluded="True" />
       <ClassDefinition Name="btSliderConstraintDoubleData" IsExcluded="True" />
@@ -494,8 +475,10 @@
       <ClassDefinition Name="btUniversalConstraint" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btGeneric6DofSpring2Constraint.h">
+      <EnumDefinition Name="RotateOrder" />
       <ClassDefinition Name="btRotationalLimitMotor2" />
       <ClassDefinition Name="btTranslationalLimitMotor2" />
+      <EnumDefinition Name="bt6DofFlags2" />
       <ClassDefinition Name="btGeneric6DofSpring2Constraint" />
       <ClassDefinition Name="btGeneric6DofSpring2ConstraintData" IsExcluded="True" />
       <ClassDefinition Name="btGeneric6DofSpring2ConstraintDoubleData2" IsExcluded="True" />
@@ -516,6 +499,7 @@
       <ClassDefinition Name="btSequentialImpulseConstraintSolver" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btConstraintSolver.h">
+      <EnumDefinition Name="btConstraintSolverType" />
       <ClassDefinition Name="btConstraintSolver" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/Vehicle/btVehicleRaycaster.h">
@@ -597,7 +581,7 @@
       <ClassDefinition Name="b3DbvtVolume" IsExcluded="True" />
       <ClassDefinition Name="b3DbvtNode" IsExcluded="True" />
       <ClassDefinition Name="b3DynamicBvh" IsExcluded="True">
-        <ClassDefinition Name="" />
+        <EnumDefinition Name="" />
         <ClassDefinition Name="IClone" />
         <ClassDefinition Name="ICollide" />
         <ClassDefinition Name="IWriter" />
@@ -630,12 +614,12 @@
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3Collision/BroadPhaseCollision/b3DynamicBvhBroadphase.h" IsExcluded="True">
       <ClassDefinition Name="b3BroadphaseProxy" IsExcluded="True">
-        <ClassDefinition Name="CollisionFilterGroups" />
+        <EnumDefinition Name="CollisionFilterGroups" />
       </ClassDefinition>
       <ClassDefinition Name="b3DbvtProxy" IsExcluded="True" />
       <ClassDefinition Name="b3DbvtProxyArray" IsExcluded="True" />
       <ClassDefinition Name="b3DynamicBvhBroadphase" IsExcluded="True">
-        <ClassDefinition Name="" />
+        <EnumDefinition Name="" />
       </ClassDefinition>
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3Common/shared/b3PlatformDefinitions.h">
@@ -663,6 +647,7 @@
       <ClassDefinition Name="b3ConvexUtility" IsExcluded="True" />
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3Collidable.h" IsExcluded="True">
+      <EnumDefinition Name="b3ShapeTypes" IsExcluded="True" />
       <ClassDefinition Name="b3Collidable_t" IsExcluded="True" />
       <ClassDefinition Name="b3Collidable" IsExcluded="True" />
       <ClassDefinition Name="b3GpuChildShape_t" IsExcluded="True" />
@@ -742,6 +727,7 @@
       <ClassDefinition Name="b3CpuRigidBodyPipeline" IsExcluded="True" />
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3ContactSolverInfo.h" IsExcluded="True">
+      <EnumDefinition Name="b3SolverMode" IsExcluded="True" />
       <ClassDefinition Name="b3ContactSolverInfoData" IsExcluded="True" />
       <ClassDefinition Name="b3ContactSolverInfo" IsExcluded="True" />
       <ClassDefinition Name="b3ContactSolverInfoDoubleData" IsExcluded="True" />
@@ -752,11 +738,13 @@
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3SolverConstraint.h" IsExcluded="True">
       <ClassDefinition Name="b3SolverConstraint" IsExcluded="True">
-        <ClassDefinition Name="b3SolverConstraintType" IsExcluded="True" />
+        <EnumDefinition Name="b3SolverConstraintType" IsExcluded="True" />
       </ClassDefinition>
       <ClassDefinition Name="b3ConstraintArray" IsExcluded="True" />
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3TypedConstraint.h" IsExcluded="True">
+      <EnumDefinition Name="b3TypedConstraintType" IsExcluded="True" />
+      <EnumDefinition Name="b3ConstraintParams" IsExcluded="True" />
       <ClassDefinition Name="b3JointFeedback" IsExcluded="True" />
       <ClassDefinition Name="b3TypedConstraint" IsExcluded="True">
         <ClassDefinition Name="b3ConstraintInfo1" IsExcluded="True" />
@@ -774,6 +762,7 @@
     <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3Generic6DofConstraint.h" IsExcluded="True">
       <ClassDefinition Name="b3RotationalLimitMotor" IsExcluded="True" />
       <ClassDefinition Name="b3TranslationalLimitMotor" IsExcluded="True" />
+      <EnumDefinition Name="b36DofFlags" IsExcluded="True" />
       <ClassDefinition Name="b3Generic6DofConstraint" IsExcluded="True" />
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3PgsJacobiSolver.h" IsExcluded="True">
@@ -781,6 +770,7 @@
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3Point2PointConstraint.h" IsExcluded="True">
       <ClassDefinition Name="b3ConstraintSetting" IsExcluded="True" />
+      <EnumDefinition Name="b3Point2PointFlags" IsExcluded="True" />
       <ClassDefinition Name="b3Point2PointConstraint" IsExcluded="True" />
       <ClassDefinition Name="b3Point2PointConstraintFloatData" IsExcluded="True" />
       <ClassDefinition Name="b3Point2PointConstraintDoubleData" IsExcluded="True" />
@@ -820,7 +810,7 @@
     <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3RadixSort32CL.h" IsExcluded="True">
       <ClassDefinition Name="b3SortData" IsExcluded="True" />
       <ClassDefinition Name="b3RadixSort32CL" IsExcluded="True">
-        <ClassDefinition Name="" />
+        <EnumDefinition Name="" />
         <ClassDefinition Name="b3ConstData" IsExcluded="True" />
       </ClassDefinition>
     </HeaderDefinition>
@@ -848,7 +838,7 @@
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/b3GpuSapBroadphase.h" IsExcluded="True">
       <ClassDefinition Name="b3GpuSapBroadphase" IsExcluded="True">
-        <ClassDefinition Name="b3GpuSapKernelType" IsExcluded="True" />
+        <EnumDefinition Name="b3GpuSapKernelType" IsExcluded="True" />
       </ClassDefinition>
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/kernels/gridBroadphaseKernels.h" IsExcluded="True" />
@@ -870,7 +860,7 @@
       <ClassDefinition Name="b3BvhSubtreeInfo" IsExcluded="True" />
       <ClassDefinition Name="b3NodeOverlapCallback" IsExcluded="True" />
       <ClassDefinition Name="b3QuantizedBvh" IsExcluded="True">
-        <ClassDefinition Name="b3TraversalMode" IsExcluded="True" />
+        <EnumDefinition Name="b3TraversalMode" IsExcluded="True" />
       </ClassDefinition>
       <ClassDefinition Name="b3OptimizedBvhNodeFloatData" IsExcluded="True" />
       <ClassDefinition Name="b3OptimizedBvhNodeDoubleData" IsExcluded="True" />
@@ -886,7 +876,7 @@
     <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3GjkEpa.h" IsExcluded="True">
       <ClassDefinition Name="b3GjkEpaSolver2" IsExcluded="True">
         <ClassDefinition Name="sResults">
-          <ClassDefinition Name="eStatus" />
+          <EnumDefinition Name="eStatus" />
         </ClassDefinition>
       </ClassDefinition>
     </HeaderDefinition>
@@ -924,7 +914,7 @@
     <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/kernels/satKernels.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3BoundSearchCL.h" IsExcluded="True">
       <ClassDefinition Name="b3BoundSearchCL" IsExcluded="True">
-        <ClassDefinition Name="Option" />
+        <EnumDefinition Name="Option" />
       </ClassDefinition>
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3LauncherCL.h" IsExcluded="True">
@@ -947,7 +937,9 @@
     <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuConstraint4.h" IsExcluded="True">
       <ClassDefinition Name="b3GpuConstraint4" IsExcluded="True" />
     </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuGenericConstraint.h" IsExcluded="True">
+    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuGenericConstraint.h">
+      <EnumDefinition Name="B3_CONSTRAINT_FLAGS" />
+      <EnumDefinition Name="b3GpuGenericConstraintType" IsExcluded="True" />
       <ClassDefinition Name="b3GpuConstraintInfo2" IsExcluded="True" />
       <ClassDefinition Name="b3GpuGenericConstraint" IsExcluded="True" />
     </HeaderDefinition>
@@ -969,7 +961,7 @@
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuSolverConstraint.h" IsExcluded="True">
       <ClassDefinition Name="b3GpuSolverConstraint" IsExcluded="True">
-        <ClassDefinition Name="b3SolverConstraintType" IsExcluded="True" />
+        <EnumDefinition Name="b3SolverConstraintType" IsExcluded="True" />
       </ClassDefinition>
       <ClassDefinition Name="b3GpuConstraintArray" IsExcluded="True" />
     </HeaderDefinition>
@@ -982,12 +974,13 @@
     <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuRigidBodyPipelineInternalData.h" IsExcluded="True">
       <ClassDefinition Name="b3GpuRigidBodyPipelineInternalData" IsExcluded="True" />
     </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3Solver.h" IsExcluded="True">
+    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3Solver.h">
+      <EnumDefinition Name="" />
       <ClassDefinition Name="b3SolverBase" IsExcluded="True">
         <ClassDefinition Name="ConstraintCfg" />
       </ClassDefinition>
       <ClassDefinition Name="b3Solver" IsExcluded="True">
-        <ClassDefinition Name="" />
+        <EnumDefinition Name="" />
       </ClassDefinition>
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3OpenCL/RigidBody/kernels/batchingKernels.h" IsExcluded="True" />
@@ -1012,13 +1005,16 @@
       <ClassDefinition Name="ChunkUtils" Namespace="bParse" />
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3File.h">
+      <EnumDefinition Name="bFileFlags" Namespace="bParse" />
+      <EnumDefinition Name="bFileVerboseMode" Namespace="bParse" />
       <ClassDefinition Name="bFile" Namespace="bParse" />
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3Serializer.h" IsExcluded="True">
       <ClassDefinition Name="b3Chunk" IsExcluded="True" />
-      <ClassDefinition Name="b3Serializer" IsExcluded="True" />
-      <ClassDefinition Name="b3PointerUid" IsExcluded="True" />
-      <ClassDefinition Name="b3DefaultSerializer" IsExcluded="True" />
+      <EnumDefinition Name="b3SerializationFlags" Namespace="bParse" IsExcluded="True" />
+      <ClassDefinition Name="b3Serializer" Namespace="bParse" IsExcluded="True" />
+      <ClassDefinition Name="b3PointerUid" Namespace="bParse" IsExcluded="True" />
+      <ClassDefinition Name="b3DefaultSerializer" Namespace="bParse" IsExcluded="True" />
     </HeaderDefinition>
     <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3BulletFile.h" IsExcluded="True">
       <ClassDefinition Name="b3BulletFile" Namespace="bParse" IsExcluded="True" />
@@ -1169,7 +1165,9 @@
       <ClassDefinition Name="btPairCachingGhostObject" />
       <ClassDefinition Name="btGhostPairCallback" />
     </HeaderDefinition>
-    <HeaderDefinition Path="BulletCollision/CollisionDispatch/btInternalEdgeUtility.h" IsExcluded="True" />
+    <HeaderDefinition Path="BulletCollision/CollisionDispatch/btInternalEdgeUtility.h">
+      <EnumDefinition Name="btInternalEdgeAdjustFlags" />
+    </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionDispatch/btUnionFind.h">
       <ClassDefinition Name="btElement" />
       <ClassDefinition Name="btUnionFind" />
@@ -1233,6 +1231,7 @@
       <ClassDefinition Name="btTriangleShape" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/Gimpact/btBoxCollision.h">
+      <EnumDefinition Name="eBT_PLANE_INTERSECTION_TYPE" />
       <ClassDefinition Name="BT_BOX_BOX_TRANSFORM_CACHE" />
       <ClassDefinition Name="btAABB" />
     </HeaderDefinition>
@@ -1266,6 +1265,7 @@
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/Gimpact/btGImpactShape.h">
       <ClassDefinition Name="btGImpactBoxSet" />
+      <EnumDefinition Name="eGIMPACT_SHAPE_TYPE" />
       <ClassDefinition Name="btTetrahedronShapeEx" />
       <ClassDefinition Name="btGImpactShapeInterface" />
       <ClassDefinition Name="btGImpactCompoundShape">
@@ -1279,7 +1279,7 @@
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/NarrowPhaseCollision/btRaycastCallback.h">
       <ClassDefinition Name="btTriangleRaycastCallback">
-        <ClassDefinition Name="EFlags" />
+        <EnumDefinition Name="EFlags" />
       </ClassDefinition>
       <ClassDefinition Name="btTriangleConvexcastCallback" />
     </HeaderDefinition>
@@ -1301,7 +1301,9 @@
       </ClassDefinition>
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/Gimpact/btGImpactMassUtil.h" IsExcluded="True" />
-    <HeaderDefinition Path="BulletCollision/Gimpact/gim_math.h" IsExcluded="True" />
+    <HeaderDefinition Path="BulletCollision/Gimpact/gim_math.h">
+      <EnumDefinition Name="GIM_SCALAR_TYPES" />
+    </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/Gimpact/gim_memory.h">
       <ClassDefinition Name="gim_alloc_function" />
       <ClassDefinition Name="gim_alloca_function" />
@@ -1310,7 +1312,6 @@
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/Gimpact/gim_array.h">
       <ClassTemplateDefinition Name="gim_array" />
-      <ClassDefinition Name="gim_array&lt;unsigned int&gt;" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/Gimpact/gim_geom_types.h">
       <ClassDefinition Name="vec2s" />
@@ -1336,7 +1337,10 @@
       <ClassDefinition Name="mat4f" />
       <ClassDefinition Name="quatf" />
     </HeaderDefinition>
-    <HeaderDefinition Path="BulletCollision/Gimpact/gim_basic_geometry_operations.h" IsExcluded="True" />
+    <HeaderDefinition Path="BulletCollision/Gimpact/gim_basic_geometry_operations.h">
+      <EnumDefinition Name="ePLANE_INTERSECTION_TYPE" />
+      <EnumDefinition Name="eLINE_PLANE_INTERSECTION_TYPE" />
+    </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/Gimpact/gim_bitset.h">
       <ClassDefinition Name="gim_bitset" />
     </HeaderDefinition>
@@ -1386,13 +1390,15 @@
     <HeaderDefinition Path="BulletCollision/NarrowPhaseCollision/btGjkEpa3.h">
       <ClassDefinition Name="btGjkEpaSolver3">
         <ClassDefinition Name="sResults">
-          <ClassDefinition Name="eStatus" />
+          <EnumDefinition Name="eStatus" />
         </ClassDefinition>
       </ClassDefinition>
       <ClassDefinition Name="U" />
       <ClassDefinition Name="U1" />
       <ClassTemplateDefinition Name="MinkowskiDiff" />
+      <EnumDefinition Name="eGjkStatus" />
       <ClassTemplateDefinition Name="GJK" />
+      <EnumDefinition Name="eEpaStatus" />
       <ClassTemplateDefinition Name="EPA" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/NarrowPhaseCollision/btComputeGjkEpaPenetration.h" IsExcluded="True" />
@@ -1413,7 +1419,7 @@
     <HeaderDefinition Path="BulletCollision/NarrowPhaseCollision/btGjkEpa2.h">
       <ClassDefinition Name="btGjkEpaSolver2">
         <ClassDefinition Name="sResults">
-          <ClassDefinition Name="eStatus" />
+          <EnumDefinition Name="eStatus" />
         </ClassDefinition>
       </ClassDefinition>
     </HeaderDefinition>
@@ -1457,8 +1463,9 @@
       <ClassDefinition Name="btSolve2LinearConstraint" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/Featherstone/btMultiBodyLink.h">
+      <EnumDefinition Name="btMultiBodyLinkFlags" />
       <ClassDefinition Name="btMultibodyLink">
-        <ClassDefinition Name="eFeatherstoneJointType" />
+        <EnumDefinition Name="eFeatherstoneJointType" />
       </ClassDefinition>
     </HeaderDefinition>
     <HeaderDefinition Path="LinearMath/btSpatialAlgebra.h">
@@ -1466,7 +1473,7 @@
       <ClassDefinition Name="btSpatialMotionVector" />
       <ClassDefinition Name="btSymmetricSpatialDyad" />
       <ClassDefinition Name="btSpatialTransformationMatrix">
-        <ClassDefinition Name="eOutputOperation" />
+        <EnumDefinition Name="eOutputOperation" />
       </ClassDefinition>
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/Featherstone/btMultiBody.h">
@@ -1482,7 +1489,7 @@
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/Featherstone/btMultiBodySolverConstraint.h">
       <ClassDefinition Name="btMultiBodySolverConstraint">
-        <ClassDefinition Name="btSolverConstraintType" />
+        <EnumDefinition Name="btSolverConstraintType" />
       </ClassDefinition>
       <ClassDefinition Name="btMultiBodyConstraintArray" />
     </HeaderDefinition>
@@ -1539,13 +1546,13 @@
     </HeaderDefinition>
     <HeaderDefinition Path="BulletSoftBody/btSoftBodySolvers.h">
       <ClassDefinition Name="btSoftBodySolver">
-        <ClassDefinition Name="SolverTypes" />
+        <EnumDefinition Name="SolverTypes" />
       </ClassDefinition>
       <ClassDefinition Name="btSoftBodySolverOutput" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletSoftBody/btSoftBodySolverVertexBuffer.h">
       <ClassDefinition Name="btVertexBufferDescriptor">
-        <ClassDefinition Name="BufferTypes" />
+        <EnumDefinition Name="BufferTypes" />
       </ClassDefinition>
       <ClassDefinition Name="btCPUVertexBufferDescriptor" />
     </HeaderDefinition>
@@ -1554,14 +1561,13 @@
     </HeaderDefinition>
     <HeaderDefinition Path="BulletSoftBody/btSparseSDF.h">
       <ClassTemplateDefinition Name="btSparseSdf" />
-      <ClassDefinition Name="btSparseSdf&lt;int&gt;" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletSoftBody/btSoftBody.h">
       <ClassDefinition Name="btSoftBodyWorldInfo" />
       <ClassDefinition Name="btSoftBody">
         <ClassDefinition Name="Joint">
           <ClassDefinition Name="eType">
-            <ClassDefinition Name="_" />
+            <EnumDefinition Name="_" />
           </ClassDefinition>
           <ClassDefinition Name="Specs" />
         </ClassDefinition>
@@ -1575,28 +1581,28 @@
         <ClassDefinition Name="Cluster" />
         <ClassDefinition Name="Config" />
         <ClassDefinition Name="eAeroModel">
-          <ClassDefinition Name="_" />
+          <EnumDefinition Name="_" />
         </ClassDefinition>
         <ClassDefinition Name="eFeature">
-          <ClassDefinition Name="_" />
+          <EnumDefinition Name="_" />
         </ClassDefinition>
         <ClassDefinition Name="Element" />
         <ClassDefinition Name="ePSolver">
-          <ClassDefinition Name="_" />
+          <EnumDefinition Name="_" />
         </ClassDefinition>
         <ClassDefinition Name="eSolverPresets">
-          <ClassDefinition Name="_" />
+          <EnumDefinition Name="_" />
         </ClassDefinition>
         <ClassDefinition Name="eVSolver">
-          <ClassDefinition Name="_" />
+          <EnumDefinition Name="_" />
         </ClassDefinition>
         <ClassDefinition Name="Feature" />
         <ClassDefinition Name="Face" />
         <ClassDefinition Name="fCollision">
-          <ClassDefinition Name="_" />
+          <EnumDefinition Name="_" />
         </ClassDefinition>
         <ClassDefinition Name="fMaterial">
-          <ClassDefinition Name="_" />
+          <EnumDefinition Name="_" />
         </ClassDefinition>
         <ClassDefinition Name="ImplicitFn" />
         <ClassDefinition Name="Impulse" />
@@ -1645,7 +1651,7 @@
         <ClassDefinition Name="SwappedCreateFunc" />
       </ClassDefinition>
     </HeaderDefinition>
-    <HeaderDefinition Path="BulletSoftBody/btSoftBodyData.h" IsExcluded="True">
+    <HeaderDefinition Path="BulletSoftBody/btSoftBodyData.h">
       <ClassDefinition Name="SoftBodyMaterialData" IsExcluded="True" />
       <ClassDefinition Name="SoftBodyNodeData" IsExcluded="True" />
       <ClassDefinition Name="SoftBodyLinkData" IsExcluded="True" />
@@ -1655,12 +1661,13 @@
       <ClassDefinition Name="SoftBodyConfigData" IsExcluded="True" />
       <ClassDefinition Name="SoftBodyPoseData" IsExcluded="True" />
       <ClassDefinition Name="SoftBodyClusterData" IsExcluded="True" />
+      <EnumDefinition Name="btSoftJointBodyType" />
       <ClassDefinition Name="btSoftBodyJointData" IsExcluded="True" />
       <ClassDefinition Name="btSoftBodyFloatData" IsExcluded="True" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletSoftBody/btSoftBodyHelpers.h">
       <ClassDefinition Name="fDrawFlags">
-        <ClassDefinition Name="_" />
+        <EnumDefinition Name="_" />
       </ClassDefinition>
       <ClassDefinition Name="btSoftBodyHelpers" />
     </HeaderDefinition>
@@ -1701,7 +1708,9 @@
     <HeaderDefinition Path="LinearMath/btConvexHull.h">
       <ClassDefinition Name="TUIntArray" />
       <ClassDefinition Name="HullResult" />
+      <EnumDefinition Name="HullFlag" />
       <ClassDefinition Name="HullDesc" />
+      <EnumDefinition Name="HullError" />
       <ClassDefinition Name="btPlane" />
       <ClassDefinition Name="ConvexH">
         <ClassDefinition Name="HalfEdge" />
@@ -1717,7 +1726,7 @@
     </HeaderDefinition>
     <HeaderDefinition Path="LinearMath/btCpuFeatureUtility.h">
       <ClassDefinition Name="btCpuFeatureUtility">
-        <ClassDefinition Name="btCpuFeature" />
+        <EnumDefinition Name="btCpuFeature" />
       </ClassDefinition>
     </HeaderDefinition>
     <HeaderDefinition Path="LinearMath/btGrahamScan2dConvexHull.h">
@@ -1769,6 +1778,7 @@
       <ClassDefinition Name="TMMesh" Namespace="HACD" />
     </HeaderDefinition>
     <HeaderDefinition Path="../Extras/HACD/hacdICHull.h">
+      <EnumDefinition Name="ICHullError" Namespace="HACD" />
       <ClassDefinition Name="ICHull" Namespace="HACD" />
     </HeaderDefinition>
     <HeaderDefinition Path="../Extras/HACD/hacdGraph.h">

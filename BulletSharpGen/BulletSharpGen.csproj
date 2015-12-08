@@ -49,6 +49,7 @@
     <Compile Include="BulletParser.cs" />
     <Compile Include="CMakeWriter.cs" />
     <Compile Include="CppCliWriter.cs" />
+    <Compile Include="DefaultParser.cs" />
     <Compile Include="ExtensionsWriter.cs" />
     <Compile Include="FilterWriter.cs" />
     <Compile Include="Model\ClassDefinition.cs" />

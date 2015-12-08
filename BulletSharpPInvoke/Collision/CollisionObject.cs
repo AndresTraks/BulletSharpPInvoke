@@ -18,32 +18,34 @@ namespace BulletSharp
 	[Flags]
 	public enum AnisotropicFrictionFlags
 	{
-        AnisotropicFrictionDisabled = 0,
-        AnisotropicFriction = 1,
-        AnisotropicRollingFriction = 2
+		FrictionDisabled = 0,
+		Friction = 1,
+		RollingFriction = 2
 	}
 
 	[Flags]
 	public enum CollisionFlags
 	{
-        StaticObject = 1,
-        KinematicObject = 2,
-        NoContactResponse = 4,
-        CustomMaterialCallback = 8,
-        CharacterObject = 16,
-        DisableVisualizeObject = 32,
-        DisableSpuCollisionProcessing = 64
+		None = 0,
+		StaticObject = 1,
+		KinematicObject = 2,
+		NoContactResponse = 4,
+		CustomMaterialCallback = 8,
+		CharacterObject = 16,
+		DisableVisualizeObject = 32,
+		DisableSpuCollisionProcessing = 64
 	}
 
-    [Flags]
+	[Flags]
 	public enum CollisionObjectTypes
 	{
-        CollisionObject = 1,
-        RigidBody = 2,
-        GhostObject = 4,
-        SoftBody = 8,
+		None = 0,
+		CollisionObject = 1,
+		RigidBody = 2,
+		GhostObject = 4,
+		SoftBody = 8,
         HFFluid = 16,
-        UserType = 32,
+		UserType = 32,
 		FeatherstoneLink = 64
 	}
 
