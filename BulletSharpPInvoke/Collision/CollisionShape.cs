@@ -5,7 +5,7 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
-	public class CollisionShape : IDisposable
+	public abstract class CollisionShape : IDisposable
 	{
 		internal IntPtr _native;
 		bool _preventDelete;

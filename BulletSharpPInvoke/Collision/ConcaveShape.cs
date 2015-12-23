@@ -15,7 +15,7 @@ namespace BulletSharp
 		UChar
 	}
 
-	public class ConcaveShape : CollisionShape
+	public abstract class ConcaveShape : CollisionShape
 	{
 		internal ConcaveShape(IntPtr native)
 			: base(native)

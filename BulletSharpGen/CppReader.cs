@@ -406,7 +406,6 @@ namespace BulletSharpGen
                     if (cursor.IsPureVirtualCxxMethod)
                     {
                         _context.Method.IsAbstract = true;
-                        _context.Class.IsAbstract = true;
                     }
                 }
 

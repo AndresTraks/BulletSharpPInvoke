@@ -1,9 +1,19 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 
 namespace BulletSharpGen
 {
     class DefaultParser
     {
+        public WrapperProject Project { get; private set; }
+
+        public DefaultParser(WrapperProject project)
+        {
+            Project = project;
+
+            MarkAbstractClasses();
+        }
+
         // n = 2 -> "\t\t"
         protected static string GetTabs(int n)
         {
@@ -69,6 +79,14 @@ namespace BulletSharpGen
             }
 
             return outText.ToString();
+        }
+
+        void MarkAbstractClasses()
+        {
+            foreach (var @class in Project.ClassDefinitions.Values)
+            {
+                @class.IsAbstract = @class.AbstractMethods.Count() != 0;
+            }
         }
     }
 }

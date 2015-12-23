@@ -486,12 +486,12 @@ namespace BulletSharp
 
 		public JointFeedback JointFeedback
 		{
-            get { return _jointFeedback; }
-            set
-            {
+			get { return _jointFeedback; }
+			set
+			{
                 btTypedConstraint_setJointFeedback(_native, (value == null) ? value._native : IntPtr.Zero);
-                _jointFeedback = value;
-            }
+				_jointFeedback = value;
+			}
 		}
 
 		public int OverrideNumSolverIterations

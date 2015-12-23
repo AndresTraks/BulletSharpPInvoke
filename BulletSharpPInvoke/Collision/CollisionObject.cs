@@ -198,12 +198,12 @@ namespace BulletSharp
 
 		public BroadphaseProxy BroadphaseHandle
 		{
-            get { return _broadphaseHandle; }
-            set
-            {
-                _broadphaseHandle = value;
+			get { return _broadphaseHandle; }
+			set
+			{
                 btCollisionObject_setBroadphaseHandle(_native, (value != null) ? value._native : IntPtr.Zero);
-            }
+				_broadphaseHandle = value;
+			}
 		}
 
 		public float CcdMotionThreshold
@@ -231,12 +231,12 @@ namespace BulletSharp
 
 		public CollisionShape CollisionShape
 		{
-            get { return _collisionShape; }
-            set
-            {
-                btCollisionObject_setCollisionShape(_native, value._native);
-                _collisionShape = value;
-            }
+			get { return _collisionShape; }
+			set
+			{
+				btCollisionObject_setCollisionShape(_native, value._native);
+				_collisionShape = value;
+			}
 		}
 
 		public int CompanionId

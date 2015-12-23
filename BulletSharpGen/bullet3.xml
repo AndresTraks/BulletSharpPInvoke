@@ -78,7 +78,37 @@
       <ClassTemplateDefinition Name="btAlignedObjectArray">
         <ClassDefinition Name="less" />
       </ClassTemplateDefinition>
-      <ClassDefinition Name="btAlignedObjectArray&lt;int&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btCollisionObject&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btVector3&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btScalar&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btQuantizedBvhDoubleData&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btQuantizedBvhFloatData&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btCollisionShapeData&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btDynamicsWorldDoubleData&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btDynamicsWorldFloatData&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btRigidBodyDoubleData&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btRigidBodyFloatData&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btCollisionObjectDoubleData&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btCollisionObjectFloatData&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btTypedConstraintFloatData&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btTypedConstraintDoubleData&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btTypedConstraintData&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btSoftBodyFloatData&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btSoftBodyDoubleData&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btDbvt::sStkNN&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btDbvtNode&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btMultiSapBroadphase::btBridgeProxy&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btWheelInfo&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btFace&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btMatrix3x3&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;bool&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btSoftBody::Node&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;unsigned int&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;ConvexH::HalfEdge&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btPlane&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;btConvexHullComputer::Edge&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;bParse::bStructHandle&gt;" />
+      <ClassDefinition Name="btAlignedObjectArray&lt;char *&gt;" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/BroadphaseCollision/btDispatcher.h">
       <ClassDefinition Name="btDispatcherInfo">
@@ -257,6 +287,7 @@
       <ClassTemplateDefinition Name="btHashKeyPtr" />
       <ClassTemplateDefinition Name="btHashKey" />
       <ClassTemplateDefinition Name="btHashMap" />
+      <ClassDefinition Name="btHashMap&lt;btHashPtr&gt;" />
     </HeaderDefinition>
     <HeaderDefinition Path="LinearMath/btSerializer.h">
       <ClassDefinition Name="btChunk" />
@@ -1312,6 +1343,7 @@
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/Gimpact/gim_array.h">
       <ClassTemplateDefinition Name="gim_array" />
+      <ClassDefinition Name="gim_array&lt;unsigned int&gt;" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/Gimpact/gim_geom_types.h">
       <ClassDefinition Name="vec2s" />
@@ -1561,6 +1593,7 @@
     </HeaderDefinition>
     <HeaderDefinition Path="BulletSoftBody/btSparseSDF.h">
       <ClassTemplateDefinition Name="btSparseSdf" />
+      <ClassDefinition Name="btSparseSdf&lt;int&gt;" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletSoftBody/btSoftBody.h">
       <ClassDefinition Name="btSoftBodyWorldInfo" />
@@ -1762,6 +1795,7 @@
     <HeaderDefinition Path="../Extras/HACD/hacdVector.h">
       <ClassDefinition Name="Real" Namespace="HACD" />
       <ClassTemplateDefinition Name="Vec3" Namespace="HACD" />
+      <ClassDefinition Name="HACD::Vec3&lt;double&gt;" />
     </HeaderDefinition>
     <HeaderDefinition Path="../Extras/HACD/hacdVector.inl" IsExcluded="True" />
     <HeaderDefinition Path="../Extras/HACD/hacdCircularList.h">

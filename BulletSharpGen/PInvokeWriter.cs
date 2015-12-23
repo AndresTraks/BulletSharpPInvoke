@@ -704,23 +704,45 @@ namespace BulletSharpGen
             WriteTabs(level + 1, WriteTo.CS);
             Write("public ", WriteTo.CS);
             WriteTypeCS(prop.Type);
-            Write(' ', WriteTo.CS);
-            WriteLine(prop.Name, WriteTo.CS);
+            WriteLine(string.Format(" {0}", prop.Name), WriteTo.CS);
             WriteTabs(level + 1, WriteTo.CS);
             WriteLine('{', WriteTo.CS);
 
-            Write(BulletParser.GetTypeGetterCSMarshal(prop, level), WriteTo.CS);
-
-            if (prop.Setter != null)
+            if (prop.Parent.CachedProperties.Keys.Contains(prop.Name))
             {
+                var cachedProperty = prop.Parent.CachedProperties[prop.Name];
                 WriteTabs(level + 2, WriteTo.CS);
-                Write("set { ", WriteTo.CS);
-                Write(prop.Parent.FullNameCS, WriteTo.CS);
-                Write('_', WriteTo.CS);
-                Write(prop.Setter.Name, WriteTo.CS);
-                Write("(_native, ", WriteTo.CS);
-                Write(BulletParser.GetTypeSetterCSMarshal(prop.Type), WriteTo.CS);
-                WriteLine("); }", WriteTo.CS);
+                WriteLine(string.Format("get {{ return {0}; }}", cachedProperty.CacheFieldName), WriteTo.CS);
+
+                if (prop.Setter != null)
+                {
+                    WriteTabs(level + 2, WriteTo.CS);
+                    WriteLine("set", WriteTo.CS);
+                    WriteTabs(level + 2, WriteTo.CS);
+                    WriteLine("{", WriteTo.CS);
+                    WriteTabs(level + 3, WriteTo.CS);
+                    WriteLine(string.Format("{0}_{1}(_native, {2});",
+                        prop.Parent.FullNameCS,
+                        prop.Setter.Name,
+                        BulletParser.GetTypeSetterCSMarshal(prop.Type)), WriteTo.CS);
+                    WriteTabs(level + 3, WriteTo.CS);
+                    WriteLine(string.Format("{0} = value;", cachedProperty.CacheFieldName));
+                    WriteTabs(level + 2, WriteTo.CS);
+                    WriteLine("}", WriteTo.CS);
+                }
+            }
+            else
+            {
+                Write(BulletParser.GetTypeGetterCSMarshal(prop, level), WriteTo.CS);
+
+                if (prop.Setter != null)
+                {
+                    WriteTabs(level + 2, WriteTo.CS);
+                    WriteLine(string.Format("set {{ {0}_{1}(_native, {2}); }}",
+                        prop.Parent.FullNameCS,
+                        prop.Setter.Name,
+                        BulletParser.GetTypeSetterCSMarshal(prop.Type)), WriteTo.CS);
+                }
             }
 
             WriteTabs(level + 1, WriteTo.CS);
@@ -792,8 +814,12 @@ namespace BulletSharpGen
 
             // Write class definition
             WriteTabs(level, WriteTo.CS);
-            Write("public class ", WriteTo.CS);
-            Write(c.ManagedName, WriteTo.CS);
+            Write("public ", WriteTo.CS);
+            if (c.IsAbstract)
+            {
+                Write("abstract ", WriteTo.CS);
+            }
+            Write(string.Format("class {0}", c.ManagedName), WriteTo.CS);
             if (c.BaseClass != null)
             {
                 Write(" : ", WriteTo.CS);

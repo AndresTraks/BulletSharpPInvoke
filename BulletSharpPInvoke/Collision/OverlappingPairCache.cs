@@ -4,7 +4,7 @@ using System.Security;
 
 namespace BulletSharp
 {
-	public class OverlapCallback : IDisposable
+	public abstract class OverlapCallback : IDisposable
 	{
 		internal IntPtr _native;
 

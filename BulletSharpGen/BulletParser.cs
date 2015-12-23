@@ -8,15 +8,14 @@ namespace BulletSharpGen
     class BulletParser : DefaultParser
     {
         Dictionary<string, ClassDefinition> classDefinitions = new Dictionary<string, ClassDefinition>();
-        Dictionary<string, HeaderDefinition> ExternalHeaders = new Dictionary<string, HeaderDefinition>();
 
         Dictionary<string, string> methodNameMapping = new Dictionary<string, string>();
         Dictionary<string, string> parameterNameMapping = new Dictionary<string, string>();
 
         public BulletParser(WrapperProject project)
+            : base(project)
         {
             classDefinitions = project.ClassDefinitions;
-            ExternalHeaders = project.HeaderDefinitions;
 
             // Managed method names
             methodNameMapping.Add("gimpact_vs_compoundshape", "GImpactVsCompoundShape");
@@ -534,7 +533,7 @@ namespace BulletSharpGen
             }
 
             // Get managed header and enum names
-            foreach (HeaderDefinition header in ExternalHeaders.Values)
+            foreach (HeaderDefinition header in project.HeaderDefinitions.Values)
             {
                 string name = header.Name;
                 string mapping;

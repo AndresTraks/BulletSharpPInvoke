@@ -118,7 +118,6 @@ namespace BulletSharpGen.Project
         static void ReadProject(WrapperProject project, XmlReader reader)
         {
             string sourceRootFolder = null;
-            HeaderDefinition currentHeader = null;
 
             while (reader.Read())
             {
@@ -129,14 +128,6 @@ namespace BulletSharpGen.Project
 
                 switch (reader.Name)
                 {
-                    case "ClassDefinition":
-                    case "ClassTemplateDefinition":
-                    case "EnumDefinition":
-                        {
-                            ReadClassDefinition(project, reader, currentHeader);
-                        }
-                        break;
-
                     case "HeaderDefinition":
                         {
                             ReadHeaderDefinition(project, reader, sourceRootFolder);

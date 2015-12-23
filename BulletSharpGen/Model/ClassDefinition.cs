@@ -53,6 +53,31 @@ namespace BulletSharpGen
         public bool IsTypedef { get; set; }
         public TypeRefDefinition TypedefUnderlyingType { get; set; }
 
+        public IEnumerable<MethodDefinition> AbstractMethods
+        {
+            get
+            {
+                var abstractMethods = Methods.Where(m => m.IsAbstract);
+                if (BaseClass == null)
+                {
+                    return abstractMethods;
+                }
+
+                return abstractMethods.Concat(BaseClass.AbstractMethods.Where(abstractMethod =>
+                {
+                    foreach (var method in Methods)
+                    {
+                        if (method.Equals(abstractMethod))
+                        {
+                            // The abstract method is implemented in this class
+                            return false;
+                        }
+                    }
+                    return true;
+                }));
+            }
+        }
+
         // Pure enum = enum wrapped in a struct
         public bool IsPureEnum
         {
