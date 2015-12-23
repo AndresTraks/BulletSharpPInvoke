@@ -123,7 +123,7 @@ namespace BulletSharp
 		static extern void btJointFeedback_delete(IntPtr obj);
 	}
 
-	public class TypedConstraint : IDisposable
+	public abstract class TypedConstraint : IDisposable
 	{
 		public class ConstraintInfo1 : IDisposable
 		{

@@ -8,6 +8,10 @@ SamplerState shadowSampler
 	AddressU = Clamp;
 	AddressV = Clamp;
 };
+SamplerState blurSampler
+{
+    Filter = MIN_MAG_MIP_LINEAR;
+};
 
 Texture2D lightBuffer;
 Texture2D normalBuffer;
@@ -16,23 +20,21 @@ Texture2D depthMap;
 Texture2D lightDepthMap;
 
 matrix OverlayViewProjection;
-matrix LightViewProjection;
 float4 SunLightDirection;
 
-matrix ViewInverse;
 float ViewportWidth;
 float ViewportHeight;
 float4 ViewParameters; //TanHalfFOVX, TanHalfFOVY, ProjectionA, ProjectionB
 
-struct VS_OUT
+struct SCREEN_VS_OUT
 {
 	float4 Pos : SV_POSITION;
 	float2 texCoord : TEXCOORD;
 };
 
-VS_OUT VS(uint id : SV_VertexID)
+SCREEN_VS_OUT Screen_VS(uint id : SV_VertexID)
 {
-	VS_OUT output = (VS_OUT)0;
+	SCREEN_VS_OUT output;
 
 	// Construct full-screen triangle
 	output.texCoord = float2((id << 1) & 2, id & 2);
@@ -41,7 +43,7 @@ VS_OUT VS(uint id : SV_VertexID)
 	return output;
 }
 
-float4 PS( VS_OUT input ) : SV_Target
+float4 PS(SCREEN_VS_OUT input) : SV_Target
 {
 	float3 diffuseSample = diffuseBuffer.Sample(defaultSampler, input.texCoord).rgb;
 	float4 normalSample = normalBuffer.Sample(defaultSampler, input.texCoord);
@@ -69,14 +71,14 @@ float4 PS( VS_OUT input ) : SV_Target
 	float2 screenPos = (input.texCoord * float2(2,-2)) + float2(-1,1); // from 0...1 to -1...1
 	float2 tanHalfFOV = ViewParameters.xy;
 	float4 viewSpacePosition = float4(linearDepth * float3(screenPos * tanHalfFOV, 1), 1);
-	float3 worldPosition = mul(viewSpacePosition, ViewInverse).xyz;
+	float3 worldPosition = mul(ViewInverse, viewSpacePosition).xyz;
 	float4 lightScreenPosition = mul(LightViewProjection, float4(worldPosition, 1));
 
-	float lightDepthActual = lightScreenPosition.z / lightScreenPosition.w;
 	float2 lightScreenPos = lightScreenPosition.xy / lightScreenPosition.w;
 
 	if (lightScreenPos.x >= -1 && lightScreenPos.x <= 1 && lightScreenPos.y >= -1 && lightScreenPos.y <= 1)
 	{
+		float lightDepthActual = lightScreenPosition.z / lightScreenPosition.w;
 		lightScreenPos = (lightScreenPos - float2(-1, 1)) * float2(0.5, -0.5); // from -1...1 to 0...1
 		float lightDepthSample = lightDepthMap.Sample(shadowSampler, lightScreenPos).x;
 
@@ -91,9 +93,50 @@ float4 PS( VS_OUT input ) : SV_Target
 	return float4(lightSample.xyz + ambient + dirLight, 1);
 }
 
-VS_OUT Overlay_VS(uint id : SV_VertexID)
+
+float4 Blur_PS(SCREEN_VS_OUT input) : SV_Target
 {
-	VS_OUT output = (VS_OUT)0;
+	float radius = 2;
+	float dx = radius / ViewportWidth;
+	float dy = radius / ViewportHeight;
+	float dx2 = dx + dx;
+	float dy2 = dy + dy;
+
+	float4 diffuse = 0;
+	diffuse += diffuseBuffer.Sample(blurSampler, input.texCoord);
+	diffuse += diffuseBuffer.Sample(blurSampler, input.texCoord + float2(-dx, 0));
+	diffuse += diffuseBuffer.Sample(blurSampler, input.texCoord + float2(-dx2, 0));
+	diffuse += diffuseBuffer.Sample(blurSampler, input.texCoord + float2(+dx, 0));
+	diffuse += diffuseBuffer.Sample(blurSampler, input.texCoord + float2(+dx2, 0));
+	diffuse += diffuseBuffer.Sample(blurSampler, input.texCoord + float2(0, -dy));
+	diffuse += diffuseBuffer.Sample(blurSampler, input.texCoord + float2(0, -dy2));
+	diffuse += diffuseBuffer.Sample(blurSampler, input.texCoord + float2(0, +dy));
+	diffuse += diffuseBuffer.Sample(blurSampler, input.texCoord + float2(0, +dy2));
+	return diffuse / 9;
+}
+
+float4 PostProcess_PS(SCREEN_VS_OUT input) : SV_Target
+{
+	float3 diffuse = diffuseBuffer.Sample(defaultSampler, input.texCoord).xyz;
+	float3 diffuseBlurred = normalBuffer.Sample(defaultSampler, input.texCoord).xyz;
+
+	float depth = depthMap.Sample(defaultSampler, input.texCoord).x;
+	float2 projection = ViewParameters.zw;
+	float linearDepth = projection.y / (depth - projection.x);
+	float focus = 50;
+	float radius = abs(linearDepth - focus);
+	radius /= 20;
+
+	// Debugging
+	//return float4(diffuseBlurred, 1);
+
+	return float4(lerp(diffuse, diffuseBlurred, saturate(radius)), 1);
+}
+
+
+SCREEN_VS_OUT Overlay_VS(uint id : SV_VertexID)
+{
+	SCREEN_VS_OUT output;
 
 	// Construct overlay quad
 	output.texCoord = 0.5 * float2((id << 1) & 2, id & 2);
@@ -103,18 +146,32 @@ VS_OUT Overlay_VS(uint id : SV_VertexID)
 	return output;
 }
 
-float4 Overlay_PS( VS_OUT input ) : SV_Target
+float4 Overlay_PS(SCREEN_VS_OUT input) : SV_Target
 {
 	return diffuseBuffer.Sample(defaultSampler, input.texCoord);
 }
 
-technique10 Render
+technique10 DeferredShader
 {
-	pass P1
+	pass DeferredShader
 	{
-		SetVertexShader( CompileShader( vs_4_0, VS() ) );
+		SetVertexShader( CompileShader( vs_4_0, Screen_VS() ) );
 		SetGeometryShader( NULL );
 		SetPixelShader( CompileShader( ps_4_0, PS() ) );
+	}
+
+	pass Blur
+	{
+		SetVertexShader( CompileShader( vs_4_0, Screen_VS() ) );
+		SetGeometryShader( NULL );
+		SetPixelShader( CompileShader( ps_4_0, Blur_PS() ) );
+	}
+
+	pass PostProcess
+	{
+		SetVertexShader( CompileShader( vs_4_0, Screen_VS() ) );
+		SetGeometryShader( NULL );
+		SetPixelShader( CompileShader( ps_4_0, PostProcess_PS() ) );
 	}
 
 	pass Overlay

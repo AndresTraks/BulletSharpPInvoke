@@ -25,7 +25,7 @@ namespace BulletSharpGen
         Index index;
         List<string> headerQueue = new List<string>();
         List<string> clangOptions = new List<string>();
-        Dictionary<string, string> excludedMethods = new Dictionary<string, string>();
+        HashSet<string> excludedMethods = new HashSet<string>();
 
         ReaderContext _context = new ReaderContext();
         WrapperProject project;
@@ -59,17 +59,17 @@ namespace BulletSharpGen
             //clangOptions.Add("-DUSE_DOUBLE_PRECISION");
 
             // Exclude irrelevant methods
-            excludedMethods.Add("operator new", null);
-            excludedMethods.Add("operator delete", null);
-            excludedMethods.Add("operator new[]", null);
-            excludedMethods.Add("operator delete[]", null);
-            excludedMethods.Add("operator+=", null);
-            excludedMethods.Add("operator-=", null);
-            excludedMethods.Add("operator*=", null);
-            excludedMethods.Add("operator/=", null);
-            excludedMethods.Add("operator==", null);
-            excludedMethods.Add("operator!=", null);
-            excludedMethods.Add("operator()", null);
+            excludedMethods.Add("operator new");
+            excludedMethods.Add("operator delete");
+            excludedMethods.Add("operator new[]");
+            excludedMethods.Add("operator delete[]");
+            excludedMethods.Add("operator+=");
+            excludedMethods.Add("operator-=");
+            excludedMethods.Add("operator*=");
+            excludedMethods.Add("operator/=");
+            excludedMethods.Add("operator==");
+            excludedMethods.Add("operator!=");
+            excludedMethods.Add("operator()");
 
             // Enumerate all header files in the source tree
             var headerFiles = Directory.EnumerateFiles(src, "*.h", SearchOption.AllDirectories);
@@ -388,7 +388,7 @@ namespace BulletSharpGen
             else if (cursor.Kind == CursorKind.CxxMethod || cursor.Kind == CursorKind.Constructor)
             {
                 string methodName = cursor.Spelling;
-                if (excludedMethods.ContainsKey(methodName))
+                if (excludedMethods.Contains(methodName))
                 {
                     return Cursor.ChildVisitResult.Continue;
                 }

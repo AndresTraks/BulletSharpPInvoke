@@ -51,7 +51,7 @@ struct PS_DEBUG_OUT_MRT
 float4 shadowGenVS(VS_IN input) : SV_POSITION
 {
 	float4x4 world = float4x4(input.World0, input.World1, input.World2, input.World3);
-	return mul(LightViewProjection, mul(input.Pos, world));  // "P" in light coords
+	return mul(LightViewProjection, mul(input.Pos, world));  // Pos in light coords
 }
 
 VS_OUT VS(VS_IN input)
@@ -99,23 +99,23 @@ PS_DEBUG_OUT_MRT PS_DEBUG_MRT( VS_DEBUG_OUT input )
 	return output;
 }
 
-technique10 Render
+technique10 GBufferCreate
 {
-	pass P0
+	pass ShadowMap
 	{
 		SetVertexShader( CompileShader( vs_4_0, shadowGenVS() ) );
 		SetGeometryShader( NULL );
 		SetPixelShader( NULL );
 	}
 
-	pass P1
+	pass GBufferGen
 	{
 		SetVertexShader( CompileShader( vs_4_0, VS() ) );
 		SetGeometryShader( NULL );
 		SetPixelShader( CompileShader( ps_4_0, PS_MRT() ) );
 	}
 
-	pass debug
+	pass DebugDraw
 	{
 		SetVertexShader( CompileShader( vs_4_0, VS_DEBUG() ) );
 		SetGeometryShader( NULL );

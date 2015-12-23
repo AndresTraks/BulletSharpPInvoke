@@ -23,6 +23,9 @@ namespace DemoFramework.SharpDX11
 {
     public class SharpDX11Graphics : Graphics
     {
+        bool shadowsEnabled = true;
+        bool depthOfFieldEnabled = true;
+
         Device _device;
         public Device Device
         {
@@ -37,6 +40,9 @@ namespace DemoFramework.SharpDX11
         Texture2D gBufferLight;
         Texture2D gBufferNormal;
         Texture2D gBufferDiffuse;
+        Texture2D gBufferPostProcess;
+        Texture2D gBufferPostProcessBlur1;
+        Texture2D gBufferPostProcessBlur2;
         Texture2D depthTexture;
         Texture2D lightDepthTexture;
         //int shadowMapWidth = 2048, shadowMapHeight = 2048;
@@ -47,10 +53,8 @@ namespace DemoFramework.SharpDX11
         EffectShaderResourceVariable depthMapVar;
         EffectShaderResourceVariable shadowLightDepthBufferVar;
 
-        EffectMatrixVariable lightViewProjectionVar;
         EffectVectorVariable sunLightDirectionVar;
         EffectMatrixVariable overlayViewProjectionVar;
-        EffectMatrixVariable viewInverseVar;
         EffectScalarVariable viewportWidthVar;
         EffectScalarVariable viewportHeightVar;
         EffectVectorVariable viewParametersVar;
@@ -61,18 +65,21 @@ namespace DemoFramework.SharpDX11
         RenderTargetView gBufferNormalView;
         RenderTargetView gBufferDiffuseView;
         RenderTargetView gBufferLightView;
+        RenderTargetView gBufferPostProcessView;
+        RenderTargetView gBufferPostProcessViewBlur1;
+        RenderTargetView gBufferPostProcessViewBlur2;
         RenderTargetView[] gBufferViews;
         DepthStencilState depthState;
         DepthStencilState insideLightVolumeDepthState;
         DepthStencilState outsideLightVolumeDepthState;
         DepthStencilState lightDepthStencilState;
-        bool shadowsEnabled = true;
 
         Effect effect;
-        Effect effect2;
         EffectPass shadowGenPass;
         EffectPass gBufferGenPass;
         EffectPass gBufferRenderPass;
+        EffectPass gBufferPostProcessPass;
+        EffectPass gBufferPostProcessPass2;
         EffectPass gBufferOverlayPass;
         EffectPass debugDrawPass;
 
@@ -91,6 +98,9 @@ namespace DemoFramework.SharpDX11
         ShaderResourceView lightBufferRes;
         ShaderResourceView normalBufferRes;
         ShaderResourceView diffuseBufferRes;
+        ShaderResourceView postProcessBufferRes;
+        ShaderResourceView postProcessBufferBlur1Res;
+        ShaderResourceView postProcessBufferBlur2Res;
 
         // Light accumulation shader
         Effect lightShader;
@@ -212,6 +222,18 @@ namespace DemoFramework.SharpDX11
             if (gBufferDiffuseView != null)
                 gBufferDiffuseView.Dispose();
 
+            if (gBufferPostProcessView != null)
+                gBufferPostProcessView.Dispose();
+
+            if (depthOfFieldEnabled)
+            {
+                if (gBufferPostProcessViewBlur1 != null)
+                    gBufferPostProcessViewBlur1.Dispose();
+
+                if (gBufferPostProcessViewBlur2 != null)
+                    gBufferPostProcessViewBlur2.Dispose();
+            }
+
             if (gBufferLight != null)
                 gBufferLight.Dispose();
 
@@ -220,6 +242,15 @@ namespace DemoFramework.SharpDX11
 
             if (gBufferDiffuse != null)
                 gBufferDiffuse.Dispose();
+
+            if (gBufferPostProcess != null)
+                gBufferPostProcess.Dispose();
+
+            if (gBufferPostProcessBlur1 != null)
+                gBufferPostProcessBlur1.Dispose();
+
+            if (gBufferPostProcessBlur2 != null)
+                gBufferPostProcessBlur2.Dispose();
 
             if (depthTexture != null)
                 depthTexture.Dispose();
@@ -324,6 +355,18 @@ namespace DemoFramework.SharpDX11
             gBufferDiffuse = new Texture2D(_device, gBufferDesc);
             gBufferDiffuseView = new RenderTargetView(_device, gBufferDiffuse);
 
+            gBufferPostProcess = new Texture2D(_device, gBufferDesc);
+            gBufferPostProcessView = new RenderTargetView(_device, gBufferPostProcess);
+
+            if (depthOfFieldEnabled)
+            {
+                gBufferPostProcessBlur1 = new Texture2D(_device, gBufferDesc);
+                gBufferPostProcessViewBlur1 = new RenderTargetView(_device, gBufferPostProcessBlur1);
+
+                gBufferPostProcessBlur2 = new Texture2D(_device, gBufferDesc);
+                gBufferPostProcessViewBlur2 = new RenderTargetView(_device, gBufferPostProcessBlur2);
+            }
+
             gBufferViews = new RenderTargetView[] { gBufferNormalView, gBufferDiffuseView };
 
             ShaderResourceViewDescription gBufferResourceDesc = new ShaderResourceViewDescription()
@@ -339,6 +382,12 @@ namespace DemoFramework.SharpDX11
             lightBufferRes = new ShaderResourceView(_device, gBufferLight, gBufferResourceDesc);
             normalBufferRes = new ShaderResourceView(_device, gBufferNormal, gBufferResourceDesc);
             diffuseBufferRes = new ShaderResourceView(_device, gBufferDiffuse, gBufferResourceDesc);
+            postProcessBufferRes = new ShaderResourceView(_device, gBufferPostProcess, gBufferResourceDesc);
+            if (depthOfFieldEnabled)
+            {
+                postProcessBufferBlur1Res = new ShaderResourceView(_device, gBufferPostProcessBlur1, gBufferResourceDesc);
+                postProcessBufferBlur2Res = new ShaderResourceView(_device, gBufferPostProcessBlur2, gBufferResourceDesc);
+            }
 
 
             Texture2DDescription depthDesc = new Texture2DDescription()
@@ -385,14 +434,6 @@ namespace DemoFramework.SharpDX11
             _immediateContext.Rasterizer.SetViewport(new ViewportF(0, 0, _width, _height));
         }
 
-        ShaderBytecode LoadShader(string name, ShaderFlags flags)
-        {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(string.Format("{0}.{1}", assembly.GetName().Name, name)));
-            string shaderSource = reader.ReadToEnd();
-            return ShaderBytecode.Compile(shaderSource, "fx_5_0", flags, EffectFlags.None);
-        }
-
         public override void Initialize()
         {
             Form.SizeChanged += (o, args) =>
@@ -437,14 +478,15 @@ namespace DemoFramework.SharpDX11
             const ShaderFlags shaderFlags = ShaderFlags.None;
             //const ShaderFlags shaderFlags = ShaderFlags.Debug | ShaderFlags.SkipOptimization;
 
-            using (var shaderByteCode = LoadShader("shader.fx", shaderFlags))
+            string[] sources = new[] { "shader.fx", "grender.fx" };
+            using (var shaderByteCode = ShaderLoader.FromResource(Assembly.GetExecutingAssembly(), sources, shaderFlags))
             {
                 effect = new Effect(_device, shaderByteCode);
             }
-            EffectTechnique technique = effect.GetTechniqueByIndex(0);
-            shadowGenPass = technique.GetPassByIndex(0);
-            gBufferGenPass = technique.GetPassByIndex(1);
-            debugDrawPass = technique.GetPassByName("debug");
+            EffectTechnique technique = effect.GetTechniqueByName("GBufferCreate");
+            shadowGenPass = technique.GetPassByName("ShadowMap");
+            gBufferGenPass = technique.GetPassByName("GBufferGen");
+            debugDrawPass = technique.GetPassByName("DebugDraw");
 
             BufferDescription sceneConstantsDesc = new BufferDescription()
             {
@@ -498,32 +540,28 @@ namespace DemoFramework.SharpDX11
 
 
             // grender.fx
-            using (var shaderByteCode = LoadShader("grender.fx", shaderFlags))
-            {
-                effect2 = new Effect(_device, shaderByteCode);
-            }
-            technique = effect2.GetTechniqueByIndex(0);
-            gBufferRenderPass = technique.GetPassByIndex(0);
-            gBufferOverlayPass = technique.GetPassByIndex(1);
+            technique = effect.GetTechniqueByName("DeferredShader");
+            gBufferRenderPass = technique.GetPassByName("DeferredShader");
+            gBufferPostProcessPass = technique.GetPassByName("Blur");
+            gBufferPostProcessPass2 = technique.GetPassByName("PostProcess");
+            gBufferOverlayPass = technique.GetPassByName("Overlay");
 
-            lightBufferVar = effect2.GetVariableByName("lightBuffer").AsShaderResource();
-            normalBufferVar = effect2.GetVariableByName("normalBuffer").AsShaderResource();
-            diffuseBufferVar = effect2.GetVariableByName("diffuseBuffer").AsShaderResource();
-            depthMapVar = effect2.GetVariableByName("depthMap").AsShaderResource();
-            shadowLightDepthBufferVar = effect2.GetVariableByName("lightDepthMap").AsShaderResource();
+            lightBufferVar = effect.GetVariableByName("lightBuffer").AsShaderResource();
+            normalBufferVar = effect.GetVariableByName("normalBuffer").AsShaderResource();
+            diffuseBufferVar = effect.GetVariableByName("diffuseBuffer").AsShaderResource();
+            depthMapVar = effect.GetVariableByName("depthMap").AsShaderResource();
+            shadowLightDepthBufferVar = effect.GetVariableByName("lightDepthMap").AsShaderResource();
 
-            lightViewProjectionVar = effect2.GetVariableByName("LightViewProjection").AsMatrix();
-            sunLightDirectionVar = effect2.GetVariableByName("SunLightDirection").AsVector();
-            viewInverseVar = effect2.GetVariableByName("ViewInverse").AsMatrix();
-            viewportWidthVar = effect2.GetVariableByName("ViewportWidth").AsScalar();
-            viewportHeightVar = effect2.GetVariableByName("ViewportHeight").AsScalar();
-            viewParametersVar = effect2.GetVariableByName("ViewParameters").AsVector();
+            sunLightDirectionVar = effect.GetVariableByName("SunLightDirection").AsVector();
+            viewportWidthVar = effect.GetVariableByName("ViewportWidth").AsScalar();
+            viewportHeightVar = effect.GetVariableByName("ViewportHeight").AsScalar();
+            viewParametersVar = effect.GetVariableByName("ViewParameters").AsVector();
 
-            overlayViewProjectionVar = effect2.GetVariableByName("OverlayViewProjection").AsMatrix();
+            overlayViewProjectionVar = effect.GetVariableByName("OverlayViewProjection").AsMatrix();
 
 
             // light.fx
-            using (var shaderByteCode = LoadShader("light.fx", shaderFlags))
+            using (var shaderByteCode = ShaderLoader.FromResource(Assembly.GetExecutingAssembly(), "light.fx", shaderFlags))
             {
                 lightShader = new Effect(_device, shaderByteCode);
             }
@@ -641,8 +679,6 @@ namespace DemoFramework.SharpDX11
             lightViewParametersVar.Set(ref viewParameters);
 
 
-            lightViewProjectionVar.SetMatrixTranspose(sceneConstants.LightViewProjection);
-            viewInverseVar.SetMatrix(ref sceneConstants.ViewInverse);
             viewportWidthVar.Set(_width);
             viewportHeightVar.Set(_height);
             viewParametersVar.Set(ref viewParameters);
@@ -750,7 +786,14 @@ namespace DemoFramework.SharpDX11
             // Render G-buffer
             outputMerger.SetBlendState(alphaBlendState);
             outputMerger.SetDepthStencilState(null);
-            outputMerger.SetTargets(renderView);
+            if (depthOfFieldEnabled)
+            {
+                outputMerger.SetTargets(gBufferPostProcessView);
+            }
+            else
+            {
+                outputMerger.SetTargets(renderView);
+            }
             inputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
 
             lightBufferVar.SetResource(lightBufferRes);
@@ -758,8 +801,41 @@ namespace DemoFramework.SharpDX11
             diffuseBufferVar.SetResource(diffuseBufferRes);
             depthMapVar.SetResource(depthBufferRes);
 
+            //_immediateContext.ClearRenderTargetView(gBufferPostProcessView, Color4.Black);
             gBufferRenderPass.Apply(_immediateContext);
             _immediateContext.Draw(3, 0);
+
+            if (depthOfFieldEnabled)
+            {
+                diffuseBufferVar.SetResource(postProcessBufferRes);
+                outputMerger.SetTargets(gBufferPostProcessViewBlur1);
+                gBufferPostProcessPass.Apply(_immediateContext);
+                _immediateContext.Draw(3, 0);
+
+                diffuseBufferVar.SetResource(postProcessBufferBlur1Res);
+                outputMerger.SetTargets(gBufferPostProcessViewBlur2);
+                gBufferPostProcessPass.Apply(_immediateContext);
+                _immediateContext.Draw(3, 0);
+
+
+                diffuseBufferVar.SetResource(postProcessBufferBlur2Res);
+                outputMerger.SetTargets(gBufferPostProcessViewBlur1);
+                gBufferPostProcessPass.Apply(_immediateContext);
+                _immediateContext.Draw(3, 0);
+
+
+                diffuseBufferVar.SetResource(postProcessBufferBlur1Res);
+                outputMerger.SetTargets(gBufferPostProcessViewBlur2);
+                gBufferPostProcessPass.Apply(_immediateContext);
+                _immediateContext.Draw(3, 0);
+
+
+                diffuseBufferVar.SetResource(postProcessBufferRes);
+                normalBufferVar.SetResource(postProcessBufferBlur2Res);
+                outputMerger.SetTargets(renderView);
+                gBufferPostProcessPass2.Apply(_immediateContext);
+                _immediateContext.Draw(3, 0);
+            }
 
 
             // Render overlay

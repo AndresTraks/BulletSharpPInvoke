@@ -61,6 +61,7 @@
     <Compile Include="MeshFactory.cs" />
     <Compile Include="PhysicsDebugDraw.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShaderLoader.cs" />
     <Compile Include="SharpDX11Graphics.cs" />
   </ItemGroup>
   <ItemGroup>
