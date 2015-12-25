@@ -1,6 +1,6 @@
 ﻿namespace BulletSharpGen
 {
-    class MethodDefinition
+    public class MethodDefinition
     {
         public string Name { get; private set; }
         public string ManagedName { get; set; }

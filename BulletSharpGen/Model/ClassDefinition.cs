@@ -3,7 +3,15 @@ using System.Linq;
 
 namespace BulletSharpGen
 {
-    class CachedProperty
+    public enum RefAccessSpecifier
+    {
+        Public,
+        Protected,
+        Private,
+        Internal
+    }
+
+    public class CachedProperty
     {
         public PropertyDefinition Property { get; private set; }
         public string CacheFieldName { get; private set; }
@@ -27,7 +35,7 @@ namespace BulletSharpGen
         }
     }
 
-    class ClassDefinition
+    public class ClassDefinition
     {
         public string Name { get; private set; }
         public string NamespaceName { get; set; }

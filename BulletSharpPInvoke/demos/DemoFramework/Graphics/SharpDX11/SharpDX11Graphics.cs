@@ -24,7 +24,7 @@ namespace DemoFramework.SharpDX11
     public class SharpDX11Graphics : Graphics
     {
         bool shadowsEnabled = true;
-        bool depthOfFieldEnabled = true;
+        bool depthOfFieldEnabled = false;
 
         Device _device;
         public Device Device

@@ -5,14 +5,6 @@ using System.Linq;
 
 namespace BulletSharpGen
 {
-    enum RefAccessSpecifier
-    {
-        Public,
-        Protected,
-        Private,
-        Internal
-    }
-
     class CppCliWriter : WrapperWriter
     {
         int _headerLineLength;
@@ -225,22 +217,7 @@ namespace BulletSharpGen
                 }
 
                 WriteTabs(level);
-                if (required == RefAccessSpecifier.Internal)
-                {
-                    HeaderWriteLine("internal:");
-                }
-                else if (required == RefAccessSpecifier.Private)
-                {
-                    HeaderWriteLine("private:");
-                }
-                else if (required == RefAccessSpecifier.Public)
-                {
-                    HeaderWriteLine("public:");
-                }
-                else if (required == RefAccessSpecifier.Protected)
-                {
-                    HeaderWriteLine("protected:");
-                }
+                HeaderWriteLine(string.Format("{0}:", required.ToString().ToLower()));
                 current = required;
             }
         }
@@ -314,7 +291,7 @@ namespace BulletSharpGen
                     }
                 }
 
-                // Any more parameters?
+                // Insert comma if there are more parameters
                 if (i != numParameters - 1)
                 {
                     if (_sourceLineLength >= LineBreakWidth)
@@ -352,8 +329,7 @@ namespace BulletSharpGen
                     string typeConditional = GetTypeConditional(param.Type, parentClass.Header);
                     if (typeConditional != null)
                     {
-                        Write("#ifndef ");
-                        WriteLine(typeConditional);
+                        WriteLine(string.Format("#ifndef {0}", typeConditional));
                         hasSourceWhiteSpace = true;
                         hasConditional = true;
                     }
@@ -687,14 +663,10 @@ namespace BulletSharpGen
 
         void OutputClasses(IList<ClassDefinition> classes, ref RefAccessSpecifier currentAccess, int level)
         {
-            int classCount = 0;
-            foreach (var cl in classes)
+            bool insertSeparator = false;
+            foreach (var @class in classes.Where(c => !IsExcludedClass(c)))
             {
-                if (IsExcludedClass(cl))
-                {
-                    continue;
-                }
-                if (classCount != 0)
+                if (insertSeparator)
                 {
                     SourceWriteLine();
                 }
@@ -702,8 +674,8 @@ namespace BulletSharpGen
                 {
                     EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Public);
                 }
-                OutputClass(cl, level + 1);
-                classCount++;
+                OutputClass(@class, level + 1);
+                insertSeparator = true;
             }
         }
 
@@ -725,16 +697,14 @@ namespace BulletSharpGen
             }
 
             // Write class definition
-            HeaderWrite("ref class ");
-            HeaderWrite(c.ManagedName);
+            HeaderWrite(string.Format("ref class {0}", c.ManagedName));
             if (c.IsAbstract)
             {
                 HeaderWrite(" abstract");
             }
             if (c.BaseClass != null)
             {
-                HeaderWrite(" : ");
-                HeaderWriteLine(c.BaseClass.ManagedName);
+                HeaderWriteLine(string.Format(" : {0}", c.BaseClass.ManagedName));
             }
             else
             {
@@ -837,20 +807,14 @@ namespace BulletSharpGen
                 EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Internal);
 
                 WriteTabs(level + 1);
-                SourceWrite(c.FullNameManaged);
-                SourceWrite("::");
-                Write(c.ManagedName);
-                Write('(');
-                Write(c.FullyQualifiedName);
-                Write("* native)");
+                SourceWrite(string.Format("{0}::", c.FullNameManaged));
+                Write(string.Format("{0}({1}* native)", c.ManagedName, c.FullyQualifiedName));
                 HeaderWriteLine(';');
                 SourceWriteLine();
                 if (c.BaseClass != null)
                 {
                     WriteTabs(1, true);
-                    SourceWrite(": ");
-                    SourceWrite(c.BaseClass.ManagedName);
-                    SourceWriteLine("(native)");
+                    SourceWriteLine(string.Format(": {0}(native)", c.BaseClass.ManagedName));
                 }
                 SourceWriteLine('{');
                 if (c.BaseClass == null)

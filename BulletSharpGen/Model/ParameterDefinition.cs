@@ -1,6 +1,6 @@
 ﻿namespace BulletSharpGen
 {
-    class ParameterDefinition
+    public class ParameterDefinition
     {
         public string Name { get; private set; }
         public TypeRefDefinition Type { get; private set; }

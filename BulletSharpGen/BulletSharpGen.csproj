@@ -69,6 +69,7 @@
     <Compile Include="SlnWriter.cs" />
     <Compile Include="CppReader.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="SymbolMapping.cs" />
     <Compile Include="WrapperWriter.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,19 +4,14 @@ using System.Linq;
 
 namespace BulletSharpGen
 {
-    class HeaderDefinition
+    public class HeaderDefinition
     {
         public string Name { get; set; }
         public string Filename { get; set; }
         public List<ClassDefinition> Classes { get; set; }
         public List<HeaderDefinition> Includes { get; set; }
 
-        string _managedName;
-        public string ManagedName
-        {
-            get { return _managedName ?? Name; }
-            set { _managedName = value; }
-        }
+        public string ManagedName { get; set; }
 
         public IEnumerable<ClassDefinition> AllSubClasses
         {

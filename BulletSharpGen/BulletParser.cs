@@ -59,18 +59,18 @@ namespace BulletSharpGen
             parameterNameMapping.Add("vertexbase", "vertexBase");
 
             // Managed header names
-            var headerNameMapping = new Dictionary<string, string>();
-            headerNameMapping.Add("btActionInterface", "IAction");
-            headerNameMapping.Add("btBox2dBox2dCollisionAlgorithm", "Box2DBox2DCollisionAlgorithm");
-            headerNameMapping.Add("btBox2dShape", "Box2DShape");
-            headerNameMapping.Add("btCompoundFromGimpact", "CompoundFromGImpact");
-            headerNameMapping.Add("btConvex2dConvex2dAlgorithm", "Convex2DConvex2DAlgorithm");
-            headerNameMapping.Add("btConvex2dShape", "Convex2DShape");
-            headerNameMapping.Add("btMLCPSolver", "MlcpSolver");
-            headerNameMapping.Add("btMLCPSolverInterface", "MlcpSolverInterface");
-            headerNameMapping.Add("btNNCGConstraintSolver", "NncgConstraintSolver");
-            headerNameMapping.Add("btSparseSDF", "SparseSdf");
-            headerNameMapping.Add("hacdHACD", "Hacd");
+            var headerNameMappings = new Dictionary<string, string>();
+            headerNameMappings.Add("btActionInterface", "IAction");
+            headerNameMappings.Add("btBox2dBox2dCollisionAlgorithm", "Box2DBox2DCollisionAlgorithm");
+            headerNameMappings.Add("btBox2dShape", "Box2DShape");
+            headerNameMappings.Add("btCompoundFromGimpact", "CompoundFromGImpact");
+            headerNameMappings.Add("btConvex2dConvex2dAlgorithm", "Convex2DConvex2DAlgorithm");
+            headerNameMappings.Add("btConvex2dShape", "Convex2DShape");
+            headerNameMappings.Add("btMLCPSolver", "MlcpSolver");
+            headerNameMappings.Add("btMLCPSolverInterface", "MlcpSolverInterface");
+            headerNameMappings.Add("btNNCGConstraintSolver", "NncgConstraintSolver");
+            headerNameMappings.Add("btSparseSDF", "SparseSdf");
+            headerNameMappings.Add("hacdHACD", "Hacd");
 
             // Managed class names
             var classNameMapping = new Dictionary<string, string>();
@@ -533,21 +533,31 @@ namespace BulletSharpGen
             }
 
             // Get managed header and enum names
+            var headerNameMapping = new ScriptedMapping(
+@"if (Name.StartsWith(""bt""))
+{
+    return Name.Substring(2);
+}
+else if (Name.StartsWith(""hacd""))
+{
+    return ""Hacd"" + Name.Substring(4);
+}
+else
+{
+    return Name;
+}");
             foreach (HeaderDefinition header in project.HeaderDefinitions.Values)
             {
                 string name = header.Name;
                 string mapping;
-                if (headerNameMapping.TryGetValue(name, out mapping))
+                if (headerNameMappings.TryGetValue(name, out mapping))
                 {
                     header.ManagedName = mapping;
                 }
-                else if (name.StartsWith("bt"))
+                else
                 {
-                    header.ManagedName = name.Substring(2);
-                }
-                else if (name.StartsWith("hacd"))
-                {
-                    header.ManagedName = "Hacd" + name.Substring(4);
+                    headerNameMapping.Header = header;
+                    header.ManagedName = headerNameMapping.Map(header.Name);
                 }
             }
 

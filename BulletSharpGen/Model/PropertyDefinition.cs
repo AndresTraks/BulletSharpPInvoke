@@ -1,7 +1,7 @@
 ﻿using System;
 namespace BulletSharpGen
 {
-    class PropertyDefinition
+    public class PropertyDefinition
     {
         public MethodDefinition Getter { get; private set; }
         public MethodDefinition Setter { get; set; }

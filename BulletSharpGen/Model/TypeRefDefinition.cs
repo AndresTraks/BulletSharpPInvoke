@@ -2,7 +2,7 @@
 
 namespace BulletSharpGen
 {
-    class TypeRefDefinition
+    public class TypeRefDefinition
     {
         public string Name { get; set; }
         public bool IsBasic { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace BulletSharpGen
 {
-    class FieldDefinition
+    public class FieldDefinition
     {
         public string Name { get; private set; }
         public TypeRefDefinition Type { get; private set; }
