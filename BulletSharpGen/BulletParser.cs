@@ -58,20 +58,6 @@ namespace BulletSharpGen
             parameterNameMapping.Add("use4componentVertices", "use4ComponentVertices");
             parameterNameMapping.Add("vertexbase", "vertexBase");
 
-            // Managed header names
-            var headerNameMappings = new Dictionary<string, string>();
-            headerNameMappings.Add("btActionInterface", "IAction");
-            headerNameMappings.Add("btBox2dBox2dCollisionAlgorithm", "Box2DBox2DCollisionAlgorithm");
-            headerNameMappings.Add("btBox2dShape", "Box2DShape");
-            headerNameMappings.Add("btCompoundFromGimpact", "CompoundFromGImpact");
-            headerNameMappings.Add("btConvex2dConvex2dAlgorithm", "Convex2DConvex2DAlgorithm");
-            headerNameMappings.Add("btConvex2dShape", "Convex2DShape");
-            headerNameMappings.Add("btMLCPSolver", "MlcpSolver");
-            headerNameMappings.Add("btMLCPSolverInterface", "MlcpSolverInterface");
-            headerNameMappings.Add("btNNCGConstraintSolver", "NncgConstraintSolver");
-            headerNameMappings.Add("btSparseSDF", "SparseSdf");
-            headerNameMappings.Add("hacdHACD", "Hacd");
-
             // Managed class names
             var classNameMapping = new Dictionary<string, string>();
             classNameMapping.Add("btAABB", "Aabb");
@@ -533,34 +519,12 @@ namespace BulletSharpGen
             }
 
             // Get managed header and enum names
-            var headerNameMapping = new ScriptedMapping(
-@"if (Name.StartsWith(""bt""))
-{
-    return Name.Substring(2);
-}
-else if (Name.StartsWith(""hacd""))
-{
-    return ""Hacd"" + Name.Substring(4);
-}
-else
-{
-    return Name;
-}");
+            var nameScriptMapping = project.NameMapping as ScriptedMapping;
             foreach (HeaderDefinition header in project.HeaderDefinitions.Values)
             {
-                string name = header.Name;
-                string mapping;
-                if (headerNameMappings.TryGetValue(name, out mapping))
-                {
-                    header.ManagedName = mapping;
-                }
-                else
-                {
-                    headerNameMapping.Header = header;
-                    header.ManagedName = headerNameMapping.Map(header.Name);
-                }
+                nameScriptMapping.Header = header;
+                header.ManagedName = nameScriptMapping.Map(header.Name);
             }
-
 
             // Apply class properties
             foreach (ClassDefinition @class in classDefinitions.Values)

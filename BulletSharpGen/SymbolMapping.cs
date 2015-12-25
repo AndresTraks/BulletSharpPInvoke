@@ -1,20 +1,55 @@
 ﻿using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
 namespace BulletSharpGen
 {
+    // Used to map e.g. C++ class names into C# class names
     interface ISymbolMapping
     {
+        string Name { get; }
         string Map(string symbol);
     }
 
-    class ScriptedMapping : ISymbolMapping
+    // Maps names according to the Replacements property
+    class ReplaceMapping : ISymbolMapping
+    {
+        public Dictionary<string, string> Replacements { get; private set; }
+
+        string _name;
+        public string Name
+        {
+            get { return _name; }
+        }
+
+        public ReplaceMapping(string name)
+        {
+            _name = name;
+
+            Replacements = new Dictionary<string, string>();
+        }
+
+        public virtual string Map(string symbol)
+        {
+            string mapping;
+            if (Replacements.TryGetValue(symbol, out mapping))
+            {
+                return mapping;
+            }
+            return symbol;
+        }
+    }
+
+    // Maps names according to the Replacements property or using a given C# script
+    class ScriptedMapping : ReplaceMapping
     {
         object _mappingObject;
         MethodInfo _method;
         PropertyInfo _headerProperty;
         PropertyInfo _nameProperty;
+
+        public string ScriptBody { get; private set; }
 
         public HeaderDefinition Header
         {
@@ -22,25 +57,32 @@ namespace BulletSharpGen
             set { _headerProperty.SetValue(_mappingObject, value); }
         }
 
-        public ScriptedMapping(string source)
+        public ScriptedMapping(string name, string scriptBody)
+            : base(name)
         {
+            ScriptBody = scriptBody;
+
+            // Construct script
+            string scriptTemplate =
+@"namespace GenMappings {{
+public class Mapping {{
+    public HeaderDefinition Header {{ get; set; }}
+    public string Name {{ get; set; }}
+    public string Map() {{
+        {0}
+    }}
+}}
+}}";
+            var thisAssembly = Assembly.GetCallingAssembly();
+            scriptTemplate = string.Format("using {0};\r\n", thisAssembly.GetName().Name) + scriptTemplate;
+            string scriptFull = string.Format(scriptTemplate, scriptBody);
+
             // Compile script
-            string programCode =
-            @"using BulletSharpGen;
-            namespace GenMappings{{
-                public class Mapping {{
-                    public HeaderDefinition Header {{ get; set; }}
-                    public string Name {{ get; set; }}
-                    public string Map() {{
-                        {0}
-                    }}
-                }}
-            }}";
             var provider = CodeDomProvider.CreateProvider("CSharp");
             var cp = new CompilerParameters();
             cp.GenerateInMemory = true;
-            cp.ReferencedAssemblies.Add(Assembly.GetCallingAssembly().Location);
-            var results = provider.CompileAssemblyFromSource(cp, string.Format(programCode, source));
+            cp.ReferencedAssemblies.Add(thisAssembly.Location);
+            var results = provider.CompileAssemblyFromSource(cp, scriptFull);
 
             // Get script members
             var assembly = results.CompiledAssembly;
@@ -54,8 +96,13 @@ namespace BulletSharpGen
             _mappingObject = constructor.Invoke(new object[] { });
         }
 
-        public string Map(string symbol)
+        public override string Map(string symbol)
         {
+            string mapping;
+            if (Replacements.TryGetValue(symbol, out mapping))
+            {
+                return mapping;
+            }
             _nameProperty.SetValue(_mappingObject, symbol);
             return _method.Invoke(_mappingObject, new object[] { }) as string;
         }

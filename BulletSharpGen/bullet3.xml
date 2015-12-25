@@ -1,5 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
+  <ScriptedMapping Name="NameMapping">
+    <Replacement Replace="btActionInterface" With="IAction" />
+    <Replacement Replace="btBox2dBox2dCollisionAlgorithm" With="Box2DBox2DCollisionAlgorithm" />
+    <Replacement Replace="btBox2dShape" With="Box2DShape" />
+    <Replacement Replace="btCompoundFromGimpact" With="CompoundFromGImpact" />
+    <Replacement Replace="btConvex2dConvex2dAlgorithm" With="Convex2DConvex2DAlgorithm" />
+    <Replacement Replace="btConvex2dShape" With="Convex2DShape" />
+    <Replacement Replace="btMLCPSolver" With="MlcpSolver" />
+    <Replacement Replace="btMLCPSolverInterface" With="MlcpSolverInterface" />
+    <Replacement Replace="btNNCGConstraintSolver" With="NncgConstraintSolver" />
+    <Replacement Replace="btSparseSDF" With="SparseSdf" />
+    <Replacement Replace="hacdHACD" With="Hacd" />
+    <ScriptBody>if (Name.StartsWith("bt"))
+{
+    return Name.Substring(2);
+}
+else if (Name.StartsWith("hacd"))
+{
+    return "Hacd" + Name.Substring(4);
+}
+else
+{
+    return Name;
+}</ScriptBody>
+  </ScriptedMapping>
   <NamespaceName>BulletSharp</NamespaceName>
   <SourceRootFolder Path="../../../../bullet3/src/">
     <HeaderDefinition Path="BulletCollision/CollisionDispatch/btCollisionWorld.h">

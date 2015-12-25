@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
@@ -18,6 +19,75 @@ namespace BulletSharpGen.Project
                     }
                 }
             }
+        }
+
+        static void ReadSymbolMapping(WrapperProject project, XmlReader reader)
+        {
+            string mappingType = reader.Name;
+            string mappingName = reader.GetAttribute("Name");
+            var replacements = new Dictionary<string, string>();
+            string scriptBody = null;
+
+            if (reader.IsEmptyElement)
+            {
+                return;
+            }
+
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    switch (reader.Name)
+                    {
+                        case "Replacement":
+                            {
+                                string replace = reader.GetAttribute("Replace");
+                                string with = reader.GetAttribute("With");
+                                replacements.Add(replace, with);
+                            }
+                            break;
+                        case "ScriptBody":
+                            {
+                                scriptBody = reader.ReadElementContentAsString();
+                            }
+                            break;
+                    }
+                }
+                else if (reader.NodeType == XmlNodeType.EndElement)
+                {
+                    break;
+                }
+            }
+
+            ISymbolMapping mapping;
+
+            switch (mappingType)
+            {
+                case "ScriptedMapping":
+                    {
+                        mapping = new ScriptedMapping(mappingName, scriptBody);
+                    }
+                    break;
+                case "ReplaceMapping":
+                    {
+                        mapping = new ReplaceMapping(mappingName);
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Unknown mapping!");
+                    return;
+            }
+
+            if (mapping is ReplaceMapping)
+            {
+                var replaceMapping = mapping as ReplaceMapping;
+                foreach (var replacement in replacements)
+                {
+                    replaceMapping.Replacements.Add(replacement.Key, replacement.Value);
+                }
+            }
+
+            project.NameMapping = mapping;
         }
 
         static void ReadHeaderDefinition(WrapperProject project, XmlReader reader, string sourceRootFolder)
@@ -147,6 +217,12 @@ namespace BulletSharpGen.Project
                             sourceRootFolder = Path.Combine(Path.GetDirectoryName(project.ProjectPath), sourceRootFolder);
                             sourceRootFolder = Path.GetFullPath(sourceRootFolder);
                             project.SourceRootFolders.Add(sourceRootFolder);
+                        }
+                        break;
+                    case "ReplaceMapping":
+                    case "ScriptedMapping":
+                        {
+                            ReadSymbolMapping(project, reader);
                         }
                         break;
                 }

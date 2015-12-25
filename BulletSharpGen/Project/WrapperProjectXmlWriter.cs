@@ -54,6 +54,33 @@ namespace BulletSharpGen.Project
             using (var writer = XmlWriter.Create(project.ProjectPath, new XmlWriterSettings() { Indent = true }))
             {
                 writer.WriteStartElement("Project");
+
+                if (project.NameMapping != null)
+                {
+                    var mapping = project.NameMapping;
+                    writer.WriteStartElement(mapping.GetType().Name);
+                    writer.WriteAttributeString("Name", mapping.Name);
+                    if (mapping is ReplaceMapping)
+                    {
+                        var replaceMapping = mapping as ReplaceMapping;
+                        foreach (var replacement in replaceMapping.Replacements)
+                        {
+                            writer.WriteStartElement("Replacement");
+                            writer.WriteAttributeString("Replace", replacement.Key);
+                            writer.WriteAttributeString("With", replacement.Value);
+                            writer.WriteEndElement();
+                        }
+                        if (replaceMapping is ScriptedMapping)
+                        {
+                            var scriptedMapping = replaceMapping as ScriptedMapping;
+                            writer.WriteStartElement("ScriptBody");
+                            writer.WriteString(scriptedMapping.ScriptBody);
+                            writer.WriteEndElement();
+                        }
+                    }
+                    writer.WriteEndElement();
+                }
+
                 foreach (string sourceRootFolder in project.SourceRootFolders)
                 {
                     writer.WriteStartElement("NamespaceName");
