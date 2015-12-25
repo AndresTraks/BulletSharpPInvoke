@@ -55,15 +55,15 @@ namespace BulletSharpGen.Project
             {
                 writer.WriteStartElement("Project");
 
-                if (project.NameMapping != null)
+                if (project.ClassNameMapping != null)
                 {
-                    var mapping = project.NameMapping;
+                    var mapping = project.ClassNameMapping;
                     writer.WriteStartElement(mapping.GetType().Name);
                     writer.WriteAttributeString("Name", mapping.Name);
                     if (mapping is ReplaceMapping)
                     {
                         var replaceMapping = mapping as ReplaceMapping;
-                        foreach (var replacement in replaceMapping.Replacements)
+                        foreach (var replacement in replaceMapping.Replacements.OrderBy(kv => kv.Key))
                         {
                             writer.WriteStartElement("Replacement");
                             writer.WriteAttributeString("Replace", replacement.Key);

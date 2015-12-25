@@ -20,6 +20,7 @@ namespace BulletSharpGen
 
             var reader = new CppReader(project);
             var parser = new BulletParser(project);
+            parser.Parse();
 
             WrapperWriter writer;
             if (cppCliMode)

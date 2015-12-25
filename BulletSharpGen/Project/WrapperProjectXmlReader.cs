@@ -87,7 +87,13 @@ namespace BulletSharpGen.Project
                 }
             }
 
-            project.NameMapping = mapping;
+            switch (mapping.Name)
+            {
+                case "NameMapping":
+                    project.ClassNameMapping = mapping;
+                    project.HeaderNameMapping = mapping;
+                    break;
+            }
         }
 
         static void ReadHeaderDefinition(WrapperProject project, XmlReader reader, string sourceRootFolder)

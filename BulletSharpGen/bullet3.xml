@@ -1,17 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
   <ScriptedMapping Name="NameMapping">
+    <Replacement Replace="BroadphaseNativeTypes" With="BroadphaseNativeType" />
+    <Replacement Replace="BT_QUANTIZED_BVH_NODE" With="GImpactQuantizedBvhNode" />
+    <Replacement Replace="bt32BitAxisSweep3" With="AxisSweep3_32Bit" />
+    <Replacement Replace="btAABB" With="Aabb" />
     <Replacement Replace="btActionInterface" With="IAction" />
     <Replacement Replace="btBox2dBox2dCollisionAlgorithm" With="Box2DBox2DCollisionAlgorithm" />
     <Replacement Replace="btBox2dShape" With="Box2DShape" />
+    <Replacement Replace="btBU_Simplex1to4" With="BuSimplex1To4" />
     <Replacement Replace="btCompoundFromGimpact" With="CompoundFromGImpact" />
     <Replacement Replace="btConvex2dConvex2dAlgorithm" With="Convex2DConvex2DAlgorithm" />
     <Replacement Replace="btConvex2dShape" With="Convex2DShape" />
+    <Replacement Replace="btCPUVertexBufferDescriptor" With="CpuVertexBufferDescriptor" />
     <Replacement Replace="btMLCPSolver" With="MlcpSolver" />
     <Replacement Replace="btMLCPSolverInterface" With="MlcpSolverInterface" />
+    <Replacement Replace="btMultibodyLink" With="MultiBodyLink" />
     <Replacement Replace="btNNCGConstraintSolver" With="NncgConstraintSolver" />
+    <Replacement Replace="btScalar" With="btScalar" />
     <Replacement Replace="btSparseSDF" With="SparseSdf" />
+    <Replacement Replace="ConstraintParams" With="ConstraintParam" />
+    <Replacement Replace="GIM_BVH_DATA" With="GimBvhData" />
+    <Replacement Replace="GIM_BVH_DATA_ARRAY" With="GimBvhDataArray" />
+    <Replacement Replace="GIM_BVH_TREE_NODE" With="GimBvhTreeNode" />
+    <Replacement Replace="GIM_BVH_TREE_NODE_ARRAY" With="GimBvhTreeNodeArray" />
+    <Replacement Replace="GIM_PAIR" With="GimPair" />
+    <Replacement Replace="GIM_QUANTIZED_BVH_NODE_ARRAY" With="GimGImpactQuantizedBvhNodeArray" />
+    <Replacement Replace="GIM_TRIANGLE_CONTACT" With="GimTriangleContact" />
+    <Replacement Replace="HACD" With="Hacd" />
     <Replacement Replace="hacdHACD" With="Hacd" />
+    <Replacement Replace="PHY_ScalarType" With="PhyScalarType" />
+    <Replacement Replace="RContact" With="RigidContact" />
+    <Replacement Replace="SContact" With="SoftContact" />
+    <Replacement Replace="SolverMode" With="SolverModes" />
+    <Replacement Replace="sRayCast" With="SRayCast" />
+    <Replacement Replace="sStkCLN" With="StkCln" />
+    <Replacement Replace="sStkNN" With="StkNN" />
+    <Replacement Replace="sStkNP" With="StkNP" />
+    <Replacement Replace="sStkNPS" With="StkNps" />
     <ScriptBody>if (Name.StartsWith("bt"))
 {
     return Name.Substring(2);

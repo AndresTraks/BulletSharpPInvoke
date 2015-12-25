@@ -58,42 +58,6 @@ namespace BulletSharpGen
             parameterNameMapping.Add("use4componentVertices", "use4ComponentVertices");
             parameterNameMapping.Add("vertexbase", "vertexBase");
 
-            // Managed class names
-            var classNameMapping = new Dictionary<string, string>();
-            classNameMapping.Add("btAABB", "Aabb");
-            classNameMapping.Add("bt32BitAxisSweep3", "AxisSweep3_32Bit");
-            classNameMapping.Add("btActionInterface", "IAction");
-            classNameMapping.Add("btBox2dBox2dCollisionAlgorithm", "Box2DBox2DCollisionAlgorithm");
-            classNameMapping.Add("btBox2dShape", "Box2DShape");
-            classNameMapping.Add("btConvex2dConvex2dAlgorithm", "Convex2DConvex2DAlgorithm");
-            classNameMapping.Add("btConvex2dShape", "Convex2DShape");
-            classNameMapping.Add("btMLCPSolver", "MlcpSolver");
-            classNameMapping.Add("btMLCPSolverInterface", "MlcpSolverInterface");
-            classNameMapping.Add("btMultibodyLink", "MultiBodyLink");
-            classNameMapping.Add("btNNCGConstraintSolver", "NncgConstraintSolver");
-            classNameMapping.Add("HACD", "Hacd");
-            classNameMapping.Add("GIM_BVH_DATA", "GimBvhData");
-            classNameMapping.Add("GIM_BVH_DATA_ARRAY", "GimBvhDataArray");
-            classNameMapping.Add("GIM_BVH_TREE_NODE", "GimBvhTreeNode");
-            classNameMapping.Add("GIM_BVH_TREE_NODE_ARRAY", "GimBvhTreeNodeArray");
-            classNameMapping.Add("GIM_PAIR", "GimPair");
-            classNameMapping.Add("GIM_TRIANGLE_CONTACT", "GimTriangleContact");
-            classNameMapping.Add("BT_QUANTIZED_BVH_NODE", "GImpactQuantizedBvhNode");
-            classNameMapping.Add("GIM_QUANTIZED_BVH_NODE_ARRAY", "GimGImpactQuantizedBvhNodeArray");
-            classNameMapping.Add("btCPUVertexBufferDescriptor", "CpuVertexBufferDescriptor");
-            classNameMapping.Add("btBU_Simplex1to4", "BuSimplex1To4");
-            classNameMapping.Add("sStkCLN", "StkCln");
-            classNameMapping.Add("sStkNN", "StkNN");
-            classNameMapping.Add("sStkNP", "StkNP");
-            classNameMapping.Add("sStkNPS", "StkNps");
-            classNameMapping.Add("sRayCast", "SRayCast");
-            classNameMapping.Add("RContact", "RigidContact");
-            classNameMapping.Add("SContact", "SoftContact");
-            classNameMapping.Add("PHY_ScalarType", "PhyScalarType");
-            classNameMapping.Add("BroadphaseNativeTypes", "BroadphaseNativeType");
-            classNameMapping.Add("SolverMode", "SolverModes");
-            classNameMapping.Add("ConstraintParams", "ConstraintParam");
-
             // Classes that shouldn't be instantiated by users
             List<string> hidePublicConstructors = new List<string>() {
                 "btActivatingCollisionAlgorithm", "btContactConstraint", "btConvexInternalShape",
@@ -167,45 +131,38 @@ namespace BulletSharpGen
                 "btCollisionObject", "btCollisionShape", "btCollisionWorld",
                 "btDbvt", "btRaycastVehicle", "btTypedConstraint"};
 
-            // Resolve references (match TypeRefDefinitions to ClassDefinitions)
-            // List might be modified with template specialization classes, so make a copy
-            var classDefinitionsList = new List<ClassDefinition>(classDefinitions.Values);
-            foreach (ClassDefinition c in classDefinitionsList)
+            // Apply class properties
+            foreach (ClassDefinition @class in classDefinitions.Values)
             {
-                // Include header for the base if necessary
-                if (c.BaseClass != null && c.Header != c.BaseClass.Header)
+                if (hidePublicConstructors.Contains(@class.FullyQualifiedName))
                 {
-                    c.Header.Includes.Add(c.BaseClass.Header);
+                    @class.HidePublicConstructors = true;
                 }
 
-                // Resolve typedef
-                if (c.TypedefUnderlyingType != null)
+                if (hideInternalConstructor.Contains(@class.FullyQualifiedName))
                 {
-                    ResolveTypeRef(c.TypedefUnderlyingType);
+                    @class.NoInternalConstructor = true;
                 }
-
-                // Resolve method return type and parameter types
-                foreach (MethodDefinition method in c.Methods)
+                if (preventDelete.Contains(@class.FullyQualifiedName))
                 {
-                    ResolveTypeRef(method.ReturnType);
-                    foreach (ParameterDefinition param in method.Parameters)
-                    {
-                        ResolveTypeRef(param.Type);
-                    }
+                    @class.HasPreventDelete = true;
                 }
-
-                // Resolve field types
-                foreach (FieldDefinition field in c.Fields)
+                if (trackingDisposable.Contains(@class.FullyQualifiedName))
                 {
-                    ResolveTypeRef(field.Type);
+                    @class.IsTrackingDisposable = true;
                 }
             }
+        }
+
+        public override void Parse()
+        {
+            base.Parse();
 
             // Exclude all overridden methods
             foreach (ClassDefinition c in classDefinitions.Values)
             {
                 int i;
-                for (i = 0; i < c.Methods.Count; )
+                for (i = 0; i < c.Methods.Count;)
                 {
                     var method = c.Methods[i];
                     // Check if the method already exists in base classes
@@ -238,7 +195,7 @@ namespace BulletSharpGen
             foreach (ClassDefinition c in classDefinitions.Values.Where(c => c.IsAbstract))
             {
                 int i;
-                for (i = 0; i < c.Methods.Count; )
+                for (i = 0; i < c.Methods.Count;)
                 {
                     var method = c.Methods[i];
                     if (method.IsConstructor)
@@ -305,8 +262,6 @@ namespace BulletSharpGen
             {
                 foreach (FieldDefinition field in c.Fields)
                 {
-                    ResolveTypeRef(field.Type);
-
                     string name = field.Name;
                     if (name.StartsWith("m_"))
                     {
@@ -519,89 +474,19 @@ namespace BulletSharpGen
             }
 
             // Get managed header and enum names
-            var nameScriptMapping = project.NameMapping as ScriptedMapping;
-            foreach (HeaderDefinition header in project.HeaderDefinitions.Values)
+            var headerNameMapping = Project.HeaderNameMapping as ScriptedMapping;
+            foreach (HeaderDefinition header in Project.HeaderDefinitions.Values)
             {
-                nameScriptMapping.Header = header;
-                header.ManagedName = nameScriptMapping.Map(header.Name);
+                headerNameMapping.Header = header;
+                header.ManagedName = headerNameMapping.Map(header.Name);
             }
 
             // Apply class properties
+            var classNameMapping = Project.ClassNameMapping as ScriptedMapping;
             foreach (ClassDefinition @class in classDefinitions.Values)
             {
-                string name = @class.Name;
-                string mapping;
-                if (classNameMapping.TryGetValue(name, out mapping))
-                {
-                    @class.ManagedName = mapping;
-                }
-                else if (name.StartsWith("bt") && !name.Equals("btScalar"))
-                {
-                    @class.ManagedName = name.Substring(2);
-                }
-                else
-                {
-                    @class.ManagedName = name;
-                }
-
-                if (hidePublicConstructors.Contains(@class.FullyQualifiedName))
-                {
-                    @class.HidePublicConstructors = true;
-                }
-
-                if (hideInternalConstructor.Contains(@class.FullyQualifiedName))
-                {
-                    @class.NoInternalConstructor = true;
-                }
-                if (preventDelete.Contains(@class.FullyQualifiedName))
-                {
-                    @class.HasPreventDelete = true;
-                }
-                if (trackingDisposable.Contains(@class.FullyQualifiedName))
-                {
-                    @class.IsTrackingDisposable = true;
-                }
-
-                if (@class is EnumDefinition)
-                {
-                    var @enum = @class as EnumDefinition;
-
-                    int prefixLength = @enum.GetCommonPrefix().Length;
-                    @enum.GetCommonSuffix();
-                    for (int i = 0; i< @enum.EnumConstants.Count; i++)
-                    {
-                        string enumConstant = @enum.EnumConstants[i];
-                        enumConstant = enumConstant.Substring(prefixLength);
-                        @enum.EnumConstants[i] = RemoveUnderscoresFromUpper(enumConstant);
-                    }
-
-                    if (@enum.Name.EndsWith("Flags"))
-                    {
-                        @enum.IsFlags = true;
-                    }
-                    else
-                    {
-                        // If all values are powers of 2, then it is considered a Flags enum.
-                        @enum.IsFlags = @enum.EnumConstantValues.All(value =>
-                        {
-                            int x;
-                            if (int.TryParse(value, out x))
-                            {
-                                return (x != 0) && ((x & (~x + 1)) == x);
-                            }
-                            return false;
-                        });
-                    }
-
-                    if (@enum.IsFlags)
-                    {
-                        if (!@enum.EnumConstantValues.Any(value => value.Equals("0")))
-                        {
-                            @enum.EnumConstants.Insert(0, "None");
-                            @enum.EnumConstantValues.Insert(0, "0");
-                        }
-                    }
-                }
+                classNameMapping.Header = @class.Header;
+                @class.ManagedName = classNameMapping.Map(@class.Name);
             }
 
             // Sort methods and properties alphabetically
@@ -657,59 +542,6 @@ namespace BulletSharpGen
                     return false;
             }
             return true;
-        }
-
-        void ResolveTypeRef(TypeRefDefinition typeRef)
-        {
-            if (typeRef.IsBasic || typeRef.HasTemplateTypeParameter)
-            {
-                return;
-            }
-            if (typeRef.IsPointer || typeRef.IsReference || typeRef.IsConstantArray)
-            {
-                ResolveTypeRef(typeRef.Referenced);
-            }
-            else if (!classDefinitions.ContainsKey(typeRef.Name))
-            {
-                // Search for unscoped enums
-                bool resolvedEnum = false;
-                foreach (var c in classDefinitions.Values.Where(c => c is EnumDefinition))
-                {
-                    if (typeRef.Name.Equals(c.FullyQualifiedName + "::" + c.Name))
-                    {
-                        typeRef.Target = c;
-                        resolvedEnum = true;
-                    }
-                }
-                if (!resolvedEnum)
-                {
-                    Console.WriteLine("Class " + typeRef.Name + " not found!");
-                }
-            }
-            else
-            {
-                typeRef.Target = classDefinitions[typeRef.Name];
-            }
-
-            if (typeRef.SpecializedTemplateType != null)
-            {
-                ResolveTypeRef(typeRef.SpecializedTemplateType);
-
-                // Create template specialization class
-                string name = string.Format("{0}<{1}>", typeRef.Name, typeRef.SpecializedTemplateType.Name);
-                if (!classDefinitions.ContainsKey(name))
-                {
-                    var templateClass = typeRef.Target;
-                    if (templateClass != null && !templateClass.IsExcluded)
-                    {
-                        var header = templateClass.Header;
-                        var specializedClass = new ClassDefinition(name, header);
-                        specializedClass.BaseClass = templateClass;
-                        header.Classes.Add(specializedClass);
-                        classDefinitions.Add(name, specializedClass);
-                    }
-                }
-            }
         }
 
         public static string GetTypeName(TypeRefDefinition type)
