@@ -4023,12 +4023,6 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
-		public bool BUpdateRtCst
-		{
-			get { return btSoftBody_getBUpdateRtCst(_native); }
-			set { btSoftBody_setBUpdateRtCst(_native, value); }
-		}
-
 		public Dbvt ClusterDbvt
 		{
             get
@@ -4255,6 +4249,12 @@ namespace BulletSharp.SoftBody
 			get { return btSoftBody_getTotalMass(_native); }
             set { btSoftBody_setTotalMass(_native, value); }
 		}
+
+        public bool UpdateRuntimeConstants
+        {
+            get { return btSoftBody_getBUpdateRtCst(_native); }
+            set { btSoftBody_setBUpdateRtCst(_native, value); }
+        }
         /*
 		public AlignedObjectArray UserIndexMapping
 		{

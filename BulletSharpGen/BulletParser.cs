@@ -30,6 +30,7 @@ namespace BulletSharpGen
 
             // Managed method parameter names
             parameterNameMapping.Add("bcheckexist", "checkExist");
+            parameterNameMapping.Add("bcountonly", "countOnly");
             parameterNameMapping.Add("childShapeindex", "childShapeIndex");
             parameterNameMapping.Add("dt", "deltaTime");
             parameterNameMapping.Add("fromfaces", "fromFaces");
@@ -128,7 +129,7 @@ namespace BulletSharpGen
 
             // Classes that have OnDisposing/OnDisposed events
             List<string> trackingDisposable = new List<string>() {
-                "btCollisionObject", "btCollisionShape", "btCollisionWorld",
+                "btCollisionObject", "btCollisionShape",
                 "btDbvt", "btRaycastVehicle", "btTypedConstraint"};
 
             // Apply class properties
@@ -528,6 +529,13 @@ namespace BulletSharpGen
             if (t.IsBasic)
             {
                 return false;
+            }
+            if (t.Target != null)
+            {
+                if (t.Target.IsPureEnum)
+                {
+                    return false;
+                }
             }
             if (t.Referenced != null)
             {

@@ -377,7 +377,7 @@ else
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionShapes/btMultiSphereShape.h">
       <ClassDefinition Name="btMultiSphereShape" />
-      <ClassDefinition Name="btPositionAndRadius" />
+      <ClassDefinition Name="btPositionAndRadius" IsExcluded="True" />
       <ClassDefinition Name="btMultiSphereShapeData" IsExcluded="True" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionShapes/btUniformScalingShape.h">
