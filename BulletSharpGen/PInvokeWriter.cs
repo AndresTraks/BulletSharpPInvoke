@@ -164,8 +164,20 @@ namespace BulletSharpGen
 
         void WriteMethodDeclaration(MethodDefinition method, int numParameters, int level, int overloadIndex, MethodDefinition returnParamMethod = null)
         {
-            // Skip methods wrapped by C# properties
+            // Do not write accessor methods of C# properties
             WriteTo cs = (method.Property == null) ? WriteTo.CS : WriteTo.None;
+
+            // Cached properties that are initialized only once do not need a DllImport for the get method
+            WriteTo dllImport;
+            if (method.Property != null && method.Property.Setter == null &&
+                method.Parent.CachedProperties.ContainsKey(method.Property.Name))
+            {
+                dllImport = WriteTo.None;
+            }
+            else
+            {
+                dllImport = WriteTo.Buffer;
+            }
 
             // Skip delete methods in classes that can't be constructed (including all subclasses).
             if (method.Name.Equals("delete"))
@@ -184,15 +196,15 @@ namespace BulletSharpGen
             Write("public ", cs);
 
             // DllImport clause
-            WriteTabs(level + 1, WriteTo.Buffer);
-            WriteLine("[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]", WriteTo.Buffer);
+            WriteTabs(level + 1, dllImport);
+            WriteLine("[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]", dllImport);
             if (method.ReturnType != null && method.ReturnType.ManagedName.Equals("bool"))
             {
-                WriteTabs(level + 1, WriteTo.Buffer);
-                WriteLine("[return: MarshalAs(UnmanagedType.I1)]", WriteTo.Buffer);
+                WriteTabs(level + 1, dllImport);
+                WriteLine("[return: MarshalAs(UnmanagedType.I1)]", dllImport);
             }
-            WriteTabs(level + 1, WriteTo.Buffer);
-            Write("static extern ", WriteTo.Buffer);
+            WriteTabs(level + 1, dllImport);
+            Write("static extern ", dllImport);
 
             // Return type
             if (method.IsConstructor)
@@ -200,7 +212,7 @@ namespace BulletSharpGen
                 Write(method.Parent.FullNameCS, WriteTo.Header);
                 Write(method.Parent.FullyQualifiedName, WriteTo.Source);
                 Write("* ", WriteTo.Header | WriteTo.Source);
-                Write("IntPtr ", WriteTo.Buffer);
+                Write("IntPtr ", dllImport);
             }
             else
             {
@@ -216,35 +228,34 @@ namespace BulletSharpGen
                 Write(' ', WriteTo.Header | WriteTo.Source | cs);
                 if (method.ReturnType.IsBasic)
                 {
-                    Write(method.ReturnType.ManagedNameCS, WriteTo.Buffer);
+                    Write(method.ReturnType.ManagedNameCS, dllImport);
                 }
                 else if (method.ReturnType.HasTemplateTypeParameter)
                 {
-                    Write(method.ReturnType.ManagedNameCS, WriteTo.Buffer);
+                    Write(method.ReturnType.ManagedNameCS, dllImport);
                 }
                 else if (method.ReturnType.Referenced != null)
                 {
-                    Write("IntPtr", WriteTo.Buffer);
+                    Write("IntPtr", dllImport);
                 }
                 else
                 {
                     // Return structures to an additional out parameter, not immediately
-                    Write("void", WriteTo.Buffer);
+                    Write("void", dllImport);
                 }
-                Write(' ', WriteTo.Buffer);
+                Write(' ', dllImport);
             }
 
             // Name
-            Write(method.Parent.FullNameCS, WriteTo.Header | WriteTo.Source | WriteTo.Buffer);
-            Write('_', WriteTo.Header | WriteTo.Source | WriteTo.Buffer);
+            Write(string.Format("{0}_", method.Parent.FullNameCS), WriteTo.Header | WriteTo.Source | dllImport);
             if (method.IsConstructor)
             {
-                Write("new", WriteTo.Header | WriteTo.Source | WriteTo.Buffer);
+                Write("new", WriteTo.Header | WriteTo.Source | dllImport);
                 Write(method.Parent.ManagedName, WriteTo.CS);
             }
             else
             {
-                Write(method.Name, WriteTo.Header | WriteTo.Source | WriteTo.Buffer);
+                Write(method.Name, WriteTo.Header | WriteTo.Source | dllImport);
                 if (method.Name.Equals("delete"))
                 {
                     WriteDeleteMethod(method, level);
@@ -258,7 +269,7 @@ namespace BulletSharpGen
             // Index number for overloaded methods
             if (overloadIndex != 0)
             {
-                Write((overloadIndex + 1).ToString(), WriteTo.Header | WriteTo.Source | WriteTo.Buffer);
+                Write((overloadIndex + 1).ToString(), WriteTo.Header | WriteTo.Source | dllImport);
             }
 
 
@@ -267,7 +278,7 @@ namespace BulletSharpGen
             {
                 Write('(', cs);
             }
-            Write('(', WriteTo.Header | WriteTo.Source | WriteTo.Buffer);
+            Write('(', WriteTo.Header | WriteTo.Source | dllImport);
 
             // The first parameter is the instance pointer (if not constructor or static method)
             if (!method.IsConstructor && !method.IsStatic)
@@ -275,11 +286,11 @@ namespace BulletSharpGen
                 Write(method.Parent.FullNameCS, WriteTo.Header);
                 Write(method.Parent.FullyQualifiedName, WriteTo.Source);
                 Write("* obj", WriteTo.Header | WriteTo.Source);
-                Write("IntPtr obj", WriteTo.Buffer);
+                Write("IntPtr obj", dllImport);
 
                 if (numParameters != 0)
                 {
-                    Write(", ", WriteTo.Header | WriteTo.Source | WriteTo.Buffer);
+                    Write(", ", WriteTo.Header | WriteTo.Source | dllImport);
                 }
             }
 
@@ -303,7 +314,7 @@ namespace BulletSharpGen
                 {
                     WriteTypeCS(param.Type);
                 }
-                Write(BulletParser.GetTypeDllImport(param.Type), WriteTo.Buffer);
+                Write(BulletParser.GetTypeDllImport(param.Type), dllImport);
 
                 // Parameter name
                 if (!isCsFinalParameter)
@@ -311,19 +322,18 @@ namespace BulletSharpGen
                     Write(' ', cs);
                     Write(param.ManagedName, cs);
                 }
-                Write(' ', WriteTo.Header | WriteTo.Source | WriteTo.Buffer);
-                Write(param.Name, WriteTo.Header | WriteTo.Source | WriteTo.Buffer);
+                Write(string.Format(" {0}", param.Name), WriteTo.Header | WriteTo.Source | dllImport);
 
                 if (!isFinalParameter)
                 {
-                    Write(", ", WriteTo.Header | WriteTo.Source | WriteTo.Buffer);
+                    Write(", ", WriteTo.Header | WriteTo.Source | dllImport);
                 }
                 if (!(isFinalParameter || (returnParamMethod != null && i == numParameters - 2)))
                 {
                     Write(", ", WriteTo.CS);
                 }
             }
-            WriteLine(");", WriteTo.Header | WriteTo.Buffer);
+            WriteLine(");", WriteTo.Header | dllImport);
             if (!method.Name.Equals("delete"))
             {
                 WriteLine(')', cs);

@@ -151,7 +151,7 @@ namespace BulletSharp
 		static extern void btDispatcherInfo_delete(IntPtr obj);
 	}
 
-	public class Dispatcher : IDisposable
+	public abstract class Dispatcher : IDisposable
 	{
 		internal IntPtr _native;
 

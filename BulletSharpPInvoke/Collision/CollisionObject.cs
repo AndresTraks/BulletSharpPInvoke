@@ -44,7 +44,7 @@ namespace BulletSharp
 		RigidBody = 2,
 		GhostObject = 4,
 		SoftBody = 8,
-        HFFluid = 16,
+		HFFluid = 16,
 		UserType = 32,
 		FeatherstoneLink = 64
 	}

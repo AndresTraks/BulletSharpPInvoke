@@ -60,7 +60,7 @@ namespace BulletSharpGen
             parameterNameMapping.Add("vertexbase", "vertexBase");
 
             // Classes that shouldn't be instantiated by users
-            List<string> hidePublicConstructors = new List<string>() {
+            HashSet<string> hidePublicConstructors = new HashSet<string>() {
                 "btActivatingCollisionAlgorithm", "btContactConstraint", "btConvexInternalShape",
                 "btConvexInternalAabbCachingShape", "btPolyhedralConvexAabbCachingShape", "btTypedObject",
                 "btDbvtProxy", "btSimpleBroadphaseProxy", "btDispatcherInfo", "btTriangleMeshShape",
@@ -73,7 +73,7 @@ namespace BulletSharpGen
             };
 
             // Classes for which no internal constructor is needed
-            List<string> hideInternalConstructor = new List<string>() {
+            HashSet<string> hideInternalConstructor = new HashSet<string>() {
                 "btBox2dBox2dCollisionAlgorithm", "btBoxBoxCollisionAlgorithm",
                 "btBoxBoxDetector", "btBroadphaseRayCallback", "btCollisionAlgorithmConstructionInfo", "btDefaultCollisionConstructionInfo",
                 "btCompoundCompoundCollisionAlgorithm", "btContinuousConvexCollision", "btConvex2dConvex2dAlgorithm",
@@ -114,7 +114,7 @@ namespace BulletSharpGen
             };
 
             // Classes that might be cleaned up by Bullet and not us (use preventDelete to indicate this)
-            List<string> preventDelete = new List<string>() {
+            HashSet<string> preventDelete = new HashSet<string>() {
                 "btAABB", "btCollisionAlgorithmCreateFunc",
                 "btCollisionObject", "btCollisionObjectWrapper", "btCollisionShape",
                 "btCollisionWorld::LocalConvexResult", "btCollisionWorld::LocalRayResult",
@@ -128,7 +128,7 @@ namespace BulletSharpGen
                 "btWheelInfo", "btManifoldPoint", "btCollisionWorld::LocalShapeInfo"};
 
             // Classes that have OnDisposing/OnDisposed events
-            List<string> trackingDisposable = new List<string>() {
+            HashSet<string> trackingDisposable = new HashSet<string>() {
                 "btCollisionObject", "btCollisionShape",
                 "btDbvt", "btRaycastVehicle", "btTypedConstraint"};
 
@@ -247,6 +247,22 @@ namespace BulletSharpGen
                 }
             }
 
+            // Get managed header and enum names
+            var headerNameMapping = Project.HeaderNameMapping as ScriptedMapping;
+            foreach (HeaderDefinition header in Project.HeaderDefinitions.Values)
+            {
+                headerNameMapping.Header = header;
+                header.ManagedName = headerNameMapping.Map(header.Name);
+            }
+
+            // Apply class properties
+            var classNameMapping = Project.ClassNameMapping as ScriptedMapping;
+            foreach (ClassDefinition @class in classDefinitions.Values)
+            {
+                classNameMapping.Header = @class.Header;
+                @class.ManagedName = classNameMapping.Map(@class.Name);
+            }
+
             // Set managed method/parameter names
             foreach (var method in classDefinitions.Values.SelectMany(c => c.Methods))
             {
@@ -269,14 +285,7 @@ namespace BulletSharpGen
                         name = name.Substring(2);
                     }
                     name = char.ToUpper(name[0]) + name.Substring(1); // capitalize
-
-                    // one_two_three -> oneTwoThree
-                    string managedName = name;
-                    while (managedName.Contains("_"))
-                    {
-                        int pos = managedName.IndexOf('_');
-                        managedName = managedName.Substring(0, pos) + managedName.Substring(pos + 1, 1).ToUpper() + managedName.Substring(pos + 2);
-                    }
+                    string managedName = ToCamelCase(name, true);
 
                     // Generate getter/setter methods
                     string getterName, setterName;
@@ -472,22 +481,6 @@ namespace BulletSharpGen
                         }
                     }
                 }
-            }
-
-            // Get managed header and enum names
-            var headerNameMapping = Project.HeaderNameMapping as ScriptedMapping;
-            foreach (HeaderDefinition header in Project.HeaderDefinitions.Values)
-            {
-                headerNameMapping.Header = header;
-                header.ManagedName = headerNameMapping.Map(header.Name);
-            }
-
-            // Apply class properties
-            var classNameMapping = Project.ClassNameMapping as ScriptedMapping;
-            foreach (ClassDefinition @class in classDefinitions.Values)
-            {
-                classNameMapping.Header = @class.Header;
-                @class.ManagedName = classNameMapping.Map(@class.Name);
             }
 
             // Sort methods and properties alphabetically
@@ -771,14 +764,12 @@ namespace BulletSharpGen
                 return method.Name;
             }
 
-            string managedName = method.Name;
-            while (managedName.Contains("_"))
+            if (method.IsConstructor)
             {
-                int pos = managedName.IndexOf('_');
-                managedName = managedName.Substring(0, pos) + managedName.Substring(pos + 1, 1).ToUpper() + managedName.Substring(pos + 2);
+                return method.Parent.ManagedName;
             }
 
-            return char.ToUpper(managedName[0]) + managedName.Substring(1);
+            return ToCamelCase(method.Name, true);
         }
 
         public string GetManagedParameterName(ParameterDefinition param)
@@ -794,31 +785,7 @@ namespace BulletSharpGen
                 return managedName;
             }
 
-            if (managedName.Length == 1)
-            {
-                return managedName.ToLower();
-            }
-
-            // Remove underscores
-            // one_two_three -> oneTwoThree
-            while (managedName.Contains("_"))
-            {
-                int pos = managedName.IndexOf('_');
-                if (pos == 0)
-                {
-                    managedName = managedName.Substring(1);
-                }
-                else if (pos >= managedName.Length - 1)
-                {
-                    managedName = managedName.Substring(0, pos);
-                    break;
-                }
-                else
-                {
-                    managedName = managedName.Substring(0, pos) + managedName.Substring(pos + 1, 1).ToUpper() + managedName.Substring(pos + 2);
-                }
-            }
-            return managedName;
+            return ToCamelCase(param.Name, false);
         }
 
         public static string GetTypeMarshalPrologue(ParameterDefinition parameter, MethodDefinition method)

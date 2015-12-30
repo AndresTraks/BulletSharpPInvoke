@@ -35,34 +35,10 @@ namespace BulletSharpGen
         }
 
         // one_two_three -> oneTwoThree
-        // ONE_TWO_THREE -> OneTwoThree
-        protected static string RemoveUnderscores(string text)
-        {
-            if (text.Length == 0)
-            {
-                return text;
-            }
-
-            string outText = text;
-            while (outText.Contains("_"))
-            {
-                int pos = outText.IndexOf('_');
-                string left = outText.Substring(0, pos).ToLower();
-                char firstLetterOfRight = char.ToUpper(outText[pos + 1]);
-                string right = outText.Substring(pos + 2);
-                outText = left + firstLetterOfRight + right;
-            }
-
-            if (char.IsUpper(text, 0))
-            {
-                outText = char.ToUpper(outText[0]) + outText.Substring(1);
-            }
-
-            return outText;
-        }
-
-        // ONE_TWO_THREE -> OneTwoThree
-        protected static string RemoveUnderscoresFromUpper(string text)
+        // one_twoThree -> oneTwoThree
+        // ONE_TWO_THREE -> oneTwoThree
+        // one_two_THREE -> oneTwoThree
+        protected static string ToCamelCase(string text, bool upper)
         {
             if (text.Length == 0)
             {
@@ -72,18 +48,46 @@ namespace BulletSharpGen
             StringBuilder outText = new StringBuilder();
             int left = 0, right;
 
-            while (true)
+            while (left < text.Length)
             {
                 right = text.IndexOf('_', left);
                 if (right == -1)
                 {
-                    outText.Append(char.ToUpper(text[left]));
-                    outText.Append(text.Substring(left + 1).ToLower());
-                    break;
+                    right = text.Length;
                 }
-                outText.Append(char.ToUpper(text[left]));
+                else if (right == left)
+                {
+                    left++;
+                    continue;
+                }
+
+                char first = text[left];
+                if (outText.Length == 0)
+                {
+                    first = upper ? char.ToUpper(first) : char.ToLower(first);
+                }
+                else
+                {
+                    first = char.ToUpper(first);
+                }
+                outText.Append(first);
                 left++;
-                outText.Append(text.Substring(left, right - left).ToLower());
+
+                string rest = text.Substring(left, right - left);
+                if (rest.All(c => char.IsDigit(c) || char.IsUpper(c)))
+                {
+                    // Two-letter acronyms are preserved as capitalized
+                    // https://msdn.microsoft.com/en-us/library/ms229043%28v=vs.110%29.aspx
+                    if (rest.Length > 1 ||
+                        (first + rest).Equals("NO") ||
+                        (first + rest).Equals("OF") ||
+                        (first + rest).Equals("IS"))
+                    {
+                        rest = rest.ToLower();
+                    }
+                }
+                outText.Append(rest);
+
                 left = right + 1;
             }
 
@@ -111,7 +115,7 @@ namespace BulletSharpGen
                 {
                     string enumConstant = @enum.EnumConstants[i];
                     enumConstant = enumConstant.Substring(prefixLength);
-                    @enum.EnumConstants[i] = RemoveUnderscoresFromUpper(enumConstant);
+                    @enum.EnumConstants[i] = ToCamelCase(enumConstant, true);
                 }
 
                 if (@enum.Name.EndsWith("Flags"))

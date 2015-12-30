@@ -374,9 +374,15 @@ namespace BulletSharpGen
                     return Cursor.ChildVisitResult.Continue;
             }
 
+            // We only care about public members
             if (_context.MemberAccess != AccessSpecifier.Public)
             {
-                return Cursor.ChildVisitResult.Continue;
+                // Except for private/protected virtual methods that override public abstract methods,
+                // necessary for checking whether a class is abstract or not.
+                if (cursor.IsPureVirtualCxxMethod || !cursor.IsVirtualCxxMethod)
+                {
+                    return Cursor.ChildVisitResult.Continue;
+                }
             }
 
             if ((cursor.Kind == CursorKind.ClassDecl || cursor.Kind == CursorKind.StructDecl ||
@@ -396,18 +402,11 @@ namespace BulletSharpGen
                 _context.Method = new MethodDefinition(methodName, _context.Class, cursor.NumArguments)
                 {
                     ReturnType = new TypeRefDefinition(cursor.ResultType),
+                    IsConstructor = cursor.Kind == CursorKind.Constructor,
                     IsStatic = cursor.IsStaticCxxMethod,
-                    IsConstructor = cursor.Kind == CursorKind.Constructor
+                    IsVirtual = cursor.IsVirtualCxxMethod,
+                    IsAbstract = cursor.IsPureVirtualCxxMethod
                 };
-
-                if (cursor.IsVirtualCxxMethod)
-                {
-                    _context.Method.IsVirtual = true;
-                    if (cursor.IsPureVirtualCxxMethod)
-                    {
-                        _context.Method.IsAbstract = true;
-                    }
-                }
 
                 // Check if the return type is a template
                 cursor.VisitChildren(MethodTemplateTypeVisitor);
@@ -435,6 +434,16 @@ namespace BulletSharpGen
                         {
                             _context.Method.Parameters[i].IsOptional = true;
                         }
+                    }
+                }
+
+                // Discard any private/protected virtual method unless it
+                // implements a public abstract method
+                if (_context.MemberAccess != AccessSpecifier.Public)
+                {
+                    if (_context.Method.Parent.BaseClass == null || !_context.Method.Parent.BaseClass.AbstractMethods.Contains(_context.Method))
+                    {
+                        _context.Method.Parent.Methods.Remove(_context.Method);
                     }
                 }
 

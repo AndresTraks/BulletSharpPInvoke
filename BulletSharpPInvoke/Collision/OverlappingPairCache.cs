@@ -40,7 +40,7 @@ namespace BulletSharp
 		static extern void btOverlapCallback_delete(IntPtr obj);
 	}
 
-	public class OverlapFilterCallback : IDisposable
+	public class OverlapFilterCallback : IDisposable // abstract
 	{
 		internal IntPtr _native;
 
