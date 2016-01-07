@@ -74,6 +74,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatherStoneDemo", "Feather
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpDX11", "DemoFramework\Graphics\SharpDX11\SharpDX11.csproj", "{540E0C60-3FBD-4166-933D-D80284D1CA0E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PendulumDemo", "PendulumDemo\PendulumDemo.csproj", "{56363BE1-F548-45A7-9DC1-7DCF7B5A97CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -182,6 +184,10 @@ Global
 		{540E0C60-3FBD-4166-933D-D80284D1CA0E}.Debug|x86.Build.0 = Debug|x86
 		{540E0C60-3FBD-4166-933D-D80284D1CA0E}.Release|x86.ActiveCfg = Release|x86
 		{540E0C60-3FBD-4166-933D-D80284D1CA0E}.Release|x86.Build.0 = Release|x86
+		{56363BE1-F548-45A7-9DC1-7DCF7B5A97CF}.Debug|x86.ActiveCfg = Debug|x86
+		{56363BE1-F548-45A7-9DC1-7DCF7B5A97CF}.Debug|x86.Build.0 = Debug|x86
+		{56363BE1-F548-45A7-9DC1-7DCF7B5A97CF}.Release|x86.ActiveCfg = Release|x86
+		{56363BE1-F548-45A7-9DC1-7DCF7B5A97CF}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
