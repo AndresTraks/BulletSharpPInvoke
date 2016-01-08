@@ -1447,7 +1447,7 @@ namespace BulletSharp.SoftBody
 
         public override int GetHashCode()
         {
-            return _native.ToInt32();
+            return _native.GetHashCode();
         }
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

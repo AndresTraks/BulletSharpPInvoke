@@ -205,7 +205,7 @@ namespace BulletSharp
 
         public override int GetHashCode()
         {
-            return _native.ToInt32();
+            return _native.GetHashCode();
         }
 
 		public void Dispose()
