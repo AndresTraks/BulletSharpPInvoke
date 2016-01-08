@@ -154,6 +154,9 @@
     <ClCompile Include="src\btConvexTriangleMeshShape_wrap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\btCpuFeatureUtility_wrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\btCylinderShape_wrap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -376,10 +379,10 @@
     <ClCompile Include="src\btSoftBodyRigidBodyCollisionConfiguration_wrap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\btSoftRigidCollisionAlgorithm_wrap.cpp">
+    <ClCompile Include="src\btSoftBodySolvers_wrap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\btSoftBodySolvers_wrap.cpp">
+    <ClCompile Include="src\btSoftRigidCollisionAlgorithm_wrap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\btSoftRigidDynamicsWorld_wrap.cpp">
@@ -621,6 +624,9 @@
     <ClInclude Include="src\btConvexTriangleMeshShape_wrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\btCpuFeatureUtility_wrap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\btCylinderShape_wrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -843,10 +849,10 @@
     <ClInclude Include="src\btSoftBodyRigidBodyCollisionConfiguration_wrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\btSoftRigidCollisionAlgorithm_wrap.h">
+    <ClInclude Include="src\btSoftBodySolvers_wrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\btSoftBodySolvers_wrap.h">
+    <ClInclude Include="src\btSoftRigidCollisionAlgorithm_wrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\btSoftRigidDynamicsWorld_wrap.h">

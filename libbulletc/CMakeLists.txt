@@ -42,6 +42,8 @@ ELSE()
         SET(REL_LIB_DIR msvc/2012)
     ELSEIF(${CMAKE_GENERATOR} MATCHES "Visual Studio 12")
         SET(REL_LIB_DIR msvc/2013)
+    ELSEIF(${CMAKE_GENERATOR} MATCHES "Visual Studio 14")
+        SET(REL_LIB_DIR msvc/2015)
     ENDIF()
     LINK_DIRECTORIES(${BULLET_INCLUDE_DIR}/../${REL_LIB_DIR}/lib/${CMAKE_CFG_INTDIR})
     SET(BULLETC_LIB libbulletc)
@@ -50,17 +52,17 @@ ENDIF()
 
 IF(MSVC)
     IF (CMAKE_CL_64)
-      ADD_DEFINITIONS(-D_WIN64)
+        ADD_DEFINITIONS(-D_WIN64)
     ELSE()
-      OPTION(USE_MSVC_SSE "Use MSVC /arch:sse option"	ON)
-      IF (USE_MSVC_SSE)
-        ADD_DEFINITIONS(/arch:SSE)
-      ENDIF()
+        OPTION(USE_MSVC_SSE "Use MSVC /arch:sse option" ON)
+        IF (USE_MSVC_SSE)
+            ADD_DEFINITIONS(/arch:SSE)
+        ENDIF()
     ENDIF()
-    OPTION(USE_MSVC_FAST_FLOATINGPOINT "Use MSVC /fp:fast option"	ON)
+    OPTION(USE_MSVC_FAST_FLOATINGPOINT "Use MSVC /fp:fast option" ON)
     IF (USE_MSVC_FAST_FLOATINGPOINT)
         ADD_DEFINITIONS(/fp:fast)
-  ENDIF()
+    ENDIF()
 ENDIF(MSVC)
 
 ADD_LIBRARY(${BULLETC_LIB} SHARED
@@ -167,6 +169,8 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btConvexShape_wrap.h
     src/btConvexTriangleMeshShape_wrap.cpp
     src/btConvexTriangleMeshShape_wrap.h
+    src/btCpuFeatureUtility_wrap.cpp
+    src/btCpuFeatureUtility_wrap.h
     src/btCylinderShape_wrap.cpp
     src/btCylinderShape_wrap.h
     src/btDantzigSolver_wrap.cpp
@@ -315,10 +319,10 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btSoftBodyHelpers_wrap.h
     src/btSoftBodyRigidBodyCollisionConfiguration_wrap.cpp
     src/btSoftBodyRigidBodyCollisionConfiguration_wrap.h
-    src/btSoftRigidCollisionAlgorithm_wrap.cpp
-    src/btSoftRigidCollisionAlgorithm_wrap.h
     src/btSoftBodySolvers_wrap.cpp
     src/btSoftBodySolvers_wrap.h
+    src/btSoftRigidCollisionAlgorithm_wrap.cpp
+    src/btSoftRigidCollisionAlgorithm_wrap.h
     src/btSoftRigidDynamicsWorld_wrap.cpp
     src/btSoftRigidDynamicsWorld_wrap.h
     src/btSoftSoftCollisionAlgorithm_wrap.cpp

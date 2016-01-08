@@ -550,6 +550,7 @@
     <ClInclude Include="src\btConvexPolyhedron_wrap.h" />
     <ClInclude Include="src\btConvexShape_wrap.h" />
     <ClInclude Include="src\btConvexTriangleMeshShape_wrap.h" />
+    <ClInclude Include="src\btCpuFeatureUtility_wrap.h" />
     <ClInclude Include="src\btCylinderShape_wrap.h" />
     <ClInclude Include="src\btDantzigSolver_wrap.h" />
     <ClInclude Include="src\btDbvt_wrap.h" />
@@ -704,6 +705,7 @@
     <ClCompile Include="src\btConvexPolyhedron_wrap.cpp" />
     <ClCompile Include="src\btConvexShape_wrap.cpp" />
     <ClCompile Include="src\btConvexTriangleMeshShape_wrap.cpp" />
+    <ClCompile Include="src\btCpuFeatureUtility_wrap.cpp" />
     <ClCompile Include="src\btCylinderShape_wrap.cpp" />
     <ClCompile Include="src\btDantzigSolver_wrap.cpp" />
     <ClCompile Include="src\btDbvt_wrap.cpp" />

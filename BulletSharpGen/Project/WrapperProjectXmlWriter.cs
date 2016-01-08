@@ -81,11 +81,13 @@ namespace BulletSharpGen.Project
                     writer.WriteEndElement();
                 }
 
+                writer.WriteStartElement("NamespaceName");
+                writer.WriteString(project.NamespaceName);
+                writer.WriteEndElement();
+
                 foreach (string sourceRootFolder in project.SourceRootFolders)
                 {
-                    writer.WriteStartElement("NamespaceName");
-                    writer.WriteString("BulletSharp");
-                    writer.WriteEndElement();
+                    string sourceRootFolderCanonical = sourceRootFolder.Replace('\\', '/');
 
                     writer.WriteStartElement("SourceRootFolder");
                     string sourceRootFolderRelative = MakeRelativePath(project.ProjectPath, sourceRootFolder);
@@ -94,6 +96,8 @@ namespace BulletSharpGen.Project
 
                     foreach (var header in project.HeaderDefinitions)
                     {
+                        if (!header.Key.StartsWith(sourceRootFolderCanonical)) continue;
+
                         writer.WriteStartElement("HeaderDefinition");
                         string headerRelativePath = MakeRelativePath(sourceRootFolder, header.Key);
                         headerRelativePath = headerRelativePath.Replace('\\', '/');
@@ -102,14 +106,18 @@ namespace BulletSharpGen.Project
                         {
                             writer.WriteAttributeString("IsExcluded", "True");
                         }
-
-                        foreach (var @class in header.Value.Classes)
+                        else
                         {
-                            WriteClassDefinition(writer, @class);
+                            foreach (var @class in header.Value.Classes)
+                            {
+                                WriteClassDefinition(writer, @class);
+                            }
                         }
 
                         writer.WriteEndElement();
                     }
+
+                    writer.WriteEndElement();
                 }
             }
         }

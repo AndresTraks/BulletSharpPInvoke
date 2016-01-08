@@ -9,10 +9,16 @@ namespace BulletSharpGen
     {
         bool hasCppClassSeparatingWhitespace;
         Dictionary<string, string> wrapperHeaderGuards = new Dictionary<string, string>();
+        WrapperProject project;
 
-        public PInvokeWriter(IEnumerable<HeaderDefinition> headerDefinitions, string namespaceName)
-            : base(headerDefinitions, namespaceName)
+        string OutDirectoryPInvoke { get { return NamespaceName + "_pinvoke"; } }
+        string OutDirectoryC { get { return NamespaceName + "_c"; } }
+
+        public PInvokeWriter(WrapperProject project)
+            : base(project.HeaderDefinitions.Values, project.NamespaceName)
         {
+            this.project = project;
+
             wrapperHeaderGuards.Add("btActionInterface", "_BT_ACTION_INTERFACE_H");
             wrapperHeaderGuards.Add("btBroadphaseAabbCallback", "BT_BROADPHASE_INTERFACE_H");
             wrapperHeaderGuards.Add("btBroadphaseRayCallback", "BT_BROADPHASE_INTERFACE_H");
@@ -100,7 +106,7 @@ namespace BulletSharpGen
             }
         }
 
-        void WriteDeleteMethod(MethodDefinition method, int level)
+        void WriteDeleteMethodCS(MethodDefinition method, int level)
         {
             // public void Dispose()
             WriteLine("Dispose()", WriteTo.CS);
@@ -247,23 +253,17 @@ namespace BulletSharpGen
             }
 
             // Name
-            Write(string.Format("{0}_", method.Parent.FullNameCS), WriteTo.Header | WriteTo.Source | dllImport);
-            if (method.IsConstructor)
+            string methodName = method.IsConstructor ? "new" : method.Name;
+            Write(string.Format("{0}_{1}", method.Parent.FullNameCS, methodName), WriteTo.Header | WriteTo.Source | dllImport);
+
+            if (methodName.Equals("delete"))
             {
-                Write("new", WriteTo.Header | WriteTo.Source | dllImport);
-                Write(method.Parent.ManagedName, WriteTo.CS);
+                WriteDeleteMethodCS(method, level);
             }
             else
             {
-                Write(method.Name, WriteTo.Header | WriteTo.Source | dllImport);
-                if (method.Name.Equals("delete"))
-                {
-                    WriteDeleteMethod(method, level);
-                }
-                else
-                {
-                    Write(method.ManagedName, cs);
-                }
+                string methodNameManaged = method.IsConstructor ? method.Parent.ManagedName : method.ManagedName;
+                Write(methodNameManaged, cs);
             }
 
             // Index number for overloaded methods
@@ -283,9 +283,8 @@ namespace BulletSharpGen
             // The first parameter is the instance pointer (if not constructor or static method)
             if (!method.IsConstructor && !method.IsStatic)
             {
-                Write(method.Parent.FullNameCS, WriteTo.Header);
-                Write(method.Parent.FullyQualifiedName, WriteTo.Source);
-                Write("* obj", WriteTo.Header | WriteTo.Source);
+                Write(string.Format("{0}* obj", method.Parent.FullNameCS), WriteTo.Header);
+                Write(string.Format("{0}* obj", method.Parent.FullyQualifiedName), WriteTo.Source);
                 Write("IntPtr obj", dllImport);
 
                 if (numParameters != 0)
@@ -398,10 +397,9 @@ namespace BulletSharpGen
             if (returnParamMethod != null)
             {
                 // Temporary variable
-                Write(BulletParser.GetTypeNameCS(returnParamMethod.ReturnType), cs);
-                Write(' ', cs);
-                Write(method.Parameters[numParametersOriginal].ManagedName, cs);
-                WriteLine(';', cs);
+                WriteLine(string.Format("{0} {1};",
+                    BulletParser.GetTypeNameCS(returnParamMethod.ReturnType),
+                    method.Parameters[numParametersOriginal].ManagedName), cs);
                 WriteTabs(level + 2, cs);
 
                 Write(BulletParser.GetReturnValueMarshalStart(returnParamMethod.ReturnType), WriteTo.Source);
@@ -409,14 +407,12 @@ namespace BulletSharpGen
 
             if (method.IsConstructor)
             {
-                Write("return new ", WriteTo.Source);
-                Write(method.Parent.FullyQualifiedName, WriteTo.Source);
+                Write(string.Format("return new {0}", method.Parent.FullyQualifiedName), WriteTo.Source);
                 if (method.Parent.BaseClass == null)
                 {
                     Write("_native = ", WriteTo.CS);
                 }
-                Write(method.Parent.FullNameCS, WriteTo.CS);
-                Write("_new", WriteTo.CS);
+                Write(string.Format("{0}_new", method.Parent.FullNameCS), WriteTo.CS);
             }
             else
             {
@@ -736,7 +732,7 @@ namespace BulletSharpGen
                         prop.Setter.Name,
                         BulletParser.GetTypeSetterCSMarshal(prop.Type)), WriteTo.CS);
                     WriteTabs(level + 3, WriteTo.CS);
-                    WriteLine(string.Format("{0} = value;", cachedProperty.CacheFieldName));
+                    WriteLine(string.Format("{0} = value;", cachedProperty.CacheFieldName), WriteTo.CS);
                     WriteTabs(level + 2, WriteTo.CS);
                     WriteLine("}", WriteTo.CS);
                 }
@@ -836,6 +832,10 @@ namespace BulletSharpGen
                 WriteLine(c.BaseClass.FullNameManaged.Replace("::", "."), WriteTo.CS);
                 //WriteLine(c.BaseClass.ManagedNameCS, WriteTo.CS);
             }
+            else if (c.IsStaticClass)
+            {
+                WriteLine(WriteTo.CS);
+            }
             else
             {
                 WriteLine(" : IDisposable", WriteTo.CS);
@@ -856,8 +856,8 @@ namespace BulletSharpGen
                 hasCppClassSeparatingWhitespace = true;
             }
 
-            // Write native pointer
-            if (c.BaseClass == null)
+            // Write the native pointer to the base class
+            if (c.BaseClass == null && !c.IsStaticClass)
             {
                 EnsureWhiteSpace(WriteTo.CS);
                 WriteTabs(level + 1, WriteTo.CS);
@@ -872,90 +872,96 @@ namespace BulletSharpGen
             }
 
             // Write cached property fields
-            if (c.CachedProperties.Count != 0)
+            if (c.CachedProperties.Any())
             {
                 EnsureWhiteSpace(WriteTo.CS);
-            }
-            foreach (var cachedProperty in c.CachedProperties.OrderBy(p => p.Key))
-            {
-                WriteTabs(level + 1, WriteTo.CS);
-                string name = cachedProperty.Key;
-                name = char.ToLower(name[0]) + name.Substring(1);
-                WriteLine(string.Format("{0} {1} _{2};", cachedProperty.Value.Access.ToString().ToLower(),
-                    cachedProperty.Value.Property.Type.ManagedNameCS, name), WriteTo.CS);
+                foreach (var cachedProperty in c.CachedProperties.OrderBy(p => p.Key))
+                {
+                    WriteTabs(level + 1, WriteTo.CS);
+                    string name = cachedProperty.Key;
+                    name = char.ToLower(name[0]) + name.Substring(1);
+                    WriteLine(string.Format("{0} {1} _{2};",
+                        cachedProperty.Value.Access.ToString().ToLower(),
+                        cachedProperty.Value.Property.Type.ManagedNameCS,
+                        name), WriteTo.CS);
+                }
                 hasCSWhiteSpace = false;
             }
 
             // Write methods
             bufferBuilder.Clear();
 
-            // Write C# internal constructor
-            if (!c.NoInternalConstructor)
+            // Write constructors
+            if (!c.IsStaticClass)
             {
-                EnsureWhiteSpace(WriteTo.CS);
-                WriteTabs(level + 1, WriteTo.CS);
-                Write("internal ", WriteTo.CS);
-                Write(c.ManagedName, WriteTo.CS);
-                Write("(IntPtr native", WriteTo.CS);
-                if (c.HasPreventDelete)
+                // Write C# internal constructor
+                if (!c.NoInternalConstructor)
                 {
-                    Write(", bool preventDelete", WriteTo.CS);
-                }
-                WriteLine(')', WriteTo.CS);
-                if (c.BaseClass != null)
-                {
-                    WriteTabs(level + 2, WriteTo.CS);
-                    Write(": base(native", WriteTo.CS);
+                    EnsureWhiteSpace(WriteTo.CS);
+                    WriteTabs(level + 1, WriteTo.CS);
+                    Write(string.Format("internal {0}(IntPtr native", c.ManagedName), WriteTo.CS);
                     if (c.HasPreventDelete)
                     {
-                        if (!c.BaseClass.HasPreventDelete)
+                        Write(", bool preventDelete", WriteTo.CS);
+                    }
+                    WriteLine(')', WriteTo.CS);
+                    if (c.BaseClass != null)
+                    {
+                        WriteTabs(level + 2, WriteTo.CS);
+                        Write(": base(native", WriteTo.CS);
+                        if (c.HasPreventDelete)
                         {
-                            // Base class should also have preventDelete
-                            //throw new NotImplementedException();
+                            if (!c.BaseClass.HasPreventDelete)
+                            {
+                                // Base class should also have preventDelete
+                                //throw new NotImplementedException();
+                            }
+                            Write(", preventDelete", WriteTo.CS);
                         }
-                        Write(", preventDelete", WriteTo.CS);
+                        else
+                        {
+                            if (c.BaseClass.HasPreventDelete)
+                            {
+                                Write(", true", WriteTo.CS);
+                            }
+                        }
+                        WriteLine(')', WriteTo.CS);
+                    }
+                    WriteTabs(level + 1, WriteTo.CS);
+                    WriteLine('{', WriteTo.CS);
+                    if (c.BaseClass == null)
+                    {
+                        WriteTabs(level + 2, WriteTo.CS);
+                        WriteLine("_native = native;", WriteTo.CS);
+                        if (c.HasPreventDelete)
+                        {
+                            WriteTabs(level + 2, WriteTo.CS);
+                            WriteLine("_preventDelete = preventDelete;", WriteTo.CS);
+                        }
+                    }
+                    WriteTabs(level + 1, WriteTo.CS);
+                    WriteLine('}', WriteTo.CS);
+                    hasCSWhiteSpace = false;
+                }
+
+                // Write public constructors
+                if (!c.HidePublicConstructors && !c.IsAbstract)
+                {
+                    int overloadIndex = 0;
+                    var constructors = c.Methods.Where(m => m.IsConstructor);
+                    if (constructors.Any())
+                    {
+                        foreach (var constructor in constructors)
+                        {
+                            WriteMethod(constructor, level, ref overloadIndex);
+                        }
                     }
                     else
                     {
-                        if (c.BaseClass.HasPreventDelete)
-                        {
-                            Write(", true", WriteTo.CS);
-                        }
-                    }
-                    WriteLine(')', WriteTo.CS);
-                }
-                WriteTabs(level + 1, WriteTo.CS);
-                WriteLine('{', WriteTo.CS);
-                if (c.BaseClass == null)
-                {
-                    WriteTabs(level + 2, WriteTo.CS);
-                    WriteLine("_native = native;", WriteTo.CS);
-                    if (c.HasPreventDelete)
-                    {
-                        WriteTabs(level + 2, WriteTo.CS);
-                        WriteLine("_preventDelete = preventDelete;", WriteTo.CS);
-                    }
-                }
-                WriteTabs(level + 1, WriteTo.CS);
-                WriteLine('}', WriteTo.CS);
-                hasCSWhiteSpace = false;
-            }
-
-            // Write public constructors
-            if (!c.HidePublicConstructors && !c.IsAbstract)
-            {
-                int overloadIndex = 0;
-                if (c.HasCppDefaultConstructor)
-                {
-                    var constructor = new MethodDefinition(c.Name, c, 0);
-                    constructor.IsConstructor = true;
-                    WriteMethod(constructor, level, ref overloadIndex);
-                }
-                else
-                {
-                    foreach (MethodDefinition method in c.Methods.Where(m => m.IsConstructor))
-                    {
-                        WriteMethod(method, level, ref overloadIndex);
+                        // Default constructor
+                        var constructor = new MethodDefinition(c.Name, c, 0);
+                        constructor.IsConstructor = true;
+                        WriteMethod(constructor, level, ref overloadIndex);
                     }
                 }
             }
@@ -977,7 +983,7 @@ namespace BulletSharpGen
             }
 
             // Write delete method
-            if (c.BaseClass == null)
+            if (c.BaseClass == null && !c.IsStaticClass)
             {
                 int overloadIndex = 0;
                 var del = new MethodDefinition("delete", c, 0);
@@ -1250,6 +1256,101 @@ namespace BulletSharpGen
             hasSourceWhiteSpace = false;
         }
 
+        void WriteHeader(HeaderDefinition header, string sourceRootFolder)
+        {
+            // C++ header file
+            string headerPath = header.Name + "_wrap.h";
+            string headerFullPath = Path.Combine(OutDirectoryC, headerPath);
+            var headerFile = new FileStream(headerFullPath, FileMode.Create, FileAccess.Write);
+            headerWriter = new StreamWriter(headerFile);
+            headerWriter.WriteLine("#include \"main.h\"");
+            headerWriter.WriteLine();
+
+            // C++ source file
+            string sourcePath = header.Name + "_wrap.cpp";
+            string sourceFullPath = Path.Combine(OutDirectoryC, sourcePath);
+            var sourceFile = new FileStream(sourceFullPath, FileMode.Create, FileAccess.Write);
+            sourceWriter = new StreamWriter(sourceFile);
+            string headerIncludeName = header.Filename.Substring(sourceRootFolder.Length);
+            sourceWriter.WriteLine("#include <{0}>", headerIncludeName);
+            sourceWriter.WriteLine();
+            if (RequiresConversionHeader(header))
+            {
+                sourceWriter.WriteLine("#include \"conversion.h\"");
+            }
+            sourceWriter.WriteLine("#include \"{0}\"", headerPath);
+
+            // C# source file
+            string csPath = header.ManagedName + ".cs";
+            string csFullPath = Path.Combine(OutDirectoryPInvoke, csPath);
+            var csFile = new FileStream(csFullPath, FileMode.Create, FileAccess.Write);
+            csWriter = new StreamWriter(csFile);
+            csWriter.WriteLine("using System;");
+            if (RequiresInterop(header))
+            {
+                csWriter.WriteLine("using System.Runtime.InteropServices;");
+                csWriter.WriteLine("using System.Security;");
+            }
+            if (RequiresMathNamespace(header))
+            {
+                csWriter.WriteLine("using BulletSharp.Math;");
+            }
+            csWriter.WriteLine();
+
+            // Write wrapper class headers
+            hasCppClassSeparatingWhitespace = true;
+            var wrappedClasses = header.AllSubClasses.Where(x => wrapperHeaderGuards.ContainsKey(x.Name)).OrderBy(x => x.FullNameCS).ToList();
+            if (wrappedClasses.Count != 0)
+            {
+                string headerGuard = wrapperHeaderGuards[wrappedClasses[0].Name];
+                WriteLine("#ifndef " + headerGuard, WriteTo.Header);
+                foreach (ClassDefinition c in wrappedClasses)
+                {
+                    WriteClassWrapperMethodPointers(c);
+                }
+                foreach (ClassDefinition c in wrappedClasses)
+                {
+                    WriteLine(string.Format("#define {0}Wrapper void", c.FullNameCS), WriteTo.Header);
+                }
+                WriteLine("#else", WriteTo.Header);
+                foreach (ClassDefinition c in wrappedClasses)
+                {
+                    WriteClassWrapperMethodDeclarations(c);
+                    WriteClassWrapperDefinition(c);
+                }
+                WriteLine("#endif", WriteTo.Header);
+                WriteLine(WriteTo.Header);
+            }
+
+            // Write classes
+            headerWriter.WriteLine("extern \"C\"");
+            headerWriter.WriteLine("{");
+            csWriter.WriteLine("namespace {0}", NamespaceName);
+            csWriter.WriteLine("{");
+            hasCSWhiteSpace = true;
+            hasCppClassSeparatingWhitespace = true;
+
+            foreach (ClassDefinition @class in header.Classes)
+            {
+                WriteEnumClass(@class, 1);
+            }
+
+            foreach (ClassDefinition c in header.Classes)
+            {
+                WriteClass(c, 1);
+            }
+
+            headerWriter.WriteLine('}');
+            csWriter.WriteLine('}');
+
+            headerWriter.Dispose();
+            headerFile.Dispose();
+            sourceWriter.Dispose();
+            sourceFile.Dispose();
+            csWriter.Dispose();
+            csFile.Dispose();
+        }
+
         public override void Output()
         {
             string outDirectoryPInvoke = NamespaceName + "_pinvoke";
@@ -1263,109 +1364,20 @@ namespace BulletSharpGen
             var includeFile = new FileStream(outDirectoryC + "\\" + includeFilename, FileMode.Create, FileAccess.Write);
             var includeWriter = new StreamWriter(includeFile);
 
-            foreach (var header in headerDefinitions.OrderBy(p => p.Name))
+            var sourceRootFolders = project.SourceRootFolders.Select(s => s.Replace('\\', '/'));
+            var headers = headerDefinitions.Where(h => !h.IsExcluded && !h.Classes.All(c => c.IsExcluded));
+            var headersByRoot = headers.GroupBy(h => sourceRootFolders.Where(s => h.Filename.StartsWith(s)).First());
+            foreach (var headerGroup in headersByRoot)
             {
-                if (header.Classes.Count == 0)
+                string sourceRootFolder = headerGroup.Key;
+                foreach (var header in headerGroup.OrderBy(h => h.Name))
                 {
-                    continue;
+                    WriteHeader(header, sourceRootFolder);
+
+                    // Include header
+                    string headerPath = header.Name + "_wrap.h";
+                    includeWriter.WriteLine("#include \"{0}\"", headerPath);
                 }
-
-                // C++ header file
-                string headerFilename = header.Name + "_wrap.h";
-                var headerFile = new FileStream(outDirectoryC + "\\" + headerFilename, FileMode.Create, FileAccess.Write);
-                headerWriter = new StreamWriter(headerFile);
-                headerWriter.WriteLine("#include \"main.h\"");
-                headerWriter.WriteLine();
-
-                // C++ source file
-                var sourceFile = new FileStream(outDirectoryC + "\\" + header.Name + "_wrap.cpp", FileMode.Create, FileAccess.Write);
-                sourceWriter = new StreamWriter(sourceFile);
-                sourceWriter.Write("#include <");
-                sourceWriter.Write(header.Filename);
-                sourceWriter.WriteLine('>');
-                sourceWriter.WriteLine();
-                if (RequiresConversionHeader(header))
-                {
-                    sourceWriter.WriteLine("#include \"conversion.h\"");
-                }
-                sourceWriter.Write("#include \"");
-                sourceWriter.Write(headerFilename);
-                sourceWriter.WriteLine("\"");
-
-                // C# source file
-                var csFile = new FileStream(outDirectoryPInvoke + "\\" + header.ManagedName + ".cs", FileMode.Create, FileAccess.Write);
-                csWriter = new StreamWriter(csFile);
-                csWriter.WriteLine("using System;");
-                if (RequiresInterop(header))
-                {
-                    csWriter.WriteLine("using System.Runtime.InteropServices;");
-                    csWriter.WriteLine("using System.Security;");
-                }
-                if (RequiresMathNamespace(header))
-                {
-                    csWriter.WriteLine("using BulletSharp.Math;");
-                }
-                csWriter.WriteLine();
-
-                // Write wrapper class headers
-                hasCppClassSeparatingWhitespace = true;
-                var wrappedClasses = header.AllSubClasses.Where(x => wrapperHeaderGuards.ContainsKey(x.Name)).OrderBy(x => x.FullNameCS).ToList();
-                if (wrappedClasses.Count != 0)
-                {
-                    string headerGuard = wrapperHeaderGuards[wrappedClasses[0].Name];
-                    WriteLine("#ifndef " + headerGuard, WriteTo.Header);
-                    foreach (ClassDefinition c in wrappedClasses)
-                    {
-                        WriteClassWrapperMethodPointers(c);
-                    }
-                    foreach (ClassDefinition c in wrappedClasses)
-                    {
-                        WriteLine(string.Format("#define {0}Wrapper void", c.FullNameCS), WriteTo.Header);
-                    }
-                    WriteLine("#else", WriteTo.Header);
-                    foreach (ClassDefinition c in wrappedClasses)
-                    {
-                        WriteClassWrapperMethodDeclarations(c);
-                        WriteClassWrapperDefinition(c);
-                    }
-                    WriteLine("#endif", WriteTo.Header);
-                    WriteLine(WriteTo.Header);
-                }
-
-                // Write classes
-                headerWriter.Write("extern \"C\"");
-                headerWriter.WriteLine();
-                headerWriter.WriteLine("{");
-                csWriter.Write("namespace ");
-                csWriter.WriteLine(NamespaceName);
-                csWriter.WriteLine("{");
-                hasCSWhiteSpace = true;
-                hasCppClassSeparatingWhitespace = true;
-
-                foreach (ClassDefinition @class in header.Classes)
-                {
-                    WriteEnumClass(@class, 1);
-                }
-
-                foreach (ClassDefinition c in header.Classes)
-                {
-                    WriteClass(c, 1);
-                }
-
-                headerWriter.WriteLine('}');
-                csWriter.WriteLine('}');
-
-                // Include header
-                includeWriter.Write("#include \"");
-                includeWriter.Write(headerFilename);
-                includeWriter.WriteLine("\"");
-
-                headerWriter.Dispose();
-                headerFile.Dispose();
-                sourceWriter.Dispose();
-                sourceFile.Dispose();
-                csWriter.Dispose();
-                csFile.Dispose();
             }
 
             includeWriter.Dispose();
@@ -1412,19 +1424,13 @@ namespace BulletSharpGen
 
         private static bool RequiresInterop(ClassDefinition @class)
         {
-            if (@class.HasCppDefaultConstructor && !@class.IsAbstract)
-            {
-                return true;
-            }
-            if (@class.Methods.Count == 0)
-            {
-                return false;
-            }
-            if (@class.HidePublicConstructors && @class.Methods.All(m => m.IsConstructor))
-            {
-                return false;
-            }
-            return true;
+            if (@class.Methods.Any(m => !m.IsConstructor)) return true;
+
+            if (!@class.NoInternalConstructor && @class.BaseClass == null) return true;
+
+            if (!@class.HidePublicConstructors && !@class.IsAbstract) return true;
+
+            return false;
         }
 
         private static bool RequiresMathNamespace(HeaderDefinition header)

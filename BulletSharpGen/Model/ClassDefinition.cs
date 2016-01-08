@@ -98,11 +98,6 @@ namespace BulletSharpGen
             get { return Methods.Count != 0 && Methods.All(x => x.IsStatic); }
         }
 
-        public bool HasCppDefaultConstructor
-        {
-            get { return !HidePublicConstructors && Methods.Count(m => m.IsConstructor) == 0; }
-        }
-
         public string ManagedName { get; set; }
 
         public IEnumerable<ClassDefinition> AllSubClasses

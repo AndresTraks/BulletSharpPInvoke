@@ -604,467 +604,131 @@ else
     <HeaderDefinition Path="BulletDynamics/Dynamics/btActionInterface.h">
       <ClassDefinition Name="btActionInterface" />
     </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Common/b3Scalar.h" IsExcluded="True">
-      <ClassDefinition Name="b3Scalar" IsExcluded="True" />
-      <ClassDefinition Name="b3TypedObject" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3Common/b3Scalar.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Common/b3Logging.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Common/b3MinMax.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3Common/b3AlignedAllocator.h">
-      <ClassDefinition Name="btSizeType" />
-      <ClassDefinition Name="b3AlignedAllocFunc" IsExcluded="True" />
-      <ClassDefinition Name="b3AlignedFreeFunc" IsExcluded="True" />
-      <ClassDefinition Name="b3AllocFunc" IsExcluded="True" />
-      <ClassDefinition Name="b3FreeFunc" IsExcluded="True" />
-      <ClassTemplateDefinition Name="b3AlignedAllocator" IsExcluded="True">
-        <ClassDefinition Name="const_pointer" />
-        <ClassDefinition Name="const_reference" />
-        <ClassDefinition Name="pointer" />
-        <ClassTemplateDefinition Name="rebind" />
-        <ClassDefinition Name="reference" />
-        <ClassDefinition Name="self_type" />
-        <ClassDefinition Name="value_type" />
-      </ClassTemplateDefinition>
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Common/b3Vector3.h" IsExcluded="True">
-      <ClassDefinition Name="b3Vector3" IsExcluded="True" />
-      <ClassDefinition Name="b3Vector4" IsExcluded="True" />
-      <ClassDefinition Name="b3Vector3FloatData" IsExcluded="True" />
-      <ClassDefinition Name="b3Vector3DoubleData" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Collision/BroadPhaseCollision/b3BroadphaseCallback.h" IsExcluded="True">
-      <ClassDefinition Name="b3BroadphaseAabbCallback" IsExcluded="True" />
-      <ClassDefinition Name="b3BroadphaseRayCallback" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Common/b3AlignedObjectArray.h" IsExcluded="True">
-      <ClassTemplateDefinition Name="b3AlignedObjectArray" IsExcluded="True">
-        <ClassDefinition Name="less" />
-      </ClassTemplateDefinition>
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Common/b3QuadWord.h" IsExcluded="True">
-      <ClassDefinition Name="b3QuadWord" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Common/b3Quaternion.h" IsExcluded="True">
-      <ClassDefinition Name="b3Quaternion" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Common/b3Matrix3x3.h" IsExcluded="True">
-      <ClassDefinition Name="b3Matrix3x3" IsExcluded="True" />
-      <ClassDefinition Name="b3Matrix3x3FloatData" IsExcluded="True" />
-      <ClassDefinition Name="b3Matrix3x3DoubleData" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Common/b3Transform.h" IsExcluded="True">
-      <ClassDefinition Name="b3Transform" IsExcluded="True" />
-      <ClassDefinition Name="b3TransformFloatData" IsExcluded="True" />
-      <ClassDefinition Name="b3TransformDoubleData" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3Common/b3AlignedAllocator.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Common/b3Vector3.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Collision/BroadPhaseCollision/b3BroadphaseCallback.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Common/b3AlignedObjectArray.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Common/b3QuadWord.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Common/b3Quaternion.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Common/b3Matrix3x3.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Common/b3Transform.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Geometry/b3AabbUtil.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3Collision/BroadPhaseCollision/b3DynamicBvh.h" IsExcluded="True">
-      <ClassDefinition Name="b3DbvtAabbMm" IsExcluded="True" />
-      <ClassDefinition Name="b3DbvtVolume" IsExcluded="True" />
-      <ClassDefinition Name="b3DbvtNode" IsExcluded="True" />
-      <ClassDefinition Name="b3DynamicBvh" IsExcluded="True">
-        <EnumDefinition Name="" />
-        <ClassDefinition Name="IClone" />
-        <ClassDefinition Name="ICollide" />
-        <ClassDefinition Name="IWriter" />
-        <ClassDefinition Name="sStkCLN" />
-        <ClassDefinition Name="sStkNN" />
-        <ClassDefinition Name="sStkNP" />
-        <ClassDefinition Name="sStkNPS" />
-      </ClassDefinition>
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Common/shared/b3Int2.h" IsExcluded="True">
-      <ClassDefinition Name="b3UnsignedInt2" IsExcluded="True" />
-      <ClassDefinition Name="b3Int2" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Collision/BroadPhaseCollision/b3OverlappingPairCache.h" IsExcluded="True">
-      <ClassDefinition Name="b3BroadphasePairArray" IsExcluded="True" />
-      <ClassDefinition Name="b3OverlapCallback" IsExcluded="True" />
-      <ClassDefinition Name="b3OverlapFilterCallback" IsExcluded="True" />
-      <ClassDefinition Name="b3OverlappingPairCache" IsExcluded="True" />
-      <ClassDefinition Name="b3HashedOverlappingPairCache" IsExcluded="True" />
-      <ClassDefinition Name="b3SortedOverlappingPairCache" IsExcluded="True" />
-      <ClassDefinition Name="b3NullPairCache" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Common/shared/b3Int4.h" IsExcluded="True">
-      <ClassDefinition Name="b3UnsignedInt4" IsExcluded="True" />
-      <ClassDefinition Name="b3Int4" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Collision/BroadPhaseCollision/b3OverlappingPair.h" IsExcluded="True">
-      <ClassDefinition Name="b3BroadphasePair" IsExcluded="True" />
-      <ClassDefinition Name="b3BroadphasePairSortPredicate" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Collision/BroadPhaseCollision/b3DynamicBvhBroadphase.h" IsExcluded="True">
-      <ClassDefinition Name="b3BroadphaseProxy" IsExcluded="True">
-        <EnumDefinition Name="CollisionFilterGroups" />
-      </ClassDefinition>
-      <ClassDefinition Name="b3DbvtProxy" IsExcluded="True" />
-      <ClassDefinition Name="b3DbvtProxyArray" IsExcluded="True" />
-      <ClassDefinition Name="b3DynamicBvhBroadphase" IsExcluded="True">
-        <EnumDefinition Name="" />
-      </ClassDefinition>
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Common/shared/b3PlatformDefinitions.h">
-      <ClassDefinition Name="MyTest" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3Collision/BroadPhaseCollision/b3DynamicBvh.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Common/shared/b3Int2.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Collision/BroadPhaseCollision/b3OverlappingPairCache.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Common/shared/b3Int4.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Collision/BroadPhaseCollision/b3OverlappingPair.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Collision/BroadPhaseCollision/b3DynamicBvhBroadphase.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Common/shared/b3PlatformDefinitions.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Common/shared/b3Float4.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Common/shared/b3Quat.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Common/shared/b3Mat3x3.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3Collision/BroadPhaseCollision/shared/b3Aabb.h" IsExcluded="True">
-      <ClassDefinition Name="b3Aabb_t" IsExcluded="True" />
-      <ClassDefinition Name="b3Aabb" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/b3Config.h" IsExcluded="True">
-      <ClassDefinition Name="b3Config" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3Contact4Data.h" IsExcluded="True">
-      <ClassDefinition Name="b3Contact4Data_t" IsExcluded="True" />
-      <ClassDefinition Name="b3Contact4Data" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/b3Contact4.h" IsExcluded="True">
-      <ClassDefinition Name="b3Contact4" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/b3ConvexUtility.h" IsExcluded="True">
-      <ClassDefinition Name="b3MyFace" IsExcluded="True" />
-      <ClassDefinition Name="b3ConvexUtility" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3Collidable.h" IsExcluded="True">
-      <EnumDefinition Name="b3ShapeTypes" IsExcluded="True" />
-      <ClassDefinition Name="b3Collidable_t" IsExcluded="True" />
-      <ClassDefinition Name="b3Collidable" IsExcluded="True" />
-      <ClassDefinition Name="b3GpuChildShape_t" IsExcluded="True" />
-      <ClassDefinition Name="b3GpuChildShape" IsExcluded="True" />
-      <ClassDefinition Name="b3CompoundOverlappingPair" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3RigidBodyData.h" IsExcluded="True">
-      <ClassDefinition Name="b3RigidBodyData_t" IsExcluded="True" />
-      <ClassDefinition Name="b3RigidBodyData" IsExcluded="True" />
-      <ClassDefinition Name="b3InertiaData_t" IsExcluded="True" />
-      <ClassDefinition Name="b3InertiaData" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/b3CpuNarrowPhase.h" IsExcluded="True">
-      <ClassDefinition Name="b3CpuNarrowPhase" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/b3RaycastInfo.h" IsExcluded="True">
-      <ClassDefinition Name="b3RayInfo" IsExcluded="True" />
-      <ClassDefinition Name="b3RayHit" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3Collision/BroadPhaseCollision/shared/b3Aabb.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/b3Config.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3Contact4Data.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/b3Contact4.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/b3ConvexUtility.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3Collidable.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3RigidBodyData.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/b3CpuNarrowPhase.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/b3RaycastInfo.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/b3RigidBodyCL.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3BvhSubtreeInfoData.h" IsExcluded="True">
-      <ClassDefinition Name="b3BvhSubtreeInfoData_t" IsExcluded="True" />
-      <ClassDefinition Name="b3BvhSubtreeInfoData" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3QuantizedBvhNodeData.h" IsExcluded="True">
-      <ClassDefinition Name="b3QuantizedBvhNodeData_t" IsExcluded="True" />
-      <ClassDefinition Name="b3QuantizedBvhNodeData" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3BvhSubtreeInfoData.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3QuantizedBvhNodeData.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3BvhTraversal.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3ConvexPolyhedronData.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuFace_t" IsExcluded="True" />
-      <ClassDefinition Name="b3GpuFace" IsExcluded="True" />
-      <ClassDefinition Name="b3ConvexPolyhedronData_t" IsExcluded="True" />
-      <ClassDefinition Name="b3ConvexPolyhedronData" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3ConvexPolyhedronData.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3ClipFaces.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3FindSeparatingAxis.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3ReduceContacts.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3ContactConvexConvexSAT.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3ContactSphereSphere.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3FindConcaveSatAxis.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3MprPenetration.h">
-      <ClassDefinition Name="_b3MprSupport_t" />
-      <ClassDefinition Name="b3MprSupport_t" IsExcluded="True" />
-      <ClassDefinition Name="_b3MprSimplex_t" />
-      <ClassDefinition Name="b3MprSimplex_t" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3MprPenetration.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3NewContactReduction.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Collision/NarrowPhaseCollision/shared/b3UpdateAabbs.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3Common/b3CommandLineArgs.h" IsExcluded="True">
-      <ClassDefinition Name="b3CommandLineArgs" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Common/b3FileUtils.h" IsExcluded="True">
-      <ClassDefinition Name="b3FileUtils" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Common/b3HashMap.h" IsExcluded="True">
-      <ClassDefinition Name="b3HashString" IsExcluded="True" />
-      <ClassDefinition Name="b3HashInt" IsExcluded="True" />
-      <ClassDefinition Name="b3HashPtr" IsExcluded="True" />
-      <ClassTemplateDefinition Name="b3HashKeyPtr" IsExcluded="True" />
-      <ClassTemplateDefinition Name="b3HashKey" IsExcluded="True" />
-      <ClassTemplateDefinition Name="b3HashMap" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Common/b3PoolAllocator.h" IsExcluded="True">
-      <ClassDefinition Name="b3PoolAllocator" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3Common/b3CommandLineArgs.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Common/b3FileUtils.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Common/b3HashMap.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Common/b3PoolAllocator.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Common/b3Random.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3Common/b3StackAlloc.h" IsExcluded="True">
-      <ClassDefinition Name="b3Block" IsExcluded="True" />
-      <ClassDefinition Name="b3StackAlloc" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Common/b3TransformUtil.h" IsExcluded="True">
-      <ClassDefinition Name="b3TransformUtil" IsExcluded="True" />
-      <ClassDefinition Name="b3ConvexSeparatingDistanceUtil" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Dynamics/b3CpuRigidBodyPipeline.h" IsExcluded="True">
-      <ClassDefinition Name="b3CpuRigidBodyPipeline" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3ContactSolverInfo.h" IsExcluded="True">
-      <EnumDefinition Name="b3SolverMode" IsExcluded="True" />
-      <ClassDefinition Name="b3ContactSolverInfoData" IsExcluded="True" />
-      <ClassDefinition Name="b3ContactSolverInfo" IsExcluded="True" />
-      <ClassDefinition Name="b3ContactSolverInfoDoubleData" IsExcluded="True" />
-      <ClassDefinition Name="b3ContactSolverInfoFloatData" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3SolverBody.h" IsExcluded="True">
-      <ClassDefinition Name="b3SolverBody" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3SolverConstraint.h" IsExcluded="True">
-      <ClassDefinition Name="b3SolverConstraint" IsExcluded="True">
-        <EnumDefinition Name="b3SolverConstraintType" IsExcluded="True" />
-      </ClassDefinition>
-      <ClassDefinition Name="b3ConstraintArray" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3TypedConstraint.h" IsExcluded="True">
-      <EnumDefinition Name="b3TypedConstraintType" IsExcluded="True" />
-      <EnumDefinition Name="b3ConstraintParams" IsExcluded="True" />
-      <ClassDefinition Name="b3JointFeedback" IsExcluded="True" />
-      <ClassDefinition Name="b3TypedConstraint" IsExcluded="True">
-        <ClassDefinition Name="b3ConstraintInfo1" IsExcluded="True" />
-        <ClassDefinition Name="b3ConstraintInfo2" IsExcluded="True" />
-      </ClassDefinition>
-      <ClassDefinition Name="b3TypedConstraintData" IsExcluded="True" />
-      <ClassDefinition Name="b3AngularLimit" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3FixedConstraint.h" IsExcluded="True">
-      <ClassDefinition Name="b3FixedConstraint" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3JacobianEntry.h" IsExcluded="True">
-      <ClassDefinition Name="b3JacobianEntry" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3Generic6DofConstraint.h" IsExcluded="True">
-      <ClassDefinition Name="b3RotationalLimitMotor" IsExcluded="True" />
-      <ClassDefinition Name="b3TranslationalLimitMotor" IsExcluded="True" />
-      <EnumDefinition Name="b36DofFlags" IsExcluded="True" />
-      <ClassDefinition Name="b3Generic6DofConstraint" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3PgsJacobiSolver.h" IsExcluded="True">
-      <ClassDefinition Name="b3PgsJacobiSolver" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3Point2PointConstraint.h" IsExcluded="True">
-      <ClassDefinition Name="b3ConstraintSetting" IsExcluded="True" />
-      <EnumDefinition Name="b3Point2PointFlags" IsExcluded="True" />
-      <ClassDefinition Name="b3Point2PointConstraint" IsExcluded="True" />
-      <ClassDefinition Name="b3Point2PointConstraintFloatData" IsExcluded="True" />
-      <ClassDefinition Name="b3Point2PointConstraintDoubleData" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Dynamics/shared/b3ContactConstraint4.h" IsExcluded="True">
-      <ClassDefinition Name="b3ContactConstraint4_t" IsExcluded="True" />
-      <ClassDefinition Name="b3ContactConstraint4" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3Common/b3StackAlloc.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Common/b3TransformUtil.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Dynamics/b3CpuRigidBodyPipeline.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3ContactSolverInfo.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3SolverBody.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3SolverConstraint.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3TypedConstraint.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3FixedConstraint.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3JacobianEntry.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3Generic6DofConstraint.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3PgsJacobiSolver.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Dynamics/ConstraintSolver/b3Point2PointConstraint.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Dynamics/shared/b3ContactConstraint4.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Dynamics/shared/b3ConvertConstraint4.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3Dynamics/shared/b3Inertia.h" IsExcluded="True">
-      <ClassDefinition Name="b3Inertia" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3Dynamics/shared/b3Inertia.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3Dynamics/shared/b3IntegrateTransforms.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3Geometry/b3ConvexHullComputer.h" IsExcluded="True">
-      <ClassDefinition Name="b3ConvexHullComputer" IsExcluded="True">
-        <ClassDefinition Name="Edge" />
-      </ClassDefinition>
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Geometry/b3GeometryUtil.h" IsExcluded="True">
-      <ClassDefinition Name="b3GeometryUtil" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Geometry/b3GrahamScan2dConvexHull.h" IsExcluded="True">
-      <ClassDefinition Name="b3GrahamVector3" IsExcluded="True" />
-      <ClassDefinition Name="b3AngleCompareFunc" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/b3SapAabb.h" IsExcluded="True">
-      <ClassDefinition Name="b3SapAabb" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3OpenCLArray.h" IsExcluded="True">
-      <ClassDefinition Name="b3OpenCLArray" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/b3GpuBroadphaseInterface.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuBroadphaseInterface" IsExcluded="True">
-        <ClassDefinition Name="CreateFunc" />
-      </ClassDefinition>
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3RadixSort32CL.h" IsExcluded="True">
-      <ClassDefinition Name="b3SortData" IsExcluded="True" />
-      <ClassDefinition Name="b3RadixSort32CL" IsExcluded="True">
-        <EnumDefinition Name="" />
-        <ClassDefinition Name="b3ConstData" IsExcluded="True" />
-      </ClassDefinition>
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3BufferInfoCL.h" IsExcluded="True">
-      <ClassDefinition Name="b3BufferInfoCL" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/b3GpuGridBroadphase.h" IsExcluded="True">
-      <ClassDefinition Name="b3ParamsGridBroadphaseCL" IsExcluded="True" />
-      <ClassDefinition Name="b3GpuGridBroadphase" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3FillCL.h" IsExcluded="True">
-      <ClassDefinition Name="b3FillCL" IsExcluded="True">
-        <ClassDefinition Name="b3ConstData" IsExcluded="True" />
-      </ClassDefinition>
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3PrefixScanCL.h" IsExcluded="True">
-      <ClassDefinition Name="b3PrefixScanCL" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3Geometry/b3ConvexHullComputer.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Geometry/b3GeometryUtil.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Geometry/b3GrahamScan2dConvexHull.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/b3SapAabb.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3OpenCLArray.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/b3GpuBroadphaseInterface.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3RadixSort32CL.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3BufferInfoCL.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/b3GpuGridBroadphase.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3FillCL.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3PrefixScanCL.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/kernels/parallelLinearBvhKernels.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/b3GpuParallelLinearBvh.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuParallelLinearBvh" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/b3GpuParallelLinearBvhBroadphase.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuParallelLinearBvhBroadphase" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/b3GpuSapBroadphase.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuSapBroadphase" IsExcluded="True">
-        <EnumDefinition Name="b3GpuSapKernelType" IsExcluded="True" />
-      </ClassDefinition>
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/b3GpuParallelLinearBvh.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/b3GpuParallelLinearBvhBroadphase.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/b3GpuSapBroadphase.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/kernels/gridBroadphaseKernels.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/BroadphaseCollision/kernels/sapKernels.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3OpenCL/Initialize/b3OpenCLUtils.h" IsExcluded="True">
-      <ClassDefinition Name="b3OpenCLDeviceInfo" IsExcluded="True" />
-      <ClassDefinition Name="b3OpenCLPlatformInfo" IsExcluded="True" />
-      <ClassDefinition Name="b3OpenCLUtils" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3BvhInfo.h" IsExcluded="True">
-      <ClassDefinition Name="b3BvhInfo" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3ContactCache.h" IsExcluded="True">
-      <ClassDefinition Name="b3ContactCache" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3QuantizedBvh.h" IsExcluded="True">
-      <ClassDefinition Name="b3QuantizedBvhNode" IsExcluded="True" />
-      <ClassDefinition Name="b3OptimizedBvhNode" IsExcluded="True" />
-      <ClassDefinition Name="b3BvhSubtreeInfo" IsExcluded="True" />
-      <ClassDefinition Name="b3NodeOverlapCallback" IsExcluded="True" />
-      <ClassDefinition Name="b3QuantizedBvh" IsExcluded="True">
-        <EnumDefinition Name="b3TraversalMode" IsExcluded="True" />
-      </ClassDefinition>
-      <ClassDefinition Name="b3OptimizedBvhNodeFloatData" IsExcluded="True" />
-      <ClassDefinition Name="b3OptimizedBvhNodeDoubleData" IsExcluded="True" />
-      <ClassDefinition Name="b3QuantizedBvhFloatData" IsExcluded="True" />
-      <ClassDefinition Name="b3QuantizedBvhDoubleData" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3OptimizedBvh.h" IsExcluded="True">
-      <ClassDefinition Name="b3OptimizedBvh" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3ConvexHullContact.h">
-      <ClassDefinition Name="GpuSatCollision" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3GjkEpa.h" IsExcluded="True">
-      <ClassDefinition Name="b3GjkEpaSolver2" IsExcluded="True">
-        <ClassDefinition Name="sResults">
-          <EnumDefinition Name="eStatus" />
-        </ClassDefinition>
-      </ClassDefinition>
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3GjkPairDetector.h" IsExcluded="True">
-      <ClassDefinition Name="b3GjkPairDetector" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3TriangleCallback.h" IsExcluded="True">
-      <ClassDefinition Name="b3TriangleCallback" IsExcluded="True" />
-      <ClassDefinition Name="b3InternalTriangleIndexCallback" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3StridingMeshInterface.h" IsExcluded="True">
-      <ClassDefinition Name="b3StridingMeshInterface" IsExcluded="True" />
-      <ClassDefinition Name="b3IntIndexData" IsExcluded="True" />
-      <ClassDefinition Name="b3ShortIntIndexData" IsExcluded="True" />
-      <ClassDefinition Name="b3ShortIntIndexTripletData" IsExcluded="True" />
-      <ClassDefinition Name="b3CharIndexTripletData" IsExcluded="True" />
-      <ClassDefinition Name="b3MeshPartData" IsExcluded="True" />
-      <ClassDefinition Name="b3StridingMeshInterfaceData" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3OpenCL/Initialize/b3OpenCLUtils.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3BvhInfo.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3ContactCache.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3QuantizedBvh.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3OptimizedBvh.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3ConvexHullContact.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3GjkEpa.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3GjkPairDetector.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3TriangleCallback.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3StridingMeshInterface.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3SupportMappings.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3TriangleIndexVertexArray.h" IsExcluded="True">
-      <ClassDefinition Name="b3IndexedMesh" IsExcluded="True" />
-      <ClassDefinition Name="b3TriangleIndexVertexArray" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3VoronoiSimplexSolver.h" IsExcluded="True">
-      <ClassDefinition Name="b3UsageBitfield" IsExcluded="True" />
-      <ClassDefinition Name="b3SubSimplexClosestResult" IsExcluded="True" />
-      <ClassDefinition Name="b3VoronoiSimplexSolver" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3TriangleIndexVertexArray.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/b3VoronoiSimplexSolver.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/kernels/bvhTraversal.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/kernels/mprKernels.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/kernels/primitiveContacts.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/kernels/satClipHullContacts.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/kernels/satConcaveKernels.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/NarrowphaseCollision/kernels/satKernels.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3BoundSearchCL.h" IsExcluded="True">
-      <ClassDefinition Name="b3BoundSearchCL" IsExcluded="True">
-        <EnumDefinition Name="Option" />
-      </ClassDefinition>
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3LauncherCL.h" IsExcluded="True">
-      <ClassDefinition Name="b3KernelArgData" IsExcluded="True" />
-      <ClassDefinition Name="b3LauncherCL" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3PrefixScanFloat4CL.h" IsExcluded="True">
-      <ClassDefinition Name="b3PrefixScanFloat4CL" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3BoundSearchCL.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3LauncherCL.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/b3PrefixScanFloat4CL.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/kernels/BoundSearchKernelsCL.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/kernels/CopyKernelsCL.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/kernels/FillKernelsCL.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/kernels/PrefixScanKernelsCL.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/kernels/PrefixScanKernelsFloat4CL.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/ParallelPrimitives/kernels/RadixSort32KernelsCL.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3OpenCL/Raycast/b3GpuRaycast.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuRaycast" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3OpenCL/Raycast/b3GpuRaycast.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/Raycast/kernels/rayCastKernels.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuConstraint4.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuConstraint4" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuGenericConstraint.h">
-      <EnumDefinition Name="B3_CONSTRAINT_FLAGS" />
-      <EnumDefinition Name="b3GpuGenericConstraintType" IsExcluded="True" />
-      <ClassDefinition Name="b3GpuConstraintInfo2" IsExcluded="True" />
-      <ClassDefinition Name="b3GpuGenericConstraint" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuJacobiContactSolver.h" IsExcluded="True">
-      <ClassDefinition Name="b3JacobiSolverInfo" IsExcluded="True" />
-      <ClassDefinition Name="b3GpuJacobiContactSolver" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuNarrowPhase.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuNarrowPhase" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuNarrowPhaseInternalData.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuNarrowPhaseInternalData" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuPgsConstraintSolver.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuPgsConstraintSolver" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuSolverBody.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuSolverBody" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuSolverConstraint.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuSolverConstraint" IsExcluded="True">
-        <EnumDefinition Name="b3SolverConstraintType" IsExcluded="True" />
-      </ClassDefinition>
-      <ClassDefinition Name="b3GpuConstraintArray" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuPgsContactSolver.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuPgsContactSolver" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuRigidBodyPipeline.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuRigidBodyPipeline" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuRigidBodyPipelineInternalData.h" IsExcluded="True">
-      <ClassDefinition Name="b3GpuRigidBodyPipelineInternalData" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3Solver.h">
-      <EnumDefinition Name="" />
-      <ClassDefinition Name="b3SolverBase" IsExcluded="True">
-        <ClassDefinition Name="ConstraintCfg" />
-      </ClassDefinition>
-      <ClassDefinition Name="b3Solver" IsExcluded="True">
-        <EnumDefinition Name="" />
-      </ClassDefinition>
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuConstraint4.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuGenericConstraint.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuJacobiContactSolver.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuNarrowPhase.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuNarrowPhaseInternalData.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuPgsConstraintSolver.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuSolverBody.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuSolverConstraint.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuPgsContactSolver.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuRigidBodyPipeline.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3GpuRigidBodyPipelineInternalData.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3OpenCL/RigidBody/b3Solver.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/RigidBody/kernels/batchingKernels.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/RigidBody/kernels/batchingKernelsNew.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/RigidBody/kernels/integrateKernel.h" IsExcluded="True" />
@@ -1075,104 +739,13 @@ else
     <HeaderDefinition Path="Bullet3OpenCL/RigidBody/kernels/solverSetup2.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/RigidBody/kernels/solverUtils.h" IsExcluded="True" />
     <HeaderDefinition Path="Bullet3OpenCL/RigidBody/kernels/updateAabbsKernel.h" IsExcluded="True" />
-    <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3Common.h">
-      <ClassDefinition Name="bStructHandle" Namespace="bParse" />
-      <ClassDefinition Name="bListBasePtr" Namespace="bParse" />
-      <ClassDefinition Name="bPtrMap" Namespace="bParse" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3Chunk.h">
-      <ClassDefinition Name="bChunkPtr4" Namespace="bParse" />
-      <ClassDefinition Name="bChunkPtr8" Namespace="bParse" />
-      <ClassDefinition Name="bChunkInd" Namespace="bParse" />
-      <ClassDefinition Name="ChunkUtils" Namespace="bParse" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3File.h">
-      <EnumDefinition Name="bFileFlags" Namespace="bParse" />
-      <EnumDefinition Name="bFileVerboseMode" Namespace="bParse" />
-      <ClassDefinition Name="bFile" Namespace="bParse" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3Serializer.h" IsExcluded="True">
-      <ClassDefinition Name="b3Chunk" IsExcluded="True" />
-      <EnumDefinition Name="b3SerializationFlags" Namespace="bParse" IsExcluded="True" />
-      <ClassDefinition Name="b3Serializer" Namespace="bParse" IsExcluded="True" />
-      <ClassDefinition Name="b3PointerUid" Namespace="bParse" IsExcluded="True" />
-      <ClassDefinition Name="b3DefaultSerializer" Namespace="bParse" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3BulletFile.h" IsExcluded="True">
-      <ClassDefinition Name="b3BulletFile" Namespace="bParse" IsExcluded="True" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3DNA.h">
-      <ClassDefinition Name="bNameInfo" Namespace="bParse" />
-      <ClassDefinition Name="bDNA" Namespace="bParse" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/autogenerated/bullet2.h">
-      <ClassDefinition Name="bInvalidHandle" Namespace="Bullet3SerializeBullet2" />
-      <ClassDefinition Name="PointerArray" Namespace="Bullet3SerializeBullet2" />
-      <ClassDefinition Name="b3PhysicsSystem" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="ListBase" Namespace="Bullet3SerializeBullet2" />
-      <ClassDefinition Name="b3Vector3FloatData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3Vector3DoubleData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3Matrix3x3FloatData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3Matrix3x3DoubleData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3TransformFloatData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3TransformDoubleData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3BvhSubtreeInfoData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3OptimizedBvhNodeFloatData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3OptimizedBvhNodeDoubleData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3QuantizedBvhNodeData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3QuantizedBvhFloatData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3QuantizedBvhDoubleData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3CollisionShapeData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3StaticPlaneShapeData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3ConvexInternalShapeData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3PositionAndRadius" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3MultiSphereShapeData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3IntIndexData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3ShortIntIndexData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3ShortIntIndexTripletData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3CharIndexTripletData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3MeshPartData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3StridingMeshInterfaceData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3TriangleMeshShapeData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3ScaledTriangleMeshShapeData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3CompoundShapeChildData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3CompoundShapeData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3CylinderShapeData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3CapsuleShapeData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3TriangleInfoData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3TriangleInfoMapData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3GImpactMeshShapeData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3ConvexHullShapeData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3CollisionObjectDoubleData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3CollisionObjectFloatData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3RigidBodyFloatData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3RigidBodyDoubleData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3ConstraintInfo1" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3TypedConstraintData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3Point2PointConstraintFloatData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3Point2PointConstraintDoubleData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3HingeConstraintDoubleData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3HingeConstraintFloatData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3ConeTwistConstraintData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3Generic6DofConstraintData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3Generic6DofSpringConstraintData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3SliderConstraintData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3ContactSolverInfoDoubleData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3ContactSolverInfoFloatData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3DynamicsWorldDoubleData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3DynamicsWorldFloatData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="SoftBodyMaterialData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="SoftBodyNodeData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="SoftBodyLinkData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="SoftBodyFaceData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="SoftBodyTetraData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="SoftRigidAnchorData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="SoftBodyConfigData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="SoftBodyPoseData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="SoftBodyClusterData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3SoftBodyJointData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-      <ClassDefinition Name="b3SoftBodyFloatData" Namespace="Bullet3SerializeBullet2" IsExcluded="True" />
-    </HeaderDefinition>
+    <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3Common.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3Chunk.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3File.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3Serializer.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3BulletFile.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/b3DNA.h" IsExcluded="True" />
+    <HeaderDefinition Path="Bullet3Serialize/Bullet2FileLoader/autogenerated/bullet2.h" IsExcluded="True" />
     <HeaderDefinition Path="BulletCollision/CollisionDispatch/btBox2dBox2dCollisionAlgorithm.h">
       <ClassDefinition Name="btBox2dBox2dCollisionAlgorithm">
         <ClassDefinition Name="CreateFunc" />
@@ -1843,37 +1416,22 @@ else
     <HeaderDefinition Path="../Extras/Serialize/BulletXmlWorldImporter/btBulletXmlWorldImporter.h">
       <ClassDefinition Name="btBulletXmlWorldImporter" />
     </HeaderDefinition>
-    <HeaderDefinition Path="../Extras/HACD/hacdVector.h">
-      <ClassDefinition Name="Real" Namespace="HACD" />
-      <ClassTemplateDefinition Name="Vec3" Namespace="HACD" />
-      <ClassDefinition Name="HACD::Vec3&lt;double&gt;" />
+  </SourceRootFolder>
+  <SourceRootFolder Path="../../../../bullet3/Extras/HACD/">
+    <HeaderDefinition Path="hacdCircularList.h" IsExcluded="True" />
+    <HeaderDefinition Path="hacdCircularList.inl" IsExcluded="True" />
+    <HeaderDefinition Path="hacdVector.h">
+      <ClassDefinition Name="Real" Namespace="HACD" IsExcluded="True" />
+      <ClassTemplateDefinition Name="Vec3" Namespace="HACD" IsExcluded="True" />
+      <ClassDefinition Name="HACD::Vec3&lt;double&gt;" IsExcluded="True" />
     </HeaderDefinition>
-    <HeaderDefinition Path="../Extras/HACD/hacdVector.inl" IsExcluded="True" />
-    <HeaderDefinition Path="../Extras/HACD/hacdCircularList.h">
-      <ClassTemplateDefinition Name="CircularListElement" Namespace="HACD" />
-      <ClassTemplateDefinition Name="CircularList" Namespace="HACD" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="../Extras/HACD/hacdCircularList.inl" IsExcluded="True" />
-    <HeaderDefinition Path="../Extras/HACD/hacdManifoldMesh.h">
-      <ClassDefinition Name="DPoint" Namespace="HACD" />
-      <ClassDefinition Name="TMMVertex" Namespace="HACD" />
-      <ClassDefinition Name="TMMEdge" Namespace="HACD" />
-      <ClassDefinition Name="TMMTriangle" Namespace="HACD" />
-      <ClassDefinition Name="Material" Namespace="HACD" />
-      <ClassDefinition Name="TMMesh" Namespace="HACD" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="../Extras/HACD/hacdICHull.h">
-      <EnumDefinition Name="ICHullError" Namespace="HACD" />
-      <ClassDefinition Name="ICHull" Namespace="HACD" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="../Extras/HACD/hacdGraph.h">
-      <ClassDefinition Name="GraphVertex" Namespace="HACD" />
-      <ClassDefinition Name="GraphEdge" Namespace="HACD" />
-      <ClassDefinition Name="Graph" Namespace="HACD" />
-    </HeaderDefinition>
-    <HeaderDefinition Path="../Extras/HACD/hacdHACD.h">
-      <ClassDefinition Name="GraphEdgePriorityQueue" Namespace="HACD" />
-      <ClassDefinition Name="CallBackFunction" Namespace="HACD" />
+    <HeaderDefinition Path="hacdVector.inl" IsExcluded="True" />
+    <HeaderDefinition Path="hacdManifoldMesh.h" IsExcluded="True" />
+    <HeaderDefinition Path="hacdICHull.h" IsExcluded="True" />
+    <HeaderDefinition Path="hacdGraph.h" IsExcluded="True" />
+    <HeaderDefinition Path="hacdHACD.h">
+      <ClassDefinition Name="GraphEdgePriorityQueue" IsExcluded="True" />
+      <ClassDefinition Name="CallBackFunction" IsExcluded="True" />
       <ClassDefinition Name="HACD" Namespace="HACD" />
     </HeaderDefinition>
   </SourceRootFolder>

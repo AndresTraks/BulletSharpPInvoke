@@ -20,7 +20,6 @@ extern "C"
 	EXPORT void btDiscreteCollisionDetectorInterface_getClosestPoints2(btDiscreteCollisionDetectorInterface* obj, const btDiscreteCollisionDetectorInterface_ClosestPointInput* input, btDiscreteCollisionDetectorInterface_Result* output, btIDebugDraw* debugDraw, bool swapResults);
 	EXPORT void btDiscreteCollisionDetectorInterface_delete(btDiscreteCollisionDetectorInterface* obj);
 
-	EXPORT btStorageResult* btStorageResult_new();
 	EXPORT void btStorageResult_getClosestPointInB(btStorageResult* obj, btScalar* value);
 	EXPORT btScalar btStorageResult_getDistance(btStorageResult* obj);
 	EXPORT void btStorageResult_getNormalOnSurfaceB(btStorageResult* obj, btScalar* value);

@@ -101,6 +101,12 @@ namespace BulletSharpGen.Project
             string headerPath = sourceRootFolder + reader.GetAttribute("Path");
             headerPath = headerPath.Replace('\\', '/');
             HeaderDefinition header = new HeaderDefinition(headerPath);
+            string isExcluded = reader.GetAttribute("IsExcluded");
+            if ("True".Equals(isExcluded))
+            {
+                header.IsExcluded = true;
+            }
+
             project.HeaderDefinitions.Add(headerPath, header);
 
             if (reader.IsEmptyElement)

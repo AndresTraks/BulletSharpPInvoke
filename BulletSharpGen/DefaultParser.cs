@@ -98,7 +98,7 @@ namespace BulletSharpGen
         {
             foreach (var @class in Project.ClassDefinitions.Values)
             {
-                @class.IsAbstract = @class.AbstractMethods.Count() != 0;
+                @class.IsAbstract = @class.AbstractMethods.Any();
             }
         }
 

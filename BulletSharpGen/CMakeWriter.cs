@@ -86,11 +86,29 @@ namespace BulletSharpGen
             WriteLine("        SET(REL_LIB_DIR msvc/2012)");
             WriteLine("    ELSEIF(${CMAKE_GENERATOR} MATCHES \"Visual Studio 12\")");
             WriteLine("        SET(REL_LIB_DIR msvc/2013)");
+            WriteLine("    ELSEIF(${CMAKE_GENERATOR} MATCHES \"Visual Studio 14\")");
+            WriteLine("        SET(REL_LIB_DIR msvc/2015)");
             WriteLine("    ENDIF()");
             WriteLine("    LINK_DIRECTORIES(${BULLET_INCLUDE_DIR}/../${REL_LIB_DIR}/lib/${CMAKE_CFG_INTDIR})");
             WriteLine("    SET(BULLETC_LIB libbulletc)");
             WriteLine("    SET(LIB_SUFFIX _${CMAKE_CFG_INTDIR}.lib)");
             WriteLine("ENDIF()");
+            WriteLine();
+
+            WriteLine("IF(MSVC)");
+            WriteLine("    IF (CMAKE_CL_64)");
+            WriteLine("        ADD_DEFINITIONS(-D_WIN64)");
+            WriteLine("    ELSE()");
+            WriteLine("        OPTION(USE_MSVC_SSE \"Use MSVC /arch:sse option\" ON)");
+            WriteLine("        IF (USE_MSVC_SSE)");
+            WriteLine("            ADD_DEFINITIONS(/arch:SSE)");
+            WriteLine("        ENDIF()");
+            WriteLine("    ENDIF()");
+            WriteLine("    OPTION(USE_MSVC_FAST_FLOATINGPOINT \"Use MSVC /fp:fast option\" ON)");
+            WriteLine("    IF (USE_MSVC_FAST_FLOATINGPOINT)");
+            WriteLine("        ADD_DEFINITIONS(/fp:fast)");
+            WriteLine("    ENDIF()");
+            WriteLine("ENDIF(MSVC)");
             WriteLine();
 
             AddLibrary();
@@ -111,7 +129,7 @@ namespace BulletSharpGen
         void AddLibrary()
         {
             List<string> sources = new List<string>();
-            var headers = headerDefinitions.Values.Where(x => !x.IsExcluded).OrderBy(x => x.Name);
+            var headers = headerDefinitions.Values.Where(h => h.Classes.Any()).OrderBy(x => x.Name);
 
             foreach (HeaderDefinition header in headers)
             {

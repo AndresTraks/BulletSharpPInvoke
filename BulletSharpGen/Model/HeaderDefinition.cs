@@ -10,6 +10,7 @@ namespace BulletSharpGen
         public string Filename { get; set; }
         public List<ClassDefinition> Classes { get; set; }
         public List<HeaderDefinition> Includes { get; set; }
+        public bool IsExcluded { get; set; }
 
         public string ManagedName { get; set; }
 
@@ -25,11 +26,6 @@ namespace BulletSharpGen
                 }
                 return subClasses;
             }
-        }
-
-        public bool IsExcluded
-        {
-            get { return Classes.All(x => x.IsExcluded); }
         }
 
         public HeaderDefinition(string filename)

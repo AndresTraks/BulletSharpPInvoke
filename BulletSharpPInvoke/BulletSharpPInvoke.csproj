@@ -191,6 +191,7 @@
     <Compile Include="LinearMath\AlignedVector3Array.cs" />
     <Compile Include="LinearMath\Collections.cs" />
     <Compile Include="LinearMath\AlignedIndexedMeshArray.cs" />
+    <Compile Include="LinearMath\CpuFeatureUtility.cs" />
     <Compile Include="LinearMath\DebugDraw.cs" />
     <Compile Include="LinearMath\DefaultMotionState.cs" />
     <Compile Include="LinearMath\GeometryUtil.cs" />

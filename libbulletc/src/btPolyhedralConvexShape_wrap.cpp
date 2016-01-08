@@ -64,6 +64,7 @@ bool btPolyhedralConvexShape_isInside(btPolyhedralConvexShape* obj, const btScal
 	return obj->isInside(VECTOR3_USE(pt), tolerance);
 }
 
+
 void btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(btPolyhedralConvexAabbCachingShape* obj, const btScalar* trans, btScalar* aabbMin, btScalar* aabbMax, btScalar margin)
 {
 	TRANSFORM_CONV(trans);

@@ -735,7 +735,7 @@ namespace BulletSharpGen
                 hasSourceWhiteSpace = false;
             }
 
-            // Write the unmanaged pointer to the base class
+            // Write the native pointer to the base class
             if (c.BaseClass == null && !c.IsStaticClass)
             {
                 if (c.Classes.Count != 0)
@@ -792,121 +792,124 @@ namespace BulletSharpGen
                 hasHeaderWhiteSpace = false;
             }
 
-            // Write unmanaged constructor
-            // TODO: Write constructor from unmanaged pointer only if the class is ever instantiated in this way.
-            if (!c.NoInternalConstructor && !c.IsStaticClass)
+            // Write constructors and destructors if not static
+            if (!c.IsStaticClass)
             {
-                EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Internal);
-
-                WriteTabs(level + 1);
-                SourceWrite(string.Format("{0}::", c.FullNameManaged));
-                Write(string.Format("{0}({1}* native)", c.ManagedName, c.FullyQualifiedName));
-                HeaderWriteLine(';');
-                SourceWriteLine();
-                if (c.BaseClass != null)
+                // Write unmanaged constructor
+                // TODO: Write constructor from unmanaged pointer only if the class is ever instantiated in this way.
+                if (!c.NoInternalConstructor)
                 {
-                    WriteTabs(1, true);
-                    SourceWriteLine(string.Format(": {0}(native)", c.BaseClass.ManagedName));
+                    EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Internal);
+
+                    WriteTabs(level + 1);
+                    SourceWrite(string.Format("{0}::", c.FullNameManaged));
+                    Write(string.Format("{0}({1}* native)", c.ManagedName, c.FullyQualifiedName));
+                    HeaderWriteLine(';');
+                    SourceWriteLine();
+                    if (c.BaseClass != null)
+                    {
+                        WriteTabs(1, true);
+                        SourceWriteLine(string.Format(": {0}(native)", c.BaseClass.ManagedName));
+                    }
+                    SourceWriteLine('{');
+                    if (c.BaseClass == null)
+                    {
+                        WriteTabs(1, true);
+                        SourceWriteLine("_native = native;");
+                    }
+                    SourceWriteLine('}');
+                    hasHeaderWhiteSpace = false;
+                    hasSourceWhiteSpace = false;
                 }
-                SourceWriteLine('{');
+
+                // Write destructor & finalizer
                 if (c.BaseClass == null)
                 {
-                    WriteTabs(1, true);
-                    SourceWriteLine("_native = native;");
-                }
-                SourceWriteLine('}');
-                hasHeaderWhiteSpace = false;
-                hasSourceWhiteSpace = false;
-            }
+                    // ECMA-372 19.13.2: "The access-specifier of a finalizer in a ref class is ignored."
+                    WriteTabs(level + 1);
+                    HeaderWriteLine(string.Format("!{0}();", c.ManagedName));
+                    // ECMA-372 19.13.1: "The access-specifier of a destructor in a ref class is ignored."
+                    WriteTabs(level + 1);
+                    HeaderWriteLine(string.Format("~{0}();", c.ManagedName));
+                    hasHeaderWhiteSpace = false;
 
-            // Write destructor & finalizer
-            if (c.BaseClass == null && !c.IsStaticClass)
-            {
-                // ECMA-372 19.13.2: "The access-specifier of a finalizer in a ref class is ignored."
-                WriteTabs(level + 1);
-                HeaderWriteLine(string.Format("!{0}();", c.ManagedName));
-                // ECMA-372 19.13.1: "The access-specifier of a destructor in a ref class is ignored."
-                WriteTabs(level + 1);
-                HeaderWriteLine(string.Format("~{0}();", c.ManagedName));
-                hasHeaderWhiteSpace = false;
-
-                EnsureSourceWhiteSpace();
-                SourceWriteLine(string.Format("{0}::~{1}()", c.FullNameManaged, c.ManagedName));
-                SourceWriteLine('{');
-                SourceWriteLine(string.Format("\tthis->!{0}();", c.ManagedName));
-                SourceWriteLine('}');
-                SourceWriteLine();
-
-                SourceWriteLine(string.Format("{0}::!{1}()", c.FullNameManaged, c.ManagedName));
-                SourceWriteLine('{');
-                if (c.IsTrackingDisposable)
-                {
-                    SourceWriteLine("\tif (this->IsDisposed)");
-                    SourceWriteLine("\t\treturn;");
+                    EnsureSourceWhiteSpace();
+                    SourceWriteLine(string.Format("{0}::~{1}()", c.FullNameManaged, c.ManagedName));
+                    SourceWriteLine('{');
+                    SourceWriteLine(string.Format("\tthis->!{0}();", c.ManagedName));
+                    SourceWriteLine('}');
                     SourceWriteLine();
-                    SourceWriteLine("\tOnDisposing(this, nullptr);");
-                    SourceWriteLine();
-                }
-                if (c.HasPreventDelete)
-                {
-                    SourceWriteLine("\tif (!_preventDelete)");
-                    SourceWriteLine("\t{");
-                    SourceWriteLine("\t\tdelete _native;");
-                    SourceWriteLine("\t}");
-                }
-                else
-                {
-                    SourceWriteLine("\tdelete _native;");
-                }
-                if (c.IsTrackingDisposable)
-                {
-                    SourceWriteLine("\t_isDisposed = true;");
-                    SourceWriteLine();
-                    SourceWriteLine("\tOnDisposed(this, nullptr);");
-                }
-                else
-                {
-                    SourceWriteLine("\t_native = NULL;");
-                }
-                SourceWriteLine('}');
-                hasSourceWhiteSpace = false;
-            }
 
-            // Write constructors
-            int constructorCount = 0;
-            foreach (MethodDefinition method in c.Methods.Where(m => m.IsConstructor))
-            {
-                if (!c.HidePublicConstructors)
+                    SourceWriteLine(string.Format("{0}::!{1}()", c.FullNameManaged, c.ManagedName));
+                    SourceWriteLine('{');
+                    if (c.IsTrackingDisposable)
+                    {
+                        SourceWriteLine("\tif (this->IsDisposed)");
+                        SourceWriteLine("\t\treturn;");
+                        SourceWriteLine();
+                        SourceWriteLine("\tOnDisposing(this, nullptr);");
+                        SourceWriteLine();
+                    }
+                    if (c.HasPreventDelete)
+                    {
+                        SourceWriteLine("\tif (!_preventDelete)");
+                        SourceWriteLine("\t{");
+                        SourceWriteLine("\t\tdelete _native;");
+                        SourceWriteLine("\t}");
+                    }
+                    else
+                    {
+                        SourceWriteLine("\tdelete _native;");
+                    }
+                    if (c.IsTrackingDisposable)
+                    {
+                        SourceWriteLine("\t_isDisposed = true;");
+                        SourceWriteLine();
+                        SourceWriteLine("\tOnDisposed(this, nullptr);");
+                    }
+                    else
+                    {
+                        SourceWriteLine("\t_native = NULL;");
+                    }
+                    SourceWriteLine('}');
+                    hasSourceWhiteSpace = false;
+                }
+
+                // Write public constructors
+                if (!c.HidePublicConstructors && !c.IsAbstract)
                 {
                     EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Public);
-                    OutputMethod(method, level);
+
+                    var constructors = c.Methods.Where(m => m.IsConstructor);
+                    if (constructors.Any())
+                    {
+                        foreach (var constructor in constructors)
+                        {
+                            OutputMethod(constructor, level);
+                        }
+                    }
+                    else
+                    {
+                        // Default constructor
+                        MethodDefinition constructor = new MethodDefinition(c.Name, c, 0);
+                        constructor.IsConstructor = true;
+                        OutputMethod(constructor, level);
+                    }
                 }
-                constructorCount++;
             }
 
-            // Write default constructor
-            if (constructorCount == 0 && !c.IsAbstract && !c.HidePublicConstructors && !c.IsStaticClass)
-            {
-                EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Public);
-
-                MethodDefinition constructor = new MethodDefinition(c.Name, c, 0);
-                constructor.IsConstructor = true;
-                OutputMethod(constructor, level);
-                constructorCount++;
-            }
-
-            // Write methods
-            if (c.Methods.Count - constructorCount != 0)
+            // Write non-constructor methods
+            var methods = c.Methods.Where(m => !m.IsConstructor);
+            if (methods.Any())
             {
                 EnsureHeaderWhiteSpace();
 
-                foreach (MethodDefinition method in c.Methods)
+                foreach (var method in methods)
                 {
-                    if (!method.IsConstructor && method.Property == null)
-                    {
-                        EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Public);
-                        OutputMethod(method, level);
-                    }
+                    if (method.Property != null) continue;
+
+                    EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Public);
+                    OutputMethod(method, level);
                 }
             }
 

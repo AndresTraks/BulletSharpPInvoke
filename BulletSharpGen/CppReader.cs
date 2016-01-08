@@ -21,7 +21,6 @@ namespace BulletSharpGen
 
     class CppReader
     {
-        string src;
         Index index;
         List<string> headerQueue = new List<string>();
         List<string> clangOptions = new List<string>();
@@ -34,23 +33,41 @@ namespace BulletSharpGen
         {
             this.project = project;
 
-            string sourceDirectory = project.SourceRootFolders[0];
-            src = Path.GetFullPath(sourceDirectory);
-            src = src.Replace('\\', '/');
+            foreach (string sourceRelDir in project.SourceRootFolders)
+            {
+                string sourceFullDir = Path.GetFullPath(sourceRelDir).Replace('\\', '/');
 
-            string[] commonHeaders;
-            List<string> excludedHeaders = new List<string>();
+                // Enumerate all header files in the source tree
+                var headerFiles = Directory.EnumerateFiles(sourceFullDir, "*.h", SearchOption.AllDirectories);
+                foreach (string headerFullDir in headerFiles)
+                {
+                    string headerFullDirCanonical = headerFullDir.Replace('\\', '/');
+                    string headerRelDir = headerFullDirCanonical.Substring(sourceFullDir.Length);
 
-            // Exclude C API
-            excludedHeaders.Add(src + "Bullet-C-Api.h");
+                    HeaderDefinition header;
+                    if (project.HeaderDefinitions.TryGetValue(headerFullDirCanonical, out header))
+                    {
+                        if (header.IsExcluded)
+                        {
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("New file {0}", headerFullDirCanonical);
+                    }
 
-            // Include directory
-            clangOptions.Add("-I");
-            clangOptions.Add(src);
+                    headerQueue.Add(headerFullDirCanonical);
+                }
+
+                // Include directory
+                clangOptions.Add("-I");
+                clangOptions.Add(sourceFullDir);
+            }
 
             // WorldImporter include directory
-            clangOptions.Add("-I");
-            clangOptions.Add(src + "../Extras/Serialize/BulletWorldImporter");
+            //clangOptions.Add("-I");
+            //clangOptions.Add(src + "../Extras/Serialize/BulletWorldImporter");
 
             // Specify C++ headers, not C ones
             clangOptions.Add("-x");
@@ -71,52 +88,23 @@ namespace BulletSharpGen
             excludedMethods.Add("operator!=");
             excludedMethods.Add("operator()");
 
-            // Enumerate all header files in the source tree
-            var headerFiles = Directory.EnumerateFiles(src, "*.h", SearchOption.AllDirectories);
-            foreach (string header in headerFiles)
-            {
-                if (header.Contains("GpuSoftBodySolvers") || header.Contains("vectormath"))
-                {
-                    continue;
-                }
-
-                string headerCanonical = header.Replace('\\', '/');
-                if (!excludedHeaders.Contains(headerCanonical))
-                {
-                    headerQueue.Add(headerCanonical);
-                }
-            }
-
             Console.Write("Reading headers");
 
             index = new Index();
-
-            // Parse the common headers
-            commonHeaders = new[] { src + "btBulletCollisionCommon.h", src + "btBulletDynamicsCommon.h" };
-            foreach (string commonHeader in commonHeaders)
-            {
-                if (!headerQueue.Contains(commonHeader))
-                {
-                    Console.WriteLine("Could not find " + commonHeader);
-                    return;
-                }
-                ReadHeader(commonHeader);
-            }
 
             while (headerQueue.Count != 0)
             {
                 ReadHeader(headerQueue[0]);
             }
-
+            /*
             if (Directory.Exists(src + "..\\Extras\\"))
             {
                 ReadHeader(src + "..\\Extras\\Serialize\\BulletFileLoader\\btBulletFile.h");
                 ReadHeader(src + "..\\Extras\\Serialize\\BulletWorldImporter\\btBulletWorldImporter.h");
                 ReadHeader(src + "..\\Extras\\Serialize\\BulletWorldImporter\\btWorldImporter.h");
                 ReadHeader(src + "..\\Extras\\Serialize\\BulletXmlWorldImporter\\btBulletXmlWorldImporter.h");
-                ReadHeader(src + "..\\Extras\\HACD\\hacdHACD.h");
             }
-
+            */
             index.Dispose();
 
             Console.WriteLine();
@@ -136,10 +124,18 @@ namespace BulletSharpGen
         Cursor.ChildVisitResult HeaderVisitor(Cursor cursor, Cursor parent)
         {
             string filename = cursor.Extent.Start.File.Name.Replace('\\', '/');
-            if (!filename.StartsWith(src, StringComparison.OrdinalIgnoreCase))
+
+            // Find the source folder this header belongs to
+            string rootDir = null;
+            foreach (string sourceRoot in project.SourceRootFolders)
             {
-                return Cursor.ChildVisitResult.Continue;
+                string sourceRootCanonical = sourceRoot.Replace('\\', '/');
+                if (filename.StartsWith(sourceRootCanonical, StringComparison.OrdinalIgnoreCase))
+                {
+                    rootDir = sourceRootCanonical;
+                }
             }
+            if (rootDir == null) return Cursor.ChildVisitResult.Continue;
 
             // Have we visited this header already?
             if (project.HeaderDefinitions.ContainsKey(filename))
@@ -149,7 +145,7 @@ namespace BulletSharpGen
             else
             {
                 // No, define a new one
-                string relativeFilename = filename.Substring(src.Length);
+                string relativeFilename = filename.Substring(rootDir.Length);
                 _context.Header = new HeaderDefinition(relativeFilename);
                 project.HeaderDefinitions.Add(filename, _context.Header);
                 headerQueue.Remove(filename);
