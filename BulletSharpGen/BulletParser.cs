@@ -251,7 +251,7 @@ namespace BulletSharpGen
             var headerNameMapping = Project.HeaderNameMapping as ScriptedMapping;
             foreach (HeaderDefinition header in Project.HeaderDefinitions.Values)
             {
-                headerNameMapping.Header = header;
+                headerNameMapping.Globals.Header = header;
                 header.ManagedName = headerNameMapping.Map(header.Name);
             }
 
@@ -259,7 +259,7 @@ namespace BulletSharpGen
             var classNameMapping = Project.ClassNameMapping as ScriptedMapping;
             foreach (ClassDefinition @class in classDefinitions.Values)
             {
-                classNameMapping.Header = @class.Header;
+                classNameMapping.Globals.Header = @class.Header;
                 @class.ManagedName = classNameMapping.Map(@class.Name);
             }
 
