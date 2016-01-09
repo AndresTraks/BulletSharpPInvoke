@@ -125,17 +125,11 @@ namespace BulletSharpGen
         {
             string filename = cursor.Extent.Start.File.Name.Replace('\\', '/');
 
-            // Find the source folder this header belongs to
-            string rootDir = null;
-            foreach (string sourceRoot in project.SourceRootFolders)
+            // Skip this header if it's not part of any project source folders
+            if (project.SourceRootFolders.All(s => !filename.StartsWith(s.Replace('\\', '/'), StringComparison.OrdinalIgnoreCase)))
             {
-                string sourceRootCanonical = sourceRoot.Replace('\\', '/');
-                if (filename.StartsWith(sourceRootCanonical, StringComparison.OrdinalIgnoreCase))
-                {
-                    rootDir = sourceRootCanonical;
-                }
+                return Cursor.ChildVisitResult.Continue;
             }
-            if (rootDir == null) return Cursor.ChildVisitResult.Continue;
 
             // Have we visited this header already?
             if (project.HeaderDefinitions.ContainsKey(filename))
@@ -145,8 +139,7 @@ namespace BulletSharpGen
             else
             {
                 // No, define a new one
-                string relativeFilename = filename.Substring(rootDir.Length);
-                _context.Header = new HeaderDefinition(relativeFilename);
+                _context.Header = new HeaderDefinition(filename);
                 project.HeaderDefinitions.Add(filename, _context.Header);
                 headerQueue.Remove(filename);
             }

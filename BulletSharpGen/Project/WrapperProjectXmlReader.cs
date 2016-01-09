@@ -98,7 +98,7 @@ namespace BulletSharpGen.Project
 
         static void ReadHeaderDefinition(WrapperProject project, XmlReader reader, string sourceRootFolder)
         {
-            string headerPath = sourceRootFolder + reader.GetAttribute("Path");
+            string headerPath = Path.Combine(sourceRootFolder, reader.GetAttribute("Path"));
             headerPath = headerPath.Replace('\\', '/');
             HeaderDefinition header = new HeaderDefinition(headerPath);
             string isExcluded = reader.GetAttribute("IsExcluded");

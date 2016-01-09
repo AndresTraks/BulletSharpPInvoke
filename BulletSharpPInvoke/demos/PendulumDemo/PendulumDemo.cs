@@ -7,8 +7,8 @@ namespace PendulumDemo
 {
     class PendulumDemo : Demo
     {
-        Vector3 eye = new Vector3(2, 0, 1);
-        Vector3 target = new Vector3(0, 0, 0);
+        Vector3 eye = new Vector3(-2, 0, 1);
+        Vector3 target = new Vector3(0, -0.5f, 0);
 
         const float radius = 0.05f;
 
