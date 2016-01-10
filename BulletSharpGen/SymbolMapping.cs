@@ -38,7 +38,7 @@ namespace BulletSharpGen
             {
                 return mapping;
             }
-            return symbol;
+            return null;
         }
     }
 
@@ -73,11 +73,8 @@ namespace BulletSharpGen
 
         public override string Map(string symbol)
         {
-            string mapping;
-            if (Replacements.TryGetValue(symbol, out mapping))
-            {
-                return mapping;
-            }
+            string mapping = base.Map(symbol);
+            if (mapping != null) return mapping;
 
             Globals.Name = symbol;
             return _script.RunAsync(Globals).Result.ReturnValue;

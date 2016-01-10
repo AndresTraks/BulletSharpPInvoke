@@ -93,6 +93,12 @@ namespace BulletSharpGen.Project
                     project.ClassNameMapping = mapping;
                     project.HeaderNameMapping = mapping;
                     break;
+                case "MethodNameMapping":
+                    project.MethodNameMapping = mapping;
+                    break;
+                case "ParameterNameMapping":
+                    project.ParameterNameMapping = mapping;
+                    break;
             }
         }
 

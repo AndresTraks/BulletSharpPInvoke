@@ -49,37 +49,40 @@ namespace BulletSharpGen.Project
             writer.WriteEndElement();
         }
 
+        public static void WriteMapping(XmlWriter writer, ISymbolMapping mapping)
+        {
+            writer.WriteStartElement(mapping.GetType().Name);
+            writer.WriteAttributeString("Name", mapping.Name);
+            if (mapping is ReplaceMapping)
+            {
+                var replaceMapping = mapping as ReplaceMapping;
+                foreach (var replacement in replaceMapping.Replacements.OrderBy(kv => kv.Key))
+                {
+                    writer.WriteStartElement("Replacement");
+                    writer.WriteAttributeString("Replace", replacement.Key);
+                    writer.WriteAttributeString("With", replacement.Value);
+                    writer.WriteEndElement();
+                }
+                if (replaceMapping is ScriptedMapping)
+                {
+                    var scriptedMapping = replaceMapping as ScriptedMapping;
+                    writer.WriteStartElement("ScriptBody");
+                    writer.WriteString(scriptedMapping.ScriptBody);
+                    writer.WriteEndElement();
+                }
+            }
+            writer.WriteEndElement();
+        }
+
         public static void Write(WrapperProject project)
         {
             using (var writer = XmlWriter.Create(project.ProjectPath, new XmlWriterSettings() { Indent = true }))
             {
                 writer.WriteStartElement("Project");
 
-                if (project.ClassNameMapping != null)
-                {
-                    var mapping = project.ClassNameMapping;
-                    writer.WriteStartElement(mapping.GetType().Name);
-                    writer.WriteAttributeString("Name", mapping.Name);
-                    if (mapping is ReplaceMapping)
-                    {
-                        var replaceMapping = mapping as ReplaceMapping;
-                        foreach (var replacement in replaceMapping.Replacements.OrderBy(kv => kv.Key))
-                        {
-                            writer.WriteStartElement("Replacement");
-                            writer.WriteAttributeString("Replace", replacement.Key);
-                            writer.WriteAttributeString("With", replacement.Value);
-                            writer.WriteEndElement();
-                        }
-                        if (replaceMapping is ScriptedMapping)
-                        {
-                            var scriptedMapping = replaceMapping as ScriptedMapping;
-                            writer.WriteStartElement("ScriptBody");
-                            writer.WriteString(scriptedMapping.ScriptBody);
-                            writer.WriteEndElement();
-                        }
-                    }
-                    writer.WriteEndElement();
-                }
+                if (project.ClassNameMapping != null) WriteMapping(writer, project.ClassNameMapping);
+                if (project.MethodNameMapping != null) WriteMapping(writer, project.MethodNameMapping);
+                if (project.ParameterNameMapping != null) WriteMapping(writer, project.ParameterNameMapping);
 
                 writer.WriteStartElement("NamespaceName");
                 writer.WriteString(project.NamespaceName);

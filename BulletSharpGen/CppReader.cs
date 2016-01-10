@@ -144,17 +144,25 @@ namespace BulletSharpGen
                 headerQueue.Remove(filename);
             }
 
-            if ((cursor.Kind == CursorKind.ClassDecl || cursor.Kind == CursorKind.StructDecl ||
-                cursor.Kind == CursorKind.ClassTemplate || cursor.Kind == CursorKind.TypedefDecl ||
-                cursor.Kind == CursorKind.EnumDecl) && cursor.IsDefinition)
-            {
-                ParseClassCursor(cursor);
-            }
-            else if (cursor.Kind == CursorKind.Namespace)
+            if (cursor.Kind == CursorKind.Namespace)
             {
                 _context.Namespace = cursor.Spelling;
                 return Cursor.ChildVisitResult.Recurse;
             }
+            else if (cursor.IsDefinition)
+            {
+                switch(cursor.Kind)
+                {
+                    case CursorKind.ClassDecl:
+                    case CursorKind.ClassTemplate:
+                    case CursorKind.EnumDecl:
+                    case CursorKind.StructDecl:
+                    case CursorKind.TypedefDecl:
+                        ParseClassCursor(cursor);
+                        break;
+                }
+            }
+
             return Cursor.ChildVisitResult.Continue;
         }
 
@@ -366,7 +374,7 @@ namespace BulletSharpGen
             // We only care about public members
             if (_context.MemberAccess != AccessSpecifier.Public)
             {
-                // Except for private/protected virtual methods that override public abstract methods,
+                // And also private/protected virtual methods that override public abstract methods,
                 // necessary for checking whether a class is abstract or not.
                 if (cursor.IsPureVirtualCxxMethod || !cursor.IsVirtualCxxMethod)
                 {

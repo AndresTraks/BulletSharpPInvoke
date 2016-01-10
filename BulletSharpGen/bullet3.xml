@@ -51,6 +51,48 @@ else
     return Name;
 }</ScriptBody>
   </ScriptedMapping>
+  <ReplaceMapping Name="MethodNameMapping">
+    <Replacement Replace="collideKDOP" With="CollideKdop" />
+    <Replacement Replace="collideOCL" With="CollideOcl" />
+    <Replacement Replace="collideTTpersistentStack" With="CollideTTPersistentStack" />
+    <Replacement Replace="gimpact_vs_compoundshape" With="GImpactVsCompoundShape" />
+    <Replacement Replace="gimpact_vs_concave" With="GImpactVsConcave" />
+    <Replacement Replace="gimpact_vs_gimpact" With="GImpactVsGImpact" />
+    <Replacement Replace="gimpact_vs_shape" With="GImpactVsShape" />
+    <Replacement Replace="maxdepth" With="MaxDepth" />
+    <Replacement Replace="updateRHS" With="UpdateRhs" />
+  </ReplaceMapping>
+  <ReplaceMapping Name="ParameterNameMapping">
+    <Replacement Replace="bcheckexist" With="checkExist" />
+    <Replacement Replace="bcountonly" With="countOnly" />
+    <Replacement Replace="childShapeindex" With="childShapeIndex" />
+    <Replacement Replace="drawflags" With="drawFlags" />
+    <Replacement Replace="dt" With="deltaTime" />
+    <Replacement Replace="fromfaces" With="fromFaces" />
+    <Replacement Replace="i_alignedDataBuffer" With="alignedDataBuffer" />
+    <Replacement Replace="i_dataBufferSize" With="dataBufferSize" />
+    <Replacement Replace="i_swapEndian" With="swapEndian" />
+    <Replacement Replace="idraw" With="iDraw" />
+    <Replacement Replace="indexstride" With="indexStride" />
+    <Replacement Replace="indicestype" With="indicesType" />
+    <Replacement Replace="limot" With="limitMotor" />
+    <Replacement Replace="maxdepth" With="maxDepth" />
+    <Replacement Replace="maxiterations" With="maxIterations" />
+    <Replacement Replace="mindepth" With="minDepth" />
+    <Replacement Replace="nodeindex" With="nodeIndex" />
+    <Replacement Replace="numfaces" With="numFaces" />
+    <Replacement Replace="numindices" With="numIndices" />
+    <Replacement Replace="numverts" With="numVerts" />
+    <Replacement Replace="o_alignedDataBuffer" With="alignedDataBuffer" />
+    <Replacement Replace="paircache" With="pairCache" />
+    <Replacement Replace="rbA" With="rigidBodyA" />
+    <Replacement Replace="rbAFrame" With="rigidBodyAFrame" />
+    <Replacement Replace="rbB" With="rigidBodyB" />
+    <Replacement Replace="rbBFrame" With="rigidBodyBFrame" />
+    <Replacement Replace="use32bitIndices" With="use32BitIndices" />
+    <Replacement Replace="use4componentVertices" With="use4ComponentVertices" />
+    <Replacement Replace="vertexbase" With="vertexBase" />
+  </ReplaceMapping>
   <NamespaceName>BulletSharp</NamespaceName>
   <SourceRootFolder Path="../../../../bullet3/src/">
     <HeaderDefinition Path="BulletCollision/CollisionDispatch/btCollisionWorld.h">
@@ -1444,5 +1486,6 @@ else
     </HeaderDefinition>
     <HeaderDefinition Path="string_split.h" IsExcluded="True" />
     <HeaderDefinition Path="tinystr.h" IsExcluded="True" />
+    <HeaderDefinition Path="tinyxml.h" IsExcluded="True" />
   </SourceRootFolder>
 </Project>

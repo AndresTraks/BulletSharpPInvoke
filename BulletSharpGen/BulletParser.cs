@@ -9,55 +9,10 @@ namespace BulletSharpGen
     {
         Dictionary<string, ClassDefinition> classDefinitions = new Dictionary<string, ClassDefinition>();
 
-        Dictionary<string, string> methodNameMapping = new Dictionary<string, string>();
-        Dictionary<string, string> parameterNameMapping = new Dictionary<string, string>();
-
         public BulletParser(WrapperProject project)
             : base(project)
         {
             classDefinitions = project.ClassDefinitions;
-
-            // Managed method names
-            methodNameMapping.Add("gimpact_vs_compoundshape", "GImpactVsCompoundShape");
-            methodNameMapping.Add("gimpact_vs_concave", "GImpactVsConcave");
-            methodNameMapping.Add("gimpact_vs_gimpact", "GImpactVsGImpact");
-            methodNameMapping.Add("gimpact_vs_shape", "GImpactVsShape");
-            methodNameMapping.Add("collideKDOP", "CollideKdop");
-            methodNameMapping.Add("collideOCL", "CollideOcl");
-            methodNameMapping.Add("collideTTpersistentStack", "CollideTTPersistentStack");
-            methodNameMapping.Add("maxdepth", "MaxDepth");
-            methodNameMapping.Add("updateRHS", "UpdateRhs");
-
-            // Managed method parameter names
-            parameterNameMapping.Add("bcheckexist", "checkExist");
-            parameterNameMapping.Add("bcountonly", "countOnly");
-            parameterNameMapping.Add("childShapeindex", "childShapeIndex");
-            parameterNameMapping.Add("dt", "deltaTime");
-            parameterNameMapping.Add("fromfaces", "fromFaces");
-            parameterNameMapping.Add("i_dataBufferSize", "dataBufferSize");
-            parameterNameMapping.Add("i_swapEndian", "swapEndian");
-            parameterNameMapping.Add("i_alignedDataBuffer", "alignedDataBuffer");
-            parameterNameMapping.Add("o_alignedDataBuffer", "alignedDataBuffer");
-            parameterNameMapping.Add("drawflags", "drawFlags");
-            parameterNameMapping.Add("idraw", "iDraw");
-            parameterNameMapping.Add("indexstride", "indexStride");
-            parameterNameMapping.Add("indicestype", "indicesType");
-            parameterNameMapping.Add("limot", "limitMotor");
-            parameterNameMapping.Add("maxiterations", "maxIterations");
-            parameterNameMapping.Add("maxdepth", "maxDepth");
-            parameterNameMapping.Add("mindepth", "minDepth");
-            parameterNameMapping.Add("nodeindex", "nodeIndex");
-            parameterNameMapping.Add("numfaces", "numFaces");
-            parameterNameMapping.Add("numindices", "numIndices");
-            parameterNameMapping.Add("numverts", "numVerts");
-            parameterNameMapping.Add("paircache", "pairCache");
-            parameterNameMapping.Add("rbA", "rigidBodyA");
-            parameterNameMapping.Add("rbB", "rigidBodyB");
-            parameterNameMapping.Add("rbAFrame", "rigidBodyAFrame");
-            parameterNameMapping.Add("rbBFrame", "rigidBodyBFrame");
-            parameterNameMapping.Add("use32bitIndices", "use32BitIndices");
-            parameterNameMapping.Add("use4componentVertices", "use4ComponentVertices");
-            parameterNameMapping.Add("vertexbase", "vertexBase");
 
             // Classes that shouldn't be instantiated by users
             HashSet<string> hidePublicConstructors = new HashSet<string>() {
@@ -754,9 +709,10 @@ namespace BulletSharpGen
 
         public string GetManagedMethodName(MethodDefinition method)
         {
-            if (methodNameMapping.ContainsKey(method.Name))
+            if (Project.MethodNameMapping != null)
             {
-                return methodNameMapping[method.Name];
+                string mapping = Project.MethodNameMapping.Map(method.Name);
+                if (mapping != null) return mapping;
             }
 
             if (method.Name.StartsWith("operator"))
@@ -774,9 +730,10 @@ namespace BulletSharpGen
 
         public string GetManagedParameterName(ParameterDefinition param)
         {
-            if (parameterNameMapping.ContainsKey(param.Name))
+            if (Project.ParameterNameMapping != null)
             {
-                return parameterNameMapping[param.Name];
+                string mapping = Project.ParameterNameMapping.Map(param.Name);
+                if (mapping != null) return mapping;
             }
 
             string managedName = param.Name;
