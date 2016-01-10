@@ -114,281 +114,6 @@ namespace BulletSharpGen
         {
             base.Parse();
 
-            // Exclude all overridden methods
-            foreach (ClassDefinition c in classDefinitions.Values)
-            {
-                int i;
-                for (i = 0; i < c.Methods.Count;)
-                {
-                    var method = c.Methods[i];
-                    // Check if the method already exists in base classes
-                    var baseClass = c.BaseClass;
-                    while (baseClass != null)
-                    {
-                        foreach (MethodDefinition m in baseClass.Methods)
-                        {
-                            if (method.Equals(m))
-                            {
-                                c.Methods.Remove(method);
-                                method = null;
-                                break;
-                            }
-                        }
-                        if (method == null)
-                        {
-                            break;
-                        }
-                        baseClass = baseClass.BaseClass;
-                    }
-                    if (method != null)
-                    {
-                        i++;
-                    }
-                }
-            }
-
-            // Exclude constructors of abstract classes
-            foreach (ClassDefinition c in classDefinitions.Values.Where(c => c.IsAbstract))
-            {
-                int i;
-                for (i = 0; i < c.Methods.Count;)
-                {
-                    var method = c.Methods[i];
-                    if (method.IsConstructor)
-                    {
-                        c.Methods.Remove(method);
-                        continue;
-                    }
-                    i++;
-                }
-            }
-
-            // Exclude duplicate methods
-            foreach (ClassDefinition c in classDefinitions.Values)
-            {
-                for (int i = 0; i < c.Methods.Count; i++)
-                {
-                    for (int j = i + 1; j < c.Methods.Count; j++)
-                    {
-                        if (!c.Methods[i].Equals(c.Methods[j]))
-                        {
-                            continue;
-                        }
-
-                        var iType = c.Methods[i].ReturnType;
-                        var jType = c.Methods[j].ReturnType;
-                        bool iConst = iType.IsConst || (iType.Referenced != null && iType.Referenced.IsConst);
-                        bool jConst = jType.IsConst || (jType.Referenced != null && jType.Referenced.IsConst);
-
-                        // Prefer non-const return value
-                        if (iConst)
-                        {
-                            if (!jConst)
-                            {
-                                c.Methods.RemoveAt(i);
-                                i--;
-                            }
-                        }
-                        else
-                        {
-                            if (jConst)
-                            {
-                                c.Methods.RemoveAt(j);
-                                i--;
-                            }
-                        }
-                        break;
-                    }
-                }
-            }
-
-            // Get managed header and enum names
-            var headerNameMapping = Project.HeaderNameMapping as ScriptedMapping;
-            foreach (HeaderDefinition header in Project.HeaderDefinitions.Values)
-            {
-                headerNameMapping.Globals.Header = header;
-                header.ManagedName = headerNameMapping.Map(header.Name);
-            }
-
-            // Apply class properties
-            var classNameMapping = Project.ClassNameMapping as ScriptedMapping;
-            foreach (ClassDefinition @class in classDefinitions.Values)
-            {
-                classNameMapping.Globals.Header = @class.Header;
-                @class.ManagedName = classNameMapping.Map(@class.Name);
-            }
-
-            // Set managed method/parameter names
-            foreach (var method in classDefinitions.Values.SelectMany(c => c.Methods))
-            {
-                method.ManagedName = GetManagedMethodName(method);
-
-                foreach (var param in method.Parameters)
-                {
-                    param.ManagedName = GetManagedParameterName(param);
-                }
-            }
-
-            // Turn fields into get/set methods
-            foreach (ClassDefinition c in classDefinitions.Values)
-            {
-                foreach (FieldDefinition field in c.Fields)
-                {
-                    string name = field.Name;
-                    if (name.StartsWith("m_"))
-                    {
-                        name = name.Substring(2);
-                    }
-                    name = char.ToUpper(name[0]) + name.Substring(1); // capitalize
-                    string managedName = ToCamelCase(name, true);
-
-                    // Generate getter/setter methods
-                    string getterName, setterName;
-                    string managedGetterName, managedSetterName;
-                    if (name.StartsWith("has"))
-                    {
-                        getterName = name;
-                        setterName = "set" + name.Substring(3);
-                        managedGetterName = managedName;
-                        managedSetterName = "Set" + managedName.Substring(3);
-                    }
-                    else if (name.StartsWith("is"))
-                    {
-                        getterName = name;
-                        setterName = "set" + name.Substring(2);
-                        managedGetterName = managedName;
-                        managedSetterName = "Set" + managedName.Substring(2);
-                    }
-                    else
-                    {
-                        getterName = "get" + name;
-                        setterName = "set" + name;
-                        managedGetterName = "Get" + managedName;
-                        managedSetterName = "Set" + managedName;
-                    }
-
-                    // See if there are already accessor methods for this field
-                    MethodDefinition getter = null, setter = null;
-                    foreach (var m in c.Methods)
-                    {
-                        if (m.ManagedName.Equals(managedGetterName) && m.Parameters.Length == 0)
-                        {
-                            getter = m;
-                            continue;
-                        }
-
-                        if (m.ManagedName.Equals(managedSetterName) && m.Parameters.Length == 1)
-                        {
-                            setter = m;
-                        }
-                    }
-
-                    if (getter == null)
-                    {
-                        getter = new MethodDefinition(getterName, c, 0);
-                        getter.ManagedName = managedGetterName;
-                        getter.ReturnType = field.Type;
-                        getter.Field = field;
-                    }
-
-                    var prop = new PropertyDefinition(getter);
-
-                    // Can't assign value to reference or constant array
-                    if (setter == null && !field.Type.IsReference && !field.Type.IsConstantArray)
-                    {
-                        setter = new MethodDefinition(setterName, c, 1);
-                        setter.ManagedName = managedSetterName;
-                        setter.ReturnType = new TypeRefDefinition();
-                        setter.Field = field;
-                        TypeRefDefinition constType;
-                        if (!field.Type.IsBasic && !field.Type.IsPointer)
-                        {
-                            constType = field.Type.Copy();
-                            constType.IsConst = true;
-                        }
-                        else
-                        {
-                            constType = field.Type;
-                        }
-                        setter.Parameters[0] = new ParameterDefinition("value", constType);
-                        setter.Parameters[0].ManagedName = "value";
-
-                        prop.Setter = setter;
-                        prop.Setter.Property = prop;
-                    }
-                }
-            }
-
-            // Turn getters/setters into properties
-            foreach (ClassDefinition c in classDefinitions.Values)
-            {
-                // Getters with return type and 0 arguments
-                foreach (var method in c.Methods)
-                {
-                    if (method.Parameters.Length == 0 && !method.IsVoid &&
-                        (method.Name.StartsWith("get", StringComparison.InvariantCultureIgnoreCase) ||
-                        method.Name.StartsWith("has", StringComparison.InvariantCultureIgnoreCase) ||
-                        method.Name.StartsWith("is", StringComparison.InvariantCultureIgnoreCase)))
-                    {
-                        if (method.Property == null)
-                        {
-                            new PropertyDefinition(method);
-                        }
-                    }
-                }
-
-                // Getters with void type and 1 pointer argument for the return value
-                // TODO: in general, it is not possible to automatically determine
-                // whether such methods can be wrapped by properties or not,
-                // so read this info from the project configuration.
-                foreach (var method in c.Methods)
-                {
-                    if (method.Parameters.Length == 1 && method.IsVoid &&
-                        method.Name.StartsWith("get", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        if (method.Property != null)
-                        {
-                            continue;
-                        }
-
-                        var paramType = method.Parameters[0].Type;
-                        if (paramType.IsPointer || paramType.IsReference)
-                        {
-                            // TODO: check project configuration
-                            //if (true)
-                            {
-                                new PropertyDefinition(method);
-                            }
-                        }
-                    }
-                }
-
-                // Setters
-                foreach (var method in c.Methods)
-                {
-                    if (method.Parameters.Length == 1 &&
-                        method.Name.StartsWith("set", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        string name = method.ManagedName.Substring(3);
-                        // Find the property with the matching getter
-                        foreach (PropertyDefinition prop in c.Properties)
-                        {
-                            if (prop.Setter != null)
-                            {
-                                continue;
-                            }
-
-                            if (prop.Name.Equals(name))
-                            {
-                                prop.Setter = method;
-                                method.Property = prop;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
             // Check if any property values can be cached in
             // in constructors or property setters
             foreach (var @class in classDefinitions.Values)
@@ -439,11 +164,11 @@ namespace BulletSharpGen
             }
 
             // Sort methods and properties alphabetically
-            foreach (ClassDefinition c in classDefinitions.Values)
+            foreach (var @class in classDefinitions.Values)
             {
                 // Order by name, then fix inheritance, parent classes must appear first
-                c.Classes.Sort((c1, c2) => c1.Name.CompareTo(c2.Name));
-                var classesOrdered = c.Classes;
+                @class.Classes.Sort((c1, c2) => c1.Name.CompareTo(c2.Name));
+                var classesOrdered = @class.Classes;
                 for (int i = 0; i < classesOrdered.Count; i++)
                 {
                     var thisClass = classesOrdered[i];
@@ -459,17 +184,9 @@ namespace BulletSharpGen
                     }
                 }
 
-                c.Methods.Sort((m1, m2) => m1.Name.CompareTo(m2.Name));
-                c.Properties.Sort((p1, p2) => p1.Name.CompareTo(p2.Name));
+                @class.Methods.Sort((m1, m2) => m1.Name.CompareTo(m2.Name));
+                @class.Properties.Sort((p1, p2) => p1.Name.CompareTo(p2.Name));
             }
-
-            // Mark excluded classes
-            foreach (ClassDefinition c in classDefinitions.Values.Where(c => IsExcludedClass(c)))
-            {
-                c.IsExcluded = true;
-            }
-
-            Console.WriteLine("Parsing complete");
         }
 
         bool IsCacheableType(TypeRefDefinition t)
@@ -705,44 +422,6 @@ namespace BulletSharpGen
                 default:
                     return null;
             }
-        }
-
-        public string GetManagedMethodName(MethodDefinition method)
-        {
-            if (Project.MethodNameMapping != null)
-            {
-                string mapping = Project.MethodNameMapping.Map(method.Name);
-                if (mapping != null) return mapping;
-            }
-
-            if (method.Name.StartsWith("operator"))
-            {
-                return method.Name;
-            }
-
-            if (method.IsConstructor)
-            {
-                return method.Parent.ManagedName;
-            }
-
-            return ToCamelCase(method.Name, true);
-        }
-
-        public string GetManagedParameterName(ParameterDefinition param)
-        {
-            if (Project.ParameterNameMapping != null)
-            {
-                string mapping = Project.ParameterNameMapping.Map(param.Name);
-                if (mapping != null) return mapping;
-            }
-
-            string managedName = param.Name;
-            if (managedName.StartsWith("__unnamed"))
-            {
-                return managedName;
-            }
-
-            return ToCamelCase(param.Name, false);
         }
 
         public static string GetTypeMarshalPrologue(ParameterDefinition parameter, MethodDefinition method)
@@ -1100,7 +779,7 @@ namespace BulletSharpGen
             return "value";
         }
 
-        private bool IsExcludedClass(ClassDefinition cl)
+        protected override bool IsExcludedClass(ClassDefinition cl)
         {
             if (cl.Name.StartsWith("b3"))
             {
@@ -1109,7 +788,7 @@ namespace BulletSharpGen
 
             // Exclude all "FloatData/DoubleData" serialization classes
             return (cl.Name.EndsWith("Data")
-                ||cl.Name.EndsWith("Data2"))
+                || cl.Name.EndsWith("Data2"))
                 && !cl.ManagedName.Equals("ContactSolverInfoData");
         }
     }

@@ -318,8 +318,7 @@ namespace BulletSharpGen
                 // Parameter name
                 if (!isCsFinalParameter)
                 {
-                    Write(' ', cs);
-                    Write(param.ManagedName, cs);
+                    Write(string.Format(" {0}", param.ManagedName), cs);
                 }
                 Write(string.Format(" {0}", param.Name), WriteTo.Header | WriteTo.Source | dllImport);
 

@@ -17,10 +17,12 @@ namespace BulletSharpGen
         public virtual void Parse()
         {
             ResolveReferences();
-
-            MarkAbstractClasses();
-
+            MapSymbols();
             ParseEnums();
+            SetClassProperties();
+            RemoveRedundantMethods();
+            CreateFieldAccessors();
+            CreateProperties();
         }
 
         // n = 2 -> "\t\t"
@@ -94,11 +96,17 @@ namespace BulletSharpGen
             return outText.ToString();
         }
 
-        void MarkAbstractClasses()
+        protected virtual bool IsExcludedClass(ClassDefinition cl)
+        {
+            return false;
+        }
+
+        void SetClassProperties()
         {
             foreach (var @class in Project.ClassDefinitions.Values)
             {
                 @class.IsAbstract = @class.AbstractMethods.Any();
+                @class.IsExcluded = IsExcludedClass(@class);
             }
         }
 
@@ -152,22 +160,22 @@ namespace BulletSharpGen
             // Resolve references (match TypeRefDefinitions to ClassDefinitions)
             // List might be modified with template specialization classes, so make a copy
             var classDefinitionsList = new List<ClassDefinition>(Project.ClassDefinitions.Values);
-            foreach (ClassDefinition c in classDefinitionsList)
+            foreach (var @class in classDefinitionsList)
             {
                 // Include header for the base if necessary
-                if (c.BaseClass != null && c.Header != c.BaseClass.Header)
+                if (@class.BaseClass != null && @class.Header != @class.BaseClass.Header)
                 {
-                    c.Header.Includes.Add(c.BaseClass.Header);
+                    @class.Header.Includes.Add(@class.BaseClass.Header);
                 }
 
                 // Resolve typedef
-                if (c.TypedefUnderlyingType != null)
+                if (@class.TypedefUnderlyingType != null)
                 {
-                    ResolveTypeRef(c.TypedefUnderlyingType);
+                    ResolveTypeRef(@class.TypedefUnderlyingType);
                 }
 
                 // Resolve method return type and parameter types
-                foreach (MethodDefinition method in c.Methods)
+                foreach (var method in @class.Methods)
                 {
                     ResolveTypeRef(method.ReturnType);
                     foreach (ParameterDefinition param in method.Parameters)
@@ -177,7 +185,7 @@ namespace BulletSharpGen
                 }
 
                 // Resolve field types
-                foreach (FieldDefinition field in c.Fields)
+                foreach (var field in @class.Fields)
                 {
                     ResolveTypeRef(field.Type);
                 }
@@ -232,6 +240,299 @@ namespace BulletSharpGen
                         specializedClass.BaseClass = templateClass;
                         header.Classes.Add(specializedClass);
                         Project.ClassDefinitions.Add(name, specializedClass);
+                    }
+                }
+            }
+        }
+
+        // Remove overridden methods, methods that differ by const/non-const return values
+        // and abstract class constructors
+        void RemoveRedundantMethods()
+        {
+            var removedMethods = new List<MethodDefinition>();
+            foreach (var @class in Project.ClassDefinitions.Values)
+            {
+                foreach (var method in @class.Methods)
+                {
+                    if (method.IsConstructor)
+                    {
+                        if (@class.IsAbstract) removedMethods.Add(method);
+                        continue;
+                    }
+
+                    // Check if the method already exists in a base class
+                    var baseClass = @class.BaseClass;
+                    while (baseClass != null)
+                    {
+                        if (baseClass.Methods.Any(m => m.Equals(method)))
+                        {
+                            removedMethods.Add(method);
+                            break;
+                        }
+                        baseClass = baseClass.BaseClass;
+                    }
+
+                    foreach (var method2 in @class.Methods.Where(m => !ReferenceEquals(m, method) && m.Equals(method)))
+                    {
+                        var type1 = method.ReturnType;
+                        var type2 = method2.ReturnType;
+                        bool const1 = type1.IsConst || (type1.Referenced != null && type1.Referenced.IsConst);
+                        bool const2 = type2.IsConst || (type2.Referenced != null && type2.Referenced.IsConst);
+
+                        // Prefer non-const return value
+                        if (const1)
+                        {
+                            if (!const2)
+                            {
+                                removedMethods.Add(method);
+                                break;
+                            }
+                        }
+                        else if (const2)
+                        {
+                            removedMethods.Add(method2);
+                            break;
+                        }
+
+                        // Couldn't see the difference
+                        //throw new NotImplementedException();
+                    }
+                }
+
+                foreach (var method in removedMethods)
+                {
+                    @class.Methods.Remove(method);
+                }
+                removedMethods.Clear();
+            }
+        }
+
+        // Give managed names to headers, classes and methods
+        void MapSymbols()
+        {
+            // Get managed header and enum names
+            var headerNameMapping = Project.HeaderNameMapping as ScriptedMapping;
+            foreach (var header in Project.HeaderDefinitions.Values)
+            {
+                headerNameMapping.Globals.Header = header;
+                header.ManagedName = headerNameMapping.Map(header.Name);
+            }
+
+            // Apply class properties
+            var classNameMapping = Project.ClassNameMapping as ScriptedMapping;
+            foreach (ClassDefinition @class in Project.ClassDefinitions.Values)
+            {
+                classNameMapping.Globals.Header = @class.Header;
+                @class.ManagedName = classNameMapping.Map(@class.Name);
+            }
+
+            // Set managed method/parameter names
+            foreach (var method in Project.ClassDefinitions.Values.SelectMany(c => c.Methods))
+            {
+                method.ManagedName = GetManagedMethodName(method);
+
+                foreach (var param in method.Parameters)
+                {
+                    param.ManagedName = GetManagedParameterName(param);
+                }
+            }
+        }
+
+        string GetManagedMethodName(MethodDefinition method)
+        {
+            if (Project.MethodNameMapping != null)
+            {
+                string mapping = Project.MethodNameMapping.Map(method.Name);
+                if (mapping != null) return mapping;
+            }
+
+            if (method.Name.StartsWith("operator"))
+            {
+                return method.Name;
+            }
+
+            if (method.IsConstructor)
+            {
+                return method.Parent.ManagedName;
+            }
+
+            return ToCamelCase(method.Name, true);
+        }
+
+        string GetManagedParameterName(ParameterDefinition param)
+        {
+            if (Project.ParameterNameMapping != null)
+            {
+                string mapping = Project.ParameterNameMapping.Map(param.Name);
+                if (mapping != null) return mapping;
+            }
+
+            string managedName = param.Name;
+            if (managedName.StartsWith("__unnamed"))
+            {
+                return managedName;
+            }
+
+            return ToCamelCase(param.Name, false);
+        }
+
+        // Create getters and setters for fields
+        void CreateFieldAccessors()
+        {
+            var getterVerbs = new List<string>() { "Has", "Is" };
+
+            foreach (var @class in Project.ClassDefinitions.Values)
+            {
+                foreach (var field in @class.Fields)
+                {
+                    string name = field.Name;
+                    if (name.StartsWith("m_"))
+                    {
+                        name = name.Substring(2);
+                    }
+                    name = char.ToUpper(name[0]) + name.Substring(1); // capitalize
+                    string managedName = ToCamelCase(name, true);
+
+                    // Generate getter/setter methods
+                    string getterName, setterName;
+                    string managedGetterName, managedSetterName;
+                    string verb = getterVerbs.Where(v => name.StartsWith(v)).FirstOrDefault();
+                    if (verb != null)
+                    {
+                        getterName = name;
+                        setterName = "set" + name.Substring(verb.Length);
+                        managedGetterName = managedName;
+                        managedSetterName = "Set" + managedName.Substring(verb.Length);
+                    }
+                    else
+                    {
+                        getterName = "get" + name;
+                        setterName = "set" + name;
+                        managedGetterName = "Get" + managedName;
+                        managedSetterName = "Set" + managedName;
+                    }
+
+                    // See if there are already accessor methods for this field
+                    MethodDefinition getter = null, setter = null;
+                    foreach (var method in @class.Methods)
+                    {
+                        if (method.ManagedName.Equals(managedGetterName) && method.Parameters.Length == 0)
+                        {
+                            getter = method;
+                            continue;
+                        }
+
+                        if (method.ManagedName.Equals(managedSetterName) && method.Parameters.Length == 1)
+                        {
+                            setter = method;
+                        }
+                    }
+
+                    if (getter == null)
+                    {
+                        getter = new MethodDefinition(getterName, @class, 0);
+                        getter.ManagedName = managedGetterName;
+                        getter.ReturnType = field.Type;
+                        getter.Field = field;
+                    }
+
+                    var prop = new PropertyDefinition(getter);
+
+                    // Can't assign value to reference or constant array
+                    if (setter == null && !field.Type.IsReference && !field.Type.IsConstantArray)
+                    {
+                        setter = new MethodDefinition(setterName, @class, 1);
+                        setter.ManagedName = managedSetterName;
+                        setter.ReturnType = new TypeRefDefinition();
+                        setter.Field = field;
+                        TypeRefDefinition constType;
+                        if (!field.Type.IsBasic && !field.Type.IsPointer)
+                        {
+                            constType = field.Type.Copy();
+                            constType.IsConst = true;
+                        }
+                        else
+                        {
+                            constType = field.Type;
+                        }
+                        setter.Parameters[0] = new ParameterDefinition("value", constType);
+                        setter.Parameters[0].ManagedName = "value";
+
+                        prop.Setter = setter;
+                        prop.Setter.Property = prop;
+                    }
+                }
+            }
+        }
+
+        // Turn getters and setters into properties
+        void CreateProperties()
+        {
+            foreach (var @class in Project.ClassDefinitions.Values)
+            {
+                // Getters with return type and 0 arguments
+                foreach (var method in @class.Methods)
+                {
+                    if (!method.IsVoid && method.Parameters.Length == 0 &&
+                        (method.Name.StartsWith("get", StringComparison.InvariantCultureIgnoreCase) ||
+                        method.Name.StartsWith("has", StringComparison.InvariantCultureIgnoreCase) ||
+                        method.Name.StartsWith("is", StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        if (method.Property == null)
+                        {
+                            new PropertyDefinition(method);
+                        }
+                    }
+                }
+
+                // Getters with void type and 1 pointer argument for the return value
+                // TODO: in general, it is not possible to automatically determine
+                // whether such methods can be wrapped by properties or not,
+                // so read this info from the project configuration.
+                foreach (var method in @class.Methods)
+                {
+                    if (method.IsVoid && method.Parameters.Length == 1 &&
+                        method.Name.StartsWith("get", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        if (method.Property != null)
+                        {
+                            continue;
+                        }
+
+                        var paramType = method.Parameters[0].Type;
+                        if (paramType.IsPointer || paramType.IsReference)
+                        {
+                            // TODO: check project configuration
+                            //if (true)
+                            {
+                                new PropertyDefinition(method);
+                            }
+                        }
+                    }
+                }
+
+                // Setters
+                foreach (var method in @class.Methods)
+                {
+                    if (method.Parameters.Length == 1 &&
+                        method.Name.StartsWith("set", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        string name = method.ManagedName.Substring(3);
+                        // Find the property with the matching getter
+                        foreach (PropertyDefinition prop in @class.Properties)
+                        {
+                            if (prop.Setter != null)
+                            {
+                                continue;
+                            }
+
+                            if (prop.Name.Equals(name))
+                            {
+                                prop.Setter = method;
+                                method.Property = prop;
+                                break;
+                            }
+                        }
                     }
                 }
             }

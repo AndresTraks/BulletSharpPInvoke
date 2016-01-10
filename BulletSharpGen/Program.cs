@@ -21,6 +21,7 @@ namespace BulletSharpGen
             var reader = new CppReader(project);
             var parser = new BulletParser(project);
             parser.Parse();
+            Console.WriteLine("Parsing complete");
 
             WrapperWriter writer;
             if (cppCliMode)
