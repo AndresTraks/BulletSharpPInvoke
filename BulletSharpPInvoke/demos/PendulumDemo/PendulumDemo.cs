@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define PENDULUM_DAMPING
+
+using System;
 using BulletSharp;
 using BulletSharp.Math;
 using DemoFramework;
@@ -41,7 +43,6 @@ namespace PendulumDemo
             World.Gravity = new Vector3(0, -9.81f, 0);
 
             const bool floating = false;
-            const bool damping = false;
             const bool gyro = false;
             const int numLinks = 1;
             const bool canSleep = false;
@@ -84,16 +85,13 @@ namespace PendulumDemo
             multiBody.HasSelfCollision = selfCollide;
             multiBody.UseGyroTerm = gyro;
 
-            if (!damping)
-            {
-                multiBody.LinearDamping = 0;
-                multiBody.AngularDamping = 0;
-            }
-            else
-            {
-                multiBody.LinearDamping = 0.1f;
-                multiBody.AngularDamping = 0.9f;
-            }
+#if PENDULUM_DAMPING
+            multiBody.LinearDamping = 0.1f;
+            multiBody.AngularDamping = 0.9f;
+#else
+            multiBody.LinearDamping = 0;
+            multiBody.AngularDamping = 0;
+#endif
 
             for (int i = 0; i < numLinks; i++)
             {

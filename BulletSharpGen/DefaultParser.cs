@@ -249,14 +249,20 @@ namespace BulletSharpGen
         // and abstract class constructors
         void RemoveRedundantMethods()
         {
-            var removedMethods = new List<MethodDefinition>();
+            // Remove by index, not by reference, otherwise the wrong method could be removed.
+            // MethodDefinition.Equals compares methods from the POV of C#, not C++,
+            // so const/non-const methods will be equal.
+            var removedMethodsIndices = new SortedSet<int>();
+
             foreach (var @class in Project.ClassDefinitions.Values)
             {
-                foreach (var method in @class.Methods)
+                for (int i = 0; i < @class.Methods.Count; i++)
                 {
+                    var method = @class.Methods[i];
+
                     if (method.IsConstructor)
                     {
-                        if (@class.IsAbstract) removedMethods.Add(method);
+                        if (@class.IsAbstract) removedMethodsIndices.Add(i);
                         continue;
                     }
 
@@ -266,14 +272,17 @@ namespace BulletSharpGen
                     {
                         if (baseClass.Methods.Any(m => m.Equals(method)))
                         {
-                            removedMethods.Add(method);
+                            removedMethodsIndices.Add(i);
                             break;
                         }
                         baseClass = baseClass.BaseClass;
                     }
 
-                    foreach (var method2 in @class.Methods.Where(m => !ReferenceEquals(m, method) && m.Equals(method)))
+                    for (int j = i + 1; j < @class.Methods.Count; j++)
                     {
+                        var method2 = @class.Methods[j];
+                        if (!method.Equals(method2)) continue;
+
                         var type1 = method.ReturnType;
                         var type2 = method2.ReturnType;
                         bool const1 = type1.IsConst || (type1.Referenced != null && type1.Referenced.IsConst);
@@ -284,13 +293,13 @@ namespace BulletSharpGen
                         {
                             if (!const2)
                             {
-                                removedMethods.Add(method);
+                                removedMethodsIndices.Add(i);
                                 break;
                             }
                         }
                         else if (const2)
                         {
-                            removedMethods.Add(method2);
+                            removedMethodsIndices.Add(j);
                             break;
                         }
 
@@ -299,11 +308,11 @@ namespace BulletSharpGen
                     }
                 }
 
-                foreach (var method in removedMethods)
+                foreach (int i in removedMethodsIndices.Reverse())
                 {
-                    @class.Methods.Remove(method);
+                    @class.Methods.RemoveAt(i);
                 }
-                removedMethods.Clear();
+                removedMethodsIndices.Clear();
             }
         }
 
@@ -376,11 +385,11 @@ namespace BulletSharpGen
             return ToCamelCase(param.Name, false);
         }
 
+        List<string> _booleanVerbs = new List<string>() { "Has", "Is", "Needs" };
+
         // Create getters and setters for fields
         void CreateFieldAccessors()
         {
-            var getterVerbs = new List<string>() { "Has", "Is" };
-
             foreach (var @class in Project.ClassDefinitions.Values)
             {
                 foreach (var field in @class.Fields)
@@ -396,8 +405,8 @@ namespace BulletSharpGen
                     // Generate getter/setter methods
                     string getterName, setterName;
                     string managedGetterName, managedSetterName;
-                    string verb = getterVerbs.Where(v => name.StartsWith(v)).FirstOrDefault();
-                    if (verb != null)
+                    string verb = _booleanVerbs.Where(v => name.StartsWith(v)).FirstOrDefault();
+                    if (verb != null && "bool".Equals(field.Type.Name))
                     {
                         getterName = name;
                         setterName = "set" + name.Substring(verb.Length);
@@ -436,7 +445,7 @@ namespace BulletSharpGen
                         getter.Field = field;
                     }
 
-                    var prop = new PropertyDefinition(getter);
+                    var prop = new PropertyDefinition(getter, GetPropertyName(getter));
 
                     // Can't assign value to reference or constant array
                     if (setter == null && !field.Type.IsReference && !field.Type.IsConstantArray)
@@ -465,23 +474,39 @@ namespace BulletSharpGen
             }
         }
 
-        // Turn getters and setters into properties
+        string GetPropertyName(MethodDefinition getter)
+        {
+            string name = getter.ManagedName;
+
+            var propertyType = getter.IsVoid ? getter.Parameters[0].Type : getter.ReturnType;
+            if ("bool".Equals(propertyType.Name) && _booleanVerbs.Any(v => name.StartsWith(v)))
+            {
+                return name;
+            }
+
+            if (name.StartsWith("Get"))
+            {
+                return name.Substring(3);
+            }
+
+            throw new NotImplementedException();
+        }
+
+        // Turn getters and setters into properties,
+        // managed method names have been resolved at this point
         void CreateProperties()
         {
             foreach (var @class in Project.ClassDefinitions.Values)
             {
                 // Getters with return type and 0 arguments
-                foreach (var method in @class.Methods)
+                foreach (var method in @class.Methods.Where(m => !m.IsVoid && m.Parameters.Length == 0))
                 {
-                    if (!method.IsVoid && method.Parameters.Length == 0 &&
-                        (method.Name.StartsWith("get", StringComparison.InvariantCultureIgnoreCase) ||
-                        method.Name.StartsWith("has", StringComparison.InvariantCultureIgnoreCase) ||
-                        method.Name.StartsWith("is", StringComparison.InvariantCultureIgnoreCase)))
+                    if (method.ManagedName.StartsWith("Get") ||
+                        ("bool".Equals(method.ReturnType.Name) &&
+                        _booleanVerbs.Any(v => method.ManagedName.StartsWith(v))))
                     {
-                        if (method.Property == null)
-                        {
-                            new PropertyDefinition(method);
-                        }
+                        if (method.Property != null) continue;
+                        new PropertyDefinition(method, GetPropertyName(method));
                     }
                 }
 
@@ -489,15 +514,11 @@ namespace BulletSharpGen
                 // TODO: in general, it is not possible to automatically determine
                 // whether such methods can be wrapped by properties or not,
                 // so read this info from the project configuration.
-                foreach (var method in @class.Methods)
+                foreach (var method in @class.Methods.Where(m => m.IsVoid && m.Parameters.Length == 1))
                 {
-                    if (method.IsVoid && method.Parameters.Length == 1 &&
-                        method.Name.StartsWith("get", StringComparison.InvariantCultureIgnoreCase))
+                    if (method.ManagedName.StartsWith("Get"))
                     {
-                        if (method.Property != null)
-                        {
-                            continue;
-                        }
+                        if (method.Property != null) continue;
 
                         var paramType = method.Parameters[0].Type;
                         if (paramType.IsPointer || paramType.IsReference)
@@ -505,7 +526,7 @@ namespace BulletSharpGen
                             // TODO: check project configuration
                             //if (true)
                             {
-                                new PropertyDefinition(method);
+                                new PropertyDefinition(method, GetPropertyName(method));
                             }
                         }
                     }
