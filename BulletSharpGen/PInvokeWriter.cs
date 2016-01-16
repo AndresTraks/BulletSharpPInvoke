@@ -1298,7 +1298,7 @@ namespace BulletSharpGen
 
             // Write wrapper class headers
             hasCppClassSeparatingWhitespace = true;
-            var wrappedClasses = header.AllSubClasses.Where(x => wrapperHeaderGuards.ContainsKey(x.Name)).OrderBy(x => x.FullNameCS).ToList();
+            var wrappedClasses = header.AllClasses.Where(x => wrapperHeaderGuards.ContainsKey(x.Name)).OrderBy(x => x.FullNameCS).ToList();
             if (wrappedClasses.Count != 0)
             {
                 string headerGuard = wrapperHeaderGuards[wrappedClasses[0].Name];

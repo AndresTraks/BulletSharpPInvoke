@@ -61,6 +61,10 @@ namespace BulletSharpGen
         public bool IsTypedef { get; set; }
         public TypeRefDefinition TypedefUnderlyingType { get; set; }
 
+        public string ManagedName { get; set; }
+
+        public Dictionary<string, CachedProperty> CachedProperties { get; private set; }
+
         public IEnumerable<MethodDefinition> AbstractMethods
         {
             get
@@ -71,18 +75,10 @@ namespace BulletSharpGen
                     return abstractMethods;
                 }
 
-                return abstractMethods.Concat(BaseClass.AbstractMethods.Where(abstractMethod =>
-                {
-                    foreach (var method in Methods)
-                    {
-                        if (method.Equals(abstractMethod))
-                        {
-                            // The abstract method is implemented in this class
-                            return false;
-                        }
-                    }
-                    return true;
-                }));
+                // Abstract methods from base classes that aren't implemented in this class
+                var baseAbstractMethods = BaseClass.AbstractMethods.Where(am => !Methods.Any(m => m.Equals(am)));
+
+                return abstractMethods.Concat(baseAbstractMethods);
             }
         }
 
@@ -98,20 +94,9 @@ namespace BulletSharpGen
             get { return Methods.Count != 0 && Methods.All(x => x.IsStatic); }
         }
 
-        public string ManagedName { get; set; }
-
         public IEnumerable<ClassDefinition> AllSubClasses
         {
-            get
-            {
-                List<ClassDefinition> subClasses = new List<ClassDefinition>();
-                foreach (ClassDefinition cl in Classes)
-                {
-                    subClasses.AddRange(cl.AllSubClasses);
-                    subClasses.Add(cl);
-                }
-                return subClasses;
-            }
+            get { return Classes.Concat(Classes.SelectMany(c => c.AllSubClasses)); }
         }
 
         public string FullyQualifiedName
@@ -165,8 +150,6 @@ namespace BulletSharpGen
                 return ManagedName;
             }
         }
-
-        public Dictionary<string, CachedProperty> CachedProperties { get; private set; }
 
         public ClassDefinition(string name, HeaderDefinition header = null, ClassDefinition parent = null)
         {

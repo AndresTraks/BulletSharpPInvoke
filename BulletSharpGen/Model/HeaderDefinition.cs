@@ -14,18 +14,9 @@ namespace BulletSharpGen
 
         public string ManagedName { get; set; }
 
-        public IEnumerable<ClassDefinition> AllSubClasses
+        public IEnumerable<ClassDefinition> AllClasses
         {
-            get
-            {
-                List<ClassDefinition> subClasses = new List<ClassDefinition>();
-                foreach (ClassDefinition cl in Classes)
-                {
-                    subClasses.AddRange(cl.AllSubClasses);
-                    subClasses.Add(cl);
-                }
-                return subClasses;
-            }
+            get { return Classes.Concat(Classes.SelectMany(c => c.AllSubClasses)); }
         }
 
         public HeaderDefinition(string filename)
