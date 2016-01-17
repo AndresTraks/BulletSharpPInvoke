@@ -305,6 +305,154 @@ namespace BulletSharpGen
             SourceWrite(')');
         }
 
+        void WriteMethodDefinition(MethodDefinition method, int numParameters)
+        {
+            var parentClass = method.Parent;
+
+            // Type marshalling prologue
+            bool needTypeMarshalEpilogue = false;
+            if (method.Field == null)
+            {
+                foreach (var param in method.Parameters)
+                {
+                    string prologue = BulletParser.GetTypeMarshalPrologueCppCli(param);
+                    if (!string.IsNullOrEmpty(prologue))
+                    {
+                        WriteTabs(1, true);
+                        SourceWriteLine(prologue);
+                    }
+
+                    // Do we need a type marshalling epilogue?
+                    if (!needTypeMarshalEpilogue)
+                    {
+                        string epilogue = BulletParser.GetTypeMarshalEpilogueCppCli(param);
+                        if (!string.IsNullOrEmpty(epilogue))
+                        {
+                            needTypeMarshalEpilogue = true;
+                        }
+                    }
+                }
+            }
+
+            WriteTabs(1, true);
+            if (method.IsConstructor)
+            {
+                SourceWrite("_native = new ");
+            }
+            else if (!method.IsVoid)
+            {
+                //if (method.ReturnType.IsBasic || method.ReturnType.Referenced != null)
+                if (needTypeMarshalEpilogue)
+                {
+                    // Return after epilogue (cleanup)
+                    SourceWrite(string.Format("{0} ret = ",
+                        BulletParser.GetTypeRefName(method.ReturnType)));
+                }
+                else
+                {
+                    // Return immediately
+                    SourceWrite("return ");
+                }
+                SourceWrite(BulletParser.GetTypeMarshalConstructorStart(method));
+            }
+            else if (method.Property != null && method.Equals(method.Property.Getter))
+            {
+                SourceWrite(BulletParser.GetTypeMarshalConstructorStart(method));
+            }
+
+            // Native is defined as static_cast<className*>(_native)
+            string nativePointer = (parentClass.BaseClass != null) ? "Native" : "_native";
+
+            if (method.Field != null)
+            {
+                var property = method.Property;
+                if (method.Equals(property.Getter))
+                {
+                    CachedProperty cachedProperty;
+                    if (method.Parent.CachedProperties.TryGetValue(property.Name, out cachedProperty))
+                    {
+                        SourceWrite(cachedProperty.CacheFieldName);
+                    }
+                    else
+                    {
+                        SourceWrite(string.Format("{0}->{1}", nativePointer, method.Field.Name));
+                    }
+                }
+                else if (property.Setter != null && method.Equals(property.Setter))
+                {
+                    var param = method.Parameters[0];
+                    var fieldSet = BulletParser.GetTypeMarshalFieldSetCppCli(method.Field, param, nativePointer);
+                    if (!string.IsNullOrEmpty(fieldSet))
+                    {
+                        SourceWrite(fieldSet);
+                    }
+                    else
+                    {
+                        SourceWrite(string.Format("{0}->{1} = ", nativePointer, method.Field.Name));
+                        if (param.Type.IsPointer || param.Type.IsReference)
+                        {
+                            if (param.Type.IsReference)
+                            {
+                                // Dereference
+                                SourceWrite('*');
+                            }
+
+                            if (param.Type.Referenced.Target != null &&
+                                param.Type.Referenced.Target.BaseClass != null)
+                            {
+                                // Cast native pointer from base class
+                                SourceWrite(string.Format("({0}*)", param.Type.Referenced.FullName));
+                            }
+                        }
+                        SourceWrite(param.ManagedName);
+                        if (!param.Type.IsBasic)
+                        {
+                            SourceWrite("->_native");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (method.IsConstructor)
+                {
+                }
+                else if (method.IsStatic)
+                {
+                    SourceWrite(parentClass.FullyQualifiedName + "::");
+                }
+                else
+                {
+                    SourceWrite(nativePointer + "->");
+                }
+                OutputMethodMarshal(method, numParameters);
+            }
+            if (!method.IsConstructor && !method.IsVoid)
+            {
+                SourceWrite(BulletParser.GetTypeMarshalConstructorEnd(method));
+            }
+            SourceWriteLine(';');
+
+            // Write type marshalling epilogue
+            if (needTypeMarshalEpilogue)
+            {
+                foreach (var param in method.Parameters)
+                {
+                    string epilogue = BulletParser.GetTypeMarshalEpilogueCppCli(param);
+                    if (!string.IsNullOrEmpty(epilogue))
+                    {
+                        WriteTabs(1, true);
+                        SourceWriteLine(epilogue);
+                    }
+                }
+                if (!method.IsVoid)
+                {
+                    WriteTabs(1, true);
+                    SourceWriteLine("return ret;");
+                }
+            }
+        }
+
         void OutputMethod(MethodDefinition method, int level, int numOptionalParams = 0)
         {
             var parentClass = method.Parent;
@@ -464,149 +612,39 @@ namespace BulletSharpGen
 
             // Method definition
             SourceWriteLine('{');
-
             if (!doConstructorChaining)
             {
-                // Type marshalling prologue
-                bool needTypeMarshalEpilogue = false;
-                if (method.Field == null)
+                WriteMethodDefinition(method, numParameters);
+            }
+            // Cache property values
+            if (method.IsConstructor)
+            {
+                var assignments = new List<string>();
+                var methodParent = method.Parent;
+                while (methodParent != null)
                 {
-                    foreach (var param in method.Parameters)
+                    foreach (var cachedProperty in methodParent.CachedProperties.OrderBy(p => p.Key))
                     {
-                        string prologue = BulletParser.GetTypeMarshalPrologueCppCli(param);
-                        if (!string.IsNullOrEmpty(prologue))
+                        foreach (var param in method.Parameters)
                         {
-                            WriteTabs(1, true);
-                            SourceWriteLine(prologue);
-                        }
-
-                        // Do we need a type marshalling epilogue?
-                        if (!needTypeMarshalEpilogue)
-                        {
-                            string epilogue = BulletParser.GetTypeMarshalEpilogueCppCli(param);
-                            if (!string.IsNullOrEmpty(epilogue))
+                            if (param.ManagedName.ToLower() == cachedProperty.Key.ToLower()
+                                && param.Type.ManagedName == cachedProperty.Value.Property.Type.ManagedName)
                             {
-                                needTypeMarshalEpilogue = true;
+                                string assignment = string.Format("\t{0} = {1};", cachedProperty.Value.CacheFieldName, param.ManagedName);
+                                assignments.Add(assignment);
                             }
                         }
                     }
+                    methodParent = methodParent.BaseClass;
                 }
-
-                WriteTabs(1, true);
-                if (method.IsConstructor)
+                if (assignments.Count != 0)
                 {
-                    SourceWrite("_native = new ");
-                }
-                else if (!method.IsVoid)
-                {
-                    //if (method.ReturnType.IsBasic || method.ReturnType.Referenced != null)
-                    if (needTypeMarshalEpilogue)
+                    EnsureSourceWhiteSpace();
+                    foreach (string assignment in assignments)
                     {
-                        // Return after epilogue (cleanup)
-                        SourceWrite(string.Format("{0} ret = ",
-                            BulletParser.GetTypeRefName(method.ReturnType)));
+                        SourceWriteLine(assignment);
                     }
-                    else
-                    {
-                        // Return immediately
-                        SourceWrite("return ");
-                    }
-                    SourceWrite(BulletParser.GetTypeMarshalConstructorStart(method));
-                }
-                else if (method.Property != null && method.Equals(method.Property.Getter))
-                {
-                    SourceWrite(BulletParser.GetTypeMarshalConstructorStart(method));
-                }
-
-                // Native is defined as static_cast<className*>(_native)
-                string nativePointer = (parentClass.BaseClass != null) ? "Native" : "_native";
-
-                if (method.Field != null)
-                {
-                    var property = method.Property;
-                    if (method.Equals(property.Getter))
-                    {
-                        if (method.Parent.CachedProperties.ContainsKey(property.Name))
-                        {
-                            SourceWrite(method.Parent.CachedProperties[property.Name].CacheFieldName);
-                        }
-                        else
-                        {
-                            SourceWrite(string.Format("{0}->{1}", nativePointer, method.Field.Name));
-                        }
-                    }
-                    else if (property.Setter != null && method.Equals(property.Setter))
-                    {
-                        var param = method.Parameters[0];
-                        var fieldSet = BulletParser.GetTypeMarshalFieldSetCppCli(method.Field, param, nativePointer);
-                        if (!string.IsNullOrEmpty(fieldSet))
-                        {
-                            SourceWrite(fieldSet);
-                        }
-                        else
-                        {
-                            SourceWrite(string.Format("{0}->{1} = ", nativePointer, method.Field.Name));
-                            if (param.Type.IsPointer || param.Type.IsReference)
-                            {
-                                if (param.Type.IsReference)
-                                {
-                                    // Dereference
-                                    SourceWrite('*');
-                                }
-
-                                if (param.Type.Referenced.Target != null &&
-                                    param.Type.Referenced.Target.BaseClass != null)
-                                {
-                                    // Cast native pointer from base class
-                                    SourceWrite(string.Format("({0}*)", param.Type.Referenced.FullName));
-                                }
-                            }
-                            SourceWrite(param.ManagedName);
-                            if (!param.Type.IsBasic)
-                            {
-                                SourceWrite("->_native");
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if (method.IsConstructor)
-                    {
-                    }
-                    else if (method.IsStatic)
-                    {
-                        SourceWrite(parentClass.FullyQualifiedName + "::");
-                    }
-                    else
-                    {
-                        SourceWrite(nativePointer + "->");
-                    }
-                    OutputMethodMarshal(method, numParameters);
-                }
-                if (!method.IsConstructor && !method.IsVoid)
-                {
-                    SourceWrite(BulletParser.GetTypeMarshalConstructorEnd(method));
-                }
-                SourceWriteLine(';');
-
-                // Write type marshalling epilogue
-                if (needTypeMarshalEpilogue)
-                {
-                    foreach (var param in method.Parameters)
-                    {
-                        string epilogue = BulletParser.GetTypeMarshalEpilogueCppCli(param);
-                        if (!string.IsNullOrEmpty(epilogue))
-                        {
-                            WriteTabs(1, true);
-                            SourceWriteLine(epilogue);
-                        }
-                    }
-                    if (!method.IsVoid)
-                    {
-                        WriteTabs(1, true);
-                        SourceWriteLine("return ret;");
-                    }
+                    hasSourceWhiteSpace = false;
                 }
             }
             SourceWriteLine('}');

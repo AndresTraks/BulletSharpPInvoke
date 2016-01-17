@@ -568,7 +568,6 @@ namespace BulletSharpGen
                             foreach (var param in method.Parameters)
                             {
                                 if (param.ManagedName.ToLower() == cachedProperty.Key.ToLower()
-                                    && !param.Type.IsBasic
                                     && param.Type.ManagedName == cachedProperty.Value.Property.Type.ManagedName)
                                 {
                                     WriteTabs(level + 2, WriteTo.CS);
