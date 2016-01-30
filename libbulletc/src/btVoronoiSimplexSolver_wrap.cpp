@@ -159,7 +159,7 @@ void btSubSimplexClosestResult_setDegenerate(btSubSimplexClosestResult* obj, boo
 	obj->m_degenerate = value;
 }
 
-void btSubSimplexClosestResult_setUsedVertices(btSubSimplexClosestResult* obj, btUsageBitfield* value)
+void btSubSimplexClosestResult_setUsedVertices(btSubSimplexClosestResult* obj, const btUsageBitfield* value)
 {
 	obj->m_usedVertices = *value;
 }
@@ -349,7 +349,7 @@ void btVoronoiSimplexSolver_reset(btVoronoiSimplexSolver* obj)
 	obj->reset();
 }
 
-void btVoronoiSimplexSolver_setCachedBC(btVoronoiSimplexSolver* obj, btSubSimplexClosestResult* value)
+void btVoronoiSimplexSolver_setCachedBC(btVoronoiSimplexSolver* obj, const btSubSimplexClosestResult* value)
 {
 	obj->m_cachedBC = *value;
 }

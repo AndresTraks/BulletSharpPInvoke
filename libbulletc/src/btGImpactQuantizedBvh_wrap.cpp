@@ -69,6 +69,11 @@ GIM_QUANTIZED_BVH_NODE_ARRAY* GIM_QUANTIZED_BVH_NODE_ARRAY_new()
 	return new GIM_QUANTIZED_BVH_NODE_ARRAY();
 }
 
+void GIM_QUANTIZED_BVH_NODE_ARRAY_delete(GIM_QUANTIZED_BVH_NODE_ARRAY* obj)
+{
+	delete obj;
+}
+
 
 btQuantizedBvhTree* btQuantizedBvhTree_new()
 {

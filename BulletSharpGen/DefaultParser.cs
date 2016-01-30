@@ -106,7 +106,10 @@ namespace BulletSharpGen
             foreach (var @class in Project.ClassDefinitions.Values)
             {
                 @class.IsAbstract = @class.AbstractMethods.Any();
-                @class.IsExcluded = IsExcludedClass(@class);
+                if (IsExcludedClass(@class))
+                {
+                    @class.IsExcluded = true;
+                }
             }
         }
 
@@ -405,7 +408,7 @@ namespace BulletSharpGen
                     // Generate getter/setter methods
                     string getterName, setterName;
                     string managedGetterName, managedSetterName;
-                    string verb = _booleanVerbs.Where(v => name.StartsWith(v)).FirstOrDefault();
+                    string verb = _booleanVerbs.FirstOrDefault(v => name.StartsWith(v));
                     if (verb != null && "bool".Equals(field.Type.Name))
                     {
                         getterName = name;

@@ -132,3 +132,8 @@ void btTriangleInfoMap_setZeroAreaThreshold(btTriangleInfoMap* obj, btScalar val
 {
 	obj->m_zeroAreaThreshold = value;
 }
+
+void btTriangleInfoMap_delete(btTriangleInfoMap* obj)
+{
+	delete obj;
+}

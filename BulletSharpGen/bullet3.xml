@@ -929,7 +929,7 @@ else
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/Gimpact/btBoxCollision.h">
       <EnumDefinition Name="eBT_PLANE_INTERSECTION_TYPE" />
-      <ClassDefinition Name="BT_BOX_BOX_TRANSFORM_CACHE" />
+      <ClassDefinition Name="BT_BOX_BOX_TRANSFORM_CACHE" IsExcluded="True" />
       <ClassDefinition Name="btAABB" />
     </HeaderDefinition>
     <HeaderDefinition Path="LinearMath/btGeometryUtil.h">

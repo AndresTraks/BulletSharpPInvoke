@@ -418,20 +418,29 @@ namespace BulletSharpGen
                     {
                         parameterName = "__unnamed" + i;
                     }
+
                     _context.Parameter = new ParameterDefinition(parameterName, new TypeRefDefinition(arg.Type));
                     _context.Method.Parameters[i] = _context.Parameter;
                     arg.VisitChildren(MethodTemplateTypeVisitor);
-                    _context.Parameter = null;
 
-                    // Check if it's a const or optional parameter
-                    IEnumerable<Token> argTokens = _context.TranslationUnit.Tokenize(arg.Extent);
-                    foreach (Token token in argTokens)
+                    // Check for a default value (optional parameter)
+                    var argTokens = _context.TranslationUnit.Tokenize(arg.Extent);
+                    if (argTokens.Any(a => a.Spelling.Equals("=")))
                     {
-                        if (token.Spelling.Equals("="))
+                        _context.Parameter.IsOptional = true;
+                    }
+
+                    // Get marshalling direction
+                    if (_context.Parameter.Type.IsPointer || _context.Parameter.Type.IsReference)
+                    {
+                        if (_context.Parameter.MarshalDirection != MarshalDirection.Out &&
+                            !_context.TranslationUnit.Tokenize(arg.Extent).Any(a => a.Spelling.Equals("const")))
                         {
-                            _context.Method.Parameters[i].IsOptional = true;
+                            _context.Parameter.MarshalDirection = MarshalDirection.InOut;
                         }
                     }
+
+                    _context.Parameter = null;
                 }
 
                 // Discard any private/protected virtual method unless it

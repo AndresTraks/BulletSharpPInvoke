@@ -196,18 +196,7 @@ btRigidBody* btRigidBody_new(const btRigidBody::btRigidBodyConstructionInfo* con
 {
 	return new btRigidBody(*constructionInfo);
 }
-/*
-btRigidBody* btRigidBody_new2(btScalar mass, btMotionState* motionState, btCollisionShape* collisionShape)
-{
-	return new btRigidBody(mass, motionState, collisionShape);
-}
 
-btRigidBody* btRigidBody_new3(btScalar mass, btMotionState* motionState, btCollisionShape* collisionShape, const btScalar* localInertia)
-{
-	VECTOR3_CONV(localInertia);
-	return new btRigidBody(mass, motionState, collisionShape, VECTOR3_USE(localInertia));
-}
-*/
 void btRigidBody_addConstraintRef(btRigidBody* obj, btTypedConstraint* c)
 {
 	obj->addConstraintRef(c);

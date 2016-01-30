@@ -59,6 +59,11 @@ void btPairSet_push_pair_inv(btPairSet* obj, int index1, int index2)
 	obj->push_pair_inv(index1, index2);
 }
 
+void btPairSet_delete(btPairSet* obj)
+{
+	delete obj;
+}
+
 
 GIM_BVH_DATA* GIM_BVH_DATA_new()
 {
@@ -142,10 +147,20 @@ GIM_BVH_DATA_ARRAY* GIM_BVH_DATA_ARRAY_new()
 	return new GIM_BVH_DATA_ARRAY();
 }
 
+void GIM_BVH_DATA_ARRAY_delete(GIM_BVH_DATA_ARRAY* obj)
+{
+	delete obj;
+}
+
 
 GIM_BVH_TREE_NODE_ARRAY* GIM_BVH_TREE_NODE_ARRAY_new()
 {
 	return new GIM_BVH_TREE_NODE_ARRAY();
+}
+
+void GIM_BVH_TREE_NODE_ARRAY_delete(GIM_BVH_TREE_NODE_ARRAY* obj)
+{
+	delete obj;
 }
 
 

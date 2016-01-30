@@ -54,14 +54,3 @@ const btVector3* btConvexHullShape_getUnscaledPoints(btConvexHullShape* obj)
 {
 	return obj->getUnscaledPoints();
 }
-
-void btConvexHullShape_project(btConvexHullShape* obj, const btScalar* trans, const btScalar* dir, btScalar* minProj, btScalar* maxProj, btScalar* witnesPtMin, btScalar* witnesPtMax)
-{
-	TRANSFORM_CONV(trans);
-	VECTOR3_CONV(dir);
-	VECTOR3_DEF(witnesPtMin);
-	VECTOR3_DEF(witnesPtMax);
-	obj->project(TRANSFORM_USE(trans), VECTOR3_USE(dir), *minProj, *maxProj, VECTOR3_USE(witnesPtMin), VECTOR3_USE(witnesPtMax));
-	VECTOR3_DEF_OUT(witnesPtMin);
-	VECTOR3_DEF_OUT(witnesPtMax);
-}

@@ -147,8 +147,6 @@ namespace BulletSharp
 		static extern void btDispatcherInfo_setUseConvexConservativeDistanceUtil(IntPtr obj, bool value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btDispatcherInfo_setUseEpa(IntPtr obj, bool value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btDispatcherInfo_delete(IntPtr obj);
 	}
 
 	public abstract class Dispatcher : IDisposable

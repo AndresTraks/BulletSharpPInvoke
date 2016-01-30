@@ -3,7 +3,6 @@
 #include "conversion.h"
 #include "btBoxCollision_wrap.h"
 
-
 btAABB* btAABB_new()
 {
 	return new btAABB();

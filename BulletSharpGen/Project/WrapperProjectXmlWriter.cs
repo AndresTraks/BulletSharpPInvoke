@@ -41,11 +41,34 @@ namespace BulletSharpGen.Project
                 writer.WriteAttributeString("IsExcluded", "True");
             }
 
+            foreach (var method in @class.Methods.Where(m => m.Parameters.Any(p => p.MarshalDirection == MarshalDirection.Out)))
+            {
+                WriteMethodDefinition(writer, method);
+            }
+
             foreach (var childClass in @class.Classes)
             {
                 WriteClassDefinition(writer, childClass);
             }
 
+            writer.WriteEndElement();
+        }
+
+        public static void WriteMethodDefinition(XmlWriter writer, MethodDefinition method)
+        {
+            writer.WriteStartElement("MethodDefinition");
+            writer.WriteAttributeString("Name", method.Name);
+            /*if (method.IsExcluded)
+            {
+                writer.WriteAttributeString("IsExcluded", "True");
+            }*/
+            foreach (var param in method.Parameters)
+            {
+                writer.WriteStartElement("Parameter");
+                writer.WriteAttributeString("Name", param.Name);
+                writer.WriteAttributeString("MarshalDirection", param.MarshalDirection.ToString());
+                writer.WriteEndElement();
+            }
             writer.WriteEndElement();
         }
 

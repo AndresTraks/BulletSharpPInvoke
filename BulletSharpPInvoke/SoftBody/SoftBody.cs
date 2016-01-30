@@ -546,8 +546,6 @@ namespace BulletSharp.SoftBody
 		static extern void btSoftBody_Anchor_setLocal(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_Anchor_setNode(IntPtr obj, IntPtr value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Anchor_delete(IntPtr obj);
 	}
 
 	public class Body : IDisposable
@@ -2995,79 +2993,12 @@ namespace BulletSharp.SoftBody
 		static extern void btSoftBody_SolverState_setVelmrg(IntPtr obj, float value);
 	}
 
-	public class SRayCast : IDisposable
+	public class SRayCast
 	{
-		internal IntPtr _native;
-
-		public SRayCast()
-		{
-			_native = btSoftBody_sRayCast_new();
-		}
-
-		public SoftBody Body
-		{
-            get { return SoftBody.GetManaged(btSoftBody_sRayCast_getBody(_native)) as SoftBody; }
-			set { btSoftBody_sRayCast_setBody(_native, (value != null) ? value._native : IntPtr.Zero); }
-		}
-
-		public EFeature Feature
-		{
-			get { return btSoftBody_sRayCast_getFeature(_native); }
-			set { btSoftBody_sRayCast_setFeature(_native, value); }
-		}
-
-		public float Fraction
-		{
-			get { return btSoftBody_sRayCast_getFraction(_native); }
-			set { btSoftBody_sRayCast_setFraction(_native, value); }
-		}
-
-		public int Index
-		{
-			get { return btSoftBody_sRayCast_getIndex(_native); }
-			set { btSoftBody_sRayCast_setIndex(_native, value); }
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-				btSoftBody_sRayCast_delete(_native);
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~SRayCast()
-		{
-			Dispose(false);
-		}
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSoftBody_sRayCast_new();
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSoftBody_sRayCast_getBody(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern EFeature btSoftBody_sRayCast_getFeature(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern float btSoftBody_sRayCast_getFraction(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern int btSoftBody_sRayCast_getIndex(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_sRayCast_setBody(IntPtr obj, IntPtr value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_sRayCast_setFeature(IntPtr obj, EFeature value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_sRayCast_setFraction(IntPtr obj, float value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_sRayCast_setIndex(IntPtr obj, int value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_sRayCast_delete(IntPtr obj);
+        public SoftBody Body { get; set; }
+        public EFeature Feature { get; set; }
+        public float Fraction { get; set; }
+        public int Index { get; set; }
 	}
 
 	public class Tetra : Feature
@@ -3686,8 +3617,27 @@ namespace BulletSharp.SoftBody
 
         public bool RayTest(ref Vector3 rayFrom, ref Vector3 rayTo, SRayCast results)
         {
-            return btSoftBody_rayTest(_native, ref rayFrom, ref rayTo, results._native);
+            IntPtr rayCast = btSoftBody_sRayCast_new();
+            bool ret = btSoftBody_rayTest(_native, ref rayFrom, ref rayTo, rayCast);
+            results.Body = this;
+            results.Feature = btSoftBody_sRayCast_getFeature(rayCast);
+            results.Fraction = btSoftBody_sRayCast_getFraction(rayCast);
+            results.Index = btSoftBody_sRayCast_getIndex(rayCast);
+            btSoftBody_sRayCast_delete(rayCast);
+            return ret;
         }
+
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern IntPtr btSoftBody_sRayCast_new();
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern EFeature btSoftBody_sRayCast_getFeature(IntPtr obj);
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern float btSoftBody_sRayCast_getFraction(IntPtr obj);
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern int btSoftBody_sRayCast_getIndex(IntPtr obj);
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern void btSoftBody_sRayCast_delete(IntPtr obj);
+
         /*
 		public int RayTest(Vector3 rayFrom, Vector3 rayTo, float mint, EFeature feature, int index, bool bcountonly)
 		{
