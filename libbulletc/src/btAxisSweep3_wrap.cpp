@@ -158,7 +158,7 @@ void bt32BitAxisSweep3_quantize(bt32BitAxisSweep3* obj, unsigned int* out, const
 	obj->quantize(out, VECTOR3_USE(point), isMax);
 }
 
-void bt32BitAxisSweep3_removeHandle(bt32BitAxisSweep3* obj, unsigned short handle, btDispatcher* dispatcher)
+void bt32BitAxisSweep3_removeHandle(bt32BitAxisSweep3* obj, unsigned int handle, btDispatcher* dispatcher)
 {
 	obj->removeHandle(handle, dispatcher);
 }
@@ -182,7 +182,7 @@ void bt32BitAxisSweep3_unQuantize(bt32BitAxisSweep3* obj, btBroadphaseProxy* pro
 	VECTOR3_DEF_OUT(aabbMax);
 }
 
-void bt32BitAxisSweep3_updateHandle(bt32BitAxisSweep3* obj, unsigned short handle, const btScalar* aabbMin, const btScalar* aabbMax, btDispatcher* dispatcher)
+void bt32BitAxisSweep3_updateHandle(bt32BitAxisSweep3* obj, unsigned int handle, const btScalar* aabbMin, const btScalar* aabbMax, btDispatcher* dispatcher)
 {
 	VECTOR3_CONV(aabbMin);
 	VECTOR3_CONV(aabbMax);
