@@ -75,11 +75,6 @@ int btOptimizedBvhNode_getEscapeIndex(btOptimizedBvhNode* obj)
 	return obj->m_escapeIndex;
 }
 
-char* btOptimizedBvhNode_getPadding(btOptimizedBvhNode* obj)
-{
-	return obj->m_padding;
-}
-
 int btOptimizedBvhNode_getSubPart(btOptimizedBvhNode* obj)
 {
 	return obj->m_subPart;

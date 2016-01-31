@@ -37,12 +37,12 @@ float btSoftBodySolver_getTimeScale(btSoftBodySolver* obj)
 	return obj->getTimeScale();
 }
 /*
-void btSoftBodySolver_optimize(btSoftBodySolver* obj, btAlignedObjectArray* softBodies)
+void btSoftBodySolver_optimize(btSoftBodySolver* obj, btAlignedObjectArray<btSoftBody*>* softBodies)
 {
 	obj->optimize(*softBodies);
 }
 
-void btSoftBodySolver_optimize2(btSoftBodySolver* obj, btAlignedObjectArray* softBodies, bool forceUpdate)
+void btSoftBodySolver_optimize2(btSoftBodySolver* obj, btAlignedObjectArray<btSoftBody*>* softBodies, bool forceUpdate)
 {
 	obj->optimize(*softBodies, forceUpdate);
 }

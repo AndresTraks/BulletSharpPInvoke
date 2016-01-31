@@ -359,6 +359,8 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btTriangleMeshShape_wrap.h
     src/btTriangleShape_wrap.cpp
     src/btTriangleShape_wrap.h
+    src/btTriangleShapeEx_wrap.cpp
+    src/btTriangleShapeEx_wrap.h
     src/btTypedConstraint_wrap.cpp
     src/btTypedConstraint_wrap.h
     src/btUniformScalingShape_wrap.cpp

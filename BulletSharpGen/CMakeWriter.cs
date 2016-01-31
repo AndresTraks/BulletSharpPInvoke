@@ -68,15 +68,15 @@ namespace BulletSharpGen
             WriteLine();
 
             WriteLine("IF(${CMAKE_GENERATOR} MATCHES \"Unix Makefiles\")");
-	        WriteLine("    SET(BULLET_LIB_DIR ${BULLET_INCLUDE_DIR}/..)");
-	        WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/BulletCollision)");
-	        WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/BulletDynamics)");
-	        WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/BulletSoftBody)");
-	        WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/LinearMath)");
-	        WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/Extras/Serialize/BulletFileLoader)");
-	        WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/Extras/Serialize/BulletWorldImporter)");
-	        WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/Extras/Serialize/BulletXmlWorldImporter)");
-	        WriteLine("    SET(BULLETC_LIB bulletc)");
+            WriteLine("    SET(BULLET_LIB_DIR ${BULLET_INCLUDE_DIR}/..)");
+            WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/BulletCollision)");
+            WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/BulletDynamics)");
+            WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/BulletSoftBody)");
+            WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/LinearMath)");
+            WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/Extras/Serialize/BulletFileLoader)");
+            WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/Extras/Serialize/BulletWorldImporter)");
+            WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/Extras/Serialize/BulletXmlWorldImporter)");
+            WriteLine("    SET(BULLETC_LIB bulletc)");
             WriteLine("ELSE()");
             WriteLine("    IF(${CMAKE_GENERATOR} MATCHES \"Visual Studio 9 2008\")");
             WriteLine("        SET(REL_LIB_DIR msvc/2008)");
@@ -139,14 +139,16 @@ namespace BulletSharpGen
             //sources.OrderBy(x => x.Na);
 
             WriteLine("ADD_LIBRARY(${BULLETC_LIB} SHARED");
-            WriteSources(new string[] {
+            WriteSources(new[]
+            {
                 "dllmain.cpp"
             });
-            WriteSources(new string[] {
+            WriteSources(new[]
+            {
                 "conversion.h",
                 "main.h",
                 "collections.cpp",
-                "collections.h",
+                "collections.h"
             }, "src");
             WriteSources(sources, "src");
             WriteLine(")");

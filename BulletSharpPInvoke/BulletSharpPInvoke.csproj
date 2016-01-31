@@ -71,7 +71,6 @@
     <Compile Include="Collision\OptimizedBvh.cs" />
     <Compile Include="Collision\QuantizedBvh.cs" />
     <Compile Include="Collision\RaycastCallback.cs" />
-    <Compile Include="Collision\SimpleBroadphase.cs" />
     <Compile Include="Collision\SoftBodyConcaveCollisionAlgorithm.cs" />
     <Compile Include="Collision\SoftRigidCollisionAlgorithm.cs" />
     <Compile Include="Collision\SoftSoftCollisionAlgorithm.cs" />

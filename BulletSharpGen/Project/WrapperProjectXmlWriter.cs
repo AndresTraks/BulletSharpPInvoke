@@ -38,7 +38,7 @@ namespace BulletSharpGen.Project
             }
             if (@class.IsExcluded)
             {
-                writer.WriteAttributeString("IsExcluded", "True");
+                writer.WriteAttributeString("IsExcluded", "true");
             }
 
             foreach (var method in @class.Methods.Where(m => m.Parameters.Any(p => p.MarshalDirection == MarshalDirection.Out)))
@@ -60,7 +60,7 @@ namespace BulletSharpGen.Project
             writer.WriteAttributeString("Name", method.Name);
             /*if (method.IsExcluded)
             {
-                writer.WriteAttributeString("IsExcluded", "True");
+                writer.WriteAttributeString("IsExcluded", "true");
             }*/
             foreach (var param in method.Parameters)
             {
@@ -130,7 +130,7 @@ namespace BulletSharpGen.Project
                         writer.WriteAttributeString("Path", headerRelativePath);
                         if (header.Value.IsExcluded)
                         {
-                            writer.WriteAttributeString("IsExcluded", "True");
+                            writer.WriteAttributeString("IsExcluded", "true");
                         }
                         else
                         {

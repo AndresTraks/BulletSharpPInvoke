@@ -2,7 +2,7 @@
 {
     public class FieldDefinition
     {
-        public string Name { get; private set; }
+        public string Name { get; set; }
         public TypeRefDefinition Type { get; private set; }
         public ClassDefinition Parent { get; private set; }
 

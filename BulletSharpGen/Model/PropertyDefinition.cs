@@ -1,12 +1,11 @@
-﻿using System;
-namespace BulletSharpGen
+﻿namespace BulletSharpGen
 {
     public class PropertyDefinition
     {
-        public MethodDefinition Getter { get; private set; }
+        public MethodDefinition Getter { get; }
         public MethodDefinition Setter { get; set; }
-        public ClassDefinition Parent { get; private set; }
-        public string Name { get; private set; }
+        public ClassDefinition Parent { get; }
+        public string Name { get; }
 
         public TypeRefDefinition Type
         {

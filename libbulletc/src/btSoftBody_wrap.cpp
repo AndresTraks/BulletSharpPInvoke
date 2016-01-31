@@ -295,11 +295,6 @@ void btSoftBody_Anchor_setNode(btSoftBody::Anchor* obj, btSoftBody::Node* value)
 	obj->m_node = value;
 }
 
-void btSoftBody_Anchor_delete(btSoftBody::Anchor* obj)
-{
-	delete obj;
-}
-
 
 btSoftBody::Body* btSoftBody_Body_new()
 {
@@ -706,11 +701,6 @@ void btSoftBody_Cluster_setNvimpulses(btSoftBody::Cluster* obj, int value)
 void btSoftBody_Cluster_setSelfCollisionImpulseFactor(btSoftBody::Cluster* obj, btScalar value)
 {
 	obj->m_selfCollisionImpulseFactor = value;
-}
-
-void btSoftBody_Cluster_delete(btSoftBody::Cluster* obj)
-{
-	delete obj;
 }
 
 

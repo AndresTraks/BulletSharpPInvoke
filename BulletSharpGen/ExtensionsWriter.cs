@@ -77,9 +77,9 @@ namespace BulletSharpGen
             foreach (HeaderDefinition header in headerDefinitions)
             {
                 bool headerNeedsExtensions = false;
-                foreach (var c in header.Classes)
+                foreach (var @class in header.Classes)
                 {
-                    if (ClassNeedsExtensions(c))
+                    if (ClassNeedsExtensions(@class))
                     {
                         headerNeedsExtensions = true;
                         break;
@@ -103,9 +103,9 @@ namespace BulletSharpGen
                 csWriter.WriteLine('{');
                 hasCSWhiteSpace = true;
 
-                foreach (var c in header.Classes)
+                foreach (var @class in header.Classes)
                 {
-                    WriteClass(c);
+                    WriteClass(@class);
                 }
 
                 csWriter.WriteLine("}");
@@ -133,7 +133,7 @@ namespace BulletSharpGen
             WriteTabs(1, WriteTo.CS);
             csWriter.WriteLine("[EditorBrowsable(EditorBrowsableState.Never)]");
             WriteTabs(1, WriteTo.CS);
-            csWriter.WriteLine(string.Format("public static class {0}Extensions", c.ManagedName));
+            csWriter.WriteLine("public static class {0}Extensions", c.ManagedName);
             WriteTabs(1, WriteTo.CS);
             csWriter.WriteLine('{');
 
@@ -244,7 +244,7 @@ namespace BulletSharpGen
                 WriteMethod(method);
             }
 
-            foreach (KeyValuePair<string, string> method in _extensionMethods.OrderBy(key => key.Key))
+            foreach (var method in _extensionMethods.OrderBy(key => key.Key))
             {
                 EnsureWhiteSpace(WriteTo.CS);
                 csWriter.Write(method.Value);
@@ -274,7 +274,7 @@ namespace BulletSharpGen
             Write(string.Format(" {0}(this {1} obj",
                 method.ManagedName, method.Parent.ManagedName), WriteTo.Buffer);
 
-            List<ParameterDefinition> extendedParams = new List<ParameterDefinition>();
+            var extendedParams = new List<ParameterDefinition>();
             int numParameters = method.Parameters.Length - numOptionalParams;
             for (int i = 0; i < numParameters; i++)
             {

@@ -645,6 +645,7 @@
     <ClInclude Include="src\btTriangleMesh_wrap.h" />
     <ClInclude Include="src\btTriangleMeshShape_wrap.h" />
     <ClInclude Include="src\btTriangleShape_wrap.h" />
+    <ClInclude Include="src\btTriangleShapeEx_wrap.h" />
     <ClInclude Include="src\btTypedConstraint_wrap.h" />
     <ClInclude Include="src\btUniformScalingShape_wrap.h" />
     <ClInclude Include="src\btUnionFind_wrap.h" />
@@ -800,6 +801,7 @@
     <ClCompile Include="src\btTriangleMesh_wrap.cpp" />
     <ClCompile Include="src\btTriangleMeshShape_wrap.cpp" />
     <ClCompile Include="src\btTriangleShape_wrap.cpp" />
+    <ClCompile Include="src\btTriangleShapeEx_wrap.cpp"  />
     <ClCompile Include="src\btTypedConstraint_wrap.cpp" />
     <ClCompile Include="src\btUniformScalingShape_wrap.cpp" />
     <ClCompile Include="src\btUnionFind_wrap.cpp" />

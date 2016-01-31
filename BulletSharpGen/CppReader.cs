@@ -112,12 +112,9 @@ namespace BulletSharpGen
                 project.HeaderDefinitions.Count, project.ClassDefinitions.Count);
 
 
-            foreach (var @class in project.ClassDefinitions.Values)
+            foreach (var @class in project.ClassDefinitions.Values.Where(c => !c.IsParsed))
             {
-                if (!@class.IsParsed)
-                {
-                    Console.WriteLine("Class removed: {0}", @class.FullyQualifiedName);
-                }
+                Console.WriteLine("Class removed: {0}", @class.FullyQualifiedName);
             }
         }
 
@@ -149,9 +146,9 @@ namespace BulletSharpGen
                 _context.Namespace = cursor.Spelling;
                 return Cursor.ChildVisitResult.Recurse;
             }
-            else if (cursor.IsDefinition)
+            if (cursor.IsDefinition)
             {
-                switch(cursor.Kind)
+                switch (cursor.Kind)
                 {
                     case CursorKind.ClassDecl:
                     case CursorKind.ClassTemplate:
@@ -447,7 +444,8 @@ namespace BulletSharpGen
                 // implements a public abstract method
                 if (_context.MemberAccess != AccessSpecifier.Public)
                 {
-                    if (_context.Method.Parent.BaseClass == null || !_context.Method.Parent.BaseClass.AbstractMethods.Contains(_context.Method))
+                    if (_context.Method.Parent.BaseClass == null ||
+                        !_context.Method.Parent.BaseClass.AbstractMethods.Contains(_context.Method))
                     {
                         _context.Method.Parent.Methods.Remove(_context.Method);
                     }
@@ -471,7 +469,7 @@ namespace BulletSharpGen
                         int typeStart = displayName.IndexOf('<') + 1;
                         int typeEnd = displayName.LastIndexOf('>');
                         displayName = displayName.Substring(typeStart, typeEnd - typeStart);
-                        var specializationTypeRef = new TypeRefDefinition()
+                        var specializationTypeRef = new TypeRefDefinition
                         {
                             IsBasic = true,
                             Name = displayName

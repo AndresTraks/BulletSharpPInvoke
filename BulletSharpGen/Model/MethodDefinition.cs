@@ -2,9 +2,9 @@
 {
     public class MethodDefinition
     {
-        public string Name { get; private set; }
+        public string Name { get; }
         public string ManagedName { get; set; }
-        public ClassDefinition Parent { get; private set; }
+        public ClassDefinition Parent { get; }
         public TypeRefDefinition ReturnType { get; set; }
         public ParameterDefinition[] Parameters { get; set; }
         public bool IsStatic { get; set; }
@@ -74,7 +74,7 @@
             }
 
             var m = obj as MethodDefinition;
-            if ((System.Object)m == null)
+            if (m == null)
             {
                 return false;
             }

@@ -30,7 +30,7 @@ namespace BulletSharpGen
         public WrapperWriter(IEnumerable<HeaderDefinition> headerDefinitions, string namespaceName)
         {
             this.headerDefinitions = headerDefinitions;
-            this.NamespaceName = namespaceName;
+            NamespaceName = namespaceName;
         }
 
         public abstract void Output();

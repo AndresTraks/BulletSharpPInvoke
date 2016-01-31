@@ -26,6 +26,7 @@ extern "C"
 	EXPORT bt32BitAxisSweep3_Handle* bt32BitAxisSweep3_getHandle(bt32BitAxisSweep3* obj, unsigned int index);
 	EXPORT unsigned int bt32BitAxisSweep3_getNumHandles(bt32BitAxisSweep3* obj, btOverlapCallback* callback);
 	EXPORT btOverlappingPairCache* bt32BitAxisSweep3_getOverlappingPairCache(bt32BitAxisSweep3* obj);
+	EXPORT btOverlappingPairCallback* bt32BitAxisSweep3_getOverlappingPairUserCallback(bt32BitAxisSweep3* obj);
 	//EXPORT void bt32BitAxisSweep3_processAllOverlappingPairs(bt32BitAxisSweep3* obj, btOverlapCallback* callback);
 	EXPORT void bt32BitAxisSweep3_quantize(btAxisSweep3* obj, unsigned int* out, const btScalar* point, int isMax);
 	EXPORT void bt32BitAxisSweep3_removeHandle(bt32BitAxisSweep3* obj, unsigned int handle, btDispatcher* dispatcher);

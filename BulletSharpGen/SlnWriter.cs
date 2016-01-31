@@ -595,7 +595,7 @@ namespace BulletSharpGen
             string projectFilename = namespaceName + (targetVS == TargetVS.VS2008 ? ".vcproj" : ".vcxproj");
             var projectFile = new FileStream(outDirectory + "\\" + projectFilename, FileMode.Create, FileAccess.Write);
             projectWriter = new StreamWriter(projectFile, Encoding.UTF8);
-            
+
             if (targetVS == TargetVS.VS2008)
             {
                 WriteLine("<?xml version=\"1.0\" encoding=\"Windows-1252\"?>");
@@ -783,7 +783,7 @@ namespace BulletSharpGen
                 }
             }
 
-            
+
             if (targetVS == TargetVS.VS2008)
             {
                 filterWriter.Output2008(projectWriter, confs, outDirectory);

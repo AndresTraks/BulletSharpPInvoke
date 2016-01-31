@@ -310,8 +310,3 @@ void btMultibodyLink_updateCacheMultiDof2(btMultibodyLink* obj, btScalar* pq)
 {
 	obj->updateCacheMultiDof(pq);
 }
-
-void btMultibodyLink_delete(btMultibodyLink* obj)
-{
-	delete obj;
-}

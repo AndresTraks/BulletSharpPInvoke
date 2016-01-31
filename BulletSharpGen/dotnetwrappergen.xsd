@@ -1,0 +1,85 @@
+﻿<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="urn:dotnetwrappergen"
+    elementFormDefault="qualified"
+    targetNamespace="urn:dotnetwrappergen">
+
+  <xsd:element name="Project" type="WrapperProject"/>
+
+  <xsd:complexType name="WrapperProject">
+    <xsd:sequence>
+      <xsd:element name="ScriptedMapping" type="ScriptedMappingType" maxOccurs="unbounded"/>
+      <xsd:element name="ReplaceMapping" type="ReplaceMappingType" maxOccurs="unbounded"/>
+      <xsd:element name="NamespaceName" type="xsd:string"/>
+      <xsd:element name="SourceRootFolder" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="HeaderDefinition" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                  <xsd:element name="ClassDefinition" type="ClassDefinitionType"/>
+                  <xsd:element name="ClassTemplateDefinition" type="ClassTemplateDefinitionType"/>
+                  <xsd:element name="EnumDefinition" type="EnumDefinitionType"/>
+                </xsd:choice>
+                <xsd:attribute name="IsExcluded" type="xsd:boolean"/>
+                <xsd:attribute name="Path" type="xsd:string"/>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+          <xsd:attribute name="Path" type="xsd:string"/>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="ReplaceMappingType">
+    <xsd:sequence>
+      <xsd:element name="Replacement" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:attribute name="Replace" type="xsd:string"/>
+          <xsd:attribute name="With" type="xsd:string"/>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="Name" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="ScriptedMappingType">
+    <xsd:complexContent>
+      <xsd:extension base="ReplaceMappingType">
+        <xsd:sequence>
+          <xsd:element name="ScriptBody" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="ClassDefinitionType">
+    <xsd:choice minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="ClassDefinition" type="ClassDefinitionType"/>
+      <xsd:element name="ClassTemplateDefinition" type="ClassTemplateDefinitionType"/>
+      <xsd:element name="EnumDefinition" type="EnumDefinitionType"/>
+    </xsd:choice>
+    <xsd:attribute name="IsExcluded" type="xsd:boolean"/>
+    <xsd:attribute name="Name" type="xsd:string"/>
+    <xsd:attribute name="Namespace" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="ClassTemplateDefinitionType">
+    <xsd:complexContent>
+      <xsd:extension base="ClassDefinitionType">
+        <xsd:sequence>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="EnumDefinitionType">
+    <xsd:complexContent>
+      <xsd:extension base="ClassDefinitionType">
+        <xsd:sequence>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+</xsd:schema>

@@ -662,13 +662,10 @@ namespace BulletSharpGen
                     {
                         return type.ManagedNameCS + "[]";
                     }
-                    else
+                    // reference
+                    if (!(type.IsConst || type.Referenced.IsConst))
                     {
-                        // reference
-                        if (!(type.IsConst || type.Referenced.IsConst))
-                        {
-                            return "[Out] out " + type.ManagedNameCS;
-                        }
+                        return "[Out] out " + type.ManagedNameCS;
                     }
                 }
                 return "IntPtr";

@@ -119,6 +119,10 @@ namespace BulletSharpGen
             {"WorldImporter", "DISABLE_SERIALIZE"}
         };
 
+        // These do no need forward references
+        public List<string> PrecompiledHeaderReferences =
+            new List<string>(new[] {"Vector3", "Matrix3x3", "Quaternion", "Transform", "Vector4"});
+
         public CppCliWriter(IEnumerable<HeaderDefinition> headerDefinitions, string namespaceName)
             : base(headerDefinitions, namespaceName)
         {
@@ -207,7 +211,8 @@ namespace BulletSharpGen
             SourceWriteLine(s);
         }
 
-        void EnsureAccess(int level, ref RefAccessSpecifier current, RefAccessSpecifier required, bool withWhiteSpace = true)
+        void EnsureAccess(int level, ref RefAccessSpecifier current, RefAccessSpecifier required,
+            bool withWhiteSpace = true)
         {
             if (current == required) return;
 
@@ -1105,9 +1110,6 @@ namespace BulletSharpGen
             Console.WriteLine("Write complete");
         }
 
-        // These do no need forward references
-        public List<string> PrecompiledHeaderReferences = new List<string>(new[] { "Vector3", "Matrix3x3", "Quaternion", "Transform", "Vector4" });
-
         void AddForwardReference(List<ClassDefinition> forwardRefs, TypeRefDefinition type, HeaderDefinition header)
         {
             if (type.IsBasic)
@@ -1125,7 +1127,7 @@ namespace BulletSharpGen
             {
                 return;
             }
-            if (type.Target.IsExcluded || 
+            if (type.Target.IsExcluded ||
                 forwardRefs.Contains(type.Target) ||
                 PrecompiledHeaderReferences.Contains(type.Target.ManagedName))
             {

@@ -9,7 +9,15 @@ namespace BulletSharpGen.Project
     {
         public static void Read(WrapperProject project)
         {
-            using (var reader = XmlReader.Create(project.ProjectPath))
+            var xmlSettings = new XmlReaderSettings();
+            xmlSettings.Schemas.Add("urn:dotnetwrappergen", "dotnetwrappergen.xsd");
+            xmlSettings.ValidationType = ValidationType.Schema;
+            xmlSettings.ValidationEventHandler += (sender, args) =>
+            {
+                Console.WriteLine(args.Message);
+            };
+
+            using (var reader = XmlReader.Create(project.ProjectPath, xmlSettings))
             {
                 while (reader.Read())
                 {
@@ -108,7 +116,7 @@ namespace BulletSharpGen.Project
             headerPath = headerPath.Replace('\\', '/');
             HeaderDefinition header = new HeaderDefinition(headerPath);
             string isExcluded = reader.GetAttribute("IsExcluded");
-            if ("True".Equals(isExcluded))
+            if ("true".Equals(isExcluded))
             {
                 header.IsExcluded = true;
             }
@@ -170,7 +178,7 @@ namespace BulletSharpGen.Project
             }
 
             string isExcluded = reader.GetAttribute("IsExcluded");
-            if ("True".Equals(isExcluded))
+            if ("true".Equals(isExcluded))
             {
                 @class.IsExcluded = true;
             }
