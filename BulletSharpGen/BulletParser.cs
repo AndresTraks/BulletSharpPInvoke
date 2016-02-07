@@ -68,20 +68,6 @@ namespace BulletSharpGen
                 "btCompoundShape" // constructor needed for CompoundFromGImpact in C++/CLI, but not C#
             };
 
-            // Classes that might be cleaned up by Bullet and not us (use preventDelete to indicate this)
-            HashSet<string> preventDelete = new HashSet<string>() {
-                "btAABB", "btCollisionAlgorithmCreateFunc",
-                "btCollisionObject", "btCollisionObjectWrapper", "btCollisionShape",
-                "btCollisionWorld::LocalConvexResult", "btCollisionWorld::LocalRayResult",
-                "btConstraintSolver", "btContactSolverInfoData", "btDbvt",
-                "btOverlappingPairCache", "btPoolAllocator",
-                "btRotationalLimitMotor", "btTranslationalLimitMotor",
-                "btRotationalLimitMotor2", "btTranslationalLimitMotor2",
-                "btConstraintSetting", "btSimulationIslandManager",
-                "btSolve2LinearConstraint", "btIndexedMesh", "btTriangleInfoMap",
-                "btAngularLimit", "btContactSolverInfo",
-                "btWheelInfo", "btManifoldPoint", "btCollisionWorld::LocalShapeInfo"};
-
             // Classes that have OnDisposing/OnDisposed events
             HashSet<string> trackingDisposable = new HashSet<string>() {
                 "btCollisionObject", "btCollisionShape",
@@ -98,10 +84,6 @@ namespace BulletSharpGen
                 if (hideInternalConstructor.Contains(@class.FullyQualifiedName))
                 {
                     @class.NoInternalConstructor = true;
-                }
-                if (preventDelete.Contains(@class.FullyQualifiedName))
-                {
-                    @class.HasPreventDelete = true;
                 }
                 if (trackingDisposable.Contains(@class.FullyQualifiedName))
                 {
@@ -600,11 +582,11 @@ namespace BulletSharpGen
                 case "CollisionObject":
                 case "CollisionShape":
                 case "OverlappingPairCache":
-                    return string.Format("{0}.GetManaged(", method.ReturnType.ManagedName);
+                    return $"{method.ReturnType.ManagedName}.GetManaged(";
                 case "IDebugDraw":
                     return "DebugDraw.GetManaged(";
                 case "CollisionObjectWrapper":
-                    return string.Format("new {0}(", method.ReturnType.ManagedName);
+                    return $"new {method.ReturnType.ManagedName}(";
                 default:
                     return "";
             }

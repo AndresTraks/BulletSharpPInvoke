@@ -59,6 +59,7 @@
       <xsd:element name="ClassTemplateDefinition" type="ClassTemplateDefinitionType"/>
       <xsd:element name="EnumDefinition" type="EnumDefinitionType"/>
     </xsd:choice>
+    <xsd:attribute name="HasPreventDelete" type="xsd:boolean"/>
     <xsd:attribute name="IsExcluded" type="xsd:boolean"/>
     <xsd:attribute name="Name" type="xsd:string"/>
     <xsd:attribute name="Namespace" type="xsd:string"/>

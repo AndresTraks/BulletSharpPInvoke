@@ -103,9 +103,9 @@ else
         <ClassDefinition Name="ClosestConvexResultCallback" />
         <ClassDefinition Name="ClosestRayResultCallback" />
         <ClassDefinition Name="ContactResultCallback" />
-        <ClassDefinition Name="LocalConvexResult" />
-        <ClassDefinition Name="LocalRayResult" />
-        <ClassDefinition Name="LocalShapeInfo" />
+        <ClassDefinition Name="LocalConvexResult" HasPreventDelete="true" />
+        <ClassDefinition Name="LocalRayResult" HasPreventDelete="true" />
+        <ClassDefinition Name="LocalShapeInfo" HasPreventDelete="true" />
       </ClassDefinition>
     </HeaderDefinition>
     <HeaderDefinition Path="LinearMath/btScalar.h">
@@ -156,7 +156,7 @@ else
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionDispatch/btCollisionObject.h">
       <ClassDefinition Name="btCollisionObjectArray" />
-      <ClassDefinition Name="btCollisionObject">
+      <ClassDefinition Name="btCollisionObject" HasPreventDelete="true">
         <EnumDefinition Name="AnisotropicFrictionFlags" />
         <EnumDefinition Name="CollisionFlags" />
         <EnumDefinition Name="CollisionObjectTypes" />
@@ -216,7 +216,7 @@ else
     <HeaderDefinition Path="BulletCollision/NarrowPhaseCollision/btManifoldPoint.h">
       <ClassDefinition Name="btConstraintRow" />
       <ClassDefinition Name="PfxConstraintRow" />
-      <ClassDefinition Name="btManifoldPoint" />
+      <ClassDefinition Name="btManifoldPoint" HasPreventDelete="true" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/NarrowPhaseCollision/btPersistentManifold.h">
       <ClassDefinition Name="ContactDestroyedCallback" />
@@ -236,7 +236,7 @@ else
       <ClassDefinition Name="btStorageResult" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionDispatch/btCollisionObjectWrapper.h">
-      <ClassDefinition Name="btCollisionObjectWrapper" />
+      <ClassDefinition Name="btCollisionObjectWrapper" HasPreventDelete="true" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/BroadphaseCollision/btBroadphaseProxy.h">
       <EnumDefinition Name="BroadphaseNativeTypes" />
@@ -253,7 +253,7 @@ else
       </ClassDefinition>
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionDispatch/btCollisionCreateFunc.h">
-      <ClassDefinition Name="btCollisionAlgorithmCreateFunc" />
+      <ClassDefinition Name="btCollisionAlgorithmCreateFunc" HasPreventDelete="true" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/BroadphaseCollision/btBroadphaseInterface.h">
       <ClassDefinition Name="btBroadphaseAabbCallback" />
@@ -267,13 +267,13 @@ else
       <ClassDefinition Name="btBroadphasePairArray" />
       <ClassDefinition Name="btOverlapCallback" />
       <ClassDefinition Name="btOverlapFilterCallback" />
-      <ClassDefinition Name="btOverlappingPairCache" />
+      <ClassDefinition Name="btOverlappingPairCache" HasPreventDelete="true" />
       <ClassDefinition Name="btHashedOverlappingPairCache" />
       <ClassDefinition Name="btSortedOverlappingPairCache" />
       <ClassDefinition Name="btNullPairCache" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionShapes/btCollisionShape.h">
-      <ClassDefinition Name="btCollisionShape" />
+      <ClassDefinition Name="btCollisionShape" HasPreventDelete="true" />
       <ClassDefinition Name="btCollisionShapeData" IsExcluded="true" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionShapes/btConvexShape.h">
@@ -339,7 +339,7 @@ else
       <ClassDefinition Name="btStridingMeshInterfaceData" IsExcluded="true" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionShapes/btTriangleIndexVertexArray.h">
-      <ClassDefinition Name="btIndexedMesh" />
+      <ClassDefinition Name="btIndexedMesh" HasPreventDelete="true" />
       <ClassDefinition Name="IndexedMeshArray" />
       <ClassDefinition Name="btTriangleIndexVertexArray" />
     </HeaderDefinition>
@@ -360,7 +360,7 @@ else
       <ClassDefinition Name="NodeArray" />
       <ClassDefinition Name="QuantizedNodeArray" />
       <ClassDefinition Name="BvhSubtreeInfoArray" />
-      <ClassDefinition Name="btQuantizedBvh">
+      <ClassDefinition Name="btQuantizedBvh" HasPreventDelete="true">
         <EnumDefinition Name="btTraversalMode" />
       </ClassDefinition>
       <ClassDefinition Name="btBvhSubtreeInfoData" IsExcluded="true" />
@@ -393,7 +393,7 @@ else
     <HeaderDefinition Path="BulletCollision/CollisionShapes/btTriangleInfoMap.h">
       <ClassDefinition Name="btTriangleInfo" />
       <ClassDefinition Name="btInternalTriangleInfoMap" />
-      <ClassDefinition Name="btTriangleInfoMap" />
+      <ClassDefinition Name="btTriangleInfoMap" HasPreventDelete="true" />
       <ClassDefinition Name="btTriangleInfoData" IsExcluded="true" />
       <ClassDefinition Name="btTriangleInfoMapData" IsExcluded="true" />
     </HeaderDefinition>
@@ -450,7 +450,7 @@ else
       <ClassDefinition Name="btDbvtAabbMm" />
       <ClassDefinition Name="btDbvtVolume" />
       <ClassDefinition Name="btDbvtNode" />
-      <ClassDefinition Name="btDbvt">
+      <ClassDefinition Name="btDbvt" HasPreventDelete="true">
         <EnumDefinition Name="" />
         <ClassDefinition Name="IClone" />
         <ClassDefinition Name="ICollide" />
@@ -500,8 +500,8 @@ else
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btContactSolverInfo.h">
       <EnumDefinition Name="btSolverMode" />
-      <ClassDefinition Name="btContactSolverInfoData" />
-      <ClassDefinition Name="btContactSolverInfo" />
+      <ClassDefinition Name="btContactSolverInfoData" HasPreventDelete="true" />
+      <ClassDefinition Name="btContactSolverInfo" HasPreventDelete="true" />
       <ClassDefinition Name="btContactSolverInfoDoubleData" IsExcluded="true" />
       <ClassDefinition Name="btContactSolverInfoFloatData" IsExcluded="true" />
     </HeaderDefinition>
@@ -549,10 +549,10 @@ else
       <ClassDefinition Name="btTypedConstraintFloatData" IsExcluded="true" />
       <ClassDefinition Name="btTypedConstraintData" IsExcluded="true" />
       <ClassDefinition Name="btTypedConstraintDoubleData" IsExcluded="true" />
-      <ClassDefinition Name="btAngularLimit" />
+      <ClassDefinition Name="btAngularLimit" HasPreventDelete="true" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btPoint2PointConstraint.h">
-      <ClassDefinition Name="btConstraintSetting" />
+      <ClassDefinition Name="btConstraintSetting" HasPreventDelete="true" />
       <EnumDefinition Name="btPoint2PointFlags" />
       <ClassDefinition Name="btPoint2PointConstraint" />
       <ClassDefinition Name="btPoint2PointConstraintFloatData" IsExcluded="true" />
@@ -574,8 +574,8 @@ else
       <ClassDefinition Name="btConeTwistConstraintData" IsExcluded="true" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btGeneric6DofConstraint.h">
-      <ClassDefinition Name="btRotationalLimitMotor" />
-      <ClassDefinition Name="btTranslationalLimitMotor" />
+      <ClassDefinition Name="btRotationalLimitMotor" HasPreventDelete="true" />
+      <ClassDefinition Name="btTranslationalLimitMotor" HasPreventDelete="true" />
       <EnumDefinition Name="bt6DofFlags" />
       <ClassDefinition Name="btGeneric6DofConstraint" />
       <ClassDefinition Name="btGeneric6DofConstraintData" IsExcluded="true" />
@@ -597,8 +597,8 @@ else
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btGeneric6DofSpring2Constraint.h">
       <EnumDefinition Name="RotateOrder" />
-      <ClassDefinition Name="btRotationalLimitMotor2" />
-      <ClassDefinition Name="btTranslationalLimitMotor2" />
+      <ClassDefinition Name="btRotationalLimitMotor2" HasPreventDelete="true" />
+      <ClassDefinition Name="btTranslationalLimitMotor2" HasPreventDelete="true" />
       <EnumDefinition Name="bt6DofFlags2" />
       <ClassDefinition Name="btGeneric6DofSpring2Constraint" />
       <ClassDefinition Name="btGeneric6DofSpring2ConstraintData" IsExcluded="true" />
@@ -621,7 +621,7 @@ else
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btConstraintSolver.h">
       <EnumDefinition Name="btConstraintSolverType" />
-      <ClassDefinition Name="btConstraintSolver" />
+      <ClassDefinition Name="btConstraintSolver" HasPreventDelete="true" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/Vehicle/btVehicleRaycaster.h">
       <ClassDefinition Name="btVehicleRaycaster">
@@ -636,7 +636,7 @@ else
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/Vehicle/btWheelInfo.h">
       <ClassDefinition Name="btWheelInfoConstructionInfo" />
-      <ClassDefinition Name="btWheelInfo">
+      <ClassDefinition Name="btWheelInfo" HasPreventDelete="true">
         <ClassDefinition Name="RaycastInfo" />
       </ClassDefinition>
     </HeaderDefinition>
@@ -867,7 +867,7 @@ else
       <ClassDefinition Name="btUnionFind" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletCollision/CollisionDispatch/btSimulationIslandManager.h">
-      <ClassDefinition Name="btSimulationIslandManager">
+      <ClassDefinition Name="btSimulationIslandManager" HasPreventDelete="true">
         <ClassDefinition Name="IslandCallback" />
       </ClassDefinition>
     </HeaderDefinition>
@@ -927,7 +927,7 @@ else
     <HeaderDefinition Path="BulletCollision/Gimpact/btBoxCollision.h">
       <EnumDefinition Name="eBT_PLANE_INTERSECTION_TYPE" />
       <ClassDefinition Name="BT_BOX_BOX_TRANSFORM_CACHE" IsExcluded="true" />
-      <ClassDefinition Name="btAABB" />
+      <ClassDefinition Name="btAABB" HasPreventDelete="true" />
     </HeaderDefinition>
     <HeaderDefinition Path="LinearMath/btGeometryUtil.h">
       <ClassDefinition Name="btGeometryUtil" />
@@ -1155,7 +1155,7 @@ else
       <ClassDefinition Name="btNNCGConstraintSolver" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/ConstraintSolver/btSolve2LinearConstraint.h">
-      <ClassDefinition Name="btSolve2LinearConstraint" />
+      <ClassDefinition Name="btSolve2LinearConstraint" HasPreventDelete="true" />
     </HeaderDefinition>
     <HeaderDefinition Path="BulletDynamics/Featherstone/btMultiBodyLink.h">
       <EnumDefinition Name="btMultiBodyLinkFlags" />
@@ -1434,7 +1434,7 @@ else
       <ClassDefinition Name="btGEN_List" />
     </HeaderDefinition>
     <HeaderDefinition Path="LinearMath/btPoolAllocator.h">
-      <ClassDefinition Name="btPoolAllocator" />
+      <ClassDefinition Name="btPoolAllocator" HasPreventDelete="true" />
     </HeaderDefinition>
     <HeaderDefinition Path="LinearMath/btStackAlloc.h">
       <ClassDefinition Name="btBlock" />

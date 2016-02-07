@@ -40,6 +40,10 @@ namespace BulletSharpGen.Project
             {
                 writer.WriteAttributeString("IsExcluded", "true");
             }
+            if (@class.HasPreventDelete)
+            {
+                writer.WriteAttributeString("HasPreventDelete", "true");
+            }
 
             foreach (var method in @class.Methods.Where(m => m.Parameters.Any(p => p.MarshalDirection == MarshalDirection.Out)))
             {
@@ -101,7 +105,7 @@ namespace BulletSharpGen.Project
         {
             using (var writer = XmlWriter.Create(project.ProjectPath, new XmlWriterSettings() { Indent = true }))
             {
-                writer.WriteStartElement("Project");
+                writer.WriteStartElement("Project", "urn:dotnetwrappergen");
 
                 if (project.ClassNameMapping != null) WriteMapping(writer, project.ClassNameMapping);
                 if (project.MethodNameMapping != null) WriteMapping(writer, project.MethodNameMapping);

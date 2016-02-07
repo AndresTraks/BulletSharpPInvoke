@@ -54,10 +54,10 @@ namespace DistanceDemo
 
             // Objects
             //colShape = new BoxShape(1);
-            Vector3[] points0 = new Vector3[] {
+            Vector3[] points0 = {
                 new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1)
             };
-            Vector3[] points1 = new Vector3[] {
+            Vector3[] points1 = {
                 new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(0,0,-1), new Vector3(-1,-1,0)
             };
             colShape0 = new ConvexHullShape(points0);

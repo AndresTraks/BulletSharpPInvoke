@@ -54,6 +54,13 @@ namespace BulletSharpGen
         public bool HidePublicConstructors { get; set; }
         public bool NoInternalConstructor { get; set; }
         public bool IsTrackingDisposable { get; set; }
+
+        /// <summary>
+        /// If true, the native memory allocated for this class
+        /// may or may not be freed by the wrapper class depending
+        /// on the value of the additional _preventDelete variable.
+        /// If false, the native memory is always freed (default).
+        /// </summary>
         public bool HasPreventDelete { get; set; }
         public bool IsExcluded { get; set; }
 

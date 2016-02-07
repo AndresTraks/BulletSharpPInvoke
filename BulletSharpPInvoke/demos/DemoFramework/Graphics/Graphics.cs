@@ -5,7 +5,7 @@ using BulletSharp;
 
 namespace DemoFramework
 {
-    public abstract class Graphics : System.IDisposable
+    public abstract class Graphics : IDisposable
     {
         public Demo Demo { get; protected set; }
         public Form Form { get; protected set; }

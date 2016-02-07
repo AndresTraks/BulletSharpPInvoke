@@ -86,9 +86,9 @@ namespace BulletSharpGen.Project
                     return;
             }
 
-            if (mapping is ReplaceMapping)
+            var replaceMapping = mapping as ReplaceMapping;
+            if (replaceMapping != null)
             {
-                var replaceMapping = mapping as ReplaceMapping;
                 foreach (var replacement in replacements)
                 {
                     replaceMapping.Replacements.Add(replacement.Key, replacement.Value);
@@ -177,10 +177,13 @@ namespace BulletSharpGen.Project
                 @class.NamespaceName = namespaceName;
             }
 
-            string isExcluded = reader.GetAttribute("IsExcluded");
-            if ("true".Equals(isExcluded))
+            if ("true".Equals(reader.GetAttribute("IsExcluded")))
             {
                 @class.IsExcluded = true;
+            }
+            if ("true".Equals(reader.GetAttribute("HasPreventDelete")))
+            {
+                @class.HasPreventDelete = true;
             }
             project.ClassDefinitions.Add(@class.FullyQualifiedName, @class);
 

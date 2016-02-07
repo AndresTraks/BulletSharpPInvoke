@@ -128,10 +128,10 @@ namespace BulletSharpGen
 
         void AddLibrary()
         {
-            List<string> sources = new List<string>();
+            var sources = new List<string>();
             var headers = headerDefinitions.Values.Where(h => h.Classes.Any()).OrderBy(x => x.Name);
 
-            foreach (HeaderDefinition header in headers)
+            foreach (var header in headers)
             {
                 sources.Add(header.Name + "_wrap.cpp");
                 sources.Add(header.Name + "_wrap.h");
@@ -158,7 +158,7 @@ namespace BulletSharpGen
         {
             foreach (string file in files)
             {
-                WriteLine(string.Format("    {0}/{1}", directory, file));
+                WriteLine($"    {directory}/{file}");
             }
         }
 
@@ -166,7 +166,7 @@ namespace BulletSharpGen
         {
             foreach (string file in files)
             {
-                WriteLine(string.Format("    {0}", file));
+                WriteLine($"    {file}");
             }
         }
     }

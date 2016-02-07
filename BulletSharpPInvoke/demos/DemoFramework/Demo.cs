@@ -7,7 +7,7 @@ using BulletSharp.Math;
 
 namespace DemoFramework
 {
-    public abstract class Demo : System.IDisposable
+    public abstract class Demo : IDisposable
     {
         protected Graphics Graphics { get; set; }
         public FreeLook Freelook { get; set; }
@@ -16,7 +16,6 @@ namespace DemoFramework
         // Frame counting
         Clock clock = new Clock();
         float frameAccumulator;
-        int frameCount;
 
         float _frameDelta;
         public float FrameDelta
@@ -151,8 +150,9 @@ namespace DemoFramework
                 }
                 Graphics.UpdateView();
 
-                clock.Start();
+                clock.StartRender();
                 Graphics.Run();
+                clock.StopRender();
 
                 if (_debugDrawer != null)
                 {
@@ -240,20 +240,21 @@ namespace DemoFramework
 
         public virtual void OnUpdate()
         {
-            _frameDelta = clock.Update();
+            _frameDelta = clock.GetFrameDelta();
             frameAccumulator += _frameDelta;
-            ++frameCount;
             if (frameAccumulator >= 1.0f)
             {
-                FramesPerSecond = frameCount / frameAccumulator;
+                FramesPerSecond = clock.FrameCount / frameAccumulator;
 
                 frameAccumulator = 0.0f;
-                frameCount = 0;
+                clock.Reset();
             }
 
             if (_world != null)
             {
+                clock.StartPhysics();
                 _world.StepSimulation(_frameDelta);
+                clock.StopPhysics();
             }
 
             if (Freelook.Update(_frameDelta))
@@ -285,6 +286,13 @@ namespace DemoFramework
                     case Keys.Escape:
                     case Keys.Q:
                         Graphics.Form.Close();
+                        return;
+                    case Keys.F1:
+                        MessageBox.Show(
+                            "Move using mouse and WASD + shift\n" +
+                            "Space - Shoot box\n" +
+                            "Q - Quit\n" +
+                            "Help");
                         return;
                     case Keys.F3:
                         IsDebugDrawEnabled = !IsDebugDrawEnabled;
