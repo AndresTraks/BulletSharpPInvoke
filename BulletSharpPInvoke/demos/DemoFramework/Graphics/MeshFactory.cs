@@ -9,27 +9,6 @@ using BulletSharp.Math;
 namespace DemoFramework
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct PositionColored
-    {
-        public static readonly int Stride = Vector3.SizeInBytes + sizeof(int);
-
-        public Vector3 Position;
-        public int Color;
-
-        public PositionColored(Vector3 pos, int col)
-        {
-            Position = pos;
-            Color = col;
-        }
-
-        public PositionColored(ref Vector3 pos, int col)
-        {
-            Position = pos;
-            Color = col;
-        }
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
     public struct PositionedNormal
     {
         public Vector3 Position;
@@ -324,12 +303,13 @@ namespace DemoFramework
                 vertices[v++] = normal;
 
                 indices[i++] = baseIndex;
+                indices[i++] = index;
                 indices[i++] = index - 1;
-                indices[i++] = index++;
+                index++;
             }
             indices[i++] = baseIndex;
-            indices[i++] = index - 1;
             indices[i++] = baseIndex + 1;
+            indices[i++] = index - 1;
 
 
             normal = GetVectorByAxis(0, 0, radius, up);
@@ -420,14 +400,14 @@ namespace DemoFramework
                     if (side == 1)
                     {
                         indices[i++] = index - 1;
-                        indices[i++] = index++;
+                        indices[i++] = index;
                     }
                     else
                     {
                         indices[i++] = index;
                         indices[i++] = index - 1;
-                        index++;
                     }
+                    index++;
                 }
                 indices[i++] = baseIndex;
                 if (side == 1)

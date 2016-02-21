@@ -48,8 +48,8 @@ void btTransformUtil_calculateVelocityQuaternion(const btScalar* pos0, const btS
 void btTransformUtil_integrateTransform(const btScalar* curTrans, const btScalar* linvel, const btScalar* angvel, btScalar timeStep, btScalar* predictedTransform)
 {
 	TRANSFORM_CONV(curTrans);
-	VECTOR3_DEF(linvel);
-	VECTOR3_DEF(angvel);
+	VECTOR3_CONV(linvel);
+	VECTOR3_CONV(angvel);
 	TRANSFORM_DEF(predictedTransform);
 	btTransformUtil::integrateTransform(TRANSFORM_USE(curTrans), VECTOR3_USE(linvel), VECTOR3_USE(angvel), timeStep, TRANSFORM_USE(predictedTransform));
 	TRANSFORM_DEF_OUT(predictedTransform);

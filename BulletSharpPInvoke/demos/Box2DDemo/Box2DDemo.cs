@@ -19,10 +19,6 @@ namespace Box2DDemo
             Freelook.SetEyeTarget(eye, target);
 
             Graphics.SetFormText("BulletSharp - Box 2D Demo");
-            Graphics.SetInfoText("Move using mouse and WASD+shift\n" +
-                "F3 - Toggle debug\n" +
-                //"F11 - Toggle fullscreen\n" +
-                "Space - Shoot box");
         }
 
         protected override void OnInitializePhysics()
@@ -81,22 +77,19 @@ namespace Box2DDemo
             float mass = 1.0f;
             Vector3 localInertia = colShape.CalculateLocalInertia(mass);
 
-            Matrix startTransform;
+            RigidBodyConstructionInfo rbInfo = new RigidBodyConstructionInfo(mass, null, colShape, localInertia);
 
             Vector3 x = new Vector3(-ArraySizeX, 8, -20);
             Vector3 y = Vector3.Zero;
             Vector3 deltaX = new Vector3(1, 2, 0);
             Vector3 deltaY = new Vector3(2, 0, 0);
 
-            var rbInfo = new RigidBodyConstructionInfo(mass, null, colShape, localInertia);
-
-            int i, j;
-            for (i = 0; i < ArraySizeY; i++)
+            for (int i = 0; i < ArraySizeY; i++)
             {
                 y = x;
-                for (j = 0; j < ArraySizeX; j++)
+                for (int j = 0; j < ArraySizeX; j++)
                 {
-                    startTransform = Matrix.Translation(y + new Vector3(10, 0, 0));
+                    Matrix startTransform = Matrix.Translation(y - new Vector3(-10, 0, 0));
 
                     //using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
                     rbInfo.MotionState = new DefaultMotionState(startTransform);

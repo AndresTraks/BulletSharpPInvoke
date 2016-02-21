@@ -48,6 +48,10 @@ namespace BulletSharp
 
 	public class ClosestConvexResultCallback : ConvexResultCallback
 	{
+        public ClosestConvexResultCallback()
+        {
+        }
+
 		public ClosestConvexResultCallback(ref Vector3 convexFromWorld, ref Vector3 convexToWorld)
 		{
             ConvexFromWorld = convexFromWorld;

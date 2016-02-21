@@ -27,10 +27,6 @@ namespace ConstraintDemo
             Freelook.SetEyeTarget(eye, target);
 
             Graphics.SetFormText("BulletSharp - Constraints Demo");
-            Graphics.SetInfoText("Move using mouse and WASD+shift\n" +
-                "F3 - Toggle debug\n" +
-                //"F11 - Toggle fullscreen\n" +
-                "Space - Shoot box");
 
             IsDebugDrawEnabled = true;
             DebugDrawMode = debugMode;
@@ -60,10 +56,10 @@ namespace ConstraintDemo
             CollisionShapes.Add(shape);
 
 
-            const float THETA = (float)Math.PI/4.0f;
+            const float THETA = (float)Math.PI / 4.0f;
             float L_1 = 2 - (float)Math.Tan(THETA);
             float L_2 = 1 / (float)Math.Cos(THETA);
-            float RATIO = L_2/L_1;
+            float RATIO = L_2 / L_1;
 
             RigidBody bodyA;
             RigidBody bodyB;

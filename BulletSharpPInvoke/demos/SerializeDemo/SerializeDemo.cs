@@ -41,15 +41,13 @@ namespace SerializeDemo
         float StartPosY = -5;
         float StartPosZ = -3;
 
+        BulletWorldImporter fileLoader;
+
         protected override void OnInitialize()
         {
             Freelook.SetEyeTarget(eye, target);
 
             Graphics.SetFormText("BulletSharp - Serialize Demo");
-            Graphics.SetInfoText("Move using mouse and WASD+shift\n" +
-                "F3 - Toggle debug\n" +
-                //"F11 - Toggle fullscreen\n" +
-                "Space - Shoot box");
         }
 
         protected override void OnInitializePhysics()
@@ -76,7 +74,7 @@ namespace SerializeDemo
                 bulletFile = args[1];
             }
 
-            BulletWorldImporter fileLoader = new CustomBulletWorldImporter(World);
+            fileLoader = new CustomBulletWorldImporter(World);
             if (!fileLoader.LoadFile(bulletFile))
             {
                 CollisionShape groundShape = new BoxShape(50);
@@ -100,21 +98,20 @@ namespace SerializeDemo
 
                 Vector3 localInertia = colShape.CalculateLocalInertia(mass);
 
-                float start_x = StartPosX - ArraySizeX / 2;
-                float start_y = StartPosY;
-                float start_z = StartPosZ - ArraySizeZ / 2;
+                float startX = StartPosX - ArraySizeX / 2;
+                float startY = StartPosY;
+                float startZ = StartPosZ - ArraySizeZ / 2;
 
-                int k, i, j;
-                for (k = 0; k < ArraySizeY; k++)
+                for (int k = 0; k < ArraySizeY; k++)
                 {
-                    for (i = 0; i < ArraySizeX; i++)
+                    for (int i = 0; i < ArraySizeX; i++)
                     {
-                        for (j = 0; j < ArraySizeZ; j++)
+                        for (int j = 0; j < ArraySizeZ; j++)
                         {
                             Matrix startTransform = Matrix.Translation(
-                                2 * i + start_x,
-                                2 * k + start_y,
-                                2 * j + start_z
+                                2 * i + startX,
+                                2 * k + startY,
+                                2 * j + startZ
                             );
 
                             // using motionstate is recommended, it provides interpolation capabilities
@@ -133,15 +130,15 @@ namespace SerializeDemo
                     }
                 }
 
-                const int maxSerializeBufferSize = 1024 * 1024 * 5;
-                DefaultSerializer serializer = new DefaultSerializer(maxSerializeBufferSize);
+                DefaultSerializer serializer = new DefaultSerializer();
 
                 serializer.RegisterNameForObject(ground, "GroundName");
 
-                for (i = 0; i < CollisionShapes.Count; i++)
+                for (int i = 0; i < CollisionShapes.Count; i++)
                     serializer.RegisterNameForObject(CollisionShapes[i], "name" + i.ToString());
 
-                Point2PointConstraint p2p = new Point2PointConstraint((RigidBody)World.CollisionObjectArray[2], new Vector3(0, 1, 0));
+                Point2PointConstraint p2p = new Point2PointConstraint((RigidBody) World.CollisionObjectArray[2],
+                    new Vector3(0, 1, 0));
                 World.AddConstraint(p2p);
 
                 serializer.RegisterNameForObject(p2p, "constraintje");
@@ -151,10 +148,17 @@ namespace SerializeDemo
                 byte[] dataBytes = new byte[serializer.CurrentBufferSize];
                 Marshal.Copy(serializer.BufferPointer, dataBytes, 0, dataBytes.Length);
 
-                FileStream file = new FileStream("testFile.bullet", FileMode.Create);
-                file.Write(dataBytes, 0, dataBytes.Length);
-                file.Dispose();
+                using (var file = new FileStream("testFile.bullet", FileMode.Create))
+                {
+                    file.Write(dataBytes, 0, dataBytes.Length);
+                }
             }
+        }
+
+        public override void ExitPhysics()
+        {
+            fileLoader.DeleteAllData();
+            base.ExitPhysics();
         }
     }
 

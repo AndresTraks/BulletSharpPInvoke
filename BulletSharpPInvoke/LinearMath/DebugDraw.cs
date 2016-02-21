@@ -229,11 +229,6 @@ namespace BulletSharp
             DrawLine(ref from, ref to, ref fromColor);
         }
 
-        void DrawAabb(Vector3 from, Vector3 to, Vector3 color)
-        {
-            DrawAabb(ref from, ref to, ref color);
-        }
-
         public virtual void DrawAabb(ref Vector3 from, ref Vector3 to, ref Vector3 color)
         {
             Vector3 halfExtents = (to - from) * 0.5f;
@@ -255,7 +250,7 @@ namespace BulletSharp
                             edgecoord.Z * halfExtents.Z);
                     pb += center;
 
-                    DrawLine(pa, pb, color);
+                    DrawLine(ref pa, ref pb, ref color);
                 }
                 edgecoord = new Vector3(-1.0f, -1.0f, -1.0f);
                 if (i < 3)
@@ -302,30 +297,50 @@ namespace BulletSharp
 
         public virtual void DrawBox(ref Vector3 bbMin, ref Vector3 bbMax, ref Vector3 color)
         {
-            DrawLine(bbMin, new Vector3(bbMax.X, bbMin.Y, bbMin.Z), color);
-            DrawLine(new Vector3(bbMax.X, bbMin.Y, bbMin.Z), new Vector3(bbMax.X, bbMax.Y, bbMin.Z), color);
-            DrawLine(new Vector3(bbMax.X, bbMax.Y, bbMin.Z), new Vector3(bbMin.X, bbMax.Y, bbMin.Z), color);
-            DrawLine(new Vector3(bbMin.X, bbMax.Y, bbMin.Z), bbMin, color);
-            DrawLine(bbMin, new Vector3(bbMin.X, bbMin.Y, bbMax.Z), color);
-            DrawLine(new Vector3(bbMax.X, bbMin.Y, bbMin.Z), new Vector3(bbMax.X, bbMin.Y, bbMax.Z), color);
-            DrawLine(new Vector3(bbMax.X, bbMax.Y, bbMin.Z), bbMax, color);
-            DrawLine(new Vector3(bbMin.X, bbMax.Y, bbMin.Z), new Vector3(bbMin.X, bbMax.Y, bbMax.Z), color);
-            DrawLine(new Vector3(bbMin.X, bbMin.Y, bbMax.Z), new Vector3(bbMax.X, bbMin.Y, bbMax.Z), color);
-            DrawLine(new Vector3(bbMax.X, bbMin.Y, bbMax.Z), bbMax, color);
-            DrawLine(bbMax, new Vector3(bbMin.X, bbMax.Y, bbMax.Z), color);
-            DrawLine(new Vector3(bbMin.X, bbMax.Y, bbMax.Z), new Vector3(bbMin.X, bbMin.Y, bbMax.Z), color);
+            //Vector3 p1 = bbMin;
+            Vector3 p2 = new Vector3(bbMax.X, bbMin.Y, bbMin.Z);
+            Vector3 p3 = new Vector3(bbMax.X, bbMax.Y, bbMin.Z);
+            Vector3 p4 = new Vector3(bbMin.X, bbMax.Y, bbMin.Z);
+            Vector3 p5 = new Vector3(bbMin.X, bbMin.Y, bbMax.Z);
+            Vector3 p6 = new Vector3(bbMax.X, bbMin.Y, bbMax.Z);
+            //Vector3 p7 = bbMax;
+            Vector3 p8 = new Vector3(bbMin.X, bbMax.Y, bbMax.Z);
+
+            DrawLine(ref bbMin, ref p2, ref color);
+            DrawLine(ref p2, ref p3, ref color);
+            DrawLine(ref p3, ref p4, ref color);
+            DrawLine(ref p4, ref bbMin, ref color);
+
+            DrawLine(ref bbMin, ref p5, ref color);
+            DrawLine(ref p2, ref p6, ref color);
+            DrawLine(ref p3, ref bbMax, ref color);
+            DrawLine(ref p4, ref p8, ref color);
+
+            DrawLine(ref p5, ref p6, ref color);
+            DrawLine(ref p6, ref bbMax, ref color);
+            DrawLine(ref bbMax, ref p8, ref color);
+            DrawLine(ref p8, ref p5, ref color);
         }
 
         public virtual void DrawBox(ref Vector3 bbMin, ref Vector3 bbMax, ref Matrix trans, ref Vector3 color)
         {
-            var p1 = Vector3.TransformCoordinate(bbMin, trans);
-            var p2 = Vector3.TransformCoordinate(new Vector3(bbMax.X, bbMin.Y, bbMin.Z), trans);
-            var p3 = Vector3.TransformCoordinate(new Vector3(bbMax.X, bbMax.Y, bbMin.Z), trans);
-            var p4 = Vector3.TransformCoordinate(new Vector3(bbMin.X, bbMax.Y, bbMin.Z), trans);
-            var p5 = Vector3.TransformCoordinate(new Vector3(bbMin.X, bbMin.Y, bbMax.Z), trans);
-            var p6 = Vector3.TransformCoordinate(new Vector3(bbMax.X, bbMin.Y, bbMax.Z), trans);
-            var p7 = Vector3.TransformCoordinate(bbMax, trans);
-            var p8 = Vector3.TransformCoordinate(new Vector3(bbMin.X, bbMax.Y, bbMax.Z), trans);
+            Vector3 p1, p2, p3, p4, p5, p6, p7, p8;
+            Vector3 point = bbMin;
+            Vector3.TransformCoordinate(ref point, ref trans, out p1);
+            point.X = bbMax.X;
+            Vector3.TransformCoordinate(ref point, ref trans, out p2);
+            point.Y = bbMax.Y;
+            Vector3.TransformCoordinate(ref point, ref trans, out p3);
+            point.X = bbMin.X;
+            Vector3.TransformCoordinate(ref point, ref trans, out p4);
+            point.Z = bbMax.Z;
+            Vector3.TransformCoordinate(ref point, ref trans, out p8);
+            point.X = bbMax.X;
+            Vector3.TransformCoordinate(ref point, ref trans, out p7);
+            point.Y = bbMin.Y;
+            Vector3.TransformCoordinate(ref point, ref trans, out p6);
+            point.X = bbMin.X;
+            Vector3.TransformCoordinate(ref point, ref trans, out p5);
 
             DrawLine(ref p1, ref p2, ref color);
             DrawLine(ref p2, ref p3, ref color);
@@ -345,24 +360,19 @@ namespace BulletSharp
 
         public virtual void DrawCapsule(float radius, float halfHeight, int upAxis, ref Matrix transform, ref Vector3 color)
         {
-            Vector3 capStart = Vector3.Zero; ;
+            Vector3 capStart = Vector3.Zero;
             capStart[upAxis] = -halfHeight;
 
             Vector3 capEnd = Vector3.Zero;
             capEnd[upAxis] = halfHeight;
 
             // Draw the ends
-            {
-                Matrix childTransform = transform;
-                childTransform.Origin = Vector3.TransformCoordinate(capStart, transform);
-                DrawSphere(radius, ref childTransform, ref color);
-            }
+            Matrix childTransform = transform;
+            childTransform.Origin = Vector3.TransformCoordinate(capStart, transform);
+            DrawSphere(radius, ref childTransform, ref color);
 
-            {
-                Matrix childTransform = transform;
-                childTransform.Origin = Vector3.TransformCoordinate(capEnd, transform);
-                DrawSphere(radius, ref childTransform, ref color);
-            }
+            childTransform.Origin = Vector3.TransformCoordinate(capEnd, transform);
+            DrawSphere(radius, ref childTransform, ref color);
 
             // Draw some additional lines
             Vector3 start = transform.Origin;
@@ -399,10 +409,11 @@ namespace BulletSharp
 
             Matrix basis = transform.Basis;
             Vector3 from = start + Vector3.TransformCoordinate(offsetHeight, basis);
-            DrawLine(from, start + Vector3.TransformCoordinate(-offsetHeight, basis) + offsetRadius, color);
-            DrawLine(from, start + Vector3.TransformCoordinate(-offsetHeight, basis) - offsetRadius, color);
-            DrawLine(from, start + Vector3.TransformCoordinate(-offsetHeight, basis) + offset2Radius, color);
-            DrawLine(from, start + Vector3.TransformCoordinate(-offsetHeight, basis) - offset2Radius, color);
+            Vector3 to = start + Vector3.TransformCoordinate(-offsetHeight, basis);
+            DrawLine(from, to + offsetRadius, color);
+            DrawLine(from, to - offsetRadius, color);
+            DrawLine(from, to + offset2Radius, color);
+            DrawLine(from, to - offset2Radius, color);
         }
 
         public virtual void DrawContactPoint(ref Vector3 pointOnB, ref Vector3 normalOnB, float distance, int lifeTime, ref Vector3 color)
@@ -428,13 +439,17 @@ namespace BulletSharp
             Vector3 planeOrigin = planeNormal * planeConst;
             Vector3 vec0, vec1;
             PlaneSpace1(ref planeNormal, out vec0, out vec1);
-            float vecLen = 100f;
+            const float vecLen = 100f;
             Vector3 pt0 = planeOrigin + vec0 * vecLen;
             Vector3 pt1 = planeOrigin - vec0 * vecLen;
             Vector3 pt2 = planeOrigin + vec1 * vecLen;
             Vector3 pt3 = planeOrigin - vec1 * vecLen;
-            DrawLine(Vector3.TransformCoordinate(pt0, transform), Vector3.TransformCoordinate(pt1, transform), color);
-            DrawLine(Vector3.TransformCoordinate(pt2, transform), Vector3.TransformCoordinate(pt3, transform), color);
+            Vector3.TransformCoordinate(ref pt0, ref transform, out pt0);
+            Vector3.TransformCoordinate(ref pt1, ref transform, out pt1);
+            Vector3.TransformCoordinate(ref pt2, ref transform, out pt2);
+            Vector3.TransformCoordinate(ref pt3, ref transform, out pt3);
+            DrawLine(ref pt0, ref pt1, ref color);
+            DrawLine(ref pt2, ref pt3, ref color);
         }
 
         public virtual void DrawSphere(float radius, ref Matrix transform, ref Vector3 color)
@@ -446,23 +461,30 @@ namespace BulletSharp
             Vector3 yoffs = Vector3.TransformCoordinate(new Vector3(0, radius, 0), basis);
             Vector3 zoffs = Vector3.TransformCoordinate(new Vector3(0, 0, radius), basis);
 
-            // XY 
-            DrawLine(start - xoffs, start + yoffs, color);
-            DrawLine(start + yoffs, start + xoffs, color);
-            DrawLine(start + xoffs, start - yoffs, color);
-            DrawLine(start - yoffs, start - xoffs, color);
+            Vector3 xn = start - xoffs;
+            Vector3 xp = start + xoffs;
+            Vector3 yn = start - yoffs;
+            Vector3 yp = start + yoffs;
+            Vector3 zn = start - zoffs;
+            Vector3 zp = start + zoffs;
+
+            // XY
+            DrawLine(ref xn, ref yp, ref color);
+            DrawLine(ref yp, ref xp, ref color);
+            DrawLine(ref xp, ref yn, ref color);
+            DrawLine(ref yn, ref xn, ref color);
 
             // XZ
-            DrawLine(start - xoffs, start + zoffs, color);
-            DrawLine(start + zoffs, start + xoffs, color);
-            DrawLine(start + xoffs, start - zoffs, color);
-            DrawLine(start - zoffs, start - xoffs, color);
+            DrawLine(ref xn, ref zp, ref color);
+            DrawLine(ref zp, ref xp, ref color);
+            DrawLine(ref xp, ref zn, ref color);
+            DrawLine(ref zn, ref xn, ref color);
 
             // YZ
-            DrawLine(start - yoffs, start + zoffs, color);
-            DrawLine(start + zoffs, start + yoffs, color);
-            DrawLine(start + yoffs, start - zoffs, color);
-            DrawLine(start - zoffs, start - yoffs, color);
+            DrawLine(ref yn, ref zp, ref color);
+            DrawLine(ref zp, ref yp, ref color);
+            DrawLine(ref yp, ref zn, ref color);
+            DrawLine(ref zn, ref yn, ref color);
         }
 
         public virtual void DrawSphere(ref Vector3 p, float radius, ref Vector3 color)
@@ -512,7 +534,7 @@ namespace BulletSharp
             int n_hor = (int)((maxTh - minTh) / step) + 1;
             if (n_hor < 2) n_hor = 2;
             float step_h = (maxTh - minTh) / (n_hor - 1);
-            bool isClosed = false;
+            bool isClosed;
             if (minPs > maxPs)
             {
                 minPs = -MathUtil.SIMD_PI + step;
@@ -548,15 +570,15 @@ namespace BulletSharp
                     pvB[j] = center + cth * cps * iv + cth * sps * jv + sth * kv;
                     if (i != 0)
                     {
-                        DrawLine(pvA[j], pvB[j], color);
+                        DrawLine(ref pvA[j], ref pvB[j], ref color);
                     }
                     else if (drawS)
                     {
-                        DrawLine(spole, pvB[j], color);
+                        DrawLine(ref spole, ref pvB[j], ref color);
                     }
                     if (j != 0)
                     {
-                        DrawLine(pvB[j - 1], pvB[j], color);
+                        DrawLine(ref pvB[j - 1], ref pvB[j], ref color);
                     }
                     else
                     {
@@ -564,20 +586,20 @@ namespace BulletSharp
                     }
                     if ((i == (n_hor - 1)) && drawN)
                     {
-                        DrawLine(npole, pvB[j], color);
+                        DrawLine(ref npole, ref pvB[j], ref color);
                     }
                     if (isClosed)
                     {
                         if (j == (n_vert - 1))
                         {
-                            DrawLine(arcStart, pvB[j], color);
+                            DrawLine(ref arcStart, ref pvB[j], ref color);
                         }
                     }
                     else
                     {
                         if (((i == 0) || (i == (n_hor - 1))) && ((j == 0) || (j == (n_vert - 1))))
                         {
-                            DrawLine(center, pvB[j], color);
+                            DrawLine(ref center, ref pvB[j], ref color);
                         }
                     }
                 }
@@ -602,14 +624,27 @@ namespace BulletSharp
             Vector3 start = transform.Origin;
             Matrix basis = transform.Basis;
 
-            Vector3 temp = start + Vector3.TransformCoordinate(new Vector3(orthoLen, 0, 0), basis);
+            Vector3 ortho = new Vector3(orthoLen, 0, 0);
             Vector3 colour = new Vector3(0.7f, 0, 0);
+            Vector3 temp;
+            Vector3.TransformCoordinate(ref ortho, ref basis, out temp);
+            temp += start;
             DrawLine(ref start, ref temp, ref colour);
-            temp = start + Vector3.TransformCoordinate(new Vector3(0, orthoLen, 0), basis);
-            colour = new Vector3(0, 0.7f, 0);
+
+            ortho.X = 0;
+            ortho.Y = orthoLen;
+            colour.X = 0;
+            colour.Y = 0.7f;
+            Vector3.TransformCoordinate(ref ortho, ref basis, out temp);
+            temp += start;
             DrawLine(ref start, ref temp, ref colour);
-            temp = start + Vector3.TransformCoordinate(new Vector3(0, 0, orthoLen), basis);
-            colour = new Vector3(0, 0, 0.7f);
+
+            ortho.Y = 0;
+            ortho.Z = orthoLen;
+            colour.Y = 0;
+            colour.Z = 0.7f;
+            Vector3.TransformCoordinate(ref ortho, ref basis, out temp);
+            temp += start;
             DrawLine(ref start, ref temp, ref colour);
         }
 

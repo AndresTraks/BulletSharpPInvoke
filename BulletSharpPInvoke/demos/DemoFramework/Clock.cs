@@ -4,19 +4,18 @@ namespace DemoFramework
 {
     public class Clock
     {
-        Stopwatch physicsTimer = new Stopwatch();
-        Stopwatch renderTimer = new Stopwatch();
-        Stopwatch frameTimer = new Stopwatch();
+        Stopwatch _physicsTimer = new Stopwatch();
+        Stopwatch _renderTimer = new Stopwatch();
+        Stopwatch _frameTimer = new Stopwatch();
 
-        long _frameCount;
-        public long FrameCount { get { return _frameCount; } }
+        public long FrameCount { get; private set; }
 
         public float PhysicsAverage
         {
             get
             {
-                if (_frameCount == 0) return 0;
-                return (((float)physicsTimer.ElapsedTicks / Stopwatch.Frequency) / _frameCount) * 1000.0f;
+                if (FrameCount == 0) return 0;
+                return (((float)_physicsTimer.ElapsedTicks / Stopwatch.Frequency) / FrameCount) * 1000.0f;
             }
         }
 
@@ -24,45 +23,45 @@ namespace DemoFramework
         {
             get
             {
-                if (_frameCount == 0) return 0;
-                return (((float)renderTimer.ElapsedTicks / Stopwatch.Frequency) / _frameCount) * 1000.0f;
+                if (FrameCount == 0) return 0;
+                return (((float)_renderTimer.ElapsedTicks / Stopwatch.Frequency) / FrameCount) * 1000.0f;
             }
         }
 
         public void StartPhysics()
         {
-            physicsTimer.Start();
+            _physicsTimer.Start();
         }
 
         public void StopPhysics()
         {
-            physicsTimer.Stop();
+            _physicsTimer.Stop();
         }
 
         public void StartRender()
         {
-            renderTimer.Start();
+            _renderTimer.Start();
         }
 
         public void StopRender()
         {
-            renderTimer.Stop();
+            _renderTimer.Stop();
         }
 
         public float GetFrameDelta()
         {
-            _frameCount++;
+            FrameCount++;
 
-            float delta = (float)frameTimer.ElapsedTicks / Stopwatch.Frequency;
-            frameTimer.Restart();
+            float delta = (float)_frameTimer.ElapsedTicks / Stopwatch.Frequency;
+            _frameTimer.Restart();
             return delta;
         }
 
         public void Reset()
         {
-            _frameCount = 0;
-            physicsTimer.Reset();
-            renderTimer.Reset();
+            FrameCount = 0;
+            _physicsTimer.Reset();
+            _renderTimer.Reset();
         }
     }
 }

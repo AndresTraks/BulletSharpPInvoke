@@ -7,10 +7,12 @@ namespace CollisionInterfaceDemo
 {
     class DrawingResult : ContactResultCallback
     {
-        DynamicsWorld world;
+        Vector3 _blue = new Vector3(0, 0, 1);
+
+        DynamicsWorld _world;
         public DrawingResult(DynamicsWorld world)
         {
-            this.world = world;
+            _world = world;
         }
 
         public override float AddSingleResult(ManifoldPoint cp,
@@ -19,7 +21,7 @@ namespace CollisionInterfaceDemo
         {
             Vector3 ptA = cp.PositionWorldOnA;
             Vector3 ptB = cp.PositionWorldOnB;
-            world.DebugDrawer.DrawLine(ref ptA, ref ptB, ref ptA);
+            _world.DebugDrawer.DrawLine(ref ptA, ref ptB, ref _blue);
             return 0;
         }
     };
@@ -41,10 +43,6 @@ namespace CollisionInterfaceDemo
             Freelook.SetEyeTarget(eye, target);
 
             Graphics.SetFormText("BulletSharp - Collision Interface Demo");
-            Graphics.SetInfoText("Move using mouse and WASD+shift\n" +
-                "F3 - Toggle debug\n" +
-                //"F11 - Toggle fullscreen\n" +
-                "Space - Shoot box");
 
             IsDebugDrawEnabled = true;
         }
@@ -93,10 +91,10 @@ namespace CollisionInterfaceDemo
             base.OnUpdate();
 
             Matrix t = objects[0].WorldTransform;
-            Vector4 pos = t.Row4;
-            t.Row4 = new Vector4(0, 0, 0, 1);
+            Vector3 pos = t.Origin;
+            t.Origin = Vector3.Zero;
             t *= Matrix.RotationYawPitchRoll(0.1f * FrameDelta, 0.05f * FrameDelta, 0);
-            t.Row4 = pos;
+            t.Origin = pos;
             objects[0].WorldTransform = t;
 
             if (IsDebugDrawEnabled)

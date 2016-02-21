@@ -10,18 +10,18 @@ namespace DemoFramework.OpenTK
         {
             world.DebugDrawWorld();
 
-            if (lines.Count == 0)
+            if (LineIndex == 0)
                 return;
 
-            Vector3[] positionArray = new Vector3[lines.Count];
-            int[] colorArray = new int[lines.Count];
+            Vector3[] positionArray = new Vector3[LineIndex];
+            int[] colorArray = new int[LineIndex];
             int i;
-            for (i = 0; i < lines.Count; i++)
+            for (i = 0; i < LineIndex; i++)
             {
-                positionArray[i] = lines[i].Position;
-                colorArray[i] = lines[i].Color;
+                positionArray[i] = Lines[i].Position;
+                colorArray[i] = Lines[i].Color;
             }
-            lines.Clear();
+            LineIndex = 0;
 
             GL.EnableClientState(ArrayCap.VertexArray);
             GL.EnableClientState(ArrayCap.ColorArray);

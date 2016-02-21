@@ -67,7 +67,7 @@ VS_OUT VS(VS_IN input)
 	return output;
 }
 
-PS_OUT_MRT PS_MRT( VS_OUT input )
+PS_OUT_MRT PS_MRT(VS_OUT input)
 {
 	PS_OUT_MRT output;
 
@@ -91,7 +91,7 @@ VS_DEBUG_OUT VS_DEBUG(VS_DEBUG_IN input)
 	return output;
 }
 
-PS_DEBUG_OUT_MRT PS_DEBUG_MRT( VS_DEBUG_OUT input )
+PS_DEBUG_OUT_MRT PS_DEBUG_MRT(VS_DEBUG_OUT input)
 {
 	PS_DEBUG_OUT_MRT output;
 	output.Normal = 0;
@@ -103,22 +103,22 @@ technique10 GBufferCreate
 {
 	pass ShadowMap
 	{
-		SetVertexShader( CompileShader( vs_4_0, shadowGenVS() ) );
-		SetGeometryShader( NULL );
-		SetPixelShader( NULL );
+		SetVertexShader(CompileShader(vs_4_0, shadowGenVS()));
+		SetGeometryShader(NULL);
+		SetPixelShader(NULL);
 	}
 
 	pass GBufferGen
 	{
-		SetVertexShader( CompileShader( vs_4_0, VS() ) );
-		SetGeometryShader( NULL );
-		SetPixelShader( CompileShader( ps_4_0, PS_MRT() ) );
+		SetVertexShader(CompileShader(vs_4_0, VS()));
+		SetGeometryShader(NULL);
+		SetPixelShader(CompileShader(ps_4_0, PS_MRT()));
 	}
 
 	pass DebugDraw
 	{
-		SetVertexShader( CompileShader( vs_4_0, VS_DEBUG() ) );
-		SetGeometryShader( NULL );
-		SetPixelShader( CompileShader( ps_4_0, PS_DEBUG_MRT() ) );
+		SetVertexShader(CompileShader(vs_4_0, VS_DEBUG()));
+		SetGeometryShader(NULL);
+		SetPixelShader(CompileShader(ps_4_0, PS_DEBUG_MRT()));
 	}
 }

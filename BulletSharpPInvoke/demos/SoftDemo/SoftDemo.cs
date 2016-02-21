@@ -121,12 +121,8 @@ namespace SoftDemo
             Freelook.SetEyeTarget(eye, target);
 
             Graphics.SetFormText("BulletSharp - SoftBody Demo");
-            Graphics.SetInfoText("Move using mouse and WASD+shift\n" +
-                "F3 - Toggle debug\n" +
-                //"F11 - Toggle fullscreen\n" +
-                "Space - Shoot box\n" +
-                "B - Previous Demo\n" +
-                "N - Next Demo");
+            DemoText = "B - Previous Demo\n" +
+                "N - Next Demo";
         }
 
         void NextDemo()
@@ -192,7 +188,7 @@ namespace SoftDemo
             psb.Translate(p);
             SoftWorld.AddSoftBody(psb);
 
-            return (psb);
+            return psb;
         }
 
         SoftBody Create_SoftBoulder(Vector3 p, Vector3 s, int np)
@@ -207,7 +203,7 @@ namespace SoftDemo
             psb.Translate(p);
             SoftWorld.AddSoftBody(psb);
 
-            return (psb);
+            return psb;
         }
 
         void Create_RbUpStack(int count)
@@ -283,7 +279,7 @@ namespace SoftDemo
             SoftBody psb = SoftBodyHelpers.CreateRope(softBodyWorldInfo, p, p + new Vector3(10, 0, 0), 8, 1);
             psb.TotalMass = 50;
             SoftWorld.AddSoftBody(psb);
-            return (psb);
+            return psb;
         }
 
         void Init_RopeAttach()
@@ -795,7 +791,7 @@ namespace SoftDemo
             psb.SetTotalMass(150, true);
             psb.GenerateClusters(1);
             SoftWorld.AddSoftBody(psb);
-            return (psb);
+            return psb;
         }
 
         SoftBody Create_ClusterTorus(Vector3 x, Vector3 a, Vector3 s)
@@ -814,7 +810,7 @@ namespace SoftDemo
             psb.SetTotalMass(50, true);
             psb.GenerateClusters(64);
             SoftWorld.AddSoftBody(psb);
-            return (psb);
+            return psb;
         }
 
         SoftBody Create_ClusterTorus(Vector3 x, Vector3 a)

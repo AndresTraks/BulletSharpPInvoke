@@ -204,21 +204,18 @@ namespace BulletSharp
 
 	public class CompoundPrimitiveManager : PrimitiveManagerBase
 	{
-		internal CompoundPrimitiveManager(IntPtr native)
+        GImpactCompoundShape _compoundShape;
+
+        internal CompoundPrimitiveManager(IntPtr native, GImpactCompoundShape compoundShape)
 			: base(native)
 		{
+            _compoundShape = compoundShape;
 		}
 
 		public GImpactCompoundShape CompoundShape
 		{
-			get { return CollisionShape.GetManaged(btGImpactCompoundShape_CompoundPrimitiveManager_getCompoundShape(_native)) as GImpactCompoundShape; }
-			set { btGImpactCompoundShape_CompoundPrimitiveManager_setCompoundShape(_native, value._native); }
+			get { return _compoundShape; }
 		}
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGImpactCompoundShape_CompoundPrimitiveManager_getCompoundShape(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGImpactCompoundShape_CompoundPrimitiveManager_setCompoundShape(IntPtr obj, IntPtr value);
 	}
 
 	public class GImpactCompoundShape : GImpactShapeInterface
@@ -263,7 +260,7 @@ namespace BulletSharp
             {
                 if (_compoundPrimitiveManager == null)
                 {
-                    _compoundPrimitiveManager = new CompoundPrimitiveManager(btGImpactCompoundShape_getCompoundPrimitiveManager(_native));
+                    _compoundPrimitiveManager = new CompoundPrimitiveManager(btGImpactCompoundShape_getCompoundPrimitiveManager(_native), this);
                 }
                 return _compoundPrimitiveManager;
             }

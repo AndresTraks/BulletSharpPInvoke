@@ -359,7 +359,7 @@ namespace DemoFramework.SharpDX
         static ShaderBytecode LoadShader(string name, ShaderFlags flags)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(string.Format("{0}.{1}", assembly.GetName().Name, name)));
+            StreamReader reader = new StreamReader(assembly.GetManifestResourceStream("DemoFramework.SharpDX." + name));
             string shaderSource = reader.ReadToEnd();
             return ShaderBytecode.Compile(shaderSource, "fx_4_0", flags, EffectFlags.None);
         }
@@ -518,8 +518,8 @@ namespace DemoFramework.SharpDX
         {
             // Clear targets
             _device.ClearDepthStencilView(depthView, DepthStencilClearFlags.Depth, 1.0f, 0);
-            _device.ClearRenderTargetView(renderView, ambient);
-            _device.ClearRenderTargetView(gBufferLightView, ambient);
+            //_device.ClearRenderTargetView(renderView, ambient);
+            //_device.ClearRenderTargetView(gBufferLightView, ambient);
             _device.ClearRenderTargetView(gBufferNormalView, ambient);
             _device.ClearRenderTargetView(gBufferDiffuseView, ambient);
 

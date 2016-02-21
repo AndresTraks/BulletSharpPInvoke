@@ -16,22 +16,17 @@ namespace CcdPhysicsDemo
         const float CubeHalfExtents = 1.0f;
         const float ExtraHeight = 1.0f;
 
-        string infoText = "Move using mouse and WASD+shift\n" +
-            "F3 - Toggle debug\n" +
-            //"F11 - Toggle fullscreen\n" +
-            "Space - Shoot box";
-
         void ToggleCcdMode()
         {
             ccdMode = !ccdMode;
 
             if (ccdMode)
             {
-                Graphics.SetInfoText(infoText + "\nCCD enabled (P to disable)");
+                DemoText = "CCD enabled (P to disable)";
             }
             else
             {
-                Graphics.SetInfoText(infoText + "\nCCD disabled (P to enable)");
+                DemoText = "CCD enabled (P to enable)";
             }
 
             ClientResetScene();
@@ -42,7 +37,7 @@ namespace CcdPhysicsDemo
             Freelook.SetEyeTarget(eye, target);
 
             Graphics.SetFormText("BulletSharp - CCD Demo");
-            Graphics.SetInfoText(infoText + "\nCCD enabled (P to disable)");
+            DemoText = "CCD enabled (P to disable)";
         }
 
         public override void OnHandleInput()
@@ -128,10 +123,7 @@ namespace CcdPhysicsDemo
 
         public override void ShootBox(Vector3 camPos, Vector3 destination)
         {
-            if (World == null)
-            {
-                return;
-            }
+            if (World == null) return;
 
             const float mass = 1.0f;
 
