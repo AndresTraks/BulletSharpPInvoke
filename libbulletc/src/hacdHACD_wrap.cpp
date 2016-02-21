@@ -1,4 +1,4 @@
-#include <../Extras/HACD/hacdHACD.h>
+#include <hacdHACD.h>
 
 #include "hacdHACD_wrap.h"
 

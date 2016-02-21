@@ -206,9 +206,17 @@ namespace BulletSharpGen
 
             string bulletRoot = "..\\bullet3";
 
+            /*
+            foreach (string sourceRootFolder in project.SourceRootFolders)
+            {
+                string sourceRootFolderRel = WrapperProject.MakeRelativePath(project.ProjectPath, sourceRootFolder);
+                sourceRootFolderRel.ToString();
+            }
+            */
+
             var slnWriter = new SlnWriter(filterWriter, project.NamespaceName)
             {
-                IncludeDirectories = string.Format("{0}\\src;{0}\\Extras\\HACD;{0}\\Extras\\Serialize\\BulletWorldImporter;", slnRelDir + bulletRoot),
+                IncludeDirectories = string.Format("{0}\\src;{0}\\Extras\\HACD;{0}\\Extras\\Serialize\\BulletWorldImporter;{0}\\Extras\\Serialize\\BulletXmlWorldImporter;", slnRelDir + bulletRoot),
                 FilterWriter = filterWriter
             };
             if (targetVS == TargetVS.VS2008)

@@ -1,33 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Xml;
 
 namespace BulletSharpGen.Project
 {
     class WrapperProjectXmlWriter
     {
-        public static string MakeRelativePath(string fromPath, string toPath)
-        {
-            if (string.IsNullOrEmpty(fromPath)) throw new ArgumentNullException("fromPath");
-            if (string.IsNullOrEmpty(toPath)) throw new ArgumentNullException("toPath");
-
-            var fromUri = new Uri(fromPath);
-            var toUri = new Uri(toPath);
-
-            if (fromUri.Scheme != toUri.Scheme) { return toPath; } // path can't be made relative.
-
-            var relativeUri = fromUri.MakeRelativeUri(toUri);
-            var relativePath = Uri.UnescapeDataString(relativeUri.ToString());
-
-            if (toUri.Scheme.ToUpperInvariant() == "FILE")
-            {
-                relativePath = relativePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-            }
-
-            return relativePath;
-        }
-
         public static void WriteClassDefinition(XmlWriter writer, ClassDefinition @class)
         {
             string name = @class.GetType().Name;
@@ -132,7 +109,7 @@ namespace BulletSharpGen.Project
                     string sourceRootFolderCanonical = sourceRootFolder.Replace('\\', '/');
 
                     writer.WriteStartElement("SourceRootFolder");
-                    string sourceRootFolderRelative = MakeRelativePath(project.ProjectPath, sourceRootFolder);
+                    string sourceRootFolderRelative = WrapperProject.MakeRelativePath(project.ProjectPath, sourceRootFolder);
                     sourceRootFolderRelative = sourceRootFolderRelative.Replace('\\', '/');
                     writer.WriteAttributeString("Path", sourceRootFolderRelative);
 
@@ -141,7 +118,7 @@ namespace BulletSharpGen.Project
                         if (!header.Key.StartsWith(sourceRootFolderCanonical)) continue;
 
                         writer.WriteStartElement("Header");
-                        string headerRelativePath = MakeRelativePath(sourceRootFolder, header.Key);
+                        string headerRelativePath = WrapperProject.MakeRelativePath(sourceRootFolder, header.Key);
                         headerRelativePath = headerRelativePath.Replace('\\', '/');
                         writer.WriteAttributeString("Path", headerRelativePath);
                         if (header.Value.IsExcluded)

@@ -1275,8 +1275,27 @@ namespace BulletSharpGen
             string sourceFullPath = Path.Combine(OutDirectoryC, sourcePath);
             var sourceFile = new FileStream(sourceFullPath, FileMode.Create, FileAccess.Write);
             sourceWriter = new StreamWriter(sourceFile);
-            string headerIncludeName = header.Filename.Substring(sourceRootFolder.Length);
-            sourceWriter.WriteLine("#include <{0}>", headerIncludeName);
+
+            // C++ #includes
+            var includes = new List<string>();
+            foreach (var includeHeader in header.Includes.Concat(new[] {header}))
+            {
+                // No need to include the base class header,
+                // it will already be included by the header of this class.
+                if (includeHeader != header &&
+                    header.AllClasses.Any(c => c.BaseClass != null && c.BaseClass.Header == includeHeader))
+                {
+                    continue;
+                }
+
+                string includePath = WrapperProject.MakeRelativePath(sourceRootFolder, includeHeader.Filename).Replace('\\', '/');
+                includes.Add(includePath);
+            }
+            includes.Sort();
+            foreach (var include in includes)
+            {
+                sourceWriter.WriteLine("#include <{0}>", include);
+            }
             sourceWriter.WriteLine();
             if (RequiresConversionHeader(header))
             {

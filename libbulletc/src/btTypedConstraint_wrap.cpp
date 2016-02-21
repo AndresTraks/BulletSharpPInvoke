@@ -1,4 +1,3 @@
-#include <BulletDynamics/ConstraintSolver/btSolverConstraint.h>
 #include <BulletDynamics/ConstraintSolver/btTypedConstraint.h>
 #include <LinearMath/btSerializer.h>
 

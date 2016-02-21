@@ -141,7 +141,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Debug/</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -160,10 +160,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -187,7 +187,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Debug/</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -204,10 +204,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -231,7 +231,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Release/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
@@ -250,10 +250,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -277,7 +277,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Release/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -294,10 +294,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -321,7 +321,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
@@ -340,10 +340,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -367,7 +367,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -384,10 +384,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -411,7 +411,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -429,10 +429,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -456,7 +456,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -472,10 +472,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet3\src;..\..\bullet3\src\..\Extras\HACD;..\..\bullet3\src\..\Extras\Serialize\BulletWorldImporter;..\..\bullet3\src\..\Extras\Serialize\BulletXmlWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>

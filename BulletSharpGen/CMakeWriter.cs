@@ -64,7 +64,9 @@ namespace BulletSharpGen
             WriteLine("  NO_DEFAULT_PATH");
             WriteLine(")");
             WriteLine("INCLUDE_DIRECTORIES(${BULLET_INCLUDE_DIR})");
+            WriteLine("INCLUDE_DIRECTORIES(${BULLET_INCLUDE_DIR}/../Extras/HACD/)");
             WriteLine("INCLUDE_DIRECTORIES(${BULLET_INCLUDE_DIR}/../Extras/Serialize/BulletWorldImporter/)");
+            WriteLine("INCLUDE_DIRECTORIES(${BULLET_INCLUDE_DIR}/../Extras/Serialize/BulletXmlWorldImporter/)");
             WriteLine();
 
             WriteLine("IF(${CMAKE_GENERATOR} MATCHES \"Unix Makefiles\")");
@@ -73,6 +75,7 @@ namespace BulletSharpGen
             WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/BulletDynamics)");
             WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/BulletSoftBody)");
             WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/LinearMath)");
+            WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/Extras/HACD)");
             WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/Extras/Serialize/BulletFileLoader)");
             WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/Extras/Serialize/BulletWorldImporter)");
             WriteLine("    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/Extras/Serialize/BulletXmlWorldImporter)");
@@ -121,6 +124,7 @@ namespace BulletSharpGen
             WriteLine("TARGET_LINK_LIBRARIES(${BULLETC_LIB} BulletSoftBody${LIB_SUFFIX})");
             WriteLine("TARGET_LINK_LIBRARIES(${BULLETC_LIB} BulletWorldImporter${LIB_SUFFIX})");
             WriteLine("TARGET_LINK_LIBRARIES(${BULLETC_LIB} BulletXmlWorldImporter${LIB_SUFFIX})");
+            WriteLine("TARGET_LINK_LIBRARIES(${BULLETC_LIB} HACD${LIB_SUFFIX})");
 
             cmakeWriter.Dispose();
             cmakeFile.Dispose();

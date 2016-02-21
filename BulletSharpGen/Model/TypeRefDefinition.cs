@@ -6,6 +6,12 @@ namespace BulletSharpGen
     {
         public string Name { get; set; }
         public bool IsBasic { get; set; }
+
+        /// <summary>
+        /// Class declaration is a forward reference.
+        /// </summary>
+        public bool IsIncomplete { get; set; }
+
         public bool IsPointer { get; set; }
         public bool IsReference { get; set; }
         public bool IsConstantArray { get; set; }
@@ -120,6 +126,14 @@ namespace BulletSharpGen
 
         public TypeRefDefinition(ClangSharp.Type type)
         {
+            if (!type.Declaration.IsInvalid &&
+                !type.Declaration.IsDefinition &&
+                type.Declaration.SpecializedCursorTemplate.IsInvalid)
+            {
+                // Forward reference
+                IsIncomplete = true;
+            }
+
             IsConst = type.IsConstQualifiedType;
 
             switch (type.TypeKind)
@@ -203,6 +217,7 @@ namespace BulletSharpGen
             t.IsBasic = IsBasic;
             t.IsConst = IsConst;
             t.IsConstantArray = IsConstantArray;
+            t.IsIncomplete = IsIncomplete;
             t.IsPointer = IsPointer;
             t.IsReference = IsReference;
             t.Name = Name;

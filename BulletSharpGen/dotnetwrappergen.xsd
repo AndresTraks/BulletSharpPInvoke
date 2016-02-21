@@ -58,6 +58,7 @@
       <xsd:element name="Class" type="ClassType"/>
       <xsd:element name="ClassTemplate" type="ClassTemplateType"/>
       <xsd:element name="Enum" type="EnumType"/>
+      <xsd:element name="Method" type="MethodType"/>
     </xsd:choice>
     <xsd:attribute name="HasPreventDelete" type="xsd:boolean"/>
     <xsd:attribute name="IsExcluded" type="xsd:boolean"/>
@@ -81,6 +82,19 @@
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="MethodType">
+    <xsd:choice minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="Parameter" type="ParameterType"/>
+    </xsd:choice>
+    <xsd:attribute name="IsExcluded" type="xsd:boolean"/>
+    <xsd:attribute name="Name" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="ParameterType">
+    <xsd:attribute name="Type" type="xsd:string"/>
+    <xsd:attribute name="Name" type="xsd:string"/>
   </xsd:complexType>
 
 </xsd:schema>

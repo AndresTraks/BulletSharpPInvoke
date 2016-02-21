@@ -8,8 +8,8 @@ namespace BulletSharpGen
     {
         public string Name { get; set; }
         public string Filename { get; set; }
-        public List<ClassDefinition> Classes { get; set; }
-        public List<HeaderDefinition> Includes { get; set; }
+        public List<ClassDefinition> Classes { get; } = new List<ClassDefinition>();
+        public HashSet<HeaderDefinition> Includes { get; } = new HashSet<HeaderDefinition>();
         public bool IsExcluded { get; set; }
 
         public string ManagedName { get; set; }
@@ -23,8 +23,6 @@ namespace BulletSharpGen
         {
             Name = Path.GetFileNameWithoutExtension(filename);
             Filename = filename;
-            Classes = new List<ClassDefinition>();
-            Includes = new List<HeaderDefinition>();
         }
 
         public override string ToString()

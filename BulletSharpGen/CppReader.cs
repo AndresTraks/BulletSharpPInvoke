@@ -90,22 +90,13 @@ namespace BulletSharpGen
 
             Console.Write("Reading headers");
 
-            index = new Index();
-
-            while (headerQueue.Count != 0)
+            using (index = new Index())
             {
-                ReadHeader(headerQueue[0]);
+                while (headerQueue.Count != 0)
+                {
+                    ReadHeader(headerQueue[0]);
+                }
             }
-            /*
-            if (Directory.Exists(src + "..\\Extras\\"))
-            {
-                ReadHeader(src + "..\\Extras\\Serialize\\BulletFileLoader\\btBulletFile.h");
-                ReadHeader(src + "..\\Extras\\Serialize\\BulletWorldImporter\\btBulletWorldImporter.h");
-                ReadHeader(src + "..\\Extras\\Serialize\\BulletWorldImporter\\btWorldImporter.h");
-                ReadHeader(src + "..\\Extras\\Serialize\\BulletXmlWorldImporter\\btBulletXmlWorldImporter.h");
-            }
-            */
-            index.Dispose();
 
             Console.WriteLine();
             Console.WriteLine("Read complete - headers: {0}, classes: {1}",
@@ -122,11 +113,8 @@ namespace BulletSharpGen
         {
             string filename = cursor.Extent.Start.File.Name.Replace('\\', '/');
 
-            // Skip this header if it's not part of any project source folders
-            if (project.SourceRootFolders.All(s => !filename.StartsWith(s.Replace('\\', '/'), StringComparison.OrdinalIgnoreCase)))
-            {
-                return Cursor.ChildVisitResult.Continue;
-            }
+            // Do not visit any included header
+            if (!filename.Equals(headerQueue[0])) return Cursor.ChildVisitResult.Continue;
 
             // Have we visited this header already?
             if (project.HeaderDefinitions.ContainsKey(filename))

@@ -62,6 +62,7 @@ namespace BulletSharpGen
         /// If false, the native memory is always freed (default).
         /// </summary>
         public bool HasPreventDelete { get; set; }
+
         public bool IsExcluded { get; set; }
 
         // For function prototypes IsTypeDef == true, but TypedefUnderlyingType == null

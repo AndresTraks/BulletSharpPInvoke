@@ -23,6 +23,7 @@ namespace BulletSharpGen
             RemoveRedundantMethods();
             CreateFieldAccessors();
             CreateProperties();
+            ResolveIncludes();
         }
 
         // n = 2 -> "\t\t"
@@ -165,12 +166,6 @@ namespace BulletSharpGen
             var classDefinitionsList = new List<ClassDefinition>(Project.ClassDefinitions.Values);
             foreach (var @class in classDefinitionsList)
             {
-                // Include header for the base if necessary
-                if (@class.BaseClass != null && @class.Header != @class.BaseClass.Header)
-                {
-                    @class.Header.Includes.Add(@class.BaseClass.Header);
-                }
-
                 // Resolve typedef
                 if (@class.TypedefUnderlyingType != null)
                 {
@@ -205,7 +200,11 @@ namespace BulletSharpGen
             {
                 ResolveTypeRef(typeRef.Referenced);
             }
-            else if (!Project.ClassDefinitions.ContainsKey(typeRef.Name))
+            else if (Project.ClassDefinitions.ContainsKey(typeRef.Name))
+            {
+                typeRef.Target = Project.ClassDefinitions[typeRef.Name];
+            }
+            else
             {
                 // Search for unscoped enums
                 bool resolvedEnum = false;
@@ -221,10 +220,6 @@ namespace BulletSharpGen
                 {
                     Console.WriteLine("Class " + typeRef.Name + " not found!");
                 }
-            }
-            else
-            {
-                typeRef.Target = Project.ClassDefinitions[typeRef.Name];
             }
 
             if (typeRef.SpecializedTemplateType != null)
@@ -388,7 +383,7 @@ namespace BulletSharpGen
             return ToCamelCase(param.Name, false);
         }
 
-        List<string> _booleanVerbs = new List<string>() { "Has", "Is", "Needs" };
+        string[] _booleanVerbs = { "Has", "Is", "Needs" };
 
         // Create getters and setters for fields
         void CreateFieldAccessors()
@@ -558,6 +553,61 @@ namespace BulletSharpGen
                             }
                         }
                     }
+                }
+            }
+        }
+
+        void ResolveInclude(TypeRefDefinition typeRef, HeaderDefinition parentHeader)
+        {
+            if (typeRef.IsPointer || typeRef.IsReference || typeRef.IsConstantArray)
+            {
+                ResolveInclude(typeRef.Referenced, parentHeader);
+            }
+            else if (typeRef.SpecializedTemplateType != null)
+            {
+                ResolveInclude(typeRef.SpecializedTemplateType, parentHeader);
+            }
+            else if (typeRef.IsIncomplete && typeRef.Target != null)
+            {
+                parentHeader.Includes.Add(typeRef.Target.Header);
+            }
+        }
+
+        // Add includes for incomplete types (forward references)
+        // Should be done after removing redundant methods.
+        void ResolveIncludes()
+        {
+            var classDefinitionsList = new List<ClassDefinition>(Project.ClassDefinitions.Values);
+            foreach (var @class in classDefinitionsList.Where(c => !c.IsExcluded))
+            {
+                var header = @class.Header;
+
+                // Include header for the base if necessary
+                if (@class.BaseClass != null && header != @class.BaseClass.Header)
+                {
+                    header.Includes.Add(@class.BaseClass.Header);
+                }
+
+                // Resolve typedef
+                if (@class.TypedefUnderlyingType != null)
+                {
+                    ResolveInclude(@class.TypedefUnderlyingType, header);
+                }
+
+                // Resolve method return type and parameter types
+                foreach (var method in @class.Methods)
+                {
+                    ResolveInclude(method.ReturnType, header);
+                    foreach (ParameterDefinition param in method.Parameters)
+                    {
+                        ResolveInclude(param.Type, header);
+                    }
+                }
+
+                // Resolve field types
+                foreach (var field in @class.Fields)
+                {
+                    ResolveInclude(field.Type, header);
                 }
             }
         }

@@ -1,5 +1,5 @@
-#include <BulletCollision/BroadphaseCollision/btBroadphaseInterface.h>
 #include <BulletCollision/BroadphaseCollision/btDispatcher.h>
+#include <BulletCollision/BroadphaseCollision/btOverlappingPairCache.h>
 
 #include "conversion.h"
 #include "btBroadphaseInterface_wrap.h"

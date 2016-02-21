@@ -1,7 +1,5 @@
 #include <BulletCollision/CollisionDispatch/btConvexConvexAlgorithm.h>
-#include <BulletCollision/CollisionDispatch/btCollisionObjectWrapper.h>
 #include <BulletCollision/NarrowPhaseCollision/btConvexPenetrationDepthSolver.h>
-#include <BulletCollision/NarrowPhaseCollision/btPersistentManifold.h>
 
 #include "btConvexConvexAlgorithm_wrap.h"
 
