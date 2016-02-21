@@ -42,7 +42,7 @@ namespace BulletSharpGen
                 foreach (string headerFullDir in headerFiles)
                 {
                     string headerFullDirCanonical = headerFullDir.Replace('\\', '/');
-                    string headerRelDir = headerFullDirCanonical.Substring(sourceFullDir.Length);
+                    //string headerRelDir = headerFullDirCanonical.Substring(sourceFullDir.Length);
 
                     HeaderDefinition header;
                     if (project.HeaderDefinitions.TryGetValue(headerFullDirCanonical, out header))
@@ -507,7 +507,8 @@ namespace BulletSharpGen
             Console.Write('.');
 
             var unsavedFiles = new UnsavedFile[] { };
-            using (_context.TranslationUnit = index.CreateTranslationUnit(headerFile, clangOptions.ToArray(), unsavedFiles, TranslationUnitFlags.SkipFunctionBodies))
+            using (_context.TranslationUnit = index.CreateTranslationUnit(headerFile,
+                clangOptions.ToArray(), unsavedFiles, TranslationUnitFlags.SkipFunctionBodies))
             {
                 var cur = _context.TranslationUnit.Cursor;
                 _context.Namespace = "";

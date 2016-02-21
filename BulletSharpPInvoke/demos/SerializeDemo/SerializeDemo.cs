@@ -130,27 +130,26 @@ namespace SerializeDemo
                     }
                 }
 
-                DefaultSerializer serializer = new DefaultSerializer();
-
-                serializer.RegisterNameForObject(ground, "GroundName");
-
-                for (int i = 0; i < CollisionShapes.Count; i++)
-                    serializer.RegisterNameForObject(CollisionShapes[i], "name" + i.ToString());
-
-                Point2PointConstraint p2p = new Point2PointConstraint((RigidBody) World.CollisionObjectArray[2],
-                    new Vector3(0, 1, 0));
-                World.AddConstraint(p2p);
-
-                serializer.RegisterNameForObject(p2p, "constraintje");
-
-                World.Serialize(serializer);
-
-                byte[] dataBytes = new byte[serializer.CurrentBufferSize];
-                Marshal.Copy(serializer.BufferPointer, dataBytes, 0, dataBytes.Length);
-
-                using (var file = new FileStream("testFile.bullet", FileMode.Create))
+                using (var serializer = new DefaultSerializer())
                 {
-                    file.Write(dataBytes, 0, dataBytes.Length);
+                    serializer.RegisterNameForObject(ground, "GroundName");
+
+                    for (int i = 0; i < CollisionShapes.Count; i++)
+                        serializer.RegisterNameForObject(CollisionShapes[i], "name" + i.ToString());
+
+                    Point2PointConstraint p2p = new Point2PointConstraint((RigidBody) World.CollisionObjectArray[2],
+                        new Vector3(0, 1, 0));
+                    World.AddConstraint(p2p);
+                    serializer.RegisterNameForObject(p2p, "constraintje");
+
+                    World.Serialize(serializer);
+                    byte[] dataBytes = new byte[serializer.CurrentBufferSize];
+                    Marshal.Copy(serializer.BufferPointer, dataBytes, 0, dataBytes.Length);
+
+                    using (var file = new FileStream("testFile.bullet", FileMode.Create))
+                    {
+                        file.Write(dataBytes, 0, dataBytes.Length);
+                    }
                 }
             }
         }

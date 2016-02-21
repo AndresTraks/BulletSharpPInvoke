@@ -30,7 +30,13 @@ namespace BulletSharpGen.Project
 
         public static void WriteClassDefinition(XmlWriter writer, ClassDefinition @class)
         {
-            writer.WriteStartElement(@class.GetType().Name);
+            string name = @class.GetType().Name;
+            if (name.EndsWith("Definition"))
+            {
+                name = name.Substring(0, name.Length - "Definition".Length);
+            }
+
+            writer.WriteStartElement(name);
             writer.WriteAttributeString("Name", @class.Name);
             if (@class.NamespaceName != "")
             {
@@ -45,8 +51,14 @@ namespace BulletSharpGen.Project
                 writer.WriteAttributeString("HasPreventDelete", "true");
             }
 
-            foreach (var method in @class.Methods.Where(m => m.Parameters.Any(p => p.MarshalDirection == MarshalDirection.Out)))
+            foreach (var method in @class.Methods)
             {
+                if (method.Parameters.All(p => p.MarshalDirection != MarshalDirection.Out) &&
+                    method.BodyText == null)
+                {
+                    break;
+                }
+
                 WriteMethodDefinition(writer, method);
             }
 
@@ -60,7 +72,7 @@ namespace BulletSharpGen.Project
 
         public static void WriteMethodDefinition(XmlWriter writer, MethodDefinition method)
         {
-            writer.WriteStartElement("MethodDefinition");
+            writer.WriteStartElement("Method");
             writer.WriteAttributeString("Name", method.Name);
             /*if (method.IsExcluded)
             {
@@ -128,7 +140,7 @@ namespace BulletSharpGen.Project
                     {
                         if (!header.Key.StartsWith(sourceRootFolderCanonical)) continue;
 
-                        writer.WriteStartElement("HeaderDefinition");
+                        writer.WriteStartElement("Header");
                         string headerRelativePath = MakeRelativePath(sourceRootFolder, header.Key);
                         headerRelativePath = headerRelativePath.Replace('\\', '/');
                         writer.WriteAttributeString("Path", headerRelativePath);

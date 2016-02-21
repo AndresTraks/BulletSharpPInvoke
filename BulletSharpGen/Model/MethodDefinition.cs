@@ -14,6 +14,8 @@
         public FieldDefinition Field { get; set; } // get/set method target
         public PropertyDefinition Property { get; set; } // property that wraps this get/set method
 
+        public string BodyText { get; set; }
+
         public bool IsVoid
         {
             get { return ReturnType != null && ReturnType.IsBasic && ReturnType.Name.Equals("void"); }
@@ -68,11 +70,6 @@
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
-            {
-                return false;
-            }
-
             var m = obj as MethodDefinition;
             if (m == null)
             {

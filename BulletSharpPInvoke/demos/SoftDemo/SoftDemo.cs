@@ -937,7 +937,7 @@ namespace SoftDemo
             const float widthr = 9;
             const float length = 8;
             const float height = 4;
-            Vector3[] wheels = new Vector3[] {
+            Vector3[] wheels = {
                 new Vector3(+widthf,-height,+length), // Front left
                 new Vector3(-widthf,-height,+length), // Front right
                 new Vector3(+widthr,-height,-length), // Rear left
@@ -1101,23 +1101,6 @@ namespace SoftDemo
             softBodyWorldInfo.SparseSdf.GarbageCollect();
             base.OnUpdate();
         }
-
-        class ImplicitSphere : ImplicitFn
-        {
-            Vector3 center;
-            float sqradius;
-
-            public ImplicitSphere(ref Vector3 c, float r)
-            {
-                center = c;
-                sqradius = r * r;
-            }
-
-            public override float Eval(ref Vector3 x)
-            {
-                return ((x - center).LengthSquared - sqradius);
-            }
-        };
 
         void PickingPreTickCallback(DynamicsWorld world, float timeStep)
         {

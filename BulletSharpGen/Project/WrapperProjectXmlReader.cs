@@ -134,9 +134,9 @@ namespace BulletSharpGen.Project
                 {
                     switch (reader.Name)
                     {
-                        case "ClassDefinition":
-                        case "ClassTemplateDefinition":
-                        case "EnumDefinition":
+                        case "Class":
+                        case "ClassTemplate":
+                        case "Enum":
                             {
                                 ReadClassDefinition(project, reader, header);
                             }
@@ -158,13 +158,13 @@ namespace BulletSharpGen.Project
             string classType = reader.Name;
             switch (classType)
             {
-                case "ClassDefinition":
+                case "Class":
                     @class = new ClassDefinition(className, header, parent);
                     break;
-                case "ClassTemplateDefinition":
+                case "ClassTemplate":
                     @class = new ClassTemplateDefinition(className, header, parent);
                     break;
-                case "EnumDefinition":
+                case "Enum":
                     @class = new EnumDefinition(className, header, parent);
                     break;
                 default:
@@ -198,9 +198,9 @@ namespace BulletSharpGen.Project
                 {
                     switch (reader.Name)
                     {
-                        case "ClassDefinition":
-                        case "ClassTemplateDefinition":
-                        case "EnumDefinition":
+                        case "Class":
+                        case "ClassTemplate":
+                        case "Enum":
                             {
                                 ReadClassDefinition(project, reader, header, @class);
                             }
@@ -227,7 +227,7 @@ namespace BulletSharpGen.Project
 
                 switch (reader.Name)
                 {
-                    case "HeaderDefinition":
+                    case "Header":
                         {
                             ReadHeaderDefinition(project, reader, sourceRootFolder);
                         }

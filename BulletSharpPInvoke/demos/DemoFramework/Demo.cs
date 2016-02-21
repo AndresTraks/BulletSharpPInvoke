@@ -334,15 +334,17 @@ namespace DemoFramework
                         break;
                     case (Keys.Control | Keys.F):
                         const int maxSerializeBufferSize = 1024 * 1024 * 5;
-                        DefaultSerializer serializer = new DefaultSerializer(maxSerializeBufferSize);
-                        World.Serialize(serializer);
-
-                        byte[] dataBytes = new byte[serializer.CurrentBufferSize];
-                        System.Runtime.InteropServices.Marshal.Copy(serializer.BufferPointer, dataBytes, 0, dataBytes.Length);
-
-                        System.IO.FileStream file = new System.IO.FileStream("world.bullet", System.IO.FileMode.Create);
-                        file.Write(dataBytes, 0, dataBytes.Length);
-                        file.Dispose();
+                        using (var serializer = new DefaultSerializer(maxSerializeBufferSize))
+                        {
+                            World.Serialize(serializer);
+                            byte[] dataBytes = new byte[serializer.CurrentBufferSize];
+                            System.Runtime.InteropServices.Marshal.Copy(serializer.BufferPointer, dataBytes, 0,
+                                dataBytes.Length);
+                            using (var file = new System.IO.FileStream("world.bullet", System.IO.FileMode.Create))
+                            {
+                                file.Write(dataBytes, 0, dataBytes.Length);
+                            }
+                        }
                         break;
                     case Keys.G:
                         //shadowsEnabled = !shadowsEnabled;

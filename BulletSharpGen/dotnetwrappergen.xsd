@@ -13,12 +13,12 @@
       <xsd:element name="SourceRootFolder" maxOccurs="unbounded">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="HeaderDefinition" maxOccurs="unbounded">
+            <xsd:element name="Header" maxOccurs="unbounded">
               <xsd:complexType>
                 <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                  <xsd:element name="ClassDefinition" type="ClassDefinitionType"/>
-                  <xsd:element name="ClassTemplateDefinition" type="ClassTemplateDefinitionType"/>
-                  <xsd:element name="EnumDefinition" type="EnumDefinitionType"/>
+                  <xsd:element name="Class" type="ClassType"/>
+                  <xsd:element name="ClassTemplate" type="ClassTemplateType"/>
+                  <xsd:element name="Enum" type="EnumType"/>
                 </xsd:choice>
                 <xsd:attribute name="IsExcluded" type="xsd:boolean"/>
                 <xsd:attribute name="Path" type="xsd:string"/>
@@ -53,11 +53,11 @@
     </xsd:complexContent>
   </xsd:complexType>
 
-  <xsd:complexType name="ClassDefinitionType">
+  <xsd:complexType name="ClassType">
     <xsd:choice minOccurs="0" maxOccurs="unbounded">
-      <xsd:element name="ClassDefinition" type="ClassDefinitionType"/>
-      <xsd:element name="ClassTemplateDefinition" type="ClassTemplateDefinitionType"/>
-      <xsd:element name="EnumDefinition" type="EnumDefinitionType"/>
+      <xsd:element name="Class" type="ClassType"/>
+      <xsd:element name="ClassTemplate" type="ClassTemplateType"/>
+      <xsd:element name="Enum" type="EnumType"/>
     </xsd:choice>
     <xsd:attribute name="HasPreventDelete" type="xsd:boolean"/>
     <xsd:attribute name="IsExcluded" type="xsd:boolean"/>
@@ -65,18 +65,18 @@
     <xsd:attribute name="Namespace" type="xsd:string"/>
   </xsd:complexType>
 
-  <xsd:complexType name="ClassTemplateDefinitionType">
+  <xsd:complexType name="ClassTemplateType">
     <xsd:complexContent>
-      <xsd:extension base="ClassDefinitionType">
+      <xsd:extension base="ClassType">
         <xsd:sequence>
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
 
-  <xsd:complexType name="EnumDefinitionType">
+  <xsd:complexType name="EnumType">
     <xsd:complexContent>
-      <xsd:extension base="ClassDefinitionType">
+      <xsd:extension base="ClassType">
         <xsd:sequence>
         </xsd:sequence>
       </xsd:extension>
