@@ -274,11 +274,6 @@ namespace BulletSharpGen
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
-            {
-                return false;
-            }
-
             TypeRefDefinition t = obj as TypeRefDefinition;
             if (t == null)
             {

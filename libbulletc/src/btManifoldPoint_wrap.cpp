@@ -1,8 +1,73 @@
-#include <BulletCollision/CollisionDispatch/btManifoldResult.h>
 #include <BulletCollision/NarrowPhaseCollision/btManifoldPoint.h>
 
 #include "conversion.h"
 #include "btManifoldPoint_wrap.h"
+
+btConstraintRow* btConstraintRow_new()
+{
+	return new btConstraintRow();
+}
+
+btScalar btConstraintRow_getAccumImpulse(btConstraintRow* obj)
+{
+	return obj->m_accumImpulse;
+}
+
+btScalar btConstraintRow_getJacDiagInv(btConstraintRow* obj)
+{
+	return obj->m_jacDiagInv;
+}
+
+btScalar btConstraintRow_getLowerLimit(btConstraintRow* obj)
+{
+	return obj->m_lowerLimit;
+}
+
+btScalar* btConstraintRow_getNormal(btConstraintRow* obj)
+{
+	return obj->m_normal;
+}
+
+btScalar btConstraintRow_getRhs(btConstraintRow* obj)
+{
+	return obj->m_rhs;
+}
+
+btScalar btConstraintRow_getUpperLimit(btConstraintRow* obj)
+{
+	return obj->m_upperLimit;
+}
+
+void btConstraintRow_setAccumImpulse(btConstraintRow* obj, btScalar value)
+{
+	obj->m_accumImpulse = value;
+}
+
+void btConstraintRow_setJacDiagInv(btConstraintRow* obj, btScalar value)
+{
+	obj->m_jacDiagInv = value;
+}
+
+void btConstraintRow_setLowerLimit(btConstraintRow* obj, btScalar value)
+{
+	obj->m_lowerLimit = value;
+}
+
+void btConstraintRow_setRhs(btConstraintRow* obj, btScalar value)
+{
+	obj->m_rhs = value;
+}
+
+void btConstraintRow_setUpperLimit(btConstraintRow* obj, btScalar value)
+{
+	obj->m_upperLimit = value;
+}
+
+void btConstraintRow_delete(btConstraintRow* obj)
+{
+	delete obj;
+}
+
 
 btManifoldPoint* btManifoldPoint_new()
 {
@@ -47,14 +112,14 @@ btScalar btManifoldPoint_getCombinedRollingFriction(btManifoldPoint* obj)
 	return obj->m_combinedRollingFriction;
 }
 
-btScalar btManifoldPoint_getContactCFM1(btManifoldPoint* obj)
+btScalar btManifoldPoint_getContactCFM(btManifoldPoint* obj)
 {
-	return obj->m_contactCFM1;
+	return obj->m_contactCFM;
 }
 
-btScalar btManifoldPoint_getContactCFM2(btManifoldPoint* obj)
+btScalar btManifoldPoint_getContactERP(btManifoldPoint* obj)
 {
-	return obj->m_contactCFM2;
+	return obj->m_contactERP;
 }
 
 btScalar btManifoldPoint_getContactMotion1(btManifoldPoint* obj)
@@ -67,6 +132,11 @@ btScalar btManifoldPoint_getContactMotion2(btManifoldPoint* obj)
 	return obj->m_contactMotion2;
 }
 
+int btManifoldPoint_getContactPointFlags(btManifoldPoint* obj)
+{
+	return obj->m_contactPointFlags;
+}
+
 btScalar btManifoldPoint_getDistance(btManifoldPoint* obj)
 {
 	return obj->getDistance();
@@ -75,6 +145,11 @@ btScalar btManifoldPoint_getDistance(btManifoldPoint* obj)
 btScalar btManifoldPoint_getDistance1(btManifoldPoint* obj)
 {
 	return obj->m_distance1;
+}
+
+btScalar btManifoldPoint_getFrictionCFM(btManifoldPoint* obj)
+{
+	return obj->m_frictionCFM;
 }
 
 int btManifoldPoint_getIndex0(btManifoldPoint* obj)
@@ -95,11 +170,6 @@ void btManifoldPoint_getLateralFrictionDir1(btManifoldPoint* obj, btScalar* valu
 void btManifoldPoint_getLateralFrictionDir2(btManifoldPoint* obj, btScalar* value)
 {
 	VECTOR3_OUT(&obj->m_lateralFrictionDir2, value);
-}
-
-bool btManifoldPoint_getLateralFrictionInitialized(btManifoldPoint* obj)
-{
-	return obj->m_lateralFrictionInitialized;
 }
 
 int btManifoldPoint_getLifeTime(btManifoldPoint* obj)
@@ -177,14 +247,14 @@ void btManifoldPoint_setCombinedRollingFriction(btManifoldPoint* obj, btScalar v
 	obj->m_combinedRollingFriction = value;
 }
 
-void btManifoldPoint_setContactCFM1(btManifoldPoint* obj, btScalar value)
+void btManifoldPoint_setContactCFM(btManifoldPoint* obj, btScalar value)
 {
-	obj->m_contactCFM1 = value;
+	obj->m_contactCFM = value;
 }
 
-void btManifoldPoint_setContactCFM2(btManifoldPoint* obj, btScalar value)
+void btManifoldPoint_setContactERP(btManifoldPoint* obj, btScalar value)
 {
-	obj->m_contactCFM2 = value;
+	obj->m_contactERP = value;
 }
 
 void btManifoldPoint_setContactMotion1(btManifoldPoint* obj, btScalar value)
@@ -197,6 +267,11 @@ void btManifoldPoint_setContactMotion2(btManifoldPoint* obj, btScalar value)
 	obj->m_contactMotion2 = value;
 }
 
+void btManifoldPoint_setContactPointFlags(btManifoldPoint* obj, int value)
+{
+	obj->m_contactPointFlags = value;
+}
+
 void btManifoldPoint_setDistance(btManifoldPoint* obj, btScalar dist)
 {
 	obj->setDistance(dist);
@@ -205,6 +280,11 @@ void btManifoldPoint_setDistance(btManifoldPoint* obj, btScalar dist)
 void btManifoldPoint_setDistance1(btManifoldPoint* obj, btScalar value)
 {
 	obj->m_distance1 = value;
+}
+
+void btManifoldPoint_setFrictionCFM(btManifoldPoint* obj, btScalar value)
+{
+	obj->m_frictionCFM = value;
 }
 
 void btManifoldPoint_setIndex0(btManifoldPoint* obj, int value)
@@ -225,11 +305,6 @@ void btManifoldPoint_setLateralFrictionDir1(btManifoldPoint* obj, const btScalar
 void btManifoldPoint_setLateralFrictionDir2(btManifoldPoint* obj, const btScalar* value)
 {
 	VECTOR3_IN(value, &obj->m_lateralFrictionDir2);
-}
-
-void btManifoldPoint_setLateralFrictionInitialized(btManifoldPoint* obj, bool value)
-{
-	obj->m_lateralFrictionInitialized = value;
 }
 
 void btManifoldPoint_setLifeTime(btManifoldPoint* obj, int value)
@@ -280,14 +355,4 @@ void btManifoldPoint_setUserPersistentData(btManifoldPoint* obj, void* value)
 void btManifoldPoint_delete(btManifoldPoint* obj)
 {
 	delete obj;
-}
-
-ContactAddedCallback getGContactAddedCallback()
-{
-	return gContactAddedCallback;
-}
-
-void setGContactAddedCallback(ContactAddedCallback value)
-{
-	gContactAddedCallback = value;
 }
