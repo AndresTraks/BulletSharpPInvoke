@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 
 namespace BulletSharpGen.Project
@@ -17,7 +18,7 @@ namespace BulletSharpGen.Project
                 Console.WriteLine(args.Message);
             };
 
-            using (var reader = XmlReader.Create(project.ProjectPath, xmlSettings))
+            using (var reader = XmlReader.Create(project.ProjectFilePath, xmlSettings))
             {
                 while (reader.Read())
                 {
@@ -110,8 +111,9 @@ namespace BulletSharpGen.Project
             }
         }
 
-        static void ReadHeaderDefinition(WrapperProject project, XmlReader reader, string sourceRootFolder)
+        static void ReadHeaderDefinition(WrapperProject project, XmlReader reader)
         {
+            string sourceRootFolder = project.SourceRootFoldersFull.Last();
             string headerPath = Path.Combine(sourceRootFolder, reader.GetAttribute("Path"));
             headerPath = headerPath.Replace('\\', '/');
             HeaderDefinition header = new HeaderDefinition(headerPath);
@@ -216,8 +218,6 @@ namespace BulletSharpGen.Project
 
         static void ReadProject(WrapperProject project, XmlReader reader)
         {
-            string sourceRootFolder = null;
-
             while (reader.Read())
             {
                 if (reader.NodeType != XmlNodeType.Element)
@@ -227,9 +227,29 @@ namespace BulletSharpGen.Project
 
                 switch (reader.Name)
                 {
+                    case "CppProjectPath":
+                        {
+                            project.CppProjectPath = reader.ReadElementContentAsString();
+                        }
+                        break;
+                    case "CProjectPath":
+                        {
+                            project.CProjectPath = reader.ReadElementContentAsString();
+                        }
+                        break;
+                    case "CsProjectPath":
+                        {
+                            project.CsProjectPath = reader.ReadElementContentAsString();
+                        }
+                        break;
+                    case "CppCliProjectPath":
+                        {
+                            project.CppCliProjectPath = reader.ReadElementContentAsString();
+                        }
+                        break;
                     case "Header":
                         {
-                            ReadHeaderDefinition(project, reader, sourceRootFolder);
+                            ReadHeaderDefinition(project, reader);
                         }
                         break;
 
@@ -242,9 +262,7 @@ namespace BulletSharpGen.Project
 
                     case "SourceRootFolder":
                         {
-                            sourceRootFolder = reader.GetAttribute("Path");
-                            sourceRootFolder = Path.Combine(Path.GetDirectoryName(project.ProjectPath), sourceRootFolder);
-                            sourceRootFolder = Path.GetFullPath(sourceRootFolder);
+                            string sourceRootFolder = reader.GetAttribute("Path");
                             project.SourceRootFolders.Add(sourceRootFolder);
                         }
                         break;

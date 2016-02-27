@@ -92,9 +92,14 @@ namespace BulletSharpGen.Project
 
         public static void Write(WrapperProject project)
         {
-            using (var writer = XmlWriter.Create(project.ProjectPath, new XmlWriterSettings() { Indent = true }))
+            using (var writer = XmlWriter.Create(project.ProjectFilePath, new XmlWriterSettings() { Indent = true }))
             {
                 writer.WriteStartElement("Project", "urn:dotnetwrappergen");
+
+                WriteStringElementIfNotNull(writer, "CppProjectPath", project.CppProjectPath);
+                WriteStringElementIfNotNull(writer, "CProjectPath", project.CProjectPath);
+                WriteStringElementIfNotNull(writer, "CsProjectPath", project.CsProjectPath);
+                WriteStringElementIfNotNull(writer, "CppCliProjectPath", project.CppCliProjectPath);
 
                 if (project.ClassNameMapping != null) WriteMapping(writer, project.ClassNameMapping);
                 if (project.MethodNameMapping != null) WriteMapping(writer, project.MethodNameMapping);
@@ -104,21 +109,21 @@ namespace BulletSharpGen.Project
                 writer.WriteString(project.NamespaceName);
                 writer.WriteEndElement();
 
-                foreach (string sourceRootFolder in project.SourceRootFolders)
+                for (int i = 0; i < project.SourceRootFolders.Count; i++)
                 {
-                    string sourceRootFolderCanonical = sourceRootFolder.Replace('\\', '/');
+                    string sourceRootFolder = project.SourceRootFolders[i];
+                    string sourceRootFolderFull = project.SourceRootFoldersFull.ElementAt(i);
+                    string sourceRootFolderCanonical = sourceRootFolderFull.Replace('\\', '/');
 
                     writer.WriteStartElement("SourceRootFolder");
-                    string sourceRootFolderRelative = WrapperProject.MakeRelativePath(project.ProjectPath, sourceRootFolder);
-                    sourceRootFolderRelative = sourceRootFolderRelative.Replace('\\', '/');
-                    writer.WriteAttributeString("Path", sourceRootFolderRelative);
+                    writer.WriteAttributeString("Path", sourceRootFolder);
 
                     foreach (var header in project.HeaderDefinitions)
                     {
                         if (!header.Key.StartsWith(sourceRootFolderCanonical)) continue;
 
                         writer.WriteStartElement("Header");
-                        string headerRelativePath = WrapperProject.MakeRelativePath(sourceRootFolder, header.Key);
+                        string headerRelativePath = WrapperProject.MakeRelativePath(sourceRootFolderFull, header.Key);
                         headerRelativePath = headerRelativePath.Replace('\\', '/');
                         writer.WriteAttributeString("Path", headerRelativePath);
                         if (header.Value.IsExcluded)
@@ -139,6 +144,15 @@ namespace BulletSharpGen.Project
                     writer.WriteEndElement();
                 }
             }
+        }
+
+        static void WriteStringElementIfNotNull(XmlWriter writer, string elementName, string value)
+        {
+            if (value == null) return;
+
+            writer.WriteStartElement(elementName);
+            writer.WriteString(value);
+            writer.WriteEndElement();
         }
     }
 }

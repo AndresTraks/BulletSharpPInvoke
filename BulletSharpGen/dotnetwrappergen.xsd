@@ -7,6 +7,10 @@
 
   <xsd:complexType name="WrapperProject">
     <xsd:sequence>
+      <xsd:element name="CppProjectPath" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="CProjectPath" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="CsProjectPath" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="CppCliProjectPath" type="xsd:string" minOccurs="0"/>
       <xsd:element name="ScriptedMapping" type="ScriptedMappingType" maxOccurs="unbounded"/>
       <xsd:element name="ReplaceMapping" type="ReplaceMappingType" maxOccurs="unbounded"/>
       <xsd:element name="NamespaceName" type="xsd:string"/>

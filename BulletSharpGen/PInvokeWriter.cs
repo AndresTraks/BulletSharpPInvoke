@@ -11,9 +11,6 @@ namespace BulletSharpGen
         Dictionary<string, string> wrapperHeaderGuards = new Dictionary<string, string>();
         WrapperProject project;
 
-        string OutDirectoryPInvoke => NamespaceName + "_pinvoke";
-        string OutDirectoryC => NamespaceName + "_c";
-
         public PInvokeWriter(WrapperProject project)
             : base(project.HeaderDefinitions.Values, project.NamespaceName)
         {
@@ -1264,7 +1261,7 @@ namespace BulletSharpGen
         {
             // C++ header file
             string headerPath = header.Name + "_wrap.h";
-            string headerFullPath = Path.Combine(OutDirectoryC, headerPath);
+            string headerFullPath = Path.Combine(project.CProjectPathFull, headerPath);
             var headerFile = new FileStream(headerFullPath, FileMode.Create, FileAccess.Write);
             headerWriter = new StreamWriter(headerFile);
             headerWriter.WriteLine("#include \"main.h\"");
@@ -1272,7 +1269,7 @@ namespace BulletSharpGen
 
             // C++ source file
             string sourcePath = header.Name + "_wrap.cpp";
-            string sourceFullPath = Path.Combine(OutDirectoryC, sourcePath);
+            string sourceFullPath = Path.Combine(project.CProjectPathFull, sourcePath);
             var sourceFile = new FileStream(sourceFullPath, FileMode.Create, FileAccess.Write);
             sourceWriter = new StreamWriter(sourceFile);
 
@@ -1305,7 +1302,7 @@ namespace BulletSharpGen
 
             // C# source file
             string csPath = header.ManagedName + ".cs";
-            string csFullPath = Path.Combine(OutDirectoryPInvoke, csPath);
+            string csFullPath = Path.Combine(project.CsProjectPathFull, csPath);
             var csFile = new FileStream(csFullPath, FileMode.Create, FileAccess.Write);
             csWriter = new StreamWriter(csFile);
             csWriter.WriteLine("using System;");
@@ -1387,7 +1384,7 @@ namespace BulletSharpGen
             var includeFile = new FileStream(outDirectoryC + "\\" + includeFilename, FileMode.Create, FileAccess.Write);
             var includeWriter = new StreamWriter(includeFile);
 
-            var sourceRootFolders = project.SourceRootFolders.Select(s => s.Replace('\\', '/'));
+            var sourceRootFolders = project.SourceRootFoldersFull.Select(s => s.Replace('\\', '/'));
             var headers = headerDefinitions.Where(h => !h.IsExcluded && !h.Classes.All(c => c.IsExcluded));
             var headersByRoot = headers.GroupBy(h => sourceRootFolders.First(s => h.Filename.StartsWith(s)));
             foreach (var headerGroup in headersByRoot)

@@ -26,7 +26,7 @@ namespace BulletSharpGen
             WrapperWriter writer;
             if (cppCliMode)
             {
-                writer = new CppCliWriter(project.HeaderDefinitions.Values, project.NamespaceName);
+                writer = new CppCliWriter(project);
             }
             else
             {
@@ -209,7 +209,7 @@ namespace BulletSharpGen
             /*
             foreach (string sourceRootFolder in project.SourceRootFolders)
             {
-                string sourceRootFolderRel = WrapperProject.MakeRelativePath(project.ProjectPath, sourceRootFolder);
+                string sourceRootFolderRel = WrapperProject.MakeRelativePath(project.ProjectFilePath, sourceRootFolder);
                 sourceRootFolderRel.ToString();
             }
             */

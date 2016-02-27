@@ -13,6 +13,8 @@ namespace BulletSharpGen
         const int TabWidth = 4;
         const int LineBreakWidth = 80;
 
+        WrapperProject _project;
+
         // Conditional compilation (#ifndef DISABLE_FEATURE)
         Dictionary<string, string> headerConditionals = new Dictionary<string, string>
         {
@@ -123,9 +125,10 @@ namespace BulletSharpGen
         public List<string> PrecompiledHeaderReferences =
             new List<string>(new[] {"Vector3", "Matrix3x3", "Quaternion", "Transform", "Vector4"});
 
-        public CppCliWriter(IEnumerable<HeaderDefinition> headerDefinitions, string namespaceName)
-            : base(headerDefinitions, namespaceName)
+        public CppCliWriter(WrapperProject project)
+            : base(project.HeaderDefinitions.Values, project.NamespaceName)
         {
+            _project = project;
         }
 
         void WriteTabs(int n, bool source = false)
@@ -990,19 +993,17 @@ namespace BulletSharpGen
 
         public override void Output()
         {
-            string outDirectory = NamespaceName + "_cppcli";
-
             foreach (HeaderDefinition header in headerDefinitions)
             {
                 if (header.Classes.All(IsExcludedClass)) continue;
 
-                Directory.CreateDirectory(outDirectory);
-                var headerFile = new FileStream(outDirectory + "\\" + header.ManagedName + ".h", FileMode.Create, FileAccess.Write);
+                Directory.CreateDirectory(_project.CppCliProjectPathFull);
+                var headerFile = new FileStream(Path.Combine(_project.CppCliProjectPathFull, header.ManagedName + ".h"), FileMode.Create, FileAccess.Write);
                 headerWriter = new StreamWriter(headerFile);
                 HeaderWriteLine("#pragma once");
                 HeaderWriteLine();
 
-                var sourceFile = new FileStream(outDirectory + "\\" + header.ManagedName + ".cpp", FileMode.Create, FileAccess.Write);
+                var sourceFile = new FileStream(Path.Combine(_project.CppCliProjectPathFull, header.ManagedName + ".cpp"), FileMode.Create, FileAccess.Write);
                 sourceWriter = new StreamWriter(sourceFile);
                 SourceWriteLine("#include \"StdAfx.h\"");
                 SourceWriteLine();

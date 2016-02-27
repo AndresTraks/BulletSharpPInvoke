@@ -33,7 +33,7 @@ namespace BulletSharpGen
         {
             this.project = project;
 
-            foreach (string sourceRelDir in project.SourceRootFolders)
+            foreach (string sourceRelDir in project.SourceRootFoldersFull)
             {
                 string sourceFullDir = Path.GetFullPath(sourceRelDir).Replace('\\', '/');
 
