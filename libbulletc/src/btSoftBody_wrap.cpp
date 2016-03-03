@@ -11,6 +11,7 @@ btSoftBody_AJoint_IControlWrapper::btSoftBody_AJoint_IControlWrapper(pIControl_P
 {
 	_prepareCallback = PrepareCallback;
 	_speedCallback = SpeedCallback;
+	_wrapperData = 0;
 }
 
 void btSoftBody_AJoint_IControlWrapper::Prepare(btSoftBody::AJoint* aJoint)
@@ -23,7 +24,7 @@ btScalar btSoftBody_AJoint_IControlWrapper::Speed(btSoftBody::AJoint* aJoint, bt
 	return _speedCallback(aJoint, current);
 }
 
-void* btSoftBody_AJoint_IControlWrapper::getWrapperData()
+void* btSoftBody_AJoint_IControlWrapper::getWrapperData() const
 {
 	return _wrapperData;
 }

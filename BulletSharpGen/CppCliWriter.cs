@@ -542,7 +542,7 @@ namespace BulletSharpGen
                 sourceMethodName = headerMethodName;
             }
             HeaderWrite($"{headerMethodName}(");
-            SourceWrite($"{parentClass.FullNameManaged}::{sourceMethodName}(");
+            SourceWrite($"{parentClass.FullNameCppCli}::{sourceMethodName}(");
 
             // Definition: parameters
             int numParameters = method.Parameters.Length - numOptionalParams;
@@ -835,7 +835,7 @@ namespace BulletSharpGen
                     EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Internal);
 
                     WriteTabs(level + 1);
-                    SourceWrite($"{@class.FullNameManaged}::");
+                    SourceWrite($"{@class.FullNameCppCli}::");
                     Write($"{@class.ManagedName}({@class.FullyQualifiedName}* native)");
                     HeaderWriteLine(';');
                     SourceWriteLine();
@@ -867,13 +867,13 @@ namespace BulletSharpGen
                     hasHeaderWhiteSpace = false;
 
                     EnsureSourceWhiteSpace();
-                    SourceWriteLine($"{@class.FullNameManaged}::~{@class.ManagedName}()");
+                    SourceWriteLine($"{@class.FullNameCppCli}::~{@class.ManagedName}()");
                     SourceWriteLine('{');
                     SourceWriteLine($"\tthis->!{@class.ManagedName}();");
                     SourceWriteLine('}');
                     SourceWriteLine();
 
-                    SourceWriteLine($"{@class.FullNameManaged}::!{@class.ManagedName}()");
+                    SourceWriteLine($"{@class.FullNameCppCli}::!{@class.ManagedName}()");
                     SourceWriteLine('{');
                     if (@class.IsTrackingDisposable)
                     {

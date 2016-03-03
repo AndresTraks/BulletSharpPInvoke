@@ -113,11 +113,11 @@ namespace BulletSharpGen
             {
                 if (Parent != null)
                 {
-                    return string.Format("{0}::{1}", Parent.FullyQualifiedName, Name);
+                    return $"{Parent.FullyQualifiedName}::{Name}";
                 }
                 if (NamespaceName != "")
                 {
-                    return string.Format("{0}::{1}", NamespaceName, Name);
+                    return $"{NamespaceName}::{Name}";
                 }
                 return Name;
             }
@@ -129,31 +129,35 @@ namespace BulletSharpGen
             {
                 if (Parent != null)
                 {
-                    return string.Format("{0}::{1}", Parent.FullName, Name);
+                    return $"{Parent.FullName}::{Name}";
                 }
                 return Name;
             }
         }
 
-        public string FullNameCS
+        public string FullNameC
         {
             get
             {
                 if (Parent != null)
                 {
-                    return Parent.FullNameCS + '_' + Name;
+                    return $"{Parent.FullNameC}_{Name}";
+                }
+                if (NamespaceName != "")
+                {
+                    return $"{NamespaceName}_{Name}";
                 }
                 return Name;
             }
         }
 
-        public string FullNameManaged
+        public string FullNameCppCli
         {
             get
             {
                 if (Parent != null)
                 {
-                    return Parent.FullNameManaged + "::" + ManagedName;
+                    return $"{Parent.FullNameCppCli}::{ManagedName}";
                 }
                 return ManagedName;
             }

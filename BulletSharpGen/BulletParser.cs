@@ -721,7 +721,7 @@ namespace BulletSharpGen
                         output.AppendLine(GetTabs(level + 2) + "get");
                         output.AppendLine(GetTabs(level + 2) + "{");
                         output.AppendLine(GetTabs(level + 3) + GetTypeNameCS(type) + " value;");
-                        output.AppendLine(GetTabs(level + 3) + string.Format("{0}_{1}(_native, out value);", prop.Parent.FullNameCS, prop.Getter.Name));
+                        output.AppendLine(GetTabs(level + 3) + string.Format("{0}_{1}(_native, out value);", prop.Parent.FullNameC, prop.Getter.Name));
                         output.AppendLine(GetTabs(level + 3) + "return value;");
                         output.AppendLine(GetTabs(level + 2) + '}');
                         return output.ToString();
@@ -730,7 +730,7 @@ namespace BulletSharpGen
 
             output.AppendLine(GetTabs(level + 2) + string.Format("get {{ return {0}{1}_{2}(_native){3}; }}",
                 GetTypeMarshalConstructorStartCS(prop.Getter),
-                prop.Parent.FullNameCS, prop.Getter.Name,
+                prop.Parent.FullNameC, prop.Getter.Name,
                 GetTypeMarshalConstructorEndCS(prop.Getter)));
             return output.ToString();
         }

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 
 #include <bulletc.h>
 #include "hacd_data.h"
@@ -23,30 +22,30 @@ void test_hacd()
 	// Truncate to float precision
 	for (int i = 0; i < sizeof(points) / sizeof(points[0]); i++)
 	{
-		points[i] = (float)points[i];
+		points[i] = float(points[i]);
 	}
 
-	HACD_HACD* myHACD = HACD_new();
-	HACD_SetPoints(myHACD, points);
-	HACD_SetNPoints(myHACD, sizeof(points) / (sizeof(points[0]) * 3));
-	HACD_SetTriangles(myHACD, triangles);
-	HACD_SetNTriangles(myHACD, sizeof(triangles) / (sizeof(triangles[0]) * 3));
-	HACD_SetCompacityWeight(myHACD, 0.1);
-	HACD_SetVolumeWeight(myHACD, 0.0);
+	HACD_HACD* myHACD = HACD_HACD_new();
+	HACD_HACD_SetPoints(myHACD, points);
+	HACD_HACD_SetNPoints(myHACD, sizeof(points) / (sizeof(points[0]) * 3));
+	HACD_HACD_SetTriangles(myHACD, triangles);
+	HACD_HACD_SetNTriangles(myHACD, sizeof(triangles) / (sizeof(triangles[0]) * 3));
+	HACD_HACD_SetCompacityWeight(myHACD, 0.1);
+	HACD_HACD_SetVolumeWeight(myHACD, 0.0);
 
-	HACD_SetNClusters(myHACD, 2);                     // minimum number of clusters
-	HACD_SetNVerticesPerCH(myHACD, 100);                      // max of 100 vertices per convex-hull
-	HACD_SetConcavity(myHACD, 100);                     // maximum concavity
-	HACD_SetAddExtraDistPoints(myHACD, false);
-	HACD_SetAddNeighboursDistPoints(myHACD, false);
-	HACD_SetAddFacesPoints(myHACD, false);
+	HACD_HACD_SetNClusters(myHACD, 2);                     // minimum number of clusters
+	HACD_HACD_SetNVerticesPerCH(myHACD, 100);                      // max of 100 vertices per convex-hull
+	HACD_HACD_SetConcavity(myHACD, 100);                     // maximum concavity
+	HACD_HACD_SetAddExtraDistPoints(myHACD, false);
+	HACD_HACD_SetAddNeighboursDistPoints(myHACD, false);
+	HACD_HACD_SetAddFacesPoints(myHACD, false);
 
-	HACD_Compute(myHACD);
-	size_t nClusters = HACD_GetNClusters(myHACD);
+	HACD_HACD_Compute(myHACD);
+	size_t nClusters = HACD_HACD_GetNClusters(myHACD);
 
 	cout << "HACD clusters: " << nClusters << endl;
 
-	HACD_Save(myHACD, "output.wrl", false);
+	HACD_HACD_Save(myHACD, "output.wrl", false);
 }
 
 int main(int argc, char* argv[])

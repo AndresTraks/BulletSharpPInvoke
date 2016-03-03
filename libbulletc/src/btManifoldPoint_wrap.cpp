@@ -1,73 +1,8 @@
+#include <BulletCollision/CollisionDispatch/btManifoldResult.h>
 #include <BulletCollision/NarrowPhaseCollision/btManifoldPoint.h>
 
 #include "conversion.h"
 #include "btManifoldPoint_wrap.h"
-
-btConstraintRow* btConstraintRow_new()
-{
-	return new btConstraintRow();
-}
-
-btScalar btConstraintRow_getAccumImpulse(btConstraintRow* obj)
-{
-	return obj->m_accumImpulse;
-}
-
-btScalar btConstraintRow_getJacDiagInv(btConstraintRow* obj)
-{
-	return obj->m_jacDiagInv;
-}
-
-btScalar btConstraintRow_getLowerLimit(btConstraintRow* obj)
-{
-	return obj->m_lowerLimit;
-}
-
-btScalar* btConstraintRow_getNormal(btConstraintRow* obj)
-{
-	return obj->m_normal;
-}
-
-btScalar btConstraintRow_getRhs(btConstraintRow* obj)
-{
-	return obj->m_rhs;
-}
-
-btScalar btConstraintRow_getUpperLimit(btConstraintRow* obj)
-{
-	return obj->m_upperLimit;
-}
-
-void btConstraintRow_setAccumImpulse(btConstraintRow* obj, btScalar value)
-{
-	obj->m_accumImpulse = value;
-}
-
-void btConstraintRow_setJacDiagInv(btConstraintRow* obj, btScalar value)
-{
-	obj->m_jacDiagInv = value;
-}
-
-void btConstraintRow_setLowerLimit(btConstraintRow* obj, btScalar value)
-{
-	obj->m_lowerLimit = value;
-}
-
-void btConstraintRow_setRhs(btConstraintRow* obj, btScalar value)
-{
-	obj->m_rhs = value;
-}
-
-void btConstraintRow_setUpperLimit(btConstraintRow* obj, btScalar value)
-{
-	obj->m_upperLimit = value;
-}
-
-void btConstraintRow_delete(btConstraintRow* obj)
-{
-	delete obj;
-}
-
 
 btManifoldPoint* btManifoldPoint_new()
 {
@@ -355,4 +290,15 @@ void btManifoldPoint_setUserPersistentData(btManifoldPoint* obj, void* value)
 void btManifoldPoint_delete(btManifoldPoint* obj)
 {
 	delete obj;
+}
+
+
+ContactAddedCallback getGContactAddedCallback()
+{
+	return gContactAddedCallback;
+}
+
+void setGContactAddedCallback(ContactAddedCallback value)
+{
+	gContactAddedCallback = value;
 }

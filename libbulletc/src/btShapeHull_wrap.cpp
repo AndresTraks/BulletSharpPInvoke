@@ -1,6 +1,5 @@
 #include <BulletCollision/CollisionShapes/btShapeHull.h>
 
-#include "conversion.h"
 #include "btShapeHull_wrap.h"
 
 btShapeHull* btShapeHull_new(const btConvexShape* shape)

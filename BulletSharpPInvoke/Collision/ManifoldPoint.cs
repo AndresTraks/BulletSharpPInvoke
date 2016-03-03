@@ -276,7 +276,7 @@ namespace BulletSharp
                 if (prevPtr != IntPtr.Zero)
                 {
                     GCHandle prevHandle = GCHandle.FromIntPtr(prevPtr);
-                    if (object.ReferenceEquals(value, prevHandle.Target))
+                    if (ReferenceEquals(value, prevHandle.Target))
                     {
                         return;
                     }

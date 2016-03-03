@@ -4,7 +4,6 @@
 #include <BulletSoftBody/btSoftBody.h>
 #include <LinearMath/btAlignedObjectArray.h>
 
-#include "conversion.h"
 #include "btAlignedObjectArray_wrap.h"
 
 btBroadphasePair* btAlignedBroadphasePairArray_at(btAlignedBroadphasePairArray* obj, int n)
@@ -263,7 +262,7 @@ int btAlignedSoftBodyNodeArray_index_of(btSoftBody::tNodeArray* obj, btSoftBody:
 	if (val < &obj->at(0) || val > &obj->at(obj->size() - 1)) {
 		return -1;
 	}
-	return (int)(val - &obj->at(0));
+	return static_cast<int>(val - &obj->at(0));
 }
 
 void btAlignedSoftBodyNodeArray_push_back(btSoftBody::tNodeArray* obj, btSoftBody::Node* val)

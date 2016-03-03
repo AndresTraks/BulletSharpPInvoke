@@ -3,12 +3,13 @@
 #include <BulletCollision/CollisionShapes/btStridingMeshInterface.h>
 #include <BulletDynamics/Dynamics/btDynamicsWorld.h>
 #include <BulletDynamics/Dynamics/btRigidBody.h>
-#include <../Extras/Serialize/BulletWorldImporter/btWorldImporter.h>
+#include <btWorldImporter.h>
 
-#include "conversion.h"
 #include "btWorldImporter_wrap.h"
 
 #ifndef BULLETC_DISABLE_WORLD_IMPORTERS
+
+#include "conversion.h"
 
 btWorldImporter* btWorldImporter_new(btDynamicsWorld* world)
 {

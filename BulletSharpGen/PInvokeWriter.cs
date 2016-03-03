@@ -133,7 +133,7 @@ namespace BulletSharpGen
                 WriteTabs(level + 3, WriteTo.CS);
                 WriteLine('{', WriteTo.CS);
                 WriteTabs(level + 4, WriteTo.CS);
-                Write(method.Parent.FullNameCS, WriteTo.CS);
+                Write(method.Parent.FullNameC, WriteTo.CS);
                 WriteLine("_delete(_native);", WriteTo.CS);
                 WriteTabs(level + 3, WriteTo.CS);
                 WriteLine('}', WriteTo.CS);
@@ -141,7 +141,7 @@ namespace BulletSharpGen
             else
             {
                 WriteTabs(level + 3, WriteTo.CS);
-                Write(method.Parent.FullNameCS, WriteTo.CS);
+                Write(method.Parent.FullNameC, WriteTo.CS);
                 WriteLine("_delete(_native);", WriteTo.CS);
             }
             WriteTabs(level + 3, WriteTo.CS);
@@ -213,7 +213,7 @@ namespace BulletSharpGen
             // Return type
             if (method.IsConstructor)
             {
-                Write(method.Parent.FullNameCS, WriteTo.Header);
+                Write(method.Parent.FullNameC, WriteTo.Header);
                 Write(method.Parent.FullyQualifiedName, WriteTo.Source);
                 Write("* ", WriteTo.Header | WriteTo.Source);
                 Write("IntPtr ", dllImport);
@@ -252,7 +252,7 @@ namespace BulletSharpGen
 
             // Name
             string methodName = method.IsConstructor ? "new" : method.Name;
-            Write($"{method.Parent.FullNameCS}_{methodName}",
+            Write($"{method.Parent.FullNameC}_{methodName}",
                 WriteTo.Header | WriteTo.Source | dllImport);
 
             if (methodName.Equals("delete"))
@@ -282,7 +282,7 @@ namespace BulletSharpGen
             // The first parameter is the instance pointer (if not constructor or static method)
             if (!method.IsConstructor && !method.IsStatic)
             {
-                Write($"{method.Parent.FullNameCS}* obj", WriteTo.Header);
+                Write($"{method.Parent.FullNameC}* obj", WriteTo.Header);
                 Write($"{method.Parent.FullyQualifiedName}* obj", WriteTo.Source);
                 Write("IntPtr obj", dllImport);
 
@@ -412,7 +412,7 @@ namespace BulletSharpGen
                 {
                     Write("_native = ", WriteTo.CS);
                 }
-                Write($"{method.Parent.FullNameCS}_new", WriteTo.CS);
+                Write($"{method.Parent.FullNameC}_new", WriteTo.CS);
             }
             else
             {
@@ -457,7 +457,7 @@ namespace BulletSharpGen
                     Write(method.Name, WriteTo.Source);
                 }
 
-                Write(method.Parent.FullNameCS, cs);
+                Write(method.Parent.FullNameC, cs);
                 Write('_', cs);
                 Write(method.Name, cs);
             }
@@ -729,7 +729,7 @@ namespace BulletSharpGen
                     WriteLine("{", WriteTo.CS);
                     WriteTabs(level + 3, WriteTo.CS);
                     WriteLine(string.Format("{0}_{1}(_native, {2});",
-                        prop.Parent.FullNameCS,
+                        prop.Parent.FullNameC,
                         prop.Setter.Name,
                         BulletParser.GetTypeSetterCSMarshal(prop.Type)), WriteTo.CS);
                     WriteTabs(level + 3, WriteTo.CS);
@@ -746,7 +746,7 @@ namespace BulletSharpGen
                 {
                     WriteTabs(level + 2, WriteTo.CS);
                     WriteLine(string.Format("set {{ {0}_{1}(_native, {2}); }}",
-                        prop.Parent.FullNameCS,
+                        prop.Parent.FullNameC,
                         prop.Setter.Name,
                         BulletParser.GetTypeSetterCSMarshal(prop.Type)), WriteTo.CS);
                 }
@@ -830,8 +830,7 @@ namespace BulletSharpGen
             if (c.BaseClass != null)
             {
                 Write(" : ", WriteTo.CS);
-                WriteLine(c.BaseClass.FullNameManaged.Replace("::", "."), WriteTo.CS);
-                //WriteLine(c.BaseClass.ManagedNameCS, WriteTo.CS);
+                WriteLine(c.BaseClass.FullNameCppCli.Replace("::", "."), WriteTo.CS);
             }
             else if (c.IsStaticClass)
             {
@@ -846,7 +845,7 @@ namespace BulletSharpGen
             hasCSWhiteSpace = true;
 
             // Write child classes
-            foreach (var cl in c.Classes.OrderBy(x => x.FullNameManaged))
+            foreach (var cl in c.Classes.OrderBy(x => x.FullNameCppCli))
             {
                 WriteClass(cl, level + 1);
             }
@@ -1071,7 +1070,7 @@ namespace BulletSharpGen
             {
                 WriteLine(WriteTo.Header);
             }
-            WriteLine(string.Format("class {0}Wrapper : public {0}", cl.FullNameCS), WriteTo.Header);
+            WriteLine(string.Format("class {0}Wrapper : public {0}", cl.FullNameC), WriteTo.Header);
             WriteLine("{", WriteTo.Header);
             WriteLine("private:", WriteTo.Header);
             foreach (var method in abstractMethods)
@@ -1083,7 +1082,7 @@ namespace BulletSharpGen
             WriteLine("public:", WriteTo.Header);
 
             // Wrapper constructor
-            Write(string.Format("\t{0}Wrapper(", cl.FullNameCS), WriteTo.Header);
+            Write(string.Format("\t{0}Wrapper(", cl.FullNameC), WriteTo.Header);
             int numMethods = abstractMethods.Count;
             for (int i = 0; i < numMethods; i++)
             {
@@ -1319,7 +1318,7 @@ namespace BulletSharpGen
 
             // Write wrapper class headers
             hasCppClassSeparatingWhitespace = true;
-            var wrappedClasses = header.AllClasses.Where(x => wrapperHeaderGuards.ContainsKey(x.Name)).OrderBy(x => x.FullNameCS).ToList();
+            var wrappedClasses = header.AllClasses.Where(x => wrapperHeaderGuards.ContainsKey(x.Name)).OrderBy(x => x.FullNameC).ToList();
             if (wrappedClasses.Count != 0)
             {
                 string headerGuard = wrapperHeaderGuards[wrappedClasses[0].Name];
@@ -1330,7 +1329,7 @@ namespace BulletSharpGen
                 }
                 foreach (var @class in wrappedClasses)
                 {
-                    WriteLine($"#define {@class.FullNameCS}Wrapper void", WriteTo.Header);
+                    WriteLine($"#define {@class.FullNameC}Wrapper void", WriteTo.Header);
                 }
                 WriteLine("#else", WriteTo.Header);
                 foreach (var @class in wrappedClasses)

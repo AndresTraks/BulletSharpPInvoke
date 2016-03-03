@@ -1,9 +1,7 @@
 #include <BulletCollision/CollisionDispatch/btCollisionObjectWrapper.h>
 #include <BulletCollision/CollisionDispatch/btManifoldResult.h>
-#include <BulletCollision/CollisionShapes/btCollisionShape.h>
 #include <BulletSoftBody/btSoftBodyConcaveCollisionAlgorithm.h>
 
-#include "conversion.h"
 #include "btSoftBodyConcaveCollisionAlgorithm_wrap.h"
 
 btSoftBodyConcaveCollisionAlgorithm::CreateFunc* btSoftBodyConcaveCollisionAlgorithm_CreateFunc_new()

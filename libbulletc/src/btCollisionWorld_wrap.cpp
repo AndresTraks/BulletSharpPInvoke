@@ -84,7 +84,7 @@ btCollisionWorld::AllHitsRayResultCallback* btCollisionWorld_AllHitsRayResultCal
 
 btAlignedCollisionObjectArray* btCollisionWorld_AllHitsRayResultCallback_getCollisionObjects(btCollisionWorld::AllHitsRayResultCallback* obj)
 {
-	return (btAlignedCollisionObjectArray*)&obj->m_collisionObjects;
+	return reinterpret_cast<btAlignedCollisionObjectArray*>(&obj->m_collisionObjects);
 }
 
 btAlignedScalarArray* btCollisionWorld_AllHitsRayResultCallback_getHitFractions(btCollisionWorld::AllHitsRayResultCallback* obj)

@@ -49,11 +49,11 @@ namespace BulletSharpGen
             }
 
             StringBuilder outText = new StringBuilder();
-            int left = 0, right;
+            int left = 0;
 
             while (left < text.Length)
             {
-                right = text.IndexOf('_', left);
+                int right = text.IndexOf('_', left);
                 if (right == -1)
                 {
                     right = text.Length;

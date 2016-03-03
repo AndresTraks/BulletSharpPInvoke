@@ -22,7 +22,7 @@ public:
 
 	virtual void Prepare(btSoftBody_AJoint* aJoint);
 	virtual btScalar Speed(btSoftBody_AJoint* aJoint, btScalar current);
-	void* getWrapperData();
+	void* getWrapperData() const;
 	void setWrapperData(void* data);
 };
 

@@ -1,10 +1,11 @@
 #include <BulletCollision/CollisionDispatch/btCollisionWorld.h>
 #include <BulletDynamics/Character/btCharacterControllerInterface.h>
 
-#include "conversion.h"
 #include "btCharacterControllerInterface_wrap.h"
 
 #ifndef BULLETC_DISABLE_IACTION_CLASSES
+
+#include "conversion.h"
 
 bool btCharacterControllerInterface_canJump(btCharacterControllerInterface* obj)
 {
