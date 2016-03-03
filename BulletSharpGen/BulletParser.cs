@@ -413,6 +413,25 @@ namespace BulletSharpGen
                 return null;
             }
 
+            if (parameter.MarshalDirection == MarshalDirection.Out)
+            {
+                switch (parameter.Type.ManagedName)
+                {
+                    case "Quaternion":
+                        return "QUATERNION_DEF(" + parameter.Name + ");";
+                    case "Matrix3x3":
+                        return "MATRIX3X3_DEF(" + parameter.Name + ");";
+                    case "Transform":
+                        return "TRANSFORM_DEF(" + parameter.Name + ");";
+                    case "Vector3":
+                        return "VECTOR3_DEF(" + parameter.Name + ");";
+                    case "Vector4":
+                        return "VECTOR4_DEF(" + parameter.Name + ");";
+                    default:
+                        return null;
+                }
+            }
+
             switch (parameter.Type.ManagedName)
             {
                 case "Quaternion":

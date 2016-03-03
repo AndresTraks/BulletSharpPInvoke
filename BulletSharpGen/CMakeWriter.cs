@@ -6,15 +6,13 @@ namespace BulletSharpGen
 {
     class CMakeWriter
     {
-        private Dictionary<string, HeaderDefinition> headerDefinitions;
-        private string namespaceName;
+        WrapperProject _project;
 
         StreamWriter cmakeWriter;
 
-        public CMakeWriter(Dictionary<string, HeaderDefinition> headerDefinitions, string namespaceName)
+        public CMakeWriter(WrapperProject project)
         {
-            this.headerDefinitions = headerDefinitions;
-            this.namespaceName = namespaceName;
+            _project = project;
         }
 
         void Write(string s)
@@ -34,13 +32,13 @@ namespace BulletSharpGen
 
         public void Output()
         {
-            string outDirectoryC = namespaceName + "_c";
+            string outDirectoryC = Path.Combine(_project.CProjectPathFull, "..");
 
             Directory.CreateDirectory(outDirectoryC);
 
             // C++ header file (includes all other headers)
             string cmakeFilename = "CMakeLists.txt";
-            var cmakeFile = new FileStream(outDirectoryC + "\\" + cmakeFilename, FileMode.Create, FileAccess.Write);
+            var cmakeFile = new FileStream(Path.Combine(outDirectoryC, cmakeFilename), FileMode.Create, FileAccess.Write);
             cmakeWriter = new StreamWriter(cmakeFile);
 
             WriteLine("CMAKE_MINIMUM_REQUIRED (VERSION 2.6)");
@@ -133,7 +131,7 @@ namespace BulletSharpGen
         void AddLibrary()
         {
             var sources = new List<string>();
-            var headers = headerDefinitions.Values.Where(h => h.Classes.Any()).OrderBy(x => x.Name);
+            var headers = _project.HeaderDefinitions.Values.Where(h => h.Classes.Any()).OrderBy(x => x.Name);
 
             foreach (var header in headers)
             {

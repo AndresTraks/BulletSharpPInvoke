@@ -69,9 +69,10 @@ namespace BulletSharpGen.Project
         {
             writer.WriteStartElement(mapping.GetType().Name);
             writer.WriteAttributeString("Name", mapping.Name);
-            if (mapping is ReplaceMapping)
+
+            var replaceMapping = mapping as ReplaceMapping;
+            if (replaceMapping != null)
             {
-                var replaceMapping = mapping as ReplaceMapping;
                 foreach (var replacement in replaceMapping.Replacements.OrderBy(kv => kv.Key))
                 {
                     writer.WriteStartElement("Replacement");
@@ -79,9 +80,9 @@ namespace BulletSharpGen.Project
                     writer.WriteAttributeString("With", replacement.Value);
                     writer.WriteEndElement();
                 }
-                if (replaceMapping is ScriptedMapping)
+                var scriptedMapping = replaceMapping as ScriptedMapping;
+                if (scriptedMapping != null)
                 {
-                    var scriptedMapping = replaceMapping as ScriptedMapping;
                     writer.WriteStartElement("ScriptBody");
                     writer.WriteString(scriptedMapping.ScriptBody);
                     writer.WriteEndElement();

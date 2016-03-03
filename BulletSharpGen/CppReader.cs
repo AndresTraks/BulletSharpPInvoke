@@ -381,14 +381,27 @@ namespace BulletSharpGen
                     return Cursor.ChildVisitResult.Continue;
                 }
 
-                _context.Method = new MethodDefinition(methodName, _context.Class, cursor.NumArguments)
+                foreach (var method in _context.Class.Methods.Where(m => !m.IsParsed))
                 {
-                    ReturnType = new TypeRefDefinition(cursor.ResultType),
-                    IsConstructor = cursor.Kind == CursorKind.Constructor,
-                    IsStatic = cursor.IsStaticCxxMethod,
-                    IsVirtual = cursor.IsVirtualCxxMethod,
-                    IsAbstract = cursor.IsPureVirtualCxxMethod
-                };
+                    if (method.Name == methodName &&
+                        method.Parameters.Length == cursor.NumArguments)
+                    {
+                        // TODO: check method parameter types if given
+                        _context.Method = method;
+                        break;
+                    }
+                }
+
+                if (_context.Method == null)
+                {
+                    _context.Method = new MethodDefinition(methodName, _context.Class, cursor.NumArguments);
+                }
+
+                _context.Method.ReturnType = new TypeRefDefinition(cursor.ResultType);
+                _context.Method.IsConstructor = cursor.Kind == CursorKind.Constructor;
+                _context.Method.IsStatic = cursor.IsStaticCxxMethod;
+                _context.Method.IsVirtual = cursor.IsVirtualCxxMethod;
+                _context.Method.IsAbstract = cursor.IsPureVirtualCxxMethod;
 
                 // Check if the return type is a template
                 cursor.VisitChildren(MethodTemplateTypeVisitor);
@@ -404,8 +417,16 @@ namespace BulletSharpGen
                         parameterName = "__unnamed" + i;
                     }
 
-                    _context.Parameter = new ParameterDefinition(parameterName, new TypeRefDefinition(arg.Type));
-                    _context.Method.Parameters[i] = _context.Parameter;
+                    if (_context.Method.Parameters[i] == null)
+                    {
+                        _context.Parameter = new ParameterDefinition(parameterName, new TypeRefDefinition(arg.Type));
+                        _context.Method.Parameters[i] = _context.Parameter;
+                    }
+                    else
+                    {
+                        _context.Parameter = _context.Method.Parameters[i];
+                        _context.Parameter.Type = new TypeRefDefinition(arg.Type);
+                    }
                     arg.VisitChildren(MethodTemplateTypeVisitor);
 
                     // Check for a default value (optional parameter)
@@ -439,6 +460,7 @@ namespace BulletSharpGen
                     }
                 }
 
+                _context.Method.IsParsed = true;
                 _context.Method = null;
             }
             else if (cursor.Kind == CursorKind.FieldDecl)

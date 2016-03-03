@@ -44,7 +44,7 @@ namespace BulletSharpGen
             OutputSolution(TargetVS.VS2015, project);
             //project.Save();
 
-            CMakeWriter cmake = new CMakeWriter(project.HeaderDefinitions, project.NamespaceName);
+            CMakeWriter cmake = new CMakeWriter(project);
             cmake.Output();
 
             Console.Write("Press any key to continue...");

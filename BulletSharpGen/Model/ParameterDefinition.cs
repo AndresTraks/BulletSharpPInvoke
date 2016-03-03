@@ -26,7 +26,7 @@
     public class ParameterDefinition
     {
         public string Name { get; }
-        public TypeRefDefinition Type { get; }
+        public TypeRefDefinition Type { get; set; }
         public bool IsOptional { get; set; }
         public string ManagedName { get; set; }
         public MarshalDirection MarshalDirection { get; set; }
@@ -42,12 +42,13 @@
         {
             var p = new ParameterDefinition(Name, Type, IsOptional);
             p.ManagedName = ManagedName;
+            p.MarshalDirection = MarshalDirection;
             return p;
         }
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", Type, Name);
+            return $"{Type} {Name}";
         }
     }
 }

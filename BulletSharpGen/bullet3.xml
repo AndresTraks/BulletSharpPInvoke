@@ -293,7 +293,12 @@ else
       <Class Name="btPolyhedralConvexAabbCachingShape" />
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btBoxShape.h">
-      <Class Name="btBoxShape" />
+      <Class Name="btBoxShape">
+        <Method Name="getPlaneEquation">
+          <Parameter Name="plane" MarshalDirection="Out" />
+          <Parameter Name="i" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btSphereShape.h">
       <Class Name="btSphereShape" />
@@ -888,7 +893,12 @@ else
       <Class Name="SphereTriangleDetector" />
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btBox2dShape.h">
-      <Class Name="btBox2dShape" />
+      <Class Name="btBox2dShape">
+        <Method Name="getPlaneEquation">
+          <Parameter Name="plane" MarshalDirection="Out" />
+          <Parameter Name="i" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btConvex2dShape.h">
       <Class Name="btConvex2dShape" />

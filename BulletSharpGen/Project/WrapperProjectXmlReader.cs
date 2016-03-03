@@ -207,12 +207,74 @@ namespace BulletSharpGen.Project
                                 ReadClassDefinition(project, reader, header, @class);
                             }
                             break;
+                        case "Method":
+                            {
+                                ReadMethodDefinition(reader, @class);
+                            }
+                            break;
                     }
                 }
                 else if (reader.NodeType == XmlNodeType.EndElement)
                 {
                     break;
                 }
+            }
+        }
+
+        static void ReadMethodDefinition(XmlReader reader, ClassDefinition @class)
+        {
+            string name = reader.GetAttribute("Name");
+            var parameters = new List<ParameterDefinition>();
+
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.EndElement)
+                {
+                    break;
+                }
+
+                if (reader.NodeType != XmlNodeType.Element)
+                {
+                    continue;
+                }
+
+                switch (reader.Name)
+                {
+                    case "Parameter":
+                        {
+                            string parameterName = reader.GetAttribute("Name");
+                            var parameter = new ParameterDefinition(parameterName, null);
+                            string marshalDirectionString = reader.GetAttribute("MarshalDirection");
+                            if (marshalDirectionString != null)
+                            {
+                                MarshalDirection marshalDirection;
+                                if (Enum.TryParse(marshalDirectionString, out marshalDirection))
+                                {
+                                    parameter.MarshalDirection = marshalDirection;
+                                }
+                            }
+                            parameters.Add(parameter);
+                        }
+                        continue;
+                }
+            }
+
+            var method = new MethodDefinition(name, @class, parameters.Count);
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                method.Parameters[i] = parameters[i];
+            }
+        }
+
+        static void ReadParameterDefinition(XmlReader reader, ParameterDefinition parameter)
+        {
+            string name = reader.GetAttribute("Name");
+            string marshalDirectionString = reader.GetAttribute("MarshalDirection");
+            if (marshalDirectionString != null)
+            {
+                MarshalDirection marshalDirection;
+                Enum.TryParse(marshalDirectionString, out marshalDirection);
+                parameter.MarshalDirection = marshalDirection;
             }
         }
 

@@ -14,6 +14,8 @@
         public FieldDefinition Field { get; set; } // get/set method target
         public PropertyDefinition Property { get; set; } // property that wraps this get/set method
 
+        public bool IsParsed { get; set; }
+
         public string BodyText { get; set; }
 
         public bool IsVoid
