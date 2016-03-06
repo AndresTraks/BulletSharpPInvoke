@@ -116,7 +116,7 @@ namespace BulletSharpGen.Project
             string sourceRootFolder = project.SourceRootFoldersFull.Last();
             string headerPath = Path.Combine(sourceRootFolder, reader.GetAttribute("Path"));
             headerPath = headerPath.Replace('\\', '/');
-            HeaderDefinition header = new HeaderDefinition(headerPath);
+            var header = new HeaderDefinition(headerPath);
             string isExcluded = reader.GetAttribute("IsExcluded");
             if ("true".Equals(isExcluded))
             {
@@ -224,6 +224,8 @@ namespace BulletSharpGen.Project
         static void ReadMethodDefinition(XmlReader reader, ClassDefinition @class)
         {
             string name = reader.GetAttribute("Name");
+            string isExcluded = reader.GetAttribute("IsExcluded");
+
             var parameters = new List<ParameterDefinition>();
 
             while (reader.Read())
@@ -263,6 +265,10 @@ namespace BulletSharpGen.Project
             for (int i = 0; i < parameters.Count; i++)
             {
                 method.Parameters[i] = parameters[i];
+            }
+            if ("true".Equals(isExcluded))
+            {
+                method.IsExcluded = true;
             }
         }
 

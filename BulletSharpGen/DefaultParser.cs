@@ -258,6 +258,12 @@ namespace BulletSharpGen
                 {
                     var method = @class.Methods[i];
 
+                    if (method.IsExcluded)
+                    {
+                        removedMethodsIndices.Add(i);
+                        continue;
+                    }
+
                     if (method.IsConstructor)
                     {
                         if (@class.IsAbstract) removedMethodsIndices.Add(i);

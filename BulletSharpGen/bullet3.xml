@@ -163,6 +163,7 @@ else
         <Enum Name="AnisotropicFrictionFlags" />
         <Enum Name="CollisionFlags" />
         <Enum Name="CollisionObjectTypes" />
+        <Method Name="getUpdateRevisionInternal" IsExcluded="true" />
       </Class>
       <Class Name="btCollisionObjectDoubleData" IsExcluded="true" />
       <Class Name="btCollisionObjectFloatData" IsExcluded="true" />
@@ -650,7 +651,20 @@ else
     <Header Path="BulletDynamics/Dynamics/btDynamicsWorld.h">
       <Class Name="btInternalTickCallback" />
       <Enum Name="btDynamicsWorldType" />
-      <Class Name="btDynamicsWorld" />
+      <Class Name="btDynamicsWorld">
+        <Method Name="addCharacter" IsExcluded="true">
+          <Parameter Name="character" />
+        </Method>
+        <Method Name="addVehicle" IsExcluded="true">
+          <Parameter Name="vehicle" />
+        </Method>
+        <Method Name="removeCharacter" IsExcluded="true">
+          <Parameter Name="character" />
+        </Method>
+        <Method Name="removeVehicle" IsExcluded="true">
+          <Parameter Name="vehicle" />
+        </Method>
+      </Class>
       <Class Name="btDynamicsWorldDoubleData" IsExcluded="true" />
       <Class Name="btDynamicsWorldFloatData" IsExcluded="true" />
     </Header>
@@ -671,6 +685,12 @@ else
         <Method Name="predictIntegratedTransform">
           <Parameter Name="step" />
           <Parameter Name="predictedTransform" MarshalDirection="Out" />
+        </Method>
+        <Method Name="btRigidBody" IsExcluded="true">
+          <Parameter Name="mass" />
+          <Parameter Name="motionState" />
+          <Parameter Name="collisionShape" />
+          <Parameter Name="localInertia" />
         </Method>
       </Class>
       <Class Name="btRigidBodyFloatData" IsExcluded="true" />
@@ -979,7 +999,6 @@ else
         <Method Name="backup_closest">
           <Parameter Name="v" MarshalDirection="Out" />
         </Method>
-        <Method Name="btVoronoiSimplexSolver" />
         <Method Name="closest">
           <Parameter Name="v" MarshalDirection="Out" />
         </Method>

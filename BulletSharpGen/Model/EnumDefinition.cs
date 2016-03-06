@@ -29,7 +29,7 @@ namespace BulletSharpGen
             while (true)
             {
                 char c = EnumConstants[0][i];
-                if (!EnumConstants.All(e => e[i] == c))
+                if (EnumConstants.Any(e => e[i] != c))
                 {
                     break;
                 }
@@ -58,7 +58,7 @@ namespace BulletSharpGen
             {
                 string enumConstant = EnumConstants[0];
                 char c = enumConstant[enumConstant.Length - i];
-                if (!EnumConstants.All(e => e[e.Length - i] == c))
+                if (EnumConstants.Any(e => e[e.Length - i] != c))
                 {
                     break;
                 }

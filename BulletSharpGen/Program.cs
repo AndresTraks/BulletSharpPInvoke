@@ -78,13 +78,17 @@ namespace BulletSharpGen
             string slnRelDir = (targetVS == TargetVS.VS2010) ? "" : "..\\";
             string rootFolder = slnRelDir + "src\\";
 
-            List<ProjectConfiguration> confs = new List<ProjectConfiguration>();
-            confs.Add(new ProjectConfiguration("Axiom", true, "GRAPHICS_AXIOM", slnRelDir + "..\\Axiom-SDK-0.8.3376.12322\\bin\\Net35"));
-            confs.Add(new ProjectConfiguration("Axiom", false, "GRAPHICS_AXIOM", slnRelDir + "..\\Axiom-SDK-0.8.3376.12322\\bin\\Net35"));
-            confs.Add(new ProjectConfiguration("Generic", true, "GRAPHICS_GENERIC"));
-            confs.Add(new ProjectConfiguration("Generic", false, "GRAPHICS_GENERIC"));
-            confs.Add(new ProjectConfiguration("Mogre", true, "GRAPHICS_MOGRE", "C:\\MogreSDK\\bin\\Debug"));
-            confs.Add(new ProjectConfiguration("Mogre", false, "GRAPHICS_MOGRE", "C:\\MogreSDK\\bin\\Release"));
+            var confs = new List<ProjectConfiguration>
+            {
+                new ProjectConfiguration("Axiom", true, "GRAPHICS_AXIOM",
+                    slnRelDir + "..\\Axiom-SDK-0.8.3376.12322\\bin\\Net35"),
+                new ProjectConfiguration("Axiom", false, "GRAPHICS_AXIOM",
+                    slnRelDir + "..\\Axiom-SDK-0.8.3376.12322\\bin\\Net35"),
+                new ProjectConfiguration("Generic", true, "GRAPHICS_GENERIC"),
+                new ProjectConfiguration("Generic", false, "GRAPHICS_GENERIC"),
+                new ProjectConfiguration("Mogre", true, "GRAPHICS_MOGRE", "C:\\MogreSDK\\bin\\Debug"),
+                new ProjectConfiguration("Mogre", false, "GRAPHICS_MOGRE", "C:\\MogreSDK\\bin\\Release")
+            };
             if (targetVS != TargetVS.VS2008)
             {
                 confs.Add(new ProjectConfiguration("MonoGame", true, "GRAPHICS_MONOGAME", "$(ProgramFiles)\\MonoGame\\v3.0\\Assemblies\\WindowsGL\\;$(ProgramFiles(x86))\\MonoGame\\v3.0\\Assemblies\\WindowsGL\\"));

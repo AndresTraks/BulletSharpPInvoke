@@ -7,6 +7,7 @@
         public ClassDefinition Parent { get; }
         public TypeRefDefinition ReturnType { get; set; }
         public ParameterDefinition[] Parameters { get; set; }
+        public bool IsExcluded { get; set; }
         public bool IsStatic { get; set; }
         public bool IsAbstract { get; set; }
         public bool IsConstructor { get; set; }
@@ -61,11 +62,12 @@
             }
             Parameters.CopyTo(m.Parameters, 0);
             m.Field = Field;
-            m.Property = Property;
             m.IsAbstract = IsAbstract;
             m.IsConstructor = IsConstructor;
-            m.ManagedName = ManagedName;
+            m.IsExcluded = IsExcluded;
             m.IsStatic = IsStatic;
+            m.ManagedName = ManagedName;
+            m.Property = Property;
             m.ReturnType = ReturnType;
             return m;
         }

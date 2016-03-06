@@ -35,13 +35,12 @@ namespace BulletSharpGen.Project
 
             foreach (var method in @class.Methods)
             {
-                if (method.Parameters.All(p => p.MarshalDirection != MarshalDirection.Out) &&
-                    method.BodyText == null)
+                // Write out only methods that have non-default options
+                if (method.Parameters.Any(p => p.MarshalDirection == MarshalDirection.Out) ||
+                    method.BodyText != null || method.IsExcluded)
                 {
-                    break;
+                    WriteMethodDefinition(writer, method);
                 }
-
-                WriteMethodDefinition(writer, method);
             }
 
             writer.WriteEndElement();
@@ -51,10 +50,10 @@ namespace BulletSharpGen.Project
         {
             writer.WriteStartElement("Method");
             writer.WriteAttributeString("Name", method.Name);
-            /*if (method.IsExcluded)
+            if (method.IsExcluded)
             {
                 writer.WriteAttributeString("IsExcluded", "true");
-            }*/
+            }
             foreach (var param in method.Parameters)
             {
                 writer.WriteStartElement("Parameter");
