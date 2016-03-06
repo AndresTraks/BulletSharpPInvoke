@@ -381,15 +381,18 @@ namespace BulletSharpGen
                     return Cursor.ChildVisitResult.Continue;
                 }
 
-                foreach (var method in _context.Class.Methods.Where(m => !m.IsParsed))
+                var existingMethodsMatch = _context.Class.Methods.Where(
+                    m => !m.IsParsed && methodName.Equals(m.Name) &&
+                         m.Parameters.Length == cursor.NumArguments);
+                int existingCount = existingMethodsMatch.Count();
+                if (existingCount == 1)
                 {
-                    if (method.Name == methodName &&
-                        method.Parameters.Length == cursor.NumArguments)
-                    {
-                        // TODO: check method parameter types if given
-                        _context.Method = method;
-                        break;
-                    }
+                    // TODO: check method parameter types if given
+                    _context.Method = existingMethodsMatch.First();
+                }
+                else if (existingCount >= 2)
+                {
+                    Console.WriteLine("Ambiguous method in project: " + methodName);
                 }
 
                 if (_context.Method == null)

@@ -266,18 +266,6 @@ namespace BulletSharpGen.Project
             }
         }
 
-        static void ReadParameterDefinition(XmlReader reader, ParameterDefinition parameter)
-        {
-            string name = reader.GetAttribute("Name");
-            string marshalDirectionString = reader.GetAttribute("MarshalDirection");
-            if (marshalDirectionString != null)
-            {
-                MarshalDirection marshalDirection;
-                Enum.TryParse(marshalDirectionString, out marshalDirection);
-                parameter.MarshalDirection = marshalDirection;
-            }
-        }
-
         static void ReadProject(WrapperProject project, XmlReader reader)
         {
             while (reader.Read())

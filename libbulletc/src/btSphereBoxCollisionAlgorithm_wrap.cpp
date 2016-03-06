@@ -16,9 +16,9 @@ btSphereBoxCollisionAlgorithm* btSphereBoxCollisionAlgorithm_new(btPersistentMan
 
 bool btSphereBoxCollisionAlgorithm_getSphereDistance(btSphereBoxCollisionAlgorithm* obj, const btCollisionObjectWrapper* boxObjWrap, btScalar* v3PointOnBox, btScalar* normal, btScalar* penetrationDepth, const btScalar* v3SphereCenter, btScalar fRadius, btScalar maxContactDistance)
 {
-	VECTOR3_CONV(v3PointOnBox);
+	VECTOR3_DEF(v3PointOnBox);
 	VECTOR3_DEF(normal);
-	VECTOR3_DEF(v3SphereCenter);
+	VECTOR3_CONV(v3SphereCenter);
 	bool ret = obj->getSphereDistance(boxObjWrap, VECTOR3_USE(v3PointOnBox), VECTOR3_USE(normal), *penetrationDepth, VECTOR3_USE(v3SphereCenter), fRadius, maxContactDistance);
 	VECTOR3_DEF_OUT(v3PointOnBox);
 	VECTOR3_DEF_OUT(normal);

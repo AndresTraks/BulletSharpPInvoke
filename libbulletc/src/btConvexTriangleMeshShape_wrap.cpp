@@ -17,7 +17,7 @@ btConvexTriangleMeshShape* btConvexTriangleMeshShape_new2(btStridingMeshInterfac
 void btConvexTriangleMeshShape_calculatePrincipalAxisTransform(btConvexTriangleMeshShape* obj, btScalar* principal, btScalar* inertia, btScalar* volume)
 {
 	TRANSFORM_CONV(principal);
-	VECTOR3_CONV(inertia);
+	VECTOR3_DEF(inertia);
 	obj->calculatePrincipalAxisTransform(TRANSFORM_USE(principal), VECTOR3_USE(inertia), *volume);
 	TRANSFORM_DEF_OUT(principal);
 	VECTOR3_DEF_OUT(inertia);

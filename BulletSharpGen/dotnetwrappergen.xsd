@@ -99,6 +99,15 @@
   <xsd:complexType name="ParameterType">
     <xsd:attribute name="Type" type="xsd:string"/>
     <xsd:attribute name="Name" type="xsd:string"/>
+    <xsd:attribute name="MarshalDirection" type="MarshalDirectionType"/>
   </xsd:complexType>
 
+  <xsd:simpleType name="MarshalDirectionType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="In"/>
+      <xsd:enumeration value="Out"/>
+      <xsd:enumeration value="InOut"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  
 </xsd:schema>

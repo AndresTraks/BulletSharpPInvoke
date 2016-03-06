@@ -28,6 +28,11 @@ namespace BulletSharpGen.Project
                 writer.WriteAttributeString("HasPreventDelete", "true");
             }
 
+            foreach (var childClass in @class.Classes)
+            {
+                WriteClassDefinition(writer, childClass);
+            }
+
             foreach (var method in @class.Methods)
             {
                 if (method.Parameters.All(p => p.MarshalDirection != MarshalDirection.Out) &&
@@ -37,11 +42,6 @@ namespace BulletSharpGen.Project
                 }
 
                 WriteMethodDefinition(writer, method);
-            }
-
-            foreach (var childClass in @class.Classes)
-            {
-                WriteClassDefinition(writer, childClass);
             }
 
             writer.WriteEndElement();

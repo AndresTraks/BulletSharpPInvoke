@@ -213,7 +213,43 @@ else
       <Class Name="btDispatcher" />
     </Header>
     <Header Path="LinearMath/btTransformUtil.h">
-      <Class Name="btTransformUtil" />
+      <Class Name="btTransformUtil">
+                <Method Name="calculateDiffAxisAngle">
+          <Parameter Name="transform0" />
+          <Parameter Name="transform1" />
+          <Parameter Name="axis" MarshalDirection="Out" />
+          <Parameter Name="angle" />
+        </Method>
+        <Method Name="calculateDiffAxisAngleQuaternion">
+          <Parameter Name="orn0" />
+          <Parameter Name="orn1a" />
+          <Parameter Name="axis" MarshalDirection="Out" />
+          <Parameter Name="angle" />
+        </Method>
+        <Method Name="calculateVelocity">
+          <Parameter Name="transform0" />
+          <Parameter Name="transform1" />
+          <Parameter Name="timeStep" />
+          <Parameter Name="linVel" MarshalDirection="Out" />
+          <Parameter Name="angVel" MarshalDirection="Out" />
+        </Method>
+        <Method Name="calculateVelocityQuaternion">
+          <Parameter Name="pos0" />
+          <Parameter Name="pos1" />
+          <Parameter Name="orn0" />
+          <Parameter Name="orn1" />
+          <Parameter Name="timeStep" />
+          <Parameter Name="linVel" MarshalDirection="Out" />
+          <Parameter Name="angVel" MarshalDirection="Out" />
+        </Method>
+        <Method Name="integrateTransform">
+          <Parameter Name="curTrans" />
+          <Parameter Name="linvel" />
+          <Parameter Name="angvel" />
+          <Parameter Name="timeStep" />
+          <Parameter Name="predictedTransform" MarshalDirection="Out" />
+        </Method>
+      </Class>
       <Class Name="btConvexSeparatingDistanceUtil" />
     </Header>
     <Header Path="BulletCollision/NarrowPhaseCollision/btManifoldPoint.h">
@@ -261,7 +297,17 @@ else
     <Header Path="BulletCollision/BroadphaseCollision/btBroadphaseInterface.h">
       <Class Name="btBroadphaseAabbCallback" />
       <Class Name="btBroadphaseRayCallback" />
-      <Class Name="btBroadphaseInterface" />
+      <Class Name="btBroadphaseInterface">
+        <Method Name="getAabb">
+          <Parameter Name="proxy" />
+          <Parameter Name="aabbMin" MarshalDirection="Out" />
+          <Parameter Name="aabbMax" MarshalDirection="Out" />
+        </Method>
+        <Method Name="getBroadphaseAabb">
+          <Parameter Name="aabbMin" MarshalDirection="Out" />
+          <Parameter Name="aabbMax" MarshalDirection="Out" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="BulletCollision/BroadphaseCollision/btOverlappingPairCallback.h">
       <Class Name="btOverlappingPairCallback" />
@@ -276,11 +322,56 @@ else
       <Class Name="btNullPairCache" />
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btCollisionShape.h">
-      <Class Name="btCollisionShape" HasPreventDelete="true" />
+      <Class Name="btCollisionShape" HasPreventDelete="true">
+        <Method Name="calculateLocalInertia">
+          <Parameter Name="mass" />
+          <Parameter Name="inertia" MarshalDirection="Out" />
+        </Method>
+        <Method Name="calculateTemporalAabb">
+          <Parameter Name="curTrans" />
+          <Parameter Name="linvel" />
+          <Parameter Name="angvel" />
+          <Parameter Name="timeStep" />
+          <Parameter Name="temporalAabbMin" MarshalDirection="Out" />
+          <Parameter Name="temporalAabbMax" MarshalDirection="Out" />
+        </Method>
+        <Method Name="getAabb">
+          <Parameter Name="t" />
+          <Parameter Name="aabbMin" MarshalDirection="Out" />
+          <Parameter Name="aabbMax" MarshalDirection="Out" />
+        </Method>
+        <Method Name="getBoundingSphere">
+          <Parameter Name="center" MarshalDirection="Out" />
+          <Parameter Name="radius" />
+        </Method>
+      </Class>
       <Class Name="btCollisionShapeData" IsExcluded="true" />
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btConvexShape.h">
-      <Class Name="btConvexShape" />
+      <Class Name="btConvexShape">
+        <Method Name="getAabbNonVirtual">
+          <Parameter Name="t" />
+          <Parameter Name="aabbMin" MarshalDirection="Out" />
+          <Parameter Name="aabbMax" MarshalDirection="Out" />
+        </Method>
+        <Method Name="getAabbSlow">
+          <Parameter Name="t" />
+          <Parameter Name="aabbMin" MarshalDirection="Out" />
+          <Parameter Name="aabbMax" MarshalDirection="Out" />
+        </Method>
+        <Method Name="getPreferredPenetrationDirection">
+          <Parameter Name="index" />
+          <Parameter Name="penetrationVector" MarshalDirection="Out" />
+        </Method>
+        <Method Name="project">
+          <Parameter Name="trans" />
+          <Parameter Name="dir" />
+          <Parameter Name="minProj" />
+          <Parameter Name="maxProj" />
+          <Parameter Name="witnesPtMin" MarshalDirection="Out" />
+          <Parameter Name="witnesPtMax" MarshalDirection="Out" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="LinearMath/btAabbUtil2.h" IsExcluded="true" />
     <Header Path="BulletCollision/CollisionShapes/btConvexInternalShape.h">
@@ -289,8 +380,30 @@ else
       <Class Name="btConvexInternalAabbCachingShape" />
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btPolyhedralConvexShape.h">
-      <Class Name="btPolyhedralConvexShape" />
-      <Class Name="btPolyhedralConvexAabbCachingShape" />
+      <Class Name="btPolyhedralConvexShape">
+        <Method Name="getEdge">
+          <Parameter Name="i" />
+          <Parameter Name="pa" MarshalDirection="Out" />
+          <Parameter Name="pb" MarshalDirection="Out" />
+        </Method>
+      <Method Name="getPlane">
+          <Parameter Name="planeNormal" MarshalDirection="Out" />
+          <Parameter Name="planeSupport" MarshalDirection="Out" />
+          <Parameter Name="i" />
+        </Method>
+        <Method Name="getVertex">
+          <Parameter Name="i" />
+          <Parameter Name="vtx" MarshalDirection="Out" />
+        </Method>
+      </Class>
+      <Class Name="btPolyhedralConvexAabbCachingShape">
+        <Method Name="getNonvirtualAabb">
+          <Parameter Name="trans" />
+          <Parameter Name="aabbMin" MarshalDirection="Out" />
+          <Parameter Name="aabbMax" MarshalDirection="Out" />
+          <Parameter Name="margin" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btBoxShape.h">
       <Class Name="btBoxShape">
@@ -338,7 +451,16 @@ else
       <Class Name="btConvexHullShapeData" IsExcluded="true" />
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btStridingMeshInterface.h">
-      <Class Name="btStridingMeshInterface" />
+      <Class Name="btStridingMeshInterface">
+        <Method Name="calculateAabbBruteForce">
+          <Parameter Name="aabbMin" MarshalDirection="Out" />
+          <Parameter Name="aabbMax" MarshalDirection="Out" />
+        </Method>
+        <Method Name="getPremadeAabb">
+          <Parameter Name="aabbMin" MarshalDirection="Out" />
+          <Parameter Name="aabbMax" MarshalDirection="Out" />
+        </Method>
+      </Class>
       <Class Name="btIntIndexData" IsExcluded="true" />
       <Class Name="btShortIntIndexData" IsExcluded="true" />
       <Class Name="btShortIntIndexTripletData" IsExcluded="true" />
@@ -355,7 +477,13 @@ else
       <Class Name="btTriangleMesh" />
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btConvexTriangleMeshShape.h">
-      <Class Name="btConvexTriangleMeshShape" />
+      <Class Name="btConvexTriangleMeshShape">
+        <Method Name="calculatePrincipalAxisTransform">
+          <Parameter Name="principal" />
+          <Parameter Name="inertia" MarshalDirection="Out" />
+          <Parameter Name="volume" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btTriangleMeshShape.h">
       <Class Name="btTriangleMeshShape" />
@@ -415,7 +543,13 @@ else
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btCompoundShape.h">
       <Class Name="btCompoundShapeChild" />
-      <Class Name="btCompoundShape" />
+      <Class Name="btCompoundShape">
+        <Method Name="calculatePrincipalAxisTransform">
+          <Parameter Name="masses" />
+          <Parameter Name="principal" />
+          <Parameter Name="inertia" MarshalDirection="Out" />
+        </Method>
+      </Class>
       <Class Name="btCompoundShapeChildData" IsExcluded="true" />
       <Class Name="btCompoundShapeData" IsExcluded="true" />
     </Header>
@@ -530,6 +664,14 @@ else
       <Enum Name="btRigidBodyFlags" />
       <Class Name="btRigidBody">
         <Class Name="btRigidBodyConstructionInfo" />
+        <Method Name="getAabb">
+          <Parameter Name="aabbMin" MarshalDirection="Out" />
+          <Parameter Name="aabbMax" MarshalDirection="Out" />
+        </Method>
+        <Method Name="predictIntegratedTransform">
+          <Parameter Name="step" />
+          <Parameter Name="predictedTransform" MarshalDirection="Out" />
+        </Method>
       </Class>
       <Class Name="btRigidBodyFloatData" IsExcluded="true" />
       <Class Name="btRigidBodyDoubleData" IsExcluded="true" />
@@ -833,7 +975,24 @@ else
     <Header Path="BulletCollision/NarrowPhaseCollision/btVoronoiSimplexSolver.h">
       <Class Name="btUsageBitfield" />
       <Class Name="btSubSimplexClosestResult" />
-      <Class Name="btVoronoiSimplexSolver" />
+      <Class Name="btVoronoiSimplexSolver">
+        <Method Name="backup_closest">
+          <Parameter Name="v" MarshalDirection="Out" />
+        </Method>
+        <Method Name="btVoronoiSimplexSolver" />
+        <Method Name="closest">
+          <Parameter Name="v" MarshalDirection="Out" />
+        </Method>
+        <Method Name="compute_points">
+          <Parameter Name="p1" MarshalDirection="Out" />
+          <Parameter Name="p2" MarshalDirection="Out" />
+        </Method>
+        <Method Name="getSimplex">
+          <Parameter Name="pBuf" MarshalDirection="Out" />
+          <Parameter Name="qBuf" MarshalDirection="Out" />
+          <Parameter Name="yBuf" MarshalDirection="Out" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="BulletCollision/CollisionDispatch/btConvex2dConvex2dAlgorithm.h">
       <Class Name="btConvex2dConvex2dAlgorithm">
@@ -882,6 +1041,21 @@ else
     <Header Path="BulletCollision/CollisionDispatch/btSphereBoxCollisionAlgorithm.h">
       <Class Name="btSphereBoxCollisionAlgorithm">
         <Class Name="CreateFunc" />
+        <Method Name="getSphereDistance">
+          <Parameter Name="boxObjWrap" />
+          <Parameter Name="v3PointOnBox" MarshalDirection="Out" />
+          <Parameter Name="normal" MarshalDirection="Out" />
+          <Parameter Name="penetrationDepth" />
+          <Parameter Name="v3SphereCenter" />
+          <Parameter Name="fRadius" />
+          <Parameter Name="maxContactDistance" />
+        </Method>
+        <Method Name="getSpherePenetration">
+          <Parameter Name="boxHalfExtent" />
+          <Parameter Name="sphereRelPos" />
+          <Parameter Name="closestPoint" MarshalDirection="Out" />
+          <Parameter Name="normal" MarshalDirection="Out" />
+        </Method>
       </Class>
     </Header>
     <Header Path="BulletCollision/CollisionDispatch/btSphereTriangleCollisionAlgorithm.h">
@@ -908,7 +1082,16 @@ else
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btConvexPolyhedron.h">
       <Class Name="btFace" />
-      <Class Name="btConvexPolyhedron" />
+      <Class Name="btConvexPolyhedron">
+        <Method Name="project">
+          <Parameter Name="trans" />
+          <Parameter Name="dir" />
+          <Parameter Name="minProj" />
+          <Parameter Name="maxProj" />
+          <Parameter Name="witnesPtMin" MarshalDirection="Out" />
+          <Parameter Name="witnesPtMax" MarshalDirection="Out" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h">
       <Class Name="btHeightfieldTerrainShape" />
@@ -935,7 +1118,16 @@ else
       <Class Name="btTriangleIndexVertexMaterialArray" />
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btTriangleShape.h">
-      <Class Name="btTriangleShape" />
+      <Class Name="btTriangleShape">
+        <Method Name="calcNormal">
+          <Parameter Name="normal" MarshalDirection="Out" />
+        </Method>
+        <Method Name="getPlaneEquation">
+          <Parameter Name="i" MarshalDirection="In" />
+          <Parameter Name="planeNormal" MarshalDirection="Out" />
+          <Parameter Name="planeSupport" MarshalDirection="Out" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="BulletCollision/Gimpact/btBoxCollision.h">
       <Enum Name="eBT_PLANE_INTERSECTION_TYPE" />
@@ -974,12 +1166,28 @@ else
       <Class Name="btGImpactBoxSet" />
       <Enum Name="eGIMPACT_SHAPE_TYPE" />
       <Class Name="btTetrahedronShapeEx" />
-      <Class Name="btGImpactShapeInterface" />
+      <Class Name="btGImpactShapeInterface">
+        <Method Name="getChildAabb">
+          <Parameter Name="child_index" />
+          <Parameter Name="t" />
+          <Parameter Name="aabbMin" MarshalDirection="Out" />
+          <Parameter Name="aabbMax" MarshalDirection="Out" />
+        </Method>
+      </Class>
       <Class Name="btGImpactCompoundShape">
         <Class Name="CompoundPrimitiveManager" />
       </Class>
       <Class Name="btGImpactMeshShapePart">
-        <Class Name="TrimeshPrimitiveManager" />
+        <Class Name="TrimeshPrimitiveManager">
+          <Method Name="get_vertex">
+            <Parameter Name="vertex_index" />
+            <Parameter Name="vertex" MarshalDirection="Out" />
+          </Method>
+        </Class>
+        <Method Name="getVertex">
+          <Parameter Name="vertex_index" />
+          <Parameter Name="vertex" MarshalDirection="Out" />
+        </Method>
       </Class>
       <Class Name="btGImpactMeshShape" />
       <Class Name="btGImpactMeshShapeData" IsExcluded="true" />
@@ -1119,7 +1327,19 @@ else
       <Class Name="btContinuousConvexCollision" />
     </Header>
     <Header Path="BulletCollision/NarrowPhaseCollision/btConvexPenetrationDepthSolver.h">
-      <Class Name="btConvexPenetrationDepthSolver" />
+      <Class Name="btConvexPenetrationDepthSolver">
+        <Method Name="calcPenDepth">
+          <Parameter Name="simplexSolver" />
+          <Parameter Name="convexA" />
+          <Parameter Name="convexB" />
+          <Parameter Name="transA" />
+          <Parameter Name="transB" />
+          <Parameter Name="v" MarshalDirection="Out" />
+          <Parameter Name="pa" MarshalDirection="Out" />
+          <Parameter Name="pb" MarshalDirection="Out" />
+          <Parameter Name="debugDraw" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="BulletCollision/NarrowPhaseCollision/btGjkConvexCast.h">
       <Class Name="btGjkConvexCast" />
@@ -1381,7 +1601,13 @@ else
       <Class Name="btSoftBodyHelpers" />
     </Header>
     <Header Path="LinearMath/btPolarDecomposition.h">
-      <Class Name="btPolarDecomposition" />
+      <Class Name="btPolarDecomposition">
+        <Method Name="decompose">
+          <Parameter Name="a" />
+          <Parameter Name="u" MarshalDirection="Out" />
+          <Parameter Name="h" MarshalDirection="Out" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="BulletSoftBody/btSoftBodyInternals.h">
       <ClassTemplate Name="btSymMatrix" />
