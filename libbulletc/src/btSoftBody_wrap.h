@@ -78,7 +78,7 @@ extern "C"
 	EXPORT void btSoftBody_AJoint_Specs_setAxis(btSoftBody_AJoint_Specs* obj, const btScalar* value);
 	EXPORT void btSoftBody_AJoint_Specs_setIcontrol(btSoftBody_AJoint_Specs* obj, btSoftBody_AJoint_IControl* value);
 
-	EXPORT void btSoftBody_AJoint_getAxis(btSoftBody_AJoint* obj, btScalar* value);
+	EXPORT btVector3* btSoftBody_AJoint_getAxis(btSoftBody_AJoint* obj);
 	EXPORT btSoftBody_AJoint_IControl* btSoftBody_AJoint_getIcontrol(btSoftBody_AJoint* obj);
 	EXPORT void btSoftBody_AJoint_setIcontrol(btSoftBody_AJoint* obj, btSoftBody_AJoint_IControl* value);
 
@@ -432,15 +432,6 @@ extern "C"
 	EXPORT void btSoftBody_sCti_setNormal(btSoftBody_sCti* obj, const btScalar* value);
 	EXPORT void btSoftBody_sCti_setOffset(btSoftBody_sCti* obj, btScalar value);
 	EXPORT void btSoftBody_sCti_delete(btSoftBody_sCti* obj);
-
-	EXPORT btSoftBody_sMedium* btSoftBody_sMedium_new();
-	EXPORT btScalar btSoftBody_sMedium_getDensity(btSoftBody_sMedium* obj);
-	EXPORT btScalar btSoftBody_sMedium_getPressure(btSoftBody_sMedium* obj);
-	EXPORT void btSoftBody_sMedium_getVelocity(btSoftBody_sMedium* obj, btScalar* value);
-	EXPORT void btSoftBody_sMedium_setDensity(btSoftBody_sMedium* obj, btScalar value);
-	EXPORT void btSoftBody_sMedium_setPressure(btSoftBody_sMedium* obj, btScalar value);
-	EXPORT void btSoftBody_sMedium_setVelocity(btSoftBody_sMedium* obj, const btScalar* value);
-	EXPORT void btSoftBody_sMedium_delete(btSoftBody_sMedium* obj);
 
 	EXPORT btScalar btSoftBody_SolverState_getIsdt(btSoftBody_SolverState* obj);
 	EXPORT btScalar btSoftBody_SolverState_getRadmrg(btSoftBody_SolverState* obj);

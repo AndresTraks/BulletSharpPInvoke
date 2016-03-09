@@ -210,9 +210,9 @@ void btSoftBody_AJoint_Specs_setIcontrol(btSoftBody::AJoint::Specs* obj, btSoftB
 }
 
 
-void btSoftBody_AJoint_getAxis(btSoftBody::AJoint* obj, btScalar* value)
+btVector3* btSoftBody_AJoint_getAxis(btSoftBody::AJoint* obj)
 {
-	VECTOR3_OUT_VAL(obj->m_axis, value);
+	return obj->m_axis;
 }
 
 btSoftBody::AJoint::IControl* btSoftBody_AJoint_getIcontrol(btSoftBody::AJoint* obj)
@@ -1908,47 +1908,6 @@ void btSoftBody_sCti_setOffset(btSoftBody::sCti* obj, btScalar value)
 }
 
 void btSoftBody_sCti_delete(btSoftBody::sCti* obj)
-{
-	delete obj;
-}
-
-
-btSoftBody::sMedium* btSoftBody_sMedium_new()
-{
-	return new btSoftBody::sMedium();
-}
-
-btScalar btSoftBody_sMedium_getDensity(btSoftBody::sMedium* obj)
-{
-	return obj->m_density;
-}
-
-btScalar btSoftBody_sMedium_getPressure(btSoftBody::sMedium* obj)
-{
-	return obj->m_pressure;
-}
-
-void btSoftBody_sMedium_getVelocity(btSoftBody::sMedium* obj, btScalar* value)
-{
-	VECTOR3_OUT(&obj->m_velocity, value);
-}
-
-void btSoftBody_sMedium_setDensity(btSoftBody::sMedium* obj, btScalar value)
-{
-	obj->m_density = value;
-}
-
-void btSoftBody_sMedium_setPressure(btSoftBody::sMedium* obj, btScalar value)
-{
-	obj->m_pressure = value;
-}
-
-void btSoftBody_sMedium_setVelocity(btSoftBody::sMedium* obj, const btScalar* value)
-{
-	VECTOR3_IN(value, &obj->m_velocity);
-}
-
-void btSoftBody_sMedium_delete(btSoftBody::sMedium* obj)
 {
 	delete obj;
 }

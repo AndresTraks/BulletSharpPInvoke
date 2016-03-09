@@ -520,7 +520,7 @@ namespace BulletSharpGen
                 if (!method.IsConstructor && !method.IsStatic)
                 {
                     Write("_native", WriteTo.CS);
-                    if (numParametersOriginal != 0)
+                    if (numParametersOriginal != 0 || returnParamMethod != null)
                     {
                         Write(", ", WriteTo.CS);
                     }
@@ -758,6 +758,25 @@ namespace BulletSharpGen
             hasCSWhiteSpace = false;
         }
 
+        IEnumerable<EnumDefinition> GetEnums(IEnumerable<ClassDefinition> classes)
+        {
+            foreach (var @class in classes)
+            {
+                var @enum = @class as EnumDefinition;
+                if (@enum != null)
+                {
+                    yield return @enum;
+                }
+                else
+                {
+                    foreach (var childEnum in GetEnums(@class.Classes))
+                    {
+                        yield return childEnum;
+                    }
+                }
+            }
+        }
+
         // Accepts a ClassDefinition for recursion
         void WriteEnumClass(ClassDefinition @class, int level)
         {
@@ -808,6 +827,15 @@ namespace BulletSharpGen
         void WriteClass(ClassDefinition c, int level)
         {
             if (c.IsExcluded || c.IsTypedef || c.IsPureEnum || c is ClassTemplateDefinition)
+            {
+                return;
+            }
+
+            // Class containing only an anonymous enum
+            if (c.Methods.Count == 0 &&
+                c.Fields.Count == 0 &&
+                c.Classes.Count == 1 &&
+                c.Classes.First() is EnumDefinition)
             {
                 return;
             }
@@ -1349,9 +1377,10 @@ namespace BulletSharpGen
             hasCSWhiteSpace = true;
             hasCppClassSeparatingWhitespace = true;
 
-            foreach (var @class in header.Classes)
+            var enums = GetEnums(header.Classes).OrderBy(e => e.ManagedName).ToList();
+            foreach (var @enum in enums)
             {
-                WriteEnumClass(@class, 1);
+                WriteEnumClass(@enum, 1);
             }
 
             foreach (var @class in header.Classes)

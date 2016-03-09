@@ -116,11 +116,10 @@ namespace BulletSharpGen
 
         void ParseEnums()
         {
-            // For enums, remove any common prefix and check for flags
-            foreach (var @class in Project.ClassDefinitions.Values.Where(c => c is EnumDefinition))
+            // Remove any common prefix and check for flags
+            foreach (var @enum in Project.ClassDefinitions.Values.
+                Where(c => c is EnumDefinition).Cast<EnumDefinition>())
             {
-                var @enum = @class as EnumDefinition;
-
                 int prefixLength = @enum.GetCommonPrefix().Length;
                 @enum.GetCommonSuffix();
                 for (int i = 0; i < @enum.EnumConstants.Count; i++)
@@ -337,6 +336,18 @@ namespace BulletSharpGen
             {
                 classNameMapping.Globals.Header = @class.Header;
                 @class.ManagedName = classNameMapping.Map(@class.Name);
+
+                var @enum = @class as EnumDefinition;
+                if (@enum != null)
+                {
+                    if (@enum.Parent != null &&
+                        @enum.Parent.Methods.Count == 0 &&
+                        @enum.Parent.Fields.Count == 0 &&
+                        @enum.Parent.Classes.Count == 1)
+                    {
+                        @enum.ManagedName = @enum.Parent.ManagedName;
+                    }
+                }
             }
 
             // Set managed method/parameter names

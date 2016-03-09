@@ -190,8 +190,9 @@ namespace BulletSharpGen
             }
             switch (t.Name)
             {
-                case "btTransform":
+                case "btMatrix3x3":
                 case "btQuaternion":
+                case "btTransform":
                 case "btVector3":
                 case "btVector4":
                     return false;

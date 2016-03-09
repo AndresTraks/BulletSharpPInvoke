@@ -37,15 +37,19 @@ namespace BulletSharpGen
 
     public class ClassDefinition
     {
-        public string Name { get; private set; }
-        public string NamespaceName { get; set; }
-        public List<ClassDefinition> Classes { get; private set; }
+        public string Name { get; set; }
+        public string NamespaceName { get; set; } = "";
+
         public ClassDefinition BaseClass { get; set; }
         public ClassDefinition Parent { get; set; }
-        public HeaderDefinition Header { get; private set; }
-        public List<MethodDefinition> Methods { get; private set; }
-        public List<PropertyDefinition> Properties { get; private set; }
-        public List<FieldDefinition> Fields { get; private set; }
+        public HeaderDefinition Header { get; }
+
+        // members
+        public List<ClassDefinition> Classes { get; } = new List<ClassDefinition>();
+        public List<MethodDefinition> Methods { get; } = new List<MethodDefinition>();
+        public List<FieldDefinition> Fields { get; } = new List<FieldDefinition>();
+        public List<PropertyDefinition> Properties { get; } = new List<PropertyDefinition>();
+
         public bool IsAbstract { get; set; }
         public bool IsStruct { get; set; }
 
@@ -71,7 +75,7 @@ namespace BulletSharpGen
 
         public string ManagedName { get; set; }
 
-        public Dictionary<string, CachedProperty> CachedProperties { get; private set; }
+        public Dictionary<string, CachedProperty> CachedProperties { get; private set; } = new Dictionary<string, CachedProperty>();
 
         public IEnumerable<MethodDefinition> AbstractMethods
         {
@@ -168,14 +172,6 @@ namespace BulletSharpGen
             Name = name;
             Header = header;
             Parent = parent;
-
-            NamespaceName = "";
-
-            Classes = new List<ClassDefinition>();
-            Methods = new List<MethodDefinition>();
-            Properties = new List<PropertyDefinition>();
-            Fields = new List<FieldDefinition>();
-            CachedProperties = new Dictionary<string, CachedProperty>();
         }
 
         public override string ToString()

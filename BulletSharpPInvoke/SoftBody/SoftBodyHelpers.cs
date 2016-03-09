@@ -430,8 +430,8 @@ namespace BulletSharp.SoftBody
 
             foreach (Link link in links)
             {
-                Node ar = link.N[0];
-                Node br = link.N[1];
+                Node ar = link.Nodes[0];
+                Node br = link.Nodes[1];
                 linkBuffer.Add(link, new Link(btSoftBody_Link_new2(link._native)));
 
                 LinkDep linkDep;

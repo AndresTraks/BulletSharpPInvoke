@@ -23,6 +23,14 @@
     <Replacement Replace="btScalar" With="btScalar" />
     <Replacement Replace="btSparseSDF" With="SparseSdf" />
     <Replacement Replace="ConstraintParams" With="ConstraintParam" />
+    <Replacement Replace="eAeroModel" With="AeroModel" />
+    <Replacement Replace="eFeature" With="FeatureType" />
+    <Replacement Replace="ePSolver" With="PositionSolver" />
+    <Replacement Replace="eSolverPresets" With="SolverPresets" />
+    <Replacement Replace="eType" With="JointType" />
+    <Replacement Replace="eVSolver" With="VelocitySolver" />
+    <Replacement Replace="fCollision" With="CollisionFlags" />
+    <Replacement Replace="fMaterial" With="MaterialFlags" />
     <Replacement Replace="GIM_BVH_DATA" With="GimBvhData" />
     <Replacement Replace="GIM_BVH_DATA_ARRAY" With="GimBvhDataArray" />
     <Replacement Replace="GIM_BVH_TREE_NODE" With="GimBvhTreeNode" />
@@ -1567,7 +1575,7 @@ else
         <Class Name="RContact" />
         <Class Name="SContact" />
         <Class Name="sCti" />
-        <Class Name="sMedium" />
+        <Class Name="sMedium" IsExcluded="true" />
         <Class Name="SolverState" />
         <Class Name="sRayCast" />
         <Class Name="tAnchorArray" />
