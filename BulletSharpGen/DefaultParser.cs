@@ -257,12 +257,6 @@ namespace BulletSharpGen
                 {
                     var method = @class.Methods[i];
 
-                    if (method.IsExcluded)
-                    {
-                        removedMethodsIndices.Add(i);
-                        continue;
-                    }
-
                     if (method.IsConstructor)
                     {
                         if (@class.IsAbstract) removedMethodsIndices.Add(i);
@@ -273,9 +267,17 @@ namespace BulletSharpGen
                     var baseClass = @class.BaseClass;
                     while (baseClass != null)
                     {
-                        if (baseClass.Methods.Any(m => m.Equals(method)))
+                        var baseMethod = baseClass.Methods.FirstOrDefault(m => m.Equals(method));
+                        if (baseMethod != null)
                         {
-                            removedMethodsIndices.Add(i);
+                            if (baseMethod.IsExcluded)
+                            {
+                                method.IsExcluded = true;
+                            }
+                            else
+                            {
+                                removedMethodsIndices.Add(i);
+                            }
                             break;
                         }
                         baseClass = baseClass.BaseClass;

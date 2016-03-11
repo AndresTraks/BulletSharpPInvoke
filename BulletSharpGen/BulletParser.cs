@@ -18,7 +18,7 @@ namespace BulletSharpGen
             HashSet<string> hidePublicConstructors = new HashSet<string>() {
                 "btActivatingCollisionAlgorithm", "btContactConstraint", "btConvexInternalShape",
                 "btConvexInternalAabbCachingShape", "btPolyhedralConvexAabbCachingShape", "btTypedObject",
-                "btDbvtProxy", "btSimpleBroadphaseProxy", "btDispatcherInfo", "btTriangleMeshShape",
+                "btDbvtProxy", "btDispatcherInfo", "btTriangleMeshShape",
                 "btUsageBitfield", "btSoftBody::Anchor", "btSoftBody::Config", "btSoftBody::Cluster",
                 "btSoftBody::Face", "btSoftBody::Tetra", "btSoftBody::Element", "btSoftBody::Feature",
                 "btSoftBody::Link", "btSoftBody::Material", "btSoftBody::Node", "btSoftBody::Note",
@@ -63,7 +63,7 @@ namespace BulletSharpGen
                 "btSliderConstraint", "btUniversalConstraint",
                 "btMLCPSolver", "btMultiBodyConstraintSolver", "btNNCGConstraintSolver",
                 "btPairCachingGhostObject", "btSortedOverlappingPairCache", "btNullPairCache",
-                "btDbvtBroadphase", "btSimpleBroadphase",
+                "btDbvtBroadphase",
                 "btShapeHull", "btSoftBody::sRayCast", "btSoftBody::AJoint::Specs", "btSoftBody::LJoint::Specs",
                 "btCompoundShape" // constructor needed for CompoundFromGImpact in C++/CLI, but not C#
             };

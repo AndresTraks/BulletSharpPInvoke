@@ -762,7 +762,7 @@ namespace BulletSharpGen
             }
 
             // Downcast native pointer if any methods in a derived class use it
-            if (@class.BaseClass != null && @class.Methods.Any(m => !m.IsConstructor && !m.IsStatic))
+            if (@class.BaseClass != null && @class.Methods.Any(m => !m.IsConstructor && !m.IsStatic && !m.IsExcluded))
             {
                 EnsureSourceWhiteSpace();
                 SourceWriteLine($"#define Native static_cast<{@class.FullyQualifiedName}*>(_native)");
@@ -932,7 +932,7 @@ namespace BulletSharpGen
             }
 
             // Write non-constructor methods
-            var methods = @class.Methods.Where(m => !m.IsConstructor);
+            var methods = @class.Methods.Where(m => !m.IsConstructor && !m.IsExcluded);
             if (methods.Any())
             {
                 EnsureHeaderWhiteSpace();

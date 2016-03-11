@@ -596,7 +596,7 @@ else
       <Class Name="btDefaultCollisionConstructionInfo" />
       <Class Name="btDefaultCollisionConfiguration" />
     </Header>
-    <Header Path="BulletCollision/BroadphaseCollision/btSimpleBroadphase.h" IsExcluded="true " />
+    <Header Path="BulletCollision/BroadphaseCollision/btSimpleBroadphase.h" IsExcluded="true" />
     <Header Path="BulletCollision/BroadphaseCollision/btDbvt.h">
       <Class Name="btDbvtAabbMm" />
       <Class Name="btDbvtVolume" />
@@ -679,9 +679,7 @@ else
     <Header Path="BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h">
       <Class Name="btDiscreteDynamicsWorld" />
     </Header>
-    <Header Path="BulletDynamics/Dynamics/btSimpleDynamicsWorld.h">
-      <Class Name="btSimpleDynamicsWorld" />
-    </Header>
+    <Header Path="BulletDynamics/Dynamics/btSimpleDynamicsWorld.h" IsExcluded="true" />
     <Header Path="BulletDynamics/Dynamics/btRigidBody.h">
       <Enum Name="btRigidBodyFlags" />
       <Class Name="btRigidBody">

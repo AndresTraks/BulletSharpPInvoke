@@ -614,6 +614,13 @@ namespace BulletSharpGen
         void WriteMethod(MethodDefinition method, int level, ref int overloadIndex, int numOptionalParams = 0,
             MethodDefinition returnParamMethod = null)
         {
+            EnsureWhiteSpace(WriteTo.Source);
+            if (!hasCppClassSeparatingWhitespace)
+            {
+                WriteLine(WriteTo.Header | WriteTo.Source);
+                hasCppClassSeparatingWhitespace = true;
+            }
+
             // Can't return whole structures, so append an output parameter
             // referencing the struct that will hold the return value.
             // convert "v method(param)" to "void method(param, &v)"
@@ -845,9 +852,8 @@ namespace BulletSharpGen
                 WriteClassWrapper(c);
             }
 
-            EnsureWhiteSpace(WriteTo.Source | WriteTo.CS);
-
             // Write class definition
+            EnsureWhiteSpace(WriteTo.CS);
             WriteTabs(level, WriteTo.CS);
             Write("public ", WriteTo.CS);
             if (c.IsAbstract)
@@ -876,12 +882,6 @@ namespace BulletSharpGen
             foreach (var cl in c.Classes.OrderBy(x => x.FullNameCppCli))
             {
                 WriteClass(cl, level + 1);
-            }
-
-            if (!hasCppClassSeparatingWhitespace)
-            {
-                WriteLine(WriteTo.Header | WriteTo.Source);
-                hasCppClassSeparatingWhitespace = true;
             }
 
             // Write the native pointer to the base class
@@ -976,7 +976,7 @@ namespace BulletSharpGen
                 if (!c.HidePublicConstructors && !c.IsAbstract)
                 {
                     int overloadIndex = 0;
-                    var constructors = c.Methods.Where(m => m.IsConstructor);
+                    var constructors = c.Methods.Where(m => m.IsConstructor && !m.IsExcluded);
                     if (constructors.Any())
                     {
                         foreach (var constructor in constructors)
@@ -995,7 +995,9 @@ namespace BulletSharpGen
             }
 
             // Write methods
-            foreach (var groupByName in c.Methods.Where(m => !m.IsConstructor).OrderBy(m => m.Name).GroupBy(m => m.Name))
+            var methods = c.Methods.Where(m => !m.IsConstructor && !m.IsExcluded).OrderBy(m => m.Name);
+            var methodsOverloads = methods.GroupBy(m => m.Name);
+            foreach (var groupByName in methodsOverloads)
             {
                 int overloadIndex = 0;
                 foreach (var method in groupByName)
@@ -1104,13 +1106,13 @@ namespace BulletSharpGen
             foreach (var method in abstractMethods)
             {
                 string className = baseAbstractMethods.Contains(method) ? cl.BaseClass.ManagedName : cl.ManagedName;
-                WriteLine(string.Format("\tp{0}_{1} _{2}Callback;", className, method.ManagedName, method.Name), WriteTo.Header);
+                WriteLine($"\tp{className}_{method.ManagedName} _{method.Name}Callback;", WriteTo.Header);
             }
             WriteLine(WriteTo.Header);
             WriteLine("public:", WriteTo.Header);
 
             // Wrapper constructor
-            Write(string.Format("\t{0}Wrapper(", cl.FullNameC), WriteTo.Header);
+            Write($"\t{cl.FullNameC}Wrapper(", WriteTo.Header);
             int numMethods = abstractMethods.Count;
             for (int i = 0; i < numMethods; i++)
             {
@@ -1286,46 +1288,73 @@ namespace BulletSharpGen
 
         void WriteHeader(HeaderDefinition header, string sourceRootFolder)
         {
-            // C++ header file
-            string headerPath = header.Name + "_wrap.h";
-            string headerFullPath = Path.Combine(project.CProjectPathFull, headerPath);
-            var headerFile = new FileStream(headerFullPath, FileMode.Create, FileAccess.Write);
-            headerWriter = new StreamWriter(headerFile);
-            headerWriter.WriteLine("#include \"main.h\"");
-            headerWriter.WriteLine();
-
-            // C++ source file
-            string sourcePath = header.Name + "_wrap.cpp";
-            string sourceFullPath = Path.Combine(project.CProjectPathFull, sourcePath);
-            var sourceFile = new FileStream(sourceFullPath, FileMode.Create, FileAccess.Write);
-            sourceWriter = new StreamWriter(sourceFile);
-
-            // C++ #includes
-            var includes = new List<string>();
-            foreach (var includeHeader in header.Includes.Concat(new[] {header}))
+            // Entirely skip headers that have no classes
+            // TODO: parse C++ methods outside of classes
+            if (header.AllClasses.All(@class =>
             {
-                // No need to include the base class header,
-                // it will already be included by the header of this class.
-                if (includeHeader != header &&
-                    header.AllClasses.Any(c => c.BaseClass != null && c.BaseClass.Header == includeHeader))
+                if (@class.IsExcluded || @class.IsTypedef) return true;
+                return false;
+            }))
+            {
+                return;
+            }
+
+            // Some headers only need a C# wrapper class, skip C++ part
+            bool hasCppWrapper = header.AllClasses.Any(@class =>
+            {
+                if (header.Name == "btActivatingCollisionAlgorithm")
                 {
-                    continue;
+                    return false;
                 }
+                return true;
+            });
 
-                string includePath = WrapperProject.MakeRelativePath(sourceRootFolder, includeHeader.Filename).Replace('\\', '/');
-                includes.Add(includePath);
-            }
-            includes.Sort();
-            foreach (var include in includes)
+            FileStream headerFile = null;
+            FileStream sourceFile = null;
+            if (hasCppWrapper)
             {
-                sourceWriter.WriteLine("#include <{0}>", include);
+                // C++ header file
+                string headerPath = header.Name + "_wrap.h";
+                string headerFullPath = Path.Combine(project.CProjectPathFull, headerPath);
+                headerFile = new FileStream(headerFullPath, FileMode.Create, FileAccess.Write);
+                headerWriter = new StreamWriter(headerFile);
+                headerWriter.WriteLine("#include \"main.h\"");
+                headerWriter.WriteLine();
+
+                // C++ source file
+                string sourcePath = header.Name + "_wrap.cpp";
+                string sourceFullPath = Path.Combine(project.CProjectPathFull, sourcePath);
+                sourceFile = new FileStream(sourceFullPath, FileMode.Create, FileAccess.Write);
+                sourceWriter = new StreamWriter(sourceFile);
+
+                // C++ #includes
+                var includes = new List<string>();
+                foreach (var includeHeader in header.Includes.Concat(new[] {header}))
+                {
+                    // No need to include the base class header,
+                    // it will already be included by the header of this class.
+                    if (includeHeader != header &&
+                        header.AllClasses.Any(c => c.BaseClass != null && c.BaseClass.Header == includeHeader))
+                    {
+                        continue;
+                    }
+
+                    string includePath =
+                        WrapperProject.MakeRelativePath(sourceRootFolder, includeHeader.Filename).Replace('\\', '/');
+                    includes.Add(includePath);
+                }
+                includes.Sort();
+                foreach (var include in includes)
+                {
+                    sourceWriter.WriteLine("#include <{0}>", include);
+                }
+                sourceWriter.WriteLine();
+                if (RequiresConversionHeader(header))
+                {
+                    sourceWriter.WriteLine("#include \"conversion.h\"");
+                }
+                sourceWriter.WriteLine("#include \"{0}\"", headerPath);
             }
-            sourceWriter.WriteLine();
-            if (RequiresConversionHeader(header))
-            {
-                sourceWriter.WriteLine("#include \"conversion.h\"");
-            }
-            sourceWriter.WriteLine("#include \"{0}\"", headerPath);
 
             // C# source file
             string csPath = header.ManagedName + ".cs";
@@ -1344,38 +1373,47 @@ namespace BulletSharpGen
             }
             csWriter.WriteLine();
 
-            // Write wrapper class headers
-            hasCppClassSeparatingWhitespace = true;
-            var wrappedClasses = header.AllClasses.Where(x => wrapperHeaderGuards.ContainsKey(x.Name)).OrderBy(x => x.FullNameC).ToList();
-            if (wrappedClasses.Count != 0)
+            if (hasCppWrapper)
             {
-                string headerGuard = wrapperHeaderGuards[wrappedClasses[0].Name];
-                WriteLine("#ifndef " + headerGuard, WriteTo.Header);
-                foreach (var @class in wrappedClasses)
+                // Write wrapper class headers
+                hasCppClassSeparatingWhitespace = true;
+                var wrappedClasses =
+                    header.AllClasses.Where(x => wrapperHeaderGuards.ContainsKey(x.Name))
+                        .OrderBy(x => x.FullNameC)
+                        .ToList();
+                if (wrappedClasses.Count != 0)
                 {
-                    WriteClassWrapperMethodPointers(@class);
+                    string headerGuard = wrapperHeaderGuards[wrappedClasses[0].Name];
+                    WriteLine("#ifndef " + headerGuard, WriteTo.Header);
+                    foreach (var @class in wrappedClasses)
+                    {
+                        WriteClassWrapperMethodPointers(@class);
+                    }
+                    foreach (var @class in wrappedClasses)
+                    {
+                        WriteLine($"#define {@class.FullNameC}Wrapper void", WriteTo.Header);
+                    }
+                    WriteLine("#else", WriteTo.Header);
+                    foreach (var @class in wrappedClasses)
+                    {
+                        WriteClassWrapperMethodDeclarations(@class);
+                        WriteClassWrapperDefinition(@class);
+                    }
+                    WriteLine("#endif", WriteTo.Header);
+                    WriteLine(WriteTo.Header);
                 }
-                foreach (var @class in wrappedClasses)
-                {
-                    WriteLine($"#define {@class.FullNameC}Wrapper void", WriteTo.Header);
-                }
-                WriteLine("#else", WriteTo.Header);
-                foreach (var @class in wrappedClasses)
-                {
-                    WriteClassWrapperMethodDeclarations(@class);
-                    WriteClassWrapperDefinition(@class);
-                }
-                WriteLine("#endif", WriteTo.Header);
-                WriteLine(WriteTo.Header);
             }
 
             // Write classes
-            headerWriter.WriteLine("extern \"C\"");
-            headerWriter.WriteLine("{");
+            if (hasCppWrapper)
+            {
+                headerWriter.WriteLine("extern \"C\"");
+                headerWriter.WriteLine("{");
+                hasCppClassSeparatingWhitespace = true;
+            }
             csWriter.WriteLine("namespace {0}", NamespaceName);
             csWriter.WriteLine("{");
             hasCSWhiteSpace = true;
-            hasCppClassSeparatingWhitespace = true;
 
             var enums = GetEnums(header.Classes).OrderBy(e => e.ManagedName).ToList();
             foreach (var @enum in enums)
@@ -1388,13 +1426,18 @@ namespace BulletSharpGen
                 WriteClass(@class, 1);
             }
 
-            headerWriter.WriteLine('}');
+            if (hasCppWrapper)
+            {
+                headerWriter.WriteLine('}');
+
+                headerWriter.Dispose();
+                headerFile.Dispose();
+                sourceWriter.Dispose();
+                sourceFile.Dispose();
+            }
+
             csWriter.WriteLine('}');
 
-            headerWriter.Dispose();
-            headerFile.Dispose();
-            sourceWriter.Dispose();
-            sourceFile.Dispose();
             csWriter.Dispose();
             csFile.Dispose();
         }
@@ -1469,7 +1512,7 @@ namespace BulletSharpGen
 
         private static bool RequiresInterop(ClassDefinition @class)
         {
-            if (@class.Methods.Any(m => !m.IsConstructor)) return true;
+            if (@class.Methods.Any(m => !m.IsConstructor && !m.IsExcluded)) return true;
 
             if (!@class.NoInternalConstructor && @class.BaseClass == null) return true;
 
