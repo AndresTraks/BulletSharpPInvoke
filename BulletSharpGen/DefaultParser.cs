@@ -21,6 +21,7 @@ namespace BulletSharpGen
             ParseEnums();
             SetClassProperties();
             RemoveRedundantMethods();
+            CreateDefaultConstructors();
             CreateFieldAccessors();
             CreateProperties();
             ResolveIncludes();
@@ -402,6 +403,24 @@ namespace BulletSharpGen
             return ToCamelCase(param.Name, false);
         }
 
+        // Create default constructor if no explicit C++ constructor exists.
+        void CreateDefaultConstructors()
+        {
+            foreach (var @class in Project.ClassDefinitions.Values)
+            {
+                if (@class.HidePublicConstructors) continue;
+                if (@class.IsStaticClass) continue;
+
+                var constructors = @class.Methods.Where(m => m.IsConstructor && !m.IsExcluded);
+                if (!constructors.Any())
+                {
+                    var constructor = new MethodDefinition(@class.Name, @class, 0);
+                    constructor.IsConstructor = true;
+                    constructor.ReturnType = new TypeRefDefinition();
+                }
+            }
+        }
+
         string[] _booleanVerbs = { "Has", "Is", "Needs" };
 
         // Create getters and setters for fields
@@ -442,13 +461,13 @@ namespace BulletSharpGen
                     MethodDefinition getter = null, setter = null;
                     foreach (var method in @class.Methods)
                     {
-                        if (method.ManagedName.Equals(managedGetterName) && method.Parameters.Length == 0)
+                        if (managedGetterName.Equals(method.ManagedName) && method.Parameters.Length == 0)
                         {
                             getter = method;
                             continue;
                         }
 
-                        if (method.ManagedName.Equals(managedSetterName) && method.Parameters.Length == 1)
+                        if (managedSetterName.Equals(method.ManagedName) && method.Parameters.Length == 1)
                         {
                             setter = method;
                         }
@@ -516,7 +535,8 @@ namespace BulletSharpGen
             foreach (var @class in Project.ClassDefinitions.Values)
             {
                 // Getters with return type and 0 arguments
-                foreach (var method in @class.Methods.Where(m => !m.IsVoid && m.Parameters.Length == 0))
+                var getterMethods = @class.Methods.Where(m => !m.IsConstructor && !m.IsVoid && m.Parameters.Length == 0);
+                foreach (var method in getterMethods)
                 {
                     if (method.ManagedName.StartsWith("Get") ||
                         ("bool".Equals(method.ReturnType.Name) &&

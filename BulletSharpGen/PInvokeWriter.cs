@@ -984,13 +984,6 @@ namespace BulletSharpGen
                             WriteMethod(constructor, level, ref overloadIndex);
                         }
                     }
-                    else
-                    {
-                        // Default constructor
-                        var constructor = new MethodDefinition(c.Name, c, 0);
-                        constructor.IsConstructor = true;
-                        WriteMethod(constructor, level, ref overloadIndex);
-                    }
                 }
             }
 
@@ -1300,14 +1293,8 @@ namespace BulletSharpGen
             }
 
             // Some headers only need a C# wrapper class, skip C++ part
-            bool hasCppWrapper = header.AllClasses.Any(@class =>
-            {
-                if (header.Name == "btActivatingCollisionAlgorithm")
-                {
-                    return false;
-                }
-                return true;
-            });
+            bool hasCppWrapper = header.AllClasses.
+                Any(@class => @class.AllSubClasses.Any() || @class.Methods.Count != 0);
 
             FileStream headerFile = null;
             FileStream sourceFile = null;
@@ -1489,7 +1476,7 @@ namespace BulletSharpGen
                 return true;
             }
 
-            foreach (var method in cl.Methods)
+            foreach (var method in cl.Methods.Where(m => !m.IsExcluded))
             {
                 if (BulletParser.TypeRequiresMarshal(method.ReturnType))
                 {
@@ -1521,6 +1508,8 @@ namespace BulletSharpGen
             return false;
         }
 
+        private static string[] _mathClasses = { "Quaternion", "Transform", "Vector3", "Vector4" };
+
         private static bool RequiresMathNamespace(HeaderDefinition header)
         {
             return header.Classes.Any(RequiresMathNamespace);
@@ -1528,38 +1517,18 @@ namespace BulletSharpGen
 
         private static bool RequiresMathNamespace(ClassDefinition @class)
         {
-            if (@class.Classes.Any(RequiresMathNamespace))
-            {
-                return true;
-            }
+            if (@class.Classes.Any(RequiresMathNamespace)) return true;
+            if (@class.IsExcluded) return false;
 
-            if (@class.IsExcluded)
+            foreach (var method in @class.Methods.Where(m => !m.IsExcluded))
             {
-                return false;
-            }
+                if (@class.HidePublicConstructors && method.IsConstructor) continue;
 
-            foreach (var method in @class.Methods)
-            {
-                if (@class.HidePublicConstructors && method.IsConstructor)
-                {
-                    continue;
-                }
+                if (_mathClasses.Contains(method.ReturnType.ManagedName)) return true;
 
-                if (method.ReturnType.ManagedName.Equals("Quaternion") ||
-                    method.ReturnType.ManagedName.Equals("Transform") ||
-                    method.ReturnType.ManagedName.Equals("Vector3"))
+                if (method.Parameters.Any(param => _mathClasses.Contains(param.Type.ManagedName)))
                 {
                     return true;
-                }
-
-                foreach (var param in method.Parameters)
-                {
-                    if (param.Type.ManagedName.Equals("Quaternion") ||
-                        param.Type.ManagedName.Equals("Transform") ||
-                        param.Type.ManagedName.Equals("Vector3"))
-                    {
-                        return true;
-                    }
                 }
             }
 

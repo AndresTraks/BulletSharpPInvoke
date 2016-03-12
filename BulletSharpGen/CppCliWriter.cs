@@ -921,13 +921,6 @@ namespace BulletSharpGen
                             OutputMethod(constructor, level);
                         }
                     }
-                    else
-                    {
-                        // Default constructor
-                        MethodDefinition constructor = new MethodDefinition(@class.Name, @class, 0);
-                        constructor.IsConstructor = true;
-                        OutputMethod(constructor, level);
-                    }
                 }
             }
 

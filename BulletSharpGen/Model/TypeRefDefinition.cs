@@ -212,18 +212,20 @@ namespace BulletSharpGen
 
         public TypeRefDefinition Copy()
         {
-            var t = new TypeRefDefinition();
-            t.HasTemplateTypeParameter = HasTemplateTypeParameter;
-            t.IsBasic = IsBasic;
-            t.IsConst = IsConst;
-            t.IsConstantArray = IsConstantArray;
-            t.IsIncomplete = IsIncomplete;
-            t.IsPointer = IsPointer;
-            t.IsReference = IsReference;
-            t.Name = Name;
-            t.Referenced = Referenced;
-            t.SpecializedTemplateType = SpecializedTemplateType;
-            t.Target = Target;
+            var t = new TypeRefDefinition
+            {
+                HasTemplateTypeParameter = HasTemplateTypeParameter,
+                IsBasic = IsBasic,
+                IsConst = IsConst,
+                IsConstantArray = IsConstantArray,
+                IsIncomplete = IsIncomplete,
+                IsPointer = IsPointer,
+                IsReference = IsReference,
+                Name = Name,
+                Referenced = Referenced,
+                SpecializedTemplateType = SpecializedTemplateType,
+                Target = Target
+            };
             return t;
         }
 
