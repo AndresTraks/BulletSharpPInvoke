@@ -410,6 +410,7 @@ namespace BulletSharpGen
             {
                 if (@class.HidePublicConstructors) continue;
                 if (@class.IsStaticClass) continue;
+                if (@class is EnumDefinition) continue;
 
                 var constructors = @class.Methods.Where(m => m.IsConstructor && !m.IsExcluded);
                 if (!constructors.Any())

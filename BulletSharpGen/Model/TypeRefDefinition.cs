@@ -237,6 +237,10 @@ namespace BulletSharpGen
             {
                 name = "[unexposed type]";
             }
+            else if (!decl.SpecializedCursorTemplate.IsInvalid)
+            {
+                name = decl.DisplayName;
+            }
             else
             {
                 name = decl.Spelling;
