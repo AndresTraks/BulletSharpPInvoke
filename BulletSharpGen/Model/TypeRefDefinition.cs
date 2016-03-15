@@ -5,6 +5,11 @@ namespace BulletSharpGen
     public class TypeRefDefinition
     {
         public string Name { get; set; }
+
+        /// <summary>
+        /// Type is void, int, float, enum, etc.
+        /// or a typedef to a basic type.
+        /// </summary>
         public bool IsBasic { get; set; }
 
         /// <summary>

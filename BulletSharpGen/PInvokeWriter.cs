@@ -33,47 +33,8 @@ namespace BulletSharpGen
 
         void WriteType(TypeRefDefinition type, WriteTo writeTo)
         {
-            if (type.IsBasic)
-            {
-                Write(type.Name.Replace("::", "_"), writeTo & WriteTo.Header);
-                Write(type.Name, writeTo & WriteTo.Source);
-            }
-            else if (type.HasTemplateTypeParameter)
-            {
-                
-            }
-            else
-            {
-                string typeName;
-                if (type.Referenced != null)
-                {
-                    if (type.Referenced.IsConst) // || type.IsConst
-                    {
-                        Write("const ", writeTo);
-                    }
-
-                    typeName = BulletParser.GetTypeName(type.Referenced) ?? string.Empty;
-                }
-                else
-                {
-                    if (type.IsConst)
-                    {
-                        Write("const ", writeTo);
-                    }
-
-                    typeName = BulletParser.GetTypeName(type);
-                }
-                if (type.Target != null && type.Target.IsPureEnum)
-                {
-                    Write(typeName + "::" + type.Target.Name, writeTo & WriteTo.Source);
-                    Write(typeName.Replace("::", "_"), writeTo & WriteTo.Header);
-                }
-                else
-                {
-                    Write(typeName + '*', writeTo & WriteTo.Source);
-                    Write(typeName.Replace("::", "_") + '*', writeTo & WriteTo.Header);
-                }
-            }
+            string typeName = BulletParser.GetTypeName(type) ?? string.Empty;
+            Write(typeName.Replace("::", "_"), writeTo & (WriteTo.Source | WriteTo.Header));
         }
 
         void WriteTypeCS(TypeRefDefinition type)
@@ -436,7 +397,7 @@ namespace BulletSharpGen
 
                     if (!returnType.IsBasic && !returnType.IsPointer && !returnType.IsConstantArray)
                     {
-                        if (!(returnType.Target != null && returnType.Target.IsPureEnum))
+                        if (!(returnType.Target != null && returnType.Target is EnumDefinition))
                         {
                             Write('&', WriteTo.Source);
                         }
@@ -833,16 +794,8 @@ namespace BulletSharpGen
 
         void WriteClass(ClassDefinition c, int level)
         {
-            if (c.IsExcluded || c.IsTypedef || c.IsPureEnum || c is ClassTemplateDefinition)
-            {
-                return;
-            }
-
-            // Class containing only an anonymous enum
-            if (c.Methods.Count == 0 &&
-                c.Fields.Count == 0 &&
-                c.Classes.Count == 1 &&
-                c.Classes.First() is EnumDefinition)
+            if (c.IsExcluded || c.IsTypedef || c.IsPureEnum ||
+                c is ClassTemplateDefinition || c is EnumDefinition)
             {
                 return;
             }

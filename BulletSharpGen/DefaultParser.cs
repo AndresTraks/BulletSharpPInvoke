@@ -411,6 +411,7 @@ namespace BulletSharpGen
                 if (@class.HidePublicConstructors) continue;
                 if (@class.IsStaticClass) continue;
                 if (@class is EnumDefinition) continue;
+                if (@class.IsPureEnum) continue;
 
                 var constructors = @class.Methods.Where(m => m.IsConstructor && !m.IsExcluded);
                 if (!constructors.Any())
@@ -484,31 +485,37 @@ namespace BulletSharpGen
 
                     var prop = new PropertyDefinition(getter, GetPropertyName(getter));
 
-                    // Can't assign value to reference or constant array
-                    if (setter == null && !field.Type.IsReference && !field.Type.IsConstantArray)
+                    if (setter == null)
                     {
-                        setter = new MethodDefinition(setterName, @class, 1);
-                        setter.ManagedName = managedSetterName;
-                        setter.ReturnType = new TypeRefDefinition();
-                        setter.Field = field;
-                        TypeRefDefinition constType;
-                        if (!field.Type.IsBasic && !field.Type.IsPointer)
-                        {
-                            constType = field.Type.Copy();
-                            constType.IsConst = true;
-                        }
-                        else
-                        {
-                            constType = field.Type;
-                        }
-                        setter.Parameters[0] = new ParameterDefinition("value", constType);
-                        setter.Parameters[0].ManagedName = "value";
-
-                        prop.Setter = setter;
-                        prop.Setter.Property = prop;
+                        CreateFieldSetter(prop, setterName, managedSetterName);
                     }
                 }
             }
+        }
+
+        void CreateFieldSetter(PropertyDefinition prop, string setterName, string managedSetterName)
+        {
+            // Can't assign value to reference or constant array
+            if (prop.Type.IsReference || prop.Type.IsConstantArray) return;
+
+            if (prop.Type.Name != null && prop.Type.Name.StartsWith("btAlignedObjectArray")) return;
+
+            var type = prop.Getter.ReturnType;
+
+            MethodDefinition setter = new MethodDefinition(setterName, prop.Parent, 1);
+            setter.ManagedName = managedSetterName;
+            setter.ReturnType = new TypeRefDefinition();
+            setter.Field = prop.Getter.Field;
+            if (!type.IsBasic && !type.IsPointer)
+            {
+                type = type.Copy();
+                type.IsConst = true;
+            }
+            setter.Parameters[0] = new ParameterDefinition("value", type);
+            setter.Parameters[0].ManagedName = "value";
+
+            prop.Setter = setter;
+            prop.Setter.Property = prop;
         }
 
         string GetPropertyName(MethodDefinition getter)

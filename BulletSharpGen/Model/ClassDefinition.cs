@@ -97,7 +97,13 @@ namespace BulletSharpGen
         // Pure enum = enum wrapped in a struct
         public bool IsPureEnum
         {
-            get { return this is EnumDefinition && Methods.Count == 0; }
+            get
+            {
+                return Methods.Count == 0 &&
+                    Fields.Count == 0 &&
+                    Classes.Count == 1 &&
+                    Classes.First() is EnumDefinition;
+            }
         }
 
         // static class contains only static methods

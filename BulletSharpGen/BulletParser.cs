@@ -179,7 +179,7 @@ namespace BulletSharpGen
             }
             if (t.Target != null)
             {
-                if (t.Target.IsPureEnum)
+                if (t.Target is EnumDefinition)
                 {
                     return false;
                 }
@@ -202,6 +202,37 @@ namespace BulletSharpGen
 
         public static string GetTypeName(TypeRefDefinition type)
         {
+            string name = type.IsConst ? "const " : "";
+
+            if (type.IsBasic)
+            {
+                return name + type.Name;
+            }
+
+            if (type.Referenced != null)
+            {
+                switch (type.ManagedName)
+                {
+                    /*case "Matrix3x3":
+                    case "Quaternion":
+                    case "Transform":
+                    case "Vector3":
+                    case "Vector4":
+                        return name + "btScalar*";*/
+                    default:
+                        return name + GetTypeName(type.Referenced) + "*";
+                }
+            }
+
+            var target = type.Target;
+            if (target != null && target is EnumDefinition)
+            {
+                if (target.Parent != null && target.Parent.IsPureEnum)
+                {
+                    return target.Parent.FullName;
+                }
+            }
+
             switch (type.ManagedName)
             {
                 case "Matrix3x3":
@@ -209,10 +240,14 @@ namespace BulletSharpGen
                 case "Transform":
                 case "Vector3":
                 case "Vector4":
-                    return "btScalar";
+                    name += "btScalar";
+                    break;
                 default:
-                    return type.FullName;
+                    name += type.FullName;
+                    break;
             }
+
+            return name;
         }
 
         public static string GetTypeNameCS(TypeRefDefinition type)
