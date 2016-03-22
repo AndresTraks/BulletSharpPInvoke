@@ -6,7 +6,7 @@ using System.Text;
 namespace BulletSharpGen
 {
     [Flags]
-    enum WriteTo
+    public enum WriteTo
     {
         None = 0,
         Header = 1,
@@ -16,7 +16,7 @@ namespace BulletSharpGen
         AllFiles = Header | Source | CS
     }
 
-    abstract class WrapperWriter
+    public abstract class WrapperWriter
     {
         protected IEnumerable<HeaderDefinition> headerDefinitions;
         protected string NamespaceName { get; private set; }

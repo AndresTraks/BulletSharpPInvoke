@@ -7,7 +7,7 @@ using System.Linq;
 namespace BulletSharpGen
 {
     // Used to map e.g. C++ class names into C# class names
-    interface ISymbolMapping
+    public interface ISymbolMapping
     {
         string Name { get; }
         string Map(string symbol);

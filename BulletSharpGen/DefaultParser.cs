@@ -5,13 +5,25 @@ using System.Text;
 
 namespace BulletSharpGen
 {
-    class DefaultParser
+    class DefaultNameMapping : ISymbolMapping
     {
-        public WrapperProject Project { get; private set; }
+        public string Name => "NameMapping";
+
+        public virtual string Map(string symbol)
+        {
+            return symbol;
+        }
+    }
+
+    public class DefaultParser
+    {
+        public WrapperProject Project { get; }
 
         public DefaultParser(WrapperProject project)
         {
             Project = project;
+            project.ClassNameMapping = new DefaultNameMapping();
+            project.HeaderNameMapping = new DefaultNameMapping();
         }
 
         public virtual void Parse()
@@ -327,19 +339,25 @@ namespace BulletSharpGen
         void MapSymbols()
         {
             // Get managed header and enum names
-            var headerNameMapping = Project.HeaderNameMapping as ScriptedMapping;
+            var scriptedNameMapping = Project.HeaderNameMapping as ScriptedMapping;
             foreach (var header in Project.HeaderDefinitions.Values)
             {
-                headerNameMapping.Globals.Header = header;
-                header.ManagedName = headerNameMapping.Map(header.Name);
+                if (scriptedNameMapping != null)
+                {
+                    scriptedNameMapping.Globals.Header = header;
+                }
+                header.ManagedName = Project.HeaderNameMapping.Map(header.Name);
             }
 
             // Apply class properties
-            var classNameMapping = Project.ClassNameMapping as ScriptedMapping;
+            scriptedNameMapping = Project.ClassNameMapping as ScriptedMapping;
             foreach (var @class in Project.ClassDefinitions.Values)
             {
-                classNameMapping.Globals.Header = @class.Header;
-                @class.ManagedName = classNameMapping.Map(@class.Name);
+                if (scriptedNameMapping != null)
+                {
+                    scriptedNameMapping.Globals.Header = @class.Header;
+                }
+                @class.ManagedName = Project.ClassNameMapping.Map(@class.Name);
 
                 var @enum = @class as EnumDefinition;
                 if (@enum != null)

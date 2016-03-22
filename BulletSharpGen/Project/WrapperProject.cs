@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace BulletSharpGen
 {
-    class WrapperProject
+    public class WrapperProject
     {
         public string ProjectFilePath { get; set; }
         public string CppProjectPath { get; set; }
@@ -83,6 +83,11 @@ namespace BulletSharpGen
         public void Save()
         {
             Project.WrapperProjectXmlWriter.Write(this);
+        }
+
+        public void ReadCpp()
+        {
+            new CppReader(this);
         }
     }
 }

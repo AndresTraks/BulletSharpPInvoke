@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace BulletSharpGen
 {
-    class PInvokeWriter : WrapperWriter
+    public class PInvokeWriter : WrapperWriter
     {
         bool hasCppClassSeparatingWhitespace;
         Dictionary<string, string> wrapperHeaderGuards = new Dictionary<string, string>();
@@ -1384,15 +1384,12 @@ namespace BulletSharpGen
 
         public override void Output()
         {
-            string outDirectoryPInvoke = NamespaceName + "_pinvoke";
-            string outDirectoryC = NamespaceName + "_c";
-
-            Directory.CreateDirectory(outDirectoryPInvoke);
-            Directory.CreateDirectory(outDirectoryC);
+            Directory.CreateDirectory(project.CsProjectPathFull);
+            Directory.CreateDirectory(project.CProjectPathFull);
 
             // C++ header file (includes all other headers)
             string includeFilename = NamespaceName + ".h";
-            var includeFile = new FileStream(outDirectoryC + "\\" + includeFilename, FileMode.Create, FileAccess.Write);
+            var includeFile = new FileStream(Path.Combine(project.CProjectPathFull, includeFilename), FileMode.Create, FileAccess.Write);
             var includeWriter = new StreamWriter(includeFile);
 
             var sourceRootFolders = project.SourceRootFoldersFull.Select(s => s.Replace('\\', '/'));

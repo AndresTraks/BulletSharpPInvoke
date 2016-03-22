@@ -21,7 +21,6 @@ namespace BulletSharpGen
 
     class CppReader
     {
-        Index index;
         List<string> headerQueue = new List<string>();
         List<string> clangOptions = new List<string>();
         HashSet<string> excludedMethods = new HashSet<string>();
@@ -90,18 +89,7 @@ namespace BulletSharpGen
 
             Console.Write("Reading headers");
 
-            using (index = new Index())
-            {
-                while (headerQueue.Count != 0)
-                {
-                    ReadHeader(headerQueue[0]);
-                }
-            }
-
-            Console.WriteLine();
-            Console.WriteLine("Read complete - headers: {0}, classes: {1}",
-                project.HeaderDefinitions.Count, project.ClassDefinitions.Count);
-
+            ReadHeaders();
 
             foreach (var @class in project.ClassDefinitions.Values.Where(c => !c.IsParsed))
             {
@@ -459,20 +447,31 @@ namespace BulletSharpGen
             return Cursor.ChildVisitResult.Continue;
         }
 
-        void ReadHeader(string headerFile)
+        private void ReadHeaders()
         {
-            Console.Write('.');
-
-            var unsavedFiles = new UnsavedFile[] { };
-            using (_context.TranslationUnit = index.CreateTranslationUnit(headerFile,
-                clangOptions.ToArray(), unsavedFiles, TranslationUnitFlags.SkipFunctionBodies))
+            using (var index = new Index())
             {
-                var cur = _context.TranslationUnit.Cursor;
-                _context.Namespace = "";
-                cur.VisitChildren(HeaderVisitor);
+                while (headerQueue.Any())
+                {
+                    string headerFile = headerQueue.First();
+                    Console.Write('.');
+
+                    var unsavedFiles = new UnsavedFile[] {};
+                    using (_context.TranslationUnit = index.CreateTranslationUnit(headerFile,
+                        clangOptions.ToArray(), unsavedFiles, TranslationUnitFlags.SkipFunctionBodies))
+                    {
+                        var cur = _context.TranslationUnit.Cursor;
+                        _context.Namespace = "";
+                        cur.VisitChildren(HeaderVisitor);
+                    }
+                    _context.TranslationUnit = null;
+                    headerQueue.Remove(headerFile);
+                }
             }
-            _context.TranslationUnit = null;
-            headerQueue.Remove(headerFile);
+
+            Console.WriteLine();
+            Console.WriteLine("Read complete - headers: {0}, classes: {1}",
+                project.HeaderDefinitions.Count, project.ClassDefinitions.Count);
         }
     }
 }

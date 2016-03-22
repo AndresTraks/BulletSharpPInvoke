@@ -18,7 +18,7 @@ namespace BulletSharpGen
                 return;
             }
 
-            var reader = new CppReader(project);
+            project.ReadCpp();
             var parser = new BulletParser(project);
             parser.Parse();
             Console.WriteLine("Parsing complete");
