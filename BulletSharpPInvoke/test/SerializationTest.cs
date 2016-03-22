@@ -53,11 +53,11 @@ namespace BulletSharpTest
             Assert.True(fileLoader.LoadFile("data\\cylinders.bullet"));
             fileLoader.DeleteAllData();
             Assert.AreEqual(0, objects.Count);
-            /*
+
             Assert.True(fileLoader.LoadFile("data\\multibody.bullet"));
             fileLoader.DeleteAllData();
             Assert.AreEqual(0, objects.Count);
-
+            /*
             Assert.True(fileLoader.LoadFile("data\\r2d2_multibody.bullet"));
             fileLoader.DeleteAllData();
             Assert.AreEqual(0, objects.Count);

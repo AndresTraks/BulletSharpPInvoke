@@ -312,10 +312,6 @@ namespace BulletSharp
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern IntPtr btCompoundShape_getChildList(IntPtr obj);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btCompoundShape_getNumChildShapes(IntPtr obj);
-        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btCompoundShape_removeChildShape(IntPtr obj, IntPtr shape);
-        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern void btCompoundShape_removeChildShapeByIndex(IntPtr obj, int childShapeindex);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern IntPtr btCompoundShapeChild_array_at(IntPtr obj, int n);
@@ -347,10 +343,14 @@ namespace BulletSharp
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
-                return (uint)Marshal.ReadInt32(_native + index * sizeof(uint));
+                return (uint)Marshal.ReadInt32(_native, index * sizeof(uint));
             }
             set
             {
+                if ((uint)index >= (uint)Count)
+                {
+                    throw new ArgumentOutOfRangeException("index");
+                }
                 Marshal.WriteInt32(_native, index * sizeof(uint), (int)value);
             }
         }
@@ -417,7 +417,14 @@ namespace BulletSharp
                 btVector3_array_at(_native, index, out value);
                 return value;
             }
-            set { btVector3_array_set(_native, index, ref value); }
+            set
+            {
+                if ((uint)index >= (uint)Count)
+                {
+                    throw new ArgumentOutOfRangeException("index");
+                }
+                btVector3_array_set(_native, index, ref value);
+            }
         }
 
         public void Add(Vector3 item)

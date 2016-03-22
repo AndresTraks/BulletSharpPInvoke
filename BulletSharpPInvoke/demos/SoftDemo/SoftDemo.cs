@@ -6,7 +6,6 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using CollisionFlags = BulletSharp.SoftBody.CollisionFlags;
 
 namespace SoftDemo
 {
@@ -377,7 +376,7 @@ namespace SoftDemo
                 SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, TorusMesh.Vertices, TorusMesh.Indices);
                 psb.GenerateBendingConstraints(2);
                 psb.Cfg.PositionIterations = 2;
-                psb.Cfg.Collisions |= CollisionFlags.VertexFaceSoftSoft;
+                psb.Cfg.Collisions |= Collisions.VertexFaceSoftSoft;
                 psb.RandomizeConstraints();
                 Matrix m = Matrix.RotationYawPitchRoll((float)Math.PI / 2 * (i & 1), (float)Math.PI / 2 * (1 - (i & 1)), 0) *
                     Matrix.Translation(3 * i, 2, 0);
@@ -400,7 +399,7 @@ namespace SoftDemo
                 psb.GenerateBendingConstraints(2, pm);
                 psb.Cfg.PositionIterations = 2;
                 psb.Cfg.DynamicFriction = 0.5f;
-                psb.Cfg.Collisions |= CollisionFlags.VertexFaceSoftSoft;
+                psb.Cfg.Collisions |= Collisions.VertexFaceSoftSoft;
                 psb.RandomizeConstraints();
                 Matrix m = Matrix.RotationYawPitchRoll((float)Math.PI / 2 * (i & 1), 0, 0) *
                     Matrix.Translation(0, -1 + 5 * i, 0);
@@ -421,7 +420,7 @@ namespace SoftDemo
                 new Vector3(+s, 0, +s),
                 15, 15, 1 + 2 + 4 + 8, true);
             psb.Materials[0].LinearStiffness = 0.4f;
-            psb.Cfg.Collisions |= CollisionFlags.VertexFaceSoftSoft;
+            psb.Cfg.Collisions |= Collisions.VertexFaceSoftSoft;
             psb.TotalMass = 150;
             SoftWorld.AddSoftBody(psb);
 
@@ -438,7 +437,7 @@ namespace SoftDemo
             pm.Flags -= MaterialFlags.DebugDraw;
             psb.GenerateBendingConstraints(2, pm);
             psb.Materials[0].LinearStiffness = 0.5f;
-            psb.Cfg.Collisions |= CollisionFlags.VertexFaceSoftSoft;
+            psb.Cfg.Collisions |= Collisions.VertexFaceSoftSoft;
             psb.TotalMass = 150;
             SoftWorld.AddSoftBody(psb);
             cutting = true;
@@ -553,7 +552,7 @@ namespace SoftDemo
             //psb.Cfg.PIterations = 1;
             cutting = false;
             //psb.CollisionShape.Margin = 0.01f;
-            psb.Cfg.Collisions = CollisionFlags.ClusterClusterSoftSoft | CollisionFlags.ClusterConvexRigidSoft; //| CollisionFlags.ClusterSelf;
+            psb.Cfg.Collisions = Collisions.ClusterClusterSoftSoft | Collisions.ClusterConvexRigidSoft; //| Collisions.ClusterSelf;
 
             ///pass zero in generateClusters to create  cluster for each tetrahedron or triangle
             psb.GenerateClusters(0);
@@ -583,7 +582,7 @@ namespace SoftDemo
             //psb.CollisionShape.Margin = 0.5f;
 
             psb.CollisionShape.Margin = 0.01f;
-            psb.Cfg.Collisions = CollisionFlags.ClusterClusterSoftSoft | CollisionFlags.ClusterConvexRigidSoft;
+            psb.Cfg.Collisions = Collisions.ClusterClusterSoftSoft | Collisions.ClusterConvexRigidSoft;
             // | Collision.ClusterSelf;
             psb.Materials[0].LinearStiffness = 0.8f;
             cutting = false;
@@ -784,7 +783,7 @@ namespace SoftDemo
             psb.GenerateBendingConstraints(2, pm);
             psb.Cfg.PositionIterations = 2;
             psb.Cfg.DynamicFriction = 1;
-            psb.Cfg.Collisions = CollisionFlags.ClusterClusterSoftSoft | CollisionFlags.ClusterConvexRigidSoft;
+            psb.Cfg.Collisions = Collisions.ClusterClusterSoftSoft | Collisions.ClusterConvexRigidSoft;
             psb.RandomizeConstraints();
             Matrix m = Matrix.RotationYawPitchRoll(a.X, a.Y, a.Z) * Matrix.Translation(x);
             psb.Transform(m);
@@ -803,7 +802,7 @@ namespace SoftDemo
             pm.Flags -= MaterialFlags.DebugDraw;
             psb.GenerateBendingConstraints(2, pm);
             psb.Cfg.PositionIterations = 2;
-            psb.Cfg.Collisions = CollisionFlags.ClusterClusterSoftSoft | CollisionFlags.ClusterConvexRigidSoft;
+            psb.Cfg.Collisions = Collisions.ClusterClusterSoftSoft | Collisions.ClusterConvexRigidSoft;
             psb.RandomizeConstraints();
             psb.Scale(s);
             Matrix m = Matrix.RotationYawPitchRoll(a.X, a.Y, a.Z) * Matrix.Translation(x);
@@ -842,7 +841,7 @@ namespace SoftDemo
             psb.Cfg.DynamicFriction = 1;
             psb.Cfg.SoftRigidHardness = 1;
             psb.Cfg.SoftRigidImpulseSplit = 0;
-            psb.Cfg.Collisions = CollisionFlags.ClusterClusterSoftSoft | CollisionFlags.ClusterConvexRigidSoft;
+            psb.Cfg.Collisions = Collisions.ClusterClusterSoftSoft | Collisions.ClusterConvexRigidSoft;
             psb.GenerateBendingConstraints(2, pm);
 
             psb.CollisionShape.Margin = 0.05f;
@@ -873,7 +872,7 @@ namespace SoftDemo
                 psb.Cfg.SoftSoftImpulseSplit = 0;
                 psb.Cfg.SoftKineticHardness = 0.1f;
                 psb.Cfg.SoftKineticImpulseSplit = 1;
-                psb.Cfg.Collisions = CollisionFlags.ClusterClusterSoftSoft | CollisionFlags.ClusterConvexRigidSoft;
+                psb.Cfg.Collisions = Collisions.ClusterClusterSoftSoft | Collisions.ClusterConvexRigidSoft;
                 psb.RandomizeConstraints();
                 Matrix m = Matrix.RotationYawPitchRoll((float)Math.PI / 2 * (i & 1), (float)Math.PI / 2 * (1 - (i & 1)), 0)
                     * Matrix.Translation(3 * i, 2, 0);

@@ -26,7 +26,7 @@ namespace BulletSharp.SoftBody
 	}
 
     [Flags]
-	public enum CollisionFlags
+	public enum Collisions
 	{
         None = 0,
         RigidSoftMask = 0x000f,
@@ -1224,7 +1224,7 @@ namespace BulletSharp.SoftBody
 			set { btSoftBody_Config_setCiterations(_native, value); }
 		}
 
-		public CollisionFlags Collisions
+		public Collisions Collisions
 		{
 			get { return btSoftBody_Config_getCollisions(_native); }
 			set { btSoftBody_Config_setCollisions(_native, value); }
@@ -1403,7 +1403,7 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBody_Config_getCiterations(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern CollisionFlags btSoftBody_Config_getCollisions(IntPtr obj);
+        static extern Collisions btSoftBody_Config_getCollisions(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBody_Config_getDiterations(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -1461,7 +1461,7 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_Config_setCiterations(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btSoftBody_Config_setCollisions(IntPtr obj, CollisionFlags value);
+        static extern void btSoftBody_Config_setCollisions(IntPtr obj, Collisions value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_Config_setDiterations(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

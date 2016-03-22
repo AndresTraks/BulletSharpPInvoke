@@ -24,12 +24,13 @@
     <Replacement Replace="btSparseSDF" With="SparseSdf" />
     <Replacement Replace="ConstraintParams" With="ConstraintParam" />
     <Replacement Replace="eAeroModel" With="AeroModel" />
+    <Replacement Replace="eFeatherstoneJointType" With="FeatherstoneJointType" />
     <Replacement Replace="eFeature" With="FeatureType" />
     <Replacement Replace="ePSolver" With="PositionSolver" />
     <Replacement Replace="eSolverPresets" With="SolverPresets" />
     <Replacement Replace="eType" With="JointType" />
     <Replacement Replace="eVSolver" With="VelocitySolver" />
-    <Replacement Replace="fCollision" With="CollisionFlags" />
+    <Replacement Replace="fCollision" With="Collisions" />
     <Replacement Replace="fMaterial" With="MaterialFlags" />
     <Replacement Replace="GIM_BVH_DATA" With="GimBvhData" />
     <Replacement Replace="GIM_BVH_DATA_ARRAY" With="GimBvhDataArray" />

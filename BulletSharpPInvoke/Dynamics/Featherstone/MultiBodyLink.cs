@@ -5,6 +5,16 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
+	public enum FeatherstoneJointType
+	{
+		Revolute = 0,
+		Prismatic = 1,
+		Spherical = 2,
+		Planar = 3,
+		Fixed = 4,
+		Invalid
+	}
+
 	public class MultiBodyLink
 	{
 		internal IntPtr _native;
@@ -214,13 +224,29 @@ namespace BulletSharp
 			}
 			set { btMultibodyLink_setInertiaLocal(_native, ref value); }
 		}
+
+		public float JointDamping
+		{
+			get { return btMultibodyLink_getJointDamping(_native); }
+			set { btMultibodyLink_setJointDamping(_native, value); }
+		}
         /*
 		public MultiBodyJointFeedback JointFeedback
 		{
-			get { return btMultibodyLink_getJointFeedback(_native); }
-			set { btMultibodyLink_setJointFeedback(_native, value._native); }
+			get { return _jointFeedback; }
+			set
+			{
+				btMultibodyLink_setJointFeedback(_native, value._native);
+				_jointFeedback = value;
+			}
 		}
-
+        */
+		public float JointFriction
+		{
+			get { return btMultibodyLink_getJointFriction(_native); }
+			set { btMultibodyLink_setJointFriction(_native, value); }
+		}
+        /*
 		public char JointName
 		{
 			get { return btMultibodyLink_getJointName(_native); }
@@ -236,13 +262,13 @@ namespace BulletSharp
 		{
 			get { return btMultibodyLink_getJointTorque(_native); }
 		}
-
-		public eFeatherstoneJointType JointType
+        */
+		public FeatherstoneJointType JointType
 		{
 			get { return btMultibodyLink_getJointType(_native); }
 			set { btMultibodyLink_setJointType(_native, value); }
 		}
-
+       /*
 		public char LinkName
 		{
 			get { return btMultibodyLink_getLinkName(_native); }
@@ -319,15 +345,19 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_getInertiaLocal(IntPtr obj, [Out] out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btMultibodyLink_getJointDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btMultibodyLink_getJointFeedback(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btMultibodyLink_getJointFriction(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btMultibodyLink_getJointName(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btMultibodyLink_getJointPos(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btMultibodyLink_getJointTorque(IntPtr obj);
-		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		//static extern eFeatherstoneJointType btMultibodyLink_getJointType(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern FeatherstoneJointType btMultibodyLink_getJointType(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btMultibodyLink_getLinkName(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -381,11 +411,15 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setInertiaLocal(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultibodyLink_setJointDamping(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setJointFeedback(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultibodyLink_setJointFriction(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setJointName(IntPtr obj, IntPtr value);
-		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		//static extern void btMultibodyLink_setJointType(IntPtr obj, eFeatherstoneJointType value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultibodyLink_setJointType(IntPtr obj, FeatherstoneJointType value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setLinkName(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

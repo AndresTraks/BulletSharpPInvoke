@@ -104,9 +104,19 @@ void btMultibodyLink_getInertiaLocal(btMultibodyLink* obj, btScalar* value)
 	VECTOR3_OUT(&obj->m_inertiaLocal, value);
 }
 
+btScalar btMultibodyLink_getJointDamping(btMultibodyLink* obj)
+{
+	return obj->m_jointDamping;
+}
+
 btMultiBodyJointFeedback* btMultibodyLink_getJointFeedback(btMultibodyLink* obj)
 {
 	return obj->m_jointFeedback;
+}
+
+btScalar btMultibodyLink_getJointFriction(btMultibodyLink* obj)
+{
+	return obj->m_jointFriction;
 }
 
 const char* btMultibodyLink_getJointName(btMultibodyLink* obj)
@@ -261,9 +271,19 @@ void btMultibodyLink_setInertiaLocal(btMultibodyLink* obj, const btScalar* value
 	VECTOR3_IN(value, &obj->m_inertiaLocal);
 }
 
+void btMultibodyLink_setJointDamping(btMultibodyLink* obj, btScalar value)
+{
+	obj->m_jointDamping = value;
+}
+
 void btMultibodyLink_setJointFeedback(btMultibodyLink* obj, btMultiBodyJointFeedback* value)
 {
 	obj->m_jointFeedback = value;
+}
+
+void btMultibodyLink_setJointFriction(btMultibodyLink* obj, btScalar value)
+{
+	obj->m_jointFriction = value;
 }
 
 void btMultibodyLink_setJointName(btMultibodyLink* obj, const char* value)
