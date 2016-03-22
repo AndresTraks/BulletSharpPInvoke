@@ -305,30 +305,6 @@ namespace BulletSharpGen
             return Cursor.ChildVisitResult.Continue;
         }
 
-        Cursor.ChildVisitResult FieldTemplateTypeVisitor(Cursor cursor, Cursor parent)
-        {
-            switch (cursor.Kind)
-            {
-                case CursorKind.TypeRef:
-                    if (cursor.Referenced.Kind == CursorKind.TemplateTypeParameter)
-                    {
-                        _context.Field.Type.HasTemplateTypeParameter = true;
-                    }
-                    return Cursor.ChildVisitResult.Break;
-
-                case CursorKind.TemplateRef:
-                    if (parent.Type.Declaration.Kind == CursorKind.ClassTemplate)
-                    {
-                        _context.Field.Type.HasTemplateTypeParameter = true;
-                        return Cursor.ChildVisitResult.Break;
-                    }
-                    return Cursor.ChildVisitResult.Continue;
-
-                default:
-                    return Cursor.ChildVisitResult.Continue;
-            }
-        }
-
         Cursor.ChildVisitResult ClassVisitor(Cursor cursor, Cursor parent)
         {
             switch (cursor.Kind)
@@ -469,39 +445,7 @@ namespace BulletSharpGen
             else if (cursor.Kind == CursorKind.FieldDecl)
             {
                 _context.Field = new FieldDefinition(cursor.Spelling,
-                    new TypeRefDefinition(cursor.Type), _context.Class);
-                if (!cursor.Type.Declaration.SpecializedCursorTemplate.IsInvalid)
-                {
-                    if (cursor.Children[0].Kind != CursorKind.TemplateRef)
-                    {
-                        throw new InvalidOperationException();
-                    }
-                    if (cursor.Children.Count == 1)
-                    {
-                        string displayName = cursor.Type.Declaration.DisplayName;
-                        int typeStart = displayName.IndexOf('<') + 1;
-                        int typeEnd = displayName.LastIndexOf('>');
-                        displayName = displayName.Substring(typeStart, typeEnd - typeStart);
-                        var specializationTypeRef = new TypeRefDefinition
-                        {
-                            IsBasic = true,
-                            Name = displayName
-                        };
-                        _context.Field.Type.SpecializedTemplateType = specializationTypeRef;
-                    }
-                    if (cursor.Children.Count == 2)
-                    {
-                        if (cursor.Children[1].Type.TypeKind != ClangSharp.Type.Kind.Invalid)
-                        {
-                            _context.Field.Type.SpecializedTemplateType = new TypeRefDefinition(cursor.Children[1].Type);
-                        }
-                        else
-                        {
-                            // TODO
-                        }
-                    }
-                }
-                //cursor.VisitChildren(FieldTemplateTypeVisitor);
+                    new TypeRefDefinition(cursor.Type, cursor), _context.Class);
                 _context.Field = null;
             }
             else if (cursor.Kind == CursorKind.UnionDecl)

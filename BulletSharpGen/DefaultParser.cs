@@ -192,15 +192,16 @@ namespace BulletSharpGen
 
         void ResolveTypeRef(TypeRefDefinition typeRef)
         {
-            if (typeRef.IsBasic || typeRef.HasTemplateTypeParameter)
-            {
-                return;
-            }
-            if (typeRef.IsPointer || typeRef.IsReference || typeRef.IsConstantArray)
+            if (typeRef.Referenced != null)
             {
                 ResolveTypeRef(typeRef.Referenced);
             }
-            else if (Project.ClassDefinitions.ContainsKey(typeRef.Name))
+
+            if (typeRef.IsBasic) return;
+            if (typeRef.Name == null) return;
+            if (typeRef.HasTemplateTypeParameter) return;
+
+            if (Project.ClassDefinitions.ContainsKey(typeRef.Name))
             {
                 typeRef.Target = Project.ClassDefinitions[typeRef.Name];
             }
@@ -227,7 +228,7 @@ namespace BulletSharpGen
                 ResolveTypeRef(typeRef.SpecializedTemplateType);
 
                 // Create template specialization class
-                string name = string.Format("{0}<{1}>", typeRef.Name, typeRef.SpecializedTemplateType.Name);
+                string name = $"{typeRef.Name}<{typeRef.SpecializedTemplateType.Name}>";
                 if (!Project.ClassDefinitions.ContainsKey(name))
                 {
                     var templateClass = typeRef.Target;

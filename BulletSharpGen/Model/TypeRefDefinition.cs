@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using ClangSharp;
 
 namespace BulletSharpGen
 {
@@ -129,8 +131,32 @@ namespace BulletSharpGen
             }
         }
 
-        public TypeRefDefinition(ClangSharp.Type type)
+        public TypeRefDefinition(ClangSharp.Type type, Cursor cursor = null)
         {
+            if (cursor != null)
+            {
+                var firstChild = cursor.Children.FirstOrDefault();
+                if (firstChild != null && firstChild.Kind == CursorKind.TemplateRef)
+                {
+                    if (cursor.Children.Count == 1)
+                    {
+                        string displayName = cursor.Type.Declaration.DisplayName;
+                        int typeStart = displayName.IndexOf('<') + 1;
+                        int typeEnd = displayName.LastIndexOf('>');
+                        displayName = displayName.Substring(typeStart, typeEnd - typeStart);
+                        SpecializedTemplateType = new TypeRefDefinition
+                        {
+                            IsBasic = true,
+                            Name = displayName
+                        };
+                    }
+                    else
+                    {
+                        SpecializedTemplateType = new TypeRefDefinition(cursor.Children[1].Type);
+                    }
+                }
+            }
+
             if (!type.Declaration.IsInvalid &&
                 !type.Declaration.IsDefinition &&
                 type.Declaration.SpecializedCursorTemplate.IsInvalid)
@@ -140,6 +166,16 @@ namespace BulletSharpGen
             }
 
             IsConst = type.IsConstQualifiedType;
+
+            if (type.Pointee.TypeKind != ClangSharp.Type.Kind.Invalid)
+            {
+                Cursor pointeeCursor = null;
+                if (cursor != null)
+                {
+                    pointeeCursor = cursor.Children.FirstOrDefault(c => c.Type.Equals(type.Pointee));
+                }
+                Referenced = new TypeRefDefinition(type.Pointee, pointeeCursor);
+            }
 
             switch (type.TypeKind)
             {
@@ -180,11 +216,9 @@ namespace BulletSharpGen
                     IsBasic = Referenced.IsBasic;
                     break;
                 case ClangSharp.Type.Kind.Pointer:
-                    Referenced = new TypeRefDefinition(type.Pointee);
                     IsPointer = true;
                     break;
                 case ClangSharp.Type.Kind.LValueReference:
-                    Referenced = new TypeRefDefinition(type.Pointee);
                     IsReference = true;
                     break;
                 case ClangSharp.Type.Kind.ConstantArray:
