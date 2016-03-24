@@ -33,5 +33,33 @@ namespace BulletSharpGenTest
             Assert.AreEqual(2, cppClass1.Methods.Count);
             Assert.AreEqual("Empty", cppClass1.Methods[1].ManagedName);
         }
+
+        [Test]
+        public void CppTemplate()
+        {
+            var project = new WrapperProject();
+            project.NamespaceName = "CppTemplate";
+            project.ProjectFilePath = "CppTemplate/cpp_template.xml";
+            project.SourceRootFolders.Add(".");
+            project.ReadCpp();
+            project.Save();
+
+            var parser = new DefaultParser(project);
+            parser.Parse();
+
+            project.CProjectPath = "CppTemplate_wrap";
+            project.CsProjectPath = "CppTemplate_wrap";
+            var writer = new PInvokeWriter(project);
+            writer.Output();
+
+            Assert.AreEqual(1, project.HeaderDefinitions.Count);
+            Assert.AreEqual(4, project.ClassDefinitions.Count);
+            /*
+            var cppClass1 = project.ClassDefinitions.First().Value;
+            Assert.AreEqual("CppClass1", cppClass1.Name);
+            Assert.AreEqual("CppClass1", cppClass1.ManagedName);
+            Assert.AreEqual(2, cppClass1.Methods.Count);
+            Assert.AreEqual("Empty", cppClass1.Methods[1].ManagedName);*/
+        }
     }
 }

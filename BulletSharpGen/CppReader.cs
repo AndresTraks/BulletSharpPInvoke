@@ -9,6 +9,7 @@ namespace BulletSharpGen
     class ReaderContext
     {
         public TranslationUnit TranslationUnit { get; set; }
+        public string HeaderFilename { get; set; }
         public HeaderDefinition Header { get; set; }
         public string Namespace { get; set; }
         public ClassDefinition Class { get; set; }
@@ -102,7 +103,7 @@ namespace BulletSharpGen
             string filename = cursor.Extent.Start.File.Name.Replace('\\', '/');
 
             // Do not visit any included header
-            if (!filename.Equals(headerQueue[0])) return Cursor.ChildVisitResult.Continue;
+            if (!filename.Equals(_context.HeaderFilename)) return Cursor.ChildVisitResult.Continue;
 
             // Have we visited this header already?
             if (project.HeaderDefinitions.ContainsKey(filename))
@@ -320,12 +321,20 @@ namespace BulletSharpGen
                     return Cursor.ChildVisitResult.Continue;
             }
 
-            // We only care about public members
+            // We usually only care about public members
             if (_context.MemberAccess != AccessSpecifier.Public)
             {
-                // And also private/protected virtual methods that override public abstract methods,
-                // necessary for checking whether a class is abstract or not.
-                if (cursor.IsPureVirtualCxxMethod || !cursor.IsVirtualCxxMethod)
+                if (cursor.IsVirtualCxxMethod && !cursor.IsPureVirtualCxxMethod)
+                {
+                    // private/protected virtual method that may override public abstract methods,
+                    // necessary for checking whether a class is abstract or not.
+                }
+                else if (cursor.Kind == CursorKind.Constructor)
+                {
+                    // class has a private/protected constructor,
+                    // no need to create a default constructor
+                }
+                else
                 {
                     return Cursor.ChildVisitResult.Continue;
                 }
@@ -365,10 +374,18 @@ namespace BulletSharpGen
                 }
 
                 _context.Method.ReturnType = new TypeRefDefinition(cursor.ResultType);
-                _context.Method.IsConstructor = cursor.Kind == CursorKind.Constructor;
                 _context.Method.IsStatic = cursor.IsStaticCxxMethod;
                 _context.Method.IsVirtual = cursor.IsVirtualCxxMethod;
                 _context.Method.IsAbstract = cursor.IsPureVirtualCxxMethod;
+
+                if (cursor.Kind == CursorKind.Constructor)
+                {
+                    _context.Method.IsConstructor = true;
+                    if (cursor.AccessSpecifier != AccessSpecifier.Public)
+                    {
+                        _context.Method.IsExcluded = true;
+                    }
+                }
 
                 // Check if the return type is a template
                 cursor.VisitChildren(MethodTemplateTypeVisitor);
@@ -418,7 +435,7 @@ namespace BulletSharpGen
 
                 // Discard any private/protected virtual method unless it
                 // implements a public abstract method
-                if (_context.MemberAccess != AccessSpecifier.Public)
+                if (_context.MemberAccess != AccessSpecifier.Public && !_context.Method.IsConstructor)
                 {
                     if (_context.Method.Parent.BaseClass == null ||
                         !_context.Method.Parent.BaseClass.AbstractMethods.Contains(_context.Method))
@@ -453,11 +470,11 @@ namespace BulletSharpGen
             {
                 while (headerQueue.Any())
                 {
-                    string headerFile = headerQueue.First();
+                    _context.HeaderFilename = headerQueue.First();
                     Console.Write('.');
 
                     var unsavedFiles = new UnsavedFile[] {};
-                    using (_context.TranslationUnit = index.CreateTranslationUnit(headerFile,
+                    using (_context.TranslationUnit = index.CreateTranslationUnit(_context.HeaderFilename,
                         clangOptions.ToArray(), unsavedFiles, TranslationUnitFlags.SkipFunctionBodies))
                     {
                         var cur = _context.TranslationUnit.Cursor;
@@ -465,7 +482,7 @@ namespace BulletSharpGen
                         cur.VisitChildren(HeaderVisitor);
                     }
                     _context.TranslationUnit = null;
-                    headerQueue.Remove(headerFile);
+                    headerQueue.Remove(_context.HeaderFilename);
                 }
             }
 

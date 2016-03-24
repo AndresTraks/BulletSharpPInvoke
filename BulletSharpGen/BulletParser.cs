@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -7,18 +6,13 @@ namespace BulletSharpGen
 {
     class BulletParser : DefaultParser
     {
-        Dictionary<string, ClassDefinition> classDefinitions = new Dictionary<string, ClassDefinition>();
-
         public BulletParser(WrapperProject project)
             : base(project)
         {
-            classDefinitions = project.ClassDefinitions;
-
             // Classes that shouldn't be instantiated by users
-            HashSet<string> hidePublicConstructors = new HashSet<string>() {
-                "btActivatingCollisionAlgorithm", "btContactConstraint", "btConvexInternalShape",
-                "btConvexInternalAabbCachingShape", "btPolyhedralConvexAabbCachingShape", "btTypedObject",
-                "btDbvtProxy", "btDispatcherInfo", "btTriangleMeshShape",
+            var hidePublicConstructors = new HashSet<string> {
+                "btActivatingCollisionAlgorithm", "btContactConstraint",
+                "btDbvtProxy", "btDispatcherInfo",
                 "btUsageBitfield", "btSoftBody::Anchor", "btSoftBody::Config", "btSoftBody::Cluster",
                 "btSoftBody::Face", "btSoftBody::Tetra", "btSoftBody::Element", "btSoftBody::Feature",
                 "btSoftBody::Link", "btSoftBody::Material", "btSoftBody::Node", "btSoftBody::Note",
@@ -28,7 +22,7 @@ namespace BulletSharpGen
             };
 
             // Classes for which no internal constructor is needed
-            HashSet<string> hideInternalConstructor = new HashSet<string>() {
+            var hideInternalConstructor = new HashSet<string> {
                 "btBox2dBox2dCollisionAlgorithm", "btBoxBoxCollisionAlgorithm",
                 "btBoxBoxDetector", "btBroadphaseRayCallback", "btCollisionAlgorithmConstructionInfo", "btDefaultCollisionConstructionInfo",
                 "btCompoundCompoundCollisionAlgorithm", "btContinuousConvexCollision", "btConvex2dConvex2dAlgorithm",
@@ -69,12 +63,12 @@ namespace BulletSharpGen
             };
 
             // Classes that have OnDisposing/OnDisposed events
-            HashSet<string> trackingDisposable = new HashSet<string>() {
+            var trackingDisposable = new HashSet<string> {
                 "btCollisionObject", "btCollisionShape",
                 "btDbvt", "btRaycastVehicle", "btTypedConstraint"};
 
             // Apply class properties
-            foreach (ClassDefinition @class in classDefinitions.Values)
+            foreach (var @class in Project.ClassDefinitions.Values)
             {
                 if (hidePublicConstructors.Contains(@class.FullyQualifiedName))
                 {
@@ -98,7 +92,7 @@ namespace BulletSharpGen
 
             // Check if any property values can be cached in
             // in constructors or property setters
-            foreach (var @class in classDefinitions.Values)
+            foreach (var @class in Project.ClassDefinitions.Values)
             {
                 foreach (var constructor in @class.Methods.Where(m => m.IsConstructor))
                 {
@@ -146,7 +140,7 @@ namespace BulletSharpGen
             }
 
             // Sort methods and properties alphabetically
-            foreach (var @class in classDefinitions.Values)
+            foreach (var @class in Project.ClassDefinitions.Values)
             {
                 // Order by name, then fix inheritance, parent classes must appear first
                 @class.Classes.Sort((c1, c2) => c1.Name.CompareTo(c2.Name));

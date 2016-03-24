@@ -22,8 +22,8 @@ namespace BulletSharpGen
         public DefaultParser(WrapperProject project)
         {
             Project = project;
-            project.ClassNameMapping = new DefaultNameMapping();
-            project.HeaderNameMapping = new DefaultNameMapping();
+            if (project.ClassNameMapping == null) project.ClassNameMapping = new DefaultNameMapping();
+            if (project.HeaderNameMapping == null) project.HeaderNameMapping = new DefaultNameMapping();
         }
 
         public virtual void Parse()
@@ -33,6 +33,7 @@ namespace BulletSharpGen
             ParseEnums();
             SetClassProperties();
             RemoveRedundantMethods();
+            //AddTemplateSpecializationMembers();
             CreateDefaultConstructors();
             CreateFieldAccessors();
             CreateProperties();
@@ -432,12 +433,17 @@ namespace BulletSharpGen
                 if (@class is EnumDefinition) continue;
                 if (@class.IsPureEnum) continue;
 
-                var constructors = @class.Methods.Where(m => m.IsConstructor && !m.IsExcluded);
+                var constructors = @class.Methods.Where(m => m.IsConstructor);
                 if (!constructors.Any())
                 {
-                    var constructor = new MethodDefinition(@class.Name, @class, 0);
-                    constructor.IsConstructor = true;
-                    constructor.ReturnType = new TypeRefDefinition();
+                    // Only possible if base class has a default constructor
+                    if (@class.BaseClass == null || (@class.BaseClass != null &&
+                        @class.BaseClass.Methods.Any(m => m.IsConstructor && !m.Parameters.Any())))
+                    {
+                        var constructor = new MethodDefinition(@class.Name, @class, 0);
+                        constructor.IsConstructor = true;
+                        constructor.ReturnType = new TypeRefDefinition();
+                    }
                 }
             }
         }
