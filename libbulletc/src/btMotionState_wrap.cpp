@@ -3,7 +3,8 @@
 #include "conversion.h"
 #include "btMotionState_wrap.h"
 
-btMotionStateWrapper::btMotionStateWrapper(pMotionState_GetWorldTransform getWorldTransformCallback, pMotionState_SetWorldTransform setWorldTransformCallback)
+btMotionStateWrapper::btMotionStateWrapper(p_btMotionState_GetWorldTransform getWorldTransformCallback,
+	p_btMotionState_SetWorldTransform setWorldTransformCallback)
 {
 	_getWorldTransformCallback = getWorldTransformCallback;
 	_setWorldTransformCallback = setWorldTransformCallback;
@@ -24,7 +25,8 @@ void btMotionStateWrapper::setWorldTransform(const btTransform& worldTrans)
 }
 
 
-btMotionStateWrapper* btMotionStateWrapper_new(pMotionState_GetWorldTransform getWorldTransformCallback, pMotionState_SetWorldTransform setWorldTransformCallback)
+btMotionStateWrapper* btMotionStateWrapper_new(p_btMotionState_GetWorldTransform getWorldTransformCallback,
+	p_btMotionState_SetWorldTransform setWorldTransformCallback)
 {
 	return ALIGNED_NEW(btMotionStateWrapper)(getWorldTransformCallback, setWorldTransformCallback);
 }

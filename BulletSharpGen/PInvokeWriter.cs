@@ -7,8 +7,6 @@ namespace BulletSharpGen
 {
     public class PInvokeWriter : WrapperWriter
     {
-        private const int LineBreakWidth = 80;
-
         bool hasCppClassSeparatingWhitespace;
         Dictionary<string, string> wrapperHeaderGuards = new Dictionary<string, string>();
 
@@ -809,7 +807,7 @@ namespace BulletSharpGen
 
             if (wrapperHeaderGuards.ContainsKey(c.Name))
             {
-                WriteClassWrapper(c);
+                WriteWrapperClassConstructor(c);
             }
 
             // Write class definition
@@ -988,41 +986,27 @@ namespace BulletSharpGen
             hasCppClassSeparatingWhitespace = false;
         }
 
-        public void WriteClassWrapperMethodPointers(ClassDefinition cl)
+        public void WriteWrapperClass(ClassDefinition @class)
         {
-            List<MethodDefinition> baseAbstractMethods;
-            var thisAbstractMethods = cl.Methods.Where(x => x.IsVirtual).ToList();
-            var abstractMethods = thisAbstractMethods.ToList();
-            if (cl.BaseClass != null)
+            var prevTo = To;
+
+            List<MethodDefinition> baseVirtualMethods;
+            var thisVirtualMethods = @class.Methods.Where(x => x.IsVirtual).ToList();
+            var virtualMethods = thisVirtualMethods.ToList();
+            if (@class.BaseClass != null)
             {
-                baseAbstractMethods = cl.BaseClass.Methods.Where(x => x.IsVirtual).ToList();
-                abstractMethods.AddRange(baseAbstractMethods);
+                baseVirtualMethods = @class.BaseClass.Methods.Where(x => x.IsVirtual).ToList();
+                virtualMethods.AddRange(baseVirtualMethods);
             }
             else
             {
-                baseAbstractMethods = new List<MethodDefinition>();
+                baseVirtualMethods = new List<MethodDefinition>();
             }
-
-            foreach (var method in thisAbstractMethods)
+            var methodCallbacks = virtualMethods.Select(m =>
             {
-                WriteLine($"#define p{cl.ManagedName}_{method.ManagedName} void*");
-            }
-        }
-
-        public void WriteClassWrapperMethodDeclarations(ClassDefinition cl)
-        {
-            List<MethodDefinition> baseAbstractMethods;
-            var thisAbstractMethods = cl.Methods.Where(x => x.IsVirtual).ToList();
-            var abstractMethods = thisAbstractMethods.ToList();
-            if (cl.BaseClass != null)
-            {
-                baseAbstractMethods = cl.BaseClass.Methods.Where(x => x.IsVirtual).ToList();
-                abstractMethods.AddRange(baseAbstractMethods);
-            }
-            else
-            {
-                baseAbstractMethods = new List<MethodDefinition>();
-            }
+                string className = baseVirtualMethods.Contains(m) ? @class.BaseClass.FullNameC : @class.FullNameC;
+                return $"p_{className}_{m.ManagedName} {m.Name}Callback";
+            }).ToList();
 
             if (!hasCppClassSeparatingWhitespace)
             {
@@ -1030,177 +1014,116 @@ namespace BulletSharpGen
                 hasCppClassSeparatingWhitespace = true;
             }
 
-            string headerGuard = wrapperHeaderGuards[cl.Name];
-            foreach (var method in thisAbstractMethods)
+            // TODO: string headerGuard = wrapperHeaderGuards[@class.Name];
+            if (thisVirtualMethods.Count != 0)
             {
-                Write(string.Format("typedef {0} (*p{1}_{2})(",
-                    method.ReturnType.Name, cl.ManagedName, method.ManagedName), WriteTo.Header);
-                int lineLength = LineLengths[WriteTo.Header];
-                string parameters = method.Parameters
-                    .Select(p => $"{GetTypeName(p.Type)} {p.Name}")
-                    .Aggregate("", (a, p) =>
-                    {
-                        if (lineLength > LineBreakWidth)
-                        {
-                            lineLength = 4 + p.Length;
-                            if (a.Length == 0) return $"\r\n\t{p}";
-                            return $"{a},\r\n\t{p}";
-                        }
-                        lineLength += 2 + p.Length;
-                        if (a.Length == 0) return p;
-                        return $"{a}, {p}";
-                    });
-                WriteLine(parameters + ");");
-            }
-            if (thisAbstractMethods.Count != 0)
-            {
+                foreach (var method in thisVirtualMethods)
+                {
+                    Write(string.Format("typedef {0} (*p_{1}_{2})(",
+                        method.ReturnType.Name, @class.FullNameC, method.ManagedName), WriteTo.Header);
+
+                    string parameters = ListToLines(
+                        method.Parameters.Select(p => $"{GetTypeName(p.Type)} {p.Name}"),
+                        LineLengths[WriteTo.Header]);
+                    WriteLine(parameters + ");");
+                }
                 WriteLine();
             }
-            WriteLine(string.Format("class {0}Wrapper : public {0}", cl.FullNameC));
+
+            // Wrapper class
+            WriteLine(string.Format("class {0}Wrapper : public {0}", @class.FullNameC));
             WriteLine("{");
             WriteLine("private:");
-            foreach (var method in abstractMethods)
+            foreach (var m in virtualMethods)
             {
-                string className = baseAbstractMethods.Contains(method) ? cl.BaseClass.ManagedName : cl.ManagedName;
-                WriteLine($"\tp{className}_{method.ManagedName} _{method.Name}Callback;", WriteTo.Header);
+                string className = baseVirtualMethods.Contains(m) ? @class.BaseClass.FullNameC : @class.FullNameC;
+                WriteLine($"\tp_{className}_{m.ManagedName} _{m.Name}Callback;");
             }
-            WriteLine(WriteTo.Header);
-            WriteLine("public:", WriteTo.Header);
+            WriteLine();
+            WriteLine("public:");
 
             // Wrapper constructor
-            Write($"\t{cl.FullNameC}Wrapper(", WriteTo.Header);
-            int numMethods = abstractMethods.Count;
-            for (int i = 0; i < numMethods; i++)
-            {
-                var method = abstractMethods[i];
-                string className = baseAbstractMethods.Contains(method) ? cl.BaseClass.ManagedName : cl.ManagedName;
-                Write($"p{className}_{method.ManagedName} {method.Name}Callback", WriteTo.Header);
-                if (i != numMethods - 1)
-                {
-                    Write(", ", WriteTo.Header);
-                }
-            }
-            WriteLine(");", WriteTo.Header);
-            WriteLine(WriteTo.Header);
+            Write($"\t{@class.FullNameC}Wrapper(");
+            string constructorParams = ListToLines(methodCallbacks, LineLengths[WriteTo.Header], 1);
+            WriteLine(constructorParams + ");");
+            WriteLine();
 
-            foreach (var method in abstractMethods)
+            // Wrapper methods
+            foreach (var m in virtualMethods)
             {
-                Write($"\tvirtual {method.ReturnType.Name} {method.Name}(", WriteTo.Header);
-                int numParameters = method.Parameters.Length;
-                for (int i = 0; i < numParameters; i++)
-                {
-                    var param = method.Parameters[i];
-                    Write(GetTypeName(param.Type), WriteTo.Header);
-                    Write(" ", WriteTo.Header);
-                    Write(param.Name, WriteTo.Header);
-
-                    if (i != numParameters - 1)
-                    {
-                        Write(", ", WriteTo.Header);
-                    }
-                }
-                WriteLine(");", WriteTo.Header);
+                Write($"\tvirtual {m.ReturnType.Name} {m.Name}(");
+                string methodParams = ListToLines(
+                    m.Parameters.Select(p => $"{GetTypeName(p.Type)} {p.Name}"),
+                    LineLengths[WriteTo.Header], 1);
+                WriteLine(methodParams + ");");
             }
 
-            WriteLine("};", WriteTo.Header);
+            WriteLine("};");
             hasCppClassSeparatingWhitespace = false;
-        }
 
-        public void WriteClassWrapperDefinition(ClassDefinition cl)
-        {
-            List<MethodDefinition> baseAbstractMethods;
-            var thisAbstractMethods = cl.Methods.Where(x => x.IsVirtual).ToList();
-            var abstractMethods = thisAbstractMethods.ToList();
-            if (cl.BaseClass != null)
-            {
-                baseAbstractMethods = cl.BaseClass.Methods.Where(x => x.IsVirtual).ToList();
-                abstractMethods.AddRange(baseAbstractMethods);
-            }
-            else
-            {
-                baseAbstractMethods = new List<MethodDefinition>();
-            }
 
-            EnsureWhiteSpace(WriteTo.Source);
+            To = WriteTo.Source;
+            EnsureWhiteSpace();
 
             // Wrapper C++ Constructor
-            Write(string.Format("{0}Wrapper::{0}Wrapper(", cl.Name), WriteTo.Source);
-            int numMethods = abstractMethods.Count;
-            for (int i = 0; i < numMethods; i++)
+            Write(string.Format("{0}Wrapper::{0}Wrapper(", @class.FullNameC));
+            WriteLine(ListToLines(
+                methodCallbacks, LineLengths[WriteTo.Source]) + ")");
+            WriteLine('{');
+            foreach (var method in virtualMethods)
             {
-                var method = abstractMethods[i];
-                string className = baseAbstractMethods.Contains(method) ? cl.BaseClass.ManagedName : cl.ManagedName;
-                Write($"p{className}_{method.ManagedName} {method.Name}Callback", WriteTo.Source);
-                if (i != numMethods - 1)
-                {
-                    Write(", ", WriteTo.Source);
-                }
+                WriteLine(string.Format("\t_{0}Callback = {0}Callback;", method.Name));
             }
-            WriteLine(')', WriteTo.Source);
-            WriteLine('{', WriteTo.Source);
-            foreach (var method in abstractMethods)
-            {
-                WriteLine(string.Format("\t_{0}Callback = {0}Callback;", method.Name), WriteTo.Source);
-            }
-            WriteLine('}', WriteTo.Source);
-            WriteLine(WriteTo.Source);
+            WriteLine('}');
+            WriteLine();
 
             // Wrapper C++ methods
-            foreach (var method in abstractMethods)
+            foreach (var method in virtualMethods)
             {
-                Write($"{method.ReturnType.Name} {cl.Name}Wrapper::{method.Name}(", WriteTo.Source);
-                int numParameters = method.Parameters.Length;
-                for (int i = 0; i < numParameters; i++)
-                {
-                    var param = method.Parameters[i];
-                    Write(GetTypeName(param.Type), WriteTo.Source);
-                    Write(" ", WriteTo.Source);
-                    Write(param.Name, WriteTo.Source);
+                Write($"{method.ReturnType.Name} {@class.FullNameC}Wrapper::{method.Name}(");
+                string parameters = ListToLines(
+                    method.Parameters.Select(p => $"{GetTypeName(p.Type)} {p.Name}"),
+                    LineLengths[WriteTo.Source]);
+                WriteLine(parameters + ")");
 
-                    if (i != numParameters - 1)
-                    {
-                        Write(", ", WriteTo.Source);
-                    }
-                }
-                WriteLine(')', WriteTo.Source);
-                WriteLine('{', WriteTo.Source);
-                Write("\t", WriteTo.Source);
+                WriteLine('{');
+                Write("\t");
                 if (!method.IsVoid)
                 {
-                    Write("return ", WriteTo.Source);
+                    Write("return ");
                 }
-                Write($"_{method.Name}Callback(", WriteTo.Source);
-                for (int i = 0; i < numParameters; i++)
-                {
-                    var param = method.Parameters[i];
-                    Write(param.Name, WriteTo.Source);
-
-                    if (i != numParameters - 1)
-                    {
-                        Write(", ", WriteTo.Source);
-                    }
-                }
-                WriteLine(");", WriteTo.Source);
-                WriteLine('}', WriteTo.Source);
-                WriteLine(WriteTo.Source);
+                Write($"_{method.Name}Callback(");
+                parameters = ListToLines(
+                    method.Parameters.Select(p => p.Name),
+                    LineLengths[WriteTo.Source], 1);
+                WriteLine(parameters + ");");
+                WriteLine('}');
+                WriteLine();
             }
-            WriteLine(WriteTo.Source);
+            WriteLine();
+
+            To = prevTo;
         }
 
-        public void WriteClassWrapper(ClassDefinition cl)
+        public void WriteWrapperClassConstructor(ClassDefinition @class)
         {
-            List<MethodDefinition> baseAbstractMethods;
-            var thisAbstractMethods = cl.Methods.Where(x => x.IsVirtual).ToList();
-            var abstractMethods = thisAbstractMethods.ToList();
-            if (cl.BaseClass != null)
+            List<MethodDefinition> baseVirtualMethods;
+            var thisVirtualMethods = @class.Methods.Where(x => x.IsVirtual).ToList();
+            var virtualMethods = thisVirtualMethods.ToList();
+            if (@class.BaseClass != null)
             {
-                baseAbstractMethods = cl.BaseClass.Methods.Where(x => x.IsVirtual).ToList();
-                abstractMethods.AddRange(baseAbstractMethods);
+                baseVirtualMethods = @class.BaseClass.Methods.Where(x => x.IsVirtual).ToList();
+                virtualMethods.AddRange(baseVirtualMethods);
             }
             else
             {
-                baseAbstractMethods = new List<MethodDefinition>();
+                baseVirtualMethods = new List<MethodDefinition>();
             }
+            var methodCallbacks = virtualMethods.Select(m =>
+            {
+                string className = baseVirtualMethods.Contains(m) ? @class.BaseClass.FullNameC : @class.FullNameC;
+                return $"p_{className}_{m.ManagedName} {m.Name}Callback";
+            });
 
             if (!hasCppClassSeparatingWhitespace)
             {
@@ -1211,32 +1134,15 @@ namespace BulletSharpGen
 
             // Wrapper C Constructor
             Write("\tEXPORT ", WriteTo.Header);
-            Write(string.Format("{0}Wrapper* {0}Wrapper_new(", cl.Name), WriteTo.Header | WriteTo.Source);
-            int numMethods = abstractMethods.Count;
-            for (int i = 0; i < numMethods; i++)
-            {
-                var method = abstractMethods[i];
-                string className = baseAbstractMethods.Contains(method) ? cl.BaseClass.ManagedName : cl.ManagedName;
-                Write($"p{className}_{method.ManagedName} {method.Name}Callback", WriteTo.Header | WriteTo.Source);
-                if (i != numMethods - 1)
-                {
-                    Write(", ", WriteTo.Header | WriteTo.Source);
-                }
-            }
-            WriteLine(");", WriteTo.Header);
-            WriteLine(')', WriteTo.Source);
+            Write(string.Format("{0}Wrapper* {0}Wrapper_new(", @class.FullNameC), WriteTo.Header | WriteTo.Source);
+            WriteLine(ListToLines(methodCallbacks, LineLengths[WriteTo.Header], 1) + ");", WriteTo.Header);
+            WriteLine(ListToLines(methodCallbacks, LineLengths[WriteTo.Source]) + ")", WriteTo.Source);
             WriteLine('{', WriteTo.Source);
-            Write($"\treturn new {cl.Name}Wrapper(", WriteTo.Source);
-            for (int i = 0; i < numMethods; i++)
-            {
-                var method = abstractMethods[i];
-                Write($"{method.Name}Callback", WriteTo.Source);
-                if (i != numMethods - 1)
-                {
-                    Write(", ", WriteTo.Source);
-                }
-            }
-            WriteLine(");", WriteTo.Source);
+            Write($"\treturn new {@class.FullNameC}Wrapper(", WriteTo.Source);
+            WriteLine(ListToLines(
+                virtualMethods.Select(m => $"{m.Name}Callback"),
+                LineLengths[WriteTo.Source], 1) + ");",
+                WriteTo.Source);
             WriteLine('}', WriteTo.Source);
             hasCppClassSeparatingWhitespace = false;
             hasSourceWhiteSpace = false;
@@ -1332,20 +1238,22 @@ namespace BulletSharpGen
                     WriteLine($"#ifndef {wrapperHeaderGuards[wrappedClasses[0].Name]}");
                     foreach (var @class in wrappedClasses)
                     {
-                        WriteClassWrapperMethodPointers(@class);
+                        foreach (var method in @class.Methods.Where(m => m.IsVirtual))
+                        {
+                            WriteLine($"#define p_{@class.FullNameC}_{method.ManagedName} void*");
+                        }
                     }
                     foreach (var @class in wrappedClasses)
                     {
                         WriteLine($"#define {@class.FullNameC}Wrapper void");
                     }
-                    WriteLine("#else", WriteTo.Header);
+                    WriteLine("#else");
                     foreach (var @class in wrappedClasses)
                     {
-                        WriteClassWrapperMethodDeclarations(@class);
-                        WriteClassWrapperDefinition(@class);
+                        WriteWrapperClass(@class);
                     }
-                    WriteLine("#endif", WriteTo.Header);
-                    WriteLine(WriteTo.Header);
+                    WriteLine("#endif");
+                    WriteLine();
                 }
 
                 // Write classes

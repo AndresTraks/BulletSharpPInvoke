@@ -3,9 +3,16 @@
 #include "conversion.h"
 #include "btIDebugDraw_wrap.h"
 
-btIDebugDrawWrapper::btIDebugDrawWrapper(void* debugDrawGCHandle, pIDebugDraw_DrawAabb drawAabbCallback, pIDebugDraw_DrawArc drawArcCallback, pIDebugDraw_DrawBox drawBoxCallback,
-	pIDebugDraw_DrawCapsule drawCapsuleCallback, pIDebugDraw_DrawCone drawConeCallback, pIDebugDraw_DrawContactPoint drawContactPointCallback, pIDebugDraw_DrawCylinder drawCylinderCallback, pIDebugDraw_DrawLine drawLineCallback, pIDebugDraw_DrawPlane drawPlaneCallback,
-	pIDebugDraw_DrawSphere drawSphereCallback, pIDebugDraw_DrawSpherePatch drawSpherePatchCallback, pIDebugDraw_DrawTransform drawTransformCallback, pIDebugDraw_DrawTriangle drawTriangleCallback, pIDebugDraw_GetDebugMode getDebugModeCallback, pSimpleCallback cb)
+btIDebugDrawWrapper::btIDebugDrawWrapper(void* debugDrawGCHandle,
+	p_btIDebugDraw_DrawAabb drawAabbCallback, p_btIDebugDraw_DrawArc drawArcCallback,
+	p_btIDebugDraw_DrawBox drawBoxCallback,
+	p_btIDebugDraw_DrawCapsule drawCapsuleCallback, p_btIDebugDraw_DrawCone drawConeCallback,
+	p_btIDebugDraw_DrawContactPoint drawContactPointCallback, p_btIDebugDraw_DrawCylinder drawCylinderCallback,
+	p_btIDebugDraw_DrawLine drawLineCallback,
+	p_btIDebugDraw_DrawPlane drawPlaneCallback, p_btIDebugDraw_DrawSphere drawSphereCallback,
+	p_btIDebugDraw_DrawSpherePatch drawSpherePatchCallback,
+	p_btIDebugDraw_DrawTransform drawTransformCallback, p_btIDebugDraw_DrawTriangle drawTriangleCallback,
+	p_btIDebugDraw_GetDebugMode getDebugModeCallback, pSimpleCallback cb)
 {
 	_debugDrawGCHandle = debugDrawGCHandle;
 	_drawAabbCallback = drawAabbCallback;
@@ -36,11 +43,12 @@ void btIDebugDrawWrapper::drawAabb(const btVector3& from, const btVector3& to, c
 	_drawAabbCallback(from, to, color);
 }
 
-void btIDebugDrawWrapper::drawArc(const btVector3& center, const btVector3& normal, const btVector3& axis,
-	btScalar radiusA, btScalar radiusB, btScalar minAngle, btScalar maxAngle,
+void btIDebugDrawWrapper::drawArc(const btVector3& center, const btVector3& normal,
+	const btVector3& axis, btScalar radiusA, btScalar radiusB, btScalar minAngle, btScalar maxAngle,
 	const btVector3& color, bool drawSect, btScalar stepDegrees)
 {
-	_drawArcCallback(center, normal, axis, radiusA, radiusB, minAngle, maxAngle, color, drawSect, stepDegrees);
+	_drawArcCallback(center, normal, axis, radiusA, radiusB, minAngle, maxAngle,
+		color, drawSect, stepDegrees);
 }
 
 void btIDebugDrawWrapper::drawArc(const btVector3& center, const btVector3& normal, const btVector3& axis,
@@ -52,13 +60,6 @@ void btIDebugDrawWrapper::drawArc(const btVector3& center, const btVector3& norm
 		//radiusA, radiusB, minAngle, maxAngle, BtVectorToBtColor(color), drawSect);
 }
 
-void btIDebugDrawWrapper::drawBox(const btVector3& bbMin, const btVector3& bbMax, const btTransform& trans, const btVector3& color)
-{
-	ATTRIBUTE_ALIGNED16(btScalar) transTemp[16];
-	btTransformToMatrix(&trans, transTemp);
-	_drawBoxCallback(bbMin, bbMax, transTemp, color);
-}
-
 void btIDebugDrawWrapper::drawBox(const btVector3& bbMin, const btVector3& bbMax, const btVector3& color)
 {
 	_cb(2);
@@ -66,26 +67,38 @@ void btIDebugDrawWrapper::drawBox(const btVector3& bbMin, const btVector3& bbMax
 		//Math::BtVector3ToVector3(&bbMin), Math::BtVector3ToVector3(&bbMax),	BtVectorToBtColor(color));
 }
 
-void btIDebugDrawWrapper::drawCapsule(btScalar radius, btScalar halfHeight, int upAxis, const btTransform& transform, const btVector3& color)
+void btIDebugDrawWrapper::drawBox(const btVector3& bbMin, const btVector3& bbMax, const btTransform& trans,
+	const btVector3& color)
+{
+	ATTRIBUTE_ALIGNED16(btScalar) transTemp[16];
+	btTransformToMatrix(&trans, transTemp);
+	_drawBoxCallback(bbMin, bbMax, transTemp, color);
+}
+
+void btIDebugDrawWrapper::drawCapsule(btScalar radius, btScalar halfHeight, int upAxis,
+	const btTransform& transform, const btVector3& color)
 {
 	ATTRIBUTE_ALIGNED16(btScalar) transformTemp[16];
 	btTransformToMatrix(&transform, transformTemp);
 	_drawCapsuleCallback(radius, halfHeight, upAxis, transformTemp, color);
 }
 
-void btIDebugDrawWrapper::drawCone(btScalar radius, btScalar height, int upAxis, const btTransform& transform, const btVector3& color)
+void btIDebugDrawWrapper::drawCone(btScalar radius, btScalar height, int upAxis,
+	const btTransform& transform, const btVector3& color)
 {
 	ATTRIBUTE_ALIGNED16(btScalar) transformTemp[16];
 	btTransformToMatrix(&transform, transformTemp);
 	_drawConeCallback(radius, height, upAxis, transformTemp, color);
 }
 
-void btIDebugDrawWrapper::drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color)
+void btIDebugDrawWrapper::drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB,
+	btScalar distance, int lifeTime, const btVector3& color)
 {
 	_drawContactPointCallback(PointOnB, normalOnB, distance, lifeTime, color);
 }
 
-void btIDebugDrawWrapper::drawCylinder(btScalar radius, btScalar halfHeight, int upAxis, const btTransform& transform, const btVector3& color)
+void btIDebugDrawWrapper::drawCylinder(btScalar radius, btScalar halfHeight, int upAxis,
+	const btTransform& transform, const btVector3& color)
 {
 	ATTRIBUTE_ALIGNED16(btScalar) transformTemp[16];
 	btTransformToMatrix(&transform, transformTemp);
@@ -97,7 +110,8 @@ void btIDebugDrawWrapper::drawLine(const btVector3& from, const btVector3& to, c
 	_drawLineCallback(from, to, color);
 }
 
-void btIDebugDrawWrapper::drawPlane(const btVector3& planeNormal, btScalar planeConst, const btTransform& transform, const btVector3& color)
+void btIDebugDrawWrapper::drawPlane(const btVector3& planeNormal, btScalar planeConst,
+	const btTransform& transform, const btVector3& color)
 {
 	ATTRIBUTE_ALIGNED16(btScalar) transformTemp[16];
 	btTransformToMatrix(&transform, transformTemp);
@@ -110,17 +124,20 @@ void btIDebugDrawWrapper::drawSphere(const btVector3& p, btScalar radius, const 
 	//_debugDraw->DrawSphere(Math::BtVector3ToVector3(&p), radius, BtVectorToBtColor(color));
 }
 
-void btIDebugDrawWrapper::drawSphere(btScalar radius, const btTransform& transform, const btVector3& color)
+void btIDebugDrawWrapper::drawSphere(btScalar radius, const btTransform& transform,
+	const btVector3& color)
 {
 	ATTRIBUTE_ALIGNED16(btScalar) transformTemp[16];
 	btTransformToMatrix(&transform, transformTemp);
 	_drawSphereCallback(radius, transformTemp, color);
 }
 
-void btIDebugDrawWrapper::drawSpherePatch(const btVector3& center, const btVector3& up, const btVector3& axis, btScalar radius,
-	btScalar minTh, btScalar maxTh, btScalar minPs, btScalar maxPs, const btVector3& color, btScalar stepDegrees)
+void btIDebugDrawWrapper::drawSpherePatch(const btVector3& center, const btVector3& up,
+	const btVector3& axis, btScalar radius, btScalar minTh, btScalar maxTh, btScalar minPs,
+	btScalar maxPs, const btVector3& color, btScalar stepDegrees)
 {
-	_drawSpherePatchCallback(center, up, axis, radius, minTh, maxTh, minPs, maxPs, color, stepDegrees);
+	_drawSpherePatchCallback(center, up, axis, radius, minTh, maxTh, minPs, maxPs,
+		color, stepDegrees);
 }
 
 void btIDebugDrawWrapper::drawSpherePatch(const btVector3& center, const btVector3& up, const btVector3& axis, btScalar radius,
@@ -138,17 +155,19 @@ void btIDebugDrawWrapper::drawTransform(const btTransform& transform, btScalar o
 	_drawTransformCallback(transformTemp, orthoLen);
 }
 
-void btIDebugDrawWrapper::drawTriangle(const btVector3& v0, const btVector3& v1, const btVector3& v2, const btVector3& color, btScalar)
+void btIDebugDrawWrapper::drawTriangle(const btVector3& v0, const btVector3& v1, const btVector3& v2,
+	const btVector3& color, btScalar __unnamed4)
 {
-	_drawTriangleCallback(v0, v1, v2, color, 0);
+	_drawTriangleCallback(v0, v1, v2, color, __unnamed4);
 }
 
 void btIDebugDrawWrapper::drawTriangle(const btVector3& v0, const btVector3& v1, const btVector3& v2,
-	const btVector3& n0, const btVector3& n1, const btVector3& n2, const btVector3& color, btScalar alpha)
+	const btVector3& __unnamed3, const btVector3& __unnamed4, const btVector3& __unnamed5,
+	const btVector3& color, btScalar alpha)
 {
 	_cb(5);
 	//_debugDraw->DrawTriangle(Math::BtVector3ToVector3(&v0), Math::BtVector3ToVector3(&v1), Math::BtVector3ToVector3(&v2),
-		//Math::BtVector3ToVector3(&n0), Math::BtVector3ToVector3(&n1), Math::BtVector3ToVector3(&n2), BtVectorToBtColor(color), alpha);
+		//Math::BtVector3ToVector3(&__unnamed3), Math::BtVector3ToVector3(&__unnamed4), Math::BtVector3ToVector3(&__unnamed5), BtVectorToBtColor(color), alpha);
 }
 
 void btIDebugDrawWrapper::baseDrawAabb(const btVector3& from, const btVector3& to, const btVector3& color)
@@ -182,6 +201,11 @@ void btIDebugDrawWrapper::baseDrawTriangle(const btVector3& v0, const btVector3&
 	btIDebugDraw::drawTriangle(v0, v1, v2, n0, n1, n2, color, alpha);
 }
 
+int btIDebugDrawWrapper::getDebugMode() const
+{
+	return _getDebugModeCallback();
+}
+
 void btIDebugDrawWrapper::reportErrorWarning(const char* warningString)
 {
 	//_debugDraw->ReportErrorWarning(StringConv::UnmanagedToManaged(warningString));
@@ -192,16 +216,24 @@ void btIDebugDrawWrapper::setDebugMode(int debugMode)
 	_cb(6);
 	//_debugDraw->DebugMode = (BulletSharp::DebugDrawModes)debugMode;
 }
-int	btIDebugDrawWrapper::getDebugMode() const
-{
-	return _getDebugModeCallback();
-}
 
-btIDebugDrawWrapper* btIDebugDrawWrapper_new(void* debugDrawGCHandle, pIDebugDraw_DrawAabb drawAabbCallback, pIDebugDraw_DrawArc drawArcCallback, pIDebugDraw_DrawBox drawBoxCallback,
-	pIDebugDraw_DrawCapsule drawCapsule, pIDebugDraw_DrawCone drawCone, pIDebugDraw_DrawContactPoint drawContactPointCallback, pIDebugDraw_DrawCylinder drawCylinderCallback, pIDebugDraw_DrawLine drawLineCallback,
-	pIDebugDraw_DrawPlane drawPlaneCallback, pIDebugDraw_DrawSphere drawSphereCallback, pIDebugDraw_DrawSpherePatch drawSpherePatchCallback, pIDebugDraw_DrawTransform drawTransformCallback, pIDebugDraw_DrawTriangle drawTriangleCallback, pIDebugDraw_GetDebugMode getDebugModeCallback, pSimpleCallback cb)
+
+btIDebugDrawWrapper* btIDebugDrawWrapper_new(void* debugDrawGCHandle,
+	p_btIDebugDraw_DrawAabb drawAabbCallback, p_btIDebugDraw_DrawArc drawArcCallback,
+	p_btIDebugDraw_DrawBox drawBoxCallback,
+	p_btIDebugDraw_DrawCapsule drawCapsuleCallback, p_btIDebugDraw_DrawCone drawConeCallback,
+	p_btIDebugDraw_DrawContactPoint drawContactPointCallback, p_btIDebugDraw_DrawCylinder drawCylinderCallback,
+	p_btIDebugDraw_DrawLine drawLineCallback,
+	p_btIDebugDraw_DrawPlane drawPlaneCallback, p_btIDebugDraw_DrawSphere drawSphereCallback,
+	p_btIDebugDraw_DrawSpherePatch drawSpherePatchCallback,
+	p_btIDebugDraw_DrawTransform drawTransformCallback, p_btIDebugDraw_DrawTriangle drawTriangleCallback,
+	p_btIDebugDraw_GetDebugMode getDebugModeCallback, pSimpleCallback cb)
 {
-	return new btIDebugDrawWrapper(debugDrawGCHandle, drawAabbCallback, drawArcCallback, drawBoxCallback, drawCapsule, drawCone, drawContactPointCallback, drawCylinderCallback, drawLineCallback, drawPlaneCallback, drawSphereCallback, drawSpherePatchCallback, drawTransformCallback, drawTriangleCallback, getDebugModeCallback, cb);
+	return new btIDebugDrawWrapper(debugDrawGCHandle, drawAabbCallback, drawArcCallback,
+		drawBoxCallback, drawCapsuleCallback, drawConeCallback, drawContactPointCallback,
+		drawCylinderCallback, drawLineCallback, drawPlaneCallback,
+		drawSphereCallback, drawSpherePatchCallback, drawTransformCallback,
+		drawTriangleCallback, getDebugModeCallback, cb);
 }
 
 void* btIDebugDrawWrapper_getGCHandle(btIDebugDrawWrapper* obj)

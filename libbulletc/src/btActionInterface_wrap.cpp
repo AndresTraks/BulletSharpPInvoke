@@ -4,7 +4,8 @@
 
 #include "btActionInterface_wrap.h"
 
-btActionInterfaceWrapper::btActionInterfaceWrapper(pIAction_DebugDraw debugDrawCallback, pIAction_UpdateAction updateActionCallback)
+btActionInterfaceWrapper::btActionInterfaceWrapper(p_btActionInterface_DebugDraw debugDrawCallback,
+	p_btActionInterface_UpdateAction updateActionCallback)
 {
 	_debugDrawCallback = debugDrawCallback;
 	_updateActionCallback = updateActionCallback;
@@ -21,7 +22,8 @@ void btActionInterfaceWrapper::updateAction(btCollisionWorld* collisionWorld, bt
 }
 
 
-btActionInterfaceWrapper* btActionInterfaceWrapper_new(pIAction_DebugDraw debugDrawCallback, pIAction_UpdateAction updateActionCallback)
+btActionInterfaceWrapper* btActionInterfaceWrapper_new(p_btActionInterface_DebugDraw debugDrawCallback,
+	p_btActionInterface_UpdateAction updateActionCallback)
 {
 	return new btActionInterfaceWrapper(debugDrawCallback, updateActionCallback);
 }

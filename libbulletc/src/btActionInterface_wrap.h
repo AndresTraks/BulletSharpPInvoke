@@ -1,21 +1,22 @@
 #include "main.h"
 
 #ifndef _BT_ACTION_INTERFACE_H
-#define pIAction_DebugDraw void*
-#define pIAction_UpdateAction void*
+#define p_btActionInterface_DebugDraw void*
+#define p_btActionInterface_UpdateAction void*
 #define btActionInterfaceWrapper void
 #else
-typedef void (*pIAction_DebugDraw)(btIDebugDraw* debugDrawer);
-typedef void (*pIAction_UpdateAction)(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
+typedef void (*p_btActionInterface_DebugDraw)(btIDebugDraw* debugDrawer);
+typedef void (*p_btActionInterface_UpdateAction)(btCollisionWorld* collisionWorld,
+	btScalar deltaTimeStep);
 
 class btActionInterfaceWrapper : public btActionInterface
 {
 private:
-	pIAction_DebugDraw _debugDrawCallback;
-	pIAction_UpdateAction _updateActionCallback;
+	p_btActionInterface_DebugDraw _debugDrawCallback;
+	p_btActionInterface_UpdateAction _updateActionCallback;
 
 public:
-	btActionInterfaceWrapper(pIAction_DebugDraw debugDrawCallback, pIAction_UpdateAction updateActionCallback);
+	btActionInterfaceWrapper(p_btActionInterface_DebugDraw debugDrawCallback, p_btActionInterface_UpdateAction updateActionCallback);
 
 	virtual void debugDraw(btIDebugDraw* debugDrawer);
 	virtual void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
@@ -24,7 +25,8 @@ public:
 
 extern "C"
 {
-	EXPORT btActionInterfaceWrapper* btActionInterfaceWrapper_new(pIAction_DebugDraw debugDrawCallback, pIAction_UpdateAction updateActionCallback);
+	EXPORT btActionInterfaceWrapper* btActionInterfaceWrapper_new(p_btActionInterface_DebugDraw debugDrawCallback,
+		p_btActionInterface_UpdateAction updateActionCallback);
 
 	EXPORT void btActionInterface_debugDraw(btActionInterface* obj, btIDebugDraw* debugDrawer);
 	EXPORT void btActionInterface_updateAction(btActionInterface* obj, btCollisionWorld* collisionWorld, btScalar deltaTimeStep);

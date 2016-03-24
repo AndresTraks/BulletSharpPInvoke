@@ -2,6 +2,109 @@
 
 #include "btSerializer_wrap.h"
 
+btSerializerWrapper::btSerializerWrapper(p_btSerializer_Allocate allocateCallback,
+	p_btSerializer_FinalizeChunk finalizeChunkCallback, p_btSerializer_FindNameForPointer findNameForPointerCallback,
+	p_btSerializer_FindPointer findPointerCallback, p_btSerializer_FinishSerialization finishSerializationCallback,
+	p_btSerializer_GetBufferPointer getBufferPointerCallback, p_btSerializer_GetChunk getChunkCallback,
+	p_btSerializer_GetCurrentBufferSize getCurrentBufferSizeCallback, p_btSerializer_GetNumChunks getNumChunksCallback,
+	p_btSerializer_GetSerializationFlags getSerializationFlagsCallback, p_btSerializer_GetUniquePointer getUniquePointerCallback,
+	p_btSerializer_RegisterNameForPointer registerNameForPointerCallback, p_btSerializer_SerializeName serializeNameCallback,
+	p_btSerializer_SetSerializationFlags setSerializationFlagsCallback, p_btSerializer_StartSerialization startSerializationCallback)
+{
+	_allocateCallback = allocateCallback;
+	_finalizeChunkCallback = finalizeChunkCallback;
+	_findNameForPointerCallback = findNameForPointerCallback;
+	_findPointerCallback = findPointerCallback;
+	_finishSerializationCallback = finishSerializationCallback;
+	_getBufferPointerCallback = getBufferPointerCallback;
+	_getChunkCallback = getChunkCallback;
+	_getCurrentBufferSizeCallback = getCurrentBufferSizeCallback;
+	_getNumChunksCallback = getNumChunksCallback;
+	_getSerializationFlagsCallback = getSerializationFlagsCallback;
+	_getUniquePointerCallback = getUniquePointerCallback;
+	_registerNameForPointerCallback = registerNameForPointerCallback;
+	_serializeNameCallback = serializeNameCallback;
+	_setSerializationFlagsCallback = setSerializationFlagsCallback;
+	_startSerializationCallback = startSerializationCallback;
+}
+
+btChunk* btSerializerWrapper::allocate(size_t size, int numElements)
+{
+	return _allocateCallback(size, numElements);
+}
+
+void btSerializerWrapper::finalizeChunk(btChunk* chunk, const char* structType, int chunkCode,
+	void* oldPtr)
+{
+	_finalizeChunkCallback(chunk, structType, chunkCode, oldPtr);
+}
+
+const char* btSerializerWrapper::findNameForPointer(const void* ptr) const
+{
+	return _findNameForPointerCallback(ptr);
+}
+
+void* btSerializerWrapper::findPointer(void* oldPtr)
+{
+	return _findPointerCallback(oldPtr);
+}
+
+void btSerializerWrapper::finishSerialization()
+{
+	_finishSerializationCallback();
+}
+
+const unsigned char* btSerializerWrapper::getBufferPointer()  const
+{
+	return _getBufferPointerCallback();
+}
+
+btChunk* btSerializerWrapper::getChunk(int chunkIndex) const
+{
+	return _getChunkCallback(chunkIndex);
+}
+
+int btSerializerWrapper::getCurrentBufferSize() const
+{
+	return _getCurrentBufferSizeCallback();
+}
+
+int btSerializerWrapper::getNumChunks() const
+{
+	return _getNumChunksCallback();
+}
+
+int btSerializerWrapper::getSerializationFlags() const
+{
+	return _getSerializationFlagsCallback();
+}
+
+void* btSerializerWrapper::getUniquePointer(void* oldPtr)
+{
+	return _getUniquePointerCallback(oldPtr);
+}
+
+void btSerializerWrapper::registerNameForPointer(const void* ptr, const char* name)
+{
+	_registerNameForPointerCallback(ptr, name);
+}
+
+void btSerializerWrapper::serializeName(const char* ptr)
+{
+	_serializeNameCallback(ptr);
+}
+
+void btSerializerWrapper::setSerializationFlags(int flags)
+{
+	_setSerializationFlagsCallback(flags);
+}
+
+void btSerializerWrapper::startSerialization()
+{
+	_startSerializationCallback();
+}
+
+
 btChunk* btChunk_new()
 {
 	return new btChunk();
@@ -62,111 +165,97 @@ void btChunk_delete(btChunk* obj)
 	delete obj;
 }
 
-btSerializerWrapper::btSerializerWrapper(pSerializer_Allocate allocateCallback, pSerializer_FinalizeChunk finalizeChunkCallback,
-	pSerializer_FindNameForPointer findNameForPointerCallback, pSerializer_FindPointer findPointerCallback,
-	pSerializer_FinishSerialization finishSerializationCallback, pSerializer_GetBufferPointer getBufferPointerCallback,
-	pSerializer_GetChunk getChunkCallback, pSerializer_GetCurrentBufferSize getCurrentBufferSizeCallback,
-	pSerializer_GetNumChunks getNumChunksCallback, pSerializer_GetSerializationFlags getSerializationFlagsCallback,
-	pSerializer_GetUniquePointer getUniquePointerCallback, pSerializer_RegisterNameForPointer registerNameForPointerCallback,
-	pSerializer_SerializeName serializeNameCallback, pSerializer_SetSerializationFlags setSerializationFlagsCallback,
-	pSerializer_StartSerialization startSerializationCallback)
-{
-	_allocateCallback = allocateCallback;
-	_finalizeChunkCallback = finalizeChunkCallback;
-	_findNameForPointerCallback = findNameForPointerCallback;
-	_findPointerCallback = findPointerCallback;
-	_finishSerializationCallback = finishSerializationCallback;
-	_getBufferPointerCallback = getBufferPointerCallback;
-	_getChunkCallback = getChunkCallback;
-	_getCurrentBufferSizeCallback = getCurrentBufferSizeCallback;
-	_getNumChunksCallback = getNumChunksCallback;
-	_getSerializationFlagsCallback = getSerializationFlagsCallback;
-	_getUniquePointerCallback = getUniquePointerCallback;
-	_registerNameForPointerCallback = registerNameForPointerCallback;
-	_serializeNameCallback = serializeNameCallback;
-	_setSerializationFlagsCallback = setSerializationFlagsCallback;
-	_startSerializationCallback = startSerializationCallback;
-}
 
-btChunk* btSerializerWrapper::allocate(size_t size, int numElements)
+btSerializerWrapper* btSerializerWrapper_new(p_btSerializer_Allocate allocateCallback,
+	p_btSerializer_FinalizeChunk finalizeChunkCallback, p_btSerializer_FindNameForPointer findNameForPointerCallback,
+	p_btSerializer_FindPointer findPointerCallback, p_btSerializer_FinishSerialization finishSerializationCallback,
+	p_btSerializer_GetBufferPointer getBufferPointerCallback, p_btSerializer_GetChunk getChunkCallback,
+	p_btSerializer_GetCurrentBufferSize getCurrentBufferSizeCallback, p_btSerializer_GetNumChunks getNumChunksCallback,
+	p_btSerializer_GetSerializationFlags getSerializationFlagsCallback, p_btSerializer_GetUniquePointer getUniquePointerCallback,
+	p_btSerializer_RegisterNameForPointer registerNameForPointerCallback, p_btSerializer_SerializeName serializeNameCallback,
+	p_btSerializer_SetSerializationFlags setSerializationFlagsCallback, p_btSerializer_StartSerialization startSerializationCallback)
 {
-	return _allocateCallback(size, numElements);
-}
-
-void btSerializerWrapper::finalizeChunk(btChunk* chunk, const char* structType, int chunkCode, void* oldPtr)
-{
-	_finalizeChunkCallback(chunk, structType, chunkCode, oldPtr);
-}
-
-const char* btSerializerWrapper::findNameForPointer(const void* ptr) const
-{
-	return _findNameForPointerCallback(ptr);
-}
-
-void* btSerializerWrapper::findPointer(void* oldPtr)
-{
-	return _findPointerCallback(oldPtr);
-}
-
-void btSerializerWrapper::finishSerialization()
-{
-	_finishSerializationCallback();
-}
-
-const unsigned char* btSerializerWrapper::getBufferPointer() const
-{
-	return _getBufferPointerCallback();
-}
-
-btChunk* btSerializerWrapper::getChunk(int chunkIndex) const
-{
-	return _getChunkCallback(chunkIndex);
-}
-
-int btSerializerWrapper::getCurrentBufferSize() const
-{
-	return _getCurrentBufferSizeCallback();
-}
-
-int btSerializerWrapper::getNumChunks() const
-{
-	return _getNumChunksCallback();
-}
-
-int btSerializerWrapper::getSerializationFlags() const
-{
-	return _getSerializationFlagsCallback();
-}
-
-void* btSerializerWrapper::getUniquePointer(void* oldPtr)
-{
-	return _getUniquePointerCallback(oldPtr);
-}
-
-void btSerializerWrapper::registerNameForPointer(const void* ptr, const char* name)
-{
-	_registerNameForPointerCallback(ptr, name);
-}
-
-void btSerializerWrapper::serializeName(const char* ptr)
-{
-	_serializeNameCallback(ptr);
-}
-
-void btSerializerWrapper::setSerializationFlags(int flags)
-{
-	_setSerializationFlagsCallback(flags);
-}
-
-void btSerializerWrapper::startSerialization()
-{
-	_startSerializationCallback();
+	return new btSerializerWrapper(allocateCallback, finalizeChunkCallback, findNameForPointerCallback,
+		findPointerCallback, finishSerializationCallback, getBufferPointerCallback,
+		getChunkCallback, getCurrentBufferSizeCallback, getNumChunksCallback, getSerializationFlagsCallback,
+		getUniquePointerCallback, registerNameForPointerCallback, serializeNameCallback,
+		setSerializationFlagsCallback, startSerializationCallback);
 }
 
 
-btSerializerWrapper* btSerializerWrapper_new(pSerializer_Allocate allocateCallback, pSerializer_FinalizeChunk finalizeChunkCallback, pSerializer_FindNameForPointer findNameForPointerCallback, pSerializer_FindPointer findPointerCallback, pSerializer_FinishSerialization finishSerializationCallback, pSerializer_GetBufferPointer getBufferPointerCallback, pSerializer_GetChunk getChunkCallback, pSerializer_GetCurrentBufferSize getCurrentBufferSizeCallback, pSerializer_GetNumChunks getNumChunksCallback, pSerializer_GetSerializationFlags getSerializationFlagsCallback, pSerializer_GetUniquePointer getUniquePointerCallback, pSerializer_RegisterNameForPointer registerNameForPointerCallback, pSerializer_SerializeName serializeNameCallback, pSerializer_SetSerializationFlags setSerializationFlagsCallback, pSerializer_StartSerialization startSerializationCallback)
+btChunk* btSerializer_allocate(btSerializer* obj, int size, int numElements)
 {
-	return new btSerializerWrapper(allocateCallback, finalizeChunkCallback, findNameForPointerCallback, findPointerCallback, finishSerializationCallback, getBufferPointerCallback, getChunkCallback, getCurrentBufferSizeCallback, getNumChunksCallback, getSerializationFlagsCallback, getUniquePointerCallback, registerNameForPointerCallback, serializeNameCallback, setSerializationFlagsCallback, startSerializationCallback);
+	return obj->allocate(size, numElements);
+}
+
+void btSerializer_finalizeChunk(btSerializer* obj, btChunk* chunk, const char* structType, int chunkCode, void* oldPtr)
+{
+	obj->finalizeChunk(chunk, structType, chunkCode, oldPtr);
+}
+
+const char* btSerializer_findNameForPointer(btSerializer* obj, const void* ptr)
+{
+	return obj->findNameForPointer(ptr);
+}
+
+void* btSerializer_findPointer(btSerializer* obj, void* oldPtr)
+{
+	return obj->findPointer(oldPtr);
+}
+
+void btSerializer_finishSerialization(btSerializer* obj)
+{
+	obj->finishSerialization();
+}
+
+const unsigned char* btSerializer_getBufferPointer(btSerializer* obj)
+{
+	return obj->getBufferPointer();
+}
+
+const btChunk* btSerializer_getChunk(btSerializer* obj, int chunkIndex)
+{
+	return obj->getChunk(chunkIndex);
+}
+
+int btSerializer_getCurrentBufferSize(btSerializer* obj)
+{
+	return obj->getCurrentBufferSize();
+}
+
+int btSerializer_getNumChunks(btSerializer* obj)
+{
+	return obj->getNumChunks();
+}
+
+int btSerializer_getSerializationFlags(btSerializer* obj)
+{
+	return obj->getSerializationFlags();
+}
+
+void* btSerializer_getUniquePointer(btSerializer* obj, void* oldPtr)
+{
+	return obj->getUniquePointer(oldPtr);
+}
+
+void btSerializer_registerNameForPointer(btSerializer* obj, const void* ptr, const char* name)
+{
+	obj->registerNameForPointer(ptr, name);
+}
+
+void btSerializer_serializeName(btSerializer* obj, const char* ptr)
+{
+	obj->serializeName(ptr);
+}
+
+void btSerializer_setSerializationFlags(btSerializer* obj, int flags)
+{
+	obj->setSerializationFlags(flags);
+}
+
+void btSerializer_startSerialization(btSerializer* obj)
+{
+	obj->startSerialization();
 }
 
 

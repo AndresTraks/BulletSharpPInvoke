@@ -4,7 +4,7 @@
 #include "conversion.h"
 #include "btBroadphaseInterface_wrap.h"
 
-btBroadphaseAabbCallbackWrapper::btBroadphaseAabbCallbackWrapper(pBroadphaseAabbCallback_Process processCallback)
+btBroadphaseAabbCallbackWrapper::btBroadphaseAabbCallbackWrapper(p_btBroadphaseAabbCallback_Process processCallback)
 {
 	_processCallback = processCallback;
 }
@@ -15,7 +15,7 @@ bool btBroadphaseAabbCallbackWrapper::process(const btBroadphaseProxy* proxy)
 }
 
 
-btBroadphaseRayCallbackWrapper::btBroadphaseRayCallbackWrapper(pBroadphaseAabbCallback_Process processCallback)
+btBroadphaseRayCallbackWrapper::btBroadphaseRayCallbackWrapper(p_btBroadphaseAabbCallback_Process processCallback)
 {
 	_processCallback = processCallback;
 }
@@ -26,7 +26,7 @@ bool btBroadphaseRayCallbackWrapper::process(const btBroadphaseProxy* proxy)
 }
 
 
-btBroadphaseAabbCallbackWrapper* btBroadphaseAabbCallbackWrapper_new(pBroadphaseAabbCallback_Process processCallback)
+btBroadphaseAabbCallbackWrapper* btBroadphaseAabbCallbackWrapper_new(p_btBroadphaseAabbCallback_Process processCallback)
 {
 	return new btBroadphaseAabbCallbackWrapper(processCallback);
 }
@@ -43,7 +43,7 @@ void btBroadphaseAabbCallback_delete(btBroadphaseAabbCallback* obj)
 }
 
 
-btBroadphaseRayCallbackWrapper* btBroadphaseRayCallbackWrapper_new(pBroadphaseAabbCallback_Process processCallback)
+btBroadphaseRayCallbackWrapper* btBroadphaseRayCallbackWrapper_new(p_btBroadphaseAabbCallback_Process processCallback)
 {
 	return new btBroadphaseRayCallbackWrapper(processCallback);
 }

@@ -21,6 +21,7 @@ namespace BulletSharpGen
     public abstract class WrapperWriter
     {
         private const int TabWidth = 4;
+        private const int LineBreakWidth = 80;
 
         public WrapperProject Project { get; }
         public WriteTo To { get; set; }
@@ -175,6 +176,32 @@ namespace BulletSharpGen
                     hasCSWhiteSpace = true;
                 }
             }
+        }
+
+        /// <summary>
+        /// Takes a collection of strings, joins them by commas
+        /// and breaks lines if necessary.
+        /// </summary>
+        /// <param name="list">Collection of strings.</param>
+        /// <param name="startingLineLength">How long the existing line is.</param>
+        /// <param name="level">How many tabs to insert to the start of a line.</param>
+        /// <returns></returns>
+        protected string ListToLines(IEnumerable<string> list, int startingLineLength, int level = 0)
+        {
+            int lineLength = startingLineLength;
+            return list.Aggregate("", (a, p) =>
+            {
+                if (lineLength > LineBreakWidth)
+                {
+                    string tabs = new string('\t', level + 1);
+                    lineLength = tabs.Length * 4 + p.Length;
+                    if (a.Length == 0) return $"\r\n{tabs}{p}";
+                    return $"{a},\r\n{tabs}{p}";
+                }
+                lineLength += 2 + p.Length;
+                if (a.Length == 0) return p;
+                return $"{a}, {p}";
+            });
         }
     }
 }

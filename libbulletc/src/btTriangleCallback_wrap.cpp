@@ -3,18 +3,19 @@
 #include "conversion.h"
 #include "btTriangleCallback_wrap.h"
 
-btInternalTriangleIndexCallbackWrapper::btInternalTriangleIndexCallbackWrapper(pInternalTriangleIndexCallback_InternalProcessTriangleIndex internalProcessTriangleIndexCallback)
+btInternalTriangleIndexCallbackWrapper::btInternalTriangleIndexCallbackWrapper(p_btInternalTriangleIndexCallback_InternalProcessTriangleIndex internalProcessTriangleIndexCallback)
 {
 	_internalProcessTriangleIndexCallback = internalProcessTriangleIndexCallback;
 }
 
-void btInternalTriangleIndexCallbackWrapper::internalProcessTriangleIndex(btVector3* triangle, int partId, int triangleIndex)
+void btInternalTriangleIndexCallbackWrapper::internalProcessTriangleIndex(btVector3* triangle,
+	int partId, int triangleIndex)
 {
 	_internalProcessTriangleIndexCallback(triangle, partId, triangleIndex);
 }
 
 
-btTriangleCallbackWrapper::btTriangleCallbackWrapper(pTriangleCallback_ProcessTriangle processTriangleCallback)
+btTriangleCallbackWrapper::btTriangleCallbackWrapper(p_btTriangleCallback_ProcessTriangle processTriangleCallback)
 {
 	_processTriangleCallback = processTriangleCallback;
 }
@@ -25,7 +26,7 @@ void btTriangleCallbackWrapper::processTriangle(btVector3* triangle, int partId,
 }
 
 
-btTriangleCallbackWrapper* btTriangleCallbackWrapper_new(pTriangleCallback_ProcessTriangle processTriangleCallback)
+btTriangleCallbackWrapper* btTriangleCallbackWrapper_new(p_btTriangleCallback_ProcessTriangle processTriangleCallback)
 {
 	return new btTriangleCallbackWrapper(processTriangleCallback);
 }
@@ -36,7 +37,8 @@ void btTriangleCallback_delete(btTriangleCallback* obj)
 }
 
 
-btInternalTriangleIndexCallbackWrapper* btInternalTriangleIndexCallbackWrapper_new(pInternalTriangleIndexCallback_InternalProcessTriangleIndex internalProcessTriangleIndexCallback)
+btInternalTriangleIndexCallbackWrapper* btInternalTriangleIndexCallbackWrapper_new(
+	p_btInternalTriangleIndexCallback_InternalProcessTriangleIndex internalProcessTriangleIndexCallback)
 {
 	return new btInternalTriangleIndexCallbackWrapper(internalProcessTriangleIndexCallback);
 }
