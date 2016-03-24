@@ -52,6 +52,9 @@ namespace BulletSharpGenTest
             var writer = new PInvokeWriter(project);
             writer.Output();
 
+            var cmake = new CMakeWriter(project);
+            cmake.Output();
+
             Assert.AreEqual(1, project.HeaderDefinitions.Count);
             Assert.AreEqual(4, project.ClassDefinitions.Count);
             /*

@@ -7,13 +7,7 @@ namespace BulletSharpGen
 {
     class CppCliWriter : WrapperWriter
     {
-        int _headerLineLength;
-        int _sourceLineLength;
-        
-        const int TabWidth = 4;
-        const int LineBreakWidth = 80;
-
-        WrapperProject _project;
+        private const int LineBreakWidth = 80;
 
         // Conditional compilation (#ifndef DISABLE_FEATURE)
         Dictionary<string, string> headerConditionals = new Dictionary<string, string>
@@ -126,92 +120,8 @@ namespace BulletSharpGen
             new List<string>(new[] {"Vector3", "Matrix3x3", "Quaternion", "Transform", "Vector4"});
 
         public CppCliWriter(WrapperProject project)
-            : base(project.HeaderDefinitions.Values, project.NamespaceName)
+            : base(project)
         {
-            _project = project;
-        }
-
-        void WriteTabs(int n, bool source = false)
-        {
-            for (int i = 0; i < n; i++)
-            {
-                if (source)
-                {
-                    sourceWriter.Write('\t');
-                    _sourceLineLength += TabWidth;
-                }
-                else
-                {
-                    headerWriter.Write('\t');
-                    _headerLineLength += TabWidth;
-                }
-            }
-        }
-
-        void HeaderWrite(string s)
-        {
-            headerWriter.Write(s);
-            _headerLineLength += s.Length;
-        }
-
-        void HeaderWriteLine(string s = "")
-        {
-            HeaderWrite(s);
-            headerWriter.WriteLine();
-            _headerLineLength = 0;
-        }
-
-        void HeaderWriteLine(char c)
-        {
-            headerWriter.WriteLine(c);
-            _headerLineLength = 0;
-        }
-
-        void SourceWrite(string s)
-        {
-            sourceWriter.Write(s);
-            _sourceLineLength += s.Length;
-        }
-
-        void SourceWrite(char c)
-        {
-            sourceWriter.Write(c);
-            _sourceLineLength += c.Equals('\t') ? TabWidth : 1;
-        }
-
-        void SourceWriteLine(string s = "")
-        {
-            sourceWriter.WriteLine(s);
-            _sourceLineLength = 0;
-        }
-
-        void SourceWriteLine(char c)
-        {
-            sourceWriter.WriteLine(c);
-            _sourceLineLength = 0;
-        }
-
-        void Write(string s)
-        {
-            HeaderWrite(s);
-            SourceWrite(s);
-        }
-
-        void Write(char c, bool source = true)
-        {
-            headerWriter.Write(c);
-            _headerLineLength += 1;
-            if (source)
-            {
-                sourceWriter.Write(c);
-                _sourceLineLength += 1;
-            }
-        }
-
-        void WriteLine(string s)
-        {
-            HeaderWriteLine(s);
-            SourceWriteLine(s);
         }
 
         void EnsureAccess(int level, ref RefAccessSpecifier current, RefAccessSpecifier required,
@@ -224,8 +134,8 @@ namespace BulletSharpGen
                 EnsureHeaderWhiteSpace();
             }
 
-            WriteTabs(level);
-            HeaderWriteLine($"{required.ToString().ToLower()}:");
+            WriteTabs(level, WriteTo.Header);
+            WriteLine($"{required.ToString().ToLower()}:", WriteTo.Header);
             current = required;
         }
 
@@ -233,7 +143,7 @@ namespace BulletSharpGen
         {
             if (hasHeaderWhiteSpace) return;
 
-            HeaderWriteLine();
+            WriteLine(WriteTo.Header);
             hasHeaderWhiteSpace = true;
         }
 
@@ -241,32 +151,32 @@ namespace BulletSharpGen
         {
             if (hasSourceWhiteSpace) return;
 
-            SourceWriteLine();
+            WriteLine(WriteTo.Source);
             hasSourceWhiteSpace = true;
         }
 
-        void OutputMethodMarshal(MethodDefinition method, int numParameters)
+        private void WriteMethodMarshal(MethodDefinition method, int numParameters)
         {
             if (method.IsConstructor)
             {
-                SourceWrite(method.Parent.FullyQualifiedName);
+                Write(method.Parent.FullyQualifiedName);
             }
             else
             {
-                SourceWrite(method.Name);
+                Write(method.Name);
             }
-            SourceWrite('(');
+            Write('(');
             for (int i = 0; i < numParameters; i++)
             {
                 var param = method.Parameters[i];
                 string marshal = BulletParser.GetTypeMarshalCppCli(param);
                 if (!string.IsNullOrEmpty(marshal))
                 {
-                    SourceWrite(marshal);
+                    Write(marshal);
                 }
                 else if (param.Type.IsBasic)
                 {
-                    SourceWrite(param.ManagedName);
+                    Write(param.ManagedName);
                 }
                 else
                 {
@@ -275,42 +185,41 @@ namespace BulletSharpGen
                         if (param.Type.IsReference)
                         {
                             // Dereference
-                            SourceWrite('*');
+                            Write('*');
                         }
 
-                        if (param.Type.Referenced.Target != null &&
-                            param.Type.Referenced.Target.BaseClass != null)
+                        if (param.Type.Referenced.Target?.BaseClass != null)
                         {
                             // Cast native pointer from base class
-                            SourceWrite(string.Format("({0}*)", param.Type.Referenced.FullName));
+                            Write($"({param.Type.Referenced.FullName}*)");
                         }
                     }
-                    SourceWrite(param.ManagedName);
+                    Write(param.ManagedName);
                     if (param.Type.IsPointer && param.Type.ManagedName.Equals("void"))
                     {
-                        SourceWrite(".ToPointer()");
+                        Write(".ToPointer()");
                     }
                     else
                     {
-                        SourceWrite("->_native");
+                        Write("->_native");
                     }
                 }
 
                 // Insert comma if there are more parameters
                 if (i != numParameters - 1)
                 {
-                    if (_sourceLineLength >= LineBreakWidth)
+                    if (LineLengths[WriteTo.Source] >= LineBreakWidth)
                     {
-                        SourceWriteLine(",");
-                        WriteTabs(2, true);
+                        WriteLine(",");
+                        WriteTabs(2);
                     }
                     else
                     {
-                        SourceWrite(", ");
+                        Write(", ");
                     }
                 }
             }
-            SourceWrite(')');
+            Write(')');
         }
 
         void WriteMethodDefinition(MethodDefinition method, int numParameters)
@@ -326,8 +235,8 @@ namespace BulletSharpGen
                     string prologue = BulletParser.GetTypeMarshalPrologueCppCli(param);
                     if (!string.IsNullOrEmpty(prologue))
                     {
-                        WriteTabs(1, true);
-                        SourceWriteLine(prologue);
+                        WriteTabs(1);
+                        WriteLine(prologue);
                     }
 
                     // Do we need a type marshalling epilogue?
@@ -342,10 +251,10 @@ namespace BulletSharpGen
                 }
             }
 
-            WriteTabs(1, true);
+            WriteTabs(1);
             if (method.IsConstructor)
             {
-                SourceWrite("_native = new ");
+                Write("_native = new ");
             }
             else if (!method.IsVoid)
             {
@@ -353,18 +262,18 @@ namespace BulletSharpGen
                 if (needTypeMarshalEpilogue)
                 {
                     // Return after epilogue (cleanup)
-                    SourceWrite($"{BulletParser.GetTypeRefName(method.ReturnType)} ret = ");
+                    Write($"{BulletParser.GetTypeRefName(method.ReturnType)} ret = ");
                 }
                 else
                 {
                     // Return immediately
-                    SourceWrite("return ");
+                    Write("return ");
                 }
-                SourceWrite(BulletParser.GetTypeMarshalConstructorStart(method));
+                Write(BulletParser.GetTypeMarshalConstructorStart(method));
             }
             else if (method.Property != null && method.Equals(method.Property.Getter))
             {
-                SourceWrite(BulletParser.GetTypeMarshalConstructorStart(method));
+                Write(BulletParser.GetTypeMarshalConstructorStart(method));
             }
 
             // Native is defined as static_cast<className*>(_native)
@@ -378,11 +287,11 @@ namespace BulletSharpGen
                     CachedProperty cachedProperty;
                     if (method.Parent.CachedProperties.TryGetValue(property.Name, out cachedProperty))
                     {
-                        SourceWrite(cachedProperty.CacheFieldName);
+                        Write(cachedProperty.CacheFieldName);
                     }
                     else
                     {
-                        SourceWrite(string.Format("{0}->{1}", nativePointer, method.Field.Name));
+                        Write($"{nativePointer}->{method.Field.Name}");
                     }
                 }
                 else if (property.Setter != null && method.Equals(property.Setter))
@@ -391,30 +300,30 @@ namespace BulletSharpGen
                     var fieldSet = BulletParser.GetTypeMarshalFieldSetCppCli(method.Field, param, nativePointer);
                     if (!string.IsNullOrEmpty(fieldSet))
                     {
-                        SourceWrite(fieldSet);
+                        Write(fieldSet);
                     }
                     else
                     {
-                        SourceWrite($"{nativePointer}->{method.Field.Name} = ");
+                        Write($"{nativePointer}->{method.Field.Name} = ");
                         if (param.Type.IsPointer || param.Type.IsReference)
                         {
                             if (param.Type.IsReference)
                             {
                                 // Dereference
-                                SourceWrite('*');
+                                Write('*');
                             }
 
                             if (param.Type.Referenced.Target != null &&
                                 param.Type.Referenced.Target.BaseClass != null)
                             {
                                 // Cast native pointer from base class
-                                SourceWrite($"({param.Type.Referenced.FullName}*)");
+                                Write($"({param.Type.Referenced.FullName}*)");
                             }
                         }
-                        SourceWrite(param.ManagedName);
+                        Write(param.ManagedName);
                         if (!param.Type.IsBasic)
                         {
-                            SourceWrite("->_native");
+                            Write("->_native");
                         }
                     }
                 }
@@ -426,19 +335,20 @@ namespace BulletSharpGen
                 }
                 else if (method.IsStatic)
                 {
-                    SourceWrite(parentClass.FullyQualifiedName + "::");
+                    Write(parentClass.FullyQualifiedName + "::");
                 }
                 else
                 {
-                    SourceWrite(nativePointer + "->");
+                    Write(nativePointer + "->");
                 }
-                OutputMethodMarshal(method, numParameters);
+                To = WriteTo.Source;
+                WriteMethodMarshal(method, numParameters);
             }
             if (!method.IsConstructor && !method.IsVoid)
             {
-                SourceWrite(BulletParser.GetTypeMarshalConstructorEnd(method));
+                Write(BulletParser.GetTypeMarshalConstructorEnd(method));
             }
-            SourceWriteLine(';');
+            WriteLine(';');
 
             // Write type marshalling epilogue
             if (needTypeMarshalEpilogue)
@@ -448,14 +358,14 @@ namespace BulletSharpGen
                     string epilogue = BulletParser.GetTypeMarshalEpilogueCppCli(param);
                     if (!string.IsNullOrEmpty(epilogue))
                     {
-                        WriteTabs(1, true);
-                        SourceWriteLine(epilogue);
+                        WriteTabs(1);
+                        WriteLine(epilogue);
                     }
                 }
                 if (!method.IsVoid)
                 {
-                    WriteTabs(1, true);
-                    SourceWriteLine("return ret;");
+                    WriteTabs(1);
+                    WriteLine("return ret;");
                 }
             }
         }
@@ -471,6 +381,9 @@ namespace BulletSharpGen
                 EnsureSourceWhiteSpace();
                 hasHeaderWhiteSpace = false;
             }
+
+            var prevTo = To;
+            To = WriteTo.Header | WriteTo.Source;
 
             // #ifndef DISABLE_FEATURE
             bool hasConditional = false;
@@ -488,12 +401,13 @@ namespace BulletSharpGen
                 }
             }
 
+            // Declaration
             WriteTabs(level + 1);
 
             // "static"
             if (method.IsStatic)
             {
-                HeaderWrite("static ");
+                Write("static ", WriteTo.Header);
             }
 
             // Definition: return type
@@ -508,7 +422,7 @@ namespace BulletSharpGen
                         // If property name matches type name, resolve ambiguity
                         if (method.Property.Name.Equals(method.Property.Type.ManagedName))
                         {
-                            HeaderWrite(NamespaceName + "::");
+                            Write(Project.NamespaceName + "::", WriteTo.Header);
                         }
 
                         // Getter with parameter for return value
@@ -541,8 +455,8 @@ namespace BulletSharpGen
                 headerMethodName = method.ManagedName;
                 sourceMethodName = headerMethodName;
             }
-            HeaderWrite($"{headerMethodName}(");
-            SourceWrite($"{parentClass.FullNameCppCli}::{sourceMethodName}(");
+            Write($"{headerMethodName}(", WriteTo.Header);
+            Write($"{parentClass.FullNameCppCli}::{sourceMethodName}(", WriteTo.Source);
 
             // Definition: parameters
             int numParameters = method.Parameters.Length - numOptionalParams;
@@ -564,64 +478,68 @@ namespace BulletSharpGen
 
                 if (i != numParameters - 1)
                 {
-                    if (_headerLineLength >= LineBreakWidth)
+                    To = WriteTo.Header;
+                    if (LineLengths[To] >= LineBreakWidth)
                     {
-                        HeaderWriteLine(",");
+                        WriteLine(",");
                         WriteTabs(level + 2);
                     }
                     else
                     {
-                        HeaderWrite(", ");
+                        Write(", ");
                     }
 
-                    if (_sourceLineLength >= LineBreakWidth)
+                    To = WriteTo.Source;
+                    if (LineLengths[To] >= LineBreakWidth)
                     {
-                        SourceWriteLine(",");
-                        WriteTabs(1, true);
+                        WriteLine(",");
+                        WriteTabs(1);
                     }
                     else
                     {
-                        SourceWrite(", ");
+                        Write(", ");
                     }
                 }
             }
-            HeaderWriteLine(");");
-            SourceWriteLine(')');
+            WriteLine(");", WriteTo.Header);
+            WriteLine(')', WriteTo.Source);
 
 
-            // Constructor chaining
+            // Definition: constructor chaining
+            To = WriteTo.Source;
             bool doConstructorChaining = false;
             if (method.IsConstructor && parentClass.BaseClass != null)
             {
                 // If there is no need for marshalling code, we can chain constructors
                 doConstructorChaining = method.Parameters.All(p => !BulletParser.TypeRequiresMarshal(p.Type));
 
-                WriteTabs(1, true);
-                SourceWrite($": {parentClass.BaseClass.ManagedName}(");
+                WriteTabs(1);
+                Write($": {parentClass.BaseClass.ManagedName}(");
 
                 if (doConstructorChaining)
                 {
-                    SourceWrite("new ");
-                    OutputMethodMarshal(method, numParameters);
+                    Write("new ");
+                    WriteMethodMarshal(method, numParameters);
                     if (parentClass.BaseClass.HasPreventDelete)
                     {
-                        SourceWrite(", false");
+                        Write(", false");
                     }
                 }
                 else
                 {
-                    SourceWrite('0');
+                    Write('0');
                 }
 
-                SourceWriteLine(')');
+                WriteLine(')');
             }
 
-            // Method definition
-            SourceWriteLine('{');
+            // Method body
+            WriteLine('{');
             if (!doConstructorChaining)
             {
                 WriteMethodDefinition(method, numParameters);
             }
+
             // Cache property values
             if (method.IsConstructor)
             {
@@ -648,12 +566,12 @@ namespace BulletSharpGen
                     EnsureSourceWhiteSpace();
                     foreach (string assignment in assignments)
                     {
-                        SourceWriteLine(assignment);
+                        WriteLine(assignment);
                     }
                     hasSourceWhiteSpace = false;
                 }
             }
-            SourceWriteLine('}');
+            WriteLine('}');
             hasSourceWhiteSpace = false;
 
             // #endif // DISABLE_FEATURE
@@ -664,7 +582,7 @@ namespace BulletSharpGen
                     string typeConditional = GetTypeConditional(param.Type, method.Parent.Header);
                     if (typeConditional != null)
                     {
-                        WriteLine("#endif");
+                        WriteLine("#endif", WriteTo.Header | WriteTo.Source);
                         hasHeaderWhiteSpace = true;
                     }
                 }
@@ -675,6 +593,8 @@ namespace BulletSharpGen
             {
                 OutputMethod(method, level, numOptionalParams + 1);
             }
+
+            To = prevTo;
         }
 
         void OutputClasses(IList<ClassDefinition> classes, ref RefAccessSpecifier currentAccess, int level)
@@ -684,7 +604,7 @@ namespace BulletSharpGen
             {
                 if (insertSeparator)
                 {
-                    SourceWriteLine();
+                    WriteLine(WriteTo.Source);
                 }
                 if (level != 0)
                 {
@@ -705,59 +625,46 @@ namespace BulletSharpGen
             EnsureHeaderWhiteSpace();
             EnsureSourceWhiteSpace();
 
-            // Write access modifier
-            WriteTabs(level);
-            if (level == 1)
-            {
-                HeaderWrite("public ");
-            }
+            var prevTo = To;
+            To = WriteTo.Header;
 
-            // Write class definition
-            HeaderWrite($"ref class {@class.ManagedName}");
-            if (@class.IsAbstract)
-            {
-                HeaderWrite(" abstract");
-            }
-            else if (@class.IsStaticClass)
-            {
-                HeaderWrite(" sealed");
-            }
-            if (@class.BaseClass != null)
-            {
-                HeaderWriteLine($" : {@class.BaseClass.ManagedName}");
-            }
-            else if (@class.IsTrackingDisposable)
-            {
-                HeaderWriteLine(" : ITrackingDisposable");
-            }
-            else
-            {
-                // In C++/CLI, IDisposable is inherited automatically if the destructor and finalizer are defined
-                //HeaderWrite(" : IDisposable");
-                HeaderWriteLine();
-            }
-
+            // Access modifier
             WriteTabs(level);
-            HeaderWriteLine("{");
-            //hasHeaderWhiteSpace = true;
+            if (level == 1) Write("public ");
+
+            // Class definition
+            Write($"ref class {@class.ManagedName}");
+
+            // abstract/sealed keywords
+            if (@class.IsAbstract) Write(" abstract");
+            else if (@class.IsStaticClass) Write(" sealed");
+
+            // Inheritance
+            if (@class.BaseClass != null) WriteLine($" : {@class.BaseClass.ManagedName}");
+            else if (@class.IsTrackingDisposable) WriteLine(" : ITrackingDisposable");
+            else WriteLine();
+
+            // Class body start
+            WriteTabs(level);
+            WriteLine("{");
 
             // Default access for ref class
             var currentAccess = RefAccessSpecifier.Private;
 
-            // Write child classes
-            if (!@class.Classes.All(IsExcludedClass))
+            // Nested classes
+            if (!@class.NestedClasses.All(IsExcludedClass))
             {
-                OutputClasses(@class.Classes, ref currentAccess, level);
+                OutputClasses(@class.NestedClasses, ref currentAccess, level);
                 currentAccess = RefAccessSpecifier.Public;
-                SourceWriteLine();
+                WriteLine(WriteTo.Source);
             }
 
-            // Add a private constructor for classes without instances
+            // Private constructor for classes that aren't instanced
             if (@class.IsStaticClass)
             {
                 EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Private);
                 WriteTabs(level + 1);
-                HeaderWriteLine($"{@class.ManagedName}() {{}}");
+                WriteLine($"{@class.ManagedName}() {{}}");
                 hasHeaderWhiteSpace = false;
             }
 
@@ -765,31 +672,31 @@ namespace BulletSharpGen
             if (@class.BaseClass != null && @class.Methods.Any(m => !m.IsConstructor && !m.IsStatic && !m.IsExcluded))
             {
                 EnsureSourceWhiteSpace();
-                SourceWriteLine($"#define Native static_cast<{@class.FullyQualifiedName}*>(_native)");
+                WriteLine($"#define Native static_cast<{@class.FullyQualifiedName}*>(_native)", WriteTo.Source);
                 hasSourceWhiteSpace = false;
             }
 
             // Write the native pointer to the base class
             if (@class.BaseClass == null && !@class.IsStaticClass)
             {
-                if (@class.Classes.Any(c => !IsExcludedClass(c)))
+                if (@class.NestedClasses.Any(c => !IsExcludedClass(c)))
                 {
-                    HeaderWriteLine();
+                    WriteLine();
                 }
                 if (@class.IsTrackingDisposable)
                 {
                     EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Public);
                     WriteTabs(level + 1);
-                    HeaderWriteLine("virtual event EventHandler^ OnDisposing;");
+                    WriteLine("virtual event EventHandler^ OnDisposing;");
                     WriteTabs(level + 1);
-                    HeaderWriteLine("virtual event EventHandler^ OnDisposed;");
+                    WriteLine("virtual event EventHandler^ OnDisposed;");
                     hasHeaderWhiteSpace = false;
                 }
                 EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Internal);
 
                 WriteTabs(level + 1);
-                HeaderWrite(@class.FullyQualifiedName);
-                HeaderWriteLine("* _native;");
+                Write(@class.FullyQualifiedName);
+                WriteLine("* _native;");
                 hasHeaderWhiteSpace = false;
             }
 
@@ -802,7 +709,7 @@ namespace BulletSharpGen
             {
                 EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Private);
                 WriteTabs(level + 1);
-                HeaderWriteLine("bool _isDisposed;");
+                WriteLine("bool _isDisposed;");
                 hasHeaderWhiteSpace = false;
             }
             // _preventDelete flag
@@ -810,47 +717,49 @@ namespace BulletSharpGen
             {
                 EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Private);
                 WriteTabs(level + 1);
-                HeaderWriteLine("bool _preventDelete;");
+                WriteLine("bool _preventDelete;");
                 hasHeaderWhiteSpace = false;
             }
 
-            // Write cached property fields
+            // Cached property fields
             foreach (var cachedProperty in @class.CachedProperties.OrderBy(p => p.Key))
             {
                 EnsureAccess(level, ref currentAccess, cachedProperty.Value.Access);
                 WriteTabs(level + 1);
                 string name = cachedProperty.Key;
                 name = char.ToLower(name[0]) + name.Substring(1);
-                HeaderWriteLine($"{BulletParser.GetTypeRefName(cachedProperty.Value.Property.Type)} _{name};");
+                WriteLine($"{BulletParser.GetTypeRefName(cachedProperty.Value.Property.Type)} _{name};");
                 hasHeaderWhiteSpace = false;
             }
 
-            // Write constructors and destructors if not static
+            // Constructors and destructors
             if (!@class.IsStaticClass)
             {
                 // Write unmanaged constructor
                 // TODO: Write constructor from unmanaged pointer only if the class is ever instantiated in this way.
                 if (!@class.NoInternalConstructor)
                 {
-                    EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Internal);
+                    string constructorName = $"{@class.FullNameCppCli}::{@class.ManagedName}";
 
+                    // Declaration
+                    To = WriteTo.Header;
+                    EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Internal);
                     WriteTabs(level + 1);
-                    SourceWrite($"{@class.FullNameCppCli}::");
-                    Write($"{@class.ManagedName}({@class.FullyQualifiedName}* native)");
-                    HeaderWriteLine(';');
-                    SourceWriteLine();
+                    WriteLine($"{constructorName}::({@class.FullyQualifiedName}* native);");
+
+                    // Definition
+                    To = WriteTo.Source;
+                    WriteLine($"{constructorName}::({@class.FullyQualifiedName}* native)");
                     if (@class.BaseClass != null)
                     {
-                        WriteTabs(1, true);
-                        SourceWriteLine($": {@class.BaseClass.ManagedName}(native)");
+                        WriteLine($"\t: {@class.BaseClass.ManagedName}(native)");
                     }
-                    SourceWriteLine('{');
-                    if (@class.BaseClass == null)
-                    {
-                        WriteTabs(1, true);
-                        SourceWriteLine("_native = native;");
-                    }
-                    SourceWriteLine('}');
+
+                    // Body
+                    WriteLine('{');
+                    if (@class.BaseClass == null) WriteLine("\t_native = native;");
+                    WriteLine('}');
+
                     hasHeaderWhiteSpace = false;
                     hasSourceWhiteSpace = false;
                 }
@@ -858,53 +767,56 @@ namespace BulletSharpGen
                 // Write destructor & finalizer
                 if (@class.BaseClass == null)
                 {
+                    To = WriteTo.Header;
+
                     // ECMA-372 19.13.1: "The access-specifier of a destructor in a ref class is ignored."
                     WriteTabs(level + 1);
-                    HeaderWriteLine($"~{@class.ManagedName}();");
+                    WriteLine($"~{@class.ManagedName}();");
                     // ECMA-372 19.13.2: "The access-specifier of a finalizer in a ref class is ignored."
                     WriteTabs(level + 1);
-                    HeaderWriteLine($"!{@class.ManagedName}();");
+                    WriteLine($"!{@class.ManagedName}();");
                     hasHeaderWhiteSpace = false;
 
+                    To = WriteTo.Source;
                     EnsureSourceWhiteSpace();
-                    SourceWriteLine($"{@class.FullNameCppCli}::~{@class.ManagedName}()");
-                    SourceWriteLine('{');
-                    SourceWriteLine($"\tthis->!{@class.ManagedName}();");
-                    SourceWriteLine('}');
-                    SourceWriteLine();
+                    WriteLine($"{@class.FullNameCppCli}::~{@class.ManagedName}()");
+                    WriteLine('{');
+                    WriteLine($"\tthis->!{@class.ManagedName}();");
+                    WriteLine('}');
+                    WriteLine();
 
-                    SourceWriteLine($"{@class.FullNameCppCli}::!{@class.ManagedName}()");
-                    SourceWriteLine('{');
+                    WriteLine($"{@class.FullNameCppCli}::!{@class.ManagedName}()");
+                    WriteLine('{');
                     if (@class.IsTrackingDisposable)
                     {
-                        SourceWriteLine("\tif (this->IsDisposed)");
-                        SourceWriteLine("\t\treturn;");
-                        SourceWriteLine();
-                        SourceWriteLine("\tOnDisposing(this, nullptr);");
-                        SourceWriteLine();
+                        WriteLine("\tif (this->IsDisposed)");
+                        WriteLine("\t\treturn;");
+                        WriteLine();
+                        WriteLine("\tOnDisposing(this, nullptr);");
+                        WriteLine();
                     }
                     if (@class.HasPreventDelete)
                     {
-                        SourceWriteLine("\tif (!_preventDelete)");
-                        SourceWriteLine("\t{");
-                        SourceWriteLine("\t\tdelete _native;");
-                        SourceWriteLine("\t}");
+                        WriteLine("\tif (!_preventDelete)");
+                        WriteLine("\t{");
+                        WriteLine("\t\tdelete _native;");
+                        WriteLine("\t}");
                     }
                     else
                     {
-                        SourceWriteLine("\tdelete _native;");
+                        WriteLine("\tdelete _native;");
                     }
                     if (@class.IsTrackingDisposable)
                     {
-                        SourceWriteLine("\t_isDisposed = true;");
-                        SourceWriteLine();
-                        SourceWriteLine("\tOnDisposed(this, nullptr);");
+                        WriteLine("\t_isDisposed = true;");
+                        WriteLine();
+                        WriteLine("\tOnDisposed(this, nullptr);");
                     }
                     else
                     {
-                        SourceWriteLine("\t_native = NULL;");
+                        WriteLine("\t_native = NULL;");
                     }
-                    SourceWriteLine('}');
+                    WriteLine('}');
                     hasSourceWhiteSpace = false;
                 }
 
@@ -940,12 +852,13 @@ namespace BulletSharpGen
             }
 
             // Write properties (includes unmanaged fields and getters/setters)
+            To = WriteTo.Header;
             foreach (PropertyDefinition prop in @class.Properties)
             {
                 string typeConditional = GetTypeConditional(prop.Type, @class.Header);
                 if (typeConditional != null)
                 {
-                    WriteLine($"#ifndef {typeConditional}");
+                    WriteLine($"#ifndef {typeConditional}", WriteTo.Header | WriteTo.Source);
                     hasSourceWhiteSpace = true;
                 }
                 else
@@ -954,11 +867,10 @@ namespace BulletSharpGen
                 }
 
                 EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Public);
-
                 WriteTabs(level + 1);
-                HeaderWriteLine($"property {BulletParser.GetTypeRefName(prop.Type)} {prop.Name}");
+                WriteLine($"property {BulletParser.GetTypeRefName(prop.Type)} {prop.Name}");
                 WriteTabs(level + 1);
-                HeaderWriteLine("{");
+                WriteLine("{");
 
                 // Getter/Setter
                 OutputMethod(prop.Getter, level + 1);
@@ -968,11 +880,11 @@ namespace BulletSharpGen
                 }
 
                 WriteTabs(level + 1);
-                HeaderWriteLine("}");
+                WriteLine("}");
 
                 if (typeConditional != null)
                 {
-                    WriteLine("#endif");
+                    WriteLine("#endif", WriteTo.Header | WriteTo.Source);
                     hasSourceWhiteSpace = false;
                 }
 
@@ -980,47 +892,38 @@ namespace BulletSharpGen
             }
 
             WriteTabs(level);
-            HeaderWriteLine("};");
+            WriteLine("};");
             hasHeaderWhiteSpace = false;
+
+            To = prevTo;
         }
 
         public override void Output()
         {
-            foreach (HeaderDefinition header in headerDefinitions)
+            foreach (HeaderDefinition header in Project.HeaderDefinitions.Values)
             {
                 if (header.Classes.All(IsExcludedClass)) continue;
 
-                Directory.CreateDirectory(_project.CppCliProjectPathFull);
-                var headerFile = new FileStream(Path.Combine(_project.CppCliProjectPathFull, header.ManagedName + ".h"), FileMode.Create, FileAccess.Write);
-                headerWriter = new StreamWriter(headerFile);
-                HeaderWriteLine("#pragma once");
-                HeaderWriteLine();
+                Directory.CreateDirectory(Project.CppCliProjectPathFull);
 
-                var sourceFile = new FileStream(Path.Combine(_project.CppCliProjectPathFull, header.ManagedName + ".cpp"), FileMode.Create, FileAccess.Write);
-                sourceWriter = new StreamWriter(sourceFile);
-                SourceWriteLine("#include \"StdAfx.h\"");
-                SourceWriteLine();
-
-                string headerConditional;
-                if (headerConditionals.TryGetValue(header.ManagedName, out headerConditional))
-                {
-                    SourceWriteLine($"#ifndef {headerConditional}");
-                    SourceWriteLine();
-                }
+                string headerFilename = Path.Combine(Project.CppCliProjectPathFull, header.ManagedName + ".h");
+                OpenFile(headerFilename, WriteTo.Header);
+                WriteLine("#pragma once");
+                WriteLine();
 
                 // Write includes
                 if (header.Includes.Count != 0)
                 {
                     foreach (var include in header.Includes)
                     {
-                        HeaderWriteLine($"#include \"{include.ManagedName}.h\"");
+                        WriteLine($"#include \"{include.ManagedName}.h\"");
                     }
-                    HeaderWriteLine();
+                    WriteLine();
                 }
 
                 // Write namespace
-                HeaderWriteLine($"namespace {NamespaceName}");
-                HeaderWriteLine("{");
+                WriteLine($"namespace {Project.NamespaceName}");
+                WriteLine("{");
                 hasHeaderWhiteSpace = true;
 
                 // Find forward references
@@ -1038,7 +941,7 @@ namespace BulletSharpGen
                 var forwardRefHeaders = new List<HeaderDefinition>();
                 foreach (ClassDefinition c in forwardRefs)
                 {
-                    HeaderWriteLine($"\tref class {c.ManagedName};");
+                    WriteLine($"\tref class {c.ManagedName};");
                     if (!forwardRefHeaders.Contains(c.Header))
                     {
                         forwardRefHeaders.Add(c.Header);
@@ -1047,6 +950,19 @@ namespace BulletSharpGen
                 }
                 forwardRefHeaders.Add(header);
                 forwardRefHeaders.Sort((r1, r2) => r1.ManagedName.CompareTo(r2.ManagedName));
+
+
+                string sourceFilename = Path.Combine(Project.CppCliProjectPathFull, header.ManagedName + ".cpp");
+                OpenFile(sourceFilename, WriteTo.Source);
+                WriteLine("#include \"StdAfx.h\"");
+                WriteLine();
+
+                string headerConditional;
+                if (headerConditionals.TryGetValue(header.ManagedName, out headerConditional))
+                {
+                    WriteLine($"#ifndef {headerConditional}");
+                    WriteLine();
+                }
 
                 // Write statements to include forward referenced types
                 if (forwardRefHeaders.Count != 0)
@@ -1065,13 +981,13 @@ namespace BulletSharpGen
                         }
                         if (hasHeaderConditional)
                         {
-                            SourceWrite("#ifndef ");
-                            SourceWriteLine(headerConditionals[refHeader.ManagedName]);
+                            Write("#ifndef ");
+                            WriteLine(headerConditionals[refHeader.ManagedName]);
                         }
-                        SourceWriteLine($"#include \"{refHeader.ManagedName}.h\"");
+                        WriteLine($"#include \"{refHeader.ManagedName}.h\"");
                         if (hasHeaderConditional)
                         {
-                            SourceWriteLine("#endif");
+                            WriteLine("#endif");
                         }
                     }
                     hasSourceWhiteSpace = false;
@@ -1083,15 +999,13 @@ namespace BulletSharpGen
 
                 if (headerConditionals.ContainsKey(header.ManagedName))
                 {
-                    SourceWriteLine();
-                    SourceWriteLine("#endif");
+                    WriteLine();
+                    WriteLine("#endif");
                 }
 
-                HeaderWriteLine("};");
-                headerWriter.Dispose();
-                headerFile.Dispose();
-                sourceWriter.Dispose();
-                sourceFile.Dispose();
+                WriteLine("};", WriteTo.Header);
+                CloseFile(WriteTo.Header);
+                CloseFile(WriteTo.Source);
             }
 
             Console.WriteLine("Write complete");
@@ -1150,7 +1064,7 @@ namespace BulletSharpGen
                 }
             }
 
-            foreach (ClassDefinition cl in c.Classes)
+            foreach (ClassDefinition cl in c.NestedClasses)
             {
                 FindForwardReferences(forwardRefs, cl);
             }

@@ -215,7 +215,7 @@ namespace BulletSharpGen
             {
                 if (_context.Class.Parent != null)
                 {
-                    _context.Class.Parent.Classes.Add(_context.Class);
+                    _context.Class.Parent.NestedClasses.Add(_context.Class);
                 }
                 else
                 {

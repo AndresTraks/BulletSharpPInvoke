@@ -19,7 +19,8 @@
 #define btSerializerWrapper void
 #else
 typedef btChunk* (*pSerializer_Allocate)(size_t size, int numElements);
-typedef void (*pSerializer_FinalizeChunk)(btChunk* chunk, const char* structType, int chunkCode, void* oldPtr);
+typedef void (*pSerializer_FinalizeChunk)(btChunk* chunk, const char* structType,
+	int chunkCode, void* oldPtr);
 typedef const char* (*pSerializer_FindNameForPointer)(const void* ptr);
 typedef void* (*pSerializer_FindPointer)(void* oldPtr);
 typedef void (*pSerializer_FinishSerialization)();

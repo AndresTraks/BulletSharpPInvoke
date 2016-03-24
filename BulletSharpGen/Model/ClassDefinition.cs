@@ -45,7 +45,7 @@ namespace BulletSharpGen
         public HeaderDefinition Header { get; }
 
         // members
-        public List<ClassDefinition> Classes { get; } = new List<ClassDefinition>();
+        public List<ClassDefinition> NestedClasses { get; } = new List<ClassDefinition>();
         public List<MethodDefinition> Methods { get; } = new List<MethodDefinition>();
         public List<FieldDefinition> Fields { get; } = new List<FieldDefinition>();
         public List<PropertyDefinition> Properties { get; } = new List<PropertyDefinition>();
@@ -82,10 +82,7 @@ namespace BulletSharpGen
             get
             {
                 var abstractMethods = Methods.Where(m => m.IsAbstract);
-                if (BaseClass == null)
-                {
-                    return abstractMethods;
-                }
+                if (BaseClass == null) return abstractMethods;
 
                 // Abstract methods from base classes that aren't implemented in this class
                 var baseAbstractMethods = BaseClass.AbstractMethods.Where(am => !Methods.Any(m => m.Equals(am)));
@@ -101,8 +98,8 @@ namespace BulletSharpGen
             {
                 return Methods.Count == 0 &&
                     Fields.Count == 0 &&
-                    Classes.Count == 1 &&
-                    Classes.First() is EnumDefinition;
+                    NestedClasses.Count == 1 &&
+                    NestedClasses.First() is EnumDefinition;
             }
         }
 
@@ -112,9 +109,9 @@ namespace BulletSharpGen
             get { return Methods.Count != 0 && Methods.All(x => x.IsStatic); }
         }
 
-        public IEnumerable<ClassDefinition> AllSubClasses
+        public IEnumerable<ClassDefinition> AllNestedClasses
         {
-            get { return Classes.Concat(Classes.SelectMany(c => c.AllSubClasses)); }
+            get { return NestedClasses.Concat(NestedClasses.SelectMany(c => c.AllNestedClasses)); }
         }
 
         public string FullyQualifiedName

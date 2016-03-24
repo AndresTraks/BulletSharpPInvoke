@@ -28,7 +28,7 @@ namespace BulletSharpGen.Project
                 writer.WriteAttributeString("HasPreventDelete", "true");
             }
 
-            foreach (var childClass in @class.Classes)
+            foreach (var childClass in @class.NestedClasses)
             {
                 WriteClassDefinition(writer, childClass);
             }

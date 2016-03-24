@@ -16,7 +16,7 @@ namespace BulletSharpGen
 
         public IEnumerable<ClassDefinition> AllClasses
         {
-            get { return Classes.Concat(Classes.SelectMany(c => c.AllSubClasses)); }
+            get { return Classes.Concat(Classes.SelectMany(c => c.AllNestedClasses)); }
         }
 
         public HeaderDefinition(string filename)

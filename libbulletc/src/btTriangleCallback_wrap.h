@@ -6,7 +6,8 @@
 #define btInternalTriangleIndexCallbackWrapper void
 #define btTriangleCallbackWrapper void
 #else
-typedef void (*pInternalTriangleIndexCallback_InternalProcessTriangleIndex)(btVector3* triangle, int partId, int triangleIndex);
+typedef void (*pInternalTriangleIndexCallback_InternalProcessTriangleIndex)(btVector3* triangle,
+	int partId, int triangleIndex);
 
 class btInternalTriangleIndexCallbackWrapper : public btInternalTriangleIndexCallback
 {
@@ -19,7 +20,8 @@ public:
 	virtual void internalProcessTriangleIndex(btVector3* triangle, int partId, int triangleIndex);
 };
 
-typedef void (*pTriangleCallback_ProcessTriangle)(btVector3* triangle, int partId, int triangleIndex);
+typedef void (*pTriangleCallback_ProcessTriangle)(btVector3* triangle, int partId,
+	int triangleIndex);
 
 class btTriangleCallbackWrapper : public btTriangleCallback
 {

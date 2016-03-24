@@ -143,8 +143,8 @@ namespace BulletSharpGen
             foreach (var @class in Project.ClassDefinitions.Values)
             {
                 // Order by name, then fix inheritance, parent classes must appear first
-                @class.Classes.Sort((c1, c2) => c1.Name.CompareTo(c2.Name));
-                var classesOrdered = @class.Classes;
+                @class.NestedClasses.Sort((c1, c2) => c1.Name.CompareTo(c2.Name));
+                var classesOrdered = @class.NestedClasses;
                 for (int i = 0; i < classesOrdered.Count; i++)
                 {
                     var thisClass = classesOrdered[i];

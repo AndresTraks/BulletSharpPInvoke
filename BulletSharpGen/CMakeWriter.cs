@@ -4,42 +4,21 @@ using System.Linq;
 
 namespace BulletSharpGen
 {
-    class CMakeWriter
+    public class CMakeWriter : WrapperWriter
     {
-        WrapperProject _project;
-
-        StreamWriter cmakeWriter;
-
         public CMakeWriter(WrapperProject project)
+            : base(project)
         {
-            _project = project;
         }
 
-        void Write(string s)
+        public override void Output()
         {
-            cmakeWriter.Write(s);
-        }
-
-        void WriteLine(string s)
-        {
-            cmakeWriter.WriteLine(s);
-        }
-
-        void WriteLine()
-        {
-            cmakeWriter.WriteLine();
-        }
-
-        public void Output()
-        {
-            string outDirectoryC = Path.Combine(_project.CProjectPathFull, "..");
+            string outDirectoryC = Path.Combine(Project.CProjectPathFull, "..");
 
             Directory.CreateDirectory(outDirectoryC);
 
             // C++ header file (includes all other headers)
-            string cmakeFilename = "CMakeLists.txt";
-            var cmakeFile = new FileStream(Path.Combine(outDirectoryC, cmakeFilename), FileMode.Create, FileAccess.Write);
-            cmakeWriter = new StreamWriter(cmakeFile);
+            OpenFile(Path.Combine(outDirectoryC, "CMakeLists.txt"), WriteTo.CMake);
 
             WriteLine("CMAKE_MINIMUM_REQUIRED (VERSION 2.6)");
             WriteLine("PROJECT (libbulletc)");
@@ -124,14 +103,13 @@ namespace BulletSharpGen
             WriteLine("TARGET_LINK_LIBRARIES(${BULLETC_LIB} BulletXmlWorldImporter${LIB_SUFFIX})");
             WriteLine("TARGET_LINK_LIBRARIES(${BULLETC_LIB} HACD${LIB_SUFFIX})");
 
-            cmakeWriter.Dispose();
-            cmakeFile.Dispose();
+            CloseFile(WriteTo.CMake);
         }
 
         void AddLibrary()
         {
             var sources = new List<string>();
-            var headers = _project.HeaderDefinitions.Values.Where(h => h.Classes.Any()).OrderBy(x => x.Name);
+            var headers = Project.HeaderDefinitions.Values.Where(h => h.Classes.Any()).OrderBy(x => x.Name);
 
             foreach (var header in headers)
             {

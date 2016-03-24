@@ -11,9 +11,9 @@
 #define btCollisionWorld_ConvexResultCallbackWrapper void
 #define btCollisionWorld_RayResultCallbackWrapper void
 #else
-typedef btScalar (*pContactResultCallback_AddSingleResult)(btManifoldPoint& cp,
-	const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0,
-	const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1);
+typedef btScalar (*pContactResultCallback_AddSingleResult)(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap,
+	int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1,
+	int index1);
 typedef bool (*pContactResultCallback_NeedsCollision)(btBroadphaseProxy* proxy0);
 
 class btCollisionWorld_ContactResultCallbackWrapper : public btCollisionWorld_ContactResultCallback

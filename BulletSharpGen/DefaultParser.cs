@@ -366,7 +366,7 @@ namespace BulletSharpGen
                     if (@enum.Parent != null &&
                         @enum.Parent.Methods.Count == 0 &&
                         @enum.Parent.Fields.Count == 0 &&
-                        @enum.Parent.Classes.Count == 1)
+                        @enum.Parent.NestedClasses.Count == 1)
                     {
                         @enum.ManagedName = @enum.Parent.ManagedName;
                     }

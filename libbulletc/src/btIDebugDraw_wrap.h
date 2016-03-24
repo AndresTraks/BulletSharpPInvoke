@@ -20,20 +20,30 @@
 #define btIDebugDrawWrapper void
 #else
 typedef void (*pIDebugDraw_DrawAabb)(const btScalar* from, const btScalar* to, const btScalar* color);
-typedef void (*pIDebugDraw_DrawArc)(const btScalar* center, const btScalar* normal, const btScalar* axis,
-	btScalar radiusA, btScalar radiusB, btScalar minAngle, btScalar maxAngle, const btScalar* color, bool drawSect, btScalar stepDegrees);
-typedef void (*pIDebugDraw_DrawBox)(const btScalar* bbMin, const btScalar* bbMax, const btScalar* trans, const btScalar* color);
-typedef void (*pIDebugDraw_DrawCapsule)(btScalar radius, btScalar halfHeight, int upAxis, const btScalar* transform, const btScalar* color);
-typedef void (*pIDebugDraw_DrawCone)(btScalar radius, btScalar height, int upAxis, const btScalar* transform, const btScalar* color);
-typedef void (*pIDebugDraw_DrawContactPoint)(const btScalar* PointOnB, const btScalar* normalOnB, btScalar distance, int lifeTime, const btScalar* color);
-typedef void (*pIDebugDraw_DrawCylinder)(btScalar radius, btScalar halfHeight, int upAxis, const btScalar* transform, const btScalar* color);
+typedef void (*pIDebugDraw_DrawArc)(const btScalar* center, const btScalar* normal,
+	const btScalar* axis, btScalar radiusA, btScalar radiusB, btScalar minAngle, btScalar maxAngle,
+	const btScalar* color, bool drawSect, btScalar stepDegrees);
+typedef void (*pIDebugDraw_DrawBox)(const btScalar* bbMin, const btScalar* bbMax,
+	const btScalar* trans, const btScalar* color);
+typedef void (*pIDebugDraw_DrawCapsule)(btScalar radius, btScalar halfHeight, int upAxis,
+	const btScalar* transform, const btScalar* color);
+typedef void (*pIDebugDraw_DrawCone)(btScalar radius, btScalar height, int upAxis,
+	const btScalar* transform, const btScalar* color);
+typedef void (*pIDebugDraw_DrawContactPoint)(const btScalar* PointOnB, const btScalar* normalOnB,
+	btScalar distance, int lifeTime, const btScalar* color);
+typedef void (*pIDebugDraw_DrawCylinder)(btScalar radius, btScalar halfHeight, int upAxis,
+	const btScalar* transform, const btScalar* color);
 typedef void (*pIDebugDraw_DrawLine)(const btScalar* from, const btScalar* to, const btScalar* color);
-typedef void (*pIDebugDraw_DrawPlane)(const btScalar* planeNormal, btScalar planeConst, const btScalar* transform, const btScalar* color);
-typedef void (*pIDebugDraw_DrawSphere)(btScalar radius, const btScalar* transform, const btScalar* color);
-typedef void (*pIDebugDraw_DrawSpherePatch)(const btScalar* center, const btScalar* up, const btScalar* axis, btScalar radius,
-	btScalar minTh, btScalar maxTh, btScalar minPs, btScalar maxPs, const btScalar* color, btScalar stepDegrees);
+typedef void (*pIDebugDraw_DrawPlane)(const btScalar* planeNormal, btScalar planeConst,
+	const btScalar* transform, const btScalar* color);
+typedef void (*pIDebugDraw_DrawSphere)(btScalar radius, const btScalar* transform,
+	const btScalar* color);
+typedef void (*pIDebugDraw_DrawSpherePatch)(const btScalar* center, const btScalar* up,
+	const btScalar* axis, btScalar radius, btScalar minTh, btScalar maxTh, btScalar minPs,
+	btScalar maxPs, const btScalar* color, btScalar stepDegrees);
 typedef void (*pIDebugDraw_DrawTransform)(const btScalar* transform, btScalar orthoLen);
-typedef void (*pIDebugDraw_DrawTriangle)(const btScalar* v0, const btScalar* v1, const btScalar* v2, const btScalar* color, btScalar __unnamed4);
+typedef void (*pIDebugDraw_DrawTriangle)(const btScalar* v0, const btScalar* v1,
+	const btScalar* v2, const btScalar* color, btScalar __unnamed4);
 typedef int (*pIDebugDraw_GetDebugMode)();
 typedef void (*pSimpleCallback)(int x);
 
