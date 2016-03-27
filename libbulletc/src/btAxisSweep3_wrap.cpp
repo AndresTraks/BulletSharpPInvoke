@@ -32,7 +32,7 @@ btAxisSweep3* btAxisSweep3_new4(const btScalar* worldAabbMin, const btScalar* wo
 	return new btAxisSweep3(VECTOR3_USE(worldAabbMin), VECTOR3_USE(worldAabbMax), maxHandles, pairCache, disableRaycastAccelerator);
 }
 
-unsigned short btAxisSweep3_addHandle(btAxisSweep3* obj, const btScalar* aabbMin, const btScalar* aabbMax, void* pOwner, unsigned short collisionFilterGroup, unsigned short collisionFilterMask, btDispatcher* dispatcher, void* multiSapProxy)
+unsigned short btAxisSweep3_addHandle(btAxisSweep3* obj, const btScalar* aabbMin, const btScalar* aabbMax, void* pOwner, short collisionFilterGroup, short collisionFilterMask, btDispatcher* dispatcher, void* multiSapProxy)
 {
 	VECTOR3_CONV(aabbMin);
 	VECTOR3_CONV(aabbMax);
@@ -44,7 +44,7 @@ btAxisSweep3_Handle* btAxisSweep3_getHandle(btAxisSweep3* obj, unsigned short in
 	return obj->getHandle(index);
 }
 
-unsigned short btAxisSweep3_getNumHandles(btAxisSweep3* obj, btOverlapCallback* callback)
+unsigned short btAxisSweep3_getNumHandles(btAxisSweep3* obj)
 {
 	return obj->getNumHandles();
 }
@@ -125,7 +125,7 @@ bt32BitAxisSweep3* bt32BitAxisSweep3_new4(const btScalar* worldAabbMin, const bt
 	return new bt32BitAxisSweep3(VECTOR3_USE(worldAabbMin), VECTOR3_USE(worldAabbMax), maxHandles, pairCache, disableRaycastAccelerator);
 }
 
-unsigned int bt32BitAxisSweep3_addHandle(bt32BitAxisSweep3* obj, const btScalar* aabbMin, const btScalar* aabbMax, void* pOwner, unsigned short collisionFilterGroup, unsigned short collisionFilterMask, btDispatcher* dispatcher, void* multiSapProxy)
+unsigned int bt32BitAxisSweep3_addHandle(bt32BitAxisSweep3* obj, const btScalar* aabbMin, const btScalar* aabbMax, void* pOwner, short collisionFilterGroup, short collisionFilterMask, btDispatcher* dispatcher, void* multiSapProxy)
 {
 	VECTOR3_CONV(aabbMin);
 	VECTOR3_CONV(aabbMax);
@@ -137,7 +137,7 @@ bt32BitAxisSweep3_Handle* bt32BitAxisSweep3_getHandle(bt32BitAxisSweep3* obj, un
 	return obj->getHandle(index);
 }
 
-unsigned int bt32BitAxisSweep3_getNumHandles(bt32BitAxisSweep3* obj, btOverlapCallback* callback)
+unsigned int bt32BitAxisSweep3_getNumHandles(bt32BitAxisSweep3* obj)
 {
 	return obj->getNumHandles();
 }

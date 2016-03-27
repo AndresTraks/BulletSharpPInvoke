@@ -262,6 +262,43 @@ namespace BulletSharpGen
             else
             {
                 cursor.VisitChildren(ClassVisitor);
+
+                if (_context.Class.BaseClass == null)
+                {
+                    // Clang doesn't give the base class if it's a template,
+                    // tokenize the class definition and extract the base template if it exists
+                    var tokens = _context.TranslationUnit.Tokenize(cursor.Extent)
+                        .TakeWhile(t => !t.Spelling.Equals("{"))
+                        .SkipWhile(t => !t.Spelling.Equals(":"));
+                    if (tokens.Any())
+                    {
+                        var baseTokens = tokens.ToList();
+                        int templSpecStart = -1, templSpecEnd = -1;
+                        for (int i = 0; i < baseTokens.Count; i++)
+                        {
+                            var token = baseTokens[i];
+                            if (token.Spelling == "<")
+                            {
+                                templSpecStart = i;
+                            }
+                            else if (token.Spelling == ">")
+                            {
+                                templSpecEnd = i;
+                            }
+                        }
+                        if (templSpecStart != -1 && templSpecEnd != -1)
+                        {
+                            string template = baseTokens[templSpecStart - 1].Spelling;
+                            string templateSpec = string.Join(" ",
+                                baseTokens.GetRange(templSpecStart + 1, templSpecEnd - templSpecStart - 1)
+                                .Select(t => t.Spelling));
+
+                            var classTemplate = new ClassTemplateDefinition(template, _context.Header);
+                            classTemplate.TemplateTypeParameters.Add(templateSpec);
+                            _context.Class.BaseClass = classTemplate;
+                        }
+                    }
+                }
             }
 
             // Restore parent state
@@ -313,10 +350,6 @@ namespace BulletSharpGen
                     return Cursor.ChildVisitResult.Continue;
                 case CursorKind.TemplateTypeParameter:
                     var classTemplate = _context.Class as ClassTemplateDefinition;
-                    if (classTemplate.TemplateTypeParameters == null)
-                    {
-                        classTemplate.TemplateTypeParameters = new List<string>();
-                    }
                     classTemplate.TemplateTypeParameters.Add(cursor.Spelling);
                     return Cursor.ChildVisitResult.Continue;
             }

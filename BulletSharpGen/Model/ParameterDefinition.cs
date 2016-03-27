@@ -40,7 +40,7 @@
 
         internal ParameterDefinition Copy()
         {
-            var p = new ParameterDefinition(Name, Type, IsOptional);
+            var p = new ParameterDefinition(Name, Type.Copy(), IsOptional);
             p.ManagedName = ManagedName;
             p.MarshalDirection = MarshalDirection;
             return p;

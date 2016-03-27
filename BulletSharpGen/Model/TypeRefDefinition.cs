@@ -144,11 +144,7 @@ namespace BulletSharpGen
                         int typeStart = displayName.IndexOf('<') + 1;
                         int typeEnd = displayName.LastIndexOf('>');
                         displayName = displayName.Substring(typeStart, typeEnd - typeStart);
-                        SpecializedTemplateType = new TypeRefDefinition
-                        {
-                            IsBasic = true,
-                            Name = displayName
-                        };
+                        SpecializedTemplateType = new TypeRefDefinition(displayName);
                     }
                     else
                     {
@@ -243,10 +239,38 @@ namespace BulletSharpGen
             }
         }
 
+        public TypeRefDefinition(string name)
+        {
+            if (name.EndsWith(" *"))
+            {
+                Referenced = new TypeRefDefinition(name.Substring(0, name.Length - 2));
+                IsPointer = true;
+            }
+            else
+            {
+                switch (name)
+                {
+                    case "bool":
+                    case "char":
+                    case "int":
+                    case "unsigned int":
+                    case "void":
+                        Name = name;
+                        IsBasic = true;
+                        break;
+                    case "unsigned short int":
+                        Name = "unsigned short";
+                        IsBasic = true;
+                        break;
+                    default:
+                        Name = name;
+                        break;
+                }
+            }
+        }
+
         public TypeRefDefinition()
         {
-            Name = "void";
-            IsBasic = true;
         }
 
         public TypeRefDefinition Copy()

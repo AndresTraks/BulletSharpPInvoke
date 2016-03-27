@@ -148,6 +148,18 @@ namespace BulletSharpGen
             }
         }
 
+        protected void Write(int numTabs, string s, WriteTo to = WriteTo.WriterFlags)
+        {
+            WriteTabs(numTabs, to);
+            Write(s, to);
+        }
+
+        protected void WriteLine(int numTabs, string s, WriteTo to = WriteTo.WriterFlags)
+        {
+            WriteTabs(numTabs, to);
+            WriteLine(s, to);
+        }
+
         protected void WriteTabs(int n, WriteTo to = WriteTo.WriterFlags)
         {
             for (int i = 0; i < n; i++)

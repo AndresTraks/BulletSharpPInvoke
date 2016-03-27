@@ -23,6 +23,7 @@ namespace BulletSharpGen
 
             // Classes for which no internal constructor is needed
             var hideInternalConstructor = new HashSet<string> {
+                "btAxisSweep3", "bt32BitAxisSweep3",
                 "btBox2dBox2dCollisionAlgorithm", "btBoxBoxCollisionAlgorithm",
                 "btBoxBoxDetector", "btBroadphaseRayCallback", "btCollisionAlgorithmConstructionInfo", "btDefaultCollisionConstructionInfo",
                 "btCompoundCompoundCollisionAlgorithm", "btContinuousConvexCollision", "btConvex2dConvex2dAlgorithm",

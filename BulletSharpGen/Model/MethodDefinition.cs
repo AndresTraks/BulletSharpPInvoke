@@ -53,14 +53,13 @@
             }
         }
 
-        public MethodDefinition Copy()
+        public MethodDefinition Copy(ClassDefinition parent = null)
         {
-            var m = new MethodDefinition(Name, Parent, Parameters.Length);
+            var m = new MethodDefinition(Name, parent ?? Parent, Parameters.Length);
             for (int i = 0; i < Parameters.Length; i++)
             {
                 m.Parameters[i] = Parameters[i].Copy();
             }
-            Parameters.CopyTo(m.Parameters, 0);
             m.Field = Field;
             m.IsAbstract = IsAbstract;
             m.IsConstructor = IsConstructor;

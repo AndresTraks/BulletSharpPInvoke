@@ -33,7 +33,9 @@ namespace BulletSharpGen
             ParseEnums();
             SetClassProperties();
             RemoveRedundantMethods();
-            //AddTemplateSpecializationMembers();
+            // TODO:
+            //FlattenClassHierarchy();
+            ResolveTemplateSpecializations();
             CreateDefaultConstructors();
             CreateFieldAccessors();
             CreateProperties();
@@ -336,6 +338,45 @@ namespace BulletSharpGen
             }
         }
 
+        void ResolveTemplateSpecializations()
+        {
+            var scriptedNameMapping = Project.ClassNameMapping as ScriptedMapping;
+
+            foreach (var @class in Project.ClassDefinitions.Values)
+            {
+                var baseClassTemplate = @class.BaseClass as ClassTemplateDefinition;
+                if (baseClassTemplate != null)
+                {
+                    if (scriptedNameMapping != null)
+                    {
+                        scriptedNameMapping.Globals.Header = @class.Header;
+                    }
+                    baseClassTemplate.ManagedName = Project.ClassNameMapping.Map(baseClassTemplate.Name);
+
+                    var classTemplate = Project.ClassDefinitions[baseClassTemplate.FullyQualifiedName];
+                    @class.BaseClass = classTemplate.BaseClass;
+
+                    foreach (var templateMethod in classTemplate.Methods.Where(m => !m.IsConstructor))
+                    {
+                        // Replace template parameters with concrete types
+                        var methodSpec = templateMethod.Copy(@class);
+                        if (methodSpec.ReturnType.HasTemplateTypeParameter)
+                        {
+                            methodSpec.ReturnType = new TypeRefDefinition(
+                                baseClassTemplate.TemplateTypeParameters.First());
+                        }
+
+                        foreach (var param in methodSpec.Parameters
+                            .Where(p => p.Type.HasTemplateTypeParameter))
+                        {
+                            param.Type = new TypeRefDefinition(
+                                baseClassTemplate.TemplateTypeParameters.First());
+                        }
+                    }
+                }
+            }
+        }
+
         // Give managed names to headers, classes and methods
         void MapSymbols()
         {
@@ -442,7 +483,7 @@ namespace BulletSharpGen
                     {
                         var constructor = new MethodDefinition(@class.Name, @class, 0);
                         constructor.IsConstructor = true;
-                        constructor.ReturnType = new TypeRefDefinition();
+                        constructor.ReturnType = new TypeRefDefinition("void");
                     }
                 }
             }
@@ -527,9 +568,9 @@ namespace BulletSharpGen
 
             var type = prop.Getter.ReturnType;
 
-            MethodDefinition setter = new MethodDefinition(setterName, prop.Parent, 1);
+            var setter = new MethodDefinition(setterName, prop.Parent, 1);
             setter.ManagedName = managedSetterName;
-            setter.ReturnType = new TypeRefDefinition();
+            setter.ReturnType = new TypeRefDefinition("void");
             setter.Field = prop.Getter.Field;
             if (!type.IsBasic && !type.IsPointer)
             {
