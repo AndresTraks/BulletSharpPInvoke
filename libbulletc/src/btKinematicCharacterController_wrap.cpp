@@ -13,7 +13,8 @@ btKinematicCharacterController* btKinematicCharacterController_new(btPairCaching
 
 btKinematicCharacterController* btKinematicCharacterController_new2(btPairCachingGhostObject* ghostObject, btConvexShape* convexShape, btScalar stepHeight, int upAxis)
 {
-	return new btKinematicCharacterController(ghostObject, convexShape, stepHeight, upAxis);
+	return new btKinematicCharacterController(ghostObject, convexShape, stepHeight,
+		upAxis);
 }
 
 btPairCachingGhostObject* btKinematicCharacterController_getGhostObject(btKinematicCharacterController* obj)

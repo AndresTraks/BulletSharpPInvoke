@@ -47,7 +47,8 @@ void btConvexTriangleCallback_setManifoldPtr(btConvexTriangleCallback* obj, btPe
 
 void btConvexTriangleCallback_setTimeStepAndCounters(btConvexTriangleCallback* obj, btScalar collisionMarginTriangle, const btDispatcherInfo* dispatchInfo, const btCollisionObjectWrapper* convexBodyWrap, const btCollisionObjectWrapper* triBodyWrap, btManifoldResult* resultOut)
 {
-	obj->setTimeStepAndCounters(collisionMarginTriangle, *dispatchInfo, convexBodyWrap, triBodyWrap, resultOut);
+	obj->setTimeStepAndCounters(collisionMarginTriangle, *dispatchInfo, convexBodyWrap,
+		triBodyWrap, resultOut);
 }
 
 void btConvexTriangleCallback_setTriangleCount(btConvexTriangleCallback* obj, int value)

@@ -8,7 +8,8 @@ btUniversalConstraint* btUniversalConstraint_new(btRigidBody* rbA, btRigidBody* 
 	VECTOR3_CONV(anchor);
 	VECTOR3_CONV(axis1);
 	VECTOR3_CONV(axis2);
-	return new btUniversalConstraint(*rbA, *rbB, VECTOR3_USE(anchor), VECTOR3_USE(axis1), VECTOR3_USE(axis2));
+	return new btUniversalConstraint(*rbA, *rbB, VECTOR3_USE(anchor), VECTOR3_USE(axis1),
+		VECTOR3_USE(axis2));
 }
 
 void btUniversalConstraint_getAnchor(btUniversalConstraint* obj, btScalar* value)

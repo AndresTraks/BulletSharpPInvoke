@@ -191,17 +191,11 @@ namespace BulletSharpGen
                 foreach (var method in @class.Methods)
                 {
                     ResolveTypeRef(method.ReturnType);
-                    foreach (ParameterDefinition param in method.Parameters)
-                    {
-                        ResolveTypeRef(param.Type);
-                    }
+                    Array.ForEach(method.Parameters, p => ResolveTypeRef(p.Type));
                 }
 
                 // Resolve field types
-                foreach (var field in @class.Fields)
-                {
-                    ResolveTypeRef(field.Type);
-                }
+                @class.Fields.ForEach(f => ResolveTypeRef(f.Type));
             }
         }
 
@@ -222,38 +216,30 @@ namespace BulletSharpGen
             }
             else
             {
-                // Search for unscoped enums
-                bool resolvedEnum = false;
-                foreach (var @class in Project.ClassDefinitions.Values.Where(c => c is EnumDefinition))
-                {
-                    if (typeRef.Name.Equals(@class.FullyQualifiedName + "::" + @class.Name))
-                    {
-                        typeRef.Target = @class;
-                        resolvedEnum = true;
-                    }
-                }
-                if (!resolvedEnum)
-                {
-                    Console.WriteLine("Class " + typeRef.Name + " not found!");
-                }
-            }
+                Console.WriteLine("Class " + typeRef.Name + " not found!");
 
-            if (typeRef.SpecializedTemplateType != null)
-            {
-                ResolveTypeRef(typeRef.SpecializedTemplateType);
-
-                // Create template specialization class
-                string name = $"{typeRef.Name}<{typeRef.SpecializedTemplateType.Name}>";
-                if (!Project.ClassDefinitions.ContainsKey(name))
+                if (typeRef.TemplateParams != null)
                 {
-                    var templateClass = typeRef.Target;
-                    if (templateClass != null && !templateClass.IsExcluded)
+                    typeRef.TemplateParams.ForEach(ResolveTypeRef);
+
+                    // Create template specialization class
+                    string templateName = typeRef.Name.Substring(0, typeRef.Name.IndexOf('<'));
+
+                    ClassDefinition template;
+                    if (Project.ClassDefinitions.TryGetValue(templateName, out template))
                     {
-                        var header = templateClass.Header;
-                        var specializedClass = new ClassDefinition(name, header);
-                        specializedClass.BaseClass = templateClass;
-                        header.Classes.Add(specializedClass);
-                        Project.ClassDefinitions.Add(name, specializedClass);
+                        if (!template.IsExcluded)
+                        {
+                            //string name = $"{typeRef.Name}<{typeRef.TemplateParams.First().Name}>";
+                            string name = typeRef.Name;
+
+                            var classTemplate = template as ClassTemplateDefinition;
+                            var header = classTemplate.Header;
+                            var specializedClass = new ClassDefinition(name, header);
+                            specializedClass.BaseClass = template;
+                            header.Classes.Add(specializedClass);
+                            Project.ClassDefinitions.Add(name, specializedClass);
+                        }
                     }
                 }
             }
@@ -342,7 +328,10 @@ namespace BulletSharpGen
         {
             var scriptedNameMapping = Project.ClassNameMapping as ScriptedMapping;
 
-            foreach (var @class in Project.ClassDefinitions.Values)
+            // Class list may be modified with template specializations
+            var classes = Project.ClassDefinitions.Values.ToList();
+
+            foreach (var @class in classes)
             {
                 var baseClassTemplate = @class.BaseClass as ClassTemplateDefinition;
                 if (baseClassTemplate != null)
@@ -355,6 +344,31 @@ namespace BulletSharpGen
 
                     var classTemplate = Project.ClassDefinitions[baseClassTemplate.FullyQualifiedName];
                     @class.BaseClass = classTemplate.BaseClass;
+
+
+                    foreach (var templateClass in classTemplate.NestedClasses)
+                    {
+                        var classSpec = new ClassDefinition(templateClass.Name, @class.Header, @class);
+                        Project.ClassDefinitions.Add(classSpec.FullName, classSpec);
+
+                        foreach (var templateMethod in templateClass.Methods)
+                        {
+                            // Replace template parameters with concrete types
+                            var methodSpec = templateMethod.Copy(classSpec);
+                            if (methodSpec.ReturnType.HasTemplateTypeParameter)
+                            {
+                                methodSpec.ReturnType = new TypeRefDefinition(
+                                    baseClassTemplate.TemplateTypeParameters.First());
+                            }
+
+                            foreach (var param in methodSpec.Parameters
+                                .Where(p => p.Type.HasTemplateTypeParameter))
+                            {
+                                param.Type = new TypeRefDefinition(
+                                    baseClassTemplate.TemplateTypeParameters.First());
+                            }
+                        }
+                    }
 
                     foreach (var templateMethod in classTemplate.Methods.Where(m => !m.IsConstructor))
                     {
@@ -676,9 +690,9 @@ namespace BulletSharpGen
             {
                 ResolveInclude(typeRef.Referenced, parentHeader);
             }
-            else if (typeRef.SpecializedTemplateType != null)
+            else if (typeRef.TemplateParams != null)
             {
-                ResolveInclude(typeRef.SpecializedTemplateType, parentHeader);
+                typeRef.TemplateParams.ForEach(p => ResolveInclude(p, parentHeader));
             }
             else if (typeRef.IsIncomplete && typeRef.Target != null)
             {

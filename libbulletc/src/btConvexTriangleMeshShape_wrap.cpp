@@ -18,7 +18,8 @@ void btConvexTriangleMeshShape_calculatePrincipalAxisTransform(btConvexTriangleM
 {
 	TRANSFORM_CONV(principal);
 	VECTOR3_DEF(inertia);
-	obj->calculatePrincipalAxisTransform(TRANSFORM_USE(principal), VECTOR3_USE(inertia), *volume);
+	obj->calculatePrincipalAxisTransform(TRANSFORM_USE(principal), VECTOR3_USE(inertia),
+		*volume);
 	TRANSFORM_DEF_OUT(principal);
 	VECTOR3_DEF_OUT(inertia);
 }

@@ -14,7 +14,8 @@ btGearConstraint* btGearConstraint_new2(btRigidBody* rbA, btRigidBody* rbB, cons
 {
 	VECTOR3_CONV(axisInA);
 	VECTOR3_CONV(axisInB);
-	return new btGearConstraint(*rbA, *rbB, VECTOR3_USE(axisInA), VECTOR3_USE(axisInB), ratio);
+	return new btGearConstraint(*rbA, *rbB, VECTOR3_USE(axisInA), VECTOR3_USE(axisInB),
+		ratio);
 }
 
 void btGearConstraint_getAxisA(btGearConstraint* obj, btScalar* axisA)

@@ -6,7 +6,8 @@
 bool btGeometryUtil_areVerticesBehindPlane(const btScalar* planeNormal, const btAlignedVector3Array* vertices, btScalar margin)
 {
 	VECTOR3_CONV(planeNormal);
-	return btGeometryUtil::areVerticesBehindPlane(VECTOR3_USE(planeNormal), *vertices, margin);
+	return btGeometryUtil::areVerticesBehindPlane(VECTOR3_USE(planeNormal), *vertices,
+		margin);
 }
 
 void btGeometryUtil_getPlaneEquationsFromVertices(btAlignedVector3Array* vertices, btAlignedVector3Array* planeEquationsOut)
@@ -28,5 +29,6 @@ bool btGeometryUtil_isInside(const btAlignedVector3Array* vertices, const btScal
 bool btGeometryUtil_isPointInsidePlanes(const btAlignedVector3Array* planeEquations, const btScalar* point, btScalar margin)
 {
 	VECTOR3_CONV(point);
-	return btGeometryUtil::isPointInsidePlanes(*planeEquations, VECTOR3_USE(point), margin);
+	return btGeometryUtil::isPointInsidePlanes(*planeEquations, VECTOR3_USE(point),
+		margin);
 }

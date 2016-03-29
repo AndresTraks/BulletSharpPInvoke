@@ -20,22 +20,26 @@ int btStridingMeshInterface_calculateSerializeBufferSize(btStridingMeshInterface
 
 void btStridingMeshInterface_getLockedReadOnlyVertexIndexBase(btStridingMeshInterface* obj, const unsigned char** vertexbase, int* numverts, PHY_ScalarType* type, int* stride, const unsigned char** indexbase, int* indexstride, int* numfaces, PHY_ScalarType* indicestype)
 {
-	obj->getLockedReadOnlyVertexIndexBase(vertexbase, *numverts, *type, *stride, indexbase, *indexstride, *numfaces, *indicestype);
+	obj->getLockedReadOnlyVertexIndexBase(vertexbase, *numverts, *type, *stride,
+		indexbase, *indexstride, *numfaces, *indicestype);
 }
 
 void btStridingMeshInterface_getLockedReadOnlyVertexIndexBase2(btStridingMeshInterface* obj, const unsigned char** vertexbase, int* numverts, PHY_ScalarType* type, int* stride, const unsigned char** indexbase, int* indexstride, int* numfaces, PHY_ScalarType* indicestype, int subpart)
 {
-	obj->getLockedReadOnlyVertexIndexBase(vertexbase, *numverts, *type, *stride, indexbase, *indexstride, *numfaces, *indicestype, subpart);
+	obj->getLockedReadOnlyVertexIndexBase(vertexbase, *numverts, *type, *stride,
+		indexbase, *indexstride, *numfaces, *indicestype, subpart);
 }
 
 void btStridingMeshInterface_getLockedVertexIndexBase(btStridingMeshInterface* obj, unsigned char** vertexbase, int* numverts, PHY_ScalarType* type, int* stride, unsigned char** indexbase, int* indexstride, int* numfaces, PHY_ScalarType* indicestype)
 {
-	obj->getLockedVertexIndexBase(vertexbase, *numverts, *type, *stride, indexbase, *indexstride, *numfaces, *indicestype);
+	obj->getLockedVertexIndexBase(vertexbase, *numverts, *type, *stride, indexbase,
+		*indexstride, *numfaces, *indicestype);
 }
 
 void btStridingMeshInterface_getLockedVertexIndexBase2(btStridingMeshInterface* obj, unsigned char** vertexbase, int* numverts, PHY_ScalarType* type, int* stride, unsigned char** indexbase, int* indexstride, int* numfaces, PHY_ScalarType* indicestype, int subpart)
 {
-	obj->getLockedVertexIndexBase(vertexbase, *numverts, *type, *stride, indexbase, *indexstride, *numfaces, *indicestype, subpart);
+	obj->getLockedVertexIndexBase(vertexbase, *numverts, *type, *stride, indexbase,
+		*indexstride, *numfaces, *indicestype, subpart);
 }
 
 int btStridingMeshInterface_getNumSubParts(btStridingMeshInterface* obj)

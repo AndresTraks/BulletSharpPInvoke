@@ -7,7 +7,8 @@ btSliderConstraint* btSliderConstraint_new(btRigidBody* rbA, btRigidBody* rbB, c
 {
 	TRANSFORM_CONV(frameInA);
 	TRANSFORM_CONV(frameInB);
-	return new btSliderConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB), useLinearReferenceFrameA);
+	return new btSliderConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB),
+		useLinearReferenceFrameA);
 }
 
 btSliderConstraint* btSliderConstraint_new2(btRigidBody* rbB, const btScalar* frameInB, bool useLinearReferenceFrameA)
@@ -98,18 +99,19 @@ void btSliderConstraint_getFrameOffsetB(btSliderConstraint* obj, btScalar* value
 	TRANSFORM_OUT(&obj->getFrameOffsetB(), value);
 }
 
-void btSliderConstraint_getInfo1NonVirtual(btSliderConstraint* obj, btTypedConstraint::btConstraintInfo1* info)
+void btSliderConstraint_getInfo1NonVirtual(btSliderConstraint* obj, btTypedConstraint_btConstraintInfo1* info)
 {
 	obj->getInfo1NonVirtual(info);
 }
 
-void btSliderConstraint_getInfo2NonVirtual(btSliderConstraint* obj, btTypedConstraint::btConstraintInfo2* info, const btScalar* transA, const btScalar* transB, const btScalar* linVelA, const btScalar* linVelB, btScalar rbAinvMass, btScalar rbBinvMass)
+void btSliderConstraint_getInfo2NonVirtual(btSliderConstraint* obj, btTypedConstraint_btConstraintInfo2* info, const btScalar* transA, const btScalar* transB, const btScalar* linVelA, const btScalar* linVelB, btScalar rbAinvMass, btScalar rbBinvMass)
 {
 	TRANSFORM_CONV(transA);
 	TRANSFORM_CONV(transB);
 	VECTOR3_CONV(linVelA);
 	VECTOR3_CONV(linVelB);
-	obj->getInfo2NonVirtual(info, TRANSFORM_USE(transA), TRANSFORM_USE(transB), VECTOR3_USE(linVelA), VECTOR3_USE(linVelB), rbAinvMass, rbBinvMass);
+	obj->getInfo2NonVirtual(info, TRANSFORM_USE(transA), TRANSFORM_USE(transB), VECTOR3_USE(linVelA),
+		VECTOR3_USE(linVelB), rbAinvMass, rbBinvMass);
 }
 
 btScalar btSliderConstraint_getLinDepth(btSliderConstraint* obj)

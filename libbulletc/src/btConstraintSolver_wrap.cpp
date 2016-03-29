@@ -30,7 +30,8 @@ void btConstraintSolver_reset(btConstraintSolver* obj)
 
 btScalar btConstraintSolver_solveGroup(btConstraintSolver* obj, btCollisionObject** bodies, int numBodies, btPersistentManifold** manifold, int numManifolds, btTypedConstraint** constraints, int numConstraints, const btContactSolverInfo* info, btIDebugDraw* debugDrawer, btDispatcher* dispatcher)
 {
-	return obj->solveGroup(bodies, numBodies, manifold, numManifolds, constraints, numConstraints, *info, debugDrawer, dispatcher);
+	return obj->solveGroup(bodies, numBodies, manifold, numManifolds, constraints,
+		numConstraints, *info, debugDrawer, dispatcher);
 }
 
 void btConstraintSolver_delete(btConstraintSolver* obj)

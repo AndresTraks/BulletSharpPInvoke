@@ -49,7 +49,8 @@ void btDiscreteCollisionDetectorInterface_Result_addContactPoint(btDiscreteColli
 {
 	VECTOR3_CONV(normalOnBInWorld);
 	VECTOR3_CONV(pointInWorld);
-	obj->addContactPoint(VECTOR3_USE(normalOnBInWorld), VECTOR3_USE(pointInWorld), depth);
+	obj->addContactPoint(VECTOR3_USE(normalOnBInWorld), VECTOR3_USE(pointInWorld),
+		depth);
 }
 
 void btDiscreteCollisionDetectorInterface_Result_setShapeIdentifiersA(btDiscreteCollisionDetectorInterface::Result* obj, int partId0, int index0)

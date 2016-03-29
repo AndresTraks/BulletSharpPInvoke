@@ -195,12 +195,12 @@ namespace BulletSharpGen
         /// and breaks lines if necessary.
         /// </summary>
         /// <param name="list">Collection of strings.</param>
-        /// <param name="startingLineLength">How long the existing line is.</param>
+        /// <param name="to">Where the list will be written to.</param>
         /// <param name="level">How many tabs to insert to the start of a line.</param>
         /// <returns></returns>
-        protected string ListToLines(IEnumerable<string> list, int startingLineLength, int level = 0)
+        protected string ListToLines(IEnumerable<string> list, WriteTo to, int level = 0)
         {
-            int lineLength = startingLineLength;
+            int lineLength = LineLengths[to];
             return list.Aggregate("", (a, p) =>
             {
                 if (lineLength > LineBreakWidth)

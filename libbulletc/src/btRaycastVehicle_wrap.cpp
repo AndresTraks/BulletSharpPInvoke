@@ -78,17 +78,18 @@ void btRaycastVehicle_btVehicleTuning_delete(btRaycastVehicle::btVehicleTuning* 
 }
 
 
-btRaycastVehicle* btRaycastVehicle_new(const btRaycastVehicle::btVehicleTuning* tuning, btRigidBody* chassis, btVehicleRaycaster* raycaster)
+btRaycastVehicle* btRaycastVehicle_new(const btRaycastVehicle_btVehicleTuning* tuning, btRigidBody* chassis, btVehicleRaycaster* raycaster)
 {
 	return new btRaycastVehicle(*tuning, chassis, raycaster);
 }
 
-btWheelInfo* btRaycastVehicle_addWheel(btRaycastVehicle* obj, const btScalar* connectionPointCS0, const btScalar* wheelDirectionCS0, const btScalar* wheelAxleCS, btScalar suspensionRestLength, btScalar wheelRadius, const btRaycastVehicle::btVehicleTuning* tuning, bool isFrontWheel)
+btWheelInfo* btRaycastVehicle_addWheel(btRaycastVehicle* obj, const btScalar* connectionPointCS0, const btScalar* wheelDirectionCS0, const btScalar* wheelAxleCS, btScalar suspensionRestLength, btScalar wheelRadius, const btRaycastVehicle_btVehicleTuning* tuning, bool isFrontWheel)
 {
 	VECTOR3_CONV(connectionPointCS0);
 	VECTOR3_CONV(wheelDirectionCS0);
 	VECTOR3_CONV(wheelAxleCS);
-	return &obj->addWheel(VECTOR3_USE(connectionPointCS0), VECTOR3_USE(wheelDirectionCS0), VECTOR3_USE(wheelAxleCS), suspensionRestLength, wheelRadius, *tuning, isFrontWheel);
+	return &obj->addWheel(VECTOR3_USE(connectionPointCS0), VECTOR3_USE(wheelDirectionCS0),
+		VECTOR3_USE(wheelAxleCS), suspensionRestLength, wheelRadius, *tuning, isFrontWheel);
 }
 
 void btRaycastVehicle_applyEngineForce(btRaycastVehicle* obj, btScalar force, int wheel)

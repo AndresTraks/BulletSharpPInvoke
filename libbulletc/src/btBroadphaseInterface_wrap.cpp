@@ -91,7 +91,8 @@ btBroadphaseProxy* btBroadphaseInterface_createProxy(btBroadphaseInterface* obj,
 {
 	VECTOR3_CONV(aabbMin);
 	VECTOR3_CONV(aabbMax);
-	return obj->createProxy(VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), shapeType, userPtr, collisionFilterGroup, collisionFilterMask, dispatcher, multiSapProxy);
+	return obj->createProxy(VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), shapeType,
+		userPtr, collisionFilterGroup, collisionFilterMask, dispatcher, multiSapProxy);
 }
 
 void btBroadphaseInterface_destroyProxy(btBroadphaseInterface* obj, btBroadphaseProxy* proxy, btDispatcher* dispatcher)
@@ -148,7 +149,8 @@ void btBroadphaseInterface_rayTest3(btBroadphaseInterface* obj, const btScalar* 
 	VECTOR3_CONV(rayTo);
 	VECTOR3_CONV(aabbMin);
 	VECTOR3_CONV(aabbMax);
-	obj->rayTest(VECTOR3_USE(rayFrom), VECTOR3_USE(rayTo), *rayCallback, VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax));
+	obj->rayTest(VECTOR3_USE(rayFrom), VECTOR3_USE(rayTo), *rayCallback, VECTOR3_USE(aabbMin),
+		VECTOR3_USE(aabbMax));
 }
 
 void btBroadphaseInterface_resetPool(btBroadphaseInterface* obj, btDispatcher* dispatcher)

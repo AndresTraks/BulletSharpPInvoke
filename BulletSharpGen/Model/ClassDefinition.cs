@@ -142,34 +142,6 @@ namespace BulletSharpGen
             }
         }
 
-        public string FullNameC
-        {
-            get
-            {
-                if (Parent != null)
-                {
-                    return $"{Parent.FullNameC}_{Name}";
-                }
-                if (NamespaceName != "")
-                {
-                    return $"{NamespaceName}_{Name}";
-                }
-                return Name;
-            }
-        }
-
-        public string FullNameCppCli
-        {
-            get
-            {
-                if (Parent != null)
-                {
-                    return $"{Parent.FullNameCppCli}::{ManagedName}";
-                }
-                return ManagedName;
-            }
-        }
-
         public ClassDefinition(string name, HeaderDefinition header = null, ClassDefinition parent = null)
         {
             Name = name;

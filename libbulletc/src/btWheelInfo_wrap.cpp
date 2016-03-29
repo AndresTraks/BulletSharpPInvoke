@@ -284,7 +284,7 @@ btScalar btWheelInfo_getMaxSuspensionTravelCm(btWheelInfo* obj)
 	return obj->m_maxSuspensionTravelCm;
 }
 
-btWheelInfo::RaycastInfo* btWheelInfo_getRaycastInfo(btWheelInfo* obj)
+btWheelInfo_RaycastInfo* btWheelInfo_getRaycastInfo(btWheelInfo* obj)
 {
 	return &obj->m_raycastInfo;
 }
@@ -484,7 +484,7 @@ void btWheelInfo_setWorldTransform(btWheelInfo* obj, const btScalar* value)
 	TRANSFORM_IN(value, &obj->m_worldTransform);
 }
 
-void btWheelInfo_updateWheel(btWheelInfo* obj, const btRigidBody* chassis, btWheelInfo::RaycastInfo* raycastInfo)
+void btWheelInfo_updateWheel(btWheelInfo* obj, const btRigidBody* chassis, btWheelInfo_RaycastInfo* raycastInfo)
 {
 	obj->updateWheel(*chassis, *raycastInfo);
 }

@@ -7,12 +7,14 @@
 
 btSoftRigidDynamicsWorld* btSoftRigidDynamicsWorld_new(btDispatcher* dispatcher, btBroadphaseInterface* pairCache, btConstraintSolver* constraintSolver, btCollisionConfiguration* collisionConfiguration)
 {
-	return new btSoftRigidDynamicsWorld(dispatcher, pairCache, constraintSolver, collisionConfiguration);
+	return new btSoftRigidDynamicsWorld(dispatcher, pairCache, constraintSolver,
+		collisionConfiguration);
 }
 
 btSoftRigidDynamicsWorld* btSoftRigidDynamicsWorld_new2(btDispatcher* dispatcher, btBroadphaseInterface* pairCache, btConstraintSolver* constraintSolver, btCollisionConfiguration* collisionConfiguration, btSoftBodySolver* softBodySolver)
 {
-	return new btSoftRigidDynamicsWorld(dispatcher, pairCache, constraintSolver, collisionConfiguration, softBodySolver);
+	return new btSoftRigidDynamicsWorld(dispatcher, pairCache, constraintSolver,
+		collisionConfiguration, softBodySolver);
 }
 
 void btSoftRigidDynamicsWorld_addSoftBody(btSoftRigidDynamicsWorld* obj, btSoftBody* body)

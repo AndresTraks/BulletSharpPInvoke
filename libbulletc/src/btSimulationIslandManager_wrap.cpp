@@ -20,7 +20,7 @@ btSimulationIslandManager* btSimulationIslandManager_new()
 	return new btSimulationIslandManager();
 }
 
-void btSimulationIslandManager_buildAndProcessIslands(btSimulationIslandManager* obj, btDispatcher* dispatcher, btCollisionWorld* collisionWorld, btSimulationIslandManager::IslandCallback* callback)
+void btSimulationIslandManager_buildAndProcessIslands(btSimulationIslandManager* obj, btDispatcher* dispatcher, btCollisionWorld* collisionWorld, btSimulationIslandManager_IslandCallback* callback)
 {
 	obj->buildAndProcessIslands(dispatcher, collisionWorld, callback);
 }

@@ -10,21 +10,24 @@ btBvhTriangleMeshShape* btBvhTriangleMeshShape_new(btStridingMeshInterface* mesh
 
 btBvhTriangleMeshShape* btBvhTriangleMeshShape_new2(btStridingMeshInterface* meshInterface, bool useQuantizedAabbCompression, bool buildBvh)
 {
-	return new btBvhTriangleMeshShape(meshInterface, useQuantizedAabbCompression, buildBvh);
+	return new btBvhTriangleMeshShape(meshInterface, useQuantizedAabbCompression,
+		buildBvh);
 }
 
 btBvhTriangleMeshShape* btBvhTriangleMeshShape_new3(btStridingMeshInterface* meshInterface, bool useQuantizedAabbCompression, const btScalar* bvhAabbMin, const btScalar* bvhAabbMax)
 {
 	VECTOR3_CONV(bvhAabbMin);
 	VECTOR3_CONV(bvhAabbMax);
-	return new btBvhTriangleMeshShape(meshInterface, useQuantizedAabbCompression, VECTOR3_USE(bvhAabbMin), VECTOR3_USE(bvhAabbMax));
+	return new btBvhTriangleMeshShape(meshInterface, useQuantizedAabbCompression,
+		VECTOR3_USE(bvhAabbMin), VECTOR3_USE(bvhAabbMax));
 }
 
 btBvhTriangleMeshShape* btBvhTriangleMeshShape_new4(btStridingMeshInterface* meshInterface, bool useQuantizedAabbCompression, const btScalar* bvhAabbMin, const btScalar* bvhAabbMax, bool buildBvh)
 {
 	VECTOR3_CONV(bvhAabbMin);
 	VECTOR3_CONV(bvhAabbMax);
-	return new btBvhTriangleMeshShape(meshInterface, useQuantizedAabbCompression, VECTOR3_USE(bvhAabbMin), VECTOR3_USE(bvhAabbMax), buildBvh);
+	return new btBvhTriangleMeshShape(meshInterface, useQuantizedAabbCompression,
+		VECTOR3_USE(bvhAabbMin), VECTOR3_USE(bvhAabbMax), buildBvh);
 }
 
 void btBvhTriangleMeshShape_buildOptimizedBvh(btBvhTriangleMeshShape* obj)
@@ -60,7 +63,8 @@ void btBvhTriangleMeshShape_performConvexcast(btBvhTriangleMeshShape* obj, btTri
 	VECTOR3_CONV(boxTarget);
 	VECTOR3_CONV(boxMin);
 	VECTOR3_CONV(boxMax);
-	obj->performConvexcast(callback, VECTOR3_USE(boxSource), VECTOR3_USE(boxTarget), VECTOR3_USE(boxMin), VECTOR3_USE(boxMax));
+	obj->performConvexcast(callback, VECTOR3_USE(boxSource), VECTOR3_USE(boxTarget),
+		VECTOR3_USE(boxMin), VECTOR3_USE(boxMax));
 }
 
 void btBvhTriangleMeshShape_performRaycast(btBvhTriangleMeshShape* obj, btTriangleCallback* callback, const btScalar* raySource, const btScalar* rayTarget)

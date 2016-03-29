@@ -27,7 +27,8 @@ void btConeTwistConstraint_calcAngleInfo2(btConeTwistConstraint* obj, const btSc
 	TRANSFORM_CONV(transB);
 	MATRIX3X3_CONV(invInertiaWorldA);
 	MATRIX3X3_CONV(invInertiaWorldB);
-	obj->calcAngleInfo2(TRANSFORM_USE(transA), TRANSFORM_USE(transB), MATRIX3X3_USE(invInertiaWorldA), MATRIX3X3_USE(invInertiaWorldB));
+	obj->calcAngleInfo2(TRANSFORM_USE(transA), TRANSFORM_USE(transB), MATRIX3X3_USE(invInertiaWorldA),
+		MATRIX3X3_USE(invInertiaWorldB));
 }
 
 void btConeTwistConstraint_enableMotor(btConeTwistConstraint* obj, bool b)
@@ -91,7 +92,8 @@ void btConeTwistConstraint_getInfo2NonVirtual(btConeTwistConstraint* obj, btType
 	TRANSFORM_CONV(transB);
 	MATRIX3X3_CONV(invInertiaWorldA);
 	MATRIX3X3_CONV(invInertiaWorldB);
-	obj->getInfo2NonVirtual(info, TRANSFORM_USE(transA), TRANSFORM_USE(transB), MATRIX3X3_USE(invInertiaWorldA), MATRIX3X3_USE(invInertiaWorldB));
+	obj->getInfo2NonVirtual(info, TRANSFORM_USE(transA), TRANSFORM_USE(transB), MATRIX3X3_USE(invInertiaWorldA),
+		MATRIX3X3_USE(invInertiaWorldB));
 }
 
 btScalar btConeTwistConstraint_getLimit(btConeTwistConstraint* obj, int limitIndex)

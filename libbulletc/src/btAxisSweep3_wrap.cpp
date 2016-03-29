@@ -15,28 +15,32 @@ btAxisSweep3* btAxisSweep3_new2(const btScalar* worldAabbMin, const btScalar* wo
 {
 	VECTOR3_CONV(worldAabbMin);
 	VECTOR3_CONV(worldAabbMax);
-	return new btAxisSweep3(VECTOR3_USE(worldAabbMin), VECTOR3_USE(worldAabbMax), maxHandles);
+	return new btAxisSweep3(VECTOR3_USE(worldAabbMin), VECTOR3_USE(worldAabbMax),
+		maxHandles);
 }
 
 btAxisSweep3* btAxisSweep3_new3(const btScalar* worldAabbMin, const btScalar* worldAabbMax, unsigned short maxHandles, btOverlappingPairCache* pairCache)
 {
 	VECTOR3_CONV(worldAabbMin);
 	VECTOR3_CONV(worldAabbMax);
-	return new btAxisSweep3(VECTOR3_USE(worldAabbMin), VECTOR3_USE(worldAabbMax), maxHandles, pairCache);
+	return new btAxisSweep3(VECTOR3_USE(worldAabbMin), VECTOR3_USE(worldAabbMax),
+		maxHandles, pairCache);
 }
 
 btAxisSweep3* btAxisSweep3_new4(const btScalar* worldAabbMin, const btScalar* worldAabbMax, unsigned short maxHandles, btOverlappingPairCache* pairCache, bool disableRaycastAccelerator)
 {
 	VECTOR3_CONV(worldAabbMin);
 	VECTOR3_CONV(worldAabbMax);
-	return new btAxisSweep3(VECTOR3_USE(worldAabbMin), VECTOR3_USE(worldAabbMax), maxHandles, pairCache, disableRaycastAccelerator);
+	return new btAxisSweep3(VECTOR3_USE(worldAabbMin), VECTOR3_USE(worldAabbMax),
+		maxHandles, pairCache, disableRaycastAccelerator);
 }
 
 unsigned short btAxisSweep3_addHandle(btAxisSweep3* obj, const btScalar* aabbMin, const btScalar* aabbMax, void* pOwner, short collisionFilterGroup, short collisionFilterMask, btDispatcher* dispatcher, void* multiSapProxy)
 {
 	VECTOR3_CONV(aabbMin);
 	VECTOR3_CONV(aabbMax);
-	return obj->addHandle(VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), pOwner, collisionFilterGroup, collisionFilterMask, dispatcher, multiSapProxy);
+	return obj->addHandle(VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), pOwner, collisionFilterGroup,
+		collisionFilterMask, dispatcher, multiSapProxy);
 }
 
 btAxisSweep3_Handle* btAxisSweep3_getHandle(btAxisSweep3* obj, unsigned short index)
@@ -108,28 +112,32 @@ bt32BitAxisSweep3* bt32BitAxisSweep3_new2(const btScalar* worldAabbMin, const bt
 {
 	VECTOR3_CONV(worldAabbMin);
 	VECTOR3_CONV(worldAabbMax);
-	return new bt32BitAxisSweep3(VECTOR3_USE(worldAabbMin), VECTOR3_USE(worldAabbMax), maxHandles);
+	return new bt32BitAxisSweep3(VECTOR3_USE(worldAabbMin), VECTOR3_USE(worldAabbMax),
+		maxHandles);
 }
 
 bt32BitAxisSweep3* bt32BitAxisSweep3_new3(const btScalar* worldAabbMin, const btScalar* worldAabbMax, unsigned int maxHandles, btOverlappingPairCache* pairCache)
 {
 	VECTOR3_CONV(worldAabbMin);
 	VECTOR3_CONV(worldAabbMax);
-	return new bt32BitAxisSweep3(VECTOR3_USE(worldAabbMin), VECTOR3_USE(worldAabbMax), maxHandles, pairCache);
+	return new bt32BitAxisSweep3(VECTOR3_USE(worldAabbMin), VECTOR3_USE(worldAabbMax),
+		maxHandles, pairCache);
 }
 
 bt32BitAxisSweep3* bt32BitAxisSweep3_new4(const btScalar* worldAabbMin, const btScalar* worldAabbMax, unsigned int maxHandles, btOverlappingPairCache* pairCache, bool disableRaycastAccelerator)
 {
 	VECTOR3_CONV(worldAabbMin);
 	VECTOR3_CONV(worldAabbMax);
-	return new bt32BitAxisSweep3(VECTOR3_USE(worldAabbMin), VECTOR3_USE(worldAabbMax), maxHandles, pairCache, disableRaycastAccelerator);
+	return new bt32BitAxisSweep3(VECTOR3_USE(worldAabbMin), VECTOR3_USE(worldAabbMax),
+		maxHandles, pairCache, disableRaycastAccelerator);
 }
 
 unsigned int bt32BitAxisSweep3_addHandle(bt32BitAxisSweep3* obj, const btScalar* aabbMin, const btScalar* aabbMax, void* pOwner, short collisionFilterGroup, short collisionFilterMask, btDispatcher* dispatcher, void* multiSapProxy)
 {
 	VECTOR3_CONV(aabbMin);
 	VECTOR3_CONV(aabbMax);
-	return obj->addHandle(VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), pOwner, collisionFilterGroup, collisionFilterMask, dispatcher, multiSapProxy);
+	return obj->addHandle(VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), pOwner, collisionFilterGroup,
+		collisionFilterMask, dispatcher, multiSapProxy);
 }
 
 bt32BitAxisSweep3_Handle* bt32BitAxisSweep3_getHandle(bt32BitAxisSweep3* obj, unsigned int index)

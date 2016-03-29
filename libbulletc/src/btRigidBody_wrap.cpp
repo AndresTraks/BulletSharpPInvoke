@@ -13,7 +13,8 @@ btRigidBody::btRigidBodyConstructionInfo* btRigidBody_btRigidBodyConstructionInf
 btRigidBody::btRigidBodyConstructionInfo* btRigidBody_btRigidBodyConstructionInfo_new2(btScalar mass, btMotionState* motionState, btCollisionShape* collisionShape, const btScalar* localInertia)
 {
 	VECTOR3_CONV(localInertia);
-	return ALIGNED_NEW(btRigidBody::btRigidBodyConstructionInfo)(mass, motionState, collisionShape, VECTOR3_USE(localInertia));
+	return ALIGNED_NEW(btRigidBody::btRigidBodyConstructionInfo)(mass, motionState, collisionShape,
+		VECTOR3_USE(localInertia));
 }
 
 btScalar btRigidBody_btRigidBodyConstructionInfo_getAdditionalAngularDampingFactor(btRigidBody::btRigidBodyConstructionInfo* obj)
@@ -192,7 +193,7 @@ void btRigidBody_btRigidBodyConstructionInfo_delete(btRigidBody::btRigidBodyCons
 }
 
 
-btRigidBody* btRigidBody_new(const btRigidBody::btRigidBodyConstructionInfo* constructionInfo)
+btRigidBody* btRigidBody_new(const btRigidBody_btRigidBodyConstructionInfo* constructionInfo)
 {
 	return new btRigidBody(*constructionInfo);
 }

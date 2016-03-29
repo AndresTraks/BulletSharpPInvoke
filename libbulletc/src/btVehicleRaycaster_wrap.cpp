@@ -46,7 +46,7 @@ void btVehicleRaycaster_btVehicleRaycasterResult_delete(btVehicleRaycaster::btVe
 }
 
 
-void* btVehicleRaycaster_castRay(btVehicleRaycaster* obj, const btScalar* from, const btScalar* to, btVehicleRaycaster::btVehicleRaycasterResult* result)
+void* btVehicleRaycaster_castRay(btVehicleRaycaster* obj, const btScalar* from, const btScalar* to, btVehicleRaycaster_btVehicleRaycasterResult* result)
 {
 	VECTOR3_CONV(from);
 	VECTOR3_CONV(to);

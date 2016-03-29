@@ -7,7 +7,8 @@ btGeneric6DofSpringConstraint* btGeneric6DofSpringConstraint_new(btRigidBody* rb
 {
 	TRANSFORM_CONV(frameInA);
 	TRANSFORM_CONV(frameInB);
-	return new btGeneric6DofSpringConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB), useLinearReferenceFrameA);
+	return new btGeneric6DofSpringConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA),
+		TRANSFORM_USE(frameInB), useLinearReferenceFrameA);
 }
 
 btGeneric6DofSpringConstraint* btGeneric6DofSpringConstraint_new2(btRigidBody* rbB, const btScalar* frameInB, bool useLinearReferenceFrameB)

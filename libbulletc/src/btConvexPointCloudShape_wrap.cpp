@@ -17,7 +17,8 @@ btConvexPointCloudShape* btConvexPointCloudShape_new2(btVector3* points, int num
 btConvexPointCloudShape* btConvexPointCloudShape_new3(btVector3* points, int numPoints, const btScalar* localScaling, bool computeAabb)
 {
 	VECTOR3_CONV(localScaling);
-	return new btConvexPointCloudShape(points, numPoints, VECTOR3_USE(localScaling), computeAabb);
+	return new btConvexPointCloudShape(points, numPoints, VECTOR3_USE(localScaling),
+		computeAabb);
 }
 
 int btConvexPointCloudShape_getNumPoints(btConvexPointCloudShape* obj)

@@ -17,5 +17,7 @@ btScalar btMultiBodyConstraintSolver_solveGroupCacheFriendlyFinish(btMultiBodyCo
 
 void btMultiBodyConstraintSolver_solveMultiBodyGroup(btMultiBodyConstraintSolver* obj, btCollisionObject** bodies, int numBodies, btPersistentManifold** manifold, int numManifolds, btTypedConstraint** constraints, int numConstraints, btMultiBodyConstraint** multiBodyConstraints, int numMultiBodyConstraints, const btContactSolverInfo* info, btIDebugDraw* debugDrawer, btDispatcher* dispatcher)
 {
-	obj->solveMultiBodyGroup(bodies, numBodies, manifold, numManifolds, constraints, numConstraints, multiBodyConstraints, numMultiBodyConstraints, *info, debugDrawer, dispatcher);
+	obj->solveMultiBodyGroup(bodies, numBodies, manifold, numManifolds, constraints,
+		numConstraints, multiBodyConstraints, numMultiBodyConstraints, *info, debugDrawer,
+		dispatcher);
 }

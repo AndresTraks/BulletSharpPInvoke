@@ -13,14 +13,16 @@ btBroadphaseProxy* btBroadphaseProxy_new2(const btScalar* aabbMin, const btScala
 {
 	VECTOR3_CONV(aabbMin);
 	VECTOR3_CONV(aabbMax);
-	return new btBroadphaseProxy(VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), userPtr, collisionFilterGroup, collisionFilterMask);
+	return new btBroadphaseProxy(VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), userPtr,
+		collisionFilterGroup, collisionFilterMask);
 }
 
 btBroadphaseProxy* btBroadphaseProxy_new3(const btScalar* aabbMin, const btScalar* aabbMax, void* userPtr, short collisionFilterGroup, short collisionFilterMask, void* multiSapParentProxy)
 {
 	VECTOR3_CONV(aabbMin);
 	VECTOR3_CONV(aabbMax);
-	return new btBroadphaseProxy(VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), userPtr, collisionFilterGroup, collisionFilterMask, multiSapParentProxy);
+	return new btBroadphaseProxy(VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), userPtr,
+		collisionFilterGroup, collisionFilterMask, multiSapParentProxy);
 }
 
 void btBroadphaseProxy_getAabbMax(btBroadphaseProxy* obj, btScalar* value)

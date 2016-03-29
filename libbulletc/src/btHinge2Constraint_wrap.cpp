@@ -8,7 +8,8 @@ btHinge2Constraint* btHinge2Constraint_new(btRigidBody* rbA, btRigidBody* rbB, b
 	VECTOR3_CONV(anchor);
 	VECTOR3_CONV(axis1);
 	VECTOR3_CONV(axis2);
-	return new btHinge2Constraint(*rbA, *rbB, VECTOR3_USE(anchor), VECTOR3_USE(axis1), VECTOR3_USE(axis2));
+	return new btHinge2Constraint(*rbA, *rbB, VECTOR3_USE(anchor), VECTOR3_USE(axis1),
+		VECTOR3_USE(axis2));
 }
 
 void btHinge2Constraint_getAnchor(btHinge2Constraint* obj, btScalar* value)

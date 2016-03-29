@@ -109,7 +109,12 @@ namespace BulletSharpGen
         void AddLibrary()
         {
             var sources = new List<string>();
-            var headers = Project.HeaderDefinitions.Values.Where(h => h.Classes.Any()).OrderBy(x => x.Name);
+            var headers = Project.HeaderDefinitions.Values
+                .Where(h => h.AllClasses
+                    .Any(c => !c.IsExcluded &&
+                    c.Methods.Any(m => !m.IsExcluded) &&
+                    !(c is ClassTemplateDefinition))
+                ).OrderBy(x => x.Name);
 
             foreach (var header in headers)
             {

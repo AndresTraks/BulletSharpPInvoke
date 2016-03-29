@@ -469,14 +469,16 @@ btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new(btRigidBody* 
 {
 	TRANSFORM_CONV(frameInA);
 	TRANSFORM_CONV(frameInB);
-	return new btGeneric6DofSpring2Constraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB));
+	return new btGeneric6DofSpring2Constraint(*rbA, *rbB, TRANSFORM_USE(frameInA),
+		TRANSFORM_USE(frameInB));
 }
 
 btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new2(btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB, RotateOrder rotOrder)
 {
 	TRANSFORM_CONV(frameInA);
 	TRANSFORM_CONV(frameInB);
-	return new btGeneric6DofSpring2Constraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB), rotOrder);
+	return new btGeneric6DofSpring2Constraint(*rbA, *rbB, TRANSFORM_USE(frameInA),
+		TRANSFORM_USE(frameInB), rotOrder);
 }
 
 btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new3(btRigidBody* rbB, const btScalar* frameInB)

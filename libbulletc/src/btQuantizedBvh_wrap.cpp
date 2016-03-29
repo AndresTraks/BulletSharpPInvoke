@@ -159,7 +159,8 @@ void btQuantizedBvh_deSerializeFloat(btQuantizedBvh* obj, btQuantizedBvhFloatDat
 
 btQuantizedBvh* btQuantizedBvh_deSerializeInPlace(void* i_alignedDataBuffer, unsigned int i_dataBufferSize, bool i_swapEndian)
 {
-	return btQuantizedBvh::deSerializeInPlace(i_alignedDataBuffer, i_dataBufferSize, i_swapEndian);
+	return btQuantizedBvh::deSerializeInPlace(i_alignedDataBuffer, i_dataBufferSize,
+		i_swapEndian);
 }
 
 unsigned int btQuantizedBvh_getAlignmentSerializationPadding()
@@ -212,7 +213,8 @@ void btQuantizedBvh_reportBoxCastOverlappingNodex(btQuantizedBvh* obj, btNodeOve
 	VECTOR3_CONV(rayTarget);
 	VECTOR3_CONV(aabbMin);
 	VECTOR3_CONV(aabbMax);
-	obj->reportBoxCastOverlappingNodex(nodeCallback, VECTOR3_USE(raySource), VECTOR3_USE(rayTarget), VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax));
+	obj->reportBoxCastOverlappingNodex(nodeCallback, VECTOR3_USE(raySource), VECTOR3_USE(rayTarget),
+		VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax));
 }
 
 void btQuantizedBvh_reportRayOverlappingNodex(btQuantizedBvh* obj, btNodeOverlapCallback* nodeCallback, const btScalar* raySource, const btScalar* rayTarget)
@@ -243,7 +245,8 @@ void btQuantizedBvh_setQuantizationValues2(btQuantizedBvh* obj, const btScalar* 
 {
 	VECTOR3_CONV(bvhAabbMin);
 	VECTOR3_CONV(bvhAabbMax);
-	obj->setQuantizationValues(VECTOR3_USE(bvhAabbMin), VECTOR3_USE(bvhAabbMax), quantizationMargin);
+	obj->setQuantizationValues(VECTOR3_USE(bvhAabbMin), VECTOR3_USE(bvhAabbMax),
+		quantizationMargin);
 }
 
 void btQuantizedBvh_setTraversalMode(btQuantizedBvh* obj, btQuantizedBvh::btTraversalMode traversalMode)

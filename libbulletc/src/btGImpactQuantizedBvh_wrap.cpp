@@ -187,7 +187,8 @@ void btGImpactQuantizedBvh_find_collision(const btGImpactQuantizedBvh* boxset1, 
 {
 	TRANSFORM_CONV(trans1);
 	TRANSFORM_CONV(trans2);
-	btGImpactQuantizedBvh::find_collision(boxset1, TRANSFORM_USE(trans1), boxset2, TRANSFORM_USE(trans2), *collision_pairs);
+	btGImpactQuantizedBvh::find_collision(boxset1, TRANSFORM_USE(trans1), boxset2,
+		TRANSFORM_USE(trans2), *collision_pairs);
 }
 
 const BT_QUANTIZED_BVH_NODE* btGImpactQuantizedBvh_get_node_pointer(btGImpactQuantizedBvh* obj)

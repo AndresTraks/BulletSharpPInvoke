@@ -75,7 +75,8 @@ void btConvexShape_project(btConvexShape* obj, const btScalar* trans, const btSc
 	VECTOR3_CONV(dir);
 	VECTOR3_DEF(witnesPtMin);
 	VECTOR3_DEF(witnesPtMax);
-	obj->project(TRANSFORM_USE(trans), VECTOR3_USE(dir), *minProj, *maxProj, VECTOR3_USE(witnesPtMin), VECTOR3_USE(witnesPtMax));
+	obj->project(TRANSFORM_USE(trans), VECTOR3_USE(dir), *minProj, *maxProj, VECTOR3_USE(witnesPtMin),
+		VECTOR3_USE(witnesPtMax));
 	VECTOR3_DEF_OUT(witnesPtMin);
 	VECTOR3_DEF_OUT(witnesPtMax);
 }

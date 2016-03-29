@@ -205,7 +205,8 @@ bool btVoronoiSimplexSolver_closestPtPointTetrahedron(btVoronoiSimplexSolver* ob
 	VECTOR3_CONV(b);
 	VECTOR3_CONV(c);
 	VECTOR3_CONV(d);
-	return obj->closestPtPointTetrahedron(VECTOR3_USE(p), VECTOR3_USE(a), VECTOR3_USE(b), VECTOR3_USE(c), VECTOR3_USE(d), *finalResult);
+	return obj->closestPtPointTetrahedron(VECTOR3_USE(p), VECTOR3_USE(a), VECTOR3_USE(b),
+		VECTOR3_USE(c), VECTOR3_USE(d), *finalResult);
 }
 
 bool btVoronoiSimplexSolver_closestPtPointTriangle(btVoronoiSimplexSolver* obj, const btScalar* p, const btScalar* a, const btScalar* b, const btScalar* c, btSubSimplexClosestResult* result)
@@ -214,7 +215,8 @@ bool btVoronoiSimplexSolver_closestPtPointTriangle(btVoronoiSimplexSolver* obj, 
 	VECTOR3_CONV(a);
 	VECTOR3_CONV(b);
 	VECTOR3_CONV(c);
-	return obj->closestPtPointTriangle(VECTOR3_USE(p), VECTOR3_USE(a), VECTOR3_USE(b), VECTOR3_USE(c), *result);
+	return obj->closestPtPointTriangle(VECTOR3_USE(p), VECTOR3_USE(a), VECTOR3_USE(b),
+		VECTOR3_USE(c), *result);
 }
 
 void btVoronoiSimplexSolver_compute_points(btVoronoiSimplexSolver* obj, btScalar* p1, btScalar* p2)
@@ -331,7 +333,8 @@ int btVoronoiSimplexSolver_pointOutsideOfPlane(btVoronoiSimplexSolver* obj, cons
 	VECTOR3_CONV(b);
 	VECTOR3_CONV(c);
 	VECTOR3_CONV(d);
-	return obj->pointOutsideOfPlane(VECTOR3_USE(p), VECTOR3_USE(a), VECTOR3_USE(b), VECTOR3_USE(c), VECTOR3_USE(d));
+	return obj->pointOutsideOfPlane(VECTOR3_USE(p), VECTOR3_USE(a), VECTOR3_USE(b),
+		VECTOR3_USE(c), VECTOR3_USE(d));
 }
 
 void btVoronoiSimplexSolver_reduceVertices(btVoronoiSimplexSolver* obj, const btUsageBitfield* usedVerts)

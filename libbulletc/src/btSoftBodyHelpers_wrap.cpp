@@ -13,7 +13,8 @@ btSoftBody* btSoftBodyHelpers_CreateEllipsoid(btSoftBodyWorldInfo* worldInfo, co
 {
 	VECTOR3_CONV(center);
 	VECTOR3_CONV(radius);
-	return btSoftBodyHelpers::CreateEllipsoid(*worldInfo, VECTOR3_USE(center), VECTOR3_USE(radius), res);
+	return btSoftBodyHelpers::CreateEllipsoid(*worldInfo, VECTOR3_USE(center), VECTOR3_USE(radius),
+		res);
 }
 #endif
 btSoftBody* btSoftBodyHelpers_CreateFromConvexHull(btSoftBodyWorldInfo* worldInfo, const btScalar* vertices, int nvertices)
@@ -34,17 +35,20 @@ btSoftBody* btSoftBodyHelpers_CreateFromConvexHull2(btSoftBodyWorldInfo* worldIn
 #ifndef BULLETC_DISABLE_SOFTBODY_HELPERS
 btSoftBody* btSoftBodyHelpers_CreateFromTetGenData(btSoftBodyWorldInfo* worldInfo, const char* ele, const char* face, const char* node, bool bfacelinks, bool btetralinks, bool bfacesfromtetras)
 {
-	return btSoftBodyHelpers::CreateFromTetGenData(*worldInfo, ele, face, node, bfacelinks, btetralinks, bfacesfromtetras);
+	return btSoftBodyHelpers::CreateFromTetGenData(*worldInfo, ele, face, node, bfacelinks,
+		btetralinks, bfacesfromtetras);
 }
 
 btSoftBody* btSoftBodyHelpers_CreateFromTriMesh(btSoftBodyWorldInfo* worldInfo, const btScalar* vertices, const int* triangles, int ntriangles)
 {
-	return btSoftBodyHelpers::CreateFromTriMesh(*worldInfo, vertices, triangles, ntriangles);
+	return btSoftBodyHelpers::CreateFromTriMesh(*worldInfo, vertices, triangles,
+		ntriangles);
 }
 
 btSoftBody* btSoftBodyHelpers_CreateFromTriMesh2(btSoftBodyWorldInfo* worldInfo, const btScalar* vertices, const int* triangles, int ntriangles, bool randomizeConstraints)
 {
-	return btSoftBodyHelpers::CreateFromTriMesh(*worldInfo, vertices, triangles, ntriangles, randomizeConstraints);
+	return btSoftBodyHelpers::CreateFromTriMesh(*worldInfo, vertices, triangles,
+		ntriangles, randomizeConstraints);
 }
 
 btSoftBody* btSoftBodyHelpers_CreatePatch(btSoftBodyWorldInfo* worldInfo, const btScalar* corner00, const btScalar* corner10, const btScalar* corner01, const btScalar* corner11, int resx, int resy, int fixeds, bool gendiags)
@@ -53,7 +57,8 @@ btSoftBody* btSoftBodyHelpers_CreatePatch(btSoftBodyWorldInfo* worldInfo, const 
 	VECTOR3_CONV(corner10);
 	VECTOR3_CONV(corner01);
 	VECTOR3_CONV(corner11);
-	return btSoftBodyHelpers::CreatePatch(*worldInfo, VECTOR3_USE(corner00), VECTOR3_USE(corner10), VECTOR3_USE(corner01), VECTOR3_USE(corner11), resx, resy, fixeds, gendiags);
+	return btSoftBodyHelpers::CreatePatch(*worldInfo, VECTOR3_USE(corner00), VECTOR3_USE(corner10),
+		VECTOR3_USE(corner01), VECTOR3_USE(corner11), resx, resy, fixeds, gendiags);
 }
 #endif
 btSoftBody* btSoftBodyHelpers_CreatePatchUV(btSoftBodyWorldInfo* worldInfo, const btScalar* corner00, const btScalar* corner10, const btScalar* corner01, const btScalar* corner11, int resx, int resy, int fixeds, bool gendiags)
@@ -62,7 +67,8 @@ btSoftBody* btSoftBodyHelpers_CreatePatchUV(btSoftBodyWorldInfo* worldInfo, cons
 	VECTOR3_CONV(corner10);
 	VECTOR3_CONV(corner01);
 	VECTOR3_CONV(corner11);
-	return btSoftBodyHelpers::CreatePatchUV(*worldInfo, VECTOR3_USE(corner00), VECTOR3_USE(corner10), VECTOR3_USE(corner01), VECTOR3_USE(corner11), resx, resy, fixeds, gendiags);
+	return btSoftBodyHelpers::CreatePatchUV(*worldInfo, VECTOR3_USE(corner00), VECTOR3_USE(corner10),
+		VECTOR3_USE(corner01), VECTOR3_USE(corner11), resx, resy, fixeds, gendiags);
 }
 
 btSoftBody* btSoftBodyHelpers_CreatePatchUV2(btSoftBodyWorldInfo* worldInfo, const btScalar* corner00, const btScalar* corner10, const btScalar* corner01, const btScalar* corner11, int resx, int resy, int fixeds, bool gendiags, float* tex_coords)
@@ -71,14 +77,17 @@ btSoftBody* btSoftBodyHelpers_CreatePatchUV2(btSoftBodyWorldInfo* worldInfo, con
 	VECTOR3_CONV(corner10);
 	VECTOR3_CONV(corner01);
 	VECTOR3_CONV(corner11);
-	return btSoftBodyHelpers::CreatePatchUV(*worldInfo, VECTOR3_USE(corner00), VECTOR3_USE(corner10), VECTOR3_USE(corner01), VECTOR3_USE(corner11), resx, resy, fixeds, gendiags, tex_coords);
+	return btSoftBodyHelpers::CreatePatchUV(*worldInfo, VECTOR3_USE(corner00), VECTOR3_USE(corner10),
+		VECTOR3_USE(corner01), VECTOR3_USE(corner11), resx, resy, fixeds, gendiags,
+		tex_coords);
 }
 #ifndef BULLETC_DISABLE_SOFTBODY_HELPERS
 btSoftBody* btSoftBodyHelpers_CreateRope(btSoftBodyWorldInfo* worldInfo, const btScalar* from, const btScalar* to, int res, int fixeds)
 {
 	VECTOR3_CONV(from);
 	VECTOR3_CONV(to);
-	return btSoftBodyHelpers::CreateRope(*worldInfo, VECTOR3_USE(from), VECTOR3_USE(to), res, fixeds);
+	return btSoftBodyHelpers::CreateRope(*worldInfo, VECTOR3_USE(from), VECTOR3_USE(to),
+		res, fixeds);
 }
 #endif
 void btSoftBodyHelpers_Draw(btSoftBody* psb, btIDebugDraw* idraw)

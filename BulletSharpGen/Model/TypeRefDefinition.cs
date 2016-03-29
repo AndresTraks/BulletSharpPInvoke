@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ClangSharp;
 
@@ -25,7 +26,7 @@ namespace BulletSharpGen
         public bool IsConst { get; set; }
         public TypeRefDefinition Referenced { get; set; }
         public bool HasTemplateTypeParameter { get; set; }
-        public TypeRefDefinition SpecializedTemplateType { get; set; }
+        public List<TypeRefDefinition> TemplateParams { get; set; }
 
         private bool _unresolved;
         public ClassDefinition Target { get; set; }
@@ -75,9 +76,9 @@ namespace BulletSharpGen
                     _unresolved = true;
                     return Name;
                 }
-                if (SpecializedTemplateType != null)
+                if (TemplateParams != null)
                 {
-                    return Target.ManagedName + "<" + SpecializedTemplateType.ManagedName + ">";
+                    return Target.ManagedName + "<" + TemplateParams.First().ManagedName + ">";
                 }
                 return Target.ManagedName;
             }
@@ -133,23 +134,21 @@ namespace BulletSharpGen
 
         public TypeRefDefinition(ClangSharp.Type type, Cursor cursor = null)
         {
-            if (cursor != null)
+            var firstChild = cursor?.Children.FirstOrDefault();
+            if (firstChild != null && firstChild.Kind == CursorKind.TemplateRef)
             {
-                var firstChild = cursor.Children.FirstOrDefault();
-                if (firstChild != null && firstChild.Kind == CursorKind.TemplateRef)
+                if (cursor.Children.Count == 1)
                 {
-                    if (cursor.Children.Count == 1)
-                    {
-                        string displayName = cursor.Type.Declaration.DisplayName;
-                        int typeStart = displayName.IndexOf('<') + 1;
-                        int typeEnd = displayName.LastIndexOf('>');
-                        displayName = displayName.Substring(typeStart, typeEnd - typeStart);
-                        SpecializedTemplateType = new TypeRefDefinition(displayName);
-                    }
-                    else
-                    {
-                        SpecializedTemplateType = new TypeRefDefinition(cursor.Children[1].Type);
-                    }
+                    string displayName = cursor.Type.Declaration.DisplayName;
+                    int typeStart = displayName.IndexOf('<') + 1;
+                    int typeEnd = displayName.LastIndexOf('>');
+                    displayName = displayName.Substring(typeStart, typeEnd - typeStart);
+                    TemplateParams = new List<TypeRefDefinition> { new TypeRefDefinition(displayName) };
+                }
+                else
+                {
+                    TemplateParams = cursor.Children.Skip(1)
+                        .Select(c => new TypeRefDefinition(c.Type, c)).ToList();
                 }
             }
 
@@ -202,6 +201,10 @@ namespace BulletSharpGen
                     Name = "unsigned long";
                     IsBasic = true;
                     break;
+                case ClangSharp.Type.Kind.ULongLong:
+                    Name = "unsigned long long";
+                    IsBasic = true;
+                    break;
                 case ClangSharp.Type.Kind.UShort:
                     Name = "unsigned short";
                     IsBasic = true;
@@ -252,10 +255,33 @@ namespace BulletSharpGen
                 {
                     case "bool":
                     case "char":
+                    case "double":
+                    case "float":
                     case "int":
+                    case "unsigned char":
                     case "unsigned int":
                     case "void":
                         Name = name;
+                        IsBasic = true;
+                        break;
+                    case "long int":
+                        Name = "long";
+                        IsBasic = true;
+                        break;
+                    case "long long int":
+                        Name = "long long";
+                        IsBasic = true;
+                        break;
+                    case "short int":
+                        Name = "short";
+                        IsBasic = true;
+                        break;
+                    case "unsigned long int":
+                        Name = "unsigned long";
+                        IsBasic = true;
+                        break;
+                    case "unsigned long long int":
+                        Name = "unsigned long long";
                         IsBasic = true;
                         break;
                     case "unsigned short int":
@@ -286,7 +312,7 @@ namespace BulletSharpGen
                 IsReference = IsReference,
                 Name = Name,
                 Referenced = Referenced,
-                SpecializedTemplateType = SpecializedTemplateType,
+                TemplateParams = TemplateParams?.Select(p => p.Copy()).ToList(),
                 Target = Target
             };
             return t;
@@ -376,7 +402,7 @@ namespace BulletSharpGen
 
         public override string ToString()
         {
-            return ManagedName;
+            return ManagedName ?? Name;
         }
     }
 }

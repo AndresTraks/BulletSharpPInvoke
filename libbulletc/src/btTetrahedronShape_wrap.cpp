@@ -35,7 +35,8 @@ btBU_Simplex1to4* btBU_Simplex1to4_new5(const btScalar* pt0, const btScalar* pt1
 	VECTOR3_CONV(pt1);
 	VECTOR3_CONV(pt2);
 	VECTOR3_CONV(pt3);
-	return new btBU_Simplex1to4(VECTOR3_USE(pt0), VECTOR3_USE(pt1), VECTOR3_USE(pt2), VECTOR3_USE(pt3));
+	return new btBU_Simplex1to4(VECTOR3_USE(pt0), VECTOR3_USE(pt1), VECTOR3_USE(pt2),
+		VECTOR3_USE(pt3));
 }
 
 void btBU_Simplex1to4_addVertex(btBU_Simplex1to4* obj, const btScalar* pt)

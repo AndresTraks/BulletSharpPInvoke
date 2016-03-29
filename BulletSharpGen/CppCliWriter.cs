@@ -5,10 +5,8 @@ using System.Linq;
 
 namespace BulletSharpGen
 {
-    class CppCliWriter : WrapperWriter
+    public class CppCliWriter : DotNetWriter
     {
-        private const int LineBreakWidth = 80;
-
         // Conditional compilation (#ifndef DISABLE_FEATURE)
         Dictionary<string, string> headerConditionals = new Dictionary<string, string>
         {
@@ -156,14 +154,9 @@ namespace BulletSharpGen
 
         private void WriteMethodMarshal(MethodDefinition method, int numParameters)
         {
-            if (method.IsConstructor)
-            {
-                Write($"{method.Parent.FullyQualifiedName}(");
-            }
-            else
-            {
-                Write($"{method.Name}(");
-            }
+            string methodName = method.IsConstructor ?
+                $"{method.Parent.FullyQualifiedName}" : $"{method.Name}";
+
             var currentParams = method.Parameters.Take(numParameters);
             var paramStrings = currentParams.Select(p =>
             {
@@ -198,8 +191,10 @@ namespace BulletSharpGen
                 }
                 return paramString;
             });
-            Write(ListToLines(paramStrings, LineLengths[WriteTo.Source], 1));
-            Write(')');
+
+            Write($"{methodName}(");
+            string parameters = ListToLines(paramStrings, WriteTo.Source, 1);
+            Write($"{parameters})");
         }
 
         void WriteMethodDefinition(MethodDefinition method, int numParameters)
@@ -429,7 +424,7 @@ namespace BulletSharpGen
                 sourceMethodName = headerMethodName;
             }
             Write($"{headerMethodName}(", WriteTo.Header);
-            Write($"{parentClass.FullNameCppCli}::{sourceMethodName}(", WriteTo.Source);
+            Write($"{GetFullNameManaged(parentClass)}::{sourceMethodName}(", WriteTo.Source);
 
             var prevTo = To;
 
@@ -443,11 +438,12 @@ namespace BulletSharpGen
             var currentParams = method.Parameters.Take(numParameters).ToList();
             var paramStrings = currentParams
                 .Select(p => $"{BulletParser.GetTypeRefName(p.Type)} {p.ManagedName}").ToList();
-            Write(ListToLines(paramStrings, LineLengths[WriteTo.Header], level + 1), WriteTo.Header);
-            Write(ListToLines(paramStrings, LineLengths[WriteTo.Source]), WriteTo.Source);
 
-            WriteLine(");", WriteTo.Header);
-            WriteLine(')', WriteTo.Source);
+            string parameters = ListToLines(paramStrings, WriteTo.Header, level + 1);
+            WriteLine($"{parameters});", WriteTo.Header);
+
+            parameters = ListToLines(paramStrings, WriteTo.Source);
+            WriteLine($"{parameters})", WriteTo.Source);
 
 
             // Definition: constructor chaining
@@ -557,12 +553,6 @@ namespace BulletSharpGen
                 OutputClass(@class, level + 1);
                 insertSeparator = true;
             }
-        }
-
-        bool IsExcludedClass(ClassDefinition c)
-        {
-            return c.IsTypedef || c.IsPureEnum || c.IsExcluded ||
-                c is ClassTemplateDefinition || c is EnumDefinition;
         }
 
         void OutputClass(ClassDefinition @class, int level)
@@ -691,12 +681,12 @@ namespace BulletSharpGen
                     WriteLine($"{@class.ManagedName}::{@class.ManagedName}({@class.FullyQualifiedName}* native)");
                     if (@class.BaseClass != null)
                     {
-                        WriteLine($"\t: {@class.BaseClass.ManagedName}(native)");
+                        WriteLine(1, $": {@class.BaseClass.ManagedName}(native)");
                     }
 
                     // Body
                     WriteLine('{');
-                    if (@class.BaseClass == null) WriteLine("\t_native = native;");
+                    if (@class.BaseClass == null) WriteLine(1, "_native = native;");
                     WriteLine('}');
 
                     hasHeaderWhiteSpace = false;
@@ -716,13 +706,13 @@ namespace BulletSharpGen
 
                     To = WriteTo.Source;
                     EnsureSourceWhiteSpace();
-                    WriteLine($"{@class.FullNameCppCli}::~{@class.ManagedName}()");
+                    WriteLine($"{GetFullNameManaged(@class)}::~{@class.ManagedName}()");
                     WriteLine('{');
                     WriteLine(1, $"this->!{@class.ManagedName}();");
                     WriteLine('}');
                     WriteLine();
 
-                    WriteLine($"{@class.FullNameCppCli}::!{@class.ManagedName}()");
+                    WriteLine($"{GetFullNameManaged(@class)}::!{@class.ManagedName}()");
                     WriteLine('{');
                     if (@class.IsTrackingDisposable)
                     {
@@ -834,12 +824,16 @@ namespace BulletSharpGen
 
         public override void Output()
         {
-            foreach (var header in Project.HeaderDefinitions.Values)
+            var headers = Project.HeaderDefinitions.Values
+                .Where(h => h.Classes.Any(c => !IsExcludedClass(c))).ToList();
+
+            if (headers.Count != 0)
             {
-                if (header.Classes.All(IsExcludedClass)) continue;
-
                 Directory.CreateDirectory(Project.CppCliProjectPathFull);
+            }
 
+            foreach (var header in headers)
+            {
                 string headerFilename = Path.Combine(Project.CppCliProjectPathFull, header.ManagedName + ".h");
                 OpenFile(headerFilename, WriteTo.Header);
                 WriteLine("#pragma once");
@@ -862,7 +856,7 @@ namespace BulletSharpGen
 
                 // Find forward references
                 var forwardRefs = new List<ClassDefinition>();
-                foreach (ClassDefinition c in header.Classes)
+                foreach (var c in header.Classes)
                 {
                     FindForwardReferences(forwardRefs, c);
                 }
@@ -875,7 +869,7 @@ namespace BulletSharpGen
                 var forwardRefHeaders = new List<HeaderDefinition>();
                 foreach (ClassDefinition c in forwardRefs)
                 {
-                    WriteLine($"\tref class {c.ManagedName};");
+                    WriteLine(1, $"ref class {c.ManagedName};");
                     if (!forwardRefHeaders.Contains(c.Header))
                     {
                         forwardRefHeaders.Add(c.Header);
@@ -1033,6 +1027,15 @@ namespace BulletSharpGen
                 }
             }
             return typeConditional;
+        }
+
+        private static string GetFullNameManaged(ClassDefinition @class)
+        {
+            if (@class.Parent != null)
+            {
+                return $"{GetFullNameManaged(@class.Parent)}::{@class.ManagedName}";
+            }
+            return @class.ManagedName;
         }
     }
 }

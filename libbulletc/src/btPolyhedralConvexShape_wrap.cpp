@@ -70,7 +70,8 @@ void btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(btPolyhedralConvexAabb
 	TRANSFORM_CONV(trans);
 	VECTOR3_DEF(aabbMin);
 	VECTOR3_DEF(aabbMax);
-	obj->getNonvirtualAabb(TRANSFORM_USE(trans), VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), margin);
+	obj->getNonvirtualAabb(TRANSFORM_USE(trans), VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax),
+		margin);
 	VECTOR3_DEF_OUT(aabbMin);
 	VECTOR3_DEF_OUT(aabbMax);
 }

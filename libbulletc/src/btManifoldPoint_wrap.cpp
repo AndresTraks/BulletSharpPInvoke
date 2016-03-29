@@ -14,7 +14,8 @@ btManifoldPoint* btManifoldPoint_new2(const btScalar* pointA, const btScalar* po
 	VECTOR3_CONV(pointA);
 	VECTOR3_CONV(pointB);
 	VECTOR3_CONV(normal);
-	return new btManifoldPoint(VECTOR3_USE(pointA), VECTOR3_USE(pointB), VECTOR3_USE(normal), distance);
+	return new btManifoldPoint(VECTOR3_USE(pointA), VECTOR3_USE(pointB), VECTOR3_USE(normal),
+		distance);
 }
 
 btScalar btManifoldPoint_getAppliedImpulse(btManifoldPoint* obj)

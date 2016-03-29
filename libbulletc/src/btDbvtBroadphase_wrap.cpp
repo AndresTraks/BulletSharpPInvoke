@@ -164,7 +164,8 @@ void btDbvtBroadphase_setAabbForceUpdate(btDbvtBroadphase* obj, btBroadphaseProx
 {
 	VECTOR3_CONV(aabbMin);
 	VECTOR3_CONV(aabbMax);
-	obj->setAabbForceUpdate(absproxy, VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), __unnamed3);
+	obj->setAabbForceUpdate(absproxy, VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax),
+		__unnamed3);
 }
 
 void btDbvtBroadphase_setCid(btDbvtBroadphase* obj, int value)

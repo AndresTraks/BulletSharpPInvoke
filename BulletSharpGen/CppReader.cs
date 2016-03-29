@@ -140,27 +140,6 @@ namespace BulletSharpGen
             return Cursor.ChildVisitResult.Continue;
         }
 
-        Cursor.ChildVisitResult EnumVisitor(Cursor cursor, Cursor parent)
-        {
-            if (cursor.Kind == CursorKind.EnumConstantDecl)
-            {
-                var @enum = _context.Class as EnumDefinition;
-                @enum.EnumConstants.Add(cursor.Spelling);
-                @enum.EnumConstantValues.Add("");
-            }
-            else if (cursor.Kind == CursorKind.IntegerLiteral)
-            {
-                var @enum = _context.Class as EnumDefinition;
-                Token intLiteralToken = _context.TranslationUnit.Tokenize(cursor.Extent).First();
-                @enum.EnumConstantValues[@enum.EnumConstants.Count - 1] = intLiteralToken.Spelling;
-            }
-            else if (cursor.Kind == CursorKind.ParenExpr)
-            {
-                return Cursor.ChildVisitResult.Continue;
-            }
-            return Cursor.ChildVisitResult.Recurse;
-        }
-
         void ParseClassCursor(Cursor cursor)
         {
             string className = cursor.Spelling;
@@ -249,7 +228,28 @@ namespace BulletSharpGen
 
             if (cursor.Kind == CursorKind.EnumDecl)
             {
-                cursor.VisitChildren(EnumVisitor);
+                var @enum = _context.Class as EnumDefinition;
+
+                foreach (var constantDecl in cursor.Children
+                    .Where(c => c.Kind == CursorKind.EnumConstantDecl))
+                {
+                    @enum.EnumConstants.Add(constantDecl.Spelling);
+
+                    var value = constantDecl.Children.FirstOrDefault();
+                    if (value != null)
+                    {
+                        var valueTokens = _context.TranslationUnit.Tokenize(value.Extent)
+                            .Where(t => t.Kind != TokenKind.Comment &&
+                                !t.Spelling.Equals(",") &&
+                                !t.Spelling.Equals("}"));
+                        string spelling = string.Join("", valueTokens.Select(t => t.Spelling));
+                        @enum.EnumConstantValues.Add(spelling);
+                    }
+                    else
+                    {
+                        @enum.EnumConstantValues.Add("");
+                    }
+                }
             }
             else if (cursor.Kind == CursorKind.TypedefDecl)
             {
@@ -428,15 +428,9 @@ namespace BulletSharpGen
                 {
                     Cursor arg = cursor.GetArgument(i);
 
-                    string parameterName = arg.Spelling;
-                    if (parameterName.Length == 0)
-                    {
-                        parameterName = "__unnamed" + i;
-                    }
-
                     if (_context.Method.Parameters[i] == null)
                     {
-                        _context.Parameter = new ParameterDefinition(parameterName, new TypeRefDefinition(arg.Type));
+                        _context.Parameter = new ParameterDefinition(arg.Spelling, new TypeRefDefinition(arg.Type));
                         _context.Method.Parameters[i] = _context.Parameter;
                     }
                     else
@@ -457,7 +451,7 @@ namespace BulletSharpGen
                     if (_context.Parameter.Type.IsPointer || _context.Parameter.Type.IsReference)
                     {
                         if (_context.Parameter.MarshalDirection != MarshalDirection.Out &&
-                            !_context.TranslationUnit.Tokenize(arg.Extent).Any(a => a.Spelling.Equals("const")))
+                            !argTokens.Any(a => a.Spelling.Equals("const")))
                         {
                             _context.Parameter.MarshalDirection = MarshalDirection.InOut;
                         }

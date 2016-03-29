@@ -62,12 +62,12 @@ int btPoint2PointConstraint_getFlags(btPoint2PointConstraint* obj)
 	return obj->getFlags();
 }
 
-void btPoint2PointConstraint_getInfo1NonVirtual(btPoint2PointConstraint* obj, btTypedConstraint::btConstraintInfo1* info)
+void btPoint2PointConstraint_getInfo1NonVirtual(btPoint2PointConstraint* obj, btTypedConstraint_btConstraintInfo1* info)
 {
 	obj->getInfo1NonVirtual(info);
 }
 
-void btPoint2PointConstraint_getInfo2NonVirtual(btPoint2PointConstraint* obj, btTypedConstraint::btConstraintInfo2* info, const btScalar* body0_trans, const btScalar* body1_trans)
+void btPoint2PointConstraint_getInfo2NonVirtual(btPoint2PointConstraint* obj, btTypedConstraint_btConstraintInfo2* info, const btScalar* body0_trans, const btScalar* body1_trans)
 {
 	TRANSFORM_CONV(body0_trans);
 	TRANSFORM_CONV(body1_trans);

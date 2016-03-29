@@ -106,7 +106,8 @@ bool btConvexCast_calcTimeOfImpact(btConvexCast* obj, const btScalar* fromA, con
 	TRANSFORM_CONV(toA);
 	TRANSFORM_CONV(fromB);
 	TRANSFORM_CONV(toB);
-	return obj->calcTimeOfImpact(TRANSFORM_USE(fromA), TRANSFORM_USE(toA), TRANSFORM_USE(fromB), TRANSFORM_USE(toB), *result);
+	return obj->calcTimeOfImpact(TRANSFORM_USE(fromA), TRANSFORM_USE(toA), TRANSFORM_USE(fromB),
+		TRANSFORM_USE(toB), *result);
 }
 
 void btConvexCast_delete(btConvexCast* obj)

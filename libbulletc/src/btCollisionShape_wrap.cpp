@@ -23,7 +23,8 @@ void btCollisionShape_calculateTemporalAabb(btCollisionShape* obj, const btScala
 	VECTOR3_CONV(angvel);
 	VECTOR3_DEF(temporalAabbMin);
 	VECTOR3_DEF(temporalAabbMax);
-	obj->calculateTemporalAabb(TRANSFORM_USE(curTrans), VECTOR3_USE(linvel), VECTOR3_USE(angvel), timeStep, VECTOR3_USE(temporalAabbMin), VECTOR3_USE(temporalAabbMax));
+	obj->calculateTemporalAabb(TRANSFORM_USE(curTrans), VECTOR3_USE(linvel), VECTOR3_USE(angvel),
+		timeStep, VECTOR3_USE(temporalAabbMin), VECTOR3_USE(temporalAabbMax));
 	VECTOR3_DEF_OUT(temporalAabbMin);
 	VECTOR3_DEF_OUT(temporalAabbMax);
 }

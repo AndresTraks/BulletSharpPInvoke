@@ -64,7 +64,8 @@ bool btAABB_collide_triangle_exact(btAABB* obj, const btScalar* p1, const btScal
 	VECTOR3_CONV(p2);
 	VECTOR3_CONV(p3);
 	VECTOR4_CONV(triangle_plane);
-	return obj->collide_triangle_exact(VECTOR3_USE(p1), VECTOR3_USE(p2), VECTOR3_USE(p3), VECTOR4_USE(triangle_plane));
+	return obj->collide_triangle_exact(VECTOR3_USE(p1), VECTOR3_USE(p2), VECTOR3_USE(p3),
+		VECTOR4_USE(triangle_plane));
 }
 
 void btAABB_copy_with_margin(btAABB* obj, const btAABB* other, btScalar margin)

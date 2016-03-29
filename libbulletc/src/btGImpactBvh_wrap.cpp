@@ -291,7 +291,8 @@ void btGImpactBvh_find_collision(btGImpactBvh* boxset1, const btScalar* trans1, 
 {
 	TRANSFORM_CONV(trans1);
 	TRANSFORM_CONV(trans2);
-	btGImpactBvh::find_collision(boxset1, TRANSFORM_USE(trans1), boxset2, TRANSFORM_USE(trans2), *collision_pairs);
+	btGImpactBvh::find_collision(boxset1, TRANSFORM_USE(trans1), boxset2, TRANSFORM_USE(trans2),
+		*collision_pairs);
 }
 
 const GIM_BVH_TREE_NODE* btGImpactBvh_get_node_pointer(btGImpactBvh* obj)

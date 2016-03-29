@@ -110,14 +110,16 @@ btGearConstraint* btWorldImporter_createGearConstraint(btWorldImporter* obj, btR
 {
 	VECTOR3_CONV(axisInA);
 	VECTOR3_CONV(axisInB);
-	return obj->createGearConstraint(*rbA, *rbB, VECTOR3_USE(axisInA), VECTOR3_USE(axisInB), ratio);
+	return obj->createGearConstraint(*rbA, *rbB, VECTOR3_USE(axisInA), VECTOR3_USE(axisInB),
+		ratio);
 }
 
 btGeneric6DofConstraint* btWorldImporter_createGeneric6DofConstraint(btWorldImporter* obj, btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB, bool useLinearReferenceFrameA)
 {
 	TRANSFORM_CONV(frameInA);
 	TRANSFORM_CONV(frameInB);
-	return obj->createGeneric6DofConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB), useLinearReferenceFrameA);
+	return obj->createGeneric6DofConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA),
+		TRANSFORM_USE(frameInB), useLinearReferenceFrameA);
 }
 
 btGeneric6DofConstraint* btWorldImporter_createGeneric6DofConstraint2(btWorldImporter* obj, btRigidBody* rbB, const btScalar* frameInB, bool useLinearReferenceFrameB)
@@ -130,14 +132,16 @@ btGeneric6DofSpring2Constraint* btWorldImporter_createGeneric6DofSpring2Constrai
 {
 	TRANSFORM_CONV(frameInA);
 	TRANSFORM_CONV(frameInB);
-	return obj->createGeneric6DofSpring2Constraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB), rotateOrder);
+	return obj->createGeneric6DofSpring2Constraint(*rbA, *rbB, TRANSFORM_USE(frameInA),
+		TRANSFORM_USE(frameInB), rotateOrder);
 }
 
 btGeneric6DofSpringConstraint* btWorldImporter_createGeneric6DofSpringConstraint(btWorldImporter* obj, btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB, bool useLinearReferenceFrameA)
 {
 	TRANSFORM_CONV(frameInA);
 	TRANSFORM_CONV(frameInB);
-	return obj->createGeneric6DofSpringConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB), useLinearReferenceFrameA);
+	return obj->createGeneric6DofSpringConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA),
+		TRANSFORM_USE(frameInB), useLinearReferenceFrameA);
 }
 
 btGImpactMeshShape* btWorldImporter_createGimpactShape(btWorldImporter* obj, btStridingMeshInterface* trimesh)
@@ -156,7 +160,8 @@ btHingeConstraint* btWorldImporter_createHingeConstraint2(btWorldImporter* obj, 
 {
 	TRANSFORM_CONV(rbAFrame);
 	TRANSFORM_CONV(rbBFrame);
-	return obj->createHingeConstraint(*rbA, *rbB, TRANSFORM_USE(rbAFrame), TRANSFORM_USE(rbBFrame), useReferenceFrameA);
+	return obj->createHingeConstraint(*rbA, *rbB, TRANSFORM_USE(rbAFrame), TRANSFORM_USE(rbBFrame),
+		useReferenceFrameA);
 }
 
 btHingeConstraint* btWorldImporter_createHingeConstraint3(btWorldImporter* obj, btRigidBody* rbA, const btScalar* rbAFrame)
@@ -209,7 +214,8 @@ btPoint2PointConstraint* btWorldImporter_createPoint2PointConstraint2(btWorldImp
 btRigidBody* btWorldImporter_createRigidBody(btWorldImporter* obj, bool isDynamic, btScalar mass, const btScalar* startTransform, btCollisionShape* shape, const char* bodyName)
 {
 	TRANSFORM_CONV(startTransform);
-	return obj->createRigidBody(isDynamic, mass, TRANSFORM_USE(startTransform), shape, bodyName);
+	return obj->createRigidBody(isDynamic, mass, TRANSFORM_USE(startTransform), shape,
+		bodyName);
 }
 
 btScaledBvhTriangleMeshShape* btWorldImporter_createScaledTrangleMeshShape(btWorldImporter* obj, btBvhTriangleMeshShape* meshShape, const btScalar* localScalingbtBvhTriangleMeshShape)
@@ -222,7 +228,8 @@ btSliderConstraint* btWorldImporter_createSliderConstraint(btWorldImporter* obj,
 {
 	TRANSFORM_CONV(frameInA);
 	TRANSFORM_CONV(frameInB);
-	return obj->createSliderConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB), useLinearReferenceFrameA);
+	return obj->createSliderConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB),
+		useLinearReferenceFrameA);
 }
 
 btSliderConstraint* btWorldImporter_createSliderConstraint2(btWorldImporter* obj, btRigidBody* rbB, const btScalar* frameInB, bool useLinearReferenceFrameA)

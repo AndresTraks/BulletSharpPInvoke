@@ -19,18 +19,20 @@ void btGhostObject_addOverlappingObjectInternal2(btGhostObject* obj, btBroadphas
 	obj->addOverlappingObjectInternal(otherProxy, thisProxy);
 }
 
-void btGhostObject_convexSweepTest(btGhostObject* obj, const btConvexShape* castShape, const btScalar* convexFromWorld, const btScalar* convexToWorld, btCollisionWorld::ConvexResultCallback* resultCallback)
+void btGhostObject_convexSweepTest(btGhostObject* obj, const btConvexShape* castShape, const btScalar* convexFromWorld, const btScalar* convexToWorld, btCollisionWorld_ConvexResultCallback* resultCallback)
 {
 	TRANSFORM_CONV(convexFromWorld);
 	TRANSFORM_CONV(convexToWorld);
-	obj->convexSweepTest(castShape, TRANSFORM_USE(convexFromWorld), TRANSFORM_USE(convexToWorld), *resultCallback);
+	obj->convexSweepTest(castShape, TRANSFORM_USE(convexFromWorld), TRANSFORM_USE(convexToWorld),
+		*resultCallback);
 }
 
-void btGhostObject_convexSweepTest2(btGhostObject* obj, const btConvexShape* castShape, const btScalar* convexFromWorld, const btScalar* convexToWorld, btCollisionWorld::ConvexResultCallback* resultCallback, btScalar allowedCcdPenetration)
+void btGhostObject_convexSweepTest2(btGhostObject* obj, const btConvexShape* castShape, const btScalar* convexFromWorld, const btScalar* convexToWorld, btCollisionWorld_ConvexResultCallback* resultCallback, btScalar allowedCcdPenetration)
 {
 	TRANSFORM_CONV(convexFromWorld);
 	TRANSFORM_CONV(convexToWorld);
-	obj->convexSweepTest(castShape, TRANSFORM_USE(convexFromWorld), TRANSFORM_USE(convexToWorld), *resultCallback, allowedCcdPenetration);
+	obj->convexSweepTest(castShape, TRANSFORM_USE(convexFromWorld), TRANSFORM_USE(convexToWorld),
+		*resultCallback, allowedCcdPenetration);
 }
 
 int btGhostObject_getNumOverlappingObjects(btGhostObject* obj)

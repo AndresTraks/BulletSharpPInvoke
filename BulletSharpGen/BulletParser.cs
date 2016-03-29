@@ -299,9 +299,9 @@ namespace BulletSharpGen
         {
             if (!string.IsNullOrEmpty(type.Name) && type.Name.Equals("btAlignedObjectArray"))
             {
-                if (type.SpecializedTemplateType != null)
+                if (type.TemplateParams != null)
                 {
-                    return "Aligned" + type.SpecializedTemplateType.ManagedName + "Array^";
+                    return "Aligned" + type.TemplateParams.First().ManagedName + "Array^";
                 }
             }
 
@@ -771,7 +771,7 @@ namespace BulletSharpGen
                         output.AppendLine(GetTabs(level + 2) + "get");
                         output.AppendLine(GetTabs(level + 2) + "{");
                         output.AppendLine(GetTabs(level + 3) + GetTypeNameCS(type) + " value;");
-                        output.AppendLine(GetTabs(level + 3) + string.Format("{0}_{1}(_native, out value);", prop.Parent.FullNameC, prop.Getter.Name));
+                        output.AppendLine(GetTabs(level + 3) + string.Format("{0}_{1}(_native, out value);", PInvokeWriter.GetFullNameC(prop.Parent), prop.Getter.Name));
                         output.AppendLine(GetTabs(level + 3) + "return value;");
                         output.AppendLine(GetTabs(level + 2) + '}');
                         return output.ToString();
@@ -780,7 +780,7 @@ namespace BulletSharpGen
 
             output.AppendLine(GetTabs(level + 2) + string.Format("get {{ return {0}{1}_{2}(_native){3}; }}",
                 GetTypeMarshalConstructorStartCS(prop.Getter),
-                prop.Parent.FullNameC, prop.Getter.Name,
+                PInvokeWriter.GetFullNameC(prop.Parent), prop.Getter.Name,
                 GetTypeMarshalConstructorEndCS(prop.Getter)));
             return output.ToString();
         }

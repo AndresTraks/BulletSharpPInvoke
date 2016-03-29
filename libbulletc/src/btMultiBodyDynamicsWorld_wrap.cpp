@@ -7,7 +7,8 @@
 
 btMultiBodyDynamicsWorld* btMultiBodyDynamicsWorld_new(btDispatcher* dispatcher, btBroadphaseInterface* pairCache, btMultiBodyConstraintSolver* constraintSolver, btCollisionConfiguration* collisionConfiguration)
 {
-	return new btMultiBodyDynamicsWorld(dispatcher, pairCache, constraintSolver, collisionConfiguration);
+	return new btMultiBodyDynamicsWorld(dispatcher, pairCache, constraintSolver,
+		collisionConfiguration);
 }
 
 void btMultiBodyDynamicsWorld_addMultiBody(btMultiBodyDynamicsWorld* obj, btMultiBody* body)

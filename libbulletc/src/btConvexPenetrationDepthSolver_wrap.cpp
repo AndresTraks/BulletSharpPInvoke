@@ -12,7 +12,8 @@ bool btConvexPenetrationDepthSolver_calcPenDepth(btConvexPenetrationDepthSolver*
 	VECTOR3_DEF(v);
 	VECTOR3_DEF(pa);
 	VECTOR3_DEF(pb);
-	bool ret = obj->calcPenDepth(*simplexSolver, convexA, convexB, TRANSFORM_USE(transA), TRANSFORM_USE(transB), VECTOR3_USE(v), VECTOR3_USE(pa), VECTOR3_USE(pb), debugDraw);
+	bool ret = obj->calcPenDepth(*simplexSolver, convexA, convexB, TRANSFORM_USE(transA),
+		TRANSFORM_USE(transB), VECTOR3_USE(v), VECTOR3_USE(pa), VECTOR3_USE(pb), debugDraw);
 	VECTOR3_DEF_OUT(v);
 	VECTOR3_DEF_OUT(pa);
 	VECTOR3_DEF_OUT(pb);

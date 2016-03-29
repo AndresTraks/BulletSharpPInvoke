@@ -115,7 +115,7 @@ void btGImpactShapeInterface_processAllTrianglesRay(btGImpactShapeInterface* obj
 	obj->processAllTrianglesRay(__unnamed0, VECTOR3_USE(__unnamed1), VECTOR3_USE(__unnamed2));
 }
 
-void btGImpactShapeInterface_rayTest(btGImpactShapeInterface* obj, const btScalar* rayFrom, const btScalar* rayTo, btCollisionWorld::RayResultCallback* resultCallback)
+void btGImpactShapeInterface_rayTest(btGImpactShapeInterface* obj, const btScalar* rayFrom, const btScalar* rayTo, btCollisionWorld_RayResultCallback* resultCallback)
 {
 	VECTOR3_CONV(rayFrom);
 	VECTOR3_CONV(rayTo);
@@ -139,7 +139,7 @@ void btGImpactShapeInterface_updateBound(btGImpactShapeInterface* obj)
 }
 
 
-btGImpactCompoundShape::CompoundPrimitiveManager* btGImpactCompoundShape_CompoundPrimitiveManager_new(const btGImpactCompoundShape::CompoundPrimitiveManager* compound)
+btGImpactCompoundShape::CompoundPrimitiveManager* btGImpactCompoundShape_CompoundPrimitiveManager_new(const btGImpactCompoundShape_CompoundPrimitiveManager* compound)
 {
 	return new btGImpactCompoundShape::CompoundPrimitiveManager(*compound);
 }
@@ -186,7 +186,7 @@ void btGImpactCompoundShape_addChildShape2(btGImpactCompoundShape* obj, btCollis
 	obj->addChildShape(shape);
 }
 
-btGImpactCompoundShape::CompoundPrimitiveManager* btGImpactCompoundShape_getCompoundPrimitiveManager(btGImpactCompoundShape* obj)
+btGImpactCompoundShape_CompoundPrimitiveManager* btGImpactCompoundShape_getCompoundPrimitiveManager(btGImpactCompoundShape* obj)
 {
 	return obj->getCompoundPrimitiveManager();
 }
@@ -197,7 +197,7 @@ btGImpactMeshShapePart::TrimeshPrimitiveManager* btGImpactMeshShapePart_TrimeshP
 	return new btGImpactMeshShapePart::TrimeshPrimitiveManager(meshInterface, part);
 }
 
-btGImpactMeshShapePart::TrimeshPrimitiveManager* btGImpactMeshShapePart_TrimeshPrimitiveManager_new2(const btGImpactMeshShapePart::TrimeshPrimitiveManager* manager)
+btGImpactMeshShapePart::TrimeshPrimitiveManager* btGImpactMeshShapePart_TrimeshPrimitiveManager_new2(const btGImpactMeshShapePart_TrimeshPrimitiveManager* manager)
 {
 	return new btGImpactMeshShapePart::TrimeshPrimitiveManager(*manager);
 }
@@ -385,7 +385,7 @@ int btGImpactMeshShapePart_getPart(btGImpactMeshShapePart* obj)
 	return obj->getPart();
 }
 
-btGImpactMeshShapePart::TrimeshPrimitiveManager* btGImpactMeshShapePart_getTrimeshPrimitiveManager(btGImpactMeshShapePart* obj)
+btGImpactMeshShapePart_TrimeshPrimitiveManager* btGImpactMeshShapePart_getTrimeshPrimitiveManager(btGImpactMeshShapePart* obj)
 {
 	return obj->getTrimeshPrimitiveManager();
 }

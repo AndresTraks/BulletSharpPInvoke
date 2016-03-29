@@ -18,7 +18,8 @@ void btOptimizedBvh_build(btOptimizedBvh* obj, btStridingMeshInterface* triangle
 
 btOptimizedBvh* btOptimizedBvh_deSerializeInPlace(void* i_alignedDataBuffer, unsigned int i_dataBufferSize, bool i_swapEndian)
 {
-	return btOptimizedBvh::deSerializeInPlace(i_alignedDataBuffer, i_dataBufferSize, i_swapEndian);
+	return btOptimizedBvh::deSerializeInPlace(i_alignedDataBuffer, i_dataBufferSize,
+		i_swapEndian);
 }
 
 void btOptimizedBvh_refit(btOptimizedBvh* obj, btStridingMeshInterface* triangles, const btScalar* aabbMin, const btScalar* aabbMax)

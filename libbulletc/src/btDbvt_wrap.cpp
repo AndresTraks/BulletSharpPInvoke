@@ -572,7 +572,8 @@ void btDbvt_rayTestInternal(btDbvt* obj, const btDbvtNode* root, const btScalar*
 	VECTOR3_CONV(rayDirectionInverse);
 	VECTOR3_CONV(aabbMin);
 	VECTOR3_CONV(aabbMax);
-	obj->rayTestInternal(root, VECTOR3_USE(rayFrom), VECTOR3_USE(rayTo), VECTOR3_USE(rayDirectionInverse), signs, lambda_max, VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), *policy);
+	obj->rayTestInternal(root, VECTOR3_USE(rayFrom), VECTOR3_USE(rayTo), VECTOR3_USE(rayDirectionInverse),
+		signs, lambda_max, VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax));
 }
 */
 void btDbvt_remove(btDbvt* obj, btDbvtNode* leaf)

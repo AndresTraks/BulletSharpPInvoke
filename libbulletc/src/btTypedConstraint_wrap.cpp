@@ -277,12 +277,12 @@ btRigidBody* btTypedConstraint_getFixedBody()
 	return &btTypedConstraint::getFixedBody();
 }
 
-void btTypedConstraint_getInfo1(btTypedConstraint* obj, btTypedConstraint::btConstraintInfo1* info)
+void btTypedConstraint_getInfo1(btTypedConstraint* obj, btTypedConstraint_btConstraintInfo1* info)
 {
 	obj->getInfo1(info);
 }
 
-void btTypedConstraint_getInfo2(btTypedConstraint* obj, btTypedConstraint::btConstraintInfo2* info)
+void btTypedConstraint_getInfo2(btTypedConstraint* obj, btTypedConstraint_btConstraintInfo2* info)
 {
 	obj->getInfo2(info);
 }
