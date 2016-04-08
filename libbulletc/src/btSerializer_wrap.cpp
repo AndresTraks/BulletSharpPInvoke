@@ -188,7 +188,8 @@ btChunk* btSerializer_allocate(btSerializer* obj, int size, int numElements)
 	return obj->allocate(size, numElements);
 }
 
-void btSerializer_finalizeChunk(btSerializer* obj, btChunk* chunk, const char* structType, int chunkCode, void* oldPtr)
+void btSerializer_finalizeChunk(btSerializer* obj, btChunk* chunk, const char* structType,
+	int chunkCode, void* oldPtr)
 {
 	obj->finalizeChunk(chunk, structType, chunkCode, oldPtr);
 }
@@ -257,7 +258,6 @@ void btSerializer_startSerialization(btSerializer* obj)
 {
 	obj->startSerialization();
 }
-
 
 void btSerializer_delete(btSerializer* obj)
 {

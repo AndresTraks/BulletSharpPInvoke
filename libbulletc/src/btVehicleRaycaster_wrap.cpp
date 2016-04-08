@@ -15,29 +15,34 @@ btScalar btVehicleRaycaster_btVehicleRaycasterResult_getDistFraction(btVehicleRa
 	return obj->m_distFraction;
 }
 
-void btVehicleRaycaster_btVehicleRaycasterResult_getHitNormalInWorld(btVehicleRaycaster::btVehicleRaycasterResult* obj, btScalar* value)
+void btVehicleRaycaster_btVehicleRaycasterResult_getHitNormalInWorld(btVehicleRaycaster::btVehicleRaycasterResult* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_hitNormalInWorld, value);
+	BTVECTOR3_SET(value, obj->m_hitNormalInWorld);
 }
 
-void btVehicleRaycaster_btVehicleRaycasterResult_getHitPointInWorld(btVehicleRaycaster::btVehicleRaycasterResult* obj, btScalar* value)
+void btVehicleRaycaster_btVehicleRaycasterResult_getHitPointInWorld(btVehicleRaycaster::btVehicleRaycasterResult* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_hitPointInWorld, value);
+	BTVECTOR3_SET(value, obj->m_hitPointInWorld);
 }
 
-void btVehicleRaycaster_btVehicleRaycasterResult_setDistFraction(btVehicleRaycaster::btVehicleRaycasterResult* obj, btScalar value)
+void btVehicleRaycaster_btVehicleRaycasterResult_setDistFraction(btVehicleRaycaster::btVehicleRaycasterResult* obj,
+	btScalar value)
 {
 	obj->m_distFraction = value;
 }
 
-void btVehicleRaycaster_btVehicleRaycasterResult_setHitNormalInWorld(btVehicleRaycaster::btVehicleRaycasterResult* obj, const btScalar* value)
+void btVehicleRaycaster_btVehicleRaycasterResult_setHitNormalInWorld(btVehicleRaycaster::btVehicleRaycasterResult* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_hitNormalInWorld);
+	BTVECTOR3_COPY(&obj->m_hitNormalInWorld, value);
 }
 
-void btVehicleRaycaster_btVehicleRaycasterResult_setHitPointInWorld(btVehicleRaycaster::btVehicleRaycasterResult* obj, const btScalar* value)
+void btVehicleRaycaster_btVehicleRaycasterResult_setHitPointInWorld(btVehicleRaycaster::btVehicleRaycasterResult* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_hitPointInWorld);
+	BTVECTOR3_COPY(&obj->m_hitPointInWorld, value);
 }
 
 void btVehicleRaycaster_btVehicleRaycasterResult_delete(btVehicleRaycaster::btVehicleRaycasterResult* obj)
@@ -46,11 +51,12 @@ void btVehicleRaycaster_btVehicleRaycasterResult_delete(btVehicleRaycaster::btVe
 }
 
 
-void* btVehicleRaycaster_castRay(btVehicleRaycaster* obj, const btScalar* from, const btScalar* to, btVehicleRaycaster_btVehicleRaycasterResult* result)
+void* btVehicleRaycaster_castRay(btVehicleRaycaster* obj, const btVector3* from,
+	const btVector3* to, btVehicleRaycaster_btVehicleRaycasterResult* result)
 {
-	VECTOR3_CONV(from);
-	VECTOR3_CONV(to);
-	return obj->castRay(VECTOR3_USE(from), VECTOR3_USE(to), *result);
+	BTVECTOR3_IN(from);
+	BTVECTOR3_IN(to);
+	return obj->castRay(BTVECTOR3_USE(from), BTVECTOR3_USE(to), *result);
 }
 
 void btVehicleRaycaster_delete(btVehicleRaycaster* obj)

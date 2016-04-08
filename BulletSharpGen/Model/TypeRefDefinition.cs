@@ -311,7 +311,7 @@ namespace BulletSharpGen
                 IsPointer = IsPointer,
                 IsReference = IsReference,
                 Name = Name,
-                Referenced = Referenced,
+                Referenced = Referenced != null ? Referenced.Copy() : null,
                 TemplateParams = TemplateParams?.Select(p => p.Copy()).ToList(),
                 Target = Target
             };

@@ -5,13 +5,16 @@
 
 #include "btSoftRigidDynamicsWorld_wrap.h"
 
-btSoftRigidDynamicsWorld* btSoftRigidDynamicsWorld_new(btDispatcher* dispatcher, btBroadphaseInterface* pairCache, btConstraintSolver* constraintSolver, btCollisionConfiguration* collisionConfiguration)
+btSoftRigidDynamicsWorld* btSoftRigidDynamicsWorld_new(btDispatcher* dispatcher,
+	btBroadphaseInterface* pairCache, btConstraintSolver* constraintSolver, btCollisionConfiguration* collisionConfiguration)
 {
 	return new btSoftRigidDynamicsWorld(dispatcher, pairCache, constraintSolver,
 		collisionConfiguration);
 }
 
-btSoftRigidDynamicsWorld* btSoftRigidDynamicsWorld_new2(btDispatcher* dispatcher, btBroadphaseInterface* pairCache, btConstraintSolver* constraintSolver, btCollisionConfiguration* collisionConfiguration, btSoftBodySolver* softBodySolver)
+btSoftRigidDynamicsWorld* btSoftRigidDynamicsWorld_new2(btDispatcher* dispatcher,
+	btBroadphaseInterface* pairCache, btConstraintSolver* constraintSolver, btCollisionConfiguration* collisionConfiguration,
+	btSoftBodySolver* softBodySolver)
 {
 	return new btSoftRigidDynamicsWorld(dispatcher, pairCache, constraintSolver,
 		collisionConfiguration, softBodySolver);
@@ -22,12 +25,14 @@ void btSoftRigidDynamicsWorld_addSoftBody(btSoftRigidDynamicsWorld* obj, btSoftB
 	obj->addSoftBody(body);
 }
 
-void btSoftRigidDynamicsWorld_addSoftBody2(btSoftRigidDynamicsWorld* obj, btSoftBody* body, short collisionFilterGroup)
+void btSoftRigidDynamicsWorld_addSoftBody2(btSoftRigidDynamicsWorld* obj, btSoftBody* body,
+	short collisionFilterGroup)
 {
 	obj->addSoftBody(body, collisionFilterGroup);
 }
 
-void btSoftRigidDynamicsWorld_addSoftBody3(btSoftRigidDynamicsWorld* obj, btSoftBody* body, short collisionFilterGroup, short collisionFilterMask)
+void btSoftRigidDynamicsWorld_addSoftBody3(btSoftRigidDynamicsWorld* obj, btSoftBody* body,
+	short collisionFilterGroup, short collisionFilterMask)
 {
 	obj->addSoftBody(body, collisionFilterGroup, collisionFilterMask);
 }
@@ -37,7 +42,7 @@ int btSoftRigidDynamicsWorld_getDrawFlags(btSoftRigidDynamicsWorld* obj)
 	return obj->getDrawFlags();
 }
 
-btSoftBodyArray* btSoftRigidDynamicsWorld_getSoftBodyArray(btSoftRigidDynamicsWorld* obj)
+btAlignedObjectArray_btSoftBodyPtr* btSoftRigidDynamicsWorld_getSoftBodyArray(btSoftRigidDynamicsWorld* obj)
 {
 	return &obj->getSoftBodyArray();
 }

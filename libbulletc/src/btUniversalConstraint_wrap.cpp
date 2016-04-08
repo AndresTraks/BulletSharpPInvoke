@@ -3,23 +3,24 @@
 #include "conversion.h"
 #include "btUniversalConstraint_wrap.h"
 
-btUniversalConstraint* btUniversalConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btScalar* anchor, const btScalar* axis1, const btScalar* axis2)
+btUniversalConstraint* btUniversalConstraint_new(btRigidBody* rbA, btRigidBody* rbB,
+	const btVector3* anchor, const btVector3* axis1, const btVector3* axis2)
 {
-	VECTOR3_CONV(anchor);
-	VECTOR3_CONV(axis1);
-	VECTOR3_CONV(axis2);
-	return new btUniversalConstraint(*rbA, *rbB, VECTOR3_USE(anchor), VECTOR3_USE(axis1),
-		VECTOR3_USE(axis2));
+	BTVECTOR3_IN(anchor);
+	BTVECTOR3_IN(axis1);
+	BTVECTOR3_IN(axis2);
+	return new btUniversalConstraint(*rbA, *rbB, BTVECTOR3_USE(anchor), BTVECTOR3_USE(axis1),
+		BTVECTOR3_USE(axis2));
 }
 
-void btUniversalConstraint_getAnchor(btUniversalConstraint* obj, btScalar* value)
+void btUniversalConstraint_getAnchor(btUniversalConstraint* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getAnchor(), value);
+	BTVECTOR3_COPY(value, &obj->getAnchor());
 }
 
-void btUniversalConstraint_getAnchor2(btUniversalConstraint* obj, btScalar* value)
+void btUniversalConstraint_getAnchor2(btUniversalConstraint* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getAnchor2(), value);
+	BTVECTOR3_COPY(value, &obj->getAnchor2());
 }
 
 btScalar btUniversalConstraint_getAngle1(btUniversalConstraint* obj)
@@ -32,22 +33,24 @@ btScalar btUniversalConstraint_getAngle2(btUniversalConstraint* obj)
 	return obj->getAngle2();
 }
 
-void btUniversalConstraint_getAxis1(btUniversalConstraint* obj, btScalar* value)
+void btUniversalConstraint_getAxis1(btUniversalConstraint* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getAxis1(), value);
+	BTVECTOR3_COPY(value, &obj->getAxis1());
 }
 
-void btUniversalConstraint_getAxis2(btUniversalConstraint* obj, btScalar* value)
+void btUniversalConstraint_getAxis2(btUniversalConstraint* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getAxis2(), value);
+	BTVECTOR3_COPY(value, &obj->getAxis2());
 }
 
-void btUniversalConstraint_setLowerLimit(btUniversalConstraint* obj, btScalar ang1min, btScalar ang2min)
+void btUniversalConstraint_setLowerLimit(btUniversalConstraint* obj, btScalar ang1min,
+	btScalar ang2min)
 {
 	obj->setLowerLimit(ang1min, ang2min);
 }
 
-void btUniversalConstraint_setUpperLimit(btUniversalConstraint* obj, btScalar ang1max, btScalar ang2max)
+void btUniversalConstraint_setUpperLimit(btUniversalConstraint* obj, btScalar ang1max,
+	btScalar ang2max)
 {
 	obj->setUpperLimit(ang1max, ang2max);
 }

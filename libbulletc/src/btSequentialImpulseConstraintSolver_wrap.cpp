@@ -12,7 +12,8 @@ unsigned long btSequentialImpulseConstraintSolver_btRand2(btSequentialImpulseCon
 	return obj->btRand2();
 }
 
-int btSequentialImpulseConstraintSolver_btRandInt2(btSequentialImpulseConstraintSolver* obj, int n)
+int btSequentialImpulseConstraintSolver_btRandInt2(btSequentialImpulseConstraintSolver* obj,
+	int n)
 {
 	return obj->btRandInt2(n);
 }
@@ -22,7 +23,8 @@ unsigned long btSequentialImpulseConstraintSolver_getRandSeed(btSequentialImpuls
 	return obj->getRandSeed();
 }
 
-void btSequentialImpulseConstraintSolver_setRandSeed(btSequentialImpulseConstraintSolver* obj, unsigned long seed)
+void btSequentialImpulseConstraintSolver_setRandSeed(btSequentialImpulseConstraintSolver* obj,
+	unsigned long seed)
 {
 	obj->setRandSeed(seed);
 }

@@ -98,7 +98,8 @@ btScalar btTriangleInfoMap_getZeroAreaThreshold(btTriangleInfoMap* obj)
 	return obj->m_zeroAreaThreshold;
 }
 
-const char* btTriangleInfoMap_serialize(btTriangleInfoMap* obj, void* dataBuffer, btSerializer* serializer)
+const char* btTriangleInfoMap_serialize(btTriangleInfoMap* obj, void* dataBuffer,
+	btSerializer* serializer)
 {
 	return obj->serialize(dataBuffer, serializer);
 }

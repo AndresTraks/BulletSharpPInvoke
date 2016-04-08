@@ -18,24 +18,24 @@ const btConvexShape* btMinkowskiSumShape_getShapeB(btMinkowskiSumShape* obj)
 	return obj->getShapeB();
 }
 
-void btMinkowskiSumShape_getTransformA(btMinkowskiSumShape* obj, btScalar* transA)
+void btMinkowskiSumShape_getTransformA(btMinkowskiSumShape* obj, btTransform* transA)
 {
-	TRANSFORM_OUT(&obj->getTransformA(), transA);
+	BTTRANSFORM_COPY(transA, &obj->getTransformA());
 }
 
-void btMinkowskiSumShape_GetTransformB(btMinkowskiSumShape* obj, btScalar* transB)
+void btMinkowskiSumShape_GetTransformB(btMinkowskiSumShape* obj, btTransform* transB)
 {
-	TRANSFORM_OUT(&obj->GetTransformB(), transB);
+	BTTRANSFORM_COPY(transB, &obj->GetTransformB());
 }
 
-void btMinkowskiSumShape_setTransformA(btMinkowskiSumShape* obj, const btScalar* transA)
+void btMinkowskiSumShape_setTransformA(btMinkowskiSumShape* obj, const btTransform* transA)
 {
-	TRANSFORM_CONV(transA);
-	obj->setTransformA(TRANSFORM_USE(transA));
+	BTTRANSFORM_IN(transA);
+	obj->setTransformA(BTTRANSFORM_USE(transA));
 }
 
-void btMinkowskiSumShape_setTransformB(btMinkowskiSumShape* obj, const btScalar* transB)
+void btMinkowskiSumShape_setTransformB(btMinkowskiSumShape* obj, const btTransform* transB)
 {
-	TRANSFORM_CONV(transB);
-	obj->setTransformB(TRANSFORM_USE(transB));
+	BTTRANSFORM_IN(transB);
+	obj->setTransformB(BTTRANSFORM_USE(transB));
 }

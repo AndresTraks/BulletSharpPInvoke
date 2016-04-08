@@ -7,17 +7,20 @@ btManifoldResult* btManifoldResult_new()
 	return new btManifoldResult();
 }
 
-btManifoldResult* btManifoldResult_new2(const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap)
+btManifoldResult* btManifoldResult_new2(const btCollisionObjectWrapper* body0Wrap,
+	const btCollisionObjectWrapper* body1Wrap)
 {
 	return new btManifoldResult(body0Wrap, body1Wrap);
 }
 
-btScalar btManifoldResult_calculateCombinedFriction(const btCollisionObject* body0, const btCollisionObject* body1)
+btScalar btManifoldResult_calculateCombinedFriction(const btCollisionObject* body0,
+	const btCollisionObject* body1)
 {
 	return btManifoldResult::calculateCombinedFriction(body0, body1);
 }
 
-btScalar btManifoldResult_calculateCombinedRestitution(const btCollisionObject* body0, const btCollisionObject* body1)
+btScalar btManifoldResult_calculateCombinedRestitution(const btCollisionObject* body0,
+	const btCollisionObject* body1)
 {
 	return btManifoldResult::calculateCombinedRestitution(body0, body1);
 }

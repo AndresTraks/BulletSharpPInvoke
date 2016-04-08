@@ -3,9 +3,9 @@
 extern "C"
 {
 	EXPORT btTriangleShape* btTriangleShape_new();
-	EXPORT btTriangleShape* btTriangleShape_new2(const btScalar* p0, const btScalar* p1, const btScalar* p2);
-	EXPORT void btTriangleShape_calcNormal(btTriangleShape* obj, btScalar* normal);
-	EXPORT void btTriangleShape_getPlaneEquation(btTriangleShape* obj, int i, btScalar* planeNormal, btScalar* planeSupport);
+	EXPORT btTriangleShape* btTriangleShape_new2(const btVector3* p0, const btVector3* p1, const btVector3* p2);
+	EXPORT void btTriangleShape_calcNormal(btTriangleShape* obj, btVector3* normal);
+	EXPORT void btTriangleShape_getPlaneEquation(btTriangleShape* obj, int i, btVector3* planeNormal, btVector3* planeSupport);
 	EXPORT const btScalar* btTriangleShape_getVertexPtr(btTriangleShape* obj, int index);
 	EXPORT btVector3* btTriangleShape_getVertices1(btTriangleShape* obj);
 }

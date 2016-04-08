@@ -3,10 +3,10 @@
 #include "conversion.h"
 #include "btStaticPlaneShape_wrap.h"
 
-btStaticPlaneShape* btStaticPlaneShape_new(const btScalar* planeNormal, btScalar planeConstant)
+btStaticPlaneShape* btStaticPlaneShape_new(const btVector3* planeNormal, btScalar planeConstant)
 {
-	VECTOR3_CONV(planeNormal);
-	return new btStaticPlaneShape(VECTOR3_USE(planeNormal), planeConstant);
+	BTVECTOR3_IN(planeNormal);
+	return new btStaticPlaneShape(BTVECTOR3_USE(planeNormal), planeConstant);
 }
 
 btScalar btStaticPlaneShape_getPlaneConstant(btStaticPlaneShape* obj)
@@ -14,7 +14,7 @@ btScalar btStaticPlaneShape_getPlaneConstant(btStaticPlaneShape* obj)
 	return obj->getPlaneConstant();
 }
 
-void btStaticPlaneShape_getPlaneNormal(btStaticPlaneShape* obj, btScalar* value)
+void btStaticPlaneShape_getPlaneNormal(btStaticPlaneShape* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getPlaneNormal(), value);
+	BTVECTOR3_COPY(value, &obj->getPlaneNormal());
 }

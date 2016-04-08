@@ -17,9 +17,10 @@ bool btWheelInfoConstructionInfo_getBIsFrontWheel(btWheelInfoConstructionInfo* o
 	return obj->m_bIsFrontWheel;
 }
 
-void btWheelInfoConstructionInfo_getChassisConnectionCS(btWheelInfoConstructionInfo* obj, btScalar* value)
+void btWheelInfoConstructionInfo_getChassisConnectionCS(btWheelInfoConstructionInfo* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_chassisConnectionCS, value);
+	BTVECTOR3_SET(value, obj->m_chassisConnectionCS);
 }
 
 btScalar btWheelInfoConstructionInfo_getFrictionSlip(btWheelInfoConstructionInfo* obj)
@@ -47,14 +48,16 @@ btScalar btWheelInfoConstructionInfo_getSuspensionStiffness(btWheelInfoConstruct
 	return obj->m_suspensionStiffness;
 }
 
-void btWheelInfoConstructionInfo_getWheelAxleCS(btWheelInfoConstructionInfo* obj, btScalar* value)
+void btWheelInfoConstructionInfo_getWheelAxleCS(btWheelInfoConstructionInfo* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_wheelAxleCS, value);
+	BTVECTOR3_SET(value, obj->m_wheelAxleCS);
 }
 
-void btWheelInfoConstructionInfo_getWheelDirectionCS(btWheelInfoConstructionInfo* obj, btScalar* value)
+void btWheelInfoConstructionInfo_getWheelDirectionCS(btWheelInfoConstructionInfo* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_wheelDirectionCS, value);
+	BTVECTOR3_SET(value, obj->m_wheelDirectionCS);
 }
 
 btScalar btWheelInfoConstructionInfo_getWheelRadius(btWheelInfoConstructionInfo* obj)
@@ -72,62 +75,74 @@ btScalar btWheelInfoConstructionInfo_getWheelsDampingRelaxation(btWheelInfoConst
 	return obj->m_wheelsDampingRelaxation;
 }
 
-void btWheelInfoConstructionInfo_setBIsFrontWheel(btWheelInfoConstructionInfo* obj, bool value)
+void btWheelInfoConstructionInfo_setBIsFrontWheel(btWheelInfoConstructionInfo* obj,
+	bool value)
 {
 	obj->m_bIsFrontWheel = value;
 }
 
-void btWheelInfoConstructionInfo_setChassisConnectionCS(btWheelInfoConstructionInfo* obj, const btScalar* value)
+void btWheelInfoConstructionInfo_setChassisConnectionCS(btWheelInfoConstructionInfo* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_chassisConnectionCS);
+	BTVECTOR3_COPY(&obj->m_chassisConnectionCS, value);
 }
 
-void btWheelInfoConstructionInfo_setFrictionSlip(btWheelInfoConstructionInfo* obj, btScalar value)
+void btWheelInfoConstructionInfo_setFrictionSlip(btWheelInfoConstructionInfo* obj,
+	btScalar value)
 {
 	obj->m_frictionSlip = value;
 }
 
-void btWheelInfoConstructionInfo_setMaxSuspensionForce(btWheelInfoConstructionInfo* obj, btScalar value)
+void btWheelInfoConstructionInfo_setMaxSuspensionForce(btWheelInfoConstructionInfo* obj,
+	btScalar value)
 {
 	obj->m_maxSuspensionForce = value;
 }
 
-void btWheelInfoConstructionInfo_setMaxSuspensionTravelCm(btWheelInfoConstructionInfo* obj, btScalar value)
+void btWheelInfoConstructionInfo_setMaxSuspensionTravelCm(btWheelInfoConstructionInfo* obj,
+	btScalar value)
 {
 	obj->m_maxSuspensionTravelCm = value;
 }
 
-void btWheelInfoConstructionInfo_setSuspensionRestLength(btWheelInfoConstructionInfo* obj, btScalar value)
+void btWheelInfoConstructionInfo_setSuspensionRestLength(btWheelInfoConstructionInfo* obj,
+	btScalar value)
 {
 	obj->m_suspensionRestLength = value;
 }
 
-void btWheelInfoConstructionInfo_setSuspensionStiffness(btWheelInfoConstructionInfo* obj, btScalar value)
+void btWheelInfoConstructionInfo_setSuspensionStiffness(btWheelInfoConstructionInfo* obj,
+	btScalar value)
 {
 	obj->m_suspensionStiffness = value;
 }
 
-void btWheelInfoConstructionInfo_setWheelAxleCS(btWheelInfoConstructionInfo* obj, const btScalar* value)
+void btWheelInfoConstructionInfo_setWheelAxleCS(btWheelInfoConstructionInfo* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_wheelAxleCS);
+	BTVECTOR3_COPY(&obj->m_wheelAxleCS, value);
 }
 
-void btWheelInfoConstructionInfo_setWheelDirectionCS(btWheelInfoConstructionInfo* obj, const btScalar* value)
+void btWheelInfoConstructionInfo_setWheelDirectionCS(btWheelInfoConstructionInfo* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_wheelDirectionCS);
+	BTVECTOR3_COPY(&obj->m_wheelDirectionCS, value);
 }
 
-void btWheelInfoConstructionInfo_setWheelRadius(btWheelInfoConstructionInfo* obj, btScalar value)
+void btWheelInfoConstructionInfo_setWheelRadius(btWheelInfoConstructionInfo* obj,
+	btScalar value)
 {
 	obj->m_wheelRadius = value;
 }
 
-void btWheelInfoConstructionInfo_setWheelsDampingCompression(btWheelInfoConstructionInfo* obj, btScalar value)
+void btWheelInfoConstructionInfo_setWheelsDampingCompression(btWheelInfoConstructionInfo* obj,
+	btScalar value)
 {
 	obj->m_wheelsDampingCompression = value;
 }
 
-void btWheelInfoConstructionInfo_setWheelsDampingRelaxation(btWheelInfoConstructionInfo* obj, btScalar value)
+void btWheelInfoConstructionInfo_setWheelsDampingRelaxation(btWheelInfoConstructionInfo* obj,
+	btScalar value)
 {
 	obj->m_wheelsDampingRelaxation = value;
 }
@@ -143,14 +158,14 @@ btWheelInfo::RaycastInfo* btWheelInfo_RaycastInfo_new()
 	return new btWheelInfo::RaycastInfo();
 }
 
-void btWheelInfo_RaycastInfo_getContactNormalWS(btWheelInfo::RaycastInfo* obj, btScalar* value)
+void btWheelInfo_RaycastInfo_getContactNormalWS(btWheelInfo::RaycastInfo* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_contactNormalWS, value);
+	BTVECTOR3_SET(value, obj->m_contactNormalWS);
 }
 
-void btWheelInfo_RaycastInfo_getContactPointWS(btWheelInfo::RaycastInfo* obj, btScalar* value)
+void btWheelInfo_RaycastInfo_getContactPointWS(btWheelInfo::RaycastInfo* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_contactPointWS, value);
+	BTVECTOR3_SET(value, obj->m_contactPointWS);
 }
 
 void* btWheelInfo_RaycastInfo_getGroundObject(btWheelInfo::RaycastInfo* obj)
@@ -158,14 +173,9 @@ void* btWheelInfo_RaycastInfo_getGroundObject(btWheelInfo::RaycastInfo* obj)
 	return obj->m_groundObject;
 }
 
-void btWheelInfo_RaycastInfo_getHardPointWS(btWheelInfo::RaycastInfo* obj, btScalar* value)
+void btWheelInfo_RaycastInfo_getHardPointWS(btWheelInfo::RaycastInfo* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_hardPointWS, value);
-}
-
-bool btWheelInfo_RaycastInfo_getIsInContact(btWheelInfo::RaycastInfo* obj)
-{
-	return obj->m_isInContact;
+	BTVECTOR3_SET(value, obj->m_hardPointWS);
 }
 
 btScalar btWheelInfo_RaycastInfo_getSuspensionLength(btWheelInfo::RaycastInfo* obj)
@@ -173,24 +183,29 @@ btScalar btWheelInfo_RaycastInfo_getSuspensionLength(btWheelInfo::RaycastInfo* o
 	return obj->m_suspensionLength;
 }
 
-void btWheelInfo_RaycastInfo_getWheelAxleWS(btWheelInfo::RaycastInfo* obj, btScalar* value)
+void btWheelInfo_RaycastInfo_getWheelAxleWS(btWheelInfo::RaycastInfo* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_wheelAxleWS, value);
+	BTVECTOR3_SET(value, obj->m_wheelAxleWS);
 }
 
-void btWheelInfo_RaycastInfo_getWheelDirectionWS(btWheelInfo::RaycastInfo* obj, btScalar* value)
+void btWheelInfo_RaycastInfo_getWheelDirectionWS(btWheelInfo::RaycastInfo* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_wheelDirectionWS, value);
+	BTVECTOR3_SET(value, obj->m_wheelDirectionWS);
 }
 
-void btWheelInfo_RaycastInfo_setContactNormalWS(btWheelInfo::RaycastInfo* obj, const btScalar* value)
+bool btWheelInfo_RaycastInfo_IsInContact(btWheelInfo::RaycastInfo* obj)
 {
-	VECTOR3_IN(value, &obj->m_contactNormalWS);
+	return obj->m_isInContact;
 }
 
-void btWheelInfo_RaycastInfo_setContactPointWS(btWheelInfo::RaycastInfo* obj, const btScalar* value)
+void btWheelInfo_RaycastInfo_setContactNormalWS(btWheelInfo::RaycastInfo* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_contactPointWS);
+	BTVECTOR3_COPY(&obj->m_contactNormalWS, value);
+}
+
+void btWheelInfo_RaycastInfo_setContactPointWS(btWheelInfo::RaycastInfo* obj, const btVector3* value)
+{
+	BTVECTOR3_COPY(&obj->m_contactPointWS, value);
 }
 
 void btWheelInfo_RaycastInfo_setGroundObject(btWheelInfo::RaycastInfo* obj, void* value)
@@ -198,12 +213,12 @@ void btWheelInfo_RaycastInfo_setGroundObject(btWheelInfo::RaycastInfo* obj, void
 	obj->m_groundObject = value;
 }
 
-void btWheelInfo_RaycastInfo_setHardPointWS(btWheelInfo::RaycastInfo* obj, const btScalar* value)
+void btWheelInfo_RaycastInfo_setHardPointWS(btWheelInfo::RaycastInfo* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_hardPointWS);
+	BTVECTOR3_COPY(&obj->m_hardPointWS, value);
 }
 
-void btWheelInfo_RaycastInfo_setIsInContact(btWheelInfo::RaycastInfo* obj, bool value)
+void btWheelInfo_RaycastInfo_setInContact(btWheelInfo::RaycastInfo* obj, bool value)
 {
 	obj->m_isInContact = value;
 }
@@ -213,14 +228,14 @@ void btWheelInfo_RaycastInfo_setSuspensionLength(btWheelInfo::RaycastInfo* obj, 
 	obj->m_suspensionLength = value;
 }
 
-void btWheelInfo_RaycastInfo_setWheelAxleWS(btWheelInfo::RaycastInfo* obj, const btScalar* value)
+void btWheelInfo_RaycastInfo_setWheelAxleWS(btWheelInfo::RaycastInfo* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_wheelAxleWS);
+	BTVECTOR3_COPY(&obj->m_wheelAxleWS, value);
 }
 
-void btWheelInfo_RaycastInfo_setWheelDirectionWS(btWheelInfo::RaycastInfo* obj, const btScalar* value)
+void btWheelInfo_RaycastInfo_setWheelDirectionWS(btWheelInfo::RaycastInfo* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_wheelDirectionWS);
+	BTVECTOR3_COPY(&obj->m_wheelDirectionWS, value);
 }
 
 void btWheelInfo_RaycastInfo_delete(btWheelInfo::RaycastInfo* obj)
@@ -244,9 +259,9 @@ btScalar btWheelInfo_getBrake(btWheelInfo* obj)
 	return obj->m_brake;
 }
 
-void btWheelInfo_getChassisConnectionPointCS(btWheelInfo* obj, btScalar* value)
+void btWheelInfo_getChassisConnectionPointCS(btWheelInfo* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_chassisConnectionPointCS, value);
+	BTVECTOR3_SET(value, obj->m_chassisConnectionPointCS);
 }
 
 void* btWheelInfo_getClientInfo(btWheelInfo* obj)
@@ -329,14 +344,14 @@ btScalar btWheelInfo_getSuspensionStiffness(btWheelInfo* obj)
 	return obj->m_suspensionStiffness;
 }
 
-void btWheelInfo_getWheelAxleCS(btWheelInfo* obj, btScalar* value)
+void btWheelInfo_getWheelAxleCS(btWheelInfo* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_wheelAxleCS, value);
+	BTVECTOR3_SET(value, obj->m_wheelAxleCS);
 }
 
-void btWheelInfo_getWheelDirectionCS(btWheelInfo* obj, btScalar* value)
+void btWheelInfo_getWheelDirectionCS(btWheelInfo* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_wheelDirectionCS, value);
+	BTVECTOR3_SET(value, obj->m_wheelDirectionCS);
 }
 
 btScalar btWheelInfo_getWheelsDampingCompression(btWheelInfo* obj)
@@ -359,9 +374,9 @@ btScalar btWheelInfo_getWheelsSuspensionForce(btWheelInfo* obj)
 	return obj->m_wheelsSuspensionForce;
 }
 
-void btWheelInfo_getWorldTransform(btWheelInfo* obj, btScalar* value)
+void btWheelInfo_getWorldTransform(btWheelInfo* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->m_worldTransform, value);
+	BTTRANSFORM_SET(value, obj->m_worldTransform);
 }
 
 void btWheelInfo_setBIsFrontWheel(btWheelInfo* obj, bool value)
@@ -374,9 +389,9 @@ void btWheelInfo_setBrake(btWheelInfo* obj, btScalar value)
 	obj->m_brake = value;
 }
 
-void btWheelInfo_setChassisConnectionPointCS(btWheelInfo* obj, const btScalar* value)
+void btWheelInfo_setChassisConnectionPointCS(btWheelInfo* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_chassisConnectionPointCS);
+	BTVECTOR3_COPY(&obj->m_chassisConnectionPointCS, value);
 }
 
 void btWheelInfo_setClientInfo(btWheelInfo* obj, void* value)
@@ -449,14 +464,14 @@ void btWheelInfo_setSuspensionStiffness(btWheelInfo* obj, btScalar value)
 	obj->m_suspensionStiffness = value;
 }
 
-void btWheelInfo_setWheelAxleCS(btWheelInfo* obj, const btScalar* value)
+void btWheelInfo_setWheelAxleCS(btWheelInfo* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_wheelAxleCS);
+	BTVECTOR3_COPY(&obj->m_wheelAxleCS, value);
 }
 
-void btWheelInfo_setWheelDirectionCS(btWheelInfo* obj, const btScalar* value)
+void btWheelInfo_setWheelDirectionCS(btWheelInfo* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_wheelDirectionCS);
+	BTVECTOR3_COPY(&obj->m_wheelDirectionCS, value);
 }
 
 void btWheelInfo_setWheelsDampingCompression(btWheelInfo* obj, btScalar value)
@@ -479,9 +494,9 @@ void btWheelInfo_setWheelsSuspensionForce(btWheelInfo* obj, btScalar value)
 	obj->m_wheelsSuspensionForce = value;
 }
 
-void btWheelInfo_setWorldTransform(btWheelInfo* obj, const btScalar* value)
+void btWheelInfo_setWorldTransform(btWheelInfo* obj, const btTransform* value)
 {
-	TRANSFORM_IN(value, &obj->m_worldTransform);
+	BTTRANSFORM_COPY(&obj->m_worldTransform, value);
 }
 
 void btWheelInfo_updateWheel(btWheelInfo* obj, const btRigidBody* chassis, btWheelInfo_RaycastInfo* raycastInfo)

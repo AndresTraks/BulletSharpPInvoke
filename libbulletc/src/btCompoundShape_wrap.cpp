@@ -24,9 +24,9 @@ btDbvtNode* btCompoundShapeChild_getNode(btCompoundShapeChild* obj)
 	return obj->m_node;
 }
 
-void btCompoundShapeChild_getTransform(btCompoundShapeChild* obj, btScalar* value)
+void btCompoundShapeChild_getTransform(btCompoundShapeChild* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->m_transform, value);
+	BTTRANSFORM_SET(value, obj->m_transform);
 }
 
 void btCompoundShapeChild_setChildMargin(btCompoundShapeChild* obj, btScalar value)
@@ -49,9 +49,9 @@ void btCompoundShapeChild_setNode(btCompoundShapeChild* obj, btDbvtNode* value)
 	obj->m_node = value;
 }
 
-void btCompoundShapeChild_setTransform(btCompoundShapeChild* obj, const btScalar* value)
+void btCompoundShapeChild_setTransform(btCompoundShapeChild* obj, const btTransform* value)
 {
-	TRANSFORM_IN(value, &obj->m_transform);
+	BTTRANSFORM_COPY(&obj->m_transform, value);
 }
 
 void btCompoundShapeChild_delete(btCompoundShapeChild* obj)
@@ -75,19 +75,21 @@ btCompoundShape* btCompoundShape_new3(bool enableDynamicAabbTree, int initialChi
 	return new btCompoundShape(enableDynamicAabbTree, initialChildCapacity);
 }
 
-void btCompoundShape_addChildShape(btCompoundShape* obj, const btScalar* localTransform, btCollisionShape* shape)
+void btCompoundShape_addChildShape(btCompoundShape* obj, const btTransform* localTransform,
+	btCollisionShape* shape)
 {
-	TRANSFORM_CONV(localTransform);
-	obj->addChildShape(TRANSFORM_USE(localTransform), shape);
+	BTTRANSFORM_IN(localTransform);
+	obj->addChildShape(BTTRANSFORM_USE(localTransform), shape);
 }
 
-void btCompoundShape_calculatePrincipalAxisTransform(btCompoundShape* obj, btScalar* masses, btScalar* principal, btScalar* inertia)
+void btCompoundShape_calculatePrincipalAxisTransform(btCompoundShape* obj, btScalar* masses,
+	btTransform* principal, btVector3* inertia)
 {
-	TRANSFORM_CONV(principal);
-	VECTOR3_DEF(inertia);
-	obj->calculatePrincipalAxisTransform(masses, TRANSFORM_USE(principal), VECTOR3_USE(inertia));
-	TRANSFORM_DEF_OUT(principal);
-	VECTOR3_DEF_OUT(inertia);
+	BTTRANSFORM_IN(principal);
+	BTVECTOR3_DEF(inertia);
+	obj->calculatePrincipalAxisTransform(masses, BTTRANSFORM_USE(principal), BTVECTOR3_USE(inertia));
+	BTTRANSFORM_DEF_OUT(principal);
+	BTVECTOR3_DEF_OUT(inertia);
 }
 
 void btCompoundShape_createAabbTreeFromChildren(btCompoundShape* obj)
@@ -105,9 +107,9 @@ const btCollisionShape* btCompoundShape_getChildShape(btCompoundShape* obj, int 
 	return obj->getChildShape(index);
 }
 
-void btCompoundShape_getChildTransform(btCompoundShape* obj, int index, btScalar* value)
+void btCompoundShape_getChildTransform(btCompoundShape* obj, int index, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getChildTransform(index), value);
+	BTTRANSFORM_COPY(value, &obj->getChildTransform(index));
 }
 
 btDbvt* btCompoundShape_getDynamicAabbTree(btCompoundShape* obj)
@@ -140,14 +142,15 @@ void btCompoundShape_removeChildShapeByIndex(btCompoundShape* obj, int childShap
 	obj->removeChildShapeByIndex(childShapeindex);
 }
 
-void btCompoundShape_updateChildTransform(btCompoundShape* obj, int childIndex, const btScalar* newChildTransform)
+void btCompoundShape_updateChildTransform(btCompoundShape* obj, int childIndex, const btTransform* newChildTransform)
 {
-	TRANSFORM_CONV(newChildTransform);
-	obj->updateChildTransform(childIndex, TRANSFORM_USE(newChildTransform));
+	BTTRANSFORM_IN(newChildTransform);
+	obj->updateChildTransform(childIndex, BTTRANSFORM_USE(newChildTransform));
 }
 
-void btCompoundShape_updateChildTransform2(btCompoundShape* obj, int childIndex, const btScalar* newChildTransform, bool shouldRecalculateLocalAabb)
+void btCompoundShape_updateChildTransform2(btCompoundShape* obj, int childIndex,
+	const btTransform* newChildTransform, bool shouldRecalculateLocalAabb)
 {
-	TRANSFORM_CONV(newChildTransform);
-	obj->updateChildTransform(childIndex, TRANSFORM_USE(newChildTransform), shouldRecalculateLocalAabb);
+	BTTRANSFORM_IN(newChildTransform);
+	obj->updateChildTransform(childIndex, BTTRANSFORM_USE(newChildTransform), shouldRecalculateLocalAabb);
 }

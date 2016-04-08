@@ -42,32 +42,38 @@ btScalar btRaycastVehicle_btVehicleTuning_getSuspensionStiffness(btRaycastVehicl
 	return obj->m_suspensionStiffness;
 }
 
-void btRaycastVehicle_btVehicleTuning_setFrictionSlip(btRaycastVehicle::btVehicleTuning* obj, btScalar value)
+void btRaycastVehicle_btVehicleTuning_setFrictionSlip(btRaycastVehicle::btVehicleTuning* obj,
+	btScalar value)
 {
 	obj->m_frictionSlip = value;
 }
 
-void btRaycastVehicle_btVehicleTuning_setMaxSuspensionForce(btRaycastVehicle::btVehicleTuning* obj, btScalar value)
+void btRaycastVehicle_btVehicleTuning_setMaxSuspensionForce(btRaycastVehicle::btVehicleTuning* obj,
+	btScalar value)
 {
 	obj->m_maxSuspensionForce = value;
 }
 
-void btRaycastVehicle_btVehicleTuning_setMaxSuspensionTravelCm(btRaycastVehicle::btVehicleTuning* obj, btScalar value)
+void btRaycastVehicle_btVehicleTuning_setMaxSuspensionTravelCm(btRaycastVehicle::btVehicleTuning* obj,
+	btScalar value)
 {
 	obj->m_maxSuspensionTravelCm = value;
 }
 
-void btRaycastVehicle_btVehicleTuning_setSuspensionCompression(btRaycastVehicle::btVehicleTuning* obj, btScalar value)
+void btRaycastVehicle_btVehicleTuning_setSuspensionCompression(btRaycastVehicle::btVehicleTuning* obj,
+	btScalar value)
 {
 	obj->m_suspensionCompression = value;
 }
 
-void btRaycastVehicle_btVehicleTuning_setSuspensionDamping(btRaycastVehicle::btVehicleTuning* obj, btScalar value)
+void btRaycastVehicle_btVehicleTuning_setSuspensionDamping(btRaycastVehicle::btVehicleTuning* obj,
+	btScalar value)
 {
 	obj->m_suspensionDamping = value;
 }
 
-void btRaycastVehicle_btVehicleTuning_setSuspensionStiffness(btRaycastVehicle::btVehicleTuning* obj, btScalar value)
+void btRaycastVehicle_btVehicleTuning_setSuspensionStiffness(btRaycastVehicle::btVehicleTuning* obj,
+	btScalar value)
 {
 	obj->m_suspensionStiffness = value;
 }
@@ -78,18 +84,21 @@ void btRaycastVehicle_btVehicleTuning_delete(btRaycastVehicle::btVehicleTuning* 
 }
 
 
-btRaycastVehicle* btRaycastVehicle_new(const btRaycastVehicle_btVehicleTuning* tuning, btRigidBody* chassis, btVehicleRaycaster* raycaster)
+btRaycastVehicle* btRaycastVehicle_new(const btRaycastVehicle_btVehicleTuning* tuning,
+	btRigidBody* chassis, btVehicleRaycaster* raycaster)
 {
 	return new btRaycastVehicle(*tuning, chassis, raycaster);
 }
 
-btWheelInfo* btRaycastVehicle_addWheel(btRaycastVehicle* obj, const btScalar* connectionPointCS0, const btScalar* wheelDirectionCS0, const btScalar* wheelAxleCS, btScalar suspensionRestLength, btScalar wheelRadius, const btRaycastVehicle_btVehicleTuning* tuning, bool isFrontWheel)
+btWheelInfo* btRaycastVehicle_addWheel(btRaycastVehicle* obj, const btVector3* connectionPointCS0,
+	const btVector3* wheelDirectionCS0, const btVector3* wheelAxleCS, btScalar suspensionRestLength,
+	btScalar wheelRadius, const btRaycastVehicle_btVehicleTuning* tuning, bool isFrontWheel)
 {
-	VECTOR3_CONV(connectionPointCS0);
-	VECTOR3_CONV(wheelDirectionCS0);
-	VECTOR3_CONV(wheelAxleCS);
-	return &obj->addWheel(VECTOR3_USE(connectionPointCS0), VECTOR3_USE(wheelDirectionCS0),
-		VECTOR3_USE(wheelAxleCS), suspensionRestLength, wheelRadius, *tuning, isFrontWheel);
+	BTVECTOR3_IN(connectionPointCS0);
+	BTVECTOR3_IN(wheelDirectionCS0);
+	BTVECTOR3_IN(wheelAxleCS);
+	return &obj->addWheel(BTVECTOR3_USE(connectionPointCS0), BTVECTOR3_USE(wheelDirectionCS0),
+		BTVECTOR3_USE(wheelAxleCS), suspensionRestLength, wheelRadius, *tuning, isFrontWheel);
 }
 
 void btRaycastVehicle_applyEngineForce(btRaycastVehicle* obj, btScalar force, int wheel)
@@ -97,9 +106,9 @@ void btRaycastVehicle_applyEngineForce(btRaycastVehicle* obj, btScalar force, in
 	obj->applyEngineForce(force, wheel);
 }
 
-void btRaycastVehicle_getChassisWorldTransform(btRaycastVehicle* obj, btScalar* value)
+void btRaycastVehicle_getChassisWorldTransform(btRaycastVehicle* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getChassisWorldTransform(), value);
+	BTTRANSFORM_COPY(value, &obj->getChassisWorldTransform());
 }
 
 btScalar btRaycastVehicle_getCurrentSpeedKmHour(btRaycastVehicle* obj)
@@ -112,9 +121,9 @@ int btRaycastVehicle_getForwardAxis(btRaycastVehicle* obj)
 	return obj->getForwardAxis();
 }
 
-void btRaycastVehicle_getForwardVector(btRaycastVehicle* obj, btScalar* value)
+void btRaycastVehicle_getForwardVector(btRaycastVehicle* obj, btVector3* value)
 {
-	VECTOR3_OUT_VAL(obj->getForwardVector(), value);
+	BTVECTOR3_SET(value, obj->getForwardVector());
 }
 
 int btRaycastVehicle_getNumWheels(btRaycastVehicle* obj)
@@ -157,14 +166,15 @@ btWheelInfo* btRaycastVehicle_getWheelInfo(btRaycastVehicle* obj, int index)
 	return &obj->getWheelInfo(index);
 }
 
-btAlignedWheelInfoArray* btRaycastVehicle_getWheelInfo2(btRaycastVehicle* obj)
+btAlignedObjectArray_btWheelInfo* btRaycastVehicle_getWheelInfo2(btRaycastVehicle* obj)
 {
 	return &obj->m_wheelInfo;
 }
 
-void btRaycastVehicle_getWheelTransformWS(btRaycastVehicle* obj, int wheelIndex, btScalar* value)
+void btRaycastVehicle_getWheelTransformWS(btRaycastVehicle* obj, int wheelIndex,
+	btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getWheelTransformWS(wheelIndex), value);
+	BTTRANSFORM_COPY(value, &obj->getWheelTransformWS(wheelIndex));
 }
 
 btScalar btRaycastVehicle_rayCast(btRaycastVehicle* obj, btWheelInfo* wheel)
@@ -182,7 +192,8 @@ void btRaycastVehicle_setBrake(btRaycastVehicle* obj, btScalar brake, int wheelI
 	obj->setBrake(brake, wheelIndex);
 }
 
-void btRaycastVehicle_setCoordinateSystem(btRaycastVehicle* obj, int rightIndex, int upIndex, int forwardIndex)
+void btRaycastVehicle_setCoordinateSystem(btRaycastVehicle* obj, int rightIndex,
+	int upIndex, int forwardIndex)
 {
 	obj->setCoordinateSystem(rightIndex, upIndex, forwardIndex);
 }
@@ -192,7 +203,8 @@ void btRaycastVehicle_setPitchControl(btRaycastVehicle* obj, btScalar pitch)
 	obj->setPitchControl(pitch);
 }
 
-void btRaycastVehicle_setSteeringValue(btRaycastVehicle* obj, btScalar steering, int wheel)
+void btRaycastVehicle_setSteeringValue(btRaycastVehicle* obj, btScalar steering,
+	int wheel)
 {
 	obj->setSteeringValue(steering, wheel);
 }
@@ -227,7 +239,8 @@ void btRaycastVehicle_updateWheelTransform(btRaycastVehicle* obj, int wheelIndex
 	obj->updateWheelTransform(wheelIndex);
 }
 
-void btRaycastVehicle_updateWheelTransform2(btRaycastVehicle* obj, int wheelIndex, bool interpolatedTransform)
+void btRaycastVehicle_updateWheelTransform2(btRaycastVehicle* obj, int wheelIndex,
+	bool interpolatedTransform)
 {
 	obj->updateWheelTransform(wheelIndex, interpolatedTransform);
 }
@@ -237,7 +250,8 @@ void btRaycastVehicle_updateWheelTransformsWS(btRaycastVehicle* obj, btWheelInfo
 	obj->updateWheelTransformsWS(*wheel);
 }
 
-void btRaycastVehicle_updateWheelTransformsWS2(btRaycastVehicle* obj, btWheelInfo* wheel, bool interpolatedTransform)
+void btRaycastVehicle_updateWheelTransformsWS2(btRaycastVehicle* obj, btWheelInfo* wheel,
+	bool interpolatedTransform)
 {
 	obj->updateWheelTransformsWS(*wheel, interpolatedTransform);
 }

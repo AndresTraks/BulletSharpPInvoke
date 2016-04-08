@@ -10,14 +10,16 @@ btMultiBodySolverConstraint* btMultiBodySolverConstraint_new()
 	return new btMultiBodySolverConstraint();
 }
 
-void btMultiBodySolverConstraint_getAngularComponentA(btMultiBodySolverConstraint* obj, btScalar* value)
+void btMultiBodySolverConstraint_getAngularComponentA(btMultiBodySolverConstraint* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_angularComponentA, value);
+	BTVECTOR3_SET(value, obj->m_angularComponentA);
 }
 
-void btMultiBodySolverConstraint_getAngularComponentB(btMultiBodySolverConstraint* obj, btScalar* value)
+void btMultiBodySolverConstraint_getAngularComponentB(btMultiBodySolverConstraint* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_angularComponentB, value);
+	BTVECTOR3_SET(value, obj->m_angularComponentB);
 }
 
 btScalar btMultiBodySolverConstraint_getAppliedImpulse(btMultiBodySolverConstraint* obj)
@@ -35,14 +37,16 @@ btScalar btMultiBodySolverConstraint_getCfm(btMultiBodySolverConstraint* obj)
 	return obj->m_cfm;
 }
 
-void btMultiBodySolverConstraint_getContactNormal1(btMultiBodySolverConstraint* obj, btScalar* value)
+void btMultiBodySolverConstraint_getContactNormal1(btMultiBodySolverConstraint* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_contactNormal1, value);
+	BTVECTOR3_SET(value, obj->m_contactNormal1);
 }
 
-void btMultiBodySolverConstraint_getContactNormal2(btMultiBodySolverConstraint* obj, btScalar* value)
+void btMultiBodySolverConstraint_getContactNormal2(btMultiBodySolverConstraint* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_contactNormal2, value);
+	BTVECTOR3_SET(value, obj->m_contactNormal2);
 }
 
 int btMultiBodySolverConstraint_getDeltaVelAindex(btMultiBodySolverConstraint* obj)
@@ -125,14 +129,16 @@ int btMultiBodySolverConstraint_getOverrideNumSolverIterations(btMultiBodySolver
 	return obj->m_overrideNumSolverIterations;
 }
 
-void btMultiBodySolverConstraint_getRelpos1CrossNormal(btMultiBodySolverConstraint* obj, btScalar* value)
+void btMultiBodySolverConstraint_getRelpos1CrossNormal(btMultiBodySolverConstraint* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_relpos1CrossNormal, value);
+	BTVECTOR3_SET(value, obj->m_relpos1CrossNormal);
 }
 
-void btMultiBodySolverConstraint_getRelpos2CrossNormal(btMultiBodySolverConstraint* obj, btScalar* value)
+void btMultiBodySolverConstraint_getRelpos2CrossNormal(btMultiBodySolverConstraint* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_relpos2CrossNormal, value);
+	BTVECTOR3_SET(value, obj->m_relpos2CrossNormal);
 }
 
 btScalar btMultiBodySolverConstraint_getRhs(btMultiBodySolverConstraint* obj)
@@ -165,22 +171,26 @@ btScalar btMultiBodySolverConstraint_getUpperLimit(btMultiBodySolverConstraint* 
 	return obj->m_upperLimit;
 }
 
-void btMultiBodySolverConstraint_setAngularComponentA(btMultiBodySolverConstraint* obj, const btScalar* value)
+void btMultiBodySolverConstraint_setAngularComponentA(btMultiBodySolverConstraint* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_angularComponentA);
+	BTVECTOR3_COPY(&obj->m_angularComponentA, value);
 }
 
-void btMultiBodySolverConstraint_setAngularComponentB(btMultiBodySolverConstraint* obj, const btScalar* value)
+void btMultiBodySolverConstraint_setAngularComponentB(btMultiBodySolverConstraint* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_angularComponentB);
+	BTVECTOR3_COPY(&obj->m_angularComponentB, value);
 }
 
-void btMultiBodySolverConstraint_setAppliedImpulse(btMultiBodySolverConstraint* obj, btScalar value)
+void btMultiBodySolverConstraint_setAppliedImpulse(btMultiBodySolverConstraint* obj,
+	btScalar value)
 {
 	obj->m_appliedImpulse = value;
 }
 
-void btMultiBodySolverConstraint_setAppliedPushImpulse(btMultiBodySolverConstraint* obj, btScalar value)
+void btMultiBodySolverConstraint_setAppliedPushImpulse(btMultiBodySolverConstraint* obj,
+	btScalar value)
 {
 	obj->m_appliedPushImpulse = value;
 }
@@ -190,22 +200,26 @@ void btMultiBodySolverConstraint_setCfm(btMultiBodySolverConstraint* obj, btScal
 	obj->m_cfm = value;
 }
 
-void btMultiBodySolverConstraint_setContactNormal1(btMultiBodySolverConstraint* obj, const btScalar* value)
+void btMultiBodySolverConstraint_setContactNormal1(btMultiBodySolverConstraint* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_contactNormal1);
+	BTVECTOR3_COPY(&obj->m_contactNormal1, value);
 }
 
-void btMultiBodySolverConstraint_setContactNormal2(btMultiBodySolverConstraint* obj, const btScalar* value)
+void btMultiBodySolverConstraint_setContactNormal2(btMultiBodySolverConstraint* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_contactNormal2);
+	BTVECTOR3_COPY(&obj->m_contactNormal2, value);
 }
 
-void btMultiBodySolverConstraint_setDeltaVelAindex(btMultiBodySolverConstraint* obj, int value)
+void btMultiBodySolverConstraint_setDeltaVelAindex(btMultiBodySolverConstraint* obj,
+	int value)
 {
 	obj->m_deltaVelAindex = value;
 }
 
-void btMultiBodySolverConstraint_setDeltaVelBindex(btMultiBodySolverConstraint* obj, int value)
+void btMultiBodySolverConstraint_setDeltaVelBindex(btMultiBodySolverConstraint* obj,
+	int value)
 {
 	obj->m_deltaVelBindex = value;
 }
@@ -215,7 +229,8 @@ void btMultiBodySolverConstraint_setFriction(btMultiBodySolverConstraint* obj, b
 	obj->m_friction = value;
 }
 
-void btMultiBodySolverConstraint_setFrictionIndex(btMultiBodySolverConstraint* obj, int value)
+void btMultiBodySolverConstraint_setFrictionIndex(btMultiBodySolverConstraint* obj,
+	int value)
 {
 	obj->m_frictionIndex = value;
 }
@@ -230,7 +245,8 @@ void btMultiBodySolverConstraint_setJacBindex(btMultiBodySolverConstraint* obj, 
 	obj->m_jacBindex = value;
 }
 
-void btMultiBodySolverConstraint_setJacDiagABInv(btMultiBodySolverConstraint* obj, btScalar value)
+void btMultiBodySolverConstraint_setJacDiagABInv(btMultiBodySolverConstraint* obj,
+	btScalar value)
 {
 	obj->m_jacDiagABInv = value;
 }
@@ -245,49 +261,58 @@ void btMultiBodySolverConstraint_setLinkB(btMultiBodySolverConstraint* obj, int 
 	obj->m_linkB = value;
 }
 
-void btMultiBodySolverConstraint_setLowerLimit(btMultiBodySolverConstraint* obj, btScalar value)
+void btMultiBodySolverConstraint_setLowerLimit(btMultiBodySolverConstraint* obj,
+	btScalar value)
 {
 	obj->m_lowerLimit = value;
 }
 
-void btMultiBodySolverConstraint_setMultiBodyA(btMultiBodySolverConstraint* obj, btMultiBody* value)
+void btMultiBodySolverConstraint_setMultiBodyA(btMultiBodySolverConstraint* obj,
+	btMultiBody* value)
 {
 	obj->m_multiBodyA = value;
 }
 
-void btMultiBodySolverConstraint_setMultiBodyB(btMultiBodySolverConstraint* obj, btMultiBody* value)
+void btMultiBodySolverConstraint_setMultiBodyB(btMultiBodySolverConstraint* obj,
+	btMultiBody* value)
 {
 	obj->m_multiBodyB = value;
 }
 
-void btMultiBodySolverConstraint_setOrgConstraint(btMultiBodySolverConstraint* obj, btMultiBodyConstraint* value)
+void btMultiBodySolverConstraint_setOrgConstraint(btMultiBodySolverConstraint* obj,
+	btMultiBodyConstraint* value)
 {
 	obj->m_orgConstraint = value;
 }
 
-void btMultiBodySolverConstraint_setOrgDofIndex(btMultiBodySolverConstraint* obj, int value)
+void btMultiBodySolverConstraint_setOrgDofIndex(btMultiBodySolverConstraint* obj,
+	int value)
 {
 	obj->m_orgDofIndex = value;
 }
 
-void btMultiBodySolverConstraint_setOriginalContactPoint(btMultiBodySolverConstraint* obj, void* value)
+void btMultiBodySolverConstraint_setOriginalContactPoint(btMultiBodySolverConstraint* obj,
+	void* value)
 {
 	obj->m_originalContactPoint = value;
 }
 
-void btMultiBodySolverConstraint_setOverrideNumSolverIterations(btMultiBodySolverConstraint* obj, int value)
+void btMultiBodySolverConstraint_setOverrideNumSolverIterations(btMultiBodySolverConstraint* obj,
+	int value)
 {
 	obj->m_overrideNumSolverIterations = value;
 }
 
-void btMultiBodySolverConstraint_setRelpos1CrossNormal(btMultiBodySolverConstraint* obj, const btScalar* value)
+void btMultiBodySolverConstraint_setRelpos1CrossNormal(btMultiBodySolverConstraint* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_relpos1CrossNormal);
+	BTVECTOR3_COPY(&obj->m_relpos1CrossNormal, value);
 }
 
-void btMultiBodySolverConstraint_setRelpos2CrossNormal(btMultiBodySolverConstraint* obj, const btScalar* value)
+void btMultiBodySolverConstraint_setRelpos2CrossNormal(btMultiBodySolverConstraint* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_relpos2CrossNormal);
+	BTVECTOR3_COPY(&obj->m_relpos2CrossNormal, value);
 }
 
 void btMultiBodySolverConstraint_setRhs(btMultiBodySolverConstraint* obj, btScalar value)
@@ -295,27 +320,32 @@ void btMultiBodySolverConstraint_setRhs(btMultiBodySolverConstraint* obj, btScal
 	obj->m_rhs = value;
 }
 
-void btMultiBodySolverConstraint_setRhsPenetration(btMultiBodySolverConstraint* obj, btScalar value)
+void btMultiBodySolverConstraint_setRhsPenetration(btMultiBodySolverConstraint* obj,
+	btScalar value)
 {
 	obj->m_rhsPenetration = value;
 }
 
-void btMultiBodySolverConstraint_setSolverBodyIdA(btMultiBodySolverConstraint* obj, int value)
+void btMultiBodySolverConstraint_setSolverBodyIdA(btMultiBodySolverConstraint* obj,
+	int value)
 {
 	obj->m_solverBodyIdA = value;
 }
 
-void btMultiBodySolverConstraint_setSolverBodyIdB(btMultiBodySolverConstraint* obj, int value)
+void btMultiBodySolverConstraint_setSolverBodyIdB(btMultiBodySolverConstraint* obj,
+	int value)
 {
 	obj->m_solverBodyIdB = value;
 }
 
-void btMultiBodySolverConstraint_setUnusedPadding4(btMultiBodySolverConstraint* obj, btScalar value)
+void btMultiBodySolverConstraint_setUnusedPadding4(btMultiBodySolverConstraint* obj,
+	btScalar value)
 {
 	obj->m_unusedPadding4 = value;
 }
 
-void btMultiBodySolverConstraint_setUpperLimit(btMultiBodySolverConstraint* obj, btScalar value)
+void btMultiBodySolverConstraint_setUpperLimit(btMultiBodySolverConstraint* obj,
+	btScalar value)
 {
 	obj->m_upperLimit = value;
 }

@@ -79,37 +79,37 @@ public:
 
 extern "C"
 {
-	EXPORT btCollisionWorld_AllHitsRayResultCallback* btCollisionWorld_AllHitsRayResultCallback_new(const btScalar* rayFromWorld, const btScalar* rayToWorld);
-	EXPORT btAlignedCollisionObjectArray* btCollisionWorld_AllHitsRayResultCallback_getCollisionObjects(btCollisionWorld_AllHitsRayResultCallback* obj);
-	EXPORT btAlignedScalarArray* btCollisionWorld_AllHitsRayResultCallback_getHitFractions(btCollisionWorld_AllHitsRayResultCallback* obj);
-	EXPORT btAlignedVector3Array* btCollisionWorld_AllHitsRayResultCallback_getHitNormalWorld(btCollisionWorld_AllHitsRayResultCallback* obj);
-	EXPORT btAlignedVector3Array* btCollisionWorld_AllHitsRayResultCallback_getHitPointWorld(btCollisionWorld_AllHitsRayResultCallback* obj);
-	EXPORT void btCollisionWorld_AllHitsRayResultCallback_getRayFromWorld(btCollisionWorld_AllHitsRayResultCallback* obj, btScalar* value);
-	EXPORT void btCollisionWorld_AllHitsRayResultCallback_getRayToWorld(btCollisionWorld_AllHitsRayResultCallback* obj, btScalar* value);
-	EXPORT void btCollisionWorld_AllHitsRayResultCallback_setRayFromWorld(btCollisionWorld_AllHitsRayResultCallback* obj, const btScalar* value);
-	EXPORT void btCollisionWorld_AllHitsRayResultCallback_setRayToWorld(btCollisionWorld_AllHitsRayResultCallback* obj, const btScalar* value);
+	EXPORT btCollisionWorld_AllHitsRayResultCallback* btCollisionWorld_AllHitsRayResultCallback_new(const btVector3* rayFromWorld, const btVector3* rayToWorld);
+	EXPORT btAlignedObjectArray_const_btCollisionObjectPtr* btCollisionWorld_AllHitsRayResultCallback_getCollisionObjects(btCollisionWorld_AllHitsRayResultCallback* obj);
+	EXPORT btAlignedObjectArray_btScalar* btCollisionWorld_AllHitsRayResultCallback_getHitFractions(btCollisionWorld_AllHitsRayResultCallback* obj);
+	EXPORT btAlignedObjectArray_btVector3* btCollisionWorld_AllHitsRayResultCallback_getHitNormalWorld(btCollisionWorld_AllHitsRayResultCallback* obj);
+	EXPORT btAlignedObjectArray_btVector3* btCollisionWorld_AllHitsRayResultCallback_getHitPointWorld(btCollisionWorld_AllHitsRayResultCallback* obj);
+	EXPORT void btCollisionWorld_AllHitsRayResultCallback_getRayFromWorld(btCollisionWorld_AllHitsRayResultCallback* obj, btVector3* value);
+	EXPORT void btCollisionWorld_AllHitsRayResultCallback_getRayToWorld(btCollisionWorld_AllHitsRayResultCallback* obj, btVector3* value);
+	EXPORT void btCollisionWorld_AllHitsRayResultCallback_setRayFromWorld(btCollisionWorld_AllHitsRayResultCallback* obj, const btVector3* value);
+	EXPORT void btCollisionWorld_AllHitsRayResultCallback_setRayToWorld(btCollisionWorld_AllHitsRayResultCallback* obj, const btVector3* value);
 
-	EXPORT btCollisionWorld_ClosestConvexResultCallback* btCollisionWorld_ClosestConvexResultCallback_new(const btScalar* convexFromWorld, const btScalar* convexToWorld);
-	EXPORT void btCollisionWorld_ClosestConvexResultCallback_getConvexFromWorld(btCollisionWorld_ClosestConvexResultCallback* obj, btScalar* value);
-	EXPORT void btCollisionWorld_ClosestConvexResultCallback_getConvexToWorld(btCollisionWorld_ClosestConvexResultCallback* obj, btScalar* value);
+	EXPORT btCollisionWorld_ClosestConvexResultCallback* btCollisionWorld_ClosestConvexResultCallback_new(const btVector3* convexFromWorld, const btVector3* convexToWorld);
+	EXPORT void btCollisionWorld_ClosestConvexResultCallback_getConvexFromWorld(btCollisionWorld_ClosestConvexResultCallback* obj, btVector3* value);
+	EXPORT void btCollisionWorld_ClosestConvexResultCallback_getConvexToWorld(btCollisionWorld_ClosestConvexResultCallback* obj, btVector3* value);
 	EXPORT const btCollisionObject* btCollisionWorld_ClosestConvexResultCallback_getHitCollisionObject(btCollisionWorld_ClosestConvexResultCallback* obj);
-	EXPORT void btCollisionWorld_ClosestConvexResultCallback_getHitNormalWorld(btCollisionWorld_ClosestConvexResultCallback* obj, btScalar* value);
-	EXPORT void btCollisionWorld_ClosestConvexResultCallback_getHitPointWorld(btCollisionWorld_ClosestConvexResultCallback* obj, btScalar* value);
-	EXPORT void btCollisionWorld_ClosestConvexResultCallback_setConvexFromWorld(btCollisionWorld_ClosestConvexResultCallback* obj, const btScalar* value);
-	EXPORT void btCollisionWorld_ClosestConvexResultCallback_setConvexToWorld(btCollisionWorld_ClosestConvexResultCallback* obj, const btScalar* value);
+	EXPORT void btCollisionWorld_ClosestConvexResultCallback_getHitNormalWorld(btCollisionWorld_ClosestConvexResultCallback* obj, btVector3* value);
+	EXPORT void btCollisionWorld_ClosestConvexResultCallback_getHitPointWorld(btCollisionWorld_ClosestConvexResultCallback* obj, btVector3* value);
+	EXPORT void btCollisionWorld_ClosestConvexResultCallback_setConvexFromWorld(btCollisionWorld_ClosestConvexResultCallback* obj, const btVector3* value);
+	EXPORT void btCollisionWorld_ClosestConvexResultCallback_setConvexToWorld(btCollisionWorld_ClosestConvexResultCallback* obj, const btVector3* value);
 	EXPORT void btCollisionWorld_ClosestConvexResultCallback_setHitCollisionObject(btCollisionWorld_ClosestConvexResultCallback* obj, const btCollisionObject* value);
-	EXPORT void btCollisionWorld_ClosestConvexResultCallback_setHitNormalWorld(btCollisionWorld_ClosestConvexResultCallback* obj, const btScalar* value);
-	EXPORT void btCollisionWorld_ClosestConvexResultCallback_setHitPointWorld(btCollisionWorld_ClosestConvexResultCallback* obj, const btScalar* value);
+	EXPORT void btCollisionWorld_ClosestConvexResultCallback_setHitNormalWorld(btCollisionWorld_ClosestConvexResultCallback* obj, const btVector3* value);
+	EXPORT void btCollisionWorld_ClosestConvexResultCallback_setHitPointWorld(btCollisionWorld_ClosestConvexResultCallback* obj, const btVector3* value);
 
-	EXPORT btCollisionWorld_ClosestRayResultCallback* btCollisionWorld_ClosestRayResultCallback_new(const btScalar* rayFromWorld, const btScalar* rayToWorld);
-	EXPORT void btCollisionWorld_ClosestRayResultCallback_getHitNormalWorld(btCollisionWorld_ClosestRayResultCallback* obj, btScalar* value);
-	EXPORT void btCollisionWorld_ClosestRayResultCallback_getHitPointWorld(btCollisionWorld_ClosestRayResultCallback* obj, btScalar* value);
-	EXPORT void btCollisionWorld_ClosestRayResultCallback_getRayFromWorld(btCollisionWorld_ClosestRayResultCallback* obj, btScalar* value);
-	EXPORT void btCollisionWorld_ClosestRayResultCallback_getRayToWorld(btCollisionWorld_ClosestRayResultCallback* obj, btScalar* value);
-	EXPORT void btCollisionWorld_ClosestRayResultCallback_setHitNormalWorld(btCollisionWorld_ClosestRayResultCallback* obj, const btScalar* value);
-	EXPORT void btCollisionWorld_ClosestRayResultCallback_setHitPointWorld(btCollisionWorld_ClosestRayResultCallback* obj, const btScalar* value);
-	EXPORT void btCollisionWorld_ClosestRayResultCallback_setRayFromWorld(btCollisionWorld_ClosestRayResultCallback* obj, const btScalar* value);
-	EXPORT void btCollisionWorld_ClosestRayResultCallback_setRayToWorld(btCollisionWorld_ClosestRayResultCallback* obj, const btScalar* value);
+	EXPORT btCollisionWorld_ClosestRayResultCallback* btCollisionWorld_ClosestRayResultCallback_new(const btVector3* rayFromWorld, const btVector3* rayToWorld);
+	EXPORT void btCollisionWorld_ClosestRayResultCallback_getHitNormalWorld(btCollisionWorld_ClosestRayResultCallback* obj, btVector3* value);
+	EXPORT void btCollisionWorld_ClosestRayResultCallback_getHitPointWorld(btCollisionWorld_ClosestRayResultCallback* obj, btVector3* value);
+	EXPORT void btCollisionWorld_ClosestRayResultCallback_getRayFromWorld(btCollisionWorld_ClosestRayResultCallback* obj, btVector3* value);
+	EXPORT void btCollisionWorld_ClosestRayResultCallback_getRayToWorld(btCollisionWorld_ClosestRayResultCallback* obj, btVector3* value);
+	EXPORT void btCollisionWorld_ClosestRayResultCallback_setHitNormalWorld(btCollisionWorld_ClosestRayResultCallback* obj, const btVector3* value);
+	EXPORT void btCollisionWorld_ClosestRayResultCallback_setHitPointWorld(btCollisionWorld_ClosestRayResultCallback* obj, const btVector3* value);
+	EXPORT void btCollisionWorld_ClosestRayResultCallback_setRayFromWorld(btCollisionWorld_ClosestRayResultCallback* obj, const btVector3* value);
+	EXPORT void btCollisionWorld_ClosestRayResultCallback_setRayToWorld(btCollisionWorld_ClosestRayResultCallback* obj, const btVector3* value);
 
 	EXPORT btCollisionWorld_ContactResultCallbackWrapper* btCollisionWorld_ContactResultCallbackWrapper_new(
 		p_btCollisionWorld_ContactResultCallback_AddSingleResult addSingleResultCallback,
@@ -140,27 +140,27 @@ extern "C"
 	EXPORT void btCollisionWorld_ConvexResultCallback_setCollisionFilterMask(btCollisionWorld_ConvexResultCallback* obj, short value);
 	EXPORT void btCollisionWorld_ConvexResultCallback_delete(btCollisionWorld_ConvexResultCallback* obj);
 
-	EXPORT btCollisionWorld_LocalConvexResult* btCollisionWorld_LocalConvexResult_new(const btCollisionObject* hitCollisionObject, btCollisionWorld_LocalShapeInfo* localShapeInfo, const btScalar* hitNormalLocal, const btScalar* hitPointLocal, btScalar hitFraction);
+	EXPORT btCollisionWorld_LocalConvexResult* btCollisionWorld_LocalConvexResult_new(const btCollisionObject* hitCollisionObject, btCollisionWorld_LocalShapeInfo* localShapeInfo, const btVector3* hitNormalLocal, const btVector3* hitPointLocal, btScalar hitFraction);
 	EXPORT const btCollisionObject* btCollisionWorld_LocalConvexResult_getHitCollisionObject(btCollisionWorld_LocalConvexResult* obj);
 	EXPORT btScalar btCollisionWorld_LocalConvexResult_getHitFraction(btCollisionWorld_LocalConvexResult* obj);
-	EXPORT void btCollisionWorld_LocalConvexResult_getHitNormalLocal(btCollisionWorld_LocalConvexResult* obj, btScalar* value);
-	EXPORT void btCollisionWorld_LocalConvexResult_getHitPointLocal(btCollisionWorld_LocalConvexResult* obj, btScalar* value);
+	EXPORT void btCollisionWorld_LocalConvexResult_getHitNormalLocal(btCollisionWorld_LocalConvexResult* obj, btVector3* value);
+	EXPORT void btCollisionWorld_LocalConvexResult_getHitPointLocal(btCollisionWorld_LocalConvexResult* obj, btVector3* value);
 	EXPORT btCollisionWorld_LocalShapeInfo* btCollisionWorld_LocalConvexResult_getLocalShapeInfo(btCollisionWorld_LocalConvexResult* obj);
 	EXPORT void btCollisionWorld_LocalConvexResult_setHitCollisionObject(btCollisionWorld_LocalConvexResult* obj, const btCollisionObject* value);
 	EXPORT void btCollisionWorld_LocalConvexResult_setHitFraction(btCollisionWorld_LocalConvexResult* obj, btScalar value);
-	EXPORT void btCollisionWorld_LocalConvexResult_setHitNormalLocal(btCollisionWorld_LocalConvexResult* obj, const btScalar* value);
-	EXPORT void btCollisionWorld_LocalConvexResult_setHitPointLocal(btCollisionWorld_LocalConvexResult* obj, const btScalar* value);
+	EXPORT void btCollisionWorld_LocalConvexResult_setHitNormalLocal(btCollisionWorld_LocalConvexResult* obj, const btVector3* value);
+	EXPORT void btCollisionWorld_LocalConvexResult_setHitPointLocal(btCollisionWorld_LocalConvexResult* obj, const btVector3* value);
 	EXPORT void btCollisionWorld_LocalConvexResult_setLocalShapeInfo(btCollisionWorld_LocalConvexResult* obj, btCollisionWorld_LocalShapeInfo* value);
 	EXPORT void btCollisionWorld_LocalConvexResult_delete(btCollisionWorld_LocalConvexResult* obj);
 
-	EXPORT btCollisionWorld_LocalRayResult* btCollisionWorld_LocalRayResult_new(const btCollisionObject* collisionObject, btCollisionWorld_LocalShapeInfo* localShapeInfo, const btScalar* hitNormalLocal, btScalar hitFraction);
+	EXPORT btCollisionWorld_LocalRayResult* btCollisionWorld_LocalRayResult_new(const btCollisionObject* collisionObject, btCollisionWorld_LocalShapeInfo* localShapeInfo, const btVector3* hitNormalLocal, btScalar hitFraction);
 	EXPORT const btCollisionObject* btCollisionWorld_LocalRayResult_getCollisionObject(btCollisionWorld_LocalRayResult* obj);
 	EXPORT btScalar btCollisionWorld_LocalRayResult_getHitFraction(btCollisionWorld_LocalRayResult* obj);
-	EXPORT void btCollisionWorld_LocalRayResult_getHitNormalLocal(btCollisionWorld_LocalRayResult* obj, btScalar* value);
+	EXPORT void btCollisionWorld_LocalRayResult_getHitNormalLocal(btCollisionWorld_LocalRayResult* obj, btVector3* value);
 	EXPORT btCollisionWorld_LocalShapeInfo* btCollisionWorld_LocalRayResult_getLocalShapeInfo(btCollisionWorld_LocalRayResult* obj);
 	EXPORT void btCollisionWorld_LocalRayResult_setCollisionObject(btCollisionWorld_LocalRayResult* obj, const btCollisionObject* value);
 	EXPORT void btCollisionWorld_LocalRayResult_setHitFraction(btCollisionWorld_LocalRayResult* obj, btScalar value);
-	EXPORT void btCollisionWorld_LocalRayResult_setHitNormalLocal(btCollisionWorld_LocalRayResult* obj, const btScalar* value);
+	EXPORT void btCollisionWorld_LocalRayResult_setHitNormalLocal(btCollisionWorld_LocalRayResult* obj, const btVector3* value);
 	EXPORT void btCollisionWorld_LocalRayResult_setLocalShapeInfo(btCollisionWorld_LocalRayResult* obj, btCollisionWorld_LocalShapeInfo* value);
 	EXPORT void btCollisionWorld_LocalRayResult_delete(btCollisionWorld_LocalRayResult* obj);
 
@@ -198,9 +198,9 @@ extern "C"
 	EXPORT void btCollisionWorld_computeOverlappingPairs(btCollisionWorld* obj);
 	EXPORT void btCollisionWorld_contactPairTest(btCollisionWorld* obj, btCollisionObject* colObjA, btCollisionObject* colObjB, btCollisionWorld_ContactResultCallback* resultCallback);
 	EXPORT void btCollisionWorld_contactTest(btCollisionWorld* obj, btCollisionObject* colObj, btCollisionWorld_ContactResultCallback* resultCallback);
-	EXPORT void btCollisionWorld_convexSweepTest(btCollisionWorld* obj, const btConvexShape* castShape, const btScalar* from, const btScalar* to, btCollisionWorld_ConvexResultCallback* resultCallback);
-	EXPORT void btCollisionWorld_convexSweepTest2(btCollisionWorld* obj, const btConvexShape* castShape, const btScalar* from, const btScalar* to, btCollisionWorld_ConvexResultCallback* resultCallback, btScalar allowedCcdPenetration);
-	EXPORT void btCollisionWorld_debugDrawObject(btCollisionWorld* obj, const btScalar* worldTransform, const btCollisionShape* shape, const btScalar* color);
+	EXPORT void btCollisionWorld_convexSweepTest(btCollisionWorld* obj, const btConvexShape* castShape, const btTransform* from, const btTransform* to, btCollisionWorld_ConvexResultCallback* resultCallback);
+	EXPORT void btCollisionWorld_convexSweepTest2(btCollisionWorld* obj, const btConvexShape* castShape, const btTransform* from, const btTransform* to, btCollisionWorld_ConvexResultCallback* resultCallback, btScalar allowedCcdPenetration);
+	EXPORT void btCollisionWorld_debugDrawObject(btCollisionWorld* obj, const btTransform* worldTransform, const btCollisionShape* shape, const btVector3* color);
 	EXPORT void btCollisionWorld_debugDrawWorld(btCollisionWorld* obj);
 	EXPORT btBroadphaseInterface* btCollisionWorld_getBroadphase(btCollisionWorld* obj);
 	EXPORT const btCollisionObjectArray* btCollisionWorld_getCollisionObjectArray(btCollisionWorld* obj);
@@ -210,12 +210,12 @@ extern "C"
 	EXPORT bool btCollisionWorld_getForceUpdateAllAabbs(btCollisionWorld* obj);
 	EXPORT int btCollisionWorld_getNumCollisionObjects(btCollisionWorld* obj);
 	EXPORT btOverlappingPairCache* btCollisionWorld_getPairCache(btCollisionWorld* obj);
-	EXPORT void btCollisionWorld_objectQuerySingle(const btConvexShape* castShape, const btScalar* rayFromTrans, const btScalar* rayToTrans, btCollisionObject* collisionObject, const btCollisionShape* collisionShape, const btScalar* colObjWorldTransform, btCollisionWorld_ConvexResultCallback* resultCallback, btScalar allowedPenetration);
-	EXPORT void btCollisionWorld_objectQuerySingleInternal(const btConvexShape* castShape, const btScalar* convexFromTrans, const btScalar* convexToTrans, const btCollisionObjectWrapper* colObjWrap, btCollisionWorld_ConvexResultCallback* resultCallback, btScalar allowedPenetration);
+	EXPORT void btCollisionWorld_objectQuerySingle(const btConvexShape* castShape, const btTransform* rayFromTrans, const btTransform* rayToTrans, btCollisionObject* collisionObject, const btCollisionShape* collisionShape, const btTransform* colObjWorldTransform, btCollisionWorld_ConvexResultCallback* resultCallback, btScalar allowedPenetration);
+	EXPORT void btCollisionWorld_objectQuerySingleInternal(const btConvexShape* castShape, const btTransform* convexFromTrans, const btTransform* convexToTrans, const btCollisionObjectWrapper* colObjWrap, btCollisionWorld_ConvexResultCallback* resultCallback, btScalar allowedPenetration);
 	EXPORT void btCollisionWorld_performDiscreteCollisionDetection(btCollisionWorld* obj);
-	EXPORT void btCollisionWorld_rayTest(btCollisionWorld* obj, const btScalar* rayFromWorld, const btScalar* rayToWorld, btCollisionWorld_RayResultCallback* resultCallback);
-	EXPORT void btCollisionWorld_rayTestSingle(const btScalar* rayFromTrans, const btScalar* rayToTrans, btCollisionObject* collisionObject, const btCollisionShape* collisionShape, const btScalar* colObjWorldTransform, btCollisionWorld_RayResultCallback* resultCallback);
-	EXPORT void btCollisionWorld_rayTestSingleInternal(const btScalar* rayFromTrans, const btScalar* rayToTrans, const btCollisionObjectWrapper* collisionObjectWrap, btCollisionWorld_RayResultCallback* resultCallback);
+	EXPORT void btCollisionWorld_rayTest(btCollisionWorld* obj, const btVector3* rayFromWorld, const btVector3* rayToWorld, btCollisionWorld_RayResultCallback* resultCallback);
+	EXPORT void btCollisionWorld_rayTestSingle(const btTransform* rayFromTrans, const btTransform* rayToTrans, btCollisionObject* collisionObject, const btCollisionShape* collisionShape, const btTransform* colObjWorldTransform, btCollisionWorld_RayResultCallback* resultCallback);
+	EXPORT void btCollisionWorld_rayTestSingleInternal(const btTransform* rayFromTrans, const btTransform* rayToTrans, const btCollisionObjectWrapper* collisionObjectWrap, btCollisionWorld_RayResultCallback* resultCallback);
 	EXPORT void btCollisionWorld_removeCollisionObject(btCollisionWorld* obj, btCollisionObject* collisionObject);
 	EXPORT void btCollisionWorld_serialize(btCollisionWorld* obj, btSerializer* serializer);
 	EXPORT void btCollisionWorld_setBroadphase(btCollisionWorld* obj, btBroadphaseInterface* pairCache);

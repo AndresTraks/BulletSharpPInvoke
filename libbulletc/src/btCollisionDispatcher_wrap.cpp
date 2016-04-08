@@ -8,7 +8,8 @@ btCollisionDispatcher* btCollisionDispatcher_new(btCollisionConfiguration* colli
 	return new btCollisionDispatcher(collisionConfiguration);
 }
 
-void btCollisionDispatcher_defaultNearCallback(btBroadphasePair* collisionPair, btCollisionDispatcher* dispatcher, const btDispatcherInfo* dispatchInfo)
+void btCollisionDispatcher_defaultNearCallback(btBroadphasePair* collisionPair, btCollisionDispatcher* dispatcher,
+	const btDispatcherInfo* dispatchInfo)
 {
 	btCollisionDispatcher::defaultNearCallback(*collisionPair, *dispatcher, *dispatchInfo);
 }
@@ -28,12 +29,14 @@ btNearCallback btCollisionDispatcher_getNearCallback(btCollisionDispatcher* obj)
 	return obj->getNearCallback();
 }
 
-void btCollisionDispatcher_registerCollisionCreateFunc(btCollisionDispatcher* obj, int proxyType0, int proxyType1, btCollisionAlgorithmCreateFunc* createFunc)
+void btCollisionDispatcher_registerCollisionCreateFunc(btCollisionDispatcher* obj,
+	int proxyType0, int proxyType1, btCollisionAlgorithmCreateFunc* createFunc)
 {
 	obj->registerCollisionCreateFunc(proxyType0, proxyType1, createFunc);
 }
 
-void btCollisionDispatcher_setCollisionConfiguration(btCollisionDispatcher* obj, btCollisionConfiguration* config)
+void btCollisionDispatcher_setCollisionConfiguration(btCollisionDispatcher* obj,
+	btCollisionConfiguration* config)
 {
 	obj->setCollisionConfiguration(config);
 }

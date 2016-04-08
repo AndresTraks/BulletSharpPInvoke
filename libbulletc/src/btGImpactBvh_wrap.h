@@ -62,10 +62,10 @@ extern "C"
 
 	EXPORT btGImpactBvh* btGImpactBvh_new();
 	EXPORT btGImpactBvh* btGImpactBvh_new2(btPrimitiveManagerBase* primitive_manager);
-	EXPORT bool btGImpactBvh_boxQuery(btGImpactBvh* obj, const btAABB* box, btAlignedIntArray* collided_results);
-	EXPORT bool btGImpactBvh_boxQueryTrans(btGImpactBvh* obj, const btAABB* box, const btScalar* transform, btAlignedIntArray* collided_results);
+	EXPORT bool btGImpactBvh_boxQuery(btGImpactBvh* obj, const btAABB* box, btAlignedObjectArray_int* collided_results);
+	EXPORT bool btGImpactBvh_boxQueryTrans(btGImpactBvh* obj, const btAABB* box, const btTransform* transform, btAlignedObjectArray_int* collided_results);
 	EXPORT void btGImpactBvh_buildSet(btGImpactBvh* obj);
-	EXPORT void btGImpactBvh_find_collision(btGImpactBvh* boxset1, const btScalar* trans1, btGImpactBvh* boxset2, const btScalar* trans2, btPairSet* collision_pairs);
+	EXPORT void btGImpactBvh_find_collision(btGImpactBvh* boxset1, const btTransform* trans1, btGImpactBvh* boxset2, const btTransform* trans2, btPairSet* collision_pairs);
 	EXPORT const GIM_BVH_TREE_NODE* btGImpactBvh_get_node_pointer(btGImpactBvh* obj);
 	EXPORT const GIM_BVH_TREE_NODE* btGImpactBvh_get_node_pointer2(btGImpactBvh* obj, int index);
 	EXPORT int btGImpactBvh_getEscapeNodeIndex(btGImpactBvh* obj, int nodeindex);
@@ -80,7 +80,7 @@ extern "C"
 	EXPORT bool btGImpactBvh_hasHierarchy(btGImpactBvh* obj);
 	EXPORT bool btGImpactBvh_isLeafNode(btGImpactBvh* obj, int nodeindex);
 	EXPORT bool btGImpactBvh_isTrimesh(btGImpactBvh* obj);
-	EXPORT bool btGImpactBvh_rayQuery(btGImpactBvh* obj, const btScalar* ray_dir, const btScalar* ray_origin, btAlignedIntArray* collided_results);
+	EXPORT bool btGImpactBvh_rayQuery(btGImpactBvh* obj, const btVector3* ray_dir, const btVector3* ray_origin, btAlignedObjectArray_int* collided_results);
 	EXPORT void btGImpactBvh_setNodeBound(btGImpactBvh* obj, int nodeindex, const btAABB* bound);
 	EXPORT void btGImpactBvh_setPrimitiveManager(btGImpactBvh* obj, btPrimitiveManagerBase* primitive_manager);
 	EXPORT void btGImpactBvh_update(btGImpactBvh* obj);

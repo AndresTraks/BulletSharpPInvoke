@@ -5,34 +5,43 @@
 #include "conversion.h"
 #include "btMultiBody_wrap.h"
 
-btMultiBody* btMultiBody_new(int n_links, btScalar mass, const btScalar* inertia, bool fixedBase, bool canSleep)
+btMultiBody* btMultiBody_new(int n_links, btScalar mass, const btVector3* inertia,
+	bool fixedBase, bool canSleep)
 {
-	VECTOR3_CONV(inertia);
-	return new btMultiBody(n_links, mass, VECTOR3_USE(inertia), fixedBase, canSleep);
+	BTVECTOR3_IN(inertia);
+	return new btMultiBody(n_links, mass, BTVECTOR3_USE(inertia), fixedBase, canSleep);
 }
 
-void btMultiBody_addBaseConstraintForce(btMultiBody* obj, const btScalar* f)
+btMultiBody* btMultiBody_new2(int n_links, btScalar mass, const btVector3* inertia,
+	bool fixedBase, bool canSleep, bool deprecatedMultiDof)
 {
-	VECTOR3_CONV(f);
-	obj->addBaseConstraintForce(VECTOR3_USE(f));
+	BTVECTOR3_IN(inertia);
+	return new btMultiBody(n_links, mass, BTVECTOR3_USE(inertia), fixedBase, canSleep,
+		deprecatedMultiDof);
 }
 
-void btMultiBody_addBaseConstraintTorque(btMultiBody* obj, const btScalar* t)
+void btMultiBody_addBaseConstraintForce(btMultiBody* obj, const btVector3* f)
 {
-	VECTOR3_CONV(t);
-	obj->addBaseConstraintTorque(VECTOR3_USE(t));
+	BTVECTOR3_IN(f);
+	obj->addBaseConstraintForce(BTVECTOR3_USE(f));
 }
 
-void btMultiBody_addBaseForce(btMultiBody* obj, const btScalar* f)
+void btMultiBody_addBaseConstraintTorque(btMultiBody* obj, const btVector3* t)
 {
-	VECTOR3_CONV(f);
-	obj->addBaseForce(VECTOR3_USE(f));
+	BTVECTOR3_IN(t);
+	obj->addBaseConstraintTorque(BTVECTOR3_USE(t));
 }
 
-void btMultiBody_addBaseTorque(btMultiBody* obj, const btScalar* t)
+void btMultiBody_addBaseForce(btMultiBody* obj, const btVector3* f)
 {
-	VECTOR3_CONV(t);
-	obj->addBaseTorque(VECTOR3_USE(t));
+	BTVECTOR3_IN(f);
+	obj->addBaseForce(BTVECTOR3_USE(f));
+}
+
+void btMultiBody_addBaseTorque(btMultiBody* obj, const btVector3* t)
+{
+	BTVECTOR3_IN(t);
+	obj->addBaseTorque(BTVECTOR3_USE(t));
 }
 
 void btMultiBody_addJointTorque(btMultiBody* obj, int i, btScalar Q)
@@ -50,41 +59,44 @@ void btMultiBody_addJointTorqueMultiDof2(btMultiBody* obj, int i, int dof, btSca
 	obj->addJointTorqueMultiDof(i, dof, Q);
 }
 
-void btMultiBody_addLinkConstraintForce(btMultiBody* obj, int i, const btScalar* f)
+void btMultiBody_addLinkConstraintForce(btMultiBody* obj, int i, const btVector3* f)
 {
-	VECTOR3_CONV(f);
-	obj->addLinkConstraintForce(i, VECTOR3_USE(f));
+	BTVECTOR3_IN(f);
+	obj->addLinkConstraintForce(i, BTVECTOR3_USE(f));
 }
 
-void btMultiBody_addLinkConstraintTorque(btMultiBody* obj, int i, const btScalar* t)
+void btMultiBody_addLinkConstraintTorque(btMultiBody* obj, int i, const btVector3* t)
 {
-	VECTOR3_CONV(t);
-	obj->addLinkConstraintTorque(i, VECTOR3_USE(t));
+	BTVECTOR3_IN(t);
+	obj->addLinkConstraintTorque(i, BTVECTOR3_USE(t));
 }
 
-void btMultiBody_addLinkForce(btMultiBody* obj, int i, const btScalar* f)
+void btMultiBody_addLinkForce(btMultiBody* obj, int i, const btVector3* f)
 {
-	VECTOR3_CONV(f);
-	obj->addLinkForce(i, VECTOR3_USE(f));
+	BTVECTOR3_IN(f);
+	obj->addLinkForce(i, BTVECTOR3_USE(f));
 }
 
-void btMultiBody_addLinkTorque(btMultiBody* obj, int i, const btScalar* t)
+void btMultiBody_addLinkTorque(btMultiBody* obj, int i, const btVector3* t)
 {
-	VECTOR3_CONV(t);
-	obj->addLinkTorque(i, VECTOR3_USE(t));
+	BTVECTOR3_IN(t);
+	obj->addLinkTorque(i, BTVECTOR3_USE(t));
 }
 
-void btMultiBody_applyDeltaVeeMultiDof(btMultiBody* obj, const btScalar* delta_vee, btScalar multiplier)
+void btMultiBody_applyDeltaVeeMultiDof(btMultiBody* obj, const btScalar* delta_vee,
+	btScalar multiplier)
 {
 	obj->applyDeltaVeeMultiDof(delta_vee, multiplier);
 }
 
-void btMultiBody_applyDeltaVeeMultiDof2(btMultiBody* obj, const btScalar* delta_vee, btScalar multiplier)
+void btMultiBody_applyDeltaVeeMultiDof2(btMultiBody* obj, const btScalar* delta_vee,
+	btScalar multiplier)
 {
 	obj->applyDeltaVeeMultiDof2(delta_vee, multiplier);
 }
 
-void btMultiBody_calcAccelerationDeltasMultiDof(btMultiBody* obj, const btScalar* force, btScalar* output, btAlignedScalarArray* scratch_r, btAlignedVector3Array* scratch_v)
+void btMultiBody_calcAccelerationDeltasMultiDof(btMultiBody* obj, const btScalar* force,
+	btScalar* output, btAlignedObjectArray<float>* scratch_r, btAlignedObjectArray<btVector3>* scratch_v)
 {
 	obj->calcAccelerationDeltasMultiDof(force, output, *scratch_r, *scratch_v);
 }
@@ -114,32 +126,40 @@ void btMultiBody_clearVelocities(btMultiBody* obj)
 	obj->clearVelocities();
 }
 
-void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof(btMultiBody* obj, btScalar dt, btAlignedScalarArray* scratch_r, btAlignedVector3Array* scratch_v, btAlignedMatrix3x3Array* scratch_m)
+void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof(btMultiBody* obj,
+	btScalar dt, btAlignedObjectArray<float>* scratch_r, btAlignedObjectArray<btVector3>* scratch_v,
+	btAlignedObjectArray_btMatrix3x3* scratch_m)
 {
 	obj->computeAccelerationsArticulatedBodyAlgorithmMultiDof(dt, *scratch_r, *scratch_v,
 		*scratch_m);
 }
 
-void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof2(btMultiBody* obj, btScalar dt, btAlignedScalarArray* scratch_r, btAlignedVector3Array* scratch_v, btAlignedMatrix3x3Array* scratch_m, bool isConstraintPass)
+void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof2(btMultiBody* obj,
+	btScalar dt, btAlignedObjectArray<float>* scratch_r, btAlignedObjectArray<btVector3>* scratch_v,
+	btAlignedObjectArray_btMatrix3x3* scratch_m, bool isConstraintPass)
 {
 	obj->computeAccelerationsArticulatedBodyAlgorithmMultiDof(dt, *scratch_r, *scratch_v,
 		*scratch_m, isConstraintPass);
 }
 
-void btMultiBody_fillConstraintJacobianMultiDof(btMultiBody* obj, int link, const btScalar* contact_point, const btScalar* normal_ang, const btScalar* normal_lin, btScalar* jac, btAlignedScalarArray* scratch_r, btAlignedVector3Array* scratch_v, btAlignedMatrix3x3Array* scratch_m)
+void btMultiBody_fillConstraintJacobianMultiDof(btMultiBody* obj, int link, const btVector3* contact_point,
+	const btVector3* normal_ang, const btVector3* normal_lin, btScalar* jac, btAlignedObjectArray<float>* scratch_r,
+	btAlignedObjectArray<btVector3>* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m)
 {
-	VECTOR3_CONV(contact_point);
-	VECTOR3_CONV(normal_ang);
-	VECTOR3_CONV(normal_lin);
-	obj->fillConstraintJacobianMultiDof(link, VECTOR3_USE(contact_point), VECTOR3_USE(normal_ang),
-		VECTOR3_USE(normal_lin), jac, *scratch_r, *scratch_v, *scratch_m);
+	BTVECTOR3_IN(contact_point);
+	BTVECTOR3_IN(normal_ang);
+	BTVECTOR3_IN(normal_lin);
+	obj->fillConstraintJacobianMultiDof(link, BTVECTOR3_USE(contact_point), BTVECTOR3_USE(normal_ang),
+		BTVECTOR3_USE(normal_lin), jac, *scratch_r, *scratch_v, *scratch_m);
 }
 
-void btMultiBody_fillContactJacobianMultiDof(btMultiBody* obj, int link, const btScalar* contact_point, const btScalar* normal, btScalar* jac, btAlignedScalarArray* scratch_r, btAlignedVector3Array* scratch_v, btAlignedMatrix3x3Array* scratch_m)
+void btMultiBody_fillContactJacobianMultiDof(btMultiBody* obj, int link, const btVector3* contact_point,
+	const btVector3* normal, btScalar* jac, btAlignedObjectArray<float>* scratch_r,
+	btAlignedObjectArray<btVector3>* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m)
 {
-	VECTOR3_CONV(contact_point);
-	VECTOR3_CONV(normal);
-	obj->fillContactJacobianMultiDof(link, VECTOR3_USE(contact_point), VECTOR3_USE(normal),
+	BTVECTOR3_IN(contact_point);
+	BTVECTOR3_IN(normal);
+	obj->fillContactJacobianMultiDof(link, BTVECTOR3_USE(contact_point), BTVECTOR3_USE(normal),
 		jac, *scratch_r, *scratch_v, *scratch_m);
 }
 
@@ -148,7 +168,8 @@ void btMultiBody_finalizeMultiDof(btMultiBody* obj)
 	obj->finalizeMultiDof();
 }
 
-void btMultiBody_forwardKinematics(btMultiBody* obj, btAlignedQuaternionArray* scratch_q, btAlignedVector3Array* scratch_m)
+void btMultiBody_forwardKinematics(btMultiBody* obj, btAlignedObjectArray_btQuaternion* scratch_q,
+	btAlignedObjectArray<btVector3>* scratch_m)
 {
 	obj->forwardKinematics(*scratch_q, *scratch_m);
 }
@@ -158,9 +179,9 @@ btScalar btMultiBody_getAngularDamping(btMultiBody* obj)
 	return obj->getAngularDamping();
 }
 
-void btMultiBody_getAngularMomentum(btMultiBody* obj, btScalar* value)
+void btMultiBody_getAngularMomentum(btMultiBody* obj, btVector3* value)
 {
-	VECTOR3_OUT_VAL(obj->getAngularMomentum(), value);
+	BTVECTOR3_SET(value, obj->getAngularMomentum());
 }
 
 btMultiBodyLinkCollider* btMultiBody_getBaseCollider(btMultiBody* obj)
@@ -168,14 +189,14 @@ btMultiBodyLinkCollider* btMultiBody_getBaseCollider(btMultiBody* obj)
 	return obj->getBaseCollider();
 }
 
-void btMultiBody_getBaseForce(btMultiBody* obj, btScalar* value)
+void btMultiBody_getBaseForce(btMultiBody* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getBaseForce(), value);
+	BTVECTOR3_COPY(value, &obj->getBaseForce());
 }
 
-void btMultiBody_getBaseInertia(btMultiBody* obj, btScalar* inertia)
+void btMultiBody_getBaseInertia(btMultiBody* obj, btVector3* inertia)
 {
-	VECTOR3_OUT(&obj->getBaseInertia(), inertia);
+	BTVECTOR3_COPY(inertia, &obj->getBaseInertia());
 }
 
 btScalar btMultiBody_getBaseMass(btMultiBody* obj)
@@ -188,29 +209,29 @@ const char* btMultiBody_getBaseName(btMultiBody* obj)
 	return obj->getBaseName();
 }
 
-void btMultiBody_getBaseOmega(btMultiBody* obj, btScalar* omega)
+void btMultiBody_getBaseOmega(btMultiBody* obj, btVector3* omega)
 {
-	VECTOR3_OUT_VAL(obj->getBaseOmega(), omega);
+	BTVECTOR3_SET(omega, obj->getBaseOmega());
 }
 
-void btMultiBody_getBasePos(btMultiBody* obj, btScalar* pos)
+void btMultiBody_getBasePos(btMultiBody* obj, btVector3* pos)
 {
-	VECTOR3_OUT(&obj->getBasePos(), pos);
+	BTVECTOR3_COPY(pos, &obj->getBasePos());
 }
 
-void btMultiBody_getBaseTorque(btMultiBody* obj, btScalar* value)
+void btMultiBody_getBaseTorque(btMultiBody* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getBaseTorque(), value);
+	BTVECTOR3_COPY(value, &obj->getBaseTorque());
 }
 
-void btMultiBody_getBaseVel(btMultiBody* obj, btScalar* vel)
+void btMultiBody_getBaseVel(btMultiBody* obj, btVector3* vel)
 {
-	VECTOR3_OUT_VAL(obj->getBaseVel(), vel);
+	BTVECTOR3_SET(vel, obj->getBaseVel());
 }
 
-void btMultiBody_getBaseWorldTransform(btMultiBody* obj, btScalar* tr)
+void btMultiBody_getBaseWorldTransform(btMultiBody* obj, btTransform* tr)
 {
-	TRANSFORM_OUT_VAL(obj->getBaseWorldTransform(), tr);
+	BTTRANSFORM_SET(tr, obj->getBaseWorldTransform());
 }
 
 bool btMultiBody_getCanSleep(btMultiBody* obj)
@@ -268,14 +289,14 @@ btMultibodyLink* btMultiBody_getLink(btMultiBody* obj, int index)
 	return &obj->getLink(index);
 }
 
-void btMultiBody_getLinkForce(btMultiBody* obj, int i, btScalar* value)
+void btMultiBody_getLinkForce(btMultiBody* obj, int i, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getLinkForce(i), value);
+	BTVECTOR3_COPY(value, &obj->getLinkForce(i));
 }
 
-void btMultiBody_getLinkInertia(btMultiBody* obj, int i, btScalar* value)
+void btMultiBody_getLinkInertia(btMultiBody* obj, int i, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getLinkInertia(i), value);
+	BTVECTOR3_COPY(value, &obj->getLinkInertia(i));
 }
 
 btScalar btMultiBody_getLinkMass(btMultiBody* obj, int i)
@@ -283,9 +304,9 @@ btScalar btMultiBody_getLinkMass(btMultiBody* obj, int i)
 	return obj->getLinkMass(i);
 }
 
-void btMultiBody_getLinkTorque(btMultiBody* obj, int i, btScalar* value)
+void btMultiBody_getLinkTorque(btMultiBody* obj, int i, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getLinkTorque(i), value);
+	BTVECTOR3_COPY(value, &obj->getLinkTorque(i));
 }
 
 btScalar btMultiBody_getMaxAppliedImpulse(btMultiBody* obj)
@@ -318,14 +339,14 @@ int btMultiBody_getParent(btMultiBody* obj, int link_num)
 	return obj->getParent(link_num);
 }
 
-void btMultiBody_getParentToLocalRot(btMultiBody* obj, int i, btScalar* value)
+void btMultiBody_getParentToLocalRot(btMultiBody* obj, int i, btQuaternion* value)
 {
-	QUATERNION_OUT(&obj->getParentToLocalRot(i), value);
+	BTQUATERNION_COPY(value, &obj->getParentToLocalRot(i));
 }
 
-void btMultiBody_getRVector(btMultiBody* obj, int i, btScalar* value)
+void btMultiBody_getRVector(btMultiBody* obj, int i, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getRVector(i), value);
+	BTVECTOR3_COPY(value, &obj->getRVector(i));
 }
 
 bool btMultiBody_getUseGyroTerm(btMultiBody* obj)
@@ -338,9 +359,9 @@ const btScalar* btMultiBody_getVelocityVector(btMultiBody* obj)
 	return obj->getVelocityVector();
 }
 
-void btMultiBody_getWorldToBaseRot(btMultiBody* obj, btScalar* rot)
+void btMultiBody_getWorldToBaseRot(btMultiBody* obj, btQuaternion* rot)
 {
-	QUATERNION_OUT(&obj->getWorldToBaseRot(), rot);
+	BTQUATERNION_COPY(rot, &obj->getWorldToBaseRot());
 }
 
 void btMultiBody_goToSleep(btMultiBody* obj)
@@ -383,16 +404,16 @@ bool btMultiBody_isUsingRK4Integration(btMultiBody* obj)
 	return obj->isUsingRK4Integration();
 }
 
-void btMultiBody_localDirToWorld(btMultiBody* obj, int i, const btScalar* vec, btScalar* value)
+void btMultiBody_localDirToWorld(btMultiBody* obj, int i, const btVector3* vec, btVector3* value)
 {
-	VECTOR3_CONV(vec);
-	VECTOR3_OUT_VAL(obj->localDirToWorld(i, VECTOR3_USE(vec)), value);
+	BTVECTOR3_IN(vec);
+	BTVECTOR3_SET(value, obj->localDirToWorld(i, BTVECTOR3_USE(vec)));
 }
 
-void btMultiBody_localPosToWorld(btMultiBody* obj, int i, const btScalar* vec, btScalar* value)
+void btMultiBody_localPosToWorld(btMultiBody* obj, int i, const btVector3* vec, btVector3* value)
 {
-	VECTOR3_CONV(vec);
-	VECTOR3_OUT_VAL(obj->localPosToWorld(i, VECTOR3_USE(vec)), value);
+	BTVECTOR3_IN(vec);
+	BTVECTOR3_SET(value, obj->localPosToWorld(i, BTVECTOR3_USE(vec)));
 }
 
 void btMultiBody_processDeltaVeeMultiDof2(btMultiBody* obj)
@@ -415,10 +436,10 @@ void btMultiBody_setBaseCollider(btMultiBody* obj, btMultiBodyLinkCollider* coll
 	obj->setBaseCollider(collider);
 }
 
-void btMultiBody_setBaseInertia(btMultiBody* obj, const btScalar* inertia)
+void btMultiBody_setBaseInertia(btMultiBody* obj, const btVector3* inertia)
 {
-	VECTOR3_CONV(inertia);
-	obj->setBaseInertia(VECTOR3_USE(inertia));
+	BTVECTOR3_IN(inertia);
+	obj->setBaseInertia(BTVECTOR3_USE(inertia));
 }
 
 void btMultiBody_setBaseMass(btMultiBody* obj, btScalar mass)
@@ -431,28 +452,28 @@ void btMultiBody_setBaseName(btMultiBody* obj, const char* name)
 	obj->setBaseName(name);
 }
 
-void btMultiBody_setBaseOmega(btMultiBody* obj, const btScalar* omega)
+void btMultiBody_setBaseOmega(btMultiBody* obj, const btVector3* omega)
 {
-	VECTOR3_CONV(omega);
-	obj->setBaseOmega(VECTOR3_USE(omega));
+	BTVECTOR3_IN(omega);
+	obj->setBaseOmega(BTVECTOR3_USE(omega));
 }
 
-void btMultiBody_setBasePos(btMultiBody* obj, const btScalar* pos)
+void btMultiBody_setBasePos(btMultiBody* obj, const btVector3* pos)
 {
-	VECTOR3_CONV(pos);
-	obj->setBasePos(VECTOR3_USE(pos));
+	BTVECTOR3_IN(pos);
+	obj->setBasePos(BTVECTOR3_USE(pos));
 }
 
-void btMultiBody_setBaseVel(btMultiBody* obj, const btScalar* vel)
+void btMultiBody_setBaseVel(btMultiBody* obj, const btVector3* vel)
 {
-	VECTOR3_CONV(vel);
-	obj->setBaseVel(VECTOR3_USE(vel));
+	BTVECTOR3_IN(vel);
+	obj->setBaseVel(BTVECTOR3_USE(vel));
 }
 
-void btMultiBody_setBaseWorldTransform(btMultiBody* obj, const btScalar* tr)
+void btMultiBody_setBaseWorldTransform(btMultiBody* obj, const btTransform* tr)
 {
-	TRANSFORM_CONV(tr);
-	obj->setBaseWorldTransform(TRANSFORM_USE(tr));
+	BTTRANSFORM_IN(tr);
+	obj->setBaseWorldTransform(BTTRANSFORM_USE(tr));
 }
 
 void btMultiBody_setCanSleep(btMultiBody* obj, bool canSleep)
@@ -515,89 +536,117 @@ void btMultiBody_setPosUpdated(btMultiBody* obj, bool updated)
 	obj->setPosUpdated(updated);
 }
 
-void btMultiBody_setupFixed(btMultiBody* obj, int linkIndex, btScalar mass, const btScalar* inertia, int parent, const btScalar* rotParentToThis, const btScalar* parentComToThisPivotOffset, const btScalar* thisPivotToThisComOffset)
+void btMultiBody_setupFixed(btMultiBody* obj, int linkIndex, btScalar mass, const btVector3* inertia,
+	int parent, const btQuaternion* rotParentToThis, const btVector3* parentComToThisPivotOffset,
+	const btVector3* thisPivotToThisComOffset)
 {
-	VECTOR3_CONV(inertia);
-	QUATERNION_CONV(rotParentToThis);
-	VECTOR3_CONV(parentComToThisPivotOffset);
-	VECTOR3_CONV(thisPivotToThisComOffset);
-	obj->setupFixed(linkIndex, mass, VECTOR3_USE(inertia), parent, QUATERNION_USE(rotParentToThis),
-		VECTOR3_USE(parentComToThisPivotOffset), VECTOR3_USE(thisPivotToThisComOffset));
+	BTVECTOR3_IN(inertia);
+	BTQUATERNION_IN(rotParentToThis);
+	BTVECTOR3_IN(parentComToThisPivotOffset);
+	BTVECTOR3_IN(thisPivotToThisComOffset);
+	obj->setupFixed(linkIndex, mass, BTVECTOR3_USE(inertia), parent, BTQUATERNION_USE(rotParentToThis),
+		BTVECTOR3_USE(parentComToThisPivotOffset), BTVECTOR3_USE(thisPivotToThisComOffset));
 }
 
-void btMultiBody_setupPlanar(btMultiBody* obj, int i, btScalar mass, const btScalar* inertia, int parent, const btScalar* rotParentToThis, const btScalar* rotationAxis, const btScalar* parentComToThisComOffset)
+void btMultiBody_setupFixed2(btMultiBody* obj, int linkIndex, btScalar mass, const btVector3* inertia,
+	int parent, const btQuaternion* rotParentToThis, const btVector3* parentComToThisPivotOffset,
+	const btVector3* thisPivotToThisComOffset, bool deprecatedDisableParentCollision)
 {
-	VECTOR3_CONV(inertia);
-	QUATERNION_CONV(rotParentToThis);
-	VECTOR3_CONV(rotationAxis);
-	VECTOR3_CONV(parentComToThisComOffset);
-	obj->setupPlanar(i, mass, VECTOR3_USE(inertia), parent, QUATERNION_USE(rotParentToThis),
-		VECTOR3_USE(rotationAxis), VECTOR3_USE(parentComToThisComOffset));
+	BTVECTOR3_IN(inertia);
+	BTQUATERNION_IN(rotParentToThis);
+	BTVECTOR3_IN(parentComToThisPivotOffset);
+	BTVECTOR3_IN(thisPivotToThisComOffset);
+	obj->setupFixed(linkIndex, mass, BTVECTOR3_USE(inertia), parent, BTQUATERNION_USE(rotParentToThis),
+		BTVECTOR3_USE(parentComToThisPivotOffset), BTVECTOR3_USE(thisPivotToThisComOffset),
+		deprecatedDisableParentCollision);
 }
 
-void btMultiBody_setupPlanar2(btMultiBody* obj, int i, btScalar mass, const btScalar* inertia, int parent, const btScalar* rotParentToThis, const btScalar* rotationAxis, const btScalar* parentComToThisComOffset, bool disableParentCollision)
+void btMultiBody_setupPlanar(btMultiBody* obj, int i, btScalar mass, const btVector3* inertia,
+	int parent, const btQuaternion* rotParentToThis, const btVector3* rotationAxis, const btVector3* parentComToThisComOffset)
 {
-	VECTOR3_CONV(inertia);
-	QUATERNION_CONV(rotParentToThis);
-	VECTOR3_CONV(rotationAxis);
-	VECTOR3_CONV(parentComToThisComOffset);
-	obj->setupPlanar(i, mass, VECTOR3_USE(inertia), parent, QUATERNION_USE(rotParentToThis),
-		VECTOR3_USE(rotationAxis), VECTOR3_USE(parentComToThisComOffset), disableParentCollision);
+	BTVECTOR3_IN(inertia);
+	BTQUATERNION_IN(rotParentToThis);
+	BTVECTOR3_IN(rotationAxis);
+	BTVECTOR3_IN(parentComToThisComOffset);
+	obj->setupPlanar(i, mass, BTVECTOR3_USE(inertia), parent, BTQUATERNION_USE(rotParentToThis),
+		BTVECTOR3_USE(rotationAxis), BTVECTOR3_USE(parentComToThisComOffset));
 }
 
-void btMultiBody_setupPrismatic(btMultiBody* obj, int i, btScalar mass, const btScalar* inertia, int parent, const btScalar* rotParentToThis, const btScalar* jointAxis, const btScalar* parentComToThisPivotOffset, const btScalar* thisPivotToThisComOffset, bool disableParentCollision)
+void btMultiBody_setupPlanar2(btMultiBody* obj, int i, btScalar mass, const btVector3* inertia,
+	int parent, const btQuaternion* rotParentToThis, const btVector3* rotationAxis, const btVector3* parentComToThisComOffset,
+	bool disableParentCollision)
 {
-	VECTOR3_CONV(inertia);
-	QUATERNION_CONV(rotParentToThis);
-	VECTOR3_CONV(jointAxis);
-	VECTOR3_CONV(parentComToThisPivotOffset);
-	VECTOR3_CONV(thisPivotToThisComOffset);
-	obj->setupPrismatic(i, mass, VECTOR3_USE(inertia), parent, QUATERNION_USE(rotParentToThis),
-		VECTOR3_USE(jointAxis), VECTOR3_USE(parentComToThisPivotOffset), VECTOR3_USE(thisPivotToThisComOffset),
+	BTVECTOR3_IN(inertia);
+	BTQUATERNION_IN(rotParentToThis);
+	BTVECTOR3_IN(rotationAxis);
+	BTVECTOR3_IN(parentComToThisComOffset);
+	obj->setupPlanar(i, mass, BTVECTOR3_USE(inertia), parent, BTQUATERNION_USE(rotParentToThis),
+		BTVECTOR3_USE(rotationAxis), BTVECTOR3_USE(parentComToThisComOffset), disableParentCollision);
+}
+
+void btMultiBody_setupPrismatic(btMultiBody* obj, int i, btScalar mass, const btVector3* inertia,
+	int parent, const btQuaternion* rotParentToThis, const btVector3* jointAxis, const btVector3* parentComToThisPivotOffset,
+	const btVector3* thisPivotToThisComOffset, bool disableParentCollision)
+{
+	BTVECTOR3_IN(inertia);
+	BTQUATERNION_IN(rotParentToThis);
+	BTVECTOR3_IN(jointAxis);
+	BTVECTOR3_IN(parentComToThisPivotOffset);
+	BTVECTOR3_IN(thisPivotToThisComOffset);
+	obj->setupPrismatic(i, mass, BTVECTOR3_USE(inertia), parent, BTQUATERNION_USE(rotParentToThis),
+		BTVECTOR3_USE(jointAxis), BTVECTOR3_USE(parentComToThisPivotOffset), BTVECTOR3_USE(thisPivotToThisComOffset),
 		disableParentCollision);
 }
 
-void btMultiBody_setupRevolute(btMultiBody* obj, int linkIndex, btScalar mass, const btScalar* inertia, int parentIndex, const btScalar* rotParentToThis, const btScalar* jointAxis, const btScalar* parentComToThisPivotOffset, const btScalar* thisPivotToThisComOffset)
+void btMultiBody_setupRevolute(btMultiBody* obj, int linkIndex, btScalar mass, const btVector3* inertia,
+	int parentIndex, const btQuaternion* rotParentToThis, const btVector3* jointAxis, const btVector3* parentComToThisPivotOffset,
+	const btVector3* thisPivotToThisComOffset)
 {
-	VECTOR3_CONV(inertia);
-	QUATERNION_CONV(rotParentToThis);
-	VECTOR3_CONV(jointAxis);
-	VECTOR3_CONV(parentComToThisPivotOffset);
-	VECTOR3_CONV(thisPivotToThisComOffset);
-	obj->setupRevolute(linkIndex, mass, VECTOR3_USE(inertia), parentIndex, QUATERNION_USE(rotParentToThis),
-		VECTOR3_USE(jointAxis), VECTOR3_USE(parentComToThisPivotOffset), VECTOR3_USE(thisPivotToThisComOffset));
+	BTVECTOR3_IN(inertia);
+	BTQUATERNION_IN(rotParentToThis);
+	BTVECTOR3_IN(jointAxis);
+	BTVECTOR3_IN(parentComToThisPivotOffset);
+	BTVECTOR3_IN(thisPivotToThisComOffset);
+	obj->setupRevolute(linkIndex, mass, BTVECTOR3_USE(inertia), parentIndex, BTQUATERNION_USE(rotParentToThis),
+		BTVECTOR3_USE(jointAxis), BTVECTOR3_USE(parentComToThisPivotOffset), BTVECTOR3_USE(thisPivotToThisComOffset));
 }
 
-void btMultiBody_setupRevolute2(btMultiBody* obj, int linkIndex, btScalar mass, const btScalar* inertia, int parentIndex, const btScalar* rotParentToThis, const btScalar* jointAxis, const btScalar* parentComToThisPivotOffset, const btScalar* thisPivotToThisComOffset, bool disableParentCollision)
+void btMultiBody_setupRevolute2(btMultiBody* obj, int linkIndex, btScalar mass, const btVector3* inertia,
+	int parentIndex, const btQuaternion* rotParentToThis, const btVector3* jointAxis, const btVector3* parentComToThisPivotOffset,
+	const btVector3* thisPivotToThisComOffset, bool disableParentCollision)
 {
-	VECTOR3_CONV(inertia);
-	QUATERNION_CONV(rotParentToThis);
-	VECTOR3_CONV(jointAxis);
-	VECTOR3_CONV(parentComToThisPivotOffset);
-	VECTOR3_CONV(thisPivotToThisComOffset);
-	obj->setupRevolute(linkIndex, mass, VECTOR3_USE(inertia), parentIndex, QUATERNION_USE(rotParentToThis),
-		VECTOR3_USE(jointAxis), VECTOR3_USE(parentComToThisPivotOffset), VECTOR3_USE(thisPivotToThisComOffset),
+	BTVECTOR3_IN(inertia);
+	BTQUATERNION_IN(rotParentToThis);
+	BTVECTOR3_IN(jointAxis);
+	BTVECTOR3_IN(parentComToThisPivotOffset);
+	BTVECTOR3_IN(thisPivotToThisComOffset);
+	obj->setupRevolute(linkIndex, mass, BTVECTOR3_USE(inertia), parentIndex, BTQUATERNION_USE(rotParentToThis),
+		BTVECTOR3_USE(jointAxis), BTVECTOR3_USE(parentComToThisPivotOffset), BTVECTOR3_USE(thisPivotToThisComOffset),
 		disableParentCollision);
 }
 
-void btMultiBody_setupSpherical(btMultiBody* obj, int linkIndex, btScalar mass, const btScalar* inertia, int parent, const btScalar* rotParentToThis, const btScalar* parentComToThisPivotOffset, const btScalar* thisPivotToThisComOffset)
+void btMultiBody_setupSpherical(btMultiBody* obj, int linkIndex, btScalar mass, const btVector3* inertia,
+	int parent, const btQuaternion* rotParentToThis, const btVector3* parentComToThisPivotOffset,
+	const btVector3* thisPivotToThisComOffset)
 {
-	VECTOR3_CONV(inertia);
-	QUATERNION_CONV(rotParentToThis);
-	VECTOR3_CONV(parentComToThisPivotOffset);
-	VECTOR3_CONV(thisPivotToThisComOffset);
-	obj->setupSpherical(linkIndex, mass, VECTOR3_USE(inertia), parent, QUATERNION_USE(rotParentToThis),
-		VECTOR3_USE(parentComToThisPivotOffset), VECTOR3_USE(thisPivotToThisComOffset));
+	BTVECTOR3_IN(inertia);
+	BTQUATERNION_IN(rotParentToThis);
+	BTVECTOR3_IN(parentComToThisPivotOffset);
+	BTVECTOR3_IN(thisPivotToThisComOffset);
+	obj->setupSpherical(linkIndex, mass, BTVECTOR3_USE(inertia), parent, BTQUATERNION_USE(rotParentToThis),
+		BTVECTOR3_USE(parentComToThisPivotOffset), BTVECTOR3_USE(thisPivotToThisComOffset));
 }
 
-void btMultiBody_setupSpherical2(btMultiBody* obj, int linkIndex, btScalar mass, const btScalar* inertia, int parent, const btScalar* rotParentToThis, const btScalar* parentComToThisPivotOffset, const btScalar* thisPivotToThisComOffset, bool disableParentCollision)
+void btMultiBody_setupSpherical2(btMultiBody* obj, int linkIndex, btScalar mass,
+	const btVector3* inertia, int parent, const btQuaternion* rotParentToThis, const btVector3* parentComToThisPivotOffset,
+	const btVector3* thisPivotToThisComOffset, bool disableParentCollision)
 {
-	VECTOR3_CONV(inertia);
-	QUATERNION_CONV(rotParentToThis);
-	VECTOR3_CONV(parentComToThisPivotOffset);
-	VECTOR3_CONV(thisPivotToThisComOffset);
-	obj->setupSpherical(linkIndex, mass, VECTOR3_USE(inertia), parent, QUATERNION_USE(rotParentToThis),
-		VECTOR3_USE(parentComToThisPivotOffset), VECTOR3_USE(thisPivotToThisComOffset),
+	BTVECTOR3_IN(inertia);
+	BTQUATERNION_IN(rotParentToThis);
+	BTVECTOR3_IN(parentComToThisPivotOffset);
+	BTVECTOR3_IN(thisPivotToThisComOffset);
+	obj->setupSpherical(linkIndex, mass, BTVECTOR3_USE(inertia), parent, BTQUATERNION_USE(rotParentToThis),
+		BTVECTOR3_USE(parentComToThisPivotOffset), BTVECTOR3_USE(thisPivotToThisComOffset),
 		disableParentCollision);
 }
 
@@ -606,10 +655,10 @@ void btMultiBody_setUseGyroTerm(btMultiBody* obj, bool useGyro)
 	obj->setUseGyroTerm(useGyro);
 }
 
-void btMultiBody_setWorldToBaseRot(btMultiBody* obj, const btScalar* rot)
+void btMultiBody_setWorldToBaseRot(btMultiBody* obj, const btQuaternion* rot)
 {
-	QUATERNION_CONV(rot);
-	obj->setWorldToBaseRot(QUATERNION_USE(rot));
+	BTQUATERNION_IN(rot);
+	obj->setWorldToBaseRot(BTQUATERNION_USE(rot));
 }
 
 void btMultiBody_stepPositionsMultiDof(btMultiBody* obj, btScalar dt)
@@ -622,12 +671,27 @@ void btMultiBody_stepPositionsMultiDof2(btMultiBody* obj, btScalar dt, btScalar*
 	obj->stepPositionsMultiDof(dt, pq);
 }
 
-void btMultiBody_stepPositionsMultiDof3(btMultiBody* obj, btScalar dt, btScalar* pq, btScalar* pqd)
+void btMultiBody_stepPositionsMultiDof3(btMultiBody* obj, btScalar dt, btScalar* pq,
+	btScalar* pqd)
 {
 	obj->stepPositionsMultiDof(dt, pq, pqd);
 }
 
-void btMultiBody_updateCollisionObjectWorldTransforms(btMultiBody* obj, btAlignedQuaternionArray* scratch_q, btAlignedVector3Array* scratch_m)
+void btMultiBody_stepVelocitiesMultiDof(btMultiBody* obj, btScalar dt, btAlignedObjectArray<float>* scratch_r,
+	btAlignedObjectArray<btVector3>* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m)
+{
+	obj->stepVelocitiesMultiDof(dt, *scratch_r, *scratch_v, *scratch_m);
+}
+
+void btMultiBody_stepVelocitiesMultiDof2(btMultiBody* obj, btScalar dt, btAlignedObjectArray<float>* scratch_r,
+	btAlignedObjectArray<btVector3>* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m,
+	bool isConstraintPass)
+{
+	obj->stepVelocitiesMultiDof(dt, *scratch_r, *scratch_v, *scratch_m, isConstraintPass);
+}
+
+void btMultiBody_updateCollisionObjectWorldTransforms(btMultiBody* obj, btAlignedObjectArray_btQuaternion* scratch_q,
+	btAlignedObjectArray<btVector3>* scratch_m)
 {
 	obj->updateCollisionObjectWorldTransforms(*scratch_q, *scratch_m);
 }
@@ -647,16 +711,16 @@ void btMultiBody_wakeUp(btMultiBody* obj)
 	obj->wakeUp();
 }
 
-void btMultiBody_worldDirToLocal(btMultiBody* obj, int i, const btScalar* vec, btScalar* value)
+void btMultiBody_worldDirToLocal(btMultiBody* obj, int i, const btVector3* vec, btVector3* value)
 {
-	VECTOR3_CONV(vec);
-	VECTOR3_OUT_VAL(obj->worldDirToLocal(i, VECTOR3_USE(vec)), value);
+	BTVECTOR3_IN(vec);
+	BTVECTOR3_SET(value, obj->worldDirToLocal(i, BTVECTOR3_USE(vec)));
 }
 
-void btMultiBody_worldPosToLocal(btMultiBody* obj, int i, const btScalar* vec, btScalar* value)
+void btMultiBody_worldPosToLocal(btMultiBody* obj, int i, const btVector3* vec, btVector3* value)
 {
-	VECTOR3_CONV(vec);
-	VECTOR3_OUT_VAL(obj->worldPosToLocal(i, VECTOR3_USE(vec)), value);
+	BTVECTOR3_IN(vec);
+	BTVECTOR3_SET(value, obj->worldPosToLocal(i, BTVECTOR3_USE(vec)));
 }
 
 void btMultiBody_delete(btMultiBody* obj)

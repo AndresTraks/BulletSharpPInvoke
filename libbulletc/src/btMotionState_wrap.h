@@ -5,8 +5,8 @@
 #define p_btMotionState_SetWorldTransform void*
 #define btMotionStateWrapper void
 #else
-typedef void (*p_btMotionState_GetWorldTransform)(btScalar* worldTrans);
-typedef void (*p_btMotionState_SetWorldTransform)(const btScalar* worldTrans);
+typedef void (*p_btMotionState_GetWorldTransform)(btTransform* worldTrans);
+typedef void (*p_btMotionState_SetWorldTransform)(const btTransform* worldTrans);
 
 class btMotionStateWrapper : public btMotionState
 {
@@ -28,7 +28,7 @@ extern "C"
 	EXPORT btMotionStateWrapper* btMotionStateWrapper_new(p_btMotionState_GetWorldTransform getWorldTransformCallback,
 		p_btMotionState_SetWorldTransform setWorldTransformCallback);
 
-	EXPORT void btMotionState_getWorldTransform(btMotionState* obj, btScalar* worldTrans);
-	EXPORT void btMotionState_setWorldTransform(btMotionState* obj, const btScalar* worldTrans);
+	EXPORT void btMotionState_getWorldTransform(btMotionState* obj, btTransform* worldTrans);
+	EXPORT void btMotionState_setWorldTransform(btMotionState* obj, const btTransform* worldTrans);
 	EXPORT void btMotionState_delete(btMotionState* obj);
 }

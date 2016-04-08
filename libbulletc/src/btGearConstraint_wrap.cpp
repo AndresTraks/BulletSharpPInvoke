@@ -3,29 +3,31 @@
 #include "conversion.h"
 #include "btGearConstraint_wrap.h"
 
-btGearConstraint* btGearConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btScalar* axisInA, const btScalar* axisInB)
+btGearConstraint* btGearConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btVector3* axisInA,
+	const btVector3* axisInB)
 {
-	VECTOR3_CONV(axisInA);
-	VECTOR3_CONV(axisInB);
-	return new btGearConstraint(*rbA, *rbB, VECTOR3_USE(axisInA), VECTOR3_USE(axisInB));
+	BTVECTOR3_IN(axisInA);
+	BTVECTOR3_IN(axisInB);
+	return new btGearConstraint(*rbA, *rbB, BTVECTOR3_USE(axisInA), BTVECTOR3_USE(axisInB));
 }
 
-btGearConstraint* btGearConstraint_new2(btRigidBody* rbA, btRigidBody* rbB, const btScalar* axisInA, const btScalar* axisInB, btScalar ratio)
+btGearConstraint* btGearConstraint_new2(btRigidBody* rbA, btRigidBody* rbB, const btVector3* axisInA,
+	const btVector3* axisInB, btScalar ratio)
 {
-	VECTOR3_CONV(axisInA);
-	VECTOR3_CONV(axisInB);
-	return new btGearConstraint(*rbA, *rbB, VECTOR3_USE(axisInA), VECTOR3_USE(axisInB),
+	BTVECTOR3_IN(axisInA);
+	BTVECTOR3_IN(axisInB);
+	return new btGearConstraint(*rbA, *rbB, BTVECTOR3_USE(axisInA), BTVECTOR3_USE(axisInB),
 		ratio);
 }
 
-void btGearConstraint_getAxisA(btGearConstraint* obj, btScalar* axisA)
+void btGearConstraint_getAxisA(btGearConstraint* obj, btVector3* axisA)
 {
-	VECTOR3_OUT(&obj->getAxisA(), axisA);
+	BTVECTOR3_COPY(axisA, &obj->getAxisA());
 }
 
-void btGearConstraint_getAxisB(btGearConstraint* obj, btScalar* axisB)
+void btGearConstraint_getAxisB(btGearConstraint* obj, btVector3* axisB)
 {
-	VECTOR3_OUT(&obj->getAxisB(), axisB);
+	BTVECTOR3_COPY(axisB, &obj->getAxisB());
 }
 
 btScalar btGearConstraint_getRatio(btGearConstraint* obj)
@@ -33,16 +35,16 @@ btScalar btGearConstraint_getRatio(btGearConstraint* obj)
 	return obj->getRatio();
 }
 
-void btGearConstraint_setAxisA(btGearConstraint* obj, btScalar* axisA)
+void btGearConstraint_setAxisA(btGearConstraint* obj, btVector3* axisA)
 {
-	VECTOR3_CONV(axisA);
-	obj->setAxisA(VECTOR3_USE(axisA));
+	BTVECTOR3_IN(axisA);
+	obj->setAxisA(BTVECTOR3_USE(axisA));
 }
 
-void btGearConstraint_setAxisB(btGearConstraint* obj, btScalar* axisB)
+void btGearConstraint_setAxisB(btGearConstraint* obj, btVector3* axisB)
 {
-	VECTOR3_CONV(axisB);
-	obj->setAxisB(VECTOR3_USE(axisB));
+	BTVECTOR3_IN(axisB);
+	obj->setAxisB(BTVECTOR3_USE(axisB));
 }
 
 void btGearConstraint_setRatio(btGearConstraint* obj, btScalar ratio)

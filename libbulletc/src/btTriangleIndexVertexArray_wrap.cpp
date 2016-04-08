@@ -98,7 +98,8 @@ btTriangleIndexVertexArray* btTriangleIndexVertexArray_new()
 	return new btTriangleIndexVertexArray();
 }
 
-btTriangleIndexVertexArray* btTriangleIndexVertexArray_new2(int numTriangles, int* triangleIndexBase, int triangleIndexStride, int numVertices, btScalar* vertexBase, int vertexStride)
+btTriangleIndexVertexArray* btTriangleIndexVertexArray_new2(int numTriangles, int* triangleIndexBase,
+	int triangleIndexStride, int numVertices, btScalar* vertexBase, int vertexStride)
 {
 	return new btTriangleIndexVertexArray(numTriangles, triangleIndexBase, triangleIndexStride,
 		numVertices, vertexBase, vertexStride);
@@ -109,12 +110,14 @@ void btTriangleIndexVertexArray_addIndexedMesh(btTriangleIndexVertexArray* obj, 
 	obj->addIndexedMesh(*mesh);
 }
 
-void btTriangleIndexVertexArray_addIndexedMesh2(btTriangleIndexVertexArray* obj, const btIndexedMesh* mesh, PHY_ScalarType indexType)
+void btTriangleIndexVertexArray_addIndexedMesh2(btTriangleIndexVertexArray* obj,
+	const btIndexedMesh* mesh, PHY_ScalarType indexType)
 {
 	obj->addIndexedMesh(*mesh, indexType);
 }
 
-IndexedMeshArray* btTriangleIndexVertexArray_getIndexedMeshArray(btTriangleIndexVertexArray* obj)
+btAlignedObjectArray_btIndexedMesh* btTriangleIndexVertexArray_getIndexedMeshArray(
+	btTriangleIndexVertexArray* obj)
 {
 	return &obj->getIndexedMeshArray();
 }

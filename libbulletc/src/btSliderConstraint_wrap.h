@@ -2,15 +2,15 @@
 
 extern "C"
 {
-	EXPORT btSliderConstraint* btSliderConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB, bool useLinearReferenceFrameA);
-	EXPORT btSliderConstraint* btSliderConstraint_new2(btRigidBody* rbB, const btScalar* frameInB, bool useLinearReferenceFrameA);
-	EXPORT void btSliderConstraint_calculateTransforms(btSliderConstraint* obj, const btScalar* transA, const btScalar* transB);
-	EXPORT void btSliderConstraint_getAncorInA(btSliderConstraint* obj, btScalar* value);
-	EXPORT void btSliderConstraint_getAncorInB(btSliderConstraint* obj, btScalar* value);
+	EXPORT btSliderConstraint* btSliderConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btTransform* frameInA, const btTransform* frameInB, bool useLinearReferenceFrameA);
+	EXPORT btSliderConstraint* btSliderConstraint_new2(btRigidBody* rbB, const btTransform* frameInB, bool useLinearReferenceFrameA);
+	EXPORT void btSliderConstraint_calculateTransforms(btSliderConstraint* obj, const btTransform* transA, const btTransform* transB);
+	EXPORT void btSliderConstraint_getAncorInA(btSliderConstraint* obj, btVector3* value);
+	EXPORT void btSliderConstraint_getAncorInB(btSliderConstraint* obj, btVector3* value);
 	EXPORT btScalar btSliderConstraint_getAngDepth(btSliderConstraint* obj);
 	EXPORT btScalar btSliderConstraint_getAngularPos(btSliderConstraint* obj);
-	EXPORT void btSliderConstraint_getCalculatedTransformA(btSliderConstraint* obj, btScalar* value);
-	EXPORT void btSliderConstraint_getCalculatedTransformB(btSliderConstraint* obj, btScalar* value);
+	EXPORT void btSliderConstraint_getCalculatedTransformA(btSliderConstraint* obj, btTransform* value);
+	EXPORT void btSliderConstraint_getCalculatedTransformB(btSliderConstraint* obj, btTransform* value);
 	EXPORT btScalar btSliderConstraint_getDampingDirAng(btSliderConstraint* obj);
 	EXPORT btScalar btSliderConstraint_getDampingDirLin(btSliderConstraint* obj);
 	EXPORT btScalar btSliderConstraint_getDampingLimAng(btSliderConstraint* obj);
@@ -18,10 +18,10 @@ extern "C"
 	EXPORT btScalar btSliderConstraint_getDampingOrthoAng(btSliderConstraint* obj);
 	EXPORT btScalar btSliderConstraint_getDampingOrthoLin(btSliderConstraint* obj);
 	EXPORT int btSliderConstraint_getFlags(btSliderConstraint* obj);
-	EXPORT void btSliderConstraint_getFrameOffsetA(btSliderConstraint* obj, btScalar* value);
-	EXPORT void btSliderConstraint_getFrameOffsetB(btSliderConstraint* obj, btScalar* value);
+	EXPORT void btSliderConstraint_getFrameOffsetA(btSliderConstraint* obj, btTransform* value);
+	EXPORT void btSliderConstraint_getFrameOffsetB(btSliderConstraint* obj, btTransform* value);
 	EXPORT void btSliderConstraint_getInfo1NonVirtual(btSliderConstraint* obj, btTypedConstraint_btConstraintInfo1* info);
-	EXPORT void btSliderConstraint_getInfo2NonVirtual(btSliderConstraint* obj, btTypedConstraint_btConstraintInfo2* info, const btScalar* transA, const btScalar* transB, const btScalar* linVelA, const btScalar* linVelB, btScalar rbAinvMass, btScalar rbBinvMass);
+	EXPORT void btSliderConstraint_getInfo2NonVirtual(btSliderConstraint* obj, btTypedConstraint_btConstraintInfo2* info, const btTransform* transA, const btTransform* transB, const btVector3* linVelA, const btVector3* linVelB, btScalar rbAinvMass, btScalar rbBinvMass);
 	EXPORT btScalar btSliderConstraint_getLinDepth(btSliderConstraint* obj);
 	EXPORT btScalar btSliderConstraint_getLinearPos(btSliderConstraint* obj);
 	EXPORT btScalar btSliderConstraint_getLowerAngLimit(btSliderConstraint* obj);
@@ -56,7 +56,7 @@ extern "C"
 	EXPORT void btSliderConstraint_setDampingLimLin(btSliderConstraint* obj, btScalar dampingLimLin);
 	EXPORT void btSliderConstraint_setDampingOrthoAng(btSliderConstraint* obj, btScalar dampingOrthoAng);
 	EXPORT void btSliderConstraint_setDampingOrthoLin(btSliderConstraint* obj, btScalar dampingOrthoLin);
-	EXPORT void btSliderConstraint_setFrames(btSliderConstraint* obj, const btScalar* frameA, const btScalar* frameB);
+	EXPORT void btSliderConstraint_setFrames(btSliderConstraint* obj, const btTransform* frameA, const btTransform* frameB);
 	EXPORT void btSliderConstraint_setLowerAngLimit(btSliderConstraint* obj, btScalar lowerLimit);
 	EXPORT void btSliderConstraint_setLowerLinLimit(btSliderConstraint* obj, btScalar lowerLimit);
 	EXPORT void btSliderConstraint_setMaxAngMotorForce(btSliderConstraint* obj, btScalar maxAngMotorForce);

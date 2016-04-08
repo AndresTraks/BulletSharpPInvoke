@@ -3,9 +3,10 @@
 #include "conversion.h"
 #include "btFixedConstraint_wrap.h"
 
-btFixedConstraint* btFixedConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB)
+btFixedConstraint* btFixedConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btTransform* frameInA,
+	const btTransform* frameInB)
 {
-	TRANSFORM_CONV(frameInA);
-	TRANSFORM_CONV(frameInB);
-	return new btFixedConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB));
+	BTTRANSFORM_IN(frameInA);
+	BTTRANSFORM_IN(frameInB);
+	return new btFixedConstraint(*rbA, *rbB, BTTRANSFORM_USE(frameInA), BTTRANSFORM_USE(frameInB));
 }

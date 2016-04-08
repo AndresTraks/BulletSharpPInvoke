@@ -9,19 +9,21 @@ btConvexTriangleMeshShape* btConvexTriangleMeshShape_new(btStridingMeshInterface
 	return new btConvexTriangleMeshShape(meshInterface);
 }
 
-btConvexTriangleMeshShape* btConvexTriangleMeshShape_new2(btStridingMeshInterface* meshInterface, bool calcAabb)
+btConvexTriangleMeshShape* btConvexTriangleMeshShape_new2(btStridingMeshInterface* meshInterface,
+	bool calcAabb)
 {
 	return new btConvexTriangleMeshShape(meshInterface, calcAabb);
 }
 
-void btConvexTriangleMeshShape_calculatePrincipalAxisTransform(btConvexTriangleMeshShape* obj, btScalar* principal, btScalar* inertia, btScalar* volume)
+void btConvexTriangleMeshShape_calculatePrincipalAxisTransform(btConvexTriangleMeshShape* obj,
+	btTransform* principal, btVector3* inertia, btScalar* volume)
 {
-	TRANSFORM_CONV(principal);
-	VECTOR3_DEF(inertia);
-	obj->calculatePrincipalAxisTransform(TRANSFORM_USE(principal), VECTOR3_USE(inertia),
+	BTTRANSFORM_IN(principal);
+	BTVECTOR3_DEF(inertia);
+	obj->calculatePrincipalAxisTransform(BTTRANSFORM_USE(principal), BTVECTOR3_USE(inertia),
 		*volume);
-	TRANSFORM_DEF_OUT(principal);
-	VECTOR3_DEF_OUT(inertia);
+	BTTRANSFORM_DEF_OUT(principal);
+	BTVECTOR3_DEF_OUT(inertia);
 }
 
 const btStridingMeshInterface* btConvexTriangleMeshShape_getMeshInterface(btConvexTriangleMeshShape* obj)

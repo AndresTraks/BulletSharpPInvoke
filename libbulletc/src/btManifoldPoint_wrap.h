@@ -3,7 +3,7 @@
 extern "C"
 {
 	EXPORT btManifoldPoint* btManifoldPoint_new();
-	EXPORT btManifoldPoint* btManifoldPoint_new2(const btScalar* pointA, const btScalar* pointB, const btScalar* normal, btScalar distance);
+	EXPORT btManifoldPoint* btManifoldPoint_new2(const btVector3* pointA, const btVector3* pointB, const btVector3* normal, btScalar distance);
 	EXPORT btScalar btManifoldPoint_getAppliedImpulse(btManifoldPoint* obj);
 	EXPORT btScalar btManifoldPoint_getAppliedImpulseLateral1(btManifoldPoint* obj);
 	EXPORT btScalar btManifoldPoint_getAppliedImpulseLateral2(btManifoldPoint* obj);
@@ -20,16 +20,16 @@ extern "C"
 	EXPORT btScalar btManifoldPoint_getFrictionCFM(btManifoldPoint* obj);
 	EXPORT int btManifoldPoint_getIndex0(btManifoldPoint* obj);
 	EXPORT int btManifoldPoint_getIndex1(btManifoldPoint* obj);
-	EXPORT void btManifoldPoint_getLateralFrictionDir1(btManifoldPoint* obj, btScalar* value);
-	EXPORT void btManifoldPoint_getLateralFrictionDir2(btManifoldPoint* obj, btScalar* value);
+	EXPORT void btManifoldPoint_getLateralFrictionDir1(btManifoldPoint* obj, btVector3* value);
+	EXPORT void btManifoldPoint_getLateralFrictionDir2(btManifoldPoint* obj, btVector3* value);
 	EXPORT int btManifoldPoint_getLifeTime(btManifoldPoint* obj);
-	EXPORT void btManifoldPoint_getLocalPointA(btManifoldPoint* obj, btScalar* value);
-	EXPORT void btManifoldPoint_getLocalPointB(btManifoldPoint* obj, btScalar* value);
-	EXPORT void btManifoldPoint_getNormalWorldOnB(btManifoldPoint* obj, btScalar* value);
+	EXPORT void btManifoldPoint_getLocalPointA(btManifoldPoint* obj, btVector3* value);
+	EXPORT void btManifoldPoint_getLocalPointB(btManifoldPoint* obj, btVector3* value);
+	EXPORT void btManifoldPoint_getNormalWorldOnB(btManifoldPoint* obj, btVector3* value);
 	EXPORT int btManifoldPoint_getPartId0(btManifoldPoint* obj);
 	EXPORT int btManifoldPoint_getPartId1(btManifoldPoint* obj);
-	EXPORT void btManifoldPoint_getPositionWorldOnA(btManifoldPoint* obj, btScalar* value);
-	EXPORT void btManifoldPoint_getPositionWorldOnB(btManifoldPoint* obj, btScalar* value);
+	EXPORT void btManifoldPoint_getPositionWorldOnA(btManifoldPoint* obj, btVector3* value);
+	EXPORT void btManifoldPoint_getPositionWorldOnB(btManifoldPoint* obj, btVector3* value);
 	EXPORT void* btManifoldPoint_getUserPersistentData(btManifoldPoint* obj);
 	EXPORT void btManifoldPoint_setAppliedImpulse(btManifoldPoint* obj, btScalar value);
 	EXPORT void btManifoldPoint_setAppliedImpulseLateral1(btManifoldPoint* obj, btScalar value);
@@ -47,16 +47,16 @@ extern "C"
 	EXPORT void btManifoldPoint_setFrictionCFM(btManifoldPoint* obj, btScalar value);
 	EXPORT void btManifoldPoint_setIndex0(btManifoldPoint* obj, int value);
 	EXPORT void btManifoldPoint_setIndex1(btManifoldPoint* obj, int value);
-	EXPORT void btManifoldPoint_setLateralFrictionDir1(btManifoldPoint* obj, const btScalar* value);
-	EXPORT void btManifoldPoint_setLateralFrictionDir2(btManifoldPoint* obj, const btScalar* value);
+	EXPORT void btManifoldPoint_setLateralFrictionDir1(btManifoldPoint* obj, const btVector3* value);
+	EXPORT void btManifoldPoint_setLateralFrictionDir2(btManifoldPoint* obj, const btVector3* value);
 	EXPORT void btManifoldPoint_setLifeTime(btManifoldPoint* obj, int value);
-	EXPORT void btManifoldPoint_setLocalPointA(btManifoldPoint* obj, const btScalar* value);
-	EXPORT void btManifoldPoint_setLocalPointB(btManifoldPoint* obj, const btScalar* value);
-	EXPORT void btManifoldPoint_setNormalWorldOnB(btManifoldPoint* obj, const btScalar* value);
+	EXPORT void btManifoldPoint_setLocalPointA(btManifoldPoint* obj, const btVector3* value);
+	EXPORT void btManifoldPoint_setLocalPointB(btManifoldPoint* obj, const btVector3* value);
+	EXPORT void btManifoldPoint_setNormalWorldOnB(btManifoldPoint* obj, const btVector3* value);
 	EXPORT void btManifoldPoint_setPartId0(btManifoldPoint* obj, int value);
 	EXPORT void btManifoldPoint_setPartId1(btManifoldPoint* obj, int value);
-	EXPORT void btManifoldPoint_setPositionWorldOnA(btManifoldPoint* obj, const btScalar* value);
-	EXPORT void btManifoldPoint_setPositionWorldOnB(btManifoldPoint* obj, const btScalar* value);
+	EXPORT void btManifoldPoint_setPositionWorldOnA(btManifoldPoint* obj, const btVector3* value);
+	EXPORT void btManifoldPoint_setPositionWorldOnB(btManifoldPoint* obj, const btVector3* value);
 	EXPORT void btManifoldPoint_setUserPersistentData(btManifoldPoint* obj, void* value);
 	EXPORT void btManifoldPoint_delete(btManifoldPoint* obj);
 

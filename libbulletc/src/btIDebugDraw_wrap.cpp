@@ -40,15 +40,15 @@ void btIDebugDrawWrapper::draw3dText(const btVector3& location, const char* text
 
 void btIDebugDrawWrapper::drawAabb(const btVector3& from, const btVector3& to, const btVector3& color)
 {
-	_drawAabbCallback(from, to, color);
+	_drawAabbCallback(&from, &to, &color);
 }
 
 void btIDebugDrawWrapper::drawArc(const btVector3& center, const btVector3& normal,
 	const btVector3& axis, btScalar radiusA, btScalar radiusB, btScalar minAngle, btScalar maxAngle,
 	const btVector3& color, bool drawSect, btScalar stepDegrees)
 {
-	_drawArcCallback(center, normal, axis, radiusA, radiusB, minAngle, maxAngle,
-		color, drawSect, stepDegrees);
+	_drawArcCallback(&center, &normal, &axis, radiusA, radiusB, minAngle, maxAngle,
+		&color, drawSect, stepDegrees);
 }
 
 void btIDebugDrawWrapper::drawArc(const btVector3& center, const btVector3& normal, const btVector3& axis,
@@ -60,62 +60,58 @@ void btIDebugDrawWrapper::drawArc(const btVector3& center, const btVector3& norm
 		//radiusA, radiusB, minAngle, maxAngle, BtVectorToBtColor(color), drawSect);
 }
 
-void btIDebugDrawWrapper::drawBox(const btVector3& bbMin, const btVector3& bbMax, const btVector3& color)
+void btIDebugDrawWrapper::drawBox(const btVector3& bbMin, const btVector3& bbMax,
+	const btVector3& color)
 {
 	_cb(2);
 	//_debugDraw->DrawBox(
 		//Math::BtVector3ToVector3(&bbMin), Math::BtVector3ToVector3(&bbMax),	BtVectorToBtColor(color));
 }
 
-void btIDebugDrawWrapper::drawBox(const btVector3& bbMin, const btVector3& bbMax, const btTransform& trans,
-	const btVector3& color)
+void btIDebugDrawWrapper::drawBox(const btVector3& bbMin, const btVector3& bbMax,
+	const btTransform& trans, const btVector3& color)
 {
-	ATTRIBUTE_ALIGNED16(btScalar) transTemp[16];
-	btTransformToMatrix(&trans, transTemp);
-	_drawBoxCallback(bbMin, bbMax, transTemp, color);
+	BTTRANSFORM_IN_REF(trans);
+	_drawBoxCallback(&bbMin, &bbMax, &BTTRANSFORM_USE_REF(trans), &color);
 }
 
 void btIDebugDrawWrapper::drawCapsule(btScalar radius, btScalar halfHeight, int upAxis,
 	const btTransform& transform, const btVector3& color)
 {
-	ATTRIBUTE_ALIGNED16(btScalar) transformTemp[16];
-	btTransformToMatrix(&transform, transformTemp);
-	_drawCapsuleCallback(radius, halfHeight, upAxis, transformTemp, color);
+	BTTRANSFORM_IN_REF(transform);
+	_drawCapsuleCallback(radius, halfHeight, upAxis, &BTTRANSFORM_USE_REF(transform), &color);
 }
 
 void btIDebugDrawWrapper::drawCone(btScalar radius, btScalar height, int upAxis,
 	const btTransform& transform, const btVector3& color)
 {
-	ATTRIBUTE_ALIGNED16(btScalar) transformTemp[16];
-	btTransformToMatrix(&transform, transformTemp);
-	_drawConeCallback(radius, height, upAxis, transformTemp, color);
+	BTTRANSFORM_IN_REF(transform);
+	_drawConeCallback(radius, height, upAxis, &BTTRANSFORM_USE_REF(transform), &color);
 }
 
 void btIDebugDrawWrapper::drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB,
 	btScalar distance, int lifeTime, const btVector3& color)
 {
-	_drawContactPointCallback(PointOnB, normalOnB, distance, lifeTime, color);
+	_drawContactPointCallback(&PointOnB, &normalOnB, distance, lifeTime, &color);
 }
 
 void btIDebugDrawWrapper::drawCylinder(btScalar radius, btScalar halfHeight, int upAxis,
 	const btTransform& transform, const btVector3& color)
 {
-	ATTRIBUTE_ALIGNED16(btScalar) transformTemp[16];
-	btTransformToMatrix(&transform, transformTemp);
-	_drawCylinderCallback(radius, halfHeight, upAxis, transformTemp, color);
+	BTTRANSFORM_IN_REF(transform);
+	_drawCylinderCallback(radius, halfHeight, upAxis, &BTTRANSFORM_USE_REF(transform), &color);
 }
 
 void btIDebugDrawWrapper::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
-	_drawLineCallback(from, to, color);
+	_drawLineCallback(&from, &to, &color);
 }
 
 void btIDebugDrawWrapper::drawPlane(const btVector3& planeNormal, btScalar planeConst,
 	const btTransform& transform, const btVector3& color)
 {
-	ATTRIBUTE_ALIGNED16(btScalar) transformTemp[16];
-	btTransformToMatrix(&transform, transformTemp);
-	_drawPlaneCallback(planeNormal, planeConst, transformTemp, color);
+	BTTRANSFORM_IN_REF(transform);
+	_drawPlaneCallback(&planeNormal, planeConst, &BTTRANSFORM_USE_REF(transform), &color);
 }
 
 void btIDebugDrawWrapper::drawSphere(const btVector3& p, btScalar radius, const btVector3& color)
@@ -127,17 +123,16 @@ void btIDebugDrawWrapper::drawSphere(const btVector3& p, btScalar radius, const 
 void btIDebugDrawWrapper::drawSphere(btScalar radius, const btTransform& transform,
 	const btVector3& color)
 {
-	ATTRIBUTE_ALIGNED16(btScalar) transformTemp[16];
-	btTransformToMatrix(&transform, transformTemp);
-	_drawSphereCallback(radius, transformTemp, color);
+	BTTRANSFORM_IN_REF(transform);
+	_drawSphereCallback(radius, &BTTRANSFORM_USE_REF(transform), &color);
 }
 
 void btIDebugDrawWrapper::drawSpherePatch(const btVector3& center, const btVector3& up,
 	const btVector3& axis, btScalar radius, btScalar minTh, btScalar maxTh, btScalar minPs,
 	btScalar maxPs, const btVector3& color, btScalar stepDegrees)
 {
-	_drawSpherePatchCallback(center, up, axis, radius, minTh, maxTh, minPs, maxPs,
-		color, stepDegrees);
+	_drawSpherePatchCallback(&center, &up, &axis, radius, minTh, maxTh, minPs, maxPs,
+		&color, stepDegrees);
 }
 
 void btIDebugDrawWrapper::drawSpherePatch(const btVector3& center, const btVector3& up, const btVector3& axis, btScalar radius,
@@ -150,20 +145,19 @@ void btIDebugDrawWrapper::drawSpherePatch(const btVector3& center, const btVecto
 
 void btIDebugDrawWrapper::drawTransform(const btTransform& transform, btScalar orthoLen)
 {
-	ATTRIBUTE_ALIGNED16(btScalar) transformTemp[16];
-	btTransformToMatrix(&transform, transformTemp);
-	_drawTransformCallback(transformTemp, orthoLen);
+	BTTRANSFORM_IN_REF(transform);
+	_drawTransformCallback(&BTTRANSFORM_USE_REF(transform), orthoLen);
 }
 
-void btIDebugDrawWrapper::drawTriangle(const btVector3& v0, const btVector3& v1, const btVector3& v2,
-	const btVector3& color, btScalar __unnamed4)
+void btIDebugDrawWrapper::drawTriangle(const btVector3& v0, const btVector3& v1,
+	const btVector3& v2, const btVector3& color, btScalar __unnamed4)
 {
-	_drawTriangleCallback(v0, v1, v2, color, __unnamed4);
+	_drawTriangleCallback(&v0, &v1, &v2, &color, __unnamed4);
 }
 
-void btIDebugDrawWrapper::drawTriangle(const btVector3& v0, const btVector3& v1, const btVector3& v2,
-	const btVector3& __unnamed3, const btVector3& __unnamed4, const btVector3& __unnamed5,
-	const btVector3& color, btScalar alpha)
+void btIDebugDrawWrapper::drawTriangle(const btVector3& v0, const btVector3& v1,
+	const btVector3& v2, const btVector3& __unnamed3, const btVector3& __unnamed4,
+	const btVector3& __unnamed5, const btVector3& color, btScalar alpha)
 {
 	_cb(5);
 	//_debugDraw->DrawTriangle(Math::BtVector3ToVector3(&v0), Math::BtVector3ToVector3(&v1), Math::BtVector3ToVector3(&v2),

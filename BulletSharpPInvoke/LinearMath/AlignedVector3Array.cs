@@ -20,7 +20,7 @@ namespace BulletSharp
 
         public AlignedVector3Array()
         {
-            _native = btAlignedVector3Array_new();
+            _native = btAlignedObjectArray_btVector3_new();
         }
 
         public void Dispose()
@@ -33,7 +33,7 @@ namespace BulletSharp
         {
             if (_native != IntPtr.Zero)
             {
-                btAlignedVector3Array_delete(_native);
+                btAlignedObjectArray_btVector3_delete(_native);
                 _native = IntPtr.Zero;
             }
         }
@@ -67,7 +67,7 @@ namespace BulletSharp
                     throw new ArgumentOutOfRangeException("index");
                 }
                 Vector3 value;
-                btAlignedVector3Array_at(_native, index, out value);
+                btAlignedObjectArray_btVector3_at(_native, index, out value);
                 return value;
             }
             set
@@ -76,18 +76,18 @@ namespace BulletSharp
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
-                btAlignedVector3Array_set(_native, index, ref value);
+                btAlignedObjectArray_btVector3_set(_native, index, ref value);
             }
         }
 
         public void Add(Vector3 item)
         {
-            btAlignedVector3Array_push_back(_native, ref item);
+            btAlignedObjectArray_btVector3_push_back(_native, ref item);
         }
 
         public void Add(Vector4 item)
         {
-            btAlignedVector3Array_push_back2(_native, ref item);
+            btAlignedObjectArray_btVector3_push_back2(_native, ref item);
         }
 
         public void Clear()
@@ -120,7 +120,7 @@ namespace BulletSharp
 
         public int Count
         {
-            get { return btAlignedVector3Array_size(_native); }
+            get { return btAlignedObjectArray_btVector3_size(_native); }
         }
 
         public bool IsReadOnly
@@ -144,18 +144,18 @@ namespace BulletSharp
         }
 
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern IntPtr btAlignedVector3Array_new();
+        static extern IntPtr btAlignedObjectArray_btVector3_new();
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedVector3Array_at(IntPtr obj, int n, [Out] out Vector3 value);
+        static extern void btAlignedObjectArray_btVector3_at(IntPtr obj, int n, [Out] out Vector3 value);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedVector3Array_push_back(IntPtr obj, [In] ref Vector3 value);
+        static extern void btAlignedObjectArray_btVector3_push_back(IntPtr obj, [In] ref Vector3 value);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedVector3Array_push_back2(IntPtr obj, [In] ref Vector4 value);
+        static extern void btAlignedObjectArray_btVector3_push_back2(IntPtr obj, [In] ref Vector4 value);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedVector3Array_set(IntPtr obj, int n, [In] ref Vector3 value);
+        static extern void btAlignedObjectArray_btVector3_set(IntPtr obj, int n, [In] ref Vector3 value);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btAlignedVector3Array_size(IntPtr obj);
+        static extern int btAlignedObjectArray_btVector3_size(IntPtr obj);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedVector3Array_delete(IntPtr obj);
+        static extern void btAlignedObjectArray_btVector3_delete(IntPtr obj);
     }
 }

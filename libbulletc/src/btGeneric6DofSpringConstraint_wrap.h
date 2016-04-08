@@ -2,8 +2,8 @@
 
 extern "C"
 {
-	EXPORT btGeneric6DofSpringConstraint* btGeneric6DofSpringConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB, bool useLinearReferenceFrameA);
-	EXPORT btGeneric6DofSpringConstraint* btGeneric6DofSpringConstraint_new2(btRigidBody* rbB, const btScalar* frameInB, bool useLinearReferenceFrameB);
+	EXPORT btGeneric6DofSpringConstraint* btGeneric6DofSpringConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btTransform* frameInA, const btTransform* frameInB, bool useLinearReferenceFrameA);
+	EXPORT btGeneric6DofSpringConstraint* btGeneric6DofSpringConstraint_new2(btRigidBody* rbB, const btTransform* frameInB, bool useLinearReferenceFrameB);
 	EXPORT void btGeneric6DofSpringConstraint_enableSpring(btGeneric6DofSpringConstraint* obj, int index, bool onOff);
 	EXPORT btScalar btGeneric6DofSpringConstraint_getDamping(btGeneric6DofSpringConstraint* obj, int index);
 	EXPORT btScalar btGeneric6DofSpringConstraint_getEquilibriumPoint(btGeneric6DofSpringConstraint* obj, int index);

@@ -103,7 +103,7 @@ namespace BulletSharp.SoftBody
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
-                return new Face(btAlignedSoftBodyFaceArray_at(_native, index));
+                return new Face(btAlignedObjectArray_btSoftBody_Face_at(_native, index));
             }
             set
             {
@@ -113,12 +113,12 @@ namespace BulletSharp.SoftBody
 
         public void Add(Face item)
         {
-            btAlignedSoftBodyFaceArray_push_back(_native, item._native);
+            btAlignedObjectArray_btSoftBody_Face_push_back(_native, item._native);
         }
 
         public void Clear()
         {
-            btAlignedSoftBodyFaceArray_resizeNoInitialize(_native, 0);
+            btAlignedObjectArray_btSoftBody_Face_resizeNoInitialize(_native, 0);
         }
 
         public bool Contains(Face item)
@@ -133,7 +133,7 @@ namespace BulletSharp.SoftBody
 
         public int Count
         {
-            get { return btAlignedSoftBodyFaceArray_size(_native); }
+            get { return btAlignedObjectArray_btSoftBody_Face_size(_native); }
         }
 
         public bool IsReadOnly
@@ -157,12 +157,12 @@ namespace BulletSharp.SoftBody
         }
 
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern IntPtr btAlignedSoftBodyFaceArray_at(IntPtr obj, int n);
+        static extern IntPtr btAlignedObjectArray_btSoftBody_Face_at(IntPtr obj, int n);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedSoftBodyFaceArray_push_back(IntPtr obj, IntPtr val);
+        static extern void btAlignedObjectArray_btSoftBody_Face_push_back(IntPtr obj, IntPtr val);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedSoftBodyFaceArray_resizeNoInitialize(IntPtr obj, int newSize);
+        static extern void btAlignedObjectArray_btSoftBody_Face_resizeNoInitialize(IntPtr obj, int newSize);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btAlignedSoftBodyFaceArray_size(IntPtr obj);
+        static extern int btAlignedObjectArray_btSoftBody_Face_size(IntPtr obj);
     }
 }

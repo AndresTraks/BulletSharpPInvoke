@@ -8,28 +8,29 @@ btTriangleShape* btTriangleShape_new()
 	return new btTriangleShape();
 }
 
-btTriangleShape* btTriangleShape_new2(const btScalar* p0, const btScalar* p1, const btScalar* p2)
+btTriangleShape* btTriangleShape_new2(const btVector3* p0, const btVector3* p1, const btVector3* p2)
 {
-	VECTOR3_CONV(p0);
-	VECTOR3_CONV(p1);
-	VECTOR3_CONV(p2);
-	return new btTriangleShape(VECTOR3_USE(p0), VECTOR3_USE(p1), VECTOR3_USE(p2));
+	BTVECTOR3_IN(p0);
+	BTVECTOR3_IN(p1);
+	BTVECTOR3_IN(p2);
+	return new btTriangleShape(BTVECTOR3_USE(p0), BTVECTOR3_USE(p1), BTVECTOR3_USE(p2));
 }
 
-void btTriangleShape_calcNormal(btTriangleShape* obj, btScalar* normal)
+void btTriangleShape_calcNormal(btTriangleShape* obj, btVector3* normal)
 {
-	VECTOR3_DEF(normal);
-	obj->calcNormal(VECTOR3_USE(normal));
-	VECTOR3_DEF_OUT(normal);
+	BTVECTOR3_DEF(normal);
+	obj->calcNormal(BTVECTOR3_USE(normal));
+	BTVECTOR3_DEF_OUT(normal);
 }
 
-void btTriangleShape_getPlaneEquation(btTriangleShape* obj, int i, btScalar* planeNormal, btScalar* planeSupport)
+void btTriangleShape_getPlaneEquation(btTriangleShape* obj, int i, btVector3* planeNormal,
+	btVector3* planeSupport)
 {
-	VECTOR3_DEF(planeNormal);
-	VECTOR3_DEF(planeSupport);
-	obj->getPlaneEquation(i, VECTOR3_USE(planeNormal), VECTOR3_USE(planeSupport));
-	VECTOR3_DEF_OUT(planeNormal);
-	VECTOR3_DEF_OUT(planeSupport);
+	BTVECTOR3_DEF(planeNormal);
+	BTVECTOR3_DEF(planeSupport);
+	obj->getPlaneEquation(i, BTVECTOR3_USE(planeNormal), BTVECTOR3_USE(planeSupport));
+	BTVECTOR3_DEF_OUT(planeNormal);
+	BTVECTOR3_DEF_OUT(planeSupport);
 }
 
 const btScalar* btTriangleShape_getVertexPtr(btTriangleShape* obj, int index)

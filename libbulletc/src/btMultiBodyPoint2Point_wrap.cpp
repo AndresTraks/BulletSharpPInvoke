@@ -4,28 +4,31 @@
 #include "conversion.h"
 #include "btMultiBodyPoint2Point_wrap.h"
 
-btMultiBodyPoint2Point* btMultiBodyPoint2Point_new(btMultiBody* body, int link, btRigidBody* bodyB, const btScalar* pivotInA, const btScalar* pivotInB)
+btMultiBodyPoint2Point* btMultiBodyPoint2Point_new(btMultiBody* body, int link, btRigidBody* bodyB,
+	const btVector3* pivotInA, const btVector3* pivotInB)
 {
-	VECTOR3_CONV(pivotInA);
-	VECTOR3_CONV(pivotInB);
-	return new btMultiBodyPoint2Point(body, link, bodyB, VECTOR3_USE(pivotInA), VECTOR3_USE(pivotInB));
+	BTVECTOR3_IN(pivotInA);
+	BTVECTOR3_IN(pivotInB);
+	return new btMultiBodyPoint2Point(body, link, bodyB, BTVECTOR3_USE(pivotInA),
+		BTVECTOR3_USE(pivotInB));
 }
 
-btMultiBodyPoint2Point* btMultiBodyPoint2Point_new2(btMultiBody* bodyA, int linkA, btMultiBody* bodyB, int linkB, const btScalar* pivotInA, const btScalar* pivotInB)
+btMultiBodyPoint2Point* btMultiBodyPoint2Point_new2(btMultiBody* bodyA, int linkA,
+	btMultiBody* bodyB, int linkB, const btVector3* pivotInA, const btVector3* pivotInB)
 {
-	VECTOR3_CONV(pivotInA);
-	VECTOR3_CONV(pivotInB);
-	return new btMultiBodyPoint2Point(bodyA, linkA, bodyB, linkB, VECTOR3_USE(pivotInA),
-		VECTOR3_USE(pivotInB));
+	BTVECTOR3_IN(pivotInA);
+	BTVECTOR3_IN(pivotInB);
+	return new btMultiBodyPoint2Point(bodyA, linkA, bodyB, linkB, BTVECTOR3_USE(pivotInA),
+		BTVECTOR3_USE(pivotInB));
 }
 
-void btMultiBodyPoint2Point_getPivotInB(btMultiBodyPoint2Point* obj, btScalar* pivotInB)
+void btMultiBodyPoint2Point_getPivotInB(btMultiBodyPoint2Point* obj, btVector3* pivotInB)
 {
-	VECTOR3_OUT(&obj->getPivotInB(), pivotInB);
+	BTVECTOR3_COPY(pivotInB, &obj->getPivotInB());
 }
 
-void btMultiBodyPoint2Point_setPivotInB(btMultiBodyPoint2Point* obj, const btScalar* pivotInB)
+void btMultiBodyPoint2Point_setPivotInB(btMultiBodyPoint2Point* obj, const btVector3* pivotInB)
 {
-	VECTOR3_CONV(pivotInB);
-	obj->setPivotInB(VECTOR3_USE(pivotInB));
+	BTVECTOR3_IN(pivotInB);
+	obj->setPivotInB(BTVECTOR3_USE(pivotInB));
 }

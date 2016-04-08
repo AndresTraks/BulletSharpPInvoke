@@ -23,6 +23,20 @@ inline void btVector3ToVector3(const btVector3& v, btScalar* s)
 	s[2] = v.getZ();
 }
 
+inline void btVector3_copy(btVector3* destination, const btVector3* source)
+{
+	destination->m_floats[0] = source->m_floats[0];
+	destination->m_floats[1] = source->m_floats[1];
+	destination->m_floats[2] = source->m_floats[2];
+}
+
+inline void btVector3_copy(btVector3* destination, const btVector3& source)
+{
+	destination->m_floats[0] = source.m_floats[0];
+	destination->m_floats[1] = source.m_floats[1];
+	destination->m_floats[2] = source.m_floats[2];
+}
+
 inline void Vector3TobtVector3(const btScalar* s, btVector3* v)
 {
 	v->setX(s[0]);
@@ -63,6 +77,22 @@ inline void Vector4TobtVector4(const btScalar* s, btVector4* v)
 	v->setW(s[3]);
 }
 
+inline void btVector4_copy(btVector4* destination, const btVector4* source)
+{
+	destination->m_floats[0] = source->m_floats[0];
+	destination->m_floats[1] = source->m_floats[1];
+	destination->m_floats[2] = source->m_floats[2];
+	destination->m_floats[3] = source->m_floats[3];
+}
+
+inline void btVector4_copy(btVector4* destination, const btVector4& source)
+{
+	destination->m_floats[0] = source.m_floats[0];
+	destination->m_floats[1] = source.m_floats[1];
+	destination->m_floats[2] = source.m_floats[2];
+	destination->m_floats[3] = source.m_floats[3];
+}
+
 inline void btQuaternionToQuaternion(const btQuaternion* q, btScalar* s)
 {
 	s[0] = q->getX();
@@ -86,6 +116,23 @@ inline void QuaternionTobtQuaternion(const btScalar* s, btQuaternion* v)
 	v->setZ(s[2]);
 	v->setW(s[3]);
 }
+
+inline void btQuaternion_copy(btQuaternion* destination, const btQuaternion* source)
+{
+	(*destination)[0] = (*source)[0];
+	(*destination)[1] = (*source)[1];
+	(*destination)[2] = (*source)[2];
+	(*destination)[3] = (*source)[3];
+}
+
+inline void btQuaternion_copy(btQuaternion* destination, const btQuaternion& source)
+{
+	(*destination)[0] = source[0];
+	(*destination)[1] = source[1];
+	(*destination)[2] = source[2];
+	(*destination)[3] = source[3];
+}
+
 
 inline void btTransformToMatrix(const btTransform* t, btScalar* m)
 {
@@ -172,6 +219,12 @@ inline void MatrixTobtTransform(const btScalar* m, btTransform* t)
 	t->getOrigin().setY(m[10]);
 	t->getOrigin().setZ(m[11]);
 #endif
+	t->getOrigin().setW(1);
+}
+
+inline void btTransform_copy(btTransform* destination, const btTransform* source)
+{
+	MatrixTobtTransform(reinterpret_cast<const btScalar*>(source), destination);
 }
 
 
@@ -259,71 +312,97 @@ inline void MatrixTobtMatrix3x3(const btScalar* m, btMatrix3x3* t)
 // must be used to exchange vectors and transforms with Bullet (if SSE is enabled).
 #define TEMP(var) var ## Temp
 #if defined(BT_USE_SSE) //&& defined(BT_USE_SSE_IN_API) && defined(BT_USE_SIMD_VECTOR3)
-#define VECTOR3_DEF(vec) ATTRIBUTE_ALIGNED16(btVector3) TEMP(vec)
-#define VECTOR3_IN(from, to) Vector3TobtVector3(from, to)
-#define VECTOR3_CONV(vec) VECTOR3_DEF(vec); VECTOR3_IN(vec, &TEMP(vec))
-#define VECTOR3_USE(vec) TEMP(vec)
-#define VECTOR3_OUT(from, to) btVector3ToVector3(from, to)
-#define VECTOR3_OUT_VAL(from, to) btVector3ToVector3(from, to)
-#define VECTOR3_DEF_OUT(vec) VECTOR3_OUT(&TEMP(vec), vec)
-#define VECTOR4_DEF(vec) ATTRIBUTE_ALIGNED16(btVector4) TEMP(vec)
-#define VECTOR4_IN(from, to) Vector4TobtVector4(from, to)
-#define VECTOR4_CONV(vec) VECTOR4_DEF(vec); VECTOR4_IN(vec, &TEMP(vec))
-#define VECTOR4_USE(vec) TEMP(vec)
-#define VECTOR4_OUT(from, to) btVector4ToVector4(from, to)
-#define VECTOR4_OUT_VAL(from, to) btVector4ToVector4(from, to)
-#define VECTOR4_DEF_OUT(vec) VECTOR4_OUT(&TEMP(vec), vec)
-#define TRANSFORM_DEF(tr) ATTRIBUTE_ALIGNED16(btTransform) TEMP(tr)
-#define MATRIX3X3_DEF(tr) ATTRIBUTE_ALIGNED16(btMatrix3x3) TEMP(tr)
-#define QUATERNION_DEF(quat) ATTRIBUTE_ALIGNED16(btQuaternion) TEMP(quat)
-#define QUATERNION_IN(from, to) QuaternionTobtQuaternion(from, to)
-#define QUATERNION_CONV(quat) QUATERNION_DEF(quat); QUATERNION_IN(quat, &TEMP(quat))
-#define QUATERNION_USE(quat) TEMP(quat)
-#define QUATERNION_OUT(from, to) btQuaternionToQuaternion(from, to)
-#define QUATERNION_OUT_VAL(from, to) btQuaternionToQuaternion(from, to)
+#define BTVECTOR3_DEF(v) ATTRIBUTE_ALIGNED16(btVector3) TEMP(v)
+#define BTVECTOR3_USE(v) TEMP(v)
+#define BTVECTOR3_SET(to, from) btVector3_copy(to, &from)
+#define BTVECTOR3_COPY(to, from) btVector3_copy(to, from)
+#define BTVECTOR3_IN(v) BTVECTOR3_DEF(v); BTVECTOR3_COPY(&BTVECTOR3_USE(v), v)
+#define BTVECTOR3_DEF_OUT(v) BTVECTOR3_SET(v, BTVECTOR3_USE(v))
+
+#define BTVECTOR4_DEF(v) ATTRIBUTE_ALIGNED16(btVector4) TEMP(v)
+#define BTVECTOR4_USE(v) TEMP(v)
+#define BTVECTOR4_SET(to, from) btVector4_copy(to, &from)
+#define BTVECTOR4_COPY(to, from) btVector4_copy(to, from)
+#define BTVECTOR4_IN(v) BTVECTOR4_DEF(v); BTVECTOR4_COPY(&BTVECTOR3_USE(v), v)
+#define BTVECTOR4_DEF_OUT(v) BTVECTOR4_SET(v, BTVECTOR4_USE(v))
+
+#define BTQUATERNION_DEF(v) ATTRIBUTE_ALIGNED16(btQuaternion) TEMP(v)
+#define BTQUATERNION_USE(v) TEMP(v)
+#define BTQUATERNION_SET(to, from) btQuaternion_copy(to, &from)
+#define BTQUATERNION_COPY(to, from) btQuaternion_copy(to, from)
+#define BTQUATERNION_IN(v) BTQUATERNION_DEF(v); BTQUATERNION_COPY(&BTQUATERNION_USE(v), v)
+#define BTQUATERNION_DEF_OUT(v) BTQUATERNION_SET(v, BTQUATERNION_USE(v))
+
+#define BTTRANSFORM_DEF(v) ATTRIBUTE_ALIGNED16(btTransform) TEMP(v)
+#define BTTRANSFORM_USE(v) TEMP(v)
+#define BTTRANSFORM_SET(to, from) btTransform_copy(to, &from)
+#define BTTRANSFORM_COPY(to, from) btTransform_copy(to, from)
+#define BTTRANSFORM_IN(v) BTTRANSFORM_DEF(v); BTTRANSFORM_COPY(&BTTRANSFORM_USE(v), v)
+#define BTTRANSFORM_DEF_OUT(v) BTTRANSFORM_SET(v, BTTRANSFORM_USE(v))
+#define BTTRANSFORM_IN_REF(v) BTTRANSFORM_DEF(v); BTTRANSFORM_SET(&BTTRANSFORM_USE(v), v)
+#define BTTRANSFORM_USE_REF(v) TEMP(v)
+#define BTTRANSFORM_DEF_OUT_REF(v) BTTRANSFORM_SET(&v, BTTRANSFORM_USE_REF(v))
+
+#define BTMATRIX3X3_DEF(tr) ATTRIBUTE_ALIGNED16(btMatrix3x3) TEMP(tr)
 #else
 // Cant use a pinned pointer to a Vector3 in case sizeof(Vector3) != sizeof(btVector3)
 #if VECTOR3_16B
-#define VECTOR3_DEF(vec)
-#define VECTOR3_IN(from, to) *to = *(btVector3*)from
-#define VECTOR3_CONV(vec)
-#define VECTOR3_USE(vec) *(btVector3*)vec
-#define VECTOR3_OUT(from, to) *(btVector3*)to = *from
-#define VECTOR3_OUT_VAL(from, to) *(btVector3*)to = from
-#define VECTOR3_DEF_OUT(vec)
+#define BTVECTOR3_DEF(v)
+#define BTVECTOR3_USE(v) *v
+#define BTVECTOR3_SET(to, from) *to = from
+#define BTVECTOR3_COPY(to, from) BTVECTOR3_SET(to, *from)
+#define BTVECTOR3_IN(v)
+#define BTVECTOR3_DEF_OUT(v)
 #else
-#define VECTOR3_DEF(vec) ATTRIBUTE_ALIGNED16(btVector3) TEMP(vec)
-#define VECTOR3_IN(from, to) Vector3TobtVector3(from, to)
-#define VECTOR3_CONV(vec) VECTOR3_DEF(vec); VECTOR3_IN(vec, &TEMP(vec))
-#define VECTOR3_USE(vec) TEMP(vec)
-#define VECTOR3_OUT(from, to) btVector3ToVector3(from, to)
-#define VECTOR3_OUT_VAL(from, to) btVector3ToVector3(from, to)
-#define VECTOR3_DEF_OUT(vec) VECTOR3_OUT(&TEMP(vec), vec)
+#define BTVECTOR3_DEF(v) btVector3 TEMP(v)
+#define BTVECTOR3_USE(v) TEMP(v)
+#define BTVECTOR3_SET(to, from) btVector3_copy(to, &from)
+#define BTVECTOR3_COPY(to, from) btVector3_copy(to, from)
+#define BTVECTOR3_IN(v) BTVECTOR3_DEF(v); BTVECTOR3_COPY(&BTVECTOR3_USE(v), v)
+#define BTVECTOR3_DEF_OUT(v) BTVECTOR3_SET(v, BTVECTOR3_USE(v))
 #endif
-#define VECTOR4_DEF(vec)
-#define VECTOR4_IN(from, to) *to = *(btVector4*)from
-#define VECTOR4_CONV(vec)
-#define VECTOR4_USE(vec) *(btVector4*)vec
-#define VECTOR4_OUT(from, to) *(btVector4*)to = *from
-#define VECTOR4_OUT_VAL(from, to) *(btVector4*)to = from
-#define VECTOR4_DEF_OUT(vec)
-#define TRANSFORM_DEF(tr) btTransform TEMP(tr)
-#define MATRIX3X3_DEF(tr) btMatrix3x3 TEMP(tr)
-#define QUATERNION_DEF(quat)
-#define QUATERNION_IN(from, to) *to = *(btQuaternion*)from
-#define QUATERNION_CONV(quat)
-#define QUATERNION_USE(quat) *(btQuaternion*)quat
-#define QUATERNION_OUT(from, to) *(btQuaternion*)to = *from
-#define QUATERNION_OUT_VAL(from, to) *(btQuaternion*)to = from
+
+#define BTVECTOR4_DEF(v)
+#define BTVECTOR4_USE(v) *v
+#define BTVECTOR4_SET(to, from) *to = from
+#define BTVECTOR4_COPY(to, from) BTVECTOR4_SET(to, *from)
+#define BTVECTOR4_IN(v)
+#define BTVECTOR4_DEF_OUT(v)
+
+#define BTQUATERNION_DEF(v)
+#define BTQUATERNION_USE(v) *v
+#define BTQUATERNION_SET(to, from) *to = from
+#define BTQUATERNION_COPY(to, from) BTQUATERNION_SET(to, *from)
+#define BTQUATERNION_IN(v)
+#define BTQUATERNION_DEF_OUT(v)
+
+#ifdef BTTRANSFORM_TRANSPOSE
+#define BTTRANSFORM_DEF(v) btTransform TEMP(v)
+#define BTTRANSFORM_USE(v) TEMP(v)
+#define BTTRANSFORM_SET(to, from) btTransform_copy(to, &from)
+#define BTTRANSFORM_COPY(to, from) btTransform_copy(to, from)
+#define BTTRANSFORM_IN(v) BTTRANSFORM_DEF(v); BTTRANSFORM_COPY(&BTTRANSFORM_USE(v), v)
+#define BTTRANSFORM_DEF_OUT(v) BTTRANSFORM_SET(v, BTTRANSFORM_USE(v))
+#define BTTRANSFORM_IN_REF(v) BTTRANSFORM_DEF(v); BTTRANSFORM_SET(&BTTRANSFORM_USE(v), v)
+#define BTTRANSFORM_USE_REF(v) TEMP(v)
+#define BTTRANSFORM_DEF_OUT_REF(v) BTTRANSFORM_SET(&v, BTTRANSFORM_USE_REF(v))
+#else
+#define BTTRANSFORM_DEF(v)
+#define BTTRANSFORM_USE(v) *v
+#define BTTRANSFORM_SET(to, from) *to = from
+#define BTTRANSFORM_COPY(to, from) BTTRANSFORM_SET(to, *from)
+#define BTTRANSFORM_IN(v)
+#define BTTRANSFORM_DEF_OUT(v)
+#define BTTRANSFORM_IN_REF(v)
+#define BTTRANSFORM_USE_REF(v) v
+#define BTTRANSFORM_DEF_OUT_REF(v)
 #endif
-#define TRANSFORM_IN(from, to) MatrixTobtTransform(from, to)
-#define TRANSFORM_CONV(tr) TRANSFORM_DEF(tr); TRANSFORM_IN(tr, &TEMP(tr))
-#define TRANSFORM_USE(tr) TEMP(tr)
-#define TRANSFORM_OUT(from, to) btTransformToMatrix(from, to)
-#define TRANSFORM_OUT_VAL(from, to) btTransformToMatrix(from, to)
-#define TRANSFORM_DEF_OUT(tr) TRANSFORM_OUT(&TEMP(tr), tr)
-#define MATRIX3X3_IN(from, to) MatrixTobtMatrix3x3(from, to)
-#define MATRIX3X3_CONV(tr) MATRIX3X3_DEF(tr); MATRIX3X3_IN(tr, &TEMP(tr))
-#define MATRIX3X3_USE(tr) TEMP(tr)
-#define MATRIX3X3_OUT(from, to) btMatrix3x3ToMatrix(from, to)
-#define MATRIX3X3_DEF_OUT(tr) MATRIX3X3_OUT(&TEMP(tr), tr)
+
+#define BTMATRIX3X3_DEF(tr) btMatrix3x3 TEMP(tr)
+#endif
+
+#define BTMATRIX3X3_USE(tr) TEMP(tr)
+#define BTMATRIX3X3_SET(to, from) MatrixTobtMatrix3x3(from, to)
+#define BTMATRIX3X3_IN(v) BTMATRIX3X3_DEF(v); MatrixTobtMatrix3x3((btScalar*)v, &BTMATRIX3X3_USE(v))
+#define BTMATRIX3X3_OUT(to, from) btMatrix3x3ToMatrix(from, (btScalar*)to)
+#define BTMATRIX3X3_DEF_OUT(tr) BTMATRIX3X3_OUT(tr, &TEMP(tr))

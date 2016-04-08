@@ -34,7 +34,8 @@ void btActionInterface_debugDraw(btActionInterface* obj, btIDebugDraw* debugDraw
 	obj->debugDraw(debugDrawer);
 }
 
-void btActionInterface_updateAction(btActionInterface* obj, btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
+void btActionInterface_updateAction(btActionInterface* obj, btCollisionWorld* collisionWorld,
+	btScalar deltaTimeStep)
 {
 	obj->updateAction(collisionWorld, deltaTimeStep);
 }

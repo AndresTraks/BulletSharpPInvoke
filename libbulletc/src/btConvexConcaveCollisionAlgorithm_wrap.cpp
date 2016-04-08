@@ -5,7 +5,9 @@
 #include "conversion.h"
 #include "btConvexConcaveCollisionAlgorithm_wrap.h"
 
-btConvexTriangleCallback* btConvexTriangleCallback_new(btDispatcher* dispatcher, const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap, bool isSwapped)
+btConvexTriangleCallback* btConvexTriangleCallback_new(btDispatcher* dispatcher,
+	const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap,
+	bool isSwapped)
 {
 	return new btConvexTriangleCallback(dispatcher, body0Wrap, body1Wrap, isSwapped);
 }
@@ -20,14 +22,14 @@ void btConvexTriangleCallback_clearWrapperData(btConvexTriangleCallback* obj)
 	obj->clearWrapperData();
 }
 
-void btConvexTriangleCallback_getAabbMax(btConvexTriangleCallback* obj, btScalar* value)
+void btConvexTriangleCallback_getAabbMax(btConvexTriangleCallback* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getAabbMax(), value);
+	BTVECTOR3_COPY(value, &obj->getAabbMax());
 }
 
-void btConvexTriangleCallback_getAabbMin(btConvexTriangleCallback* obj, btScalar* value)
+void btConvexTriangleCallback_getAabbMin(btConvexTriangleCallback* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getAabbMin(), value);
+	BTVECTOR3_COPY(value, &obj->getAabbMin());
 }
 
 btPersistentManifold* btConvexTriangleCallback_getManifoldPtr(btConvexTriangleCallback* obj)
@@ -45,7 +47,9 @@ void btConvexTriangleCallback_setManifoldPtr(btConvexTriangleCallback* obj, btPe
 	obj->m_manifoldPtr = value;
 }
 
-void btConvexTriangleCallback_setTimeStepAndCounters(btConvexTriangleCallback* obj, btScalar collisionMarginTriangle, const btDispatcherInfo* dispatchInfo, const btCollisionObjectWrapper* convexBodyWrap, const btCollisionObjectWrapper* triBodyWrap, btManifoldResult* resultOut)
+void btConvexTriangleCallback_setTimeStepAndCounters(btConvexTriangleCallback* obj,
+	btScalar collisionMarginTriangle, const btDispatcherInfo* dispatchInfo, const btCollisionObjectWrapper* convexBodyWrap,
+	const btCollisionObjectWrapper* triBodyWrap, btManifoldResult* resultOut)
 {
 	obj->setTimeStepAndCounters(collisionMarginTriangle, *dispatchInfo, convexBodyWrap,
 		triBodyWrap, resultOut);
@@ -69,7 +73,9 @@ btConvexConcaveCollisionAlgorithm::SwappedCreateFunc* btConvexConcaveCollisionAl
 }
 
 
-btConvexConcaveCollisionAlgorithm* btConvexConcaveCollisionAlgorithm_new(const btCollisionAlgorithmConstructionInfo* ci, const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap, bool isSwapped)
+btConvexConcaveCollisionAlgorithm* btConvexConcaveCollisionAlgorithm_new(const btCollisionAlgorithmConstructionInfo* ci,
+	const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap,
+	bool isSwapped)
 {
 	return new btConvexConcaveCollisionAlgorithm(*ci, body0Wrap, body1Wrap, isSwapped);
 }

@@ -18,21 +18,23 @@ btConvexHullShape* btConvexHullShape_new3(const btScalar* points, int numPoints)
 	return new btConvexHullShape(points, numPoints);
 }
 
-btConvexHullShape* btConvexHullShape_new4(const btScalar* points, int numPoints, int stride)
+btConvexHullShape* btConvexHullShape_new4(const btScalar* points, int numPoints,
+	int stride)
 {
 	return new btConvexHullShape(points, numPoints, stride);
 }
 
-void btConvexHullShape_addPoint(btConvexHullShape* obj, const btScalar* point)
+void btConvexHullShape_addPoint(btConvexHullShape* obj, const btVector3* point)
 {
-	VECTOR3_CONV(point);
-	obj->addPoint(VECTOR3_USE(point));
+	BTVECTOR3_IN(point);
+	obj->addPoint(BTVECTOR3_USE(point));
 }
 
-void btConvexHullShape_addPoint2(btConvexHullShape* obj, const btScalar* point, bool recalculateLocalAabb)
+void btConvexHullShape_addPoint2(btConvexHullShape* obj, const btVector3* point,
+	bool recalculateLocalAabb)
 {
-	VECTOR3_CONV(point);
-	obj->addPoint(VECTOR3_USE(point), recalculateLocalAabb);
+	BTVECTOR3_IN(point);
+	obj->addPoint(BTVECTOR3_USE(point), recalculateLocalAabb);
 }
 
 int btConvexHullShape_getNumPoints(btConvexHullShape* obj)
@@ -45,9 +47,9 @@ const btVector3* btConvexHullShape_getPoints(btConvexHullShape* obj)
 	return obj->getPoints();
 }
 
-void btConvexHullShape_getScaledPoint(btConvexHullShape* obj, int i, btScalar* value)
+void btConvexHullShape_getScaledPoint(btConvexHullShape* obj, int i, btVector3* value)
 {
-	VECTOR3_OUT_VAL(obj->getScaledPoint(i), value);
+	BTVECTOR3_SET(value, obj->getScaledPoint(i));
 }
 
 const btVector3* btConvexHullShape_getUnscaledPoints(btConvexHullShape* obj)

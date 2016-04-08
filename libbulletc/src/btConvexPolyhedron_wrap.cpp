@@ -8,7 +8,7 @@ btFace* btFace_new()
 	return new btFace();
 }
 
-btAlignedIntArray* btFace_getIndices(btFace* obj)
+btAlignedObjectArray_int* btFace_getIndices(btFace* obj)
 {
 	return &obj->m_indices;
 }
@@ -29,29 +29,29 @@ btConvexPolyhedron* btConvexPolyhedron_new()
 	return new btConvexPolyhedron();
 }
 
-void btConvexPolyhedron_getExtents(btConvexPolyhedron* obj, btScalar* value)
+void btConvexPolyhedron_getExtents(btConvexPolyhedron* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_extents, value);
+	BTVECTOR3_SET(value, obj->m_extents);
 }
 
-btAlignedFaceArray* btConvexPolyhedron_getFaces(btConvexPolyhedron* obj)
+btAlignedObjectArray_btFace* btConvexPolyhedron_getFaces(btConvexPolyhedron* obj)
 {
 	return &obj->m_faces;
 }
 
-void btConvexPolyhedron_getLocalCenter(btConvexPolyhedron* obj, btScalar* value)
+void btConvexPolyhedron_getLocalCenter(btConvexPolyhedron* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_localCenter, value);
+	BTVECTOR3_SET(value, obj->m_localCenter);
 }
 
-void btConvexPolyhedron_getMC(btConvexPolyhedron* obj, btScalar* value)
+void btConvexPolyhedron_getMC(btConvexPolyhedron* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->mC, value);
+	BTVECTOR3_SET(value, obj->mC);
 }
 
-void btConvexPolyhedron_getME(btConvexPolyhedron* obj, btScalar* value)
+void btConvexPolyhedron_getME(btConvexPolyhedron* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->mE, value);
+	BTVECTOR3_SET(value, obj->mE);
 }
 
 btScalar btConvexPolyhedron_getRadius(btConvexPolyhedron* obj)
@@ -59,12 +59,12 @@ btScalar btConvexPolyhedron_getRadius(btConvexPolyhedron* obj)
 	return obj->m_radius;
 }
 
-btAlignedVector3Array* btConvexPolyhedron_getUniqueEdges(btConvexPolyhedron* obj)
+btAlignedObjectArray_btVector3* btConvexPolyhedron_getUniqueEdges(btConvexPolyhedron* obj)
 {
 	return &obj->m_uniqueEdges;
 }
 
-btAlignedVector3Array* btConvexPolyhedron_getVertices(btConvexPolyhedron* obj)
+btAlignedObjectArray_btVector3* btConvexPolyhedron_getVertices(btConvexPolyhedron* obj)
 {
 	return &obj->m_vertices;
 }
@@ -74,36 +74,38 @@ void btConvexPolyhedron_initialize(btConvexPolyhedron* obj)
 	obj->initialize();
 }
 
-void btConvexPolyhedron_project(btConvexPolyhedron* obj, const btScalar* trans, const btScalar* dir, btScalar* minProj, btScalar* maxProj, btScalar* witnesPtMin, btScalar* witnesPtMax)
+void btConvexPolyhedron_project(btConvexPolyhedron* obj, const btTransform* trans,
+	const btVector3* dir, btScalar* minProj, btScalar* maxProj, btVector3* witnesPtMin,
+	btVector3* witnesPtMax)
 {
-	TRANSFORM_CONV(trans);
-	VECTOR3_CONV(dir);
-	VECTOR3_DEF(witnesPtMin);
-	VECTOR3_DEF(witnesPtMax);
-	obj->project(TRANSFORM_USE(trans), VECTOR3_USE(dir), *minProj, *maxProj, VECTOR3_USE(witnesPtMin),
-		VECTOR3_USE(witnesPtMax));
-	VECTOR3_DEF_OUT(witnesPtMin);
-	VECTOR3_DEF_OUT(witnesPtMax);
+	BTTRANSFORM_IN(trans);
+	BTVECTOR3_IN(dir);
+	BTVECTOR3_DEF(witnesPtMin);
+	BTVECTOR3_DEF(witnesPtMax);
+	obj->project(BTTRANSFORM_USE(trans), BTVECTOR3_USE(dir), *minProj, *maxProj,
+		BTVECTOR3_USE(witnesPtMin), BTVECTOR3_USE(witnesPtMax));
+	BTVECTOR3_DEF_OUT(witnesPtMin);
+	BTVECTOR3_DEF_OUT(witnesPtMax);
 }
 
-void btConvexPolyhedron_setExtents(btConvexPolyhedron* obj, const btScalar* value)
+void btConvexPolyhedron_setExtents(btConvexPolyhedron* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_extents);
+	BTVECTOR3_COPY(&obj->m_extents, value);
 }
 
-void btConvexPolyhedron_setLocalCenter(btConvexPolyhedron* obj, const btScalar* value)
+void btConvexPolyhedron_setLocalCenter(btConvexPolyhedron* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_localCenter);
+	BTVECTOR3_COPY(&obj->m_localCenter, value);
 }
 
-void btConvexPolyhedron_setMC(btConvexPolyhedron* obj, const btScalar* value)
+void btConvexPolyhedron_setMC(btConvexPolyhedron* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->mC);
+	BTVECTOR3_COPY(&obj->mC, value);
 }
 
-void btConvexPolyhedron_setME(btConvexPolyhedron* obj, const btScalar* value)
+void btConvexPolyhedron_setME(btConvexPolyhedron* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->mE);
+	BTVECTOR3_COPY(&obj->mE, value);
 }
 
 void btConvexPolyhedron_setRadius(btConvexPolyhedron* obj, btScalar value)

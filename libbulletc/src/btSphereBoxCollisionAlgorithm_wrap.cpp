@@ -9,32 +9,39 @@ btSphereBoxCollisionAlgorithm::CreateFunc* btSphereBoxCollisionAlgorithm_CreateF
 }
 
 
-btSphereBoxCollisionAlgorithm* btSphereBoxCollisionAlgorithm_new(btPersistentManifold* mf, const btCollisionAlgorithmConstructionInfo* ci, const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap, bool isSwapped)
+btSphereBoxCollisionAlgorithm* btSphereBoxCollisionAlgorithm_new(btPersistentManifold* mf,
+	const btCollisionAlgorithmConstructionInfo* ci, const btCollisionObjectWrapper* body0Wrap,
+	const btCollisionObjectWrapper* body1Wrap, bool isSwapped)
 {
 	return new btSphereBoxCollisionAlgorithm(mf, *ci, body0Wrap, body1Wrap, isSwapped);
 }
 
-bool btSphereBoxCollisionAlgorithm_getSphereDistance(btSphereBoxCollisionAlgorithm* obj, const btCollisionObjectWrapper* boxObjWrap, btScalar* v3PointOnBox, btScalar* normal, btScalar* penetrationDepth, const btScalar* v3SphereCenter, btScalar fRadius, btScalar maxContactDistance)
+bool btSphereBoxCollisionAlgorithm_getSphereDistance(btSphereBoxCollisionAlgorithm* obj,
+	const btCollisionObjectWrapper* boxObjWrap, btVector3* v3PointOnBox, btVector3* normal,
+	btScalar* penetrationDepth, const btVector3* v3SphereCenter, btScalar fRadius,
+	btScalar maxContactDistance)
 {
-	VECTOR3_DEF(v3PointOnBox);
-	VECTOR3_DEF(normal);
-	VECTOR3_CONV(v3SphereCenter);
-	bool ret = obj->getSphereDistance(boxObjWrap, VECTOR3_USE(v3PointOnBox), VECTOR3_USE(normal),
-		*penetrationDepth, VECTOR3_USE(v3SphereCenter), fRadius, maxContactDistance);
-	VECTOR3_DEF_OUT(v3PointOnBox);
-	VECTOR3_DEF_OUT(normal);
+	BTVECTOR3_DEF(v3PointOnBox);
+	BTVECTOR3_DEF(normal);
+	BTVECTOR3_IN(v3SphereCenter);
+	bool ret = obj->getSphereDistance(boxObjWrap, BTVECTOR3_USE(v3PointOnBox), BTVECTOR3_USE(normal),
+		*penetrationDepth, BTVECTOR3_USE(v3SphereCenter), fRadius, maxContactDistance);
+	BTVECTOR3_DEF_OUT(v3PointOnBox);
+	BTVECTOR3_DEF_OUT(normal);
 	return ret;
 }
 
-btScalar btSphereBoxCollisionAlgorithm_getSpherePenetration(btSphereBoxCollisionAlgorithm* obj, const btScalar* boxHalfExtent, const btScalar* sphereRelPos, btScalar* closestPoint, btScalar* normal)
+btScalar btSphereBoxCollisionAlgorithm_getSpherePenetration(btSphereBoxCollisionAlgorithm* obj,
+	const btVector3* boxHalfExtent, const btVector3* sphereRelPos, btVector3* closestPoint,
+	btVector3* normal)
 {
-	VECTOR3_CONV(boxHalfExtent);
-	VECTOR3_CONV(sphereRelPos);
-	VECTOR3_DEF(closestPoint);
-	VECTOR3_DEF(normal);
-	btScalar ret = obj->getSpherePenetration(VECTOR3_USE(boxHalfExtent), VECTOR3_USE(sphereRelPos),
-		VECTOR3_USE(closestPoint), VECTOR3_USE(normal));
-	VECTOR3_DEF_OUT(closestPoint);
-	VECTOR3_DEF_OUT(normal);
+	BTVECTOR3_IN(boxHalfExtent);
+	BTVECTOR3_IN(sphereRelPos);
+	BTVECTOR3_DEF(closestPoint);
+	BTVECTOR3_DEF(normal);
+	btScalar ret = obj->getSpherePenetration(BTVECTOR3_USE(boxHalfExtent), BTVECTOR3_USE(sphereRelPos),
+		BTVECTOR3_USE(closestPoint), BTVECTOR3_USE(normal));
+	BTVECTOR3_DEF_OUT(closestPoint);
+	BTVECTOR3_DEF_OUT(normal);
 	return ret;
 }

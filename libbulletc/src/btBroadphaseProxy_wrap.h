@@ -3,10 +3,10 @@
 extern "C"
 {
 	EXPORT btBroadphaseProxy* btBroadphaseProxy_new();
-	EXPORT btBroadphaseProxy* btBroadphaseProxy_new2(const btScalar* aabbMin, const btScalar* aabbMax, void* userPtr, short collisionFilterGroup, short collisionFilterMask);
-	EXPORT btBroadphaseProxy* btBroadphaseProxy_new3(const btScalar* aabbMin, const btScalar* aabbMax, void* userPtr, short collisionFilterGroup, short collisionFilterMask, void* multiSapParentProxy);
-	EXPORT void btBroadphaseProxy_getAabbMax(btBroadphaseProxy* obj, btScalar* value);
-	EXPORT void btBroadphaseProxy_getAabbMin(btBroadphaseProxy* obj, btScalar* value);
+	EXPORT btBroadphaseProxy* btBroadphaseProxy_new2(const btVector3* aabbMin, const btVector3* aabbMax, void* userPtr, short collisionFilterGroup, short collisionFilterMask);
+	EXPORT btBroadphaseProxy* btBroadphaseProxy_new3(const btVector3* aabbMin, const btVector3* aabbMax, void* userPtr, short collisionFilterGroup, short collisionFilterMask, void* multiSapParentProxy);
+	EXPORT void btBroadphaseProxy_getAabbMax(btBroadphaseProxy* obj, btVector3* value);
+	EXPORT void btBroadphaseProxy_getAabbMin(btBroadphaseProxy* obj, btVector3* value);
 	EXPORT void* btBroadphaseProxy_getClientObject(btBroadphaseProxy* obj);
 	EXPORT short btBroadphaseProxy_getCollisionFilterGroup(btBroadphaseProxy* obj);
 	EXPORT short btBroadphaseProxy_getCollisionFilterMask(btBroadphaseProxy* obj);
@@ -21,8 +21,8 @@ extern "C"
 	EXPORT bool btBroadphaseProxy_isNonMoving(int proxyType);
 	EXPORT bool btBroadphaseProxy_isPolyhedral(int proxyType);
 	EXPORT bool btBroadphaseProxy_isSoftBody(int proxyType);
-	EXPORT void btBroadphaseProxy_setAabbMax(btBroadphaseProxy* obj, const btScalar* value);
-	EXPORT void btBroadphaseProxy_setAabbMin(btBroadphaseProxy* obj, const btScalar* value);
+	EXPORT void btBroadphaseProxy_setAabbMax(btBroadphaseProxy* obj, const btVector3* value);
+	EXPORT void btBroadphaseProxy_setAabbMin(btBroadphaseProxy* obj, const btVector3* value);
 	EXPORT void btBroadphaseProxy_setClientObject(btBroadphaseProxy* obj, void* value);
 	EXPORT void btBroadphaseProxy_setCollisionFilterGroup(btBroadphaseProxy* obj, short value);
 	EXPORT void btBroadphaseProxy_setCollisionFilterMask(btBroadphaseProxy* obj, short value);

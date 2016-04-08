@@ -168,29 +168,15 @@ namespace BulletSharpGen
 
         bool IsCacheableType(TypeRefDefinition t)
         {
-            if (t.IsBasic)
-            {
-                return false;
-            }
+            if (t.IsBasic) return false;
             if (t.Target != null)
             {
-                if (t.Target is EnumDefinition)
-                {
-                    return false;
-                }
+                if (t.Target is EnumDefinition) return false;
+                if (t.Target.MarshalAsStruct) return false;
             }
             if (t.Referenced != null)
             {
                 return IsCacheableType(t.Referenced);
-            }
-            switch (t.Name)
-            {
-                case "btMatrix3x3":
-                case "btQuaternion":
-                case "btTransform":
-                case "btVector3":
-                case "btVector4":
-                    return false;
             }
             return true;
         }
@@ -211,7 +197,6 @@ namespace BulletSharpGen
                     /*case "Matrix3x3":
                     case "Quaternion":
                     case "Transform":
-                    case "Vector3":
                     case "Vector4":
                         return name + "btScalar*";*/
                     default:
@@ -228,32 +213,11 @@ namespace BulletSharpGen
                 }
             }
 
-            switch (type.ManagedName)
-            {
-                case "Matrix3x3":
-                case "Quaternion":
-                case "Transform":
-                case "Vector3":
-                case "Vector4":
-                    name += "btScalar";
-                    break;
-                default:
-                    name += type.FullName;
-                    break;
-            }
-
-            return name;
+            return name + type.FullName;
         }
 
         public static string GetTypeNameCS(TypeRefDefinition type)
         {
-            switch (type.ManagedName)
-            {
-                case "Matrix3x3":
-                case "Transform":
-                    return "Matrix";
-            }
-
             if (type.IsConstantArray)
             {
                 switch (type.Referenced.Name)
@@ -268,8 +232,6 @@ namespace BulletSharpGen
                         return "UShortArray";
                     case "btScalar":
                         return "FloatArray";
-                    case "btVector3":
-                        return "Vector3Array";
                     case "btDbvt":
                         return "DbvtArray";
                     case "btSoftBody::Body":
@@ -312,7 +274,6 @@ namespace BulletSharpGen
                 case "Transform":
                     return "Matrix";
                 case "Quaternion":
-                case "Vector3":
                 case "Vector4":
                     return type.ManagedName;
             }
@@ -322,162 +283,6 @@ namespace BulletSharpGen
                 return "btScalar";
             }
             return type.ManagedTypeRefName;
-        }
-
-        // Is the struct passed by value or by reference?
-        public static bool MarshalStructByValue(TypeRefDefinition type)
-        {
-            if (type.IsPointer)
-            {
-                return false;
-            }
-
-            switch (type.ManagedName)
-            {
-                case "Matrix3x3":
-                case "Quaternion":
-                case "Transform":
-                case "Vector3":
-                case "Vector4":
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        // Does the type require additional lines of code to marshal?
-        public static bool TypeRequiresMarshal(TypeRefDefinition type)
-        {
-            switch (type.ManagedName)
-            {
-                case "Matrix3x3":
-                case "Quaternion":
-                case "Transform":
-                case "Vector3":
-                case "Vector4":
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        public static string GetReturnValueMarshalStart(TypeRefDefinition type)
-        {
-            switch (type.ManagedName)
-            {
-                case "Quaternion":
-                case "Matrix3x3":
-                case "Transform":
-                case "Vector3":
-                case "Vector4":
-                    if (type.IsPointer)
-                    {
-                        return type.ManagedName.ToUpper() + "_OUT(";
-                    }
-                    if (type.IsReference)
-                    {
-                        return type.ManagedName.ToUpper() + "_OUT(&";
-                    }
-                    return type.ManagedName.ToUpper() + "_OUT_VAL(";
-                default:
-                    return null;
-            }
-        }
-
-        public static string GetReturnValueMarshalEnd(ParameterDefinition param)
-        {
-            switch (param.Type.ManagedName)
-            {
-                case "Quaternion":
-                case "Matrix3x3":
-                case "Transform":
-                case "Vector3":
-                case "Vector4":
-                    return "), " + param.Name + ");";
-                default:
-                    return null;
-            }
-        }
-
-        public static string GetFieldGetterMarshal(ParameterDefinition parameter, FieldDefinition field)
-        {
-            switch (parameter.Type.ManagedName)
-            {
-                case "Quaternion":
-                    return "QUATERNION_OUT(&obj->" + field.Name + ", " + parameter.Name + ");";
-                case "Matrix3x3":
-                    return "MATRIX3X3_OUT(&obj->" + field.Name + ", " + parameter.Name + ");";
-                case "Transform":
-                    return "TRANSFORM_OUT(&obj->" + field.Name + ", " + parameter.Name + ");";
-                case "Vector3":
-                    return "VECTOR3_OUT(&obj->" + field.Name + ", " + parameter.Name + ");";
-                case "Vector4":
-                    return "VECTOR4_OUT(&obj->" + field.Name + ", " + parameter.Name + ");";
-                default:
-                    return null;
-            }
-        }
-
-        public static string GetFieldSetterMarshal(ParameterDefinition parameter, FieldDefinition field)
-        {
-            switch (parameter.Type.ManagedName)
-            {
-                case "Quaternion":
-                    return "QUATERNION_IN(" + parameter.Name + ", &obj->" + field.Name + ");";
-                case "Matrix3x3":
-                    return "MATRIX3X3_IN(" + parameter.Name + ", &obj->" + field.Name + ");";
-                case "Transform":
-                    return "TRANSFORM_IN(" + parameter.Name + ", &obj->" + field.Name + ");";
-                case "Vector3":
-                    return "VECTOR3_IN(" + parameter.Name + ", &obj->" + field.Name + ");";
-                case "Vector4":
-                    return "VECTOR4_IN(" + parameter.Name + ", &obj->" + field.Name + ");";
-                default:
-                    return null;
-            }
-        }
-
-        public static string GetTypeMarshalPrologue(ParameterDefinition parameter, MethodDefinition method)
-        {
-            if (method.Field != null)
-            {
-                return null;
-            }
-
-            if (parameter.MarshalDirection == MarshalDirection.Out)
-            {
-                switch (parameter.Type.ManagedName)
-                {
-                    case "Quaternion":
-                        return "QUATERNION_DEF(" + parameter.Name + ");";
-                    case "Matrix3x3":
-                        return "MATRIX3X3_DEF(" + parameter.Name + ");";
-                    case "Transform":
-                        return "TRANSFORM_DEF(" + parameter.Name + ");";
-                    case "Vector3":
-                        return "VECTOR3_DEF(" + parameter.Name + ");";
-                    case "Vector4":
-                        return "VECTOR4_DEF(" + parameter.Name + ");";
-                    default:
-                        return null;
-                }
-            }
-
-            switch (parameter.Type.ManagedName)
-            {
-                case "Quaternion":
-                    return "QUATERNION_CONV(" + parameter.Name + ");";
-                case "Matrix3x3":
-                    return "MATRIX3X3_CONV(" + parameter.Name + ");";
-                case "Transform":
-                    return "TRANSFORM_CONV(" + parameter.Name + ");";
-                case "Vector3":
-                    return "VECTOR3_CONV(" + parameter.Name + ");";
-                case "Vector4":
-                    return "VECTOR4_CONV(" + parameter.Name + ");";
-                default:
-                    return null;
-            }
         }
 
         public static string GetTypeMarshalPrologueCppCli(ParameterDefinition parameter)
@@ -490,34 +295,8 @@ namespace BulletSharpGen
                     return "QUATERNION_CONV(" + parameter.ManagedName + ");";
                 case "Transform":
                     return "TRANSFORM_CONV(" + parameter.ManagedName + ");";
-                case "Vector3":
-                    return "VECTOR3_CONV(" + parameter.ManagedName + ");";
                 case "Vector4":
                     return "VECTOR4_CONV(" + parameter.ManagedName + ");";
-                default:
-                    return null;
-            }
-        }
-
-        public static string GetTypeMarshalEpilogue(ParameterDefinition parameter)
-        {
-            if (parameter.Type.IsConst || (parameter.Type.Referenced != null && parameter.Type.Referenced.IsConst))
-            {
-                return null;
-            }
-
-            switch (parameter.Type.ManagedName)
-            {
-                case "Quaternion":
-                    return "QUATERNION_DEF_OUT(" + parameter.Name + ");";
-                case "Matrix3x3":
-                    return "MATRIX3X3_DEF_OUT(" + parameter.Name + ");";
-                case "Transform":
-                    return "TRANSFORM_DEF_OUT(" + parameter.Name + ");";
-                case "Vector3":
-                    return "VECTOR3_DEF_OUT(" + parameter.Name + ");";
-                case "Vector4":
-                    return "VECTOR4_DEF_OUT(" + parameter.Name + ");";
                 default:
                     return null;
             }
@@ -533,31 +312,8 @@ namespace BulletSharpGen
                     return "MATRIX3X3_DEL(" + parameter.ManagedName + ");";
                 case "Transform":
                     return "TRANSFORM_DEL(" + parameter.ManagedName + ");";
-                case "Vector3":
-                    return "VECTOR3_DEL(" + parameter.ManagedName + ");";
                 case "Vector4":
                     return "VECTOR4_DEL(" + parameter.ManagedName + ");";
-                default:
-                    return null;
-            }
-        }
-
-        public static string GetTypeMarshal(ParameterDefinition parameter)
-        {
-            string reference = parameter.Type.IsPointer ? "&" : string.Empty;
-
-            switch (parameter.Type.ManagedName)
-            {
-                case "Quaternion":
-                    return reference + "QUATERNION_USE(" + parameter.Name + ")";
-                case "Transform":
-                    return reference + "TRANSFORM_USE(" + parameter.Name + ")";
-                case "Matrix3x3":
-                    return reference + "MATRIX3X3_USE(" + parameter.Name + ")";
-                case "Vector3":
-                    return reference + "VECTOR3_USE(" + parameter.Name + ")";
-                case "Vector4":
-                    return reference + "VECTOR4_USE(" + parameter.Name + ")";
                 default:
                     return null;
             }
@@ -575,8 +331,6 @@ namespace BulletSharpGen
                     return "TRANSFORM_USE(" + parameter.ManagedName + ")";
                 case "Matrix3x3":
                     return "MATRIX3X3_USE(" + parameter.ManagedName + ")";
-                case "Vector3":
-                    return "VECTOR3_USE(" + parameter.ManagedName + ")";
                 case "Vector4":
                     return "VECTOR4_USE(" + parameter.ManagedName + ")";
                 default:
@@ -598,8 +352,6 @@ namespace BulletSharpGen
                     return "Math::BtQuatToQuaternion(&";
                 case "Transform":
                     return "Math::BtTransformToMatrix(&";
-                case "Vector3":
-                    return "Math::BtVector3ToVector3(&";
                 case "Vector4":
                     return "Math::BtVector4ToVector4(&";
                 default:
@@ -616,7 +368,6 @@ namespace BulletSharpGen
                 case "OverlappingPairCache":
                 case "Quaternion":
                 case "Transform":
-                case "Vector3":
                 case "Vector4":
                     return ")";
                 default:
@@ -659,8 +410,6 @@ namespace BulletSharpGen
                     return "Math::QuaternionToBtQuat(" + parameter.ManagedName + ", &" + nativePointer + "->" + field.Name + ')';
                 case "Transform":
                     return "Math::MatrixToBtTransform(" + parameter.ManagedName + ", &" + nativePointer + "->" + field.Name + ')';
-                case "Vector3":
-                    return "Math::Vector3ToBtVector3(" + parameter.ManagedName + ", &" + nativePointer + "->" + field.Name + ')';
                 case "Vector4":
                     return "Math::Vector4ToBtVector4(" + parameter.ManagedName + ", &" + nativePointer + "->" + field.Name + ')';
                 default:
@@ -675,7 +424,6 @@ namespace BulletSharpGen
                 case "Matrix3x3":
                 case "Quaternion":
                 case "Transform":
-                case "Vector3":
                 case "Vector4":
                     {
                         if (type.Referenced != null && !(type.IsConst || type.Referenced.IsConst))
@@ -717,7 +465,6 @@ namespace BulletSharpGen
                     case "Matrix3x3":
                     case "Quaternion":
                     case "Transform":
-                    case "Vector3":
                     case "Vector4":
                         {
                             if (type.Referenced != null && !(type.IsConst || type.Referenced.IsConst))
@@ -766,7 +513,6 @@ namespace BulletSharpGen
                     case "Matrix3x3":
                     case "Quaternion":
                     case "Transform":
-                    case "Vector3":
                     case "Vector4":
                         output.AppendLine(GetTabs(level + 2) + "get");
                         output.AppendLine(GetTabs(level + 2) + "{");
@@ -794,7 +540,6 @@ namespace BulletSharpGen
                     case "Matrix3x3":
                     case "Quaternion":
                     case "Transform":
-                    case "Vector3":
                     case "Vector4":
                         return "ref value";
                 }

@@ -18,14 +18,14 @@ bool btPointCollector_getHasResult(btPointCollector* obj)
 	return obj->m_hasResult;
 }
 
-void btPointCollector_getNormalOnBInWorld(btPointCollector* obj, btScalar* value)
+void btPointCollector_getNormalOnBInWorld(btPointCollector* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_normalOnBInWorld, value);
+	BTVECTOR3_SET(value, obj->m_normalOnBInWorld);
 }
 
-void btPointCollector_getPointInWorld(btPointCollector* obj, btScalar* value)
+void btPointCollector_getPointInWorld(btPointCollector* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_pointInWorld, value);
+	BTVECTOR3_SET(value, obj->m_pointInWorld);
 }
 
 void btPointCollector_setDistance(btPointCollector* obj, btScalar value)
@@ -38,12 +38,12 @@ void btPointCollector_setHasResult(btPointCollector* obj, bool value)
 	obj->m_hasResult = value;
 }
 
-void btPointCollector_setNormalOnBInWorld(btPointCollector* obj, const btScalar* value)
+void btPointCollector_setNormalOnBInWorld(btPointCollector* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_normalOnBInWorld);
+	BTVECTOR3_COPY(&obj->m_normalOnBInWorld, value);
 }
 
-void btPointCollector_setPointInWorld(btPointCollector* obj, const btScalar* value)
+void btPointCollector_setPointInWorld(btPointCollector* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_pointInWorld);
+	BTVECTOR3_COPY(&obj->m_pointInWorld, value);
 }

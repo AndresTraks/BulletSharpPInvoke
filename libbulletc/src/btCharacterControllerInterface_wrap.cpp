@@ -22,12 +22,14 @@ bool btCharacterControllerInterface_onGround(btCharacterControllerInterface* obj
 	return obj->onGround();
 }
 
-void btCharacterControllerInterface_playerStep(btCharacterControllerInterface* obj, btCollisionWorld* collisionWorld, btScalar dt)
+void btCharacterControllerInterface_playerStep(btCharacterControllerInterface* obj,
+	btCollisionWorld* collisionWorld, btScalar dt)
 {
 	obj->playerStep(collisionWorld, dt);
 }
 
-void btCharacterControllerInterface_preStep(btCharacterControllerInterface* obj, btCollisionWorld* collisionWorld)
+void btCharacterControllerInterface_preStep(btCharacterControllerInterface* obj,
+	btCollisionWorld* collisionWorld)
 {
 	obj->preStep(collisionWorld);
 }
@@ -37,27 +39,30 @@ void btCharacterControllerInterface_reset(btCharacterControllerInterface* obj, b
 	obj->reset(collisionWorld);
 }
 
-void btCharacterControllerInterface_setUpInterpolate(btCharacterControllerInterface* obj, bool value)
+void btCharacterControllerInterface_setUpInterpolate(btCharacterControllerInterface* obj,
+	bool value)
 {
 	obj->setUpInterpolate(value);
 }
 
-void btCharacterControllerInterface_setWalkDirection(btCharacterControllerInterface* obj, const btScalar* walkDirection)
+void btCharacterControllerInterface_setWalkDirection(btCharacterControllerInterface* obj,
+	const btVector3* walkDirection)
 {
-	VECTOR3_CONV(walkDirection);
-	obj->setWalkDirection(VECTOR3_USE(walkDirection));
+	BTVECTOR3_IN(walkDirection);
+	obj->setWalkDirection(BTVECTOR3_USE(walkDirection));
 }
 
-void btCharacterControllerInterface_setVelocityForTimeInterval(btCharacterControllerInterface* obj, const btScalar* velocity, btScalar timeInterval)
+void btCharacterControllerInterface_setVelocityForTimeInterval(btCharacterControllerInterface* obj,
+	const btVector3* velocity, btScalar timeInterval)
 {
-	VECTOR3_CONV(velocity);
-	obj->setVelocityForTimeInterval(VECTOR3_USE(velocity), timeInterval);
+	BTVECTOR3_IN(velocity);
+	obj->setVelocityForTimeInterval(BTVECTOR3_USE(velocity), timeInterval);
 }
 
-void btCharacterControllerInterface_warp(btCharacterControllerInterface* obj, const btScalar* origin)
+void btCharacterControllerInterface_warp(btCharacterControllerInterface* obj, const btVector3* origin)
 {
-	VECTOR3_CONV(origin);
-	obj->warp(VECTOR3_USE(origin));
+	BTVECTOR3_IN(origin);
+	obj->warp(BTVECTOR3_USE(origin));
 }
 
 #endif

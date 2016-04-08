@@ -18,7 +18,7 @@ extern "C"
 	EXPORT btScalar btPersistentManifold_getContactProcessingThreshold(btPersistentManifold* obj);
 	EXPORT int btPersistentManifold_getIndex1a(btPersistentManifold* obj);
 	EXPORT int btPersistentManifold_getNumContacts(btPersistentManifold* obj);
-	EXPORT void btPersistentManifold_refreshContactPoints(btPersistentManifold* obj, const btScalar* trA, const btScalar* trB);
+	EXPORT void btPersistentManifold_refreshContactPoints(btPersistentManifold* obj, const btTransform* trA, const btTransform* trB);
 	EXPORT void btPersistentManifold_removeContactPoint(btPersistentManifold* obj, int index);
 	EXPORT void btPersistentManifold_replaceContactPoint(btPersistentManifold* obj, const btManifoldPoint* newPoint, int insertIndex);
 	EXPORT void btPersistentManifold_setBodies(btPersistentManifold* obj, const btCollisionObject* body0, const btCollisionObject* body1);

@@ -15,7 +15,9 @@ btCompoundCompoundCollisionAlgorithm::SwappedCreateFunc* btCompoundCompoundColli
 }
 
 
-btCompoundCompoundCollisionAlgorithm* btCompoundCompoundCollisionAlgorithm_new(const btCollisionAlgorithmConstructionInfo* ci, const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap, bool isSwapped)
+btCompoundCompoundCollisionAlgorithm* btCompoundCompoundCollisionAlgorithm_new(const btCollisionAlgorithmConstructionInfo* ci,
+	const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap,
+	bool isSwapped)
 {
 	return new btCompoundCompoundCollisionAlgorithm(*ci, body0Wrap, body1Wrap, isSwapped);
 }

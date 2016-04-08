@@ -160,11 +160,12 @@ void btDbvtBroadphase_performDeferredRemoval(btDbvtBroadphase* obj, btDispatcher
 	obj->performDeferredRemoval(dispatcher);
 }
 
-void btDbvtBroadphase_setAabbForceUpdate(btDbvtBroadphase* obj, btBroadphaseProxy* absproxy, const btScalar* aabbMin, const btScalar* aabbMax, btDispatcher* __unnamed3)
+void btDbvtBroadphase_setAabbForceUpdate(btDbvtBroadphase* obj, btBroadphaseProxy* absproxy,
+	const btVector3* aabbMin, const btVector3* aabbMax, btDispatcher* __unnamed3)
 {
-	VECTOR3_CONV(aabbMin);
-	VECTOR3_CONV(aabbMax);
-	obj->setAabbForceUpdate(absproxy, VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax),
+	BTVECTOR3_IN(aabbMin);
+	BTVECTOR3_IN(aabbMax);
+	obj->setAabbForceUpdate(absproxy, BTVECTOR3_USE(aabbMin), BTVECTOR3_USE(aabbMax),
 		__unnamed3);
 }
 

@@ -3,10 +3,11 @@
 #include "conversion.h"
 #include "btScaledBvhTriangleMeshShape_wrap.h"
 
-btScaledBvhTriangleMeshShape* btScaledBvhTriangleMeshShape_new(btBvhTriangleMeshShape* childShape, const btScalar* localScaling)
+btScaledBvhTriangleMeshShape* btScaledBvhTriangleMeshShape_new(btBvhTriangleMeshShape* childShape,
+	const btVector3* localScaling)
 {
-	VECTOR3_CONV(localScaling);
-	return new btScaledBvhTriangleMeshShape(childShape, VECTOR3_USE(localScaling));
+	BTVECTOR3_IN(localScaling);
+	return new btScaledBvhTriangleMeshShape(childShape, BTVECTOR3_USE(localScaling));
 }
 
 btBvhTriangleMeshShape* btScaledBvhTriangleMeshShape_getChildShape(btScaledBvhTriangleMeshShape* obj)

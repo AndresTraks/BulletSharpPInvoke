@@ -118,7 +118,7 @@ namespace BulletSharp
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
-                return CollisionObject.GetManaged(btAlignedCollisionObjectArray_at(_native, index));
+                return CollisionObject.GetManaged(btAlignedObjectArray_btCollisionObjectPtr_at(_native, index));
             }
             set
             {
@@ -151,7 +151,7 @@ namespace BulletSharp
             }
             else
             {
-                btAlignedCollisionObjectArray_push_back(_native, item._native);
+                btAlignedObjectArray_btCollisionObjectPtr_push_back(_native, item._native);
             }
         }
 
@@ -183,12 +183,12 @@ namespace BulletSharp
             {
                 _backingList.Clear();
             }
-            btAlignedCollisionObjectArray_resizeNoInitialize(_native, 0);
+            btAlignedObjectArray_btCollisionObjectPtr_resizeNoInitialize(_native, 0);
         }
 
         public bool Contains(CollisionObject item)
         {
-            //return btAlignedCollisionObjectArray_findLinearSearch(_native, item._native) != Count;
+            //return btAlignedObjectArray_btCollisionObjectPtr_findLinearSearch(_native, item._native) != Count;
             throw new NotImplementedException();
         }
 
@@ -213,7 +213,7 @@ namespace BulletSharp
 
         public int Count
         {
-            get { return btAlignedCollisionObjectArray_size(_native); }
+            get { return btAlignedObjectArray_btCollisionObjectPtr_size(_native); }
         }
 
         public bool IsReadOnly
@@ -228,7 +228,7 @@ namespace BulletSharp
             if (_backingList == null)
             {
                 throw new NotImplementedException();
-                //btAlignedCollisionObjectArray_remove(itemPtr);
+                //btAlignedObjectArray_btCollisionObjectPtr_remove(itemPtr);
             }
 
             int count = _backingList.Count;
@@ -312,13 +312,13 @@ namespace BulletSharp
         }
 
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern IntPtr btAlignedCollisionObjectArray_at(IntPtr obj, int n);
+        static extern IntPtr btAlignedObjectArray_btCollisionObjectPtr_at(IntPtr obj, int n);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedCollisionObjectArray_push_back(IntPtr obj, IntPtr val);
+        static extern void btAlignedObjectArray_btCollisionObjectPtr_push_back(IntPtr obj, IntPtr val);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedCollisionObjectArray_resizeNoInitialize(IntPtr obj, int newSize);
+        static extern void btAlignedObjectArray_btCollisionObjectPtr_resizeNoInitialize(IntPtr obj, int newSize);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btAlignedCollisionObjectArray_size(IntPtr obj);
+        static extern int btAlignedObjectArray_btCollisionObjectPtr_size(IntPtr obj);
 
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern IntPtr btCollisionObject_getBroadphaseHandle(IntPtr obj);

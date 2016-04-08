@@ -179,14 +179,10 @@ namespace BulletSharpGen.Project
                 @class.NamespaceName = namespaceName;
             }
 
-            if ("true".Equals(reader.GetAttribute("IsExcluded")))
-            {
-                @class.IsExcluded = true;
-            }
-            if ("true".Equals(reader.GetAttribute("HasPreventDelete")))
-            {
-                @class.HasPreventDelete = true;
-            }
+            if ("true".Equals(reader.GetAttribute("IsExcluded"))) @class.IsExcluded = true;
+            if ("true".Equals(reader.GetAttribute("HasPreventDelete"))) @class.HasPreventDelete = true;
+            if ("true".Equals(reader.GetAttribute("MarshalAsStruct"))) @class.MarshalAsStruct = true;
+
             project.ClassDefinitions.Add(@class.FullyQualifiedName, @class);
 
             if (reader.IsEmptyElement)

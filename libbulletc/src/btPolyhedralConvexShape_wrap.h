@@ -3,16 +3,16 @@
 extern "C"
 {
 	EXPORT const btConvexPolyhedron* btPolyhedralConvexShape_getConvexPolyhedron(btPolyhedralConvexShape* obj);
-	EXPORT void btPolyhedralConvexShape_getEdge(btPolyhedralConvexShape* obj, int i, btScalar* pa, btScalar* pb);
+	EXPORT void btPolyhedralConvexShape_getEdge(btPolyhedralConvexShape* obj, int i, btVector3* pa, btVector3* pb);
 	EXPORT int btPolyhedralConvexShape_getNumEdges(btPolyhedralConvexShape* obj);
 	EXPORT int btPolyhedralConvexShape_getNumPlanes(btPolyhedralConvexShape* obj);
 	EXPORT int btPolyhedralConvexShape_getNumVertices(btPolyhedralConvexShape* obj);
-	EXPORT void btPolyhedralConvexShape_getPlane(btPolyhedralConvexShape* obj, btScalar* planeNormal, btScalar* planeSupport, int i);
-	EXPORT void btPolyhedralConvexShape_getVertex(btPolyhedralConvexShape* obj, int i, btScalar* vtx);
+	EXPORT void btPolyhedralConvexShape_getPlane(btPolyhedralConvexShape* obj, btVector3* planeNormal, btVector3* planeSupport, int i);
+	EXPORT void btPolyhedralConvexShape_getVertex(btPolyhedralConvexShape* obj, int i, btVector3* vtx);
 	EXPORT bool btPolyhedralConvexShape_initializePolyhedralFeatures(btPolyhedralConvexShape* obj);
 	EXPORT bool btPolyhedralConvexShape_initializePolyhedralFeatures2(btPolyhedralConvexShape* obj, int shiftVerticesByMargin);
-	EXPORT bool btPolyhedralConvexShape_isInside(btPolyhedralConvexShape* obj, const btScalar* pt, btScalar tolerance);
+	EXPORT bool btPolyhedralConvexShape_isInside(btPolyhedralConvexShape* obj, const btVector3* pt, btScalar tolerance);
 
-	EXPORT void btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(btPolyhedralConvexAabbCachingShape* obj, const btScalar* trans, btScalar* aabbMin, btScalar* aabbMax, btScalar margin);
+	EXPORT void btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(btPolyhedralConvexAabbCachingShape* obj, const btTransform* trans, btVector3* aabbMin, btVector3* aabbMax, btScalar margin);
 	EXPORT void btPolyhedralConvexAabbCachingShape_recalcLocalAabb(btPolyhedralConvexAabbCachingShape* obj);
 }

@@ -14,24 +14,28 @@ void btGhostObject_addOverlappingObjectInternal(btGhostObject* obj, btBroadphase
 	obj->addOverlappingObjectInternal(otherProxy);
 }
 
-void btGhostObject_addOverlappingObjectInternal2(btGhostObject* obj, btBroadphaseProxy* otherProxy, btBroadphaseProxy* thisProxy)
+void btGhostObject_addOverlappingObjectInternal2(btGhostObject* obj, btBroadphaseProxy* otherProxy,
+	btBroadphaseProxy* thisProxy)
 {
 	obj->addOverlappingObjectInternal(otherProxy, thisProxy);
 }
 
-void btGhostObject_convexSweepTest(btGhostObject* obj, const btConvexShape* castShape, const btScalar* convexFromWorld, const btScalar* convexToWorld, btCollisionWorld_ConvexResultCallback* resultCallback)
+void btGhostObject_convexSweepTest(btGhostObject* obj, const btConvexShape* castShape,
+	const btTransform* convexFromWorld, const btTransform* convexToWorld, btCollisionWorld_ConvexResultCallback* resultCallback)
 {
-	TRANSFORM_CONV(convexFromWorld);
-	TRANSFORM_CONV(convexToWorld);
-	obj->convexSweepTest(castShape, TRANSFORM_USE(convexFromWorld), TRANSFORM_USE(convexToWorld),
+	BTTRANSFORM_IN(convexFromWorld);
+	BTTRANSFORM_IN(convexToWorld);
+	obj->convexSweepTest(castShape, BTTRANSFORM_USE(convexFromWorld), BTTRANSFORM_USE(convexToWorld),
 		*resultCallback);
 }
 
-void btGhostObject_convexSweepTest2(btGhostObject* obj, const btConvexShape* castShape, const btScalar* convexFromWorld, const btScalar* convexToWorld, btCollisionWorld_ConvexResultCallback* resultCallback, btScalar allowedCcdPenetration)
+void btGhostObject_convexSweepTest2(btGhostObject* obj, const btConvexShape* castShape,
+	const btTransform* convexFromWorld, const btTransform* convexToWorld, btCollisionWorld_ConvexResultCallback* resultCallback,
+	btScalar allowedCcdPenetration)
 {
-	TRANSFORM_CONV(convexFromWorld);
-	TRANSFORM_CONV(convexToWorld);
-	obj->convexSweepTest(castShape, TRANSFORM_USE(convexFromWorld), TRANSFORM_USE(convexToWorld),
+	BTTRANSFORM_IN(convexFromWorld);
+	BTTRANSFORM_IN(convexToWorld);
+	obj->convexSweepTest(castShape, BTTRANSFORM_USE(convexFromWorld), BTTRANSFORM_USE(convexToWorld),
 		*resultCallback, allowedCcdPenetration);
 }
 
@@ -45,24 +49,27 @@ btCollisionObject* btGhostObject_getOverlappingObject(btGhostObject* obj, int in
 	return obj->getOverlappingObject(index);
 }
 
-btAlignedCollisionObjectArray* btGhostObject_getOverlappingPairs(btGhostObject* obj)
+btAlignedObjectArray_btCollisionObjectPtr* btGhostObject_getOverlappingPairs(btGhostObject* obj)
 {
 	return &obj->getOverlappingPairs();
 }
 
-void btGhostObject_rayTest(btGhostObject* obj, const btScalar* rayFromWorld, const btScalar* rayToWorld, btCollisionWorld::RayResultCallback* resultCallback)
+void btGhostObject_rayTest(btGhostObject* obj, const btVector3* rayFromWorld, const btVector3* rayToWorld,
+	btCollisionWorld_RayResultCallback* resultCallback)
 {
-	VECTOR3_CONV(rayFromWorld);
-	VECTOR3_CONV(rayToWorld);
-	obj->rayTest(VECTOR3_USE(rayFromWorld), VECTOR3_USE(rayToWorld), *resultCallback);
+	BTVECTOR3_IN(rayFromWorld);
+	BTVECTOR3_IN(rayToWorld);
+	obj->rayTest(BTVECTOR3_USE(rayFromWorld), BTVECTOR3_USE(rayToWorld), *resultCallback);
 }
 
-void btGhostObject_removeOverlappingObjectInternal(btGhostObject* obj, btBroadphaseProxy* otherProxy, btDispatcher* dispatcher)
+void btGhostObject_removeOverlappingObjectInternal(btGhostObject* obj, btBroadphaseProxy* otherProxy,
+	btDispatcher* dispatcher)
 {
 	obj->removeOverlappingObjectInternal(otherProxy, dispatcher);
 }
 
-void btGhostObject_removeOverlappingObjectInternal2(btGhostObject* obj, btBroadphaseProxy* otherProxy, btDispatcher* dispatcher, btBroadphaseProxy* thisProxy)
+void btGhostObject_removeOverlappingObjectInternal2(btGhostObject* obj, btBroadphaseProxy* otherProxy,
+	btDispatcher* dispatcher, btBroadphaseProxy* thisProxy)
 {
 	obj->removeOverlappingObjectInternal(otherProxy, dispatcher, thisProxy);
 }

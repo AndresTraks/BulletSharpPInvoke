@@ -60,14 +60,14 @@ btOptimizedBvhNode* btOptimizedBvhNode_new()
 	return new btOptimizedBvhNode();
 }
 
-void btOptimizedBvhNode_getAabbMaxOrg(btOptimizedBvhNode* obj, btScalar* value)
+void btOptimizedBvhNode_getAabbMaxOrg(btOptimizedBvhNode* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_aabbMaxOrg, value);
+	BTVECTOR3_SET(value, obj->m_aabbMaxOrg);
 }
 
-void btOptimizedBvhNode_getAabbMinOrg(btOptimizedBvhNode* obj, btScalar* value)
+void btOptimizedBvhNode_getAabbMinOrg(btOptimizedBvhNode* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_aabbMinOrg, value);
+	BTVECTOR3_SET(value, obj->m_aabbMinOrg);
 }
 
 int btOptimizedBvhNode_getEscapeIndex(btOptimizedBvhNode* obj)
@@ -85,14 +85,14 @@ int btOptimizedBvhNode_getTriangleIndex(btOptimizedBvhNode* obj)
 	return obj->m_triangleIndex;
 }
 
-void btOptimizedBvhNode_setAabbMaxOrg(btOptimizedBvhNode* obj, const btScalar* value)
+void btOptimizedBvhNode_setAabbMaxOrg(btOptimizedBvhNode* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_aabbMaxOrg);
+	BTVECTOR3_COPY(&obj->m_aabbMaxOrg, value);
 }
 
-void btOptimizedBvhNode_setAabbMinOrg(btOptimizedBvhNode* obj, const btScalar* value)
+void btOptimizedBvhNode_setAabbMinOrg(btOptimizedBvhNode* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_aabbMinOrg);
+	BTVECTOR3_COPY(&obj->m_aabbMinOrg, value);
 }
 
 void btOptimizedBvhNode_setEscapeIndex(btOptimizedBvhNode* obj, int value)
@@ -157,7 +157,8 @@ void btQuantizedBvh_deSerializeFloat(btQuantizedBvh* obj, btQuantizedBvhFloatDat
 	obj->deSerializeFloat(*quantizedBvhFloatData);
 }
 
-btQuantizedBvh* btQuantizedBvh_deSerializeInPlace(void* i_alignedDataBuffer, unsigned int i_dataBufferSize, bool i_swapEndian)
+btQuantizedBvh* btQuantizedBvh_deSerializeInPlace(void* i_alignedDataBuffer, unsigned int i_dataBufferSize,
+	bool i_swapEndian)
 {
 	return btQuantizedBvh::deSerializeInPlace(i_alignedDataBuffer, i_dataBufferSize,
 		i_swapEndian);
@@ -168,17 +169,17 @@ unsigned int btQuantizedBvh_getAlignmentSerializationPadding()
 	return btQuantizedBvh::getAlignmentSerializationPadding();
 }
 
-QuantizedNodeArray* btQuantizedBvh_getLeafNodeArray(btQuantizedBvh* obj)
+btAlignedObjectArray_btQuantizedBvhNode* btQuantizedBvh_getLeafNodeArray(btQuantizedBvh* obj)
 {
 	return &obj->getLeafNodeArray();
 }
 
-QuantizedNodeArray* btQuantizedBvh_getQuantizedNodeArray(btQuantizedBvh* obj)
+btAlignedObjectArray_btQuantizedBvhNode* btQuantizedBvh_getQuantizedNodeArray(btQuantizedBvh* obj)
 {
 	return &obj->getQuantizedNodeArray();
 }
 
-BvhSubtreeInfoArray* btQuantizedBvh_getSubtreeInfoArray(btQuantizedBvh* obj)
+btAlignedObjectArray_btBvhSubtreeInfo* btQuantizedBvh_getSubtreeInfoArray(btQuantizedBvh* obj)
 {
 	return &obj->getSubtreeInfoArray();
 }
@@ -188,43 +189,50 @@ bool btQuantizedBvh_isQuantized(btQuantizedBvh* obj)
 	return obj->isQuantized();
 }
 
-void btQuantizedBvh_quantize(btQuantizedBvh* obj, unsigned short* out, const btScalar* point, int isMax)
+void btQuantizedBvh_quantize(btQuantizedBvh* obj, unsigned short* out, const btVector3* point,
+	int isMax)
 {
-	VECTOR3_CONV(point);
-	obj->quantize(out, VECTOR3_USE(point), isMax);
+	BTVECTOR3_IN(point);
+	obj->quantize(out, BTVECTOR3_USE(point), isMax);
 }
 
-void btQuantizedBvh_quantizeWithClamp(btQuantizedBvh* obj, unsigned short* out, const btScalar* point2, int isMax)
+void btQuantizedBvh_quantizeWithClamp(btQuantizedBvh* obj, unsigned short* out, const btVector3* point2,
+	int isMax)
 {
-	VECTOR3_CONV(point2);
-	obj->quantizeWithClamp(out, VECTOR3_USE(point2), isMax);
+	BTVECTOR3_IN(point2);
+	obj->quantizeWithClamp(out, BTVECTOR3_USE(point2), isMax);
 }
 
-void btQuantizedBvh_reportAabbOverlappingNodex(btQuantizedBvh* obj, btNodeOverlapCallback* nodeCallback, const btScalar* aabbMin, const btScalar* aabbMax)
+void btQuantizedBvh_reportAabbOverlappingNodex(btQuantizedBvh* obj, btNodeOverlapCallback* nodeCallback,
+	const btVector3* aabbMin, const btVector3* aabbMax)
 {
-	VECTOR3_CONV(aabbMin);
-	VECTOR3_CONV(aabbMax);
-	obj->reportAabbOverlappingNodex(nodeCallback, VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax));
+	BTVECTOR3_IN(aabbMin);
+	BTVECTOR3_IN(aabbMax);
+	obj->reportAabbOverlappingNodex(nodeCallback, BTVECTOR3_USE(aabbMin), BTVECTOR3_USE(aabbMax));
 }
 
-void btQuantizedBvh_reportBoxCastOverlappingNodex(btQuantizedBvh* obj, btNodeOverlapCallback* nodeCallback, const btScalar* raySource, const btScalar* rayTarget, const btScalar* aabbMin, const btScalar* aabbMax)
+void btQuantizedBvh_reportBoxCastOverlappingNodex(btQuantizedBvh* obj, btNodeOverlapCallback* nodeCallback,
+	const btVector3* raySource, const btVector3* rayTarget, const btVector3* aabbMin,
+	const btVector3* aabbMax)
 {
-	VECTOR3_CONV(raySource);
-	VECTOR3_CONV(rayTarget);
-	VECTOR3_CONV(aabbMin);
-	VECTOR3_CONV(aabbMax);
-	obj->reportBoxCastOverlappingNodex(nodeCallback, VECTOR3_USE(raySource), VECTOR3_USE(rayTarget),
-		VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax));
+	BTVECTOR3_IN(raySource);
+	BTVECTOR3_IN(rayTarget);
+	BTVECTOR3_IN(aabbMin);
+	BTVECTOR3_IN(aabbMax);
+	obj->reportBoxCastOverlappingNodex(nodeCallback, BTVECTOR3_USE(raySource), BTVECTOR3_USE(rayTarget),
+		BTVECTOR3_USE(aabbMin), BTVECTOR3_USE(aabbMax));
 }
 
-void btQuantizedBvh_reportRayOverlappingNodex(btQuantizedBvh* obj, btNodeOverlapCallback* nodeCallback, const btScalar* raySource, const btScalar* rayTarget)
+void btQuantizedBvh_reportRayOverlappingNodex(btQuantizedBvh* obj, btNodeOverlapCallback* nodeCallback,
+	const btVector3* raySource, const btVector3* rayTarget)
 {
-	VECTOR3_CONV(raySource);
-	VECTOR3_CONV(rayTarget);
-	obj->reportRayOverlappingNodex(nodeCallback, VECTOR3_USE(raySource), VECTOR3_USE(rayTarget));
+	BTVECTOR3_IN(raySource);
+	BTVECTOR3_IN(rayTarget);
+	obj->reportRayOverlappingNodex(nodeCallback, BTVECTOR3_USE(raySource), BTVECTOR3_USE(rayTarget));
 }
 
-bool btQuantizedBvh_serialize(btQuantizedBvh* obj, void* o_alignedDataBuffer, unsigned int i_dataBufferSize, bool i_swapEndian)
+bool btQuantizedBvh_serialize(btQuantizedBvh* obj, void* o_alignedDataBuffer, unsigned int i_dataBufferSize,
+	bool i_swapEndian)
 {
 	return obj->serialize(o_alignedDataBuffer, i_dataBufferSize, i_swapEndian);
 }
@@ -234,18 +242,20 @@ const char* btQuantizedBvh_serialize2(btQuantizedBvh* obj, void* dataBuffer, btS
 	return obj->serialize(dataBuffer, serializer);
 }
 
-void btQuantizedBvh_setQuantizationValues(btQuantizedBvh* obj, const btScalar* bvhAabbMin, const btScalar* bvhAabbMax)
+void btQuantizedBvh_setQuantizationValues(btQuantizedBvh* obj, const btVector3* bvhAabbMin,
+	const btVector3* bvhAabbMax)
 {
-	VECTOR3_CONV(bvhAabbMin);
-	VECTOR3_CONV(bvhAabbMax);
-	obj->setQuantizationValues(VECTOR3_USE(bvhAabbMin), VECTOR3_USE(bvhAabbMax));
+	BTVECTOR3_IN(bvhAabbMin);
+	BTVECTOR3_IN(bvhAabbMax);
+	obj->setQuantizationValues(BTVECTOR3_USE(bvhAabbMin), BTVECTOR3_USE(bvhAabbMax));
 }
 
-void btQuantizedBvh_setQuantizationValues2(btQuantizedBvh* obj, const btScalar* bvhAabbMin, const btScalar* bvhAabbMax, btScalar quantizationMargin)
+void btQuantizedBvh_setQuantizationValues2(btQuantizedBvh* obj, const btVector3* bvhAabbMin,
+	const btVector3* bvhAabbMax, btScalar quantizationMargin)
 {
-	VECTOR3_CONV(bvhAabbMin);
-	VECTOR3_CONV(bvhAabbMax);
-	obj->setQuantizationValues(VECTOR3_USE(bvhAabbMin), VECTOR3_USE(bvhAabbMax),
+	BTVECTOR3_IN(bvhAabbMin);
+	BTVECTOR3_IN(bvhAabbMax);
+	obj->setQuantizationValues(BTVECTOR3_USE(bvhAabbMin), BTVECTOR3_USE(bvhAabbMax),
 		quantizationMargin);
 }
 
@@ -254,9 +264,10 @@ void btQuantizedBvh_setTraversalMode(btQuantizedBvh* obj, btQuantizedBvh::btTrav
 	obj->setTraversalMode(traversalMode);
 }
 
-void btQuantizedBvh_unQuantize(btQuantizedBvh* obj, const unsigned short* vecIn, btScalar* value)
+void btQuantizedBvh_unQuantize(btQuantizedBvh* obj, const unsigned short* vecIn,
+	btVector3* value)
 {
-	VECTOR3_OUT_VAL(obj->unQuantize(vecIn), value);
+	BTVECTOR3_SET(value, obj->unQuantize(vecIn));
 }
 
 void btQuantizedBvh_delete(btQuantizedBvh* obj)

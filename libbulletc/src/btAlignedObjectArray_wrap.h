@@ -2,72 +2,72 @@
 
 extern "C"
 {
-	EXPORT btBroadphasePair* btAlignedBroadphasePairArray_at(btAlignedBroadphasePairArray* obj, int n);
-	EXPORT void btAlignedBroadphasePairArray_push_back(btAlignedBroadphasePairArray* obj, btBroadphasePair* val);
-	EXPORT void btAlignedBroadphasePairArray_resizeNoInitialize(btAlignedBroadphasePairArray* obj, int newSize);
-	EXPORT int btAlignedBroadphasePairArray_size(btAlignedBroadphasePairArray* obj);
+	EXPORT btBroadphasePair* btAlignedObjectArray_btBroadphasePair_at(btAlignedObjectArray_btBroadphasePair* obj, int n);
+	EXPORT void btAlignedObjectArray_btBroadphasePair_push_back(btAlignedObjectArray_btBroadphasePair* obj, btBroadphasePair* val);
+	EXPORT void btAlignedObjectArray_btBroadphasePair_resizeNoInitialize(btAlignedObjectArray_btBroadphasePair* obj, int newSize);
+	EXPORT int btAlignedObjectArray_btBroadphasePair_size(btAlignedObjectArray_btBroadphasePair* obj);
 
-	EXPORT btCollisionObject* btAlignedCollisionObjectArray_at(btAlignedCollisionObjectArray* obj, int n);
-	EXPORT void btAlignedCollisionObjectArray_push_back(btAlignedCollisionObjectArray* obj, btCollisionObject* val);
-	EXPORT void btAlignedCollisionObjectArray_resizeNoInitialize(btAlignedCollisionObjectArray* obj, int newSize);
-	EXPORT int btAlignedCollisionObjectArray_size(btAlignedCollisionObjectArray* obj);
+	EXPORT btCollisionObject* btAlignedObjectArray_btCollisionObjectPtr_at(btAlignedObjectArray_btCollisionObjectPtr* obj, int n);
+	EXPORT void btAlignedObjectArray_btCollisionObjectPtr_push_back(btAlignedObjectArray_btCollisionObjectPtr* obj, btCollisionObject* val);
+	EXPORT void btAlignedObjectArray_btCollisionObjectPtr_resizeNoInitialize(btAlignedObjectArray_btCollisionObjectPtr* obj, int newSize);
+	EXPORT int btAlignedObjectArray_btCollisionObjectPtr_size(btAlignedObjectArray_btCollisionObjectPtr* obj);
 
-	EXPORT btIndexedMesh* btAlignedIndexedMeshArray_at(btAlignedIndexedMeshArray* obj, int n);
-	EXPORT void btAlignedIndexedMeshArray_push_back(btAlignedIndexedMeshArray* obj, btIndexedMesh* val);
-	EXPORT void btAlignedIndexedMeshArray_resizeNoInitialize(btAlignedIndexedMeshArray* obj, int newSize);
-	EXPORT int btAlignedIndexedMeshArray_size(btAlignedIndexedMeshArray* obj);
+	EXPORT btIndexedMesh* btAlignedObjectArray_btIndexedMesh_at(btAlignedObjectArray_btIndexedMesh* obj, int n);
+	EXPORT void btAlignedObjectArray_btIndexedMesh_push_back(btAlignedObjectArray_btIndexedMesh* obj, btIndexedMesh* val);
+	EXPORT void btAlignedObjectArray_btIndexedMesh_resizeNoInitialize(btAlignedObjectArray_btIndexedMesh* obj, int newSize);
+	EXPORT int btAlignedObjectArray_btIndexedMesh_size(btAlignedObjectArray_btIndexedMesh* obj);
 
-	EXPORT btAlignedManifoldArray* btAlignedManifoldArray_new();
-	EXPORT btPersistentManifold* btAlignedManifoldArray_at(btAlignedManifoldArray* obj, int n);
-	EXPORT void btAlignedManifoldArray_push_back(btAlignedManifoldArray* obj, btPersistentManifold* val);
-	EXPORT void btAlignedManifoldArray_resizeNoInitialize(btAlignedManifoldArray* obj, int newSize);
-	EXPORT int btAlignedManifoldArray_size(btAlignedManifoldArray* obj);
-	EXPORT void btAlignedManifoldArray_delete(btAlignedManifoldArray* obj);
+	EXPORT btAlignedObjectArray_btPersistendManifold* btAlignedObjectArray_btPersistendManifold_new();
+	EXPORT btPersistentManifold* btAlignedObjectArray_btPersistendManifold_at(btAlignedObjectArray_btPersistendManifold* obj, int n);
+	EXPORT void btAlignedObjectArray_btPersistendManifold_push_back(btAlignedObjectArray_btPersistendManifold* obj, btPersistentManifold* val);
+	EXPORT void btAlignedObjectArray_btPersistendManifold_resizeNoInitialize(btAlignedObjectArray_btPersistendManifold* obj, int newSize);
+	EXPORT int btAlignedObjectArray_btPersistendManifold_size(btAlignedObjectArray_btPersistendManifold* obj);
+	EXPORT void btAlignedObjectArray_btPersistendManifold_delete(btAlignedObjectArray_btPersistendManifold* obj);
 
-	EXPORT btSoftBody* btAlignedSoftBodyArray_at(btAlignedSoftBodyArray* obj, int n);
-	EXPORT void btAlignedSoftBodyArray_push_back(btAlignedSoftBodyArray* obj, btSoftBody* val);
-	EXPORT void btAlignedSoftBodyArray_resizeNoInitialize(btAlignedSoftBodyArray* obj, int newSize);
-	EXPORT int btAlignedSoftBodyArray_size(btAlignedSoftBodyArray* obj);
+	EXPORT btSoftBody* btAlignedObjectArray_btSoftBodyPtr_at(btAlignedObjectArray_btSoftBodyPtr* obj, int n);
+	EXPORT void btAlignedObjectArray_btSoftBodyPtr_push_back(btAlignedObjectArray_btSoftBodyPtr* obj, btSoftBody* val);
+	EXPORT void btAlignedObjectArray_btSoftBodyPtr_resizeNoInitialize(btAlignedObjectArray_btSoftBodyPtr* obj, int newSize);
+	EXPORT int btAlignedObjectArray_btSoftBodyPtr_size(btAlignedObjectArray_btSoftBodyPtr* obj);
 
-	EXPORT btSoftBody_Anchor* btAlignedSoftBodyAnchorArray_at(btAlignedSoftBodyAnchorArray* obj, int n);
-	EXPORT void btAlignedSoftBodyAnchorArray_push_back(btAlignedSoftBodyAnchorArray* obj, btSoftBody_Anchor* val);
-	EXPORT void btAlignedSoftBodyAnchorArray_resizeNoInitialize(btAlignedSoftBodyAnchorArray* obj, int newSize);
-	EXPORT int btAlignedSoftBodyAnchorArray_size(btAlignedSoftBodyAnchorArray* obj);
+	EXPORT btSoftBody_Anchor* btAlignedObjectArray_btSoftBody_Anchor_at(btAlignedObjectArray_btSoftBody_Anchor* obj, int n);
+	EXPORT void btAlignedObjectArray_btSoftBody_Anchor_push_back(btAlignedObjectArray_btSoftBody_Anchor* obj, btSoftBody_Anchor* val);
+	EXPORT void btAlignedObjectArray_btSoftBody_Anchor_resizeNoInitialize(btAlignedObjectArray_btSoftBody_Anchor* obj, int newSize);
+	EXPORT int btAlignedObjectArray_btSoftBody_Anchor_size(btAlignedObjectArray_btSoftBody_Anchor* obj);
 
-	EXPORT btSoftBody_Cluster* btAlignedSoftBodyClusterArray_at(btAlignedSoftBodyClusterArray* obj, int n);
-	EXPORT void btAlignedSoftBodyClusterArray_push_back(btAlignedSoftBodyClusterArray* obj, btSoftBody_Cluster* val);
-	EXPORT void btAlignedSoftBodyClusterArray_resizeNoInitialize(btAlignedSoftBodyClusterArray* obj, int newSize);
-	EXPORT int btAlignedSoftBodyClusterArray_size(btAlignedSoftBodyClusterArray* obj);
+	EXPORT btSoftBody_Cluster* btAlignedObjectArray_btSoftBody_ClusterPtr_at(btAlignedObjectArray_btSoftBody_ClusterPtr* obj, int n);
+	EXPORT void btAlignedObjectArray_btSoftBody_ClusterPtr_push_back(btAlignedObjectArray_btSoftBody_ClusterPtr* obj, btSoftBody_Cluster* val);
+	EXPORT void btAlignedObjectArray_btSoftBody_ClusterPtr_resizeNoInitialize(btAlignedObjectArray_btSoftBody_ClusterPtr* obj, int newSize);
+	EXPORT int btAlignedObjectArray_btSoftBody_ClusterPtr_size(btAlignedObjectArray_btSoftBody_ClusterPtr* obj);
 
-	EXPORT btSoftBody_Face* btAlignedSoftBodyFaceArray_at(btAlignedSoftBodyFaceArray* obj, int n);
-	EXPORT void btAlignedSoftBodyFaceArray_push_back(btAlignedSoftBodyFaceArray* obj, btSoftBody_Face* val);
-	EXPORT void btAlignedSoftBodyFaceArray_resizeNoInitialize(btAlignedSoftBodyFaceArray* obj, int newSize);
-	EXPORT int btAlignedSoftBodyFaceArray_size(btAlignedSoftBodyFaceArray* obj);
+	EXPORT btSoftBody_Face* btAlignedObjectArray_btSoftBody_Face_at(btAlignedObjectArray_btSoftBody_Face* obj, int n);
+	EXPORT void btAlignedObjectArray_btSoftBody_Face_push_back(btAlignedObjectArray_btSoftBody_Face* obj, btSoftBody_Face* val);
+	EXPORT void btAlignedObjectArray_btSoftBody_Face_resizeNoInitialize(btAlignedObjectArray_btSoftBody_Face* obj, int newSize);
+	EXPORT int btAlignedObjectArray_btSoftBody_Face_size(btAlignedObjectArray_btSoftBody_Face* obj);
 
-	EXPORT btSoftBody_Joint* btAlignedSoftBodyJointArray_at(btAlignedSoftBodyJointArray* obj, int n);
-	EXPORT void btAlignedSoftBodyJointArray_push_back(btAlignedSoftBodyJointArray* obj, btSoftBody_Joint* val);
-	EXPORT void btAlignedSoftBodyJointArray_resizeNoInitialize(btAlignedSoftBodyJointArray* obj, int newSize);
-	EXPORT int btAlignedSoftBodyJointArray_size(btAlignedSoftBodyJointArray* obj);
+	EXPORT btSoftBody_Joint* btAlignedObjectArray_btSoftBody_JointPtr_at(btAlignedObjectArray_btSoftBody_JointPtr** obj, int n);
+	EXPORT void btAlignedObjectArray_btSoftBody_JointPtr_push_back(btAlignedObjectArray_btSoftBody_JointPtr** obj, btSoftBody_Joint* val);
+	EXPORT void btAlignedObjectArray_btSoftBody_JointPtr_resizeNoInitialize(btAlignedObjectArray_btSoftBody_JointPtr** obj, int newSize);
+	EXPORT int btAlignedObjectArray_btSoftBody_JointPtr_size(btAlignedObjectArray_btSoftBody_JointPtr** obj);
 
-	EXPORT btSoftBody_Link* btAlignedSoftBodyLinkArray_at(btAlignedSoftBodyLinkArray* obj, int n);
-	EXPORT void btAlignedSoftBodyLinkArray_push_back(btAlignedSoftBodyLinkArray* obj, btSoftBody_Link* val);
-	EXPORT void btAlignedSoftBodyLinkArray_resizeNoInitialize(btAlignedSoftBodyLinkArray* obj, int newSize);
-	EXPORT void btAlignedSoftBodyLinkArray_set(btAlignedSoftBodyLinkArray* obj, btSoftBody_Link* val, int index);
-	EXPORT int btAlignedSoftBodyLinkArray_size(btAlignedSoftBodyLinkArray* obj);
+	EXPORT btSoftBody_Link* btAlignedObjectArray_btSoftBody_Link_at(btAlignedObjectArray_btSoftBody_Link* obj, int n);
+	EXPORT void btAlignedObjectArray_btSoftBody_Link_push_back(btAlignedObjectArray_btSoftBody_Link* obj, btSoftBody_Link* val);
+	EXPORT void btAlignedObjectArray_btSoftBody_Link_resizeNoInitialize(btAlignedObjectArray_btSoftBody_Link* obj, int newSize);
+	EXPORT void btAlignedObjectArray_btSoftBody_Link_set(btAlignedObjectArray_btSoftBody_Link* obj, btSoftBody_Link* val, int index);
+	EXPORT int btAlignedObjectArray_btSoftBody_Link_size(btAlignedObjectArray_btSoftBody_Link* obj);
 
-	EXPORT btSoftBody_Material* btAlignedSoftBodyMaterialArray_at(btAlignedSoftBodyMaterialArray* obj, int n);
-	EXPORT void btAlignedSoftBodyMaterialArray_push_back(btAlignedSoftBodyMaterialArray* obj, btSoftBody_Material* val);
-	EXPORT void btAlignedSoftBodyMaterialArray_resizeNoInitialize(btAlignedSoftBodyMaterialArray* obj, int newSize);
-	EXPORT int btAlignedSoftBodyMaterialArray_size(btAlignedSoftBodyMaterialArray* obj);
+	EXPORT btSoftBody_Material* btAlignedObjectArray_btSoftBody_MaterialPtr_at(btAlignedObjectArray_btSoftBody_MaterialPtr* obj, int n);
+	EXPORT void btAlignedObjectArray_btSoftBody_MaterialPtr_push_back(btAlignedObjectArray_btSoftBody_MaterialPtr* obj, btSoftBody_Material* val);
+	EXPORT void btAlignedObjectArray_btSoftBody_MaterialPtr_resizeNoInitialize(btAlignedObjectArray_btSoftBody_MaterialPtr* obj, int newSize);
+	EXPORT int btAlignedObjectArray_btSoftBody_MaterialPtr_size(btAlignedObjectArray_btSoftBody_MaterialPtr* obj);
 
-	EXPORT btSoftBody_Node* btAlignedSoftBodyNodeArray_at(btAlignedSoftBodyNodeArray* obj, int n);
-	EXPORT int btAlignedSoftBodyNodeArray_index_of(btAlignedSoftBodyNodeArray* obj, btSoftBody_Node* val);
-	EXPORT void btAlignedSoftBodyNodeArray_push_back(btAlignedSoftBodyNodeArray* obj, btSoftBody_Node* val);
-	EXPORT void btAlignedSoftBodyNodeArray_resizeNoInitialize(btAlignedSoftBodyNodeArray* obj, int newSize);
-	EXPORT int btAlignedSoftBodyNodeArray_size(btAlignedSoftBodyNodeArray* obj);
+	EXPORT btSoftBody_Node* btAlignedObjectArray_btSoftBody_Node_at(btAlignedObjectArray_btSoftBody_Node* obj, int n);
+	EXPORT int btAlignedObjectArray_btSoftBody_Node_index_of(btAlignedObjectArray_btSoftBody_Node* obj, btSoftBody_Node* val);
+	EXPORT void btAlignedObjectArray_btSoftBody_Node_push_back(btAlignedObjectArray_btSoftBody_Node* obj, btSoftBody_Node* val);
+	EXPORT void btAlignedObjectArray_btSoftBody_Node_resizeNoInitialize(btAlignedObjectArray_btSoftBody_Node* obj, int newSize);
+	EXPORT int btAlignedObjectArray_btSoftBody_Node_size(btAlignedObjectArray_btSoftBody_Node* obj);
 
-	EXPORT btSoftBody_Tetra* btAlignedSoftBodyTetraArray_at(btAlignedSoftBodyTetraArray* obj, int n);
-	EXPORT void btAlignedSoftBodyTetraArray_push_back(btAlignedSoftBodyTetraArray* obj, btSoftBody_Tetra* val);
-	EXPORT void btAlignedSoftBodyTetraArray_resizeNoInitialize(btAlignedSoftBodyTetraArray* obj, int newSize);
-	EXPORT int btAlignedSoftBodyTetraArray_size(btAlignedSoftBodyTetraArray* obj);
+	EXPORT btSoftBody_Tetra* btAlignedObjectArray_btSoftBody_Tetra_at(btAlignedObjectArray_btSoftBody_Tetra* obj, int n);
+	EXPORT void btAlignedObjectArray_btSoftBody_Tetra_push_back(btAlignedObjectArray_btSoftBody_Tetra* obj, btSoftBody_Tetra* val);
+	EXPORT void btAlignedObjectArray_btSoftBody_Tetra_resizeNoInitialize(btAlignedObjectArray_btSoftBody_Tetra* obj, int newSize);
+	EXPORT int btAlignedObjectArray_btSoftBody_Tetra_size(btAlignedObjectArray_btSoftBody_Tetra* obj);
 }

@@ -18,12 +18,12 @@ extern "C"
 	EXPORT void btRaycastVehicle_btVehicleTuning_delete(btRaycastVehicle_btVehicleTuning* obj);
 
 	EXPORT btRaycastVehicle* btRaycastVehicle_new(const btRaycastVehicle_btVehicleTuning* tuning, btRigidBody* chassis, btVehicleRaycaster* raycaster);
-	EXPORT btWheelInfo* btRaycastVehicle_addWheel(btRaycastVehicle* obj, const btScalar* connectionPointCS0, const btScalar* wheelDirectionCS0, const btScalar* wheelAxleCS, btScalar suspensionRestLength, btScalar wheelRadius, const btRaycastVehicle_btVehicleTuning* tuning, bool isFrontWheel);
+	EXPORT btWheelInfo* btRaycastVehicle_addWheel(btRaycastVehicle* obj, const btVector3* connectionPointCS0, const btVector3* wheelDirectionCS0, const btVector3* wheelAxleCS, btScalar suspensionRestLength, btScalar wheelRadius, const btRaycastVehicle_btVehicleTuning* tuning, bool isFrontWheel);
 	EXPORT void btRaycastVehicle_applyEngineForce(btRaycastVehicle* obj, btScalar force, int wheel);
-	EXPORT void btRaycastVehicle_getChassisWorldTransform(btRaycastVehicle* obj, btScalar* value);
+	EXPORT void btRaycastVehicle_getChassisWorldTransform(btRaycastVehicle* obj, btTransform* value);
 	EXPORT btScalar btRaycastVehicle_getCurrentSpeedKmHour(btRaycastVehicle* obj);
 	EXPORT int btRaycastVehicle_getForwardAxis(btRaycastVehicle* obj);
-	EXPORT void btRaycastVehicle_getForwardVector(btRaycastVehicle* obj, btScalar* value);
+	EXPORT void btRaycastVehicle_getForwardVector(btRaycastVehicle* obj, btVector3* value);
 	EXPORT int btRaycastVehicle_getNumWheels(btRaycastVehicle* obj);
 	EXPORT int btRaycastVehicle_getRightAxis(btRaycastVehicle* obj);
 	EXPORT btRigidBody* btRaycastVehicle_getRigidBody(btRaycastVehicle* obj);
@@ -32,8 +32,8 @@ extern "C"
 	EXPORT int btRaycastVehicle_getUserConstraintId(btRaycastVehicle* obj);
 	EXPORT int btRaycastVehicle_getUserConstraintType(btRaycastVehicle* obj);
 	EXPORT btWheelInfo* btRaycastVehicle_getWheelInfo(btRaycastVehicle* obj, int index);
-	EXPORT btAlignedWheelInfoArray* btRaycastVehicle_getWheelInfo2(btRaycastVehicle* obj);
-	EXPORT void btRaycastVehicle_getWheelTransformWS(btRaycastVehicle* obj, int wheelIndex, btScalar* value);
+	EXPORT btAlignedObjectArray_btWheelInfo* btRaycastVehicle_getWheelInfo2(btRaycastVehicle* obj);
+	EXPORT void btRaycastVehicle_getWheelTransformWS(btRaycastVehicle* obj, int wheelIndex, btTransform* value);
 	EXPORT btScalar btRaycastVehicle_rayCast(btRaycastVehicle* obj, btWheelInfo* wheel);
 	EXPORT void btRaycastVehicle_resetSuspension(btRaycastVehicle* obj);
 	EXPORT void btRaycastVehicle_setBrake(btRaycastVehicle* obj, btScalar brake, int wheelIndex);

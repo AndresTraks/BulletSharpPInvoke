@@ -9,34 +9,40 @@ btDiscreteCollisionDetectorInterface::ClosestPointInput* btDiscreteCollisionDete
 	return new btDiscreteCollisionDetectorInterface::ClosestPointInput();
 }
 
-btScalar btDiscreteCollisionDetectorInterface_ClosestPointInput_getMaximumDistanceSquared(btDiscreteCollisionDetectorInterface::ClosestPointInput* obj)
+btScalar btDiscreteCollisionDetectorInterface_ClosestPointInput_getMaximumDistanceSquared(
+	btDiscreteCollisionDetectorInterface::ClosestPointInput* obj)
 {
 	return obj->m_maximumDistanceSquared;
 }
 
-void btDiscreteCollisionDetectorInterface_ClosestPointInput_getTransformA(btDiscreteCollisionDetectorInterface::ClosestPointInput* obj, btScalar* value)
+void btDiscreteCollisionDetectorInterface_ClosestPointInput_getTransformA(btDiscreteCollisionDetectorInterface::ClosestPointInput* obj,
+	btTransform* value)
 {
-	TRANSFORM_OUT(&obj->m_transformA, value);
+	BTTRANSFORM_SET(value, obj->m_transformA);
 }
 
-void btDiscreteCollisionDetectorInterface_ClosestPointInput_getTransformB(btDiscreteCollisionDetectorInterface::ClosestPointInput* obj, btScalar* value)
+void btDiscreteCollisionDetectorInterface_ClosestPointInput_getTransformB(btDiscreteCollisionDetectorInterface::ClosestPointInput* obj,
+	btTransform* value)
 {
-	TRANSFORM_OUT(&obj->m_transformB, value);
+	BTTRANSFORM_SET(value, obj->m_transformB);
 }
 
-void btDiscreteCollisionDetectorInterface_ClosestPointInput_setMaximumDistanceSquared(btDiscreteCollisionDetectorInterface::ClosestPointInput* obj, btScalar value)
+void btDiscreteCollisionDetectorInterface_ClosestPointInput_setMaximumDistanceSquared(
+	btDiscreteCollisionDetectorInterface::ClosestPointInput* obj, btScalar value)
 {
 	obj->m_maximumDistanceSquared = value;
 }
 
-void btDiscreteCollisionDetectorInterface_ClosestPointInput_setTransformA(btDiscreteCollisionDetectorInterface::ClosestPointInput* obj, const btScalar* value)
+void btDiscreteCollisionDetectorInterface_ClosestPointInput_setTransformA(btDiscreteCollisionDetectorInterface::ClosestPointInput* obj,
+	const btTransform* value)
 {
-	TRANSFORM_IN(value, &obj->m_transformA);
+	BTTRANSFORM_COPY(&obj->m_transformA, value);
 }
 
-void btDiscreteCollisionDetectorInterface_ClosestPointInput_setTransformB(btDiscreteCollisionDetectorInterface::ClosestPointInput* obj, const btScalar* value)
+void btDiscreteCollisionDetectorInterface_ClosestPointInput_setTransformB(btDiscreteCollisionDetectorInterface::ClosestPointInput* obj,
+	const btTransform* value)
 {
-	TRANSFORM_IN(value, &obj->m_transformB);
+	BTTRANSFORM_COPY(&obj->m_transformB, value);
 }
 
 void btDiscreteCollisionDetectorInterface_ClosestPointInput_delete(btDiscreteCollisionDetectorInterface::ClosestPointInput* obj)
@@ -45,20 +51,23 @@ void btDiscreteCollisionDetectorInterface_ClosestPointInput_delete(btDiscreteCol
 }
 
 
-void btDiscreteCollisionDetectorInterface_Result_addContactPoint(btDiscreteCollisionDetectorInterface::Result* obj, const btScalar* normalOnBInWorld, const btScalar* pointInWorld, btScalar depth)
+void btDiscreteCollisionDetectorInterface_Result_addContactPoint(btDiscreteCollisionDetectorInterface::Result* obj,
+	const btVector3* normalOnBInWorld, const btVector3* pointInWorld, btScalar depth)
 {
-	VECTOR3_CONV(normalOnBInWorld);
-	VECTOR3_CONV(pointInWorld);
-	obj->addContactPoint(VECTOR3_USE(normalOnBInWorld), VECTOR3_USE(pointInWorld),
+	BTVECTOR3_IN(normalOnBInWorld);
+	BTVECTOR3_IN(pointInWorld);
+	obj->addContactPoint(BTVECTOR3_USE(normalOnBInWorld), BTVECTOR3_USE(pointInWorld),
 		depth);
 }
 
-void btDiscreteCollisionDetectorInterface_Result_setShapeIdentifiersA(btDiscreteCollisionDetectorInterface::Result* obj, int partId0, int index0)
+void btDiscreteCollisionDetectorInterface_Result_setShapeIdentifiersA(btDiscreteCollisionDetectorInterface::Result* obj,
+	int partId0, int index0)
 {
 	obj->setShapeIdentifiersA(partId0, index0);
 }
 
-void btDiscreteCollisionDetectorInterface_Result_setShapeIdentifiersB(btDiscreteCollisionDetectorInterface::Result* obj, int partId1, int index1)
+void btDiscreteCollisionDetectorInterface_Result_setShapeIdentifiersB(btDiscreteCollisionDetectorInterface::Result* obj,
+	int partId1, int index1)
 {
 	obj->setShapeIdentifiersB(partId1, index1);
 }
@@ -69,12 +78,16 @@ void btDiscreteCollisionDetectorInterface_Result_delete(btDiscreteCollisionDetec
 }
 
 
-void btDiscreteCollisionDetectorInterface_getClosestPoints(btDiscreteCollisionDetectorInterface* obj, const btDiscreteCollisionDetectorInterface::ClosestPointInput* input, btDiscreteCollisionDetectorInterface::Result* output, btIDebugDraw* debugDraw)
+void btDiscreteCollisionDetectorInterface_getClosestPoints(btDiscreteCollisionDetectorInterface* obj,
+	const btDiscreteCollisionDetectorInterface_ClosestPointInput* input, btDiscreteCollisionDetectorInterface_Result* output,
+	btIDebugDraw* debugDraw)
 {
 	obj->getClosestPoints(*input, *output, debugDraw);
 }
 
-void btDiscreteCollisionDetectorInterface_getClosestPoints2(btDiscreteCollisionDetectorInterface* obj, const btDiscreteCollisionDetectorInterface::ClosestPointInput* input, btDiscreteCollisionDetectorInterface::Result* output, btIDebugDraw* debugDraw, bool swapResults)
+void btDiscreteCollisionDetectorInterface_getClosestPoints2(btDiscreteCollisionDetectorInterface* obj,
+	const btDiscreteCollisionDetectorInterface_ClosestPointInput* input, btDiscreteCollisionDetectorInterface_Result* output,
+	btIDebugDraw* debugDraw, bool swapResults)
 {
 	obj->getClosestPoints(*input, *output, debugDraw, swapResults);
 }
@@ -85,9 +98,9 @@ void btDiscreteCollisionDetectorInterface_delete(btDiscreteCollisionDetectorInte
 }
 
 
-void btStorageResult_getClosestPointInB(btStorageResult* obj, btScalar* value)
+void btStorageResult_getClosestPointInB(btStorageResult* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_closestPointInB, value);
+	BTVECTOR3_SET(value, obj->m_closestPointInB);
 }
 
 btScalar btStorageResult_getDistance(btStorageResult* obj)
@@ -95,14 +108,14 @@ btScalar btStorageResult_getDistance(btStorageResult* obj)
 	return obj->m_distance;
 }
 
-void btStorageResult_getNormalOnSurfaceB(btStorageResult* obj, btScalar* value)
+void btStorageResult_getNormalOnSurfaceB(btStorageResult* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_normalOnSurfaceB, value);
+	BTVECTOR3_SET(value, obj->m_normalOnSurfaceB);
 }
 
-void btStorageResult_setClosestPointInB(btStorageResult* obj, const btScalar* value)
+void btStorageResult_setClosestPointInB(btStorageResult* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_closestPointInB);
+	BTVECTOR3_COPY(&obj->m_closestPointInB, value);
 }
 
 void btStorageResult_setDistance(btStorageResult* obj, btScalar value)
@@ -110,7 +123,7 @@ void btStorageResult_setDistance(btStorageResult* obj, btScalar value)
 	obj->m_distance = value;
 }
 
-void btStorageResult_setNormalOnSurfaceB(btStorageResult* obj, const btScalar* value)
+void btStorageResult_setNormalOnSurfaceB(btStorageResult* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_normalOnSurfaceB);
+	BTVECTOR3_COPY(&obj->m_normalOnSurfaceB, value);
 }

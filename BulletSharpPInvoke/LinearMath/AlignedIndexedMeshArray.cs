@@ -102,7 +102,7 @@ namespace BulletSharp
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
-                return new IndexedMesh(btAlignedIndexedMeshArray_at(_native, index), true);
+                return new IndexedMesh(btAlignedObjectArray_btIndexedMesh_at(_native, index), true);
             }
             set
             {
@@ -112,12 +112,12 @@ namespace BulletSharp
 
         public void Add(IndexedMesh item)
         {
-            btAlignedIndexedMeshArray_push_back(_native, item._native);
+            btAlignedObjectArray_btIndexedMesh_push_back(_native, item._native);
         }
 
         public void Clear()
         {
-            btAlignedIndexedMeshArray_resizeNoInitialize(_native, 0);
+            btAlignedObjectArray_btIndexedMesh_resizeNoInitialize(_native, 0);
         }
 
         public bool Contains(IndexedMesh item)
@@ -145,7 +145,7 @@ namespace BulletSharp
 
         public int Count
         {
-            get { return btAlignedIndexedMeshArray_size(_native); }
+            get { return btAlignedObjectArray_btIndexedMesh_size(_native); }
         }
 
         public bool IsReadOnly
@@ -169,12 +169,12 @@ namespace BulletSharp
         }
 
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern IntPtr btAlignedIndexedMeshArray_at(IntPtr obj, int n);
+        static extern IntPtr btAlignedObjectArray_btIndexedMesh_at(IntPtr obj, int n);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedIndexedMeshArray_push_back(IntPtr obj, IntPtr val);
+        static extern void btAlignedObjectArray_btIndexedMesh_push_back(IntPtr obj, IntPtr val);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedIndexedMeshArray_resizeNoInitialize(IntPtr obj, int newSize);
+        static extern void btAlignedObjectArray_btIndexedMesh_resizeNoInitialize(IntPtr obj, int newSize);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btAlignedIndexedMeshArray_size(IntPtr obj);
+        static extern int btAlignedObjectArray_btIndexedMesh_size(IntPtr obj);
     }
 }

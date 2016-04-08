@@ -3,34 +3,40 @@
 #include "conversion.h"
 #include "btMultimaterialTriangleMeshShape_wrap.h"
 
-btMultimaterialTriangleMeshShape* btMultimaterialTriangleMeshShape_new(btStridingMeshInterface* meshInterface, bool useQuantizedAabbCompression)
+btMultimaterialTriangleMeshShape* btMultimaterialTriangleMeshShape_new(btStridingMeshInterface* meshInterface,
+	bool useQuantizedAabbCompression)
 {
 	return new btMultimaterialTriangleMeshShape(meshInterface, useQuantizedAabbCompression);
 }
 
-btMultimaterialTriangleMeshShape* btMultimaterialTriangleMeshShape_new2(btStridingMeshInterface* meshInterface, bool useQuantizedAabbCompression, bool buildBvh)
+btMultimaterialTriangleMeshShape* btMultimaterialTriangleMeshShape_new2(btStridingMeshInterface* meshInterface,
+	bool useQuantizedAabbCompression, bool buildBvh)
 {
 	return new btMultimaterialTriangleMeshShape(meshInterface, useQuantizedAabbCompression,
 		buildBvh);
 }
 
-btMultimaterialTriangleMeshShape* btMultimaterialTriangleMeshShape_new3(btStridingMeshInterface* meshInterface, bool useQuantizedAabbCompression, const btScalar* bvhAabbMin, const btScalar* bvhAabbMax)
+btMultimaterialTriangleMeshShape* btMultimaterialTriangleMeshShape_new3(btStridingMeshInterface* meshInterface,
+	bool useQuantizedAabbCompression, const btVector3* bvhAabbMin, const btVector3* bvhAabbMax)
 {
-	VECTOR3_CONV(bvhAabbMin);
-	VECTOR3_CONV(bvhAabbMax);
+	BTVECTOR3_IN(bvhAabbMin);
+	BTVECTOR3_IN(bvhAabbMax);
 	return new btMultimaterialTriangleMeshShape(meshInterface, useQuantizedAabbCompression,
-		VECTOR3_USE(bvhAabbMin), VECTOR3_USE(bvhAabbMax));
+		BTVECTOR3_USE(bvhAabbMin), BTVECTOR3_USE(bvhAabbMax));
 }
 
-btMultimaterialTriangleMeshShape* btMultimaterialTriangleMeshShape_new4(btStridingMeshInterface* meshInterface, bool useQuantizedAabbCompression, const btScalar* bvhAabbMin, const btScalar* bvhAabbMax, bool buildBvh)
+btMultimaterialTriangleMeshShape* btMultimaterialTriangleMeshShape_new4(btStridingMeshInterface* meshInterface,
+	bool useQuantizedAabbCompression, const btVector3* bvhAabbMin, const btVector3* bvhAabbMax,
+	bool buildBvh)
 {
-	VECTOR3_CONV(bvhAabbMin);
-	VECTOR3_CONV(bvhAabbMax);
+	BTVECTOR3_IN(bvhAabbMin);
+	BTVECTOR3_IN(bvhAabbMax);
 	return new btMultimaterialTriangleMeshShape(meshInterface, useQuantizedAabbCompression,
-		VECTOR3_USE(bvhAabbMin), VECTOR3_USE(bvhAabbMax), buildBvh);
+		BTVECTOR3_USE(bvhAabbMin), BTVECTOR3_USE(bvhAabbMax), buildBvh);
 }
 
-const btMaterial* btMultimaterialTriangleMeshShape_getMaterialProperties(btMultimaterialTriangleMeshShape* obj, int partID, int triIndex)
+const btMaterial* btMultimaterialTriangleMeshShape_getMaterialProperties(btMultimaterialTriangleMeshShape* obj,
+	int partID, int triIndex)
 {
 	return obj->getMaterialProperties(partID, triIndex);
 }

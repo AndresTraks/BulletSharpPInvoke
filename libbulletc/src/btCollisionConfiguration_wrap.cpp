@@ -2,7 +2,8 @@
 
 #include "btCollisionConfiguration_wrap.h"
 
-btCollisionAlgorithmCreateFunc* btCollisionConfiguration_getCollisionAlgorithmCreateFunc(btCollisionConfiguration* obj, int proxyType0, int proxyType1)
+btCollisionAlgorithmCreateFunc* btCollisionConfiguration_getCollisionAlgorithmCreateFunc(
+	btCollisionConfiguration* obj, int proxyType0, int proxyType1)
 {
 	return obj->getCollisionAlgorithmCreateFunc(proxyType0, proxyType1);
 }

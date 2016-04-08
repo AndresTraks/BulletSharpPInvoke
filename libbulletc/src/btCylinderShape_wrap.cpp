@@ -3,10 +3,10 @@
 #include "conversion.h"
 #include "btCylinderShape_wrap.h"
 
-btCylinderShape* btCylinderShape_new(const btScalar* halfExtents)
+btCylinderShape* btCylinderShape_new(const btVector3* halfExtents)
 {
-	VECTOR3_CONV(halfExtents);
-	return new btCylinderShape(VECTOR3_USE(halfExtents));
+	BTVECTOR3_IN(halfExtents);
+	return new btCylinderShape(BTVECTOR3_USE(halfExtents));
 }
 
 btCylinderShape* btCylinderShape_new2(btScalar halfExtentX, btScalar halfExtentY, btScalar halfExtentZ)
@@ -14,14 +14,14 @@ btCylinderShape* btCylinderShape_new2(btScalar halfExtentX, btScalar halfExtentY
 	return new btCylinderShape(btVector3(halfExtentX, halfExtentY, halfExtentZ));
 }
 
-void btCylinderShape_getHalfExtentsWithMargin(btCylinderShape* obj, btScalar* value)
+void btCylinderShape_getHalfExtentsWithMargin(btCylinderShape* obj, btVector3* value)
 {
-	VECTOR3_OUT_VAL(obj->getHalfExtentsWithMargin(), value);
+	BTVECTOR3_SET(value, obj->getHalfExtentsWithMargin());
 }
 
-void btCylinderShape_getHalfExtentsWithoutMargin(btCylinderShape* obj, btScalar* value)
+void btCylinderShape_getHalfExtentsWithoutMargin(btCylinderShape* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getHalfExtentsWithoutMargin(), value);
+	BTVECTOR3_COPY(value, &obj->getHalfExtentsWithoutMargin());
 }
 
 btScalar btCylinderShape_getRadius(btCylinderShape* obj)
@@ -35,10 +35,10 @@ int btCylinderShape_getUpAxis(btCylinderShape* obj)
 }
 
 
-btCylinderShapeX* btCylinderShapeX_new(const btScalar* halfExtents)
+btCylinderShapeX* btCylinderShapeX_new(const btVector3* halfExtents)
 {
-	VECTOR3_CONV(halfExtents);
-	return new btCylinderShapeX(VECTOR3_USE(halfExtents));
+	BTVECTOR3_IN(halfExtents);
+	return new btCylinderShapeX(BTVECTOR3_USE(halfExtents));
 }
 
 btCylinderShapeX* btCylinderShapeX_new2(btScalar halfExtentX, btScalar halfExtentY, btScalar halfExtentZ)
@@ -47,10 +47,10 @@ btCylinderShapeX* btCylinderShapeX_new2(btScalar halfExtentX, btScalar halfExten
 }
 
 
-btCylinderShapeZ* btCylinderShapeZ_new(const btScalar* halfExtents)
+btCylinderShapeZ* btCylinderShapeZ_new(const btVector3* halfExtents)
 {
-	VECTOR3_CONV(halfExtents);
-	return new btCylinderShapeZ(VECTOR3_USE(halfExtents));
+	BTVECTOR3_IN(halfExtents);
+	return new btCylinderShapeZ(BTVECTOR3_USE(halfExtents));
 }
 
 btCylinderShapeZ* btCylinderShapeZ_new2(btScalar halfExtentX, btScalar halfExtentY, btScalar halfExtentZ)

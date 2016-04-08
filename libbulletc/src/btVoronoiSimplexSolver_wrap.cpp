@@ -99,9 +99,10 @@ btScalar* btSubSimplexClosestResult_getBarycentricCoords(btSubSimplexClosestResu
 	return obj->m_barycentricCoords;
 }
 
-void btSubSimplexClosestResult_getClosestPointOnSimplex(btSubSimplexClosestResult* obj, btScalar* value)
+void btSubSimplexClosestResult_getClosestPointOnSimplex(btSubSimplexClosestResult* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_closestPointOnSimplex, value);
+	BTVECTOR3_SET(value, obj->m_closestPointOnSimplex);
 }
 
 bool btSubSimplexClosestResult_getDegenerate(btSubSimplexClosestResult* obj)
@@ -129,29 +130,34 @@ void btSubSimplexClosestResult_setBarycentricCoordinates(btSubSimplexClosestResu
 	obj->setBarycentricCoordinates();
 }
 
-void btSubSimplexClosestResult_setBarycentricCoordinates2(btSubSimplexClosestResult* obj, btScalar a)
+void btSubSimplexClosestResult_setBarycentricCoordinates2(btSubSimplexClosestResult* obj,
+	btScalar a)
 {
 	obj->setBarycentricCoordinates(a);
 }
 
-void btSubSimplexClosestResult_setBarycentricCoordinates3(btSubSimplexClosestResult* obj, btScalar a, btScalar b)
+void btSubSimplexClosestResult_setBarycentricCoordinates3(btSubSimplexClosestResult* obj,
+	btScalar a, btScalar b)
 {
 	obj->setBarycentricCoordinates(a, b);
 }
 
-void btSubSimplexClosestResult_setBarycentricCoordinates4(btSubSimplexClosestResult* obj, btScalar a, btScalar b, btScalar c)
+void btSubSimplexClosestResult_setBarycentricCoordinates4(btSubSimplexClosestResult* obj,
+	btScalar a, btScalar b, btScalar c)
 {
 	obj->setBarycentricCoordinates(a, b, c);
 }
 
-void btSubSimplexClosestResult_setBarycentricCoordinates5(btSubSimplexClosestResult* obj, btScalar a, btScalar b, btScalar c, btScalar d)
+void btSubSimplexClosestResult_setBarycentricCoordinates5(btSubSimplexClosestResult* obj,
+	btScalar a, btScalar b, btScalar c, btScalar d)
 {
 	obj->setBarycentricCoordinates(a, b, c, d);
 }
 
-void btSubSimplexClosestResult_setClosestPointOnSimplex(btSubSimplexClosestResult* obj, const btScalar* value)
+void btSubSimplexClosestResult_setClosestPointOnSimplex(btSubSimplexClosestResult* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_closestPointOnSimplex);
+	BTVECTOR3_COPY(&obj->m_closestPointOnSimplex, value);
 }
 
 void btSubSimplexClosestResult_setDegenerate(btSubSimplexClosestResult* obj, bool value)
@@ -175,57 +181,62 @@ btVoronoiSimplexSolver* btVoronoiSimplexSolver_new()
 	return new btVoronoiSimplexSolver();
 }
 
-void btVoronoiSimplexSolver_addVertex(btVoronoiSimplexSolver* obj, const btScalar* w, const btScalar* p, const btScalar* q)
+void btVoronoiSimplexSolver_addVertex(btVoronoiSimplexSolver* obj, const btVector3* w,
+	const btVector3* p, const btVector3* q)
 {
-	VECTOR3_CONV(w);
-	VECTOR3_CONV(p);
-	VECTOR3_CONV(q);
-	obj->addVertex(VECTOR3_USE(w), VECTOR3_USE(p), VECTOR3_USE(q));
+	BTVECTOR3_IN(w);
+	BTVECTOR3_IN(p);
+	BTVECTOR3_IN(q);
+	obj->addVertex(BTVECTOR3_USE(w), BTVECTOR3_USE(p), BTVECTOR3_USE(q));
 }
 
-void btVoronoiSimplexSolver_backup_closest(btVoronoiSimplexSolver* obj, btScalar* v)
+void btVoronoiSimplexSolver_backup_closest(btVoronoiSimplexSolver* obj, btVector3* v)
 {
-	VECTOR3_DEF(v);
-	obj->backup_closest(VECTOR3_USE(v));
-	VECTOR3_DEF_OUT(v);
+	BTVECTOR3_DEF(v);
+	obj->backup_closest(BTVECTOR3_USE(v));
+	BTVECTOR3_DEF_OUT(v);
 }
 
-bool btVoronoiSimplexSolver_closest(btVoronoiSimplexSolver* obj, btScalar* v)
+bool btVoronoiSimplexSolver_closest(btVoronoiSimplexSolver* obj, btVector3* v)
 {
-	VECTOR3_DEF(v);
-	bool ret = obj->closest(VECTOR3_USE(v));
-	VECTOR3_DEF_OUT(v);
+	BTVECTOR3_DEF(v);
+	bool ret = obj->closest(BTVECTOR3_USE(v));
+	BTVECTOR3_DEF_OUT(v);
 	return ret;
 }
 
-bool btVoronoiSimplexSolver_closestPtPointTetrahedron(btVoronoiSimplexSolver* obj, const btScalar* p, const btScalar* a, const btScalar* b, const btScalar* c, const btScalar* d, btSubSimplexClosestResult* finalResult)
+bool btVoronoiSimplexSolver_closestPtPointTetrahedron(btVoronoiSimplexSolver* obj,
+	const btVector3* p, const btVector3* a, const btVector3* b, const btVector3* c,
+	const btVector3* d, btSubSimplexClosestResult* finalResult)
 {
-	VECTOR3_CONV(p);
-	VECTOR3_CONV(a);
-	VECTOR3_CONV(b);
-	VECTOR3_CONV(c);
-	VECTOR3_CONV(d);
-	return obj->closestPtPointTetrahedron(VECTOR3_USE(p), VECTOR3_USE(a), VECTOR3_USE(b),
-		VECTOR3_USE(c), VECTOR3_USE(d), *finalResult);
+	BTVECTOR3_IN(p);
+	BTVECTOR3_IN(a);
+	BTVECTOR3_IN(b);
+	BTVECTOR3_IN(c);
+	BTVECTOR3_IN(d);
+	return obj->closestPtPointTetrahedron(BTVECTOR3_USE(p), BTVECTOR3_USE(a), BTVECTOR3_USE(b),
+		BTVECTOR3_USE(c), BTVECTOR3_USE(d), *finalResult);
 }
 
-bool btVoronoiSimplexSolver_closestPtPointTriangle(btVoronoiSimplexSolver* obj, const btScalar* p, const btScalar* a, const btScalar* b, const btScalar* c, btSubSimplexClosestResult* result)
+bool btVoronoiSimplexSolver_closestPtPointTriangle(btVoronoiSimplexSolver* obj, const btVector3* p,
+	const btVector3* a, const btVector3* b, const btVector3* c, btSubSimplexClosestResult* result)
 {
-	VECTOR3_CONV(p);
-	VECTOR3_CONV(a);
-	VECTOR3_CONV(b);
-	VECTOR3_CONV(c);
-	return obj->closestPtPointTriangle(VECTOR3_USE(p), VECTOR3_USE(a), VECTOR3_USE(b),
-		VECTOR3_USE(c), *result);
+	BTVECTOR3_IN(p);
+	BTVECTOR3_IN(a);
+	BTVECTOR3_IN(b);
+	BTVECTOR3_IN(c);
+	return obj->closestPtPointTriangle(BTVECTOR3_USE(p), BTVECTOR3_USE(a), BTVECTOR3_USE(b),
+		BTVECTOR3_USE(c), *result);
 }
 
-void btVoronoiSimplexSolver_compute_points(btVoronoiSimplexSolver* obj, btScalar* p1, btScalar* p2)
+void btVoronoiSimplexSolver_compute_points(btVoronoiSimplexSolver* obj, btVector3* p1,
+	btVector3* p2)
 {
-	VECTOR3_DEF(p1);
-	VECTOR3_DEF(p2);
-	obj->compute_points(VECTOR3_USE(p1), VECTOR3_USE(p2));
-	VECTOR3_DEF_OUT(p1);
-	VECTOR3_DEF_OUT(p2);
+	BTVECTOR3_DEF(p1);
+	BTVECTOR3_DEF(p2);
+	obj->compute_points(BTVECTOR3_USE(p1), BTVECTOR3_USE(p2));
+	BTVECTOR3_DEF_OUT(p1);
+	BTVECTOR3_DEF_OUT(p2);
 }
 
 bool btVoronoiSimplexSolver_emptySimplex(btVoronoiSimplexSolver* obj)
@@ -243,19 +254,19 @@ btSubSimplexClosestResult* btVoronoiSimplexSolver_getCachedBC(btVoronoiSimplexSo
 	return &obj->m_cachedBC;
 }
 
-void btVoronoiSimplexSolver_getCachedP1(btVoronoiSimplexSolver* obj, btScalar* value)
+void btVoronoiSimplexSolver_getCachedP1(btVoronoiSimplexSolver* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_cachedP1, value);
+	BTVECTOR3_SET(value, obj->m_cachedP1);
 }
 
-void btVoronoiSimplexSolver_getCachedP2(btVoronoiSimplexSolver* obj, btScalar* value)
+void btVoronoiSimplexSolver_getCachedP2(btVoronoiSimplexSolver* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_cachedP2, value);
+	BTVECTOR3_SET(value, obj->m_cachedP2);
 }
 
-void btVoronoiSimplexSolver_getCachedV(btVoronoiSimplexSolver* obj, btScalar* value)
+void btVoronoiSimplexSolver_getCachedV(btVoronoiSimplexSolver* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_cachedV, value);
+	BTVECTOR3_SET(value, obj->m_cachedV);
 }
 
 bool btVoronoiSimplexSolver_getCachedValidClosest(btVoronoiSimplexSolver* obj)
@@ -268,9 +279,9 @@ btScalar btVoronoiSimplexSolver_getEqualVertexThreshold(btVoronoiSimplexSolver* 
 	return obj->getEqualVertexThreshold();
 }
 
-void btVoronoiSimplexSolver_getLastW(btVoronoiSimplexSolver* obj, btScalar* value)
+void btVoronoiSimplexSolver_getLastW(btVoronoiSimplexSolver* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_lastW, value);
+	BTVECTOR3_SET(value, obj->m_lastW);
 }
 
 bool btVoronoiSimplexSolver_getNeedsUpdate(btVoronoiSimplexSolver* obj)
@@ -283,16 +294,10 @@ int btVoronoiSimplexSolver_getNumVertices(btVoronoiSimplexSolver* obj)
 	return obj->numVertices();
 }
 
-int btVoronoiSimplexSolver_getSimplex(btVoronoiSimplexSolver* obj, btScalar* pBuf, btScalar* qBuf, btScalar* yBuf)
+int btVoronoiSimplexSolver_getSimplex(btVoronoiSimplexSolver* obj, btVector3* pBuf,
+	btVector3* qBuf, btVector3* yBuf)
 {
-	VECTOR3_DEF(pBuf);
-	VECTOR3_DEF(qBuf);
-	VECTOR3_DEF(yBuf);
-	int ret = obj->getSimplex(&VECTOR3_USE(pBuf), &VECTOR3_USE(qBuf), &VECTOR3_USE(yBuf));
-	VECTOR3_DEF_OUT(pBuf);
-	VECTOR3_DEF_OUT(qBuf);
-	VECTOR3_DEF_OUT(yBuf);
-	return ret;
+	return obj->getSimplex(pBuf, qBuf, yBuf);
 }
 
 btVector3* btVoronoiSimplexSolver_getSimplexPointsP(btVoronoiSimplexSolver* obj)
@@ -310,10 +315,10 @@ btVector3* btVoronoiSimplexSolver_getSimplexVectorW(btVoronoiSimplexSolver* obj)
 	return obj->m_simplexVectorW;
 }
 
-bool btVoronoiSimplexSolver_inSimplex(btVoronoiSimplexSolver* obj, const btScalar* w)
+bool btVoronoiSimplexSolver_inSimplex(btVoronoiSimplexSolver* obj, const btVector3* w)
 {
-	VECTOR3_CONV(w);
-	return obj->inSimplex(VECTOR3_USE(w));
+	BTVECTOR3_IN(w);
+	return obj->inSimplex(BTVECTOR3_USE(w));
 }
 
 btScalar btVoronoiSimplexSolver_maxVertex(btVoronoiSimplexSolver* obj)
@@ -326,15 +331,16 @@ int btVoronoiSimplexSolver_numVertices(btVoronoiSimplexSolver* obj)
 	return obj->numVertices();
 }
 
-int btVoronoiSimplexSolver_pointOutsideOfPlane(btVoronoiSimplexSolver* obj, const btScalar* p, const btScalar* a, const btScalar* b, const btScalar* c, const btScalar* d)
+int btVoronoiSimplexSolver_pointOutsideOfPlane(btVoronoiSimplexSolver* obj, const btVector3* p,
+	const btVector3* a, const btVector3* b, const btVector3* c, const btVector3* d)
 {
-	VECTOR3_CONV(p);
-	VECTOR3_CONV(a);
-	VECTOR3_CONV(b);
-	VECTOR3_CONV(c);
-	VECTOR3_CONV(d);
-	return obj->pointOutsideOfPlane(VECTOR3_USE(p), VECTOR3_USE(a), VECTOR3_USE(b),
-		VECTOR3_USE(c), VECTOR3_USE(d));
+	BTVECTOR3_IN(p);
+	BTVECTOR3_IN(a);
+	BTVECTOR3_IN(b);
+	BTVECTOR3_IN(c);
+	BTVECTOR3_IN(d);
+	return obj->pointOutsideOfPlane(BTVECTOR3_USE(p), BTVECTOR3_USE(a), BTVECTOR3_USE(b),
+		BTVECTOR3_USE(c), BTVECTOR3_USE(d));
 }
 
 void btVoronoiSimplexSolver_reduceVertices(btVoronoiSimplexSolver* obj, const btUsageBitfield* usedVerts)
@@ -357,19 +363,19 @@ void btVoronoiSimplexSolver_setCachedBC(btVoronoiSimplexSolver* obj, const btSub
 	obj->m_cachedBC = *value;
 }
 
-void btVoronoiSimplexSolver_setCachedP1(btVoronoiSimplexSolver* obj, const btScalar* value)
+void btVoronoiSimplexSolver_setCachedP1(btVoronoiSimplexSolver* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_cachedP1);
+	BTVECTOR3_COPY(&obj->m_cachedP1, value);
 }
 
-void btVoronoiSimplexSolver_setCachedP2(btVoronoiSimplexSolver* obj, const btScalar* value)
+void btVoronoiSimplexSolver_setCachedP2(btVoronoiSimplexSolver* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_cachedP2);
+	BTVECTOR3_COPY(&obj->m_cachedP2, value);
 }
 
-void btVoronoiSimplexSolver_setCachedV(btVoronoiSimplexSolver* obj, const btScalar* value)
+void btVoronoiSimplexSolver_setCachedV(btVoronoiSimplexSolver* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_cachedV);
+	BTVECTOR3_COPY(&obj->m_cachedV, value);
 }
 
 void btVoronoiSimplexSolver_setCachedValidClosest(btVoronoiSimplexSolver* obj, bool value)
@@ -377,14 +383,15 @@ void btVoronoiSimplexSolver_setCachedValidClosest(btVoronoiSimplexSolver* obj, b
 	obj->m_cachedValidClosest = value;
 }
 
-void btVoronoiSimplexSolver_setEqualVertexThreshold(btVoronoiSimplexSolver* obj, btScalar threshold)
+void btVoronoiSimplexSolver_setEqualVertexThreshold(btVoronoiSimplexSolver* obj,
+	btScalar threshold)
 {
 	obj->setEqualVertexThreshold(threshold);
 }
 
-void btVoronoiSimplexSolver_setLastW(btVoronoiSimplexSolver* obj, const btScalar* value)
+void btVoronoiSimplexSolver_setLastW(btVoronoiSimplexSolver* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_lastW);
+	BTVECTOR3_COPY(&obj->m_lastW, value);
 }
 
 void btVoronoiSimplexSolver_setNeedsUpdate(btVoronoiSimplexSolver* obj, bool value)

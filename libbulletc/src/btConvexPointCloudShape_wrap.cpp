@@ -8,16 +8,18 @@ btConvexPointCloudShape* btConvexPointCloudShape_new()
 	return new btConvexPointCloudShape();
 }
 
-btConvexPointCloudShape* btConvexPointCloudShape_new2(btVector3* points, int numPoints, const btScalar* localScaling)
+btConvexPointCloudShape* btConvexPointCloudShape_new2(btVector3* points, int numPoints,
+	const btVector3* localScaling)
 {
-	VECTOR3_CONV(localScaling);
-	return new btConvexPointCloudShape(points, numPoints, VECTOR3_USE(localScaling));
+	BTVECTOR3_IN(localScaling);
+	return new btConvexPointCloudShape(points, numPoints, BTVECTOR3_USE(localScaling));
 }
 
-btConvexPointCloudShape* btConvexPointCloudShape_new3(btVector3* points, int numPoints, const btScalar* localScaling, bool computeAabb)
+btConvexPointCloudShape* btConvexPointCloudShape_new3(btVector3* points, int numPoints,
+	const btVector3* localScaling, bool computeAabb)
 {
-	VECTOR3_CONV(localScaling);
-	return new btConvexPointCloudShape(points, numPoints, VECTOR3_USE(localScaling),
+	BTVECTOR3_IN(localScaling);
+	return new btConvexPointCloudShape(points, numPoints, BTVECTOR3_USE(localScaling),
 		computeAabb);
 }
 
@@ -26,9 +28,10 @@ int btConvexPointCloudShape_getNumPoints(btConvexPointCloudShape* obj)
 	return obj->getNumPoints();
 }
 
-void btConvexPointCloudShape_getScaledPoint(btConvexPointCloudShape* obj, int index, btScalar* value)
+void btConvexPointCloudShape_getScaledPoint(btConvexPointCloudShape* obj, int index,
+	btVector3* value)
 {
-	VECTOR3_OUT_VAL(obj->getScaledPoint(index), value);
+	BTVECTOR3_SET(value, obj->getScaledPoint(index));
 }
 
 btVector3* btConvexPointCloudShape_getUnscaledPoints(btConvexPointCloudShape* obj)
@@ -36,18 +39,21 @@ btVector3* btConvexPointCloudShape_getUnscaledPoints(btConvexPointCloudShape* ob
 	return obj->getUnscaledPoints();
 }
 
-void btConvexPointCloudShape_setPoints(btConvexPointCloudShape* obj, btVector3* points, int numPoints)
+void btConvexPointCloudShape_setPoints(btConvexPointCloudShape* obj, btVector3* points,
+	int numPoints)
 {
 	obj->setPoints(points, numPoints);
 }
 
-void btConvexPointCloudShape_setPoints2(btConvexPointCloudShape* obj, btVector3* points, int numPoints, bool computeAabb)
+void btConvexPointCloudShape_setPoints2(btConvexPointCloudShape* obj, btVector3* points,
+	int numPoints, bool computeAabb)
 {
 	obj->setPoints(points, numPoints, computeAabb);
 }
 
-void btConvexPointCloudShape_setPoints3(btConvexPointCloudShape* obj, btVector3* points, int numPoints, bool computeAabb, const btScalar* localScaling)
+void btConvexPointCloudShape_setPoints3(btConvexPointCloudShape* obj, btVector3* points,
+	int numPoints, bool computeAabb, const btVector3* localScaling)
 {
-	VECTOR3_CONV(localScaling);
-	obj->setPoints(points, numPoints, computeAabb, VECTOR3_USE(localScaling));
+	BTVECTOR3_IN(localScaling);
+	obj->setPoints(points, numPoints, computeAabb, BTVECTOR3_USE(localScaling));
 }

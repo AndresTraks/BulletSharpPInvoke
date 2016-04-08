@@ -9,30 +9,32 @@ btBroadphaseProxy* btBroadphaseProxy_new()
 	return new btBroadphaseProxy();
 }
 
-btBroadphaseProxy* btBroadphaseProxy_new2(const btScalar* aabbMin, const btScalar* aabbMax, void* userPtr, short collisionFilterGroup, short collisionFilterMask)
+btBroadphaseProxy* btBroadphaseProxy_new2(const btVector3* aabbMin, const btVector3* aabbMax,
+	void* userPtr, short collisionFilterGroup, short collisionFilterMask)
 {
-	VECTOR3_CONV(aabbMin);
-	VECTOR3_CONV(aabbMax);
-	return new btBroadphaseProxy(VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), userPtr,
-		collisionFilterGroup, collisionFilterMask);
+	BTVECTOR3_IN(aabbMin);
+	BTVECTOR3_IN(aabbMax);
+	return new btBroadphaseProxy(BTVECTOR3_USE(aabbMin), BTVECTOR3_USE(aabbMax),
+		userPtr, collisionFilterGroup, collisionFilterMask);
 }
 
-btBroadphaseProxy* btBroadphaseProxy_new3(const btScalar* aabbMin, const btScalar* aabbMax, void* userPtr, short collisionFilterGroup, short collisionFilterMask, void* multiSapParentProxy)
+btBroadphaseProxy* btBroadphaseProxy_new3(const btVector3* aabbMin, const btVector3* aabbMax,
+	void* userPtr, short collisionFilterGroup, short collisionFilterMask, void* multiSapParentProxy)
 {
-	VECTOR3_CONV(aabbMin);
-	VECTOR3_CONV(aabbMax);
-	return new btBroadphaseProxy(VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax), userPtr,
-		collisionFilterGroup, collisionFilterMask, multiSapParentProxy);
+	BTVECTOR3_IN(aabbMin);
+	BTVECTOR3_IN(aabbMax);
+	return new btBroadphaseProxy(BTVECTOR3_USE(aabbMin), BTVECTOR3_USE(aabbMax),
+		userPtr, collisionFilterGroup, collisionFilterMask, multiSapParentProxy);
 }
 
-void btBroadphaseProxy_getAabbMax(btBroadphaseProxy* obj, btScalar* value)
+void btBroadphaseProxy_getAabbMax(btBroadphaseProxy* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_aabbMax, value);
+	BTVECTOR3_SET(value, obj->m_aabbMax);
 }
 
-void btBroadphaseProxy_getAabbMin(btBroadphaseProxy* obj, btScalar* value)
+void btBroadphaseProxy_getAabbMin(btBroadphaseProxy* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_aabbMin, value);
+	BTVECTOR3_SET(value, obj->m_aabbMin);
 }
 
 void* btBroadphaseProxy_getClientObject(btBroadphaseProxy* obj)
@@ -105,14 +107,14 @@ bool btBroadphaseProxy_isSoftBody(int proxyType)
 	return btBroadphaseProxy::isSoftBody(proxyType);
 }
 
-void btBroadphaseProxy_setAabbMax(btBroadphaseProxy* obj, const btScalar* value)
+void btBroadphaseProxy_setAabbMax(btBroadphaseProxy* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_aabbMax);
+	BTVECTOR3_COPY(&obj->m_aabbMax, value);
 }
 
-void btBroadphaseProxy_setAabbMin(btBroadphaseProxy* obj, const btScalar* value)
+void btBroadphaseProxy_setAabbMin(btBroadphaseProxy* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_aabbMin);
+	BTVECTOR3_COPY(&obj->m_aabbMin, value);
 }
 
 void btBroadphaseProxy_setClientObject(btBroadphaseProxy* obj, void* value)

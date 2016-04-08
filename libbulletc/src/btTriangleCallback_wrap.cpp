@@ -20,7 +20,8 @@ btTriangleCallbackWrapper::btTriangleCallbackWrapper(p_btTriangleCallback_Proces
 	_processTriangleCallback = processTriangleCallback;
 }
 
-void btTriangleCallbackWrapper::processTriangle(btVector3* triangle, int partId, int triangleIndex)
+void btTriangleCallbackWrapper::processTriangle(btVector3* triangle, int partId,
+	int triangleIndex)
 {
 	_processTriangleCallback(triangle, partId, triangleIndex);
 }

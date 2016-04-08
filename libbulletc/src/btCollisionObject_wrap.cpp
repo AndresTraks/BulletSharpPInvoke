@@ -46,9 +46,9 @@ int btCollisionObject_getActivationState(btCollisionObject* obj)
 	return obj->getActivationState();
 }
 
-void btCollisionObject_getAnisotropicFriction(btCollisionObject* obj, btScalar* value)
+void btCollisionObject_getAnisotropicFriction(btCollisionObject* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getAnisotropicFriction(), value);
+	BTVECTOR3_COPY(value, &obj->getAnisotropicFriction());
 }
 
 btBroadphaseProxy* btCollisionObject_getBroadphaseHandle(btCollisionObject* obj)
@@ -111,19 +111,19 @@ int btCollisionObject_getInternalType(btCollisionObject* obj)
 	return obj->getInternalType();
 }
 
-void btCollisionObject_getInterpolationAngularVelocity(btCollisionObject* obj, btScalar* angvel)
+void btCollisionObject_getInterpolationAngularVelocity(btCollisionObject* obj, btVector3* angvel)
 {
-	VECTOR3_OUT(&obj->getInterpolationAngularVelocity(), angvel);
+	BTVECTOR3_COPY(angvel, &obj->getInterpolationAngularVelocity());
 }
 
-void btCollisionObject_getInterpolationLinearVelocity(btCollisionObject* obj, btScalar* linvel)
+void btCollisionObject_getInterpolationLinearVelocity(btCollisionObject* obj, btVector3* linvel)
 {
-	VECTOR3_OUT(&obj->getInterpolationLinearVelocity(), linvel);
+	BTVECTOR3_COPY(linvel, &obj->getInterpolationLinearVelocity());
 }
 
-void btCollisionObject_getInterpolationWorldTransform(btCollisionObject* obj, btScalar* trans)
+void btCollisionObject_getInterpolationWorldTransform(btCollisionObject* obj, btTransform* trans)
 {
-	TRANSFORM_OUT(&obj->getInterpolationWorldTransform(), trans);
+	BTTRANSFORM_COPY(trans, &obj->getInterpolationWorldTransform());
 }
 
 int btCollisionObject_getIslandTag(btCollisionObject* obj)
@@ -151,9 +151,9 @@ void* btCollisionObject_getUserPointer(btCollisionObject* obj)
 	return obj->getUserPointer();
 }
 
-void btCollisionObject_getWorldTransform(btCollisionObject* obj, btScalar* worldTrans)
+void btCollisionObject_getWorldTransform(btCollisionObject* obj, btTransform* worldTrans)
 {
-	TRANSFORM_OUT(&obj->getWorldTransform(), worldTrans);
+	BTTRANSFORM_COPY(worldTrans, &obj->getWorldTransform());
 }
 
 bool btCollisionObject_hasAnisotropicFriction(btCollisionObject* obj)
@@ -206,7 +206,8 @@ bool btCollisionObject_mergesSimulationIslands(btCollisionObject* obj)
 	return obj->mergesSimulationIslands();
 }
 
-const char* btCollisionObject_serialize(btCollisionObject* obj, void* dataBuffer, btSerializer* serializer)
+const char* btCollisionObject_serialize(btCollisionObject* obj, void* dataBuffer,
+	btSerializer* serializer)
 {
 	return obj->serialize(dataBuffer, serializer);
 }
@@ -221,16 +222,17 @@ void btCollisionObject_setActivationState(btCollisionObject* obj, int newState)
 	obj->setActivationState(newState);
 }
 
-void btCollisionObject_setAnisotropicFriction(btCollisionObject* obj, const btScalar* anisotropicFriction)
+void btCollisionObject_setAnisotropicFriction(btCollisionObject* obj, const btVector3* anisotropicFriction)
 {
-	VECTOR3_CONV(anisotropicFriction);
-	obj->setAnisotropicFriction(VECTOR3_USE(anisotropicFriction));
+	BTVECTOR3_IN(anisotropicFriction);
+	obj->setAnisotropicFriction(BTVECTOR3_USE(anisotropicFriction));
 }
 
-void btCollisionObject_setAnisotropicFriction2(btCollisionObject* obj, const btScalar* anisotropicFriction, int frictionMode)
+void btCollisionObject_setAnisotropicFriction2(btCollisionObject* obj, const btVector3* anisotropicFriction,
+	int frictionMode)
 {
-	VECTOR3_CONV(anisotropicFriction);
-	obj->setAnisotropicFriction(VECTOR3_USE(anisotropicFriction), frictionMode);
+	BTVECTOR3_IN(anisotropicFriction);
+	obj->setAnisotropicFriction(BTVECTOR3_USE(anisotropicFriction), frictionMode);
 }
 
 void btCollisionObject_setBroadphaseHandle(btCollisionObject* obj, btBroadphaseProxy* handle)
@@ -283,27 +285,28 @@ void btCollisionObject_setHitFraction(btCollisionObject* obj, btScalar hitFracti
 	obj->setHitFraction(hitFraction);
 }
 
-void btCollisionObject_setIgnoreCollisionCheck(btCollisionObject* obj, const btCollisionObject* co, bool ignoreCollisionCheck)
+void btCollisionObject_setIgnoreCollisionCheck(btCollisionObject* obj, const btCollisionObject* co,
+	bool ignoreCollisionCheck)
 {
 	obj->setIgnoreCollisionCheck(co, ignoreCollisionCheck);
 }
 
-void btCollisionObject_setInterpolationAngularVelocity(btCollisionObject* obj, const btScalar* angvel)
+void btCollisionObject_setInterpolationAngularVelocity(btCollisionObject* obj, const btVector3* angvel)
 {
-	VECTOR3_CONV(angvel);
-	obj->setInterpolationAngularVelocity(VECTOR3_USE(angvel));
+	BTVECTOR3_IN(angvel);
+	obj->setInterpolationAngularVelocity(BTVECTOR3_USE(angvel));
 }
 
-void btCollisionObject_setInterpolationLinearVelocity(btCollisionObject* obj, const btScalar* linvel)
+void btCollisionObject_setInterpolationLinearVelocity(btCollisionObject* obj, const btVector3* linvel)
 {
-	VECTOR3_CONV(linvel);
-	obj->setInterpolationLinearVelocity(VECTOR3_USE(linvel));
+	BTVECTOR3_IN(linvel);
+	obj->setInterpolationLinearVelocity(BTVECTOR3_USE(linvel));
 }
 
-void btCollisionObject_setInterpolationWorldTransform(btCollisionObject* obj, const btScalar* trans)
+void btCollisionObject_setInterpolationWorldTransform(btCollisionObject* obj, const btTransform* trans)
 {
-	TRANSFORM_CONV(trans);
-	obj->setInterpolationWorldTransform(TRANSFORM_USE(trans));
+	BTTRANSFORM_IN(trans);
+	obj->setInterpolationWorldTransform(BTTRANSFORM_USE(trans));
 }
 
 void btCollisionObject_setIslandTag(btCollisionObject* obj, int tag)
@@ -331,10 +334,10 @@ void btCollisionObject_setUserPointer(btCollisionObject* obj, void* userPointer)
 	obj->setUserPointer(userPointer);
 }
 
-void btCollisionObject_setWorldTransform(btCollisionObject* obj, const btScalar* worldTrans)
+void btCollisionObject_setWorldTransform(btCollisionObject* obj, const btTransform* worldTrans)
 {
-	TRANSFORM_CONV(worldTrans);
-	obj->setWorldTransform(TRANSFORM_USE(worldTrans));
+	BTTRANSFORM_IN(worldTrans);
+	obj->setWorldTransform(BTTRANSFORM_USE(worldTrans));
 }
 
 void btCollisionObject_delete(btCollisionObject* obj)

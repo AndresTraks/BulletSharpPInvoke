@@ -3,35 +3,38 @@
 #include "conversion.h"
 #include "btSliderConstraint_wrap.h"
 
-btSliderConstraint* btSliderConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB, bool useLinearReferenceFrameA)
+btSliderConstraint* btSliderConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btTransform* frameInA,
+	const btTransform* frameInB, bool useLinearReferenceFrameA)
 {
-	TRANSFORM_CONV(frameInA);
-	TRANSFORM_CONV(frameInB);
-	return new btSliderConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB),
+	BTTRANSFORM_IN(frameInA);
+	BTTRANSFORM_IN(frameInB);
+	return new btSliderConstraint(*rbA, *rbB, BTTRANSFORM_USE(frameInA), BTTRANSFORM_USE(frameInB),
 		useLinearReferenceFrameA);
 }
 
-btSliderConstraint* btSliderConstraint_new2(btRigidBody* rbB, const btScalar* frameInB, bool useLinearReferenceFrameA)
+btSliderConstraint* btSliderConstraint_new2(btRigidBody* rbB, const btTransform* frameInB,
+	bool useLinearReferenceFrameA)
 {
-	TRANSFORM_CONV(frameInB);
-	return new btSliderConstraint(*rbB, TRANSFORM_USE(frameInB), useLinearReferenceFrameA);
+	BTTRANSFORM_IN(frameInB);
+	return new btSliderConstraint(*rbB, BTTRANSFORM_USE(frameInB), useLinearReferenceFrameA);
 }
 
-void btSliderConstraint_calculateTransforms(btSliderConstraint* obj, const btScalar* transA, const btScalar* transB)
+void btSliderConstraint_calculateTransforms(btSliderConstraint* obj, const btTransform* transA,
+	const btTransform* transB)
 {
-	TRANSFORM_CONV(transA);
-	TRANSFORM_CONV(transB);
-	obj->calculateTransforms(TRANSFORM_USE(transA), TRANSFORM_USE(transB));
+	BTTRANSFORM_IN(transA);
+	BTTRANSFORM_IN(transB);
+	obj->calculateTransforms(BTTRANSFORM_USE(transA), BTTRANSFORM_USE(transB));
 }
 
-void btSliderConstraint_getAncorInA(btSliderConstraint* obj, btScalar* value)
+void btSliderConstraint_getAncorInA(btSliderConstraint* obj, btVector3* value)
 {
-	VECTOR3_OUT_VAL(obj->getAncorInA(), value);
+	BTVECTOR3_SET(value, obj->getAncorInA());
 }
 
-void btSliderConstraint_getAncorInB(btSliderConstraint* obj, btScalar* value)
+void btSliderConstraint_getAncorInB(btSliderConstraint* obj, btVector3* value)
 {
-	VECTOR3_OUT_VAL(obj->getAncorInB(), value);
+	BTVECTOR3_SET(value, obj->getAncorInB());
 }
 
 btScalar btSliderConstraint_getAngDepth(btSliderConstraint* obj)
@@ -44,14 +47,14 @@ btScalar btSliderConstraint_getAngularPos(btSliderConstraint* obj)
 	return obj->getAngularPos();
 }
 
-void btSliderConstraint_getCalculatedTransformA(btSliderConstraint* obj, btScalar* value)
+void btSliderConstraint_getCalculatedTransformA(btSliderConstraint* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getCalculatedTransformA(), value);
+	BTTRANSFORM_COPY(value, &obj->getCalculatedTransformA());
 }
 
-void btSliderConstraint_getCalculatedTransformB(btSliderConstraint* obj, btScalar* value)
+void btSliderConstraint_getCalculatedTransformB(btSliderConstraint* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getCalculatedTransformB(), value);
+	BTTRANSFORM_COPY(value, &obj->getCalculatedTransformB());
 }
 
 btScalar btSliderConstraint_getDampingDirAng(btSliderConstraint* obj)
@@ -89,14 +92,14 @@ int btSliderConstraint_getFlags(btSliderConstraint* obj)
 	return obj->getFlags();
 }
 
-void btSliderConstraint_getFrameOffsetA(btSliderConstraint* obj, btScalar* value)
+void btSliderConstraint_getFrameOffsetA(btSliderConstraint* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getFrameOffsetA(), value);
+	BTTRANSFORM_COPY(value, &obj->getFrameOffsetA());
 }
 
-void btSliderConstraint_getFrameOffsetB(btSliderConstraint* obj, btScalar* value)
+void btSliderConstraint_getFrameOffsetB(btSliderConstraint* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getFrameOffsetB(), value);
+	BTTRANSFORM_COPY(value, &obj->getFrameOffsetB());
 }
 
 void btSliderConstraint_getInfo1NonVirtual(btSliderConstraint* obj, btTypedConstraint_btConstraintInfo1* info)
@@ -104,14 +107,16 @@ void btSliderConstraint_getInfo1NonVirtual(btSliderConstraint* obj, btTypedConst
 	obj->getInfo1NonVirtual(info);
 }
 
-void btSliderConstraint_getInfo2NonVirtual(btSliderConstraint* obj, btTypedConstraint_btConstraintInfo2* info, const btScalar* transA, const btScalar* transB, const btScalar* linVelA, const btScalar* linVelB, btScalar rbAinvMass, btScalar rbBinvMass)
+void btSliderConstraint_getInfo2NonVirtual(btSliderConstraint* obj, btTypedConstraint_btConstraintInfo2* info,
+	const btTransform* transA, const btTransform* transB, const btVector3* linVelA,
+	const btVector3* linVelB, btScalar rbAinvMass, btScalar rbBinvMass)
 {
-	TRANSFORM_CONV(transA);
-	TRANSFORM_CONV(transB);
-	VECTOR3_CONV(linVelA);
-	VECTOR3_CONV(linVelB);
-	obj->getInfo2NonVirtual(info, TRANSFORM_USE(transA), TRANSFORM_USE(transB), VECTOR3_USE(linVelA),
-		VECTOR3_USE(linVelB), rbAinvMass, rbBinvMass);
+	BTTRANSFORM_IN(transA);
+	BTTRANSFORM_IN(transB);
+	BTVECTOR3_IN(linVelA);
+	BTVECTOR3_IN(linVelB);
+	obj->getInfo2NonVirtual(info, BTTRANSFORM_USE(transA), BTTRANSFORM_USE(transB),
+		BTVECTOR3_USE(linVelA), BTVECTOR3_USE(linVelB), rbAinvMass, rbBinvMass);
 }
 
 btScalar btSliderConstraint_getLinDepth(btSliderConstraint* obj)
@@ -284,11 +289,12 @@ void btSliderConstraint_setDampingOrthoLin(btSliderConstraint* obj, btScalar dam
 	obj->setDampingOrthoLin(dampingOrthoLin);
 }
 
-void btSliderConstraint_setFrames(btSliderConstraint* obj, const btScalar* frameA, const btScalar* frameB)
+void btSliderConstraint_setFrames(btSliderConstraint* obj, const btTransform* frameA,
+	const btTransform* frameB)
 {
-	TRANSFORM_CONV(frameA);
-	TRANSFORM_CONV(frameB);
-	obj->setFrames(TRANSFORM_USE(frameA), TRANSFORM_USE(frameB));
+	BTTRANSFORM_IN(frameA);
+	BTTRANSFORM_IN(frameB);
+	obj->setFrames(BTTRANSFORM_USE(frameA), BTTRANSFORM_USE(frameB));
 }
 
 void btSliderConstraint_setLowerAngLimit(btSliderConstraint* obj, btScalar lowerLimit)

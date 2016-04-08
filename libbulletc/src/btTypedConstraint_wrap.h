@@ -3,14 +3,14 @@
 extern "C"
 {
 	EXPORT btJointFeedback* btJointFeedback_new();
-	EXPORT void btJointFeedback_getAppliedForceBodyA(btJointFeedback* obj, btScalar* value);
-	EXPORT void btJointFeedback_getAppliedForceBodyB(btJointFeedback* obj, btScalar* value);
-	EXPORT void btJointFeedback_getAppliedTorqueBodyA(btJointFeedback* obj, btScalar* value);
-	EXPORT void btJointFeedback_getAppliedTorqueBodyB(btJointFeedback* obj, btScalar* value);
-	EXPORT void btJointFeedback_setAppliedForceBodyA(btJointFeedback* obj, const btScalar* value);
-	EXPORT void btJointFeedback_setAppliedForceBodyB(btJointFeedback* obj, const btScalar* value);
-	EXPORT void btJointFeedback_setAppliedTorqueBodyA(btJointFeedback* obj, const btScalar* value);
-	EXPORT void btJointFeedback_setAppliedTorqueBodyB(btJointFeedback* obj, const btScalar* value);
+	EXPORT void btJointFeedback_getAppliedForceBodyA(btJointFeedback* obj, btVector3* value);
+	EXPORT void btJointFeedback_getAppliedForceBodyB(btJointFeedback* obj, btVector3* value);
+	EXPORT void btJointFeedback_getAppliedTorqueBodyA(btJointFeedback* obj, btVector3* value);
+	EXPORT void btJointFeedback_getAppliedTorqueBodyB(btJointFeedback* obj, btVector3* value);
+	EXPORT void btJointFeedback_setAppliedForceBodyA(btJointFeedback* obj, const btVector3* value);
+	EXPORT void btJointFeedback_setAppliedForceBodyB(btJointFeedback* obj, const btVector3* value);
+	EXPORT void btJointFeedback_setAppliedTorqueBodyA(btJointFeedback* obj, const btVector3* value);
+	EXPORT void btJointFeedback_setAppliedTorqueBodyB(btJointFeedback* obj, const btVector3* value);
 	EXPORT void btJointFeedback_delete(btJointFeedback* obj);
 
 	EXPORT btTypedConstraint_btConstraintInfo1* btTypedConstraint_btConstraintInfo1_new();
@@ -83,7 +83,7 @@ extern "C"
 	EXPORT void btTypedConstraint_setOverrideNumSolverIterations(btTypedConstraint* obj, int overideNumIterations);
 	EXPORT void btTypedConstraint_setParam(btTypedConstraint* obj, int num, btScalar value);
 	EXPORT void btTypedConstraint_setParam2(btTypedConstraint* obj, int num, btScalar value, int axis);
-	EXPORT void btTypedConstraint_setupSolverConstraint(btTypedConstraint* obj, btConstraintArray* ca, int solverBodyA, int solverBodyB, btScalar timeStep);
+	EXPORT void btTypedConstraint_setupSolverConstraint(btTypedConstraint* obj, btAlignedObjectArray_btSolverConstraint* ca, int solverBodyA, int solverBodyB, btScalar timeStep);
 	EXPORT void btTypedConstraint_setUserConstraintId(btTypedConstraint* obj, int uid);
 	EXPORT void btTypedConstraint_setUserConstraintPtr(btTypedConstraint* obj, void* ptr);
 	EXPORT void btTypedConstraint_setUserConstraintType(btTypedConstraint* obj, int userConstraintType);

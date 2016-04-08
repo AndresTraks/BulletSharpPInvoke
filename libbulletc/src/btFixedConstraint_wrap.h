@@ -2,5 +2,5 @@
 
 extern "C"
 {
-	EXPORT btFixedConstraint* btFixedConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB);
+	EXPORT btFixedConstraint* btFixedConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btTransform* frameInA, const btTransform* frameInB);
 }

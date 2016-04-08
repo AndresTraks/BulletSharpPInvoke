@@ -3,23 +3,23 @@
 extern "C"
 {
 	EXPORT btDbvtAabbMm* btDbvtAabbMm_new();
-	EXPORT void btDbvtAabbMm_Center(btDbvtAabbMm* obj, btScalar* value);
-	EXPORT int btDbvtAabbMm_Classify(btDbvtAabbMm* obj, const btScalar* n, btScalar o, int s);
+	EXPORT void btDbvtAabbMm_Center(btDbvtAabbMm* obj, btVector3* value);
+	EXPORT int btDbvtAabbMm_Classify(btDbvtAabbMm* obj, const btVector3* n, btScalar o, int s);
 	EXPORT bool btDbvtAabbMm_Contain(btDbvtAabbMm* obj, const btDbvtAabbMm* a);
-	EXPORT void btDbvtAabbMm_Expand(btDbvtAabbMm* obj, const btScalar* e);
-	EXPORT void btDbvtAabbMm_Extents(btDbvtAabbMm* obj, btScalar* value);
-	EXPORT btDbvtAabbMm* btDbvtAabbMm_FromCE(const btScalar* c, const btScalar* e);
-	EXPORT btDbvtAabbMm* btDbvtAabbMm_FromCR(const btScalar* c, btScalar r);
-	EXPORT btDbvtAabbMm* btDbvtAabbMm_FromMM(const btScalar* mi, const btScalar* mx);
+	EXPORT void btDbvtAabbMm_Expand(btDbvtAabbMm* obj, const btVector3* e);
+	EXPORT void btDbvtAabbMm_Extents(btDbvtAabbMm* obj, btVector3* value);
+	EXPORT btDbvtAabbMm* btDbvtAabbMm_FromCE(const btVector3* c, const btVector3* e);
+	EXPORT btDbvtAabbMm* btDbvtAabbMm_FromCR(const btVector3* c, btScalar r);
+	EXPORT btDbvtAabbMm* btDbvtAabbMm_FromMM(const btVector3* mi, const btVector3* mx);
 	EXPORT btDbvtAabbMm* btDbvtAabbMm_FromPoints(const btVector3** ppts, int n);
 	EXPORT btDbvtAabbMm* btDbvtAabbMm_FromPoints2(const btVector3* pts, int n);
-	EXPORT void btDbvtAabbMm_Lengths(btDbvtAabbMm* obj, btScalar* value);
-	EXPORT void btDbvtAabbMm_Maxs(btDbvtAabbMm* obj, btScalar* value);
-	EXPORT void btDbvtAabbMm_Mins(btDbvtAabbMm* obj, btScalar* value);
-	EXPORT btScalar btDbvtAabbMm_ProjectMinimum(btDbvtAabbMm* obj, const btScalar* v, unsigned int signs);
-	EXPORT void btDbvtAabbMm_SignedExpand(btDbvtAabbMm* obj, const btScalar* e);
-	EXPORT void btDbvtAabbMm_tMaxs(btDbvtAabbMm* obj, btScalar* value);
-	EXPORT void btDbvtAabbMm_tMins(btDbvtAabbMm* obj, btScalar* value);
+	EXPORT void btDbvtAabbMm_Lengths(btDbvtAabbMm* obj, btVector3* value);
+	EXPORT void btDbvtAabbMm_Maxs(btDbvtAabbMm* obj, btVector3* value);
+	EXPORT void btDbvtAabbMm_Mins(btDbvtAabbMm* obj, btVector3* value);
+	EXPORT btScalar btDbvtAabbMm_ProjectMinimum(btDbvtAabbMm* obj, const btVector3* v, unsigned int signs);
+	EXPORT void btDbvtAabbMm_SignedExpand(btDbvtAabbMm* obj, const btVector3* e);
+	EXPORT void btDbvtAabbMm_tMaxs(btDbvtAabbMm* obj, btVector3* value);
+	EXPORT void btDbvtAabbMm_tMins(btDbvtAabbMm* obj, btVector3* value);
 	EXPORT void btDbvtAabbMm_delete(btDbvtAabbMm* obj);
 
 	EXPORT btDbvtNode* btDbvtNode_new();
@@ -85,14 +85,14 @@ extern "C"
 	EXPORT void btDbvt_sStkNPS_delete(btDbvt_sStkNPS* obj);
 
 	EXPORT btDbvt* btDbvt_new();
-	EXPORT int btDbvt_allocate(btAlignedIntArray* ifree, btAlignedStkNpsArray* stock, const btDbvt_sStkNPS* value);
+	EXPORT int btDbvt_allocate(btAlignedObjectArray_int* ifree, btAlignedObjectArray_btDbvt_sStkNPS* stock, const btDbvt_sStkNPS* value);
 	EXPORT void btDbvt_benchmark();
 	EXPORT void btDbvt_clear(btDbvt* obj);
 	EXPORT void btDbvt_clone(btDbvt* obj, btDbvt* dest);
 	EXPORT void btDbvt_clone2(btDbvt* obj, btDbvt* dest, btDbvt_IClone* iclone);
 	//EXPORT void btDbvt_collideKDOP(const btDbvtNode* root, const btVector3* normals, const btScalar* offsets, int count, const btDbvt_ICollide* policy);
-	//EXPORT void btDbvt_collideOCL(const btDbvtNode* root, const btVector3* normals, const btScalar* offsets, const btScalar* sortaxis, int count, const btDbvt_ICollide* policy);
-	//EXPORT void btDbvt_collideOCL2(const btDbvtNode* root, const btVector3* normals, const btScalar* offsets, const btScalar* sortaxis, int count, const btDbvt_ICollide* policy, bool fullsort);
+	//EXPORT void btDbvt_collideOCL(const btDbvtNode* root, const btVector3* normals, const btScalar* offsets, const btVector3* sortaxis, int count, const btDbvt_ICollide* policy);
+	//EXPORT void btDbvt_collideOCL2(const btDbvtNode* root, const btVector3* normals, const btScalar* offsets, const btVector3* sortaxis, int count, const btDbvt_ICollide* policy, bool fullsort);
 	//EXPORT void btDbvt_collideTT(btDbvt* obj, const btDbvtNode* root0, const btDbvtNode* root1, const btDbvt_ICollide* policy);
 	//EXPORT void btDbvt_collideTTpersistentStack(btDbvt* obj, const btDbvtNode* root0, const btDbvtNode* root1, const btDbvt_ICollide* policy);
 	//EXPORT void btDbvt_collideTU(const btDbvtNode* root, const btDbvt_ICollide* policy);
@@ -101,14 +101,14 @@ extern "C"
 	EXPORT bool btDbvt_empty(btDbvt* obj);
 	//EXPORT void btDbvt_enumLeaves(const btDbvtNode* root, const btDbvt_ICollide* policy);
 	//EXPORT void btDbvt_enumNodes(const btDbvtNode* root, const btDbvt_ICollide* policy);
-	EXPORT void btDbvt_extractLeaves(const btDbvtNode* node, btAlignedDbvtNodeArray* leaves);
+	EXPORT void btDbvt_extractLeaves(const btDbvtNode* node, btAlignedObjectArray_const_btDbvtNodePtr* leaves);
 	EXPORT btDbvtNode* btDbvt_getFree(btDbvt* obj);
 	EXPORT int btDbvt_getLeaves(btDbvt* obj);
 	EXPORT int btDbvt_getLkhd(btDbvt* obj);
 	EXPORT unsigned int btDbvt_getOpath(btDbvt* obj);
-	EXPORT btAlignedDbvtNodeArray* btDbvt_getRayTestStack(btDbvt* obj);
+	EXPORT btAlignedObjectArray_const_btDbvtNodePtr* btDbvt_getRayTestStack(btDbvt* obj);
 	EXPORT btDbvtNode* btDbvt_getRoot(btDbvt* obj);
-	EXPORT btAlignedStkNNArray* btDbvt_getStkStack(btDbvt* obj);
+	EXPORT btAlignedObjectArray_btDbvt_sStkNN* btDbvt_getStkStack(btDbvt* obj);
 	EXPORT btDbvtNode* btDbvt_insert(btDbvt* obj, const btDbvtVolume* box, void* data);
 	EXPORT int btDbvt_maxdepth(const btDbvtNode* node);
 	EXPORT int btDbvt_nearest(const int* i, const btDbvt_sStkNPS* a, btScalar v, int l, int h);
@@ -116,8 +116,8 @@ extern "C"
 	EXPORT void btDbvt_optimizeIncremental(btDbvt* obj, int passes);
 	EXPORT void btDbvt_optimizeTopDown(btDbvt* obj);
 	EXPORT void btDbvt_optimizeTopDown2(btDbvt* obj, int bu_treshold);
-	EXPORT void btDbvt_rayTest(const btDbvtNode* root, const btScalar* rayFrom, const btScalar* rayTo, const btDbvt_ICollide* policy);
-	EXPORT void btDbvt_rayTestInternal(btDbvt* obj, const btDbvtNode* root, const btScalar* rayFrom, const btScalar* rayTo, const btScalar* rayDirectionInverse, unsigned int* signs, btScalar lambda_max, const btScalar* aabbMin, const btScalar* aabbMax, const btDbvt_ICollide* policy);
+	EXPORT void btDbvt_rayTest(const btDbvtNode* root, const btVector3* rayFrom, const btVector3* rayTo, btDbvt_ICollide* policy);
+	EXPORT void btDbvt_rayTestInternal(btDbvt* obj, const btDbvtNode* root, const btVector3* rayFrom, const btVector3* rayTo, const btVector3* rayDirectionInverse, unsigned int* signs, btScalar lambda_max, const btVector3* aabbMin, const btVector3* aabbMax, const btDbvt_ICollide* policy);
 	EXPORT void btDbvt_remove(btDbvt* obj, btDbvtNode* leaf);
 	EXPORT void btDbvt_setFree(btDbvt* obj, btDbvtNode* value);
 	EXPORT void btDbvt_setLeaves(btDbvt* obj, int value);
@@ -128,8 +128,8 @@ extern "C"
 	EXPORT void btDbvt_update2(btDbvt* obj, btDbvtNode* leaf);
 	EXPORT void btDbvt_update3(btDbvt* obj, btDbvtNode* leaf, int lookahead);
 	EXPORT bool btDbvt_update4(btDbvt* obj, btDbvtNode* leaf, btDbvtVolume* volume, btScalar margin);
-	EXPORT bool btDbvt_update5(btDbvt* obj, btDbvtNode* leaf, btDbvtVolume* volume, const btScalar* velocity);
-	EXPORT bool btDbvt_update6(btDbvt* obj, btDbvtNode* leaf, btDbvtVolume* volume, const btScalar* velocity, btScalar margin);
+	EXPORT bool btDbvt_update5(btDbvt* obj, btDbvtNode* leaf, btDbvtVolume* volume, const btVector3* velocity);
+	EXPORT bool btDbvt_update6(btDbvt* obj, btDbvtNode* leaf, btDbvtVolume* volume, const btVector3* velocity, btScalar margin);
 	EXPORT void btDbvt_write(btDbvt* obj, btDbvt_IWriter* iwriter);
 	EXPORT void btDbvt_delete(btDbvt* obj);
 }

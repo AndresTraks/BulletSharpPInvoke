@@ -72,7 +72,8 @@ void btDispatcherInfo_setAllowedCcdPenetration(btDispatcherInfo* obj, btScalar v
 	obj->m_allowedCcdPenetration = value;
 }
 
-void btDispatcherInfo_setConvexConservativeDistanceThreshold(btDispatcherInfo* obj, btScalar value)
+void btDispatcherInfo_setConvexConservativeDistanceThreshold(btDispatcherInfo* obj,
+	btScalar value)
 {
 	obj->m_convexConservativeDistanceThreshold = value;
 }
@@ -117,7 +118,8 @@ void btDispatcherInfo_setUseContinuous(btDispatcherInfo* obj, bool value)
 	obj->m_useContinuous = value;
 }
 
-void btDispatcherInfo_setUseConvexConservativeDistanceUtil(btDispatcherInfo* obj, bool value)
+void btDispatcherInfo_setUseConvexConservativeDistanceUtil(btDispatcherInfo* obj,
+	bool value)
 {
 	obj->m_useConvexConservativeDistanceUtil = value;
 }
@@ -138,17 +140,20 @@ void btDispatcher_clearManifold(btDispatcher* obj, btPersistentManifold* manifol
 	obj->clearManifold(manifold);
 }
 
-void btDispatcher_dispatchAllCollisionPairs(btDispatcher* obj, btOverlappingPairCache* pairCache, const btDispatcherInfo* dispatchInfo, btDispatcher* dispatcher)
+void btDispatcher_dispatchAllCollisionPairs(btDispatcher* obj, btOverlappingPairCache* pairCache,
+	const btDispatcherInfo* dispatchInfo, btDispatcher* dispatcher)
 {
 	obj->dispatchAllCollisionPairs(pairCache, *dispatchInfo, dispatcher);
 }
 
-btCollisionAlgorithm* btDispatcher_findAlgorithm(btDispatcher* obj, const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap)
+btCollisionAlgorithm* btDispatcher_findAlgorithm(btDispatcher* obj, const btCollisionObjectWrapper* body0Wrap,
+	const btCollisionObjectWrapper* body1Wrap)
 {
 	return obj->findAlgorithm(body0Wrap, body1Wrap);
 }
 
-btCollisionAlgorithm* btDispatcher_findAlgorithm2(btDispatcher* obj, const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap, btPersistentManifold* sharedManifold)
+btCollisionAlgorithm* btDispatcher_findAlgorithm2(btDispatcher* obj, const btCollisionObjectWrapper* body0Wrap,
+	const btCollisionObjectWrapper* body1Wrap, btPersistentManifold* sharedManifold)
 {
 	return obj->findAlgorithm(body0Wrap, body1Wrap, sharedManifold);
 }
@@ -168,12 +173,14 @@ btPoolAllocator* btDispatcher_getInternalManifoldPool(btDispatcher* obj)
 	return obj->getInternalManifoldPool();
 }
 
-btPersistentManifold* btDispatcher_getManifoldByIndexInternal(btDispatcher* obj, int index)
+btPersistentManifold* btDispatcher_getManifoldByIndexInternal(btDispatcher* obj,
+	int index)
 {
 	return obj->getManifoldByIndexInternal(index);
 }
 
-btPersistentManifold* btDispatcher_getNewManifold(btDispatcher* obj, const btCollisionObject* b0, const btCollisionObject* b1)
+btPersistentManifold* btDispatcher_getNewManifold(btDispatcher* obj, const btCollisionObject* b0,
+	const btCollisionObject* b1)
 {
 	return obj->getNewManifold(b0, b1);
 }
@@ -183,12 +190,14 @@ int btDispatcher_getNumManifolds(btDispatcher* obj)
 	return obj->getNumManifolds();
 }
 
-bool btDispatcher_needsCollision(btDispatcher* obj, const btCollisionObject* body0, const btCollisionObject* body1)
+bool btDispatcher_needsCollision(btDispatcher* obj, const btCollisionObject* body0,
+	const btCollisionObject* body1)
 {
 	return obj->needsCollision(body0, body1);
 }
 
-bool btDispatcher_needsResponse(btDispatcher* obj, const btCollisionObject* body0, const btCollisionObject* body1)
+bool btDispatcher_needsResponse(btDispatcher* obj, const btCollisionObject* body0,
+	const btCollisionObject* body1)
 {
 	return obj->needsResponse(body0, body1);
 }

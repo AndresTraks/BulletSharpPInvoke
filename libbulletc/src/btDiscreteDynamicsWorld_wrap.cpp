@@ -5,7 +5,8 @@
 
 #include "btDiscreteDynamicsWorld_wrap.h"
 
-btDiscreteDynamicsWorld* btDiscreteDynamicsWorld_new(btDispatcher* dispatcher, btBroadphaseInterface* pairCache, btConstraintSolver* constraintSolver, btCollisionConfiguration* collisionConfiguration)
+btDiscreteDynamicsWorld* btDiscreteDynamicsWorld_new(btDispatcher* dispatcher, btBroadphaseInterface* pairCache,
+	btConstraintSolver* constraintSolver, btCollisionConfiguration* collisionConfiguration)
 {
 	return new btDiscreteDynamicsWorld(dispatcher, pairCache, constraintSolver, collisionConfiguration);
 }
@@ -45,12 +46,14 @@ bool btDiscreteDynamicsWorld_getSynchronizeAllMotionStates(btDiscreteDynamicsWor
 	return obj->getSynchronizeAllMotionStates();
 }
 
-void btDiscreteDynamicsWorld_setApplySpeculativeContactRestitution(btDiscreteDynamicsWorld* obj, bool enable)
+void btDiscreteDynamicsWorld_setApplySpeculativeContactRestitution(btDiscreteDynamicsWorld* obj,
+	bool enable)
 {
 	obj->setApplySpeculativeContactRestitution(enable);
 }
 
-void btDiscreteDynamicsWorld_setLatencyMotionStateInterpolation(btDiscreteDynamicsWorld* obj, bool latencyInterpolation)
+void btDiscreteDynamicsWorld_setLatencyMotionStateInterpolation(btDiscreteDynamicsWorld* obj,
+	bool latencyInterpolation)
 {
 	obj->setLatencyMotionStateInterpolation(latencyInterpolation);
 }
@@ -60,12 +63,14 @@ void btDiscreteDynamicsWorld_setNumTasks(btDiscreteDynamicsWorld* obj, int numTa
 	obj->setNumTasks(numTasks);
 }
 
-void btDiscreteDynamicsWorld_setSynchronizeAllMotionStates(btDiscreteDynamicsWorld* obj, bool synchronizeAll)
+void btDiscreteDynamicsWorld_setSynchronizeAllMotionStates(btDiscreteDynamicsWorld* obj,
+	bool synchronizeAll)
 {
 	obj->setSynchronizeAllMotionStates(synchronizeAll);
 }
 
-void btDiscreteDynamicsWorld_synchronizeSingleMotionState(btDiscreteDynamicsWorld* obj, btRigidBody* body)
+void btDiscreteDynamicsWorld_synchronizeSingleMotionState(btDiscreteDynamicsWorld* obj,
+	btRigidBody* body)
 {
 	obj->synchronizeSingleMotionState(body);
 }

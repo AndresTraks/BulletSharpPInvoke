@@ -19,49 +19,49 @@ void btSoftBodyNodePtrArray_set(btSoftBodyNodePtrArray* obj, btSoftBody_Node* va
 	obj[index] = value;
 }
 
-void btVector3_array_at(const btVector3* a, int n, btScalar* value)
+void btVector3_array_at(const btVector3* obj, int n, btVector3* value)
 {
-	VECTOR3_OUT(&a[n], value);
+	BTVECTOR3_SET(value, obj[n]);
 }
 
-void btVector3_array_set(btVector3* obj, int n, const btScalar* value)
+void btVector3_array_set(btVector3* obj, int n, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj[n]);
+	BTVECTOR3_COPY(&obj[n], value);
 }
 
-btAlignedVector3Array* btAlignedVector3Array_new()
+btAlignedObjectArray_btVector3* btAlignedObjectArray_btVector3_new()
 {
-	return new btAlignedVector3Array();
+	return new btAlignedObjectArray_btVector3();
 }
 
-void btAlignedVector3Array_at(btAlignedVector3Array* obj, int n, btScalar* value)
+void btAlignedObjectArray_btVector3_at(btAlignedObjectArray_btVector3* obj, int n, btVector3* value)
 {
-	VECTOR3_OUT(&obj->at(n), value);
+	BTVECTOR3_SET(value, obj->at(n));
 }
 
-void btAlignedVector3Array_push_back(btAlignedVector3Array* obj, const btScalar* value)
+void btAlignedObjectArray_btVector3_push_back(btAlignedObjectArray_btVector3* obj, const btVector3* value)
 {
-	VECTOR3_CONV(value);
-	obj->push_back(VECTOR3_USE(value));
+	BTVECTOR3_IN(value);
+	obj->push_back(BTVECTOR3_USE(value));
 }
 
-void btAlignedVector3Array_push_back2(btAlignedVector3Array* obj, const btScalar* value) // btVector4
+void btAlignedObjectArray_btVector3_push_back2(btAlignedObjectArray_btVector3* obj, const btVector4* value)
 {
-	VECTOR4_CONV(value);
-	obj->push_back(VECTOR4_USE(value));
+	BTVECTOR4_IN(value);
+	obj->push_back(BTVECTOR4_USE(value));
 }
 
-void btAlignedVector3Array_set(btAlignedVector3Array* obj, int n, const btScalar* value)
+void btAlignedObjectArray_btVector3_set(btAlignedObjectArray_btVector3* obj, int n, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->at(n));
+	BTVECTOR3_COPY(&obj->at(n), value);
 }
 
-int btAlignedVector3Array_size(btAlignedVector3Array* obj)
+int btAlignedObjectArray_btVector3_size(btAlignedObjectArray_btVector3* obj)
 {
 	return obj->size();
 }
 
-void btAlignedVector3Array_delete(btAlignedVector3Array* obj)
+void btAlignedObjectArray_btVector3_delete(btAlignedObjectArray_btVector3* obj)
 {
 	delete obj;
 }

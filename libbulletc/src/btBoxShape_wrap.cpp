@@ -3,10 +3,10 @@
 #include "conversion.h"
 #include "btBoxShape_wrap.h"
 
-btBoxShape* btBoxShape_new(const btScalar* boxHalfExtents)
+btBoxShape* btBoxShape_new(const btVector3* boxHalfExtents)
 {
-	VECTOR3_CONV(boxHalfExtents);
-	return new btBoxShape(VECTOR3_USE(boxHalfExtents));
+	BTVECTOR3_IN(boxHalfExtents);
+	return new btBoxShape(BTVECTOR3_USE(boxHalfExtents));
 }
 
 btBoxShape* btBoxShape_new2(btScalar boxHalfExtent)
@@ -19,19 +19,19 @@ btBoxShape* btBoxShape_new3(btScalar boxHalfExtentX, btScalar boxHalfExtentY, bt
 	return new btBoxShape(btVector3(boxHalfExtentX, boxHalfExtentY, boxHalfExtentZ));
 }
 
-void btBoxShape_getHalfExtentsWithMargin(btBoxShape* obj, btScalar* value)
+void btBoxShape_getHalfExtentsWithMargin(btBoxShape* obj, btVector3* value)
 {
-	VECTOR3_OUT_VAL(obj->getHalfExtentsWithMargin(), value);
+	BTVECTOR3_SET(value, obj->getHalfExtentsWithMargin());
 }
 
-void btBoxShape_getHalfExtentsWithoutMargin(btBoxShape* obj, btScalar* value)
+void btBoxShape_getHalfExtentsWithoutMargin(btBoxShape* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getHalfExtentsWithoutMargin(), value);
+	BTVECTOR3_COPY(value, &obj->getHalfExtentsWithoutMargin());
 }
 
-void btBoxShape_getPlaneEquation(btBoxShape* obj, btScalar* plane, int i)
+void btBoxShape_getPlaneEquation(btBoxShape* obj, btVector4* plane, int i)
 {
-	VECTOR4_DEF(plane);
-	obj->getPlaneEquation(VECTOR4_USE(plane), i);
-	VECTOR4_DEF_OUT(plane);
+	BTVECTOR4_DEF(plane);
+	obj->getPlaneEquation(BTVECTOR4_USE(plane), i);
+	BTVECTOR4_DEF_OUT(plane);
 }

@@ -23,32 +23,36 @@ void btTriangleMesh_addIndex(btTriangleMesh* obj, int index)
 	obj->addIndex(index);
 }
 
-void btTriangleMesh_addTriangle(btTriangleMesh* obj, const btScalar* vertex0, const btScalar* vertex1, const btScalar* vertex2)
+void btTriangleMesh_addTriangle(btTriangleMesh* obj, const btVector3* vertex0, const btVector3* vertex1,
+	const btVector3* vertex2)
 {
-	VECTOR3_CONV(vertex0);
-	VECTOR3_CONV(vertex1);
-	VECTOR3_CONV(vertex2);
-	obj->addTriangle(VECTOR3_USE(vertex0), VECTOR3_USE(vertex1), VECTOR3_USE(vertex2));
+	BTVECTOR3_IN(vertex0);
+	BTVECTOR3_IN(vertex1);
+	BTVECTOR3_IN(vertex2);
+	obj->addTriangle(BTVECTOR3_USE(vertex0), BTVECTOR3_USE(vertex1), BTVECTOR3_USE(vertex2));
 }
 
-void btTriangleMesh_addTriangle2(btTriangleMesh* obj, const btScalar* vertex0, const btScalar* vertex1, const btScalar* vertex2, bool removeDuplicateVertices)
+void btTriangleMesh_addTriangle2(btTriangleMesh* obj, const btVector3* vertex0, const btVector3* vertex1,
+	const btVector3* vertex2, bool removeDuplicateVertices)
 {
-	VECTOR3_CONV(vertex0);
-	VECTOR3_CONV(vertex1);
-	VECTOR3_CONV(vertex2);
-	obj->addTriangle(VECTOR3_USE(vertex0), VECTOR3_USE(vertex1), VECTOR3_USE(vertex2),
+	BTVECTOR3_IN(vertex0);
+	BTVECTOR3_IN(vertex1);
+	BTVECTOR3_IN(vertex2);
+	obj->addTriangle(BTVECTOR3_USE(vertex0), BTVECTOR3_USE(vertex1), BTVECTOR3_USE(vertex2),
 		removeDuplicateVertices);
 }
 
-void btTriangleMesh_addTriangleIndices(btTriangleMesh* obj, int index1, int index2, int index3)
+void btTriangleMesh_addTriangleIndices(btTriangleMesh* obj, int index1, int index2,
+	int index3)
 {
 	obj->addTriangleIndices(index1, index2, index3);
 }
 
-int btTriangleMesh_findOrAddVertex(btTriangleMesh* obj, const btScalar* vertex, bool removeDuplicateVertices)
+int btTriangleMesh_findOrAddVertex(btTriangleMesh* obj, const btVector3* vertex,
+	bool removeDuplicateVertices)
 {
-	VECTOR3_CONV(vertex);
-	return obj->findOrAddVertex(VECTOR3_USE(vertex), removeDuplicateVertices);
+	BTVECTOR3_IN(vertex);
+	return obj->findOrAddVertex(BTVECTOR3_USE(vertex), removeDuplicateVertices);
 }
 
 int btTriangleMesh_getNumTriangles(btTriangleMesh* obj)

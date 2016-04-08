@@ -115,7 +115,7 @@ namespace BulletSharpGen
 
         // These do no need forward references
         public List<string> PrecompiledHeaderReferences =
-            new List<string>(new[] {"Vector3", "Matrix3x3", "Quaternion", "Transform", "Vector4"});
+            new List<string>(new[] {"Matrix3x3", "Quaternion", "Transform", "Vector4"});
 
         public CppCliWriter(WrapperProject project)
             : base(project)
@@ -452,7 +452,7 @@ namespace BulletSharpGen
             if (method.IsConstructor && parentClass.BaseClass != null)
             {
                 // If there is no need for marshalling code, we can chain constructors
-                doConstructorChaining = currentParams.All(p => !BulletParser.TypeRequiresMarshal(p.Type));
+                doConstructorChaining = currentParams.All(p => !DefaultParser.TypeRequiresMarshal(p.Type));
 
                 Write(1, $": {parentClass.BaseClass.ManagedName}(");
 

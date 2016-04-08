@@ -3,69 +3,78 @@
 #include "conversion.h"
 #include "btHingeConstraint_wrap.h"
 
-btHingeConstraint* btHingeConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btScalar* pivotInA, const btScalar* pivotInB, const btScalar* axisInA, const btScalar* axisInB)
+btHingeConstraint* btHingeConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btVector3* pivotInA,
+	const btVector3* pivotInB, const btVector3* axisInA, const btVector3* axisInB)
 {
-	VECTOR3_CONV(pivotInA);
-	VECTOR3_CONV(pivotInB);
-	VECTOR3_CONV(axisInA);
-	VECTOR3_CONV(axisInB);
-	return new btHingeConstraint(*rbA, *rbB, VECTOR3_USE(pivotInA), VECTOR3_USE(pivotInB),
-		VECTOR3_USE(axisInA), VECTOR3_USE(axisInB));
+	BTVECTOR3_IN(pivotInA);
+	BTVECTOR3_IN(pivotInB);
+	BTVECTOR3_IN(axisInA);
+	BTVECTOR3_IN(axisInB);
+	return new btHingeConstraint(*rbA, *rbB, BTVECTOR3_USE(pivotInA), BTVECTOR3_USE(pivotInB),
+		BTVECTOR3_USE(axisInA), BTVECTOR3_USE(axisInB));
 }
 
-btHingeConstraint* btHingeConstraint_new2(btRigidBody* rbA, btRigidBody* rbB, const btScalar* pivotInA, const btScalar* pivotInB, const btScalar* axisInA, const btScalar* axisInB, bool useReferenceFrameA)
+btHingeConstraint* btHingeConstraint_new2(btRigidBody* rbA, btRigidBody* rbB, const btVector3* pivotInA,
+	const btVector3* pivotInB, const btVector3* axisInA, const btVector3* axisInB,
+	bool useReferenceFrameA)
 {
-	VECTOR3_CONV(pivotInA);
-	VECTOR3_CONV(pivotInB);
-	VECTOR3_CONV(axisInA);
-	VECTOR3_CONV(axisInB);
-	return new btHingeConstraint(*rbA, *rbB, VECTOR3_USE(pivotInA), VECTOR3_USE(pivotInB),
-		VECTOR3_USE(axisInA), VECTOR3_USE(axisInB), useReferenceFrameA);
+	BTVECTOR3_IN(pivotInA);
+	BTVECTOR3_IN(pivotInB);
+	BTVECTOR3_IN(axisInA);
+	BTVECTOR3_IN(axisInB);
+	return new btHingeConstraint(*rbA, *rbB, BTVECTOR3_USE(pivotInA), BTVECTOR3_USE(pivotInB),
+		BTVECTOR3_USE(axisInA), BTVECTOR3_USE(axisInB), useReferenceFrameA);
 }
 
-btHingeConstraint* btHingeConstraint_new3(btRigidBody* rbA, const btScalar* pivotInA, const btScalar* axisInA)
+btHingeConstraint* btHingeConstraint_new3(btRigidBody* rbA, const btVector3* pivotInA,
+	const btVector3* axisInA)
 {
-	VECTOR3_CONV(pivotInA);
-	VECTOR3_CONV(axisInA);
-	return new btHingeConstraint(*rbA, VECTOR3_USE(pivotInA), VECTOR3_USE(axisInA));
+	BTVECTOR3_IN(pivotInA);
+	BTVECTOR3_IN(axisInA);
+	return new btHingeConstraint(*rbA, BTVECTOR3_USE(pivotInA), BTVECTOR3_USE(axisInA));
 }
 
-btHingeConstraint* btHingeConstraint_new4(btRigidBody* rbA, const btScalar* pivotInA, const btScalar* axisInA, bool useReferenceFrameA)
+btHingeConstraint* btHingeConstraint_new4(btRigidBody* rbA, const btVector3* pivotInA,
+	const btVector3* axisInA, bool useReferenceFrameA)
 {
-	VECTOR3_CONV(pivotInA);
-	VECTOR3_CONV(axisInA);
-	return new btHingeConstraint(*rbA, VECTOR3_USE(pivotInA), VECTOR3_USE(axisInA),
+	BTVECTOR3_IN(pivotInA);
+	BTVECTOR3_IN(axisInA);
+	return new btHingeConstraint(*rbA, BTVECTOR3_USE(pivotInA), BTVECTOR3_USE(axisInA),
 		useReferenceFrameA);
 }
 
-btHingeConstraint* btHingeConstraint_new5(btRigidBody* rbA, btRigidBody* rbB, const btScalar* rbAFrame, const btScalar* rbBFrame)
+btHingeConstraint* btHingeConstraint_new5(btRigidBody* rbA, btRigidBody* rbB, const btTransform* rbAFrame,
+	const btTransform* rbBFrame)
 {
-	TRANSFORM_CONV(rbAFrame);
-	TRANSFORM_CONV(rbBFrame);
-	return new btHingeConstraint(*rbA, *rbB, TRANSFORM_USE(rbAFrame), TRANSFORM_USE(rbBFrame));
+	BTTRANSFORM_IN(rbAFrame);
+	BTTRANSFORM_IN(rbBFrame);
+	return new btHingeConstraint(*rbA, *rbB, BTTRANSFORM_USE(rbAFrame), BTTRANSFORM_USE(rbBFrame));
 }
 
-btHingeConstraint* btHingeConstraint_new6(btRigidBody* rbA, btRigidBody* rbB, const btScalar* rbAFrame, const btScalar* rbBFrame, bool useReferenceFrameA)
+btHingeConstraint* btHingeConstraint_new6(btRigidBody* rbA, btRigidBody* rbB, const btTransform* rbAFrame,
+	const btTransform* rbBFrame, bool useReferenceFrameA)
 {
-	TRANSFORM_CONV(rbAFrame);
-	TRANSFORM_CONV(rbBFrame);
-	return new btHingeConstraint(*rbA, *rbB, TRANSFORM_USE(rbAFrame), TRANSFORM_USE(rbBFrame),
+	BTTRANSFORM_IN(rbAFrame);
+	BTTRANSFORM_IN(rbBFrame);
+	return new btHingeConstraint(*rbA, *rbB, BTTRANSFORM_USE(rbAFrame), BTTRANSFORM_USE(rbBFrame),
 		useReferenceFrameA);
 }
 
-btHingeConstraint* btHingeConstraint_new7(btRigidBody* rbA, const btScalar* rbAFrame)
+btHingeConstraint* btHingeConstraint_new7(btRigidBody* rbA, const btTransform* rbAFrame)
 {
-	TRANSFORM_CONV(rbAFrame);
-	return new btHingeConstraint(*rbA, TRANSFORM_USE(rbAFrame));
+	BTTRANSFORM_IN(rbAFrame);
+	return new btHingeConstraint(*rbA, BTTRANSFORM_USE(rbAFrame));
 }
 
-btHingeConstraint* btHingeConstraint_new8(btRigidBody* rbA, const btScalar* rbAFrame, bool useReferenceFrameA)
+btHingeConstraint* btHingeConstraint_new8(btRigidBody* rbA, const btTransform* rbAFrame,
+	bool useReferenceFrameA)
 {
-	TRANSFORM_CONV(rbAFrame);
-	return new btHingeConstraint(*rbA, TRANSFORM_USE(rbAFrame), useReferenceFrameA);
+	BTTRANSFORM_IN(rbAFrame);
+	return new btHingeConstraint(*rbA, BTTRANSFORM_USE(rbAFrame), useReferenceFrameA);
 }
 
-void btHingeConstraint_enableAngularMotor(btHingeConstraint* obj, bool enableMotor, btScalar targetVelocity, btScalar maxMotorImpulse)
+void btHingeConstraint_enableAngularMotor(btHingeConstraint* obj, bool enableMotor,
+	btScalar targetVelocity, btScalar maxMotorImpulse)
 {
 	obj->enableAngularMotor(enableMotor, targetVelocity, maxMotorImpulse);
 }
@@ -75,9 +84,9 @@ void btHingeConstraint_enableMotor(btHingeConstraint* obj, bool enableMotor)
 	obj->enableMotor(enableMotor);
 }
 
-void btHingeConstraint_getAFrame(btHingeConstraint* obj, btScalar* value)
+void btHingeConstraint_getAFrame(btHingeConstraint* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getAFrame(), value);
+	BTTRANSFORM_COPY(value, &obj->getAFrame());
 }
 
 bool btHingeConstraint_getAngularOnly(btHingeConstraint* obj)
@@ -85,9 +94,9 @@ bool btHingeConstraint_getAngularOnly(btHingeConstraint* obj)
 	return obj->getAngularOnly();
 }
 
-void btHingeConstraint_getBFrame(btHingeConstraint* obj, btScalar* value)
+void btHingeConstraint_getBFrame(btHingeConstraint* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getBFrame(), value);
+	BTTRANSFORM_COPY(value, &obj->getBFrame());
 }
 
 bool btHingeConstraint_getEnableAngularMotor(btHingeConstraint* obj)
@@ -100,21 +109,22 @@ int btHingeConstraint_getFlags(btHingeConstraint* obj)
 	return obj->getFlags();
 }
 
-void btHingeConstraint_getFrameOffsetA(btHingeConstraint* obj, btScalar* value)
+void btHingeConstraint_getFrameOffsetA(btHingeConstraint* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getFrameOffsetA(), value);
+	BTTRANSFORM_COPY(value, &obj->getFrameOffsetA());
 }
 
-void btHingeConstraint_getFrameOffsetB(btHingeConstraint* obj, btScalar* value)
+void btHingeConstraint_getFrameOffsetB(btHingeConstraint* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getFrameOffsetB(), value);
+	BTTRANSFORM_COPY(value, &obj->getFrameOffsetB());
 }
 
-btScalar btHingeConstraint_getHingeAngle(btHingeConstraint* obj, const btScalar* transA, const btScalar* transB)
+btScalar btHingeConstraint_getHingeAngle(btHingeConstraint* obj, const btTransform* transA,
+	const btTransform* transB)
 {
-	TRANSFORM_CONV(transA);
-	TRANSFORM_CONV(transB);
-	return obj->getHingeAngle(TRANSFORM_USE(transA), TRANSFORM_USE(transB));
+	BTTRANSFORM_IN(transA);
+	BTTRANSFORM_IN(transB);
+	return obj->getHingeAngle(BTTRANSFORM_USE(transA), BTTRANSFORM_USE(transB));
 }
 
 btScalar btHingeConstraint_getHingeAngle2(btHingeConstraint* obj)
@@ -127,34 +137,40 @@ void btHingeConstraint_getInfo1NonVirtual(btHingeConstraint* obj, btTypedConstra
 	obj->getInfo1NonVirtual(info);
 }
 
-void btHingeConstraint_getInfo2Internal(btHingeConstraint* obj, btTypedConstraint_btConstraintInfo2* info, const btScalar* transA, const btScalar* transB, const btScalar* angVelA, const btScalar* angVelB)
+void btHingeConstraint_getInfo2Internal(btHingeConstraint* obj, btTypedConstraint_btConstraintInfo2* info,
+	const btTransform* transA, const btTransform* transB, const btVector3* angVelA,
+	const btVector3* angVelB)
 {
-	TRANSFORM_CONV(transA);
-	TRANSFORM_CONV(transB);
-	VECTOR3_CONV(angVelA);
-	VECTOR3_CONV(angVelB);
-	obj->getInfo2Internal(info, TRANSFORM_USE(transA), TRANSFORM_USE(transB), VECTOR3_USE(angVelA),
-		VECTOR3_USE(angVelB));
+	BTTRANSFORM_IN(transA);
+	BTTRANSFORM_IN(transB);
+	BTVECTOR3_IN(angVelA);
+	BTVECTOR3_IN(angVelB);
+	obj->getInfo2Internal(info, BTTRANSFORM_USE(transA), BTTRANSFORM_USE(transB),
+		BTVECTOR3_USE(angVelA), BTVECTOR3_USE(angVelB));
 }
 
-void btHingeConstraint_getInfo2InternalUsingFrameOffset(btHingeConstraint* obj, btTypedConstraint_btConstraintInfo2* info, const btScalar* transA, const btScalar* transB, const btScalar* angVelA, const btScalar* angVelB)
+void btHingeConstraint_getInfo2InternalUsingFrameOffset(btHingeConstraint* obj, btTypedConstraint_btConstraintInfo2* info,
+	const btTransform* transA, const btTransform* transB, const btVector3* angVelA,
+	const btVector3* angVelB)
 {
-	TRANSFORM_CONV(transA);
-	TRANSFORM_CONV(transB);
-	VECTOR3_CONV(angVelA);
-	VECTOR3_CONV(angVelB);
-	obj->getInfo2InternalUsingFrameOffset(info, TRANSFORM_USE(transA), TRANSFORM_USE(transB),
-		VECTOR3_USE(angVelA), VECTOR3_USE(angVelB));
+	BTTRANSFORM_IN(transA);
+	BTTRANSFORM_IN(transB);
+	BTVECTOR3_IN(angVelA);
+	BTVECTOR3_IN(angVelB);
+	obj->getInfo2InternalUsingFrameOffset(info, BTTRANSFORM_USE(transA), BTTRANSFORM_USE(transB),
+		BTVECTOR3_USE(angVelA), BTVECTOR3_USE(angVelB));
 }
 
-void btHingeConstraint_getInfo2NonVirtual(btHingeConstraint* obj, btTypedConstraint_btConstraintInfo2* info, const btScalar* transA, const btScalar* transB, const btScalar* angVelA, const btScalar* angVelB)
+void btHingeConstraint_getInfo2NonVirtual(btHingeConstraint* obj, btTypedConstraint_btConstraintInfo2* info,
+	const btTransform* transA, const btTransform* transB, const btVector3* angVelA,
+	const btVector3* angVelB)
 {
-	TRANSFORM_CONV(transA);
-	TRANSFORM_CONV(transB);
-	VECTOR3_CONV(angVelA);
-	VECTOR3_CONV(angVelB);
-	obj->getInfo2NonVirtual(info, TRANSFORM_USE(transA), TRANSFORM_USE(transB), VECTOR3_USE(angVelA),
-		VECTOR3_USE(angVelB));
+	BTTRANSFORM_IN(transA);
+	BTTRANSFORM_IN(transB);
+	BTVECTOR3_IN(angVelA);
+	BTVECTOR3_IN(angVelB);
+	obj->getInfo2NonVirtual(info, BTTRANSFORM_USE(transA), BTTRANSFORM_USE(transB),
+		BTVECTOR3_USE(angVelA), BTVECTOR3_USE(angVelB));
 }
 
 btScalar btHingeConstraint_getLimitBiasFactor(btHingeConstraint* obj)
@@ -222,17 +238,18 @@ void btHingeConstraint_setAngularOnly(btHingeConstraint* obj, bool angularOnly)
 	obj->setAngularOnly(angularOnly);
 }
 
-void btHingeConstraint_setAxis(btHingeConstraint* obj, btScalar* axisInA)
+void btHingeConstraint_setAxis(btHingeConstraint* obj, btVector3* axisInA)
 {
-	VECTOR3_CONV(axisInA);
-	obj->setAxis(VECTOR3_USE(axisInA));
+	BTVECTOR3_IN(axisInA);
+	obj->setAxis(BTVECTOR3_USE(axisInA));
 }
 
-void btHingeConstraint_setFrames(btHingeConstraint* obj, const btScalar* frameA, const btScalar* frameB)
+void btHingeConstraint_setFrames(btHingeConstraint* obj, const btTransform* frameA,
+	const btTransform* frameB)
 {
-	TRANSFORM_CONV(frameA);
-	TRANSFORM_CONV(frameB);
-	obj->setFrames(TRANSFORM_USE(frameA), TRANSFORM_USE(frameB));
+	BTTRANSFORM_IN(frameA);
+	BTTRANSFORM_IN(frameB);
+	obj->setFrames(BTTRANSFORM_USE(frameA), BTTRANSFORM_USE(frameB));
 }
 
 void btHingeConstraint_setLimit(btHingeConstraint* obj, btScalar low, btScalar high)
@@ -240,17 +257,20 @@ void btHingeConstraint_setLimit(btHingeConstraint* obj, btScalar low, btScalar h
 	obj->setLimit(low, high);
 }
 
-void btHingeConstraint_setLimit2(btHingeConstraint* obj, btScalar low, btScalar high, btScalar _softness)
+void btHingeConstraint_setLimit2(btHingeConstraint* obj, btScalar low, btScalar high,
+	btScalar _softness)
 {
 	obj->setLimit(low, high, _softness);
 }
 
-void btHingeConstraint_setLimit3(btHingeConstraint* obj, btScalar low, btScalar high, btScalar _softness, btScalar _biasFactor)
+void btHingeConstraint_setLimit3(btHingeConstraint* obj, btScalar low, btScalar high,
+	btScalar _softness, btScalar _biasFactor)
 {
 	obj->setLimit(low, high, _softness, _biasFactor);
 }
 
-void btHingeConstraint_setLimit4(btHingeConstraint* obj, btScalar low, btScalar high, btScalar _softness, btScalar _biasFactor, btScalar _relaxationFactor)
+void btHingeConstraint_setLimit4(btHingeConstraint* obj, btScalar low, btScalar high,
+	btScalar _softness, btScalar _biasFactor, btScalar _relaxationFactor)
 {
 	obj->setLimit(low, high, _softness, _biasFactor, _relaxationFactor);
 }
@@ -260,15 +280,17 @@ void btHingeConstraint_setMaxMotorImpulse(btHingeConstraint* obj, btScalar maxMo
 	obj->setMaxMotorImpulse(maxMotorImpulse);
 }
 
-void btHingeConstraint_setMotorTarget(btHingeConstraint* obj, btScalar targetAngle, btScalar dt)
+void btHingeConstraint_setMotorTarget(btHingeConstraint* obj, btScalar targetAngle,
+	btScalar dt)
 {
 	obj->setMotorTarget(targetAngle, dt);
 }
 
-void btHingeConstraint_setMotorTarget2(btHingeConstraint* obj, const btScalar* qAinB, btScalar dt)
+void btHingeConstraint_setMotorTarget2(btHingeConstraint* obj, const btQuaternion* qAinB,
+	btScalar dt)
 {
-	QUATERNION_CONV(qAinB);
-	obj->setMotorTarget(QUATERNION_USE(qAinB), dt);
+	BTQUATERNION_IN(qAinB);
+	obj->setMotorTarget(BTQUATERNION_USE(qAinB), dt);
 }
 
 void btHingeConstraint_setMotorTargetVelocity(btHingeConstraint* obj, btScalar motorTargetVelocity)
@@ -286,11 +308,12 @@ void btHingeConstraint_setUseReferenceFrameA(btHingeConstraint* obj, bool useRef
 	obj->setUseReferenceFrameA(useReferenceFrameA);
 }
 
-void btHingeConstraint_testLimit(btHingeConstraint* obj, const btScalar* transA, const btScalar* transB)
+void btHingeConstraint_testLimit(btHingeConstraint* obj, const btTransform* transA,
+	const btTransform* transB)
 {
-	TRANSFORM_CONV(transA);
-	TRANSFORM_CONV(transB);
-	obj->testLimit(TRANSFORM_USE(transA), TRANSFORM_USE(transB));
+	BTTRANSFORM_IN(transA);
+	BTTRANSFORM_IN(transB);
+	obj->testLimit(BTTRANSFORM_USE(transA), BTTRANSFORM_USE(transB));
 }
 
 void btHingeConstraint_updateRHS(btHingeConstraint* obj, btScalar timeStep)
@@ -299,67 +322,78 @@ void btHingeConstraint_updateRHS(btHingeConstraint* obj, btScalar timeStep)
 }
 
 
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btScalar* pivotInA, const btScalar* pivotInB, const btScalar* axisInA, const btScalar* axisInB)
+btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new(btRigidBody* rbA,
+	btRigidBody* rbB, const btVector3* pivotInA, const btVector3* pivotInB, const btVector3* axisInA,
+	const btVector3* axisInB)
 {
-	VECTOR3_CONV(pivotInA);
-	VECTOR3_CONV(pivotInB);
-	VECTOR3_CONV(axisInA);
-	VECTOR3_CONV(axisInB);
-	return new btHingeAccumulatedAngleConstraint(*rbA, *rbB, VECTOR3_USE(pivotInA),
-		VECTOR3_USE(pivotInB), VECTOR3_USE(axisInA), VECTOR3_USE(axisInB));
+	BTVECTOR3_IN(pivotInA);
+	BTVECTOR3_IN(pivotInB);
+	BTVECTOR3_IN(axisInA);
+	BTVECTOR3_IN(axisInB);
+	return new btHingeAccumulatedAngleConstraint(*rbA, *rbB, BTVECTOR3_USE(pivotInA),
+		BTVECTOR3_USE(pivotInB), BTVECTOR3_USE(axisInA), BTVECTOR3_USE(axisInB));
 }
 
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new2(btRigidBody* rbA, btRigidBody* rbB, const btScalar* pivotInA, const btScalar* pivotInB, const btScalar* axisInA, const btScalar* axisInB, bool useReferenceFrameA)
+btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new2(btRigidBody* rbA,
+	btRigidBody* rbB, const btVector3* pivotInA, const btVector3* pivotInB, const btVector3* axisInA,
+	const btVector3* axisInB, bool useReferenceFrameA)
 {
-	VECTOR3_CONV(pivotInA);
-	VECTOR3_CONV(pivotInB);
-	VECTOR3_CONV(axisInA);
-	VECTOR3_CONV(axisInB);
-	return new btHingeAccumulatedAngleConstraint(*rbA, *rbB, VECTOR3_USE(pivotInA),
-		VECTOR3_USE(pivotInB), VECTOR3_USE(axisInA), VECTOR3_USE(axisInB), useReferenceFrameA);
+	BTVECTOR3_IN(pivotInA);
+	BTVECTOR3_IN(pivotInB);
+	BTVECTOR3_IN(axisInA);
+	BTVECTOR3_IN(axisInB);
+	return new btHingeAccumulatedAngleConstraint(*rbA, *rbB, BTVECTOR3_USE(pivotInA),
+		BTVECTOR3_USE(pivotInB), BTVECTOR3_USE(axisInA), BTVECTOR3_USE(axisInB), useReferenceFrameA);
 }
 
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new3(btRigidBody* rbA, const btScalar* pivotInA, const btScalar* axisInA)
+btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new3(btRigidBody* rbA,
+	const btVector3* pivotInA, const btVector3* axisInA)
 {
-	VECTOR3_CONV(pivotInA);
-	VECTOR3_CONV(axisInA);
-	return new btHingeAccumulatedAngleConstraint(*rbA, VECTOR3_USE(pivotInA), VECTOR3_USE(axisInA));
+	BTVECTOR3_IN(pivotInA);
+	BTVECTOR3_IN(axisInA);
+	return new btHingeAccumulatedAngleConstraint(*rbA, BTVECTOR3_USE(pivotInA), BTVECTOR3_USE(axisInA));
 }
 
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new4(btRigidBody* rbA, const btScalar* pivotInA, const btScalar* axisInA, bool useReferenceFrameA)
+btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new4(btRigidBody* rbA,
+	const btVector3* pivotInA, const btVector3* axisInA, bool useReferenceFrameA)
 {
-	VECTOR3_CONV(pivotInA);
-	VECTOR3_CONV(axisInA);
-	return new btHingeAccumulatedAngleConstraint(*rbA, VECTOR3_USE(pivotInA), VECTOR3_USE(axisInA),
+	BTVECTOR3_IN(pivotInA);
+	BTVECTOR3_IN(axisInA);
+	return new btHingeAccumulatedAngleConstraint(*rbA, BTVECTOR3_USE(pivotInA), BTVECTOR3_USE(axisInA),
 		useReferenceFrameA);
 }
 
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new5(btRigidBody* rbA, btRigidBody* rbB, const btScalar* rbAFrame, const btScalar* rbBFrame)
+btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new5(btRigidBody* rbA,
+	btRigidBody* rbB, const btTransform* rbAFrame, const btTransform* rbBFrame)
 {
-	TRANSFORM_CONV(rbAFrame);
-	TRANSFORM_CONV(rbBFrame);
-	return new btHingeAccumulatedAngleConstraint(*rbA, *rbB, TRANSFORM_USE(rbAFrame),
-		TRANSFORM_USE(rbBFrame));
+	BTTRANSFORM_IN(rbAFrame);
+	BTTRANSFORM_IN(rbBFrame);
+	return new btHingeAccumulatedAngleConstraint(*rbA, *rbB, BTTRANSFORM_USE(rbAFrame),
+		BTTRANSFORM_USE(rbBFrame));
 }
 
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new6(btRigidBody* rbA, btRigidBody* rbB, const btScalar* rbAFrame, const btScalar* rbBFrame, bool useReferenceFrameA)
+btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new6(btRigidBody* rbA,
+	btRigidBody* rbB, const btTransform* rbAFrame, const btTransform* rbBFrame, bool useReferenceFrameA)
 {
-	TRANSFORM_CONV(rbAFrame);
-	TRANSFORM_CONV(rbBFrame);
-	return new btHingeAccumulatedAngleConstraint(*rbA, *rbB, TRANSFORM_USE(rbAFrame),
-		TRANSFORM_USE(rbBFrame), useReferenceFrameA);
+	BTTRANSFORM_IN(rbAFrame);
+	BTTRANSFORM_IN(rbBFrame);
+	return new btHingeAccumulatedAngleConstraint(*rbA, *rbB, BTTRANSFORM_USE(rbAFrame),
+		BTTRANSFORM_USE(rbBFrame), useReferenceFrameA);
 }
 
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new7(btRigidBody* rbA, const btScalar* rbAFrame)
+btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new7(btRigidBody* rbA,
+	const btTransform* rbAFrame)
 {
-	TRANSFORM_CONV(rbAFrame);
-	return new btHingeAccumulatedAngleConstraint(*rbA, TRANSFORM_USE(rbAFrame));
+	BTTRANSFORM_IN(rbAFrame);
+	return new btHingeAccumulatedAngleConstraint(*rbA, BTTRANSFORM_USE(rbAFrame));
 }
 
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new8(btRigidBody* rbA, const btScalar* rbAFrame, bool useReferenceFrameA)
+btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new8(btRigidBody* rbA,
+	const btTransform* rbAFrame, bool useReferenceFrameA)
 {
-	TRANSFORM_CONV(rbAFrame);
-	return new btHingeAccumulatedAngleConstraint(*rbA, TRANSFORM_USE(rbAFrame), useReferenceFrameA);
+	BTTRANSFORM_IN(rbAFrame);
+	return new btHingeAccumulatedAngleConstraint(*rbA, BTTRANSFORM_USE(rbAFrame),
+		useReferenceFrameA);
 }
 
 btScalar btHingeAccumulatedAngleConstraint_getAccumulatedHingeAngle(btHingeAccumulatedAngleConstraint* obj)
@@ -367,7 +401,8 @@ btScalar btHingeAccumulatedAngleConstraint_getAccumulatedHingeAngle(btHingeAccum
 	return obj->getAccumulatedHingeAngle();
 }
 
-void btHingeAccumulatedAngleConstraint_setAccumulatedHingeAngle(btHingeAccumulatedAngleConstraint* obj, btScalar accAngle)
+void btHingeAccumulatedAngleConstraint_setAccumulatedHingeAngle(btHingeAccumulatedAngleConstraint* obj,
+	btScalar accAngle)
 {
 	obj->setAccumulatedHingeAngle(accAngle);
 }

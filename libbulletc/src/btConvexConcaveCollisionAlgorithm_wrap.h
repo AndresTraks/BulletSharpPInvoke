@@ -5,8 +5,8 @@ extern "C"
 	EXPORT btConvexTriangleCallback* btConvexTriangleCallback_new(btDispatcher* dispatcher, const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap, bool isSwapped);
 	EXPORT void btConvexTriangleCallback_clearCache(btConvexTriangleCallback* obj);
 	EXPORT void btConvexTriangleCallback_clearWrapperData(btConvexTriangleCallback* obj);
-	EXPORT void btConvexTriangleCallback_getAabbMax(btConvexTriangleCallback* obj, btScalar* value);
-	EXPORT void btConvexTriangleCallback_getAabbMin(btConvexTriangleCallback* obj, btScalar* value);
+	EXPORT void btConvexTriangleCallback_getAabbMax(btConvexTriangleCallback* obj, btVector3* value);
+	EXPORT void btConvexTriangleCallback_getAabbMin(btConvexTriangleCallback* obj, btVector3* value);
 	EXPORT btPersistentManifold* btConvexTriangleCallback_getManifoldPtr(btConvexTriangleCallback* obj);
 	EXPORT int btConvexTriangleCallback_getTriangleCount(btConvexTriangleCallback* obj);
 	EXPORT void btConvexTriangleCallback_setManifoldPtr(btConvexTriangleCallback* obj, btPersistentManifold* value);

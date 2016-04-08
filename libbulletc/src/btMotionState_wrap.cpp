@@ -12,16 +12,15 @@ btMotionStateWrapper::btMotionStateWrapper(p_btMotionState_GetWorldTransform get
 
 void btMotionStateWrapper::getWorldTransform(btTransform& worldTrans) const
 {
-	ATTRIBUTE_ALIGNED16(btScalar) worldTransTemp[16];
-	_getWorldTransformCallback(worldTransTemp);
-	MatrixTobtTransform(worldTransTemp, &worldTrans);
+	BTTRANSFORM_DEF(worldTrans);
+	_getWorldTransformCallback(&BTTRANSFORM_USE_REF(worldTrans));
+	BTTRANSFORM_DEF_OUT_REF(worldTrans);
 }
 
 void btMotionStateWrapper::setWorldTransform(const btTransform& worldTrans)
 {
-	ATTRIBUTE_ALIGNED16(btScalar) worldTransTemp[16];
-	btTransformToMatrix(&worldTrans, worldTransTemp);
-	_setWorldTransformCallback(worldTransTemp);
+	BTTRANSFORM_IN_REF(worldTrans);
+	_setWorldTransformCallback(&BTTRANSFORM_USE_REF(worldTrans));
 }
 
 
@@ -32,17 +31,16 @@ btMotionStateWrapper* btMotionStateWrapper_new(p_btMotionState_GetWorldTransform
 }
 
 
-void btMotionState_getWorldTransform(btMotionState* obj, btScalar* worldTrans)
+void btMotionState_getWorldTransform(btMotionState* obj, btTransform* worldTrans)
 {
-	TRANSFORM_DEF(worldTrans);
-	obj->getWorldTransform(TRANSFORM_USE(worldTrans));
-	TRANSFORM_DEF_OUT(worldTrans);
+	BTTRANSFORM_IN(worldTrans);
+	obj->getWorldTransform(BTTRANSFORM_USE(worldTrans));
 }
 
-void btMotionState_setWorldTransform(btMotionState* obj, const btScalar* worldTrans)
+void btMotionState_setWorldTransform(btMotionState* obj, const btTransform* worldTrans)
 {
-	TRANSFORM_CONV(worldTrans);
-	obj->setWorldTransform(TRANSFORM_USE(worldTrans));
+	BTTRANSFORM_IN(worldTrans);
+	obj->setWorldTransform(BTTRANSFORM_USE(worldTrans));
 }
 
 void btMotionState_delete(btMotionState* obj)

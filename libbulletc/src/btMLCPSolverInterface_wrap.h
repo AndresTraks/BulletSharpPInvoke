@@ -2,7 +2,7 @@
 
 extern "C"
 {
-	//EXPORT bool btMLCPSolverInterface_solveMLCP(btMLCPSolverInterface* obj, const btMatrixXf* A, const btVectorXf* b, btVectorXf* x, const btVectorXf* lo, const btVectorXf* hi, const btAlignedIntArray* limitDependency, int numIterations);
-	//EXPORT bool btMLCPSolverInterface_solveMLCP2(btMLCPSolverInterface* obj, const btMatrixXf* A, const btVectorXf* b, btVectorXf* x, const btVectorXf* lo, const btVectorXf* hi, const btAlignedIntArray* limitDependency, int numIterations, bool useSparsity);
+	//EXPORT bool btMLCPSolverInterface_solveMLCP(btMLCPSolverInterface* obj, const btMatrixX_float* A, const btVectorX_float* b, btVectorX_float* x, const btVectorX_float* lo, const btVectorX_float* hi, const btAlignedObjectArray_int* limitDependency, int numIterations);
+	//EXPORT bool btMLCPSolverInterface_solveMLCP2(btMLCPSolverInterface* obj, const btMatrixX_float* A, const btVectorX_float* b, btVectorX_float* x, const btVectorX_float* lo, const btVectorX_float* hi, const btAlignedObjectArray_int* limitDependency, int numIterations, bool useSparsity);
 	EXPORT void btMLCPSolverInterface_delete(btMLCPSolverInterface* obj);
 }

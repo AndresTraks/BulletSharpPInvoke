@@ -20,8 +20,13 @@
     <Replacement Replace="btMLCPSolverInterface" With="MlcpSolverInterface" />
     <Replacement Replace="btMultibodyLink" With="MultiBodyLink" />
     <Replacement Replace="btNNCGConstraintSolver" With="NncgConstraintSolver" />
+    <Replacement Replace="btQuaternion" With="Quaternion" />
     <Replacement Replace="btScalar" With="btScalar" />
     <Replacement Replace="btSparseSDF" With="SparseSdf" />
+    <Replacement Replace="btMatrix3x3" With="Matrix" />
+    <Replacement Replace="btTransform" With="Matrix" />
+    <Replacement Replace="btVector3" With="Vector3" />
+    <Replacement Replace="btVector4" With="Vector4" />
     <Replacement Replace="ConstraintParams" With="ConstraintParam" />
     <Replacement Replace="eAeroModel" With="AeroModel" />
     <Replacement Replace="eFeatherstoneJointType" With="FeatherstoneJointType" />
@@ -143,8 +148,8 @@ else
       </ClassTemplate>
     </Header>
     <Header Path="LinearMath/btVector3.h">
-      <Class Name="btVector3" />
-      <Class Name="btVector4" />
+      <Class Name="btVector3" MarshalAsStruct="true" />
+      <Class Name="btVector4" MarshalAsStruct="true" />
       <Class Name="btVector3FloatData" IsExcluded="true" />
       <Class Name="btVector3DoubleData" IsExcluded="true" />
     </Header>
@@ -152,17 +157,17 @@ else
       <Class Name="btQuadWord" />
     </Header>
     <Header Path="LinearMath/btQuaternion.h">
-      <Class Name="btQuaternion" />
+      <Class Name="btQuaternion" MarshalAsStruct="true" />
       <Class Name="btQuaternionFloatData" IsExcluded="true" />
       <Class Name="btQuaternionDoubleData" IsExcluded="true" />
     </Header>
     <Header Path="LinearMath/btMatrix3x3.h">
-      <Class Name="btMatrix3x3" />
+      <Class Name="btMatrix3x3" MarshalAsStruct="true" />
       <Class Name="btMatrix3x3FloatData" IsExcluded="true" />
       <Class Name="btMatrix3x3DoubleData" IsExcluded="true" />
     </Header>
     <Header Path="LinearMath/btTransform.h">
-      <Class Name="btTransform" />
+      <Class Name="btTransform" MarshalAsStruct="true" />
       <Class Name="btTransformFloatData" IsExcluded="true" />
       <Class Name="btTransformDoubleData" IsExcluded="true" />
     </Header>
@@ -1149,7 +1154,7 @@ else
           <Parameter Name="normal" MarshalDirection="Out" />
         </Method>
         <Method Name="getPlaneEquation">
-          <Parameter Name="i" MarshalDirection="In" />
+          <Parameter Name="i" />
           <Parameter Name="planeNormal" MarshalDirection="Out" />
           <Parameter Name="planeSupport" MarshalDirection="Out" />
         </Method>
@@ -1158,7 +1163,12 @@ else
     <Header Path="BulletCollision/Gimpact/btBoxCollision.h">
       <Enum Name="eBT_PLANE_INTERSECTION_TYPE" />
       <Class Name="BT_BOX_BOX_TRANSFORM_CACHE" IsExcluded="true" />
-      <Class Name="btAABB" HasPreventDelete="true" />
+      <Class Name="btAABB" HasPreventDelete="true">
+        <Method Name="get_center_extend">
+          <Parameter Name="center" MarshalDirection="Out" />
+          <Parameter Name="extend" MarshalDirection="Out" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="LinearMath/btGeometryUtil.h">
       <Class Name="btGeometryUtil" />
@@ -1167,8 +1177,17 @@ else
     <Header Path="BulletCollision/Gimpact/btGeometryOperations.h" IsExcluded="true" />
     <Header Path="BulletCollision/Gimpact/btTriangleShapeEx.h">
       <Class Name="GIM_TRIANGLE_CONTACT" />
-      <Class Name="btPrimitiveTriangle" />
-      <Class Name="btTriangleShapeEx" />
+      <Class Name="btPrimitiveTriangle">
+        <Method Name="get_edge_plane">
+          <Parameter Name="edge_index" />
+          <Parameter Name="plane" MarshalDirection="Out" />
+        </Method>
+      </Class>
+      <Class Name="btTriangleShapeEx">
+        <Method Name="buildTriPlane">
+          <Parameter Name="plane" MarshalDirection="Out" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="BulletCollision/Gimpact/btGImpactBvh.h">
       <Class Name="GIM_PAIR" />

@@ -25,7 +25,7 @@
 
     public class ParameterDefinition
     {
-        public string Name { get; }
+        public string Name { get; set; }
         public TypeRefDefinition Type { get; set; }
         public bool IsOptional { get; set; }
         public string ManagedName { get; set; }

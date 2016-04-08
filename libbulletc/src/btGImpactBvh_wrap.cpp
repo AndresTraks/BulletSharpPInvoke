@@ -235,7 +235,8 @@ void btBvhTree_delete(btBvhTree* obj)
 }
 
 
-void btPrimitiveManagerBase_get_primitive_box(btPrimitiveManagerBase* obj, int prim_index, btAABB* primbox)
+void btPrimitiveManagerBase_get_primitive_box(btPrimitiveManagerBase* obj, int prim_index,
+	btAABB* primbox)
 {
 	obj->get_primitive_box(prim_index, *primbox);
 }
@@ -245,7 +246,8 @@ int btPrimitiveManagerBase_get_primitive_count(btPrimitiveManagerBase* obj)
 	return obj->get_primitive_count();
 }
 
-void btPrimitiveManagerBase_get_primitive_triangle(btPrimitiveManagerBase* obj, int prim_index, btPrimitiveTriangle* triangle)
+void btPrimitiveManagerBase_get_primitive_triangle(btPrimitiveManagerBase* obj, int prim_index,
+	btPrimitiveTriangle* triangle)
 {
 	obj->get_primitive_triangle(prim_index, *triangle);
 }
@@ -271,15 +273,16 @@ btGImpactBvh* btGImpactBvh_new2(btPrimitiveManagerBase* primitive_manager)
 	return new btGImpactBvh(primitive_manager);
 }
 
-bool btGImpactBvh_boxQuery(btGImpactBvh* obj, const btAABB* box, btAlignedIntArray* collided_results)
+bool btGImpactBvh_boxQuery(btGImpactBvh* obj, const btAABB* box, btAlignedObjectArray_int* collided_results)
 {
 	return obj->boxQuery(*box, *collided_results);
 }
 
-bool btGImpactBvh_boxQueryTrans(btGImpactBvh* obj, const btAABB* box, const btScalar* transform, btAlignedIntArray* collided_results)
+bool btGImpactBvh_boxQueryTrans(btGImpactBvh* obj, const btAABB* box, const btTransform* transform,
+	btAlignedObjectArray_int* collided_results)
 {
-	TRANSFORM_CONV(transform);
-	return obj->boxQueryTrans(*box, TRANSFORM_USE(transform), *collided_results);
+	BTTRANSFORM_IN(transform);
+	return obj->boxQueryTrans(*box, BTTRANSFORM_USE(transform), *collided_results);
 }
 
 void btGImpactBvh_buildSet(btGImpactBvh* obj)
@@ -287,11 +290,12 @@ void btGImpactBvh_buildSet(btGImpactBvh* obj)
 	obj->buildSet();
 }
 
-void btGImpactBvh_find_collision(btGImpactBvh* boxset1, const btScalar* trans1, btGImpactBvh* boxset2, const btScalar* trans2, btPairSet* collision_pairs)
+void btGImpactBvh_find_collision(btGImpactBvh* boxset1, const btTransform* trans1,
+	btGImpactBvh* boxset2, const btTransform* trans2, btPairSet* collision_pairs)
 {
-	TRANSFORM_CONV(trans1);
-	TRANSFORM_CONV(trans2);
-	btGImpactBvh::find_collision(boxset1, TRANSFORM_USE(trans1), boxset2, TRANSFORM_USE(trans2),
+	BTTRANSFORM_IN(trans1);
+	BTTRANSFORM_IN(trans2);
+	btGImpactBvh::find_collision(boxset1, BTTRANSFORM_USE(trans1), boxset2, BTTRANSFORM_USE(trans2),
 		*collision_pairs);
 }
 
@@ -367,11 +371,12 @@ bool btGImpactBvh_isTrimesh(btGImpactBvh* obj)
 	return obj->isTrimesh();
 }
 
-bool btGImpactBvh_rayQuery(btGImpactBvh* obj, const btScalar* ray_dir, const btScalar* ray_origin, btAlignedIntArray* collided_results)
+bool btGImpactBvh_rayQuery(btGImpactBvh* obj, const btVector3* ray_dir, const btVector3* ray_origin,
+	btAlignedObjectArray_int* collided_results)
 {
-	VECTOR3_CONV(ray_dir);
-	VECTOR3_CONV(ray_origin);
-	return obj->rayQuery(VECTOR3_USE(ray_dir), VECTOR3_USE(ray_origin), *collided_results);
+	BTVECTOR3_IN(ray_dir);
+	BTVECTOR3_IN(ray_origin);
+	return obj->rayQuery(BTVECTOR3_USE(ray_dir), BTVECTOR3_USE(ray_origin), *collided_results);
 }
 
 void btGImpactBvh_setNodeBound(btGImpactBvh* obj, int nodeindex, const btAABB* bound)

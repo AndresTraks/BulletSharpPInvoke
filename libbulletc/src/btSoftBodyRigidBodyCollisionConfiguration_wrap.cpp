@@ -7,7 +7,8 @@ btSoftBodyRigidBodyCollisionConfiguration* btSoftBodyRigidBodyCollisionConfigura
 	return new btSoftBodyRigidBodyCollisionConfiguration();
 }
 
-btSoftBodyRigidBodyCollisionConfiguration* btSoftBodyRigidBodyCollisionConfiguration_new2(const btDefaultCollisionConstructionInfo* constructionInfo)
+btSoftBodyRigidBodyCollisionConfiguration* btSoftBodyRigidBodyCollisionConfiguration_new2(
+	const btDefaultCollisionConstructionInfo* constructionInfo)
 {
 	return new btSoftBodyRigidBodyCollisionConfiguration(*constructionInfo);
 }

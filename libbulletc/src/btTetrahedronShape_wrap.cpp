@@ -8,41 +8,43 @@ btBU_Simplex1to4* btBU_Simplex1to4_new()
 	return new btBU_Simplex1to4();
 }
 
-btBU_Simplex1to4* btBU_Simplex1to4_new2(const btScalar* pt0)
+btBU_Simplex1to4* btBU_Simplex1to4_new2(const btVector3* pt0)
 {
-	VECTOR3_CONV(pt0);
-	return new btBU_Simplex1to4(VECTOR3_USE(pt0));
+	BTVECTOR3_IN(pt0);
+	return new btBU_Simplex1to4(BTVECTOR3_USE(pt0));
 }
 
-btBU_Simplex1to4* btBU_Simplex1to4_new3(const btScalar* pt0, const btScalar* pt1)
+btBU_Simplex1to4* btBU_Simplex1to4_new3(const btVector3* pt0, const btVector3* pt1)
 {
-	VECTOR3_CONV(pt0);
-	VECTOR3_CONV(pt1);
-	return new btBU_Simplex1to4(VECTOR3_USE(pt0), VECTOR3_USE(pt1));
+	BTVECTOR3_IN(pt0);
+	BTVECTOR3_IN(pt1);
+	return new btBU_Simplex1to4(BTVECTOR3_USE(pt0), BTVECTOR3_USE(pt1));
 }
 
-btBU_Simplex1to4* btBU_Simplex1to4_new4(const btScalar* pt0, const btScalar* pt1, const btScalar* pt2)
+btBU_Simplex1to4* btBU_Simplex1to4_new4(const btVector3* pt0, const btVector3* pt1,
+	const btVector3* pt2)
 {
-	VECTOR3_CONV(pt0);
-	VECTOR3_CONV(pt1);
-	VECTOR3_CONV(pt2);
-	return new btBU_Simplex1to4(VECTOR3_USE(pt0), VECTOR3_USE(pt1), VECTOR3_USE(pt2));
+	BTVECTOR3_IN(pt0);
+	BTVECTOR3_IN(pt1);
+	BTVECTOR3_IN(pt2);
+	return new btBU_Simplex1to4(BTVECTOR3_USE(pt0), BTVECTOR3_USE(pt1), BTVECTOR3_USE(pt2));
 }
 
-btBU_Simplex1to4* btBU_Simplex1to4_new5(const btScalar* pt0, const btScalar* pt1, const btScalar* pt2, const btScalar* pt3)
+btBU_Simplex1to4* btBU_Simplex1to4_new5(const btVector3* pt0, const btVector3* pt1,
+	const btVector3* pt2, const btVector3* pt3)
 {
-	VECTOR3_CONV(pt0);
-	VECTOR3_CONV(pt1);
-	VECTOR3_CONV(pt2);
-	VECTOR3_CONV(pt3);
-	return new btBU_Simplex1to4(VECTOR3_USE(pt0), VECTOR3_USE(pt1), VECTOR3_USE(pt2),
-		VECTOR3_USE(pt3));
+	BTVECTOR3_IN(pt0);
+	BTVECTOR3_IN(pt1);
+	BTVECTOR3_IN(pt2);
+	BTVECTOR3_IN(pt3);
+	return new btBU_Simplex1to4(BTVECTOR3_USE(pt0), BTVECTOR3_USE(pt1), BTVECTOR3_USE(pt2),
+		BTVECTOR3_USE(pt3));
 }
 
-void btBU_Simplex1to4_addVertex(btBU_Simplex1to4* obj, const btScalar* pt)
+void btBU_Simplex1to4_addVertex(btBU_Simplex1to4* obj, const btVector3* pt)
 {
-	VECTOR3_CONV(pt);
-	obj->addVertex(VECTOR3_USE(pt));
+	BTVECTOR3_IN(pt);
+	obj->addVertex(BTVECTOR3_USE(pt));
 }
 
 int btBU_Simplex1to4_getIndex(btBU_Simplex1to4* obj, int i)

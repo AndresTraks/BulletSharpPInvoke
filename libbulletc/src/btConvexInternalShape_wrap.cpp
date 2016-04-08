@@ -3,14 +3,15 @@
 #include "conversion.h"
 #include "btConvexInternalShape_wrap.h"
 
-void btConvexInternalShape_getImplicitShapeDimensions(btConvexInternalShape* obj, btScalar* dimensions)
+void btConvexInternalShape_getImplicitShapeDimensions(btConvexInternalShape* obj,
+	btVector3* dimensions)
 {
-	VECTOR3_OUT(&obj->getImplicitShapeDimensions(), dimensions);
+	BTVECTOR3_COPY(dimensions, &obj->getImplicitShapeDimensions());
 }
 
-void btConvexInternalShape_getLocalScalingNV(btConvexInternalShape* obj, btScalar* value)
+void btConvexInternalShape_getLocalScalingNV(btConvexInternalShape* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getLocalScalingNV(), value);
+	BTVECTOR3_COPY(value, &obj->getLocalScalingNV());
 }
 
 btScalar btConvexInternalShape_getMarginNV(btConvexInternalShape* obj)
@@ -18,10 +19,11 @@ btScalar btConvexInternalShape_getMarginNV(btConvexInternalShape* obj)
 	return obj->getMarginNV();
 }
 
-void btConvexInternalShape_setImplicitShapeDimensions(btConvexInternalShape* obj, const btScalar* dimensions)
+void btConvexInternalShape_setImplicitShapeDimensions(btConvexInternalShape* obj,
+	const btVector3* dimensions)
 {
-	VECTOR3_CONV(dimensions);
-	obj->setImplicitShapeDimensions(VECTOR3_USE(dimensions));
+	BTVECTOR3_IN(dimensions);
+	obj->setImplicitShapeDimensions(BTVECTOR3_USE(dimensions));
 }
 
 void btConvexInternalShape_setSafeMargin(btConvexInternalShape* obj, btScalar minDimension)
@@ -29,21 +31,23 @@ void btConvexInternalShape_setSafeMargin(btConvexInternalShape* obj, btScalar mi
 	obj->setSafeMargin(minDimension);
 }
 
-void btConvexInternalShape_setSafeMargin2(btConvexInternalShape* obj, btScalar minDimension, btScalar defaultMarginMultiplier)
+void btConvexInternalShape_setSafeMargin2(btConvexInternalShape* obj, btScalar minDimension,
+	btScalar defaultMarginMultiplier)
 {
 	obj->setSafeMargin(minDimension, defaultMarginMultiplier);
 }
 
-void btConvexInternalShape_setSafeMargin3(btConvexInternalShape* obj, const btScalar* halfExtents)
+void btConvexInternalShape_setSafeMargin3(btConvexInternalShape* obj, const btVector3* halfExtents)
 {
-	VECTOR3_CONV(halfExtents);
-	obj->setSafeMargin(VECTOR3_USE(halfExtents));
+	BTVECTOR3_IN(halfExtents);
+	obj->setSafeMargin(BTVECTOR3_USE(halfExtents));
 }
 
-void btConvexInternalShape_setSafeMargin4(btConvexInternalShape* obj, const btScalar* halfExtents, btScalar defaultMarginMultiplier)
+void btConvexInternalShape_setSafeMargin4(btConvexInternalShape* obj, const btVector3* halfExtents,
+	btScalar defaultMarginMultiplier)
 {
-	VECTOR3_CONV(halfExtents);
-	obj->setSafeMargin(VECTOR3_USE(halfExtents), defaultMarginMultiplier);
+	BTVECTOR3_IN(halfExtents);
+	obj->setSafeMargin(BTVECTOR3_USE(halfExtents), defaultMarginMultiplier);
 }
 
 

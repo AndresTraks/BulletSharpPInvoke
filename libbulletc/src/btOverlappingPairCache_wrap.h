@@ -12,7 +12,7 @@ extern "C"
 	EXPORT void btOverlappingPairCache_cleanProxyFromPairs(btOverlappingPairCache* obj, btBroadphaseProxy* proxy, btDispatcher* dispatcher);
 	EXPORT btBroadphasePair* btOverlappingPairCache_findPair(btOverlappingPairCache* obj, btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1);
 	EXPORT int btOverlappingPairCache_getNumOverlappingPairs(btOverlappingPairCache* obj);
-	EXPORT btAlignedBroadphasePairArray* btOverlappingPairCache_getOverlappingPairArray(btOverlappingPairCache* obj);
+	EXPORT btAlignedObjectArray_btBroadphasePair* btOverlappingPairCache_getOverlappingPairArray(btOverlappingPairCache* obj);
 	EXPORT btBroadphasePair* btOverlappingPairCache_getOverlappingPairArrayPtr(btOverlappingPairCache* obj);
 	EXPORT bool btOverlappingPairCache_hasDeferredRemoval(btOverlappingPairCache* obj);
 	EXPORT void btOverlappingPairCache_processAllOverlappingPairs(btOverlappingPairCache* obj, btOverlapCallback* __unnamed0, btDispatcher* dispatcher);

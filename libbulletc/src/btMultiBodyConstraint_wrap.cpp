@@ -8,7 +8,8 @@ void btMultiBodyConstraint_allocateJacobiansMultiDof(btMultiBodyConstraint* obj)
 	obj->allocateJacobiansMultiDof();
 }
 
-void btMultiBodyConstraint_createConstraintRows(btMultiBodyConstraint* obj, btMultiBodyConstraintArray* constraintRows, btMultiBodyJacobianData* data, const btContactSolverInfo* infoGlobal)
+void btMultiBodyConstraint_createConstraintRows(btMultiBodyConstraint* obj, btAlignedObjectArray_btMultiBodySolverConstraint* constraintRows,
+	btMultiBodyJacobianData* data, const btContactSolverInfo* infoGlobal)
 {
 	obj->createConstraintRows(*constraintRows, *data, *infoGlobal);
 }
@@ -63,7 +64,8 @@ btScalar btMultiBodyConstraint_getPosition(btMultiBodyConstraint* obj, int row)
 	return obj->getPosition(row);
 }
 
-void btMultiBodyConstraint_internalSetAppliedImpulse(btMultiBodyConstraint* obj, int dof, btScalar appliedImpulse)
+void btMultiBodyConstraint_internalSetAppliedImpulse(btMultiBodyConstraint* obj,
+	int dof, btScalar appliedImpulse)
 {
 	obj->internalSetAppliedImpulse(dof, appliedImpulse);
 }

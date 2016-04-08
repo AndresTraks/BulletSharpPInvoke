@@ -118,6 +118,14 @@ namespace BulletSharpGen
             return false;
         }
 
+        // Does the type require additional lines of code to marshal?
+        public static bool TypeRequiresMarshal(TypeRefDefinition type)
+        {
+            if (type.Target != null && type.Target.MarshalAsStruct) return true;
+            if (type.IsReference && TypeRequiresMarshal(type.Referenced)) return true;
+            return false;
+        }
+
         void SetClassProperties()
         {
             foreach (var @class in Project.ClassDefinitions.Values)
@@ -433,20 +441,26 @@ namespace BulletSharpGen
             {
                 method.ManagedName = GetManagedMethodName(method);
 
-                foreach (var param in method.Parameters)
+                for (int i = 0; i < method.Parameters.Length; i++)
                 {
-                    param.ManagedName = GetManagedParameterName(param);
+                    var param = method.Parameters[i];
+                    if (param.Name == "")
+                    {
+                        param.Name = $"__unnamed{i}";
+                        param.ManagedName = param.Name;
+                    }
+                    else
+                    {
+                        param.ManagedName = GetManagedParameterName(param);
+                    }
                 }
             }
         }
 
         string GetManagedMethodName(MethodDefinition method)
         {
-            if (Project.MethodNameMapping != null)
-            {
-                string mapping = Project.MethodNameMapping.Map(method.Name);
-                if (mapping != null) return mapping;
-            }
+            string mapping = Project.MethodNameMapping?.Map(method.Name);
+            if (mapping != null) return mapping;
 
             if (method.Name.StartsWith("operator"))
             {
@@ -463,17 +477,8 @@ namespace BulletSharpGen
 
         string GetManagedParameterName(ParameterDefinition param)
         {
-            if (Project.ParameterNameMapping != null)
-            {
-                string mapping = Project.ParameterNameMapping.Map(param.Name);
-                if (mapping != null) return mapping;
-            }
-
-            string managedName = param.Name;
-            if (managedName.StartsWith("__unnamed"))
-            {
-                return managedName;
-            }
+            string mapping = Project.ParameterNameMapping?.Map(param.Name);
+            if (mapping != null) return mapping;
 
             return ToCamelCase(param.Name, false);
         }
@@ -586,7 +591,16 @@ namespace BulletSharpGen
             setter.ManagedName = managedSetterName;
             setter.ReturnType = new TypeRefDefinition("void");
             setter.Field = prop.Getter.Field;
-            if (!type.IsBasic && !type.IsPointer)
+            if (type.Target != null && type.Target.MarshalAsStruct)
+            {
+                type = new TypeRefDefinition
+                {
+                    IsConst = true,
+                    IsPointer = true,
+                    Referenced = type.Copy()
+                };
+            }
+            else if (!type.IsBasic && !type.IsPointer)
             {
                 type = type.Copy();
                 type.IsConst = true;

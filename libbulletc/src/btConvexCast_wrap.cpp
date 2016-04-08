@@ -13,10 +13,10 @@ void btConvexCast_CastResult_DebugDraw(btConvexCast::CastResult* obj, btScalar f
 	obj->DebugDraw(fraction);
 }
 
-void btConvexCast_CastResult_drawCoordSystem(btConvexCast::CastResult* obj, const btScalar* trans)
+void btConvexCast_CastResult_drawCoordSystem(btConvexCast::CastResult* obj, const btTransform* trans)
 {
-	TRANSFORM_CONV(trans);
-	obj->drawCoordSystem(TRANSFORM_USE(trans));
+	BTTRANSFORM_IN(trans);
+	obj->drawCoordSystem(BTTRANSFORM_USE(trans));
 }
 
 btScalar btConvexCast_CastResult_getAllowedPenetration(btConvexCast::CastResult* obj)
@@ -34,32 +34,34 @@ btScalar btConvexCast_CastResult_getFraction(btConvexCast::CastResult* obj)
 	return obj->m_fraction;
 }
 
-void btConvexCast_CastResult_getHitPoint(btConvexCast::CastResult* obj, btScalar* value)
+void btConvexCast_CastResult_getHitPoint(btConvexCast::CastResult* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_hitPoint, value);
+	BTVECTOR3_SET(value, obj->m_hitPoint);
 }
 
-void btConvexCast_CastResult_getHitTransformA(btConvexCast::CastResult* obj, btScalar* value)
+void btConvexCast_CastResult_getHitTransformA(btConvexCast::CastResult* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->m_hitTransformA, value);
+	BTTRANSFORM_SET(value, obj->m_hitTransformA);
 }
 
-void btConvexCast_CastResult_getHitTransformB(btConvexCast::CastResult* obj, btScalar* value)
+void btConvexCast_CastResult_getHitTransformB(btConvexCast::CastResult* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->m_hitTransformB, value);
+	BTTRANSFORM_SET(value, obj->m_hitTransformB);
 }
 
-void btConvexCast_CastResult_getNormal(btConvexCast::CastResult* obj, btScalar* value)
+void btConvexCast_CastResult_getNormal(btConvexCast::CastResult* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_normal, value);
+	BTVECTOR3_SET(value, obj->m_normal);
 }
 
-void btConvexCast_CastResult_reportFailure(btConvexCast::CastResult* obj, int errNo, int numIterations)
+void btConvexCast_CastResult_reportFailure(btConvexCast::CastResult* obj, int errNo,
+	int numIterations)
 {
 	obj->reportFailure(errNo, numIterations);
 }
 
-void btConvexCast_CastResult_setAllowedPenetration(btConvexCast::CastResult* obj, btScalar value)
+void btConvexCast_CastResult_setAllowedPenetration(btConvexCast::CastResult* obj,
+	btScalar value)
 {
 	obj->m_allowedPenetration = value;
 }
@@ -74,24 +76,24 @@ void btConvexCast_CastResult_setFraction(btConvexCast::CastResult* obj, btScalar
 	obj->m_fraction = value;
 }
 
-void btConvexCast_CastResult_setHitPoint(btConvexCast::CastResult* obj, const btScalar* value)
+void btConvexCast_CastResult_setHitPoint(btConvexCast::CastResult* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_hitPoint);
+	BTVECTOR3_COPY(&obj->m_hitPoint, value);
 }
 
-void btConvexCast_CastResult_setHitTransformA(btConvexCast::CastResult* obj, const btScalar* value)
+void btConvexCast_CastResult_setHitTransformA(btConvexCast::CastResult* obj, const btTransform* value)
 {
-	TRANSFORM_IN(value, &obj->m_hitTransformA);
+	BTTRANSFORM_COPY(&obj->m_hitTransformA, value);
 }
 
-void btConvexCast_CastResult_setHitTransformB(btConvexCast::CastResult* obj, const btScalar* value)
+void btConvexCast_CastResult_setHitTransformB(btConvexCast::CastResult* obj, const btTransform* value)
 {
-	TRANSFORM_IN(value, &obj->m_hitTransformB);
+	BTTRANSFORM_COPY(&obj->m_hitTransformB, value);
 }
 
-void btConvexCast_CastResult_setNormal(btConvexCast::CastResult* obj, const btScalar* value)
+void btConvexCast_CastResult_setNormal(btConvexCast::CastResult* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_normal);
+	BTVECTOR3_COPY(&obj->m_normal, value);
 }
 
 void btConvexCast_CastResult_delete(btConvexCast::CastResult* obj)
@@ -100,14 +102,15 @@ void btConvexCast_CastResult_delete(btConvexCast::CastResult* obj)
 }
 
 
-bool btConvexCast_calcTimeOfImpact(btConvexCast* obj, const btScalar* fromA, const btScalar* toA, const btScalar* fromB, const btScalar* toB, btConvexCast::CastResult* result)
+bool btConvexCast_calcTimeOfImpact(btConvexCast* obj, const btTransform* fromA, const btTransform* toA,
+	const btTransform* fromB, const btTransform* toB, btConvexCast_CastResult* result)
 {
-	TRANSFORM_CONV(fromA);
-	TRANSFORM_CONV(toA);
-	TRANSFORM_CONV(fromB);
-	TRANSFORM_CONV(toB);
-	return obj->calcTimeOfImpact(TRANSFORM_USE(fromA), TRANSFORM_USE(toA), TRANSFORM_USE(fromB),
-		TRANSFORM_USE(toB), *result);
+	BTTRANSFORM_IN(fromA);
+	BTTRANSFORM_IN(toA);
+	BTTRANSFORM_IN(fromB);
+	BTTRANSFORM_IN(toB);
+	return obj->calcTimeOfImpact(BTTRANSFORM_USE(fromA), BTTRANSFORM_USE(toA), BTTRANSFORM_USE(fromB),
+		BTTRANSFORM_USE(toB), *result);
 }
 
 void btConvexCast_delete(btConvexCast* obj)

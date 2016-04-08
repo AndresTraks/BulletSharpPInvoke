@@ -44,17 +44,18 @@ void btConstraintSetting_delete(btConstraintSetting* obj)
 }
 
 
-btPoint2PointConstraint* btPoint2PointConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btScalar* pivotInA, const btScalar* pivotInB)
+btPoint2PointConstraint* btPoint2PointConstraint_new(btRigidBody* rbA, btRigidBody* rbB,
+	const btVector3* pivotInA, const btVector3* pivotInB)
 {
-	VECTOR3_CONV(pivotInA);
-	VECTOR3_CONV(pivotInB);
-	return new btPoint2PointConstraint(*rbA, *rbB, VECTOR3_USE(pivotInA), VECTOR3_USE(pivotInB));
+	BTVECTOR3_IN(pivotInA);
+	BTVECTOR3_IN(pivotInB);
+	return new btPoint2PointConstraint(*rbA, *rbB, BTVECTOR3_USE(pivotInA), BTVECTOR3_USE(pivotInB));
 }
 
-btPoint2PointConstraint* btPoint2PointConstraint_new2(btRigidBody* rbA, const btScalar* pivotInA)
+btPoint2PointConstraint* btPoint2PointConstraint_new2(btRigidBody* rbA, const btVector3* pivotInA)
 {
-	VECTOR3_CONV(pivotInA);
-	return new btPoint2PointConstraint(*rbA, VECTOR3_USE(pivotInA));
+	BTVECTOR3_IN(pivotInA);
+	return new btPoint2PointConstraint(*rbA, BTVECTOR3_USE(pivotInA));
 }
 
 int btPoint2PointConstraint_getFlags(btPoint2PointConstraint* obj)
@@ -67,21 +68,22 @@ void btPoint2PointConstraint_getInfo1NonVirtual(btPoint2PointConstraint* obj, bt
 	obj->getInfo1NonVirtual(info);
 }
 
-void btPoint2PointConstraint_getInfo2NonVirtual(btPoint2PointConstraint* obj, btTypedConstraint_btConstraintInfo2* info, const btScalar* body0_trans, const btScalar* body1_trans)
+void btPoint2PointConstraint_getInfo2NonVirtual(btPoint2PointConstraint* obj, btTypedConstraint_btConstraintInfo2* info,
+	const btTransform* body0_trans, const btTransform* body1_trans)
 {
-	TRANSFORM_CONV(body0_trans);
-	TRANSFORM_CONV(body1_trans);
-	obj->getInfo2NonVirtual(info, TRANSFORM_USE(body0_trans), TRANSFORM_USE(body1_trans));
+	BTTRANSFORM_IN(body0_trans);
+	BTTRANSFORM_IN(body1_trans);
+	obj->getInfo2NonVirtual(info, BTTRANSFORM_USE(body0_trans), BTTRANSFORM_USE(body1_trans));
 }
 
-void btPoint2PointConstraint_getPivotInA(btPoint2PointConstraint* obj, btScalar* value)
+void btPoint2PointConstraint_getPivotInA(btPoint2PointConstraint* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getPivotInA(), value);
+	BTVECTOR3_COPY(value, &obj->getPivotInA());
 }
 
-void btPoint2PointConstraint_getPivotInB(btPoint2PointConstraint* obj, btScalar* value)
+void btPoint2PointConstraint_getPivotInB(btPoint2PointConstraint* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->getPivotInB(), value);
+	BTVECTOR3_COPY(value, &obj->getPivotInB());
 }
 
 btConstraintSetting* btPoint2PointConstraint_getSetting(btPoint2PointConstraint* obj)
@@ -94,19 +96,20 @@ bool btPoint2PointConstraint_getUseSolveConstraintObsolete(btPoint2PointConstrai
 	return obj->m_useSolveConstraintObsolete;
 }
 
-void btPoint2PointConstraint_setPivotA(btPoint2PointConstraint* obj, const btScalar* pivotA)
+void btPoint2PointConstraint_setPivotA(btPoint2PointConstraint* obj, const btVector3* pivotA)
 {
-	VECTOR3_CONV(pivotA);
-	obj->setPivotA(VECTOR3_USE(pivotA));
+	BTVECTOR3_IN(pivotA);
+	obj->setPivotA(BTVECTOR3_USE(pivotA));
 }
 
-void btPoint2PointConstraint_setPivotB(btPoint2PointConstraint* obj, const btScalar* pivotB)
+void btPoint2PointConstraint_setPivotB(btPoint2PointConstraint* obj, const btVector3* pivotB)
 {
-	VECTOR3_CONV(pivotB);
-	obj->setPivotB(VECTOR3_USE(pivotB));
+	BTVECTOR3_IN(pivotB);
+	obj->setPivotB(BTVECTOR3_USE(pivotB));
 }
 
-void btPoint2PointConstraint_setUseSolveConstraintObsolete(btPoint2PointConstraint* obj, bool value)
+void btPoint2PointConstraint_setUseSolveConstraintObsolete(btPoint2PointConstraint* obj,
+	bool value)
 {
 	obj->m_useSolveConstraintObsolete = value;
 }

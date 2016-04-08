@@ -102,7 +102,7 @@ namespace BulletSharp
 
                     throw new ArgumentOutOfRangeException("index");
 
-                return new BroadphasePair(btAlignedBroadphasePairArray_at(_native, index));
+                return new BroadphasePair(btAlignedObjectArray_btBroadphasePair_at(_native, index));
             }
             set
             {
@@ -112,12 +112,12 @@ namespace BulletSharp
 
         public void Add(BroadphasePair item)
         {
-            btAlignedBroadphasePairArray_push_back(_native, item._native);
+            btAlignedObjectArray_btBroadphasePair_push_back(_native, item._native);
         }
 
         public void Clear()
         {
-            btAlignedBroadphasePairArray_resizeNoInitialize(_native, 0);
+            btAlignedObjectArray_btBroadphasePair_resizeNoInitialize(_native, 0);
         }
 
         public bool Contains(BroadphasePair item)
@@ -145,7 +145,7 @@ namespace BulletSharp
 
         public int Count
         {
-            get { return btAlignedBroadphasePairArray_size(_native); }
+            get { return btAlignedObjectArray_btBroadphasePair_size(_native); }
         }
 
         public bool IsReadOnly
@@ -169,12 +169,12 @@ namespace BulletSharp
         }
 
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern IntPtr btAlignedBroadphasePairArray_at(IntPtr obj, int n);
+        static extern IntPtr btAlignedObjectArray_btBroadphasePair_at(IntPtr obj, int n);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedBroadphasePairArray_push_back(IntPtr obj, IntPtr val);
+        static extern void btAlignedObjectArray_btBroadphasePair_push_back(IntPtr obj, IntPtr val);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedBroadphasePairArray_resizeNoInitialize(IntPtr obj, int newSize);
+        static extern void btAlignedObjectArray_btBroadphasePair_resizeNoInitialize(IntPtr obj, int newSize);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btAlignedBroadphasePairArray_size(IntPtr obj);
+        static extern int btAlignedObjectArray_btBroadphasePair_size(IntPtr obj);
     }
 }

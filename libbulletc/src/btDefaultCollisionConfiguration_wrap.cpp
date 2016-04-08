@@ -13,7 +13,8 @@ btPoolAllocator* btDefaultCollisionConstructionInfo_getCollisionAlgorithmPool(bt
 	return obj->m_collisionAlgorithmPool;
 }
 
-int btDefaultCollisionConstructionInfo_getCustomCollisionAlgorithmMaxElementSize(btDefaultCollisionConstructionInfo* obj)
+int btDefaultCollisionConstructionInfo_getCustomCollisionAlgorithmMaxElementSize(
+	btDefaultCollisionConstructionInfo* obj)
 {
 	return obj->m_customCollisionAlgorithmMaxElementSize;
 }
@@ -38,32 +39,38 @@ int btDefaultCollisionConstructionInfo_getUseEpaPenetrationAlgorithm(btDefaultCo
 	return obj->m_useEpaPenetrationAlgorithm;
 }
 
-void btDefaultCollisionConstructionInfo_setCollisionAlgorithmPool(btDefaultCollisionConstructionInfo* obj, btPoolAllocator* value)
+void btDefaultCollisionConstructionInfo_setCollisionAlgorithmPool(btDefaultCollisionConstructionInfo* obj,
+	btPoolAllocator* value)
 {
 	obj->m_collisionAlgorithmPool = value;
 }
 
-void btDefaultCollisionConstructionInfo_setCustomCollisionAlgorithmMaxElementSize(btDefaultCollisionConstructionInfo* obj, int value)
+void btDefaultCollisionConstructionInfo_setCustomCollisionAlgorithmMaxElementSize(
+	btDefaultCollisionConstructionInfo* obj, int value)
 {
 	obj->m_customCollisionAlgorithmMaxElementSize = value;
 }
 
-void btDefaultCollisionConstructionInfo_setDefaultMaxCollisionAlgorithmPoolSize(btDefaultCollisionConstructionInfo* obj, int value)
+void btDefaultCollisionConstructionInfo_setDefaultMaxCollisionAlgorithmPoolSize(btDefaultCollisionConstructionInfo* obj,
+	int value)
 {
 	obj->m_defaultMaxCollisionAlgorithmPoolSize = value;
 }
 
-void btDefaultCollisionConstructionInfo_setDefaultMaxPersistentManifoldPoolSize(btDefaultCollisionConstructionInfo* obj, int value)
+void btDefaultCollisionConstructionInfo_setDefaultMaxPersistentManifoldPoolSize(btDefaultCollisionConstructionInfo* obj,
+	int value)
 {
 	obj->m_defaultMaxPersistentManifoldPoolSize = value;
 }
 
-void btDefaultCollisionConstructionInfo_setPersistentManifoldPool(btDefaultCollisionConstructionInfo* obj, btPoolAllocator* value)
+void btDefaultCollisionConstructionInfo_setPersistentManifoldPool(btDefaultCollisionConstructionInfo* obj,
+	btPoolAllocator* value)
 {
 	obj->m_persistentManifoldPool = value;
 }
 
-void btDefaultCollisionConstructionInfo_setUseEpaPenetrationAlgorithm(btDefaultCollisionConstructionInfo* obj, int value)
+void btDefaultCollisionConstructionInfo_setUseEpaPenetrationAlgorithm(btDefaultCollisionConstructionInfo* obj,
+	int value)
 {
 	obj->m_useEpaPenetrationAlgorithm = value;
 }
@@ -94,12 +101,14 @@ void btDefaultCollisionConfiguration_setConvexConvexMultipointIterations(btDefau
 	obj->setConvexConvexMultipointIterations();
 }
 
-void btDefaultCollisionConfiguration_setConvexConvexMultipointIterations2(btDefaultCollisionConfiguration* obj, int numPerturbationIterations)
+void btDefaultCollisionConfiguration_setConvexConvexMultipointIterations2(btDefaultCollisionConfiguration* obj,
+	int numPerturbationIterations)
 {
 	obj->setConvexConvexMultipointIterations(numPerturbationIterations);
 }
 
-void btDefaultCollisionConfiguration_setConvexConvexMultipointIterations3(btDefaultCollisionConfiguration* obj, int numPerturbationIterations, int minimumPointsPerturbationThreshold)
+void btDefaultCollisionConfiguration_setConvexConvexMultipointIterations3(btDefaultCollisionConfiguration* obj,
+	int numPerturbationIterations, int minimumPointsPerturbationThreshold)
 {
 	obj->setConvexConvexMultipointIterations(numPerturbationIterations, minimumPointsPerturbationThreshold);
 }
@@ -109,12 +118,14 @@ void btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations(btDefaul
 	obj->setPlaneConvexMultipointIterations();
 }
 
-void btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations2(btDefaultCollisionConfiguration* obj, int numPerturbationIterations)
+void btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations2(btDefaultCollisionConfiguration* obj,
+	int numPerturbationIterations)
 {
 	obj->setPlaneConvexMultipointIterations(numPerturbationIterations);
 }
 
-void btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations3(btDefaultCollisionConfiguration* obj, int numPerturbationIterations, int minimumPointsPerturbationThreshold)
+void btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations3(btDefaultCollisionConfiguration* obj,
+	int numPerturbationIterations, int minimumPointsPerturbationThreshold)
 {
 	obj->setPlaneConvexMultipointIterations(numPerturbationIterations, minimumPointsPerturbationThreshold);
 }

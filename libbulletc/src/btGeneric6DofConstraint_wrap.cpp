@@ -183,10 +183,12 @@ void btRotationalLimitMotor_setTargetVelocity(btRotationalLimitMotor* obj, btSca
 	obj->m_targetVelocity = value;
 }
 
-btScalar btRotationalLimitMotor_solveAngularLimits(btRotationalLimitMotor* obj, btScalar timeStep, btScalar* axis, btScalar jacDiagABInv, btRigidBody* body0, btRigidBody* body1)
+btScalar btRotationalLimitMotor_solveAngularLimits(btRotationalLimitMotor* obj, btScalar timeStep,
+	btVector3* axis, btScalar jacDiagABInv, btRigidBody* body0, btRigidBody* body1)
 {
-	VECTOR3_CONV(axis);
-	return obj->solveAngularLimits(timeStep, VECTOR3_USE(axis), jacDiagABInv, body0, body1);
+	BTVECTOR3_IN(axis);
+	return obj->solveAngularLimits(timeStep, BTVECTOR3_USE(axis), jacDiagABInv, body0,
+		body1);
 }
 
 int btRotationalLimitMotor_testLimitValue(btRotationalLimitMotor* obj, btScalar test_value)
@@ -210,9 +212,10 @@ btTranslationalLimitMotor* btTranslationalLimitMotor_new2(const btTranslationalL
 	return new btTranslationalLimitMotor(*other);
 }
 
-void btTranslationalLimitMotor_getAccumulatedImpulse(btTranslationalLimitMotor* obj, btScalar* value)
+void btTranslationalLimitMotor_getAccumulatedImpulse(btTranslationalLimitMotor* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_accumulatedImpulse, value);
+	BTVECTOR3_SET(value, obj->m_accumulatedImpulse);
 }
 
 int* btTranslationalLimitMotor_getCurrentLimit(btTranslationalLimitMotor* obj)
@@ -220,14 +223,16 @@ int* btTranslationalLimitMotor_getCurrentLimit(btTranslationalLimitMotor* obj)
 	return obj->m_currentLimit;
 }
 
-void btTranslationalLimitMotor_getCurrentLimitError(btTranslationalLimitMotor* obj, btScalar* value)
+void btTranslationalLimitMotor_getCurrentLimitError(btTranslationalLimitMotor* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_currentLimitError, value);
+	BTVECTOR3_SET(value, obj->m_currentLimitError);
 }
 
-void btTranslationalLimitMotor_getCurrentLinearDiff(btTranslationalLimitMotor* obj, btScalar* value)
+void btTranslationalLimitMotor_getCurrentLinearDiff(btTranslationalLimitMotor* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_currentLinearDiff, value);
+	BTVECTOR3_SET(value, obj->m_currentLinearDiff);
 }
 
 btScalar btTranslationalLimitMotor_getDamping(btTranslationalLimitMotor* obj)
@@ -245,19 +250,19 @@ btScalar btTranslationalLimitMotor_getLimitSoftness(btTranslationalLimitMotor* o
 	return obj->m_limitSoftness;
 }
 
-void btTranslationalLimitMotor_getLowerLimit(btTranslationalLimitMotor* obj, btScalar* value)
+void btTranslationalLimitMotor_getLowerLimit(btTranslationalLimitMotor* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_lowerLimit, value);
+	BTVECTOR3_SET(value, obj->m_lowerLimit);
 }
 
-void btTranslationalLimitMotor_getMaxMotorForce(btTranslationalLimitMotor* obj, btScalar* value)
+void btTranslationalLimitMotor_getMaxMotorForce(btTranslationalLimitMotor* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_maxMotorForce, value);
+	BTVECTOR3_SET(value, obj->m_maxMotorForce);
 }
 
-void btTranslationalLimitMotor_getNormalCFM(btTranslationalLimitMotor* obj, btScalar* value)
+void btTranslationalLimitMotor_getNormalCFM(btTranslationalLimitMotor* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_normalCFM, value);
+	BTVECTOR3_SET(value, obj->m_normalCFM);
 }
 
 btScalar btTranslationalLimitMotor_getRestitution(btTranslationalLimitMotor* obj)
@@ -265,24 +270,25 @@ btScalar btTranslationalLimitMotor_getRestitution(btTranslationalLimitMotor* obj
 	return obj->m_restitution;
 }
 
-void btTranslationalLimitMotor_getStopCFM(btTranslationalLimitMotor* obj, btScalar* value)
+void btTranslationalLimitMotor_getStopCFM(btTranslationalLimitMotor* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_stopCFM, value);
+	BTVECTOR3_SET(value, obj->m_stopCFM);
 }
 
-void btTranslationalLimitMotor_getStopERP(btTranslationalLimitMotor* obj, btScalar* value)
+void btTranslationalLimitMotor_getStopERP(btTranslationalLimitMotor* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_stopERP, value);
+	BTVECTOR3_SET(value, obj->m_stopERP);
 }
 
-void btTranslationalLimitMotor_getTargetVelocity(btTranslationalLimitMotor* obj, btScalar* value)
+void btTranslationalLimitMotor_getTargetVelocity(btTranslationalLimitMotor* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_targetVelocity, value);
+	BTVECTOR3_SET(value, obj->m_targetVelocity);
 }
 
-void btTranslationalLimitMotor_getUpperLimit(btTranslationalLimitMotor* obj, btScalar* value)
+void btTranslationalLimitMotor_getUpperLimit(btTranslationalLimitMotor* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_upperLimit, value);
+	BTVECTOR3_SET(value, obj->m_upperLimit);
 }
 
 bool btTranslationalLimitMotor_isLimited(btTranslationalLimitMotor* obj, int limitIndex)
@@ -295,19 +301,22 @@ bool btTranslationalLimitMotor_needApplyForce(btTranslationalLimitMotor* obj, in
 	return obj->needApplyForce(limitIndex);
 }
 
-void btTranslationalLimitMotor_setAccumulatedImpulse(btTranslationalLimitMotor* obj, const btScalar* value)
+void btTranslationalLimitMotor_setAccumulatedImpulse(btTranslationalLimitMotor* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_accumulatedImpulse);
+	BTVECTOR3_COPY(&obj->m_accumulatedImpulse, value);
 }
 
-void btTranslationalLimitMotor_setCurrentLimitError(btTranslationalLimitMotor* obj, const btScalar* value)
+void btTranslationalLimitMotor_setCurrentLimitError(btTranslationalLimitMotor* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_currentLimitError);
+	BTVECTOR3_COPY(&obj->m_currentLimitError, value);
 }
 
-void btTranslationalLimitMotor_setCurrentLinearDiff(btTranslationalLimitMotor* obj, const btScalar* value)
+void btTranslationalLimitMotor_setCurrentLinearDiff(btTranslationalLimitMotor* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_currentLinearDiff);
+	BTVECTOR3_COPY(&obj->m_currentLinearDiff, value);
 }
 
 void btTranslationalLimitMotor_setDamping(btTranslationalLimitMotor* obj, btScalar value)
@@ -320,19 +329,19 @@ void btTranslationalLimitMotor_setLimitSoftness(btTranslationalLimitMotor* obj, 
 	obj->m_limitSoftness = value;
 }
 
-void btTranslationalLimitMotor_setLowerLimit(btTranslationalLimitMotor* obj, const btScalar* value)
+void btTranslationalLimitMotor_setLowerLimit(btTranslationalLimitMotor* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_lowerLimit);
+	BTVECTOR3_COPY(&obj->m_lowerLimit, value);
 }
 
-void btTranslationalLimitMotor_setMaxMotorForce(btTranslationalLimitMotor* obj, const btScalar* value)
+void btTranslationalLimitMotor_setMaxMotorForce(btTranslationalLimitMotor* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_maxMotorForce);
+	BTVECTOR3_COPY(&obj->m_maxMotorForce, value);
 }
 
-void btTranslationalLimitMotor_setNormalCFM(btTranslationalLimitMotor* obj, const btScalar* value)
+void btTranslationalLimitMotor_setNormalCFM(btTranslationalLimitMotor* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_normalCFM);
+	BTVECTOR3_COPY(&obj->m_normalCFM, value);
 }
 
 void btTranslationalLimitMotor_setRestitution(btTranslationalLimitMotor* obj, btScalar value)
@@ -340,38 +349,43 @@ void btTranslationalLimitMotor_setRestitution(btTranslationalLimitMotor* obj, bt
 	obj->m_restitution = value;
 }
 
-void btTranslationalLimitMotor_setStopCFM(btTranslationalLimitMotor* obj, const btScalar* value)
+void btTranslationalLimitMotor_setStopCFM(btTranslationalLimitMotor* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_stopCFM);
+	BTVECTOR3_COPY(&obj->m_stopCFM, value);
 }
 
-void btTranslationalLimitMotor_setStopERP(btTranslationalLimitMotor* obj, const btScalar* value)
+void btTranslationalLimitMotor_setStopERP(btTranslationalLimitMotor* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_stopERP);
+	BTVECTOR3_COPY(&obj->m_stopERP, value);
 }
 
-void btTranslationalLimitMotor_setTargetVelocity(btTranslationalLimitMotor* obj, const btScalar* value)
+void btTranslationalLimitMotor_setTargetVelocity(btTranslationalLimitMotor* obj,
+	const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_targetVelocity);
+	BTVECTOR3_COPY(&obj->m_targetVelocity, value);
 }
 
-void btTranslationalLimitMotor_setUpperLimit(btTranslationalLimitMotor* obj, const btScalar* value)
+void btTranslationalLimitMotor_setUpperLimit(btTranslationalLimitMotor* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_upperLimit);
+	BTVECTOR3_COPY(&obj->m_upperLimit, value);
 }
 
-btScalar btTranslationalLimitMotor_solveLinearAxis(btTranslationalLimitMotor* obj, btScalar timeStep, btScalar jacDiagABInv, btRigidBody* body1, const btScalar* pointInA, btRigidBody* body2, const btScalar* pointInB, int limit_index, const btScalar* axis_normal_on_a, const btScalar* anchorPos)
+btScalar btTranslationalLimitMotor_solveLinearAxis(btTranslationalLimitMotor* obj,
+	btScalar timeStep, btScalar jacDiagABInv, btRigidBody* body1, const btVector3* pointInA,
+	btRigidBody* body2, const btVector3* pointInB, int limit_index, const btVector3* axis_normal_on_a,
+	const btVector3* anchorPos)
 {
-	VECTOR3_CONV(pointInA);
-	VECTOR3_CONV(pointInB);
-	VECTOR3_CONV(axis_normal_on_a);
-	VECTOR3_CONV(anchorPos);
-	return obj->solveLinearAxis(timeStep, jacDiagABInv, *body1, VECTOR3_USE(pointInA),
-		*body2, VECTOR3_USE(pointInB), limit_index, VECTOR3_USE(axis_normal_on_a),
-		VECTOR3_USE(anchorPos));
+	BTVECTOR3_IN(pointInA);
+	BTVECTOR3_IN(pointInB);
+	BTVECTOR3_IN(axis_normal_on_a);
+	BTVECTOR3_IN(anchorPos);
+	return obj->solveLinearAxis(timeStep, jacDiagABInv, *body1, BTVECTOR3_USE(pointInA),
+		*body2, BTVECTOR3_USE(pointInB), limit_index, BTVECTOR3_USE(axis_normal_on_a),
+		BTVECTOR3_USE(anchorPos));
 }
 
-int btTranslationalLimitMotor_testLimitValue(btTranslationalLimitMotor* obj, int limitIndex, btScalar test_value)
+int btTranslationalLimitMotor_testLimitValue(btTranslationalLimitMotor* obj, int limitIndex,
+	btScalar test_value)
 {
 	return obj->testLimitValue(limitIndex, test_value);
 }
@@ -382,18 +396,20 @@ void btTranslationalLimitMotor_delete(btTranslationalLimitMotor* obj)
 }
 
 
-btGeneric6DofConstraint* btGeneric6DofConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btScalar* frameInA, const btScalar* frameInB, bool useLinearReferenceFrameA)
+btGeneric6DofConstraint* btGeneric6DofConstraint_new(btRigidBody* rbA, btRigidBody* rbB,
+	const btTransform* frameInA, const btTransform* frameInB, bool useLinearReferenceFrameA)
 {
-	TRANSFORM_CONV(frameInA);
-	TRANSFORM_CONV(frameInB);
-	return new btGeneric6DofConstraint(*rbA, *rbB, TRANSFORM_USE(frameInA), TRANSFORM_USE(frameInB),
+	BTTRANSFORM_IN(frameInA);
+	BTTRANSFORM_IN(frameInB);
+	return new btGeneric6DofConstraint(*rbA, *rbB, BTTRANSFORM_USE(frameInA), BTTRANSFORM_USE(frameInB),
 		useLinearReferenceFrameA);
 }
 
-btGeneric6DofConstraint* btGeneric6DofConstraint_new2(btRigidBody* rbB, const btScalar* frameInB, bool useLinearReferenceFrameB)
+btGeneric6DofConstraint* btGeneric6DofConstraint_new2(btRigidBody* rbB, const btTransform* frameInB,
+	bool useLinearReferenceFrameB)
 {
-	TRANSFORM_CONV(frameInB);
-	return new btGeneric6DofConstraint(*rbB, TRANSFORM_USE(frameInB), useLinearReferenceFrameB);
+	BTTRANSFORM_IN(frameInB);
+	return new btGeneric6DofConstraint(*rbB, BTTRANSFORM_USE(frameInB), useLinearReferenceFrameB);
 }
 
 void btGeneric6DofConstraint_calcAnchorPos(btGeneric6DofConstraint* obj)
@@ -401,11 +417,12 @@ void btGeneric6DofConstraint_calcAnchorPos(btGeneric6DofConstraint* obj)
 	obj->calcAnchorPos();
 }
 
-void btGeneric6DofConstraint_calculateTransforms(btGeneric6DofConstraint* obj, const btScalar* transA, const btScalar* transB)
+void btGeneric6DofConstraint_calculateTransforms(btGeneric6DofConstraint* obj, const btTransform* transA,
+	const btTransform* transB)
 {
-	TRANSFORM_CONV(transA);
-	TRANSFORM_CONV(transB);
-	obj->calculateTransforms(TRANSFORM_USE(transA), TRANSFORM_USE(transB));
+	BTTRANSFORM_IN(transA);
+	BTTRANSFORM_IN(transB);
+	obj->calculateTransforms(BTTRANSFORM_USE(transA), BTTRANSFORM_USE(transB));
 }
 
 void btGeneric6DofConstraint_calculateTransforms2(btGeneric6DofConstraint* obj)
@@ -413,35 +430,42 @@ void btGeneric6DofConstraint_calculateTransforms2(btGeneric6DofConstraint* obj)
 	obj->calculateTransforms();
 }
 
-int btGeneric6DofConstraint_get_limit_motor_info2(btGeneric6DofConstraint* obj, btRotationalLimitMotor* limot, const btScalar* transA, const btScalar* transB, const btScalar* linVelA, const btScalar* linVelB, const btScalar* angVelA, const btScalar* angVelB, btTypedConstraint_btConstraintInfo2* info, int row, btScalar* ax1, int rotational)
+int btGeneric6DofConstraint_get_limit_motor_info2(btGeneric6DofConstraint* obj, btRotationalLimitMotor* limot,
+	const btTransform* transA, const btTransform* transB, const btVector3* linVelA,
+	const btVector3* linVelB, const btVector3* angVelA, const btVector3* angVelB, btTypedConstraint_btConstraintInfo2* info,
+	int row, btVector3* ax1, int rotational)
 {
-	TRANSFORM_CONV(transA);
-	TRANSFORM_CONV(transB);
-	VECTOR3_CONV(linVelA);
-	VECTOR3_CONV(linVelB);
-	VECTOR3_CONV(angVelA);
-	VECTOR3_CONV(angVelB);
-	VECTOR3_CONV(ax1);
-	int ret = obj->get_limit_motor_info2(limot, TRANSFORM_USE(transA), TRANSFORM_USE(transB),
-		VECTOR3_USE(linVelA), VECTOR3_USE(linVelB), VECTOR3_USE(angVelA), VECTOR3_USE(angVelB),
-		info, row, VECTOR3_USE(ax1), rotational);
-	VECTOR3_DEF_OUT(ax1);
+	BTTRANSFORM_IN(transA);
+	BTTRANSFORM_IN(transB);
+	BTVECTOR3_IN(linVelA);
+	BTVECTOR3_IN(linVelB);
+	BTVECTOR3_IN(angVelA);
+	BTVECTOR3_IN(angVelB);
+	BTVECTOR3_IN(ax1);
+	int ret = obj->get_limit_motor_info2(limot, BTTRANSFORM_USE(transA), BTTRANSFORM_USE(transB),
+		BTVECTOR3_USE(linVelA), BTVECTOR3_USE(linVelB), BTVECTOR3_USE(angVelA), BTVECTOR3_USE(angVelB),
+		info, row, BTVECTOR3_USE(ax1), rotational);
+	BTVECTOR3_DEF_OUT(ax1);
 	return ret;
 }
 
-int btGeneric6DofConstraint_get_limit_motor_info22(btGeneric6DofConstraint* obj, btRotationalLimitMotor* limot, const btScalar* transA, const btScalar* transB, const btScalar* linVelA, const btScalar* linVelB, const btScalar* angVelA, const btScalar* angVelB, btTypedConstraint_btConstraintInfo2* info, int row, btScalar* ax1, int rotational, int rotAllowed)
+int btGeneric6DofConstraint_get_limit_motor_info22(btGeneric6DofConstraint* obj,
+	btRotationalLimitMotor* limot, const btTransform* transA, const btTransform* transB,
+	const btVector3* linVelA, const btVector3* linVelB, const btVector3* angVelA, const btVector3* angVelB,
+	btTypedConstraint_btConstraintInfo2* info, int row, btVector3* ax1, int rotational,
+	int rotAllowed)
 {
-	TRANSFORM_CONV(transA);
-	TRANSFORM_CONV(transB);
-	VECTOR3_CONV(linVelA);
-	VECTOR3_CONV(linVelB);
-	VECTOR3_CONV(angVelA);
-	VECTOR3_CONV(angVelB);
-	VECTOR3_CONV(ax1);
-	int ret = obj->get_limit_motor_info2(limot, TRANSFORM_USE(transA), TRANSFORM_USE(transB),
-		VECTOR3_USE(linVelA), VECTOR3_USE(linVelB), VECTOR3_USE(angVelA), VECTOR3_USE(angVelB),
-		info, row, VECTOR3_USE(ax1), rotational, rotAllowed);
-	VECTOR3_DEF_OUT(ax1);
+	BTTRANSFORM_IN(transA);
+	BTTRANSFORM_IN(transB);
+	BTVECTOR3_IN(linVelA);
+	BTVECTOR3_IN(linVelB);
+	BTVECTOR3_IN(angVelA);
+	BTVECTOR3_IN(angVelB);
+	BTVECTOR3_IN(ax1);
+	int ret = obj->get_limit_motor_info2(limot, BTTRANSFORM_USE(transA), BTTRANSFORM_USE(transB),
+		BTVECTOR3_USE(linVelA), BTVECTOR3_USE(linVelB), BTVECTOR3_USE(angVelA), BTVECTOR3_USE(angVelB),
+		info, row, BTVECTOR3_USE(ax1), rotational, rotAllowed);
+	BTVECTOR3_DEF_OUT(ax1);
 	return ret;
 }
 
@@ -450,33 +474,34 @@ btScalar btGeneric6DofConstraint_getAngle(btGeneric6DofConstraint* obj, int axis
 	return obj->getAngle(axis_index);
 }
 
-void btGeneric6DofConstraint_getAngularLowerLimit(btGeneric6DofConstraint* obj, btScalar* angularLower)
+void btGeneric6DofConstraint_getAngularLowerLimit(btGeneric6DofConstraint* obj, btVector3* angularLower)
 {
-	VECTOR3_DEF(angularLower);
-	obj->getAngularLowerLimit(VECTOR3_USE(angularLower));
-	VECTOR3_DEF_OUT(angularLower);
+	BTVECTOR3_IN(angularLower);
+	obj->getAngularLowerLimit(BTVECTOR3_USE(angularLower));
 }
 
-void btGeneric6DofConstraint_getAngularUpperLimit(btGeneric6DofConstraint* obj, btScalar* angularUpper)
+void btGeneric6DofConstraint_getAngularUpperLimit(btGeneric6DofConstraint* obj, btVector3* angularUpper)
 {
-	VECTOR3_DEF(angularUpper);
-	obj->getAngularUpperLimit(VECTOR3_USE(angularUpper));
-	VECTOR3_DEF_OUT(angularUpper);
+	BTVECTOR3_IN(angularUpper);
+	obj->getAngularUpperLimit(BTVECTOR3_USE(angularUpper));
 }
 
-void btGeneric6DofConstraint_getAxis(btGeneric6DofConstraint* obj, int axis_index, btScalar* value)
+void btGeneric6DofConstraint_getAxis(btGeneric6DofConstraint* obj, int axis_index,
+	btVector3* value)
 {
-	VECTOR3_OUT_VAL(obj->getAxis(axis_index), value);
+	BTVECTOR3_SET(value, obj->getAxis(axis_index));
 }
 
-void btGeneric6DofConstraint_getCalculatedTransformA(btGeneric6DofConstraint* obj, btScalar* value)
+void btGeneric6DofConstraint_getCalculatedTransformA(btGeneric6DofConstraint* obj,
+	btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getCalculatedTransformA(), value);
+	BTTRANSFORM_COPY(value, &obj->getCalculatedTransformA());
 }
 
-void btGeneric6DofConstraint_getCalculatedTransformB(btGeneric6DofConstraint* obj, btScalar* value)
+void btGeneric6DofConstraint_getCalculatedTransformB(btGeneric6DofConstraint* obj,
+	btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getCalculatedTransformB(), value);
+	BTTRANSFORM_COPY(value, &obj->getCalculatedTransformB());
 }
 
 int btGeneric6DofConstraint_getFlags(btGeneric6DofConstraint* obj)
@@ -484,14 +509,14 @@ int btGeneric6DofConstraint_getFlags(btGeneric6DofConstraint* obj)
 	return obj->getFlags();
 }
 
-void btGeneric6DofConstraint_getFrameOffsetA(btGeneric6DofConstraint* obj, btScalar* value)
+void btGeneric6DofConstraint_getFrameOffsetA(btGeneric6DofConstraint* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getFrameOffsetA(), value);
+	BTTRANSFORM_COPY(value, &obj->getFrameOffsetA());
 }
 
-void btGeneric6DofConstraint_getFrameOffsetB(btGeneric6DofConstraint* obj, btScalar* value)
+void btGeneric6DofConstraint_getFrameOffsetB(btGeneric6DofConstraint* obj, btTransform* value)
 {
-	TRANSFORM_OUT(&obj->getFrameOffsetB(), value);
+	BTTRANSFORM_COPY(value, &obj->getFrameOffsetB());
 }
 
 void btGeneric6DofConstraint_getInfo1NonVirtual(btGeneric6DofConstraint* obj, btTypedConstraint_btConstraintInfo1* info)
@@ -499,38 +524,40 @@ void btGeneric6DofConstraint_getInfo1NonVirtual(btGeneric6DofConstraint* obj, bt
 	obj->getInfo1NonVirtual(info);
 }
 
-void btGeneric6DofConstraint_getInfo2NonVirtual(btGeneric6DofConstraint* obj, btTypedConstraint_btConstraintInfo2* info, const btScalar* transA, const btScalar* transB, const btScalar* linVelA, const btScalar* linVelB, const btScalar* angVelA, const btScalar* angVelB)
+void btGeneric6DofConstraint_getInfo2NonVirtual(btGeneric6DofConstraint* obj, btTypedConstraint_btConstraintInfo2* info,
+	const btTransform* transA, const btTransform* transB, const btVector3* linVelA,
+	const btVector3* linVelB, const btVector3* angVelA, const btVector3* angVelB)
 {
-	TRANSFORM_CONV(transA);
-	TRANSFORM_CONV(transB);
-	VECTOR3_CONV(linVelA);
-	VECTOR3_CONV(linVelB);
-	VECTOR3_CONV(angVelA);
-	VECTOR3_CONV(angVelB);
-	obj->getInfo2NonVirtual(info, TRANSFORM_USE(transA), TRANSFORM_USE(transB), VECTOR3_USE(linVelA),
-		VECTOR3_USE(linVelB), VECTOR3_USE(angVelA), VECTOR3_USE(angVelB));
+	BTTRANSFORM_IN(transA);
+	BTTRANSFORM_IN(transB);
+	BTVECTOR3_IN(linVelA);
+	BTVECTOR3_IN(linVelB);
+	BTVECTOR3_IN(angVelA);
+	BTVECTOR3_IN(angVelB);
+	obj->getInfo2NonVirtual(info, BTTRANSFORM_USE(transA), BTTRANSFORM_USE(transB),
+		BTVECTOR3_USE(linVelA), BTVECTOR3_USE(linVelB), BTVECTOR3_USE(angVelA), BTVECTOR3_USE(angVelB));
 }
 
-void btGeneric6DofConstraint_getLinearLowerLimit(btGeneric6DofConstraint* obj, btScalar* linearLower)
+void btGeneric6DofConstraint_getLinearLowerLimit(btGeneric6DofConstraint* obj, btVector3* linearLower)
 {
-	VECTOR3_DEF(linearLower);
-	obj->getLinearLowerLimit(VECTOR3_USE(linearLower));
-	VECTOR3_DEF_OUT(linearLower);
+	BTVECTOR3_IN(linearLower);
+	obj->getLinearLowerLimit(BTVECTOR3_USE(linearLower));
 }
 
-void btGeneric6DofConstraint_getLinearUpperLimit(btGeneric6DofConstraint* obj, btScalar* linearUpper)
+void btGeneric6DofConstraint_getLinearUpperLimit(btGeneric6DofConstraint* obj, btVector3* linearUpper)
 {
-	VECTOR3_DEF(linearUpper);
-	obj->getLinearUpperLimit(VECTOR3_USE(linearUpper));
-	VECTOR3_DEF_OUT(linearUpper);
+	BTVECTOR3_IN(linearUpper);
+	obj->getLinearUpperLimit(BTVECTOR3_USE(linearUpper));
 }
 
-btScalar btGeneric6DofConstraint_getRelativePivotPosition(btGeneric6DofConstraint* obj, int axis_index)
+btScalar btGeneric6DofConstraint_getRelativePivotPosition(btGeneric6DofConstraint* obj,
+	int axis_index)
 {
 	return obj->getRelativePivotPosition(axis_index);
 }
 
-btRotationalLimitMotor* btGeneric6DofConstraint_getRotationalLimitMotor(btGeneric6DofConstraint* obj, int index)
+btRotationalLimitMotor* btGeneric6DofConstraint_getRotationalLimitMotor(btGeneric6DofConstraint* obj,
+	int index)
 {
 	return obj->getRotationalLimitMotor(index);
 }
@@ -560,47 +587,50 @@ bool btGeneric6DofConstraint_isLimited(btGeneric6DofConstraint* obj, int limitIn
 	return obj->isLimited(limitIndex);
 }
 
-void btGeneric6DofConstraint_setAngularLowerLimit(btGeneric6DofConstraint* obj, const btScalar* angularLower)
+void btGeneric6DofConstraint_setAngularLowerLimit(btGeneric6DofConstraint* obj, const btVector3* angularLower)
 {
-	VECTOR3_CONV(angularLower);
-	obj->setAngularLowerLimit(VECTOR3_USE(angularLower));
+	BTVECTOR3_IN(angularLower);
+	obj->setAngularLowerLimit(BTVECTOR3_USE(angularLower));
 }
 
-void btGeneric6DofConstraint_setAngularUpperLimit(btGeneric6DofConstraint* obj, const btScalar* angularUpper)
+void btGeneric6DofConstraint_setAngularUpperLimit(btGeneric6DofConstraint* obj, const btVector3* angularUpper)
 {
-	VECTOR3_CONV(angularUpper);
-	obj->setAngularUpperLimit(VECTOR3_USE(angularUpper));
+	BTVECTOR3_IN(angularUpper);
+	obj->setAngularUpperLimit(BTVECTOR3_USE(angularUpper));
 }
 
-void btGeneric6DofConstraint_setAxis(btGeneric6DofConstraint* obj, const btScalar* axis1, const btScalar* axis2)
+void btGeneric6DofConstraint_setAxis(btGeneric6DofConstraint* obj, const btVector3* axis1,
+	const btVector3* axis2)
 {
-	VECTOR3_CONV(axis1);
-	VECTOR3_CONV(axis2);
-	obj->setAxis(VECTOR3_USE(axis1), VECTOR3_USE(axis2));
+	BTVECTOR3_IN(axis1);
+	BTVECTOR3_IN(axis2);
+	obj->setAxis(BTVECTOR3_USE(axis1), BTVECTOR3_USE(axis2));
 }
 
-void btGeneric6DofConstraint_setFrames(btGeneric6DofConstraint* obj, const btScalar* frameA, const btScalar* frameB)
+void btGeneric6DofConstraint_setFrames(btGeneric6DofConstraint* obj, const btTransform* frameA,
+	const btTransform* frameB)
 {
-	TRANSFORM_CONV(frameA);
-	TRANSFORM_CONV(frameB);
-	obj->setFrames(TRANSFORM_USE(frameA), TRANSFORM_USE(frameB));
+	BTTRANSFORM_IN(frameA);
+	BTTRANSFORM_IN(frameB);
+	obj->setFrames(BTTRANSFORM_USE(frameA), BTTRANSFORM_USE(frameB));
 }
 
-void btGeneric6DofConstraint_setLimit(btGeneric6DofConstraint* obj, int axis, btScalar lo, btScalar hi)
+void btGeneric6DofConstraint_setLimit(btGeneric6DofConstraint* obj, int axis, btScalar lo,
+	btScalar hi)
 {
 	obj->setLimit(axis, lo, hi);
 }
 
-void btGeneric6DofConstraint_setLinearLowerLimit(btGeneric6DofConstraint* obj, const btScalar* linearLower)
+void btGeneric6DofConstraint_setLinearLowerLimit(btGeneric6DofConstraint* obj, const btVector3* linearLower)
 {
-	VECTOR3_CONV(linearLower);
-	obj->setLinearLowerLimit(VECTOR3_USE(linearLower));
+	BTVECTOR3_IN(linearLower);
+	obj->setLinearLowerLimit(BTVECTOR3_USE(linearLower));
 }
 
-void btGeneric6DofConstraint_setLinearUpperLimit(btGeneric6DofConstraint* obj, const btScalar* linearUpper)
+void btGeneric6DofConstraint_setLinearUpperLimit(btGeneric6DofConstraint* obj, const btVector3* linearUpper)
 {
-	VECTOR3_CONV(linearUpper);
-	obj->setLinearUpperLimit(VECTOR3_USE(linearUpper));
+	BTVECTOR3_IN(linearUpper);
+	obj->setLinearUpperLimit(BTVECTOR3_USE(linearUpper));
 }
 
 void btGeneric6DofConstraint_setUseFrameOffset(btGeneric6DofConstraint* obj, bool frameOffsetOnOff)
@@ -608,17 +638,20 @@ void btGeneric6DofConstraint_setUseFrameOffset(btGeneric6DofConstraint* obj, boo
 	obj->setUseFrameOffset(frameOffsetOnOff);
 }
 
-void btGeneric6DofConstraint_setUseLinearReferenceFrameA(btGeneric6DofConstraint* obj, bool linearReferenceFrameA)
+void btGeneric6DofConstraint_setUseLinearReferenceFrameA(btGeneric6DofConstraint* obj,
+	bool linearReferenceFrameA)
 {
 	obj->setUseLinearReferenceFrameA(linearReferenceFrameA);
 }
 
-void btGeneric6DofConstraint_setUseSolveConstraintObsolete(btGeneric6DofConstraint* obj, bool value)
+void btGeneric6DofConstraint_setUseSolveConstraintObsolete(btGeneric6DofConstraint* obj,
+	bool value)
 {
 	obj->m_useSolveConstraintObsolete = value;
 }
 
-bool btGeneric6DofConstraint_testAngularLimitMotor(btGeneric6DofConstraint* obj, int axis_index)
+bool btGeneric6DofConstraint_testAngularLimitMotor(btGeneric6DofConstraint* obj,
+	int axis_index)
 {
 	return obj->testAngularLimitMotor(axis_index);
 }

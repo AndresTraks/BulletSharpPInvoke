@@ -3,66 +3,73 @@
 #include "conversion.h"
 #include "btTransformUtil_wrap.h"
 
-void btTransformUtil_calculateDiffAxisAngle(const btScalar* transform0, const btScalar* transform1, btScalar* axis, btScalar* angle)
+void btTransformUtil_calculateDiffAxisAngle(const btTransform* transform0, const btTransform* transform1,
+	btVector3* axis, btScalar* angle)
 {
-	TRANSFORM_CONV(transform0);
-	TRANSFORM_CONV(transform1);
-	VECTOR3_DEF(axis);
-	btTransformUtil::calculateDiffAxisAngle(TRANSFORM_USE(transform0), TRANSFORM_USE(transform1),
-		VECTOR3_USE(axis), *angle);
-	VECTOR3_DEF_OUT(axis);
+	BTTRANSFORM_IN(transform0);
+	BTTRANSFORM_IN(transform1);
+	BTVECTOR3_DEF(axis);
+	btTransformUtil::calculateDiffAxisAngle(BTTRANSFORM_USE(transform0), BTTRANSFORM_USE(transform1),
+		BTVECTOR3_USE(axis), *angle);
+	BTVECTOR3_DEF_OUT(axis);
 }
 
-void btTransformUtil_calculateDiffAxisAngleQuaternion(const btScalar* orn0, const btScalar* orn1a, btScalar* axis, btScalar* angle)
+void btTransformUtil_calculateDiffAxisAngleQuaternion(const btQuaternion* orn0, const btQuaternion* orn1a,
+	btVector3* axis, btScalar* angle)
 {
-	QUATERNION_CONV(orn0);
-	QUATERNION_CONV(orn1a);
-	VECTOR3_DEF(axis);
-	btTransformUtil::calculateDiffAxisAngleQuaternion(QUATERNION_USE(orn0), QUATERNION_USE(orn1a),
-		VECTOR3_USE(axis), *angle);
-	VECTOR3_DEF_OUT(axis);
+	BTQUATERNION_IN(orn0);
+	BTQUATERNION_IN(orn1a);
+	BTVECTOR3_DEF(axis);
+	btTransformUtil::calculateDiffAxisAngleQuaternion(BTQUATERNION_USE(orn0), BTQUATERNION_USE(orn1a),
+		BTVECTOR3_USE(axis), *angle);
+	BTVECTOR3_DEF_OUT(axis);
 }
 
-void btTransformUtil_calculateVelocity(const btScalar* transform0, const btScalar* transform1, btScalar timeStep, btScalar* linVel, btScalar* angVel)
+void btTransformUtil_calculateVelocity(const btTransform* transform0, const btTransform* transform1,
+	btScalar timeStep, btVector3* linVel, btVector3* angVel)
 {
-	TRANSFORM_CONV(transform0);
-	TRANSFORM_CONV(transform1);
-	VECTOR3_DEF(linVel);
-	VECTOR3_DEF(angVel);
-	btTransformUtil::calculateVelocity(TRANSFORM_USE(transform0), TRANSFORM_USE(transform1),
-		timeStep, VECTOR3_USE(linVel), VECTOR3_USE(angVel));
-	VECTOR3_DEF_OUT(linVel);
-	VECTOR3_DEF_OUT(angVel);
+	BTTRANSFORM_IN(transform0);
+	BTTRANSFORM_IN(transform1);
+	BTVECTOR3_DEF(linVel);
+	BTVECTOR3_DEF(angVel);
+	btTransformUtil::calculateVelocity(BTTRANSFORM_USE(transform0), BTTRANSFORM_USE(transform1),
+		timeStep, BTVECTOR3_USE(linVel), BTVECTOR3_USE(angVel));
+	BTVECTOR3_DEF_OUT(linVel);
+	BTVECTOR3_DEF_OUT(angVel);
 }
 
-void btTransformUtil_calculateVelocityQuaternion(const btScalar* pos0, const btScalar* pos1, const btScalar* orn0, const btScalar* orn1, btScalar timeStep, btScalar* linVel, btScalar* angVel)
+void btTransformUtil_calculateVelocityQuaternion(const btVector3* pos0, const btVector3* pos1,
+	const btQuaternion* orn0, const btQuaternion* orn1, btScalar timeStep, btVector3* linVel,
+	btVector3* angVel)
 {
-	VECTOR3_CONV(pos0);
-	VECTOR3_CONV(pos1);
-	QUATERNION_CONV(orn0);
-	QUATERNION_CONV(orn1);
-	VECTOR3_DEF(linVel);
-	VECTOR3_DEF(angVel);
-	btTransformUtil::calculateVelocityQuaternion(VECTOR3_USE(pos0), VECTOR3_USE(pos1),
-		QUATERNION_USE(orn0), QUATERNION_USE(orn1), timeStep, VECTOR3_USE(linVel),
-		VECTOR3_USE(angVel));
-	VECTOR3_DEF_OUT(linVel);
-	VECTOR3_DEF_OUT(angVel);
+	BTVECTOR3_IN(pos0);
+	BTVECTOR3_IN(pos1);
+	BTQUATERNION_IN(orn0);
+	BTQUATERNION_IN(orn1);
+	BTVECTOR3_DEF(linVel);
+	BTVECTOR3_DEF(angVel);
+	btTransformUtil::calculateVelocityQuaternion(BTVECTOR3_USE(pos0), BTVECTOR3_USE(pos1),
+		BTQUATERNION_USE(orn0), BTQUATERNION_USE(orn1), timeStep, BTVECTOR3_USE(linVel),
+		BTVECTOR3_USE(angVel));
+	BTVECTOR3_DEF_OUT(linVel);
+	BTVECTOR3_DEF_OUT(angVel);
 }
 
-void btTransformUtil_integrateTransform(const btScalar* curTrans, const btScalar* linvel, const btScalar* angvel, btScalar timeStep, btScalar* predictedTransform)
+void btTransformUtil_integrateTransform(const btTransform* curTrans, const btVector3* linvel,
+	const btVector3* angvel, btScalar timeStep, btTransform* predictedTransform)
 {
-	TRANSFORM_CONV(curTrans);
-	VECTOR3_CONV(linvel);
-	VECTOR3_CONV(angvel);
-	TRANSFORM_DEF(predictedTransform);
-	btTransformUtil::integrateTransform(TRANSFORM_USE(curTrans), VECTOR3_USE(linvel),
-		VECTOR3_USE(angvel), timeStep, TRANSFORM_USE(predictedTransform));
-	TRANSFORM_DEF_OUT(predictedTransform);
+	BTTRANSFORM_IN(curTrans);
+	BTVECTOR3_IN(linvel);
+	BTVECTOR3_IN(angvel);
+	BTTRANSFORM_DEF(predictedTransform);
+	btTransformUtil::integrateTransform(BTTRANSFORM_USE(curTrans), BTVECTOR3_USE(linvel),
+		BTVECTOR3_USE(angvel), timeStep, BTTRANSFORM_USE(predictedTransform));
+	BTTRANSFORM_DEF_OUT(predictedTransform);
 }
 
 
-btConvexSeparatingDistanceUtil* btConvexSeparatingDistanceUtil_new(btScalar boundingRadiusA, btScalar boundingRadiusB)
+btConvexSeparatingDistanceUtil* btConvexSeparatingDistanceUtil_new(btScalar boundingRadiusA,
+	btScalar boundingRadiusB)
 {
 	return new btConvexSeparatingDistanceUtil(boundingRadiusA, boundingRadiusB);
 }
@@ -72,20 +79,23 @@ btScalar btConvexSeparatingDistanceUtil_getConservativeSeparatingDistance(btConv
 	return obj->getConservativeSeparatingDistance();
 }
 
-void btConvexSeparatingDistanceUtil_initSeparatingDistance(btConvexSeparatingDistanceUtil* obj, const btScalar* separatingVector, btScalar separatingDistance, const btScalar* transA, const btScalar* transB)
+void btConvexSeparatingDistanceUtil_initSeparatingDistance(btConvexSeparatingDistanceUtil* obj,
+	const btVector3* separatingVector, btScalar separatingDistance, const btTransform* transA,
+	const btTransform* transB)
 {
-	VECTOR3_CONV(separatingVector);
-	TRANSFORM_CONV(transA);
-	TRANSFORM_CONV(transB);
-	obj->initSeparatingDistance(VECTOR3_USE(separatingVector), separatingDistance,
-		TRANSFORM_USE(transA), TRANSFORM_USE(transB));
+	BTVECTOR3_IN(separatingVector);
+	BTTRANSFORM_IN(transA);
+	BTTRANSFORM_IN(transB);
+	obj->initSeparatingDistance(BTVECTOR3_USE(separatingVector), separatingDistance,
+		BTTRANSFORM_USE(transA), BTTRANSFORM_USE(transB));
 }
 
-void btConvexSeparatingDistanceUtil_updateSeparatingDistance(btConvexSeparatingDistanceUtil* obj, const btScalar* transA, const btScalar* transB)
+void btConvexSeparatingDistanceUtil_updateSeparatingDistance(btConvexSeparatingDistanceUtil* obj,
+	const btTransform* transA, const btTransform* transB)
 {
-	TRANSFORM_CONV(transA);
-	TRANSFORM_CONV(transB);
-	obj->updateSeparatingDistance(TRANSFORM_USE(transA), TRANSFORM_USE(transB));
+	BTTRANSFORM_IN(transA);
+	BTTRANSFORM_IN(transB);
+	obj->updateSeparatingDistance(BTTRANSFORM_USE(transA), BTTRANSFORM_USE(transB));
 }
 
 void btConvexSeparatingDistanceUtil_delete(btConvexSeparatingDistanceUtil* obj)

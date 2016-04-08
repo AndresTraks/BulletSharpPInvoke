@@ -4,11 +4,12 @@
 #include "conversion.h"
 #include "btCollisionShape_wrap.h"
 
-void btCollisionShape_calculateLocalInertia(btCollisionShape* obj, btScalar mass, btScalar* inertia)
+void btCollisionShape_calculateLocalInertia(btCollisionShape* obj, btScalar mass,
+	btVector3* inertia)
 {
-	VECTOR3_DEF(inertia);
-	obj->calculateLocalInertia(mass, VECTOR3_USE(inertia));
-	VECTOR3_DEF_OUT(inertia);
+	BTVECTOR3_DEF(inertia);
+	obj->calculateLocalInertia(mass, BTVECTOR3_USE(inertia));
+	BTVECTOR3_DEF_OUT(inertia);
 }
 
 int btCollisionShape_calculateSerializeBufferSize(btCollisionShape* obj)
@@ -16,27 +17,30 @@ int btCollisionShape_calculateSerializeBufferSize(btCollisionShape* obj)
 	return obj->calculateSerializeBufferSize();
 }
 
-void btCollisionShape_calculateTemporalAabb(btCollisionShape* obj, const btScalar* curTrans, const btScalar* linvel, const btScalar* angvel, btScalar timeStep, btScalar* temporalAabbMin, btScalar* temporalAabbMax)
+void btCollisionShape_calculateTemporalAabb(btCollisionShape* obj, const btTransform* curTrans,
+	const btVector3* linvel, const btVector3* angvel, btScalar timeStep, btVector3* temporalAabbMin,
+	btVector3* temporalAabbMax)
 {
-	TRANSFORM_CONV(curTrans);
-	VECTOR3_CONV(linvel);
-	VECTOR3_CONV(angvel);
-	VECTOR3_DEF(temporalAabbMin);
-	VECTOR3_DEF(temporalAabbMax);
-	obj->calculateTemporalAabb(TRANSFORM_USE(curTrans), VECTOR3_USE(linvel), VECTOR3_USE(angvel),
-		timeStep, VECTOR3_USE(temporalAabbMin), VECTOR3_USE(temporalAabbMax));
-	VECTOR3_DEF_OUT(temporalAabbMin);
-	VECTOR3_DEF_OUT(temporalAabbMax);
+	BTTRANSFORM_IN(curTrans);
+	BTVECTOR3_IN(linvel);
+	BTVECTOR3_IN(angvel);
+	BTVECTOR3_DEF(temporalAabbMin);
+	BTVECTOR3_DEF(temporalAabbMax);
+	obj->calculateTemporalAabb(BTTRANSFORM_USE(curTrans), BTVECTOR3_USE(linvel),
+		BTVECTOR3_USE(angvel), timeStep, BTVECTOR3_USE(temporalAabbMin), BTVECTOR3_USE(temporalAabbMax));
+	BTVECTOR3_DEF_OUT(temporalAabbMin);
+	BTVECTOR3_DEF_OUT(temporalAabbMax);
 }
 
-void btCollisionShape_getAabb(btCollisionShape* obj, const btScalar* t, btScalar* aabbMin, btScalar* aabbMax)
+void btCollisionShape_getAabb(btCollisionShape* obj, const btTransform* t, btVector3* aabbMin,
+	btVector3* aabbMax)
 {
-	TRANSFORM_CONV(t);
-	VECTOR3_DEF(aabbMin);
-	VECTOR3_DEF(aabbMax);
-	obj->getAabb(TRANSFORM_USE(t), VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax));
-	VECTOR3_DEF_OUT(aabbMin);
-	VECTOR3_DEF_OUT(aabbMax);
+	BTTRANSFORM_IN(t);
+	BTVECTOR3_DEF(aabbMin);
+	BTVECTOR3_DEF(aabbMax);
+	obj->getAabb(BTTRANSFORM_USE(t), BTVECTOR3_USE(aabbMin), BTVECTOR3_USE(aabbMax));
+	BTVECTOR3_DEF_OUT(aabbMin);
+	BTVECTOR3_DEF_OUT(aabbMax);
 }
 
 btScalar btCollisionShape_getAngularMotionDisc(btCollisionShape* obj)
@@ -44,16 +48,18 @@ btScalar btCollisionShape_getAngularMotionDisc(btCollisionShape* obj)
 	return obj->getAngularMotionDisc();
 }
 
-void btCollisionShape_getAnisotropicRollingFrictionDirection(btCollisionShape* obj, btScalar* value)
+void btCollisionShape_getAnisotropicRollingFrictionDirection(btCollisionShape* obj,
+	btVector3* value)
 {
-	VECTOR3_OUT_VAL(obj->getAnisotropicRollingFrictionDirection(), value);
+	BTVECTOR3_SET(value, obj->getAnisotropicRollingFrictionDirection());
 }
 
-void btCollisionShape_getBoundingSphere(btCollisionShape* obj, btScalar* center, btScalar* radius)
+void btCollisionShape_getBoundingSphere(btCollisionShape* obj, btVector3* center,
+	btScalar* radius)
 {
-	VECTOR3_DEF(center);
-	obj->getBoundingSphere(VECTOR3_USE(center), *radius);
-	VECTOR3_DEF_OUT(center);
+	BTVECTOR3_DEF(center);
+	obj->getBoundingSphere(BTVECTOR3_USE(center), *radius);
+	BTVECTOR3_DEF_OUT(center);
 }
 
 btScalar btCollisionShape_getContactBreakingThreshold(btCollisionShape* obj, btScalar defaultContactThresholdFactor)
@@ -61,9 +67,9 @@ btScalar btCollisionShape_getContactBreakingThreshold(btCollisionShape* obj, btS
 	return obj->getContactBreakingThreshold(defaultContactThresholdFactor);
 }
 
-void btCollisionShape_getLocalScaling(btCollisionShape* obj, btScalar* scaling)
+void btCollisionShape_getLocalScaling(btCollisionShape* obj, btVector3* scaling)
 {
-	VECTOR3_OUT(&obj->getLocalScaling(), scaling);
+	BTVECTOR3_COPY(scaling, &obj->getLocalScaling());
 }
 
 btScalar btCollisionShape_getMargin(btCollisionShape* obj)
@@ -141,10 +147,10 @@ void btCollisionShape_serializeSingleShape(btCollisionShape* obj, btSerializer* 
 	obj->serializeSingleShape(serializer);
 }
 
-void btCollisionShape_setLocalScaling(btCollisionShape* obj, const btScalar* scaling)
+void btCollisionShape_setLocalScaling(btCollisionShape* obj, const btVector3* scaling)
 {
-	VECTOR3_CONV(scaling);
-	obj->setLocalScaling(VECTOR3_USE(scaling));
+	BTVECTOR3_IN(scaling);
+	obj->setLocalScaling(BTVECTOR3_USE(scaling));
 }
 
 void btCollisionShape_setMargin(btCollisionShape* obj, btScalar margin)

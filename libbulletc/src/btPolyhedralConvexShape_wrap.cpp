@@ -8,13 +8,14 @@ const btConvexPolyhedron* btPolyhedralConvexShape_getConvexPolyhedron(btPolyhedr
 	return obj->getConvexPolyhedron();
 }
 
-void btPolyhedralConvexShape_getEdge(btPolyhedralConvexShape* obj, int i, btScalar* pa, btScalar* pb)
+void btPolyhedralConvexShape_getEdge(btPolyhedralConvexShape* obj, int i, btVector3* pa,
+	btVector3* pb)
 {
-	VECTOR3_DEF(pa);
-	VECTOR3_DEF(pb);
-	obj->getEdge(i, VECTOR3_USE(pa), VECTOR3_USE(pb));
-	VECTOR3_DEF_OUT(pa);
-	VECTOR3_DEF_OUT(pb);
+	BTVECTOR3_DEF(pa);
+	BTVECTOR3_DEF(pb);
+	obj->getEdge(i, BTVECTOR3_USE(pa), BTVECTOR3_USE(pb));
+	BTVECTOR3_DEF_OUT(pa);
+	BTVECTOR3_DEF_OUT(pb);
 }
 
 int btPolyhedralConvexShape_getNumEdges(btPolyhedralConvexShape* obj)
@@ -32,20 +33,21 @@ int btPolyhedralConvexShape_getNumVertices(btPolyhedralConvexShape* obj)
 	return obj->getNumVertices();
 }
 
-void btPolyhedralConvexShape_getPlane(btPolyhedralConvexShape* obj, btScalar* planeNormal, btScalar* planeSupport, int i)
+void btPolyhedralConvexShape_getPlane(btPolyhedralConvexShape* obj, btVector3* planeNormal,
+	btVector3* planeSupport, int i)
 {
-	VECTOR3_DEF(planeNormal);
-	VECTOR3_DEF(planeSupport);
-	obj->getPlane(VECTOR3_USE(planeNormal), VECTOR3_USE(planeSupport), i);
-	VECTOR3_DEF_OUT(planeNormal);
-	VECTOR3_DEF_OUT(planeSupport);
+	BTVECTOR3_DEF(planeNormal);
+	BTVECTOR3_DEF(planeSupport);
+	obj->getPlane(BTVECTOR3_USE(planeNormal), BTVECTOR3_USE(planeSupport), i);
+	BTVECTOR3_DEF_OUT(planeNormal);
+	BTVECTOR3_DEF_OUT(planeSupport);
 }
 
-void btPolyhedralConvexShape_getVertex(btPolyhedralConvexShape* obj, int i, btScalar* vtx)
+void btPolyhedralConvexShape_getVertex(btPolyhedralConvexShape* obj, int i, btVector3* vtx)
 {
-	VECTOR3_DEF(vtx);
-	obj->getVertex(i, VECTOR3_USE(vtx));
-	VECTOR3_DEF_OUT(vtx);
+	BTVECTOR3_DEF(vtx);
+	obj->getVertex(i, BTVECTOR3_USE(vtx));
+	BTVECTOR3_DEF_OUT(vtx);
 }
 
 bool btPolyhedralConvexShape_initializePolyhedralFeatures(btPolyhedralConvexShape* obj)
@@ -53,27 +55,30 @@ bool btPolyhedralConvexShape_initializePolyhedralFeatures(btPolyhedralConvexShap
 	return obj->initializePolyhedralFeatures();
 }
 
-bool btPolyhedralConvexShape_initializePolyhedralFeatures2(btPolyhedralConvexShape* obj, int shiftVerticesByMargin)
+bool btPolyhedralConvexShape_initializePolyhedralFeatures2(btPolyhedralConvexShape* obj,
+	int shiftVerticesByMargin)
 {
 	return obj->initializePolyhedralFeatures(shiftVerticesByMargin);
 }
 
-bool btPolyhedralConvexShape_isInside(btPolyhedralConvexShape* obj, const btScalar* pt, btScalar tolerance)
+bool btPolyhedralConvexShape_isInside(btPolyhedralConvexShape* obj, const btVector3* pt,
+	btScalar tolerance)
 {
-	VECTOR3_CONV(pt);
-	return obj->isInside(VECTOR3_USE(pt), tolerance);
+	BTVECTOR3_IN(pt);
+	return obj->isInside(BTVECTOR3_USE(pt), tolerance);
 }
 
 
-void btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(btPolyhedralConvexAabbCachingShape* obj, const btScalar* trans, btScalar* aabbMin, btScalar* aabbMax, btScalar margin)
+void btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(btPolyhedralConvexAabbCachingShape* obj,
+	const btTransform* trans, btVector3* aabbMin, btVector3* aabbMax, btScalar margin)
 {
-	TRANSFORM_CONV(trans);
-	VECTOR3_DEF(aabbMin);
-	VECTOR3_DEF(aabbMax);
-	obj->getNonvirtualAabb(TRANSFORM_USE(trans), VECTOR3_USE(aabbMin), VECTOR3_USE(aabbMax),
+	BTTRANSFORM_IN(trans);
+	BTVECTOR3_DEF(aabbMin);
+	BTVECTOR3_DEF(aabbMax);
+	obj->getNonvirtualAabb(BTTRANSFORM_USE(trans), BTVECTOR3_USE(aabbMin), BTVECTOR3_USE(aabbMax),
 		margin);
-	VECTOR3_DEF_OUT(aabbMin);
-	VECTOR3_DEF_OUT(aabbMax);
+	BTVECTOR3_DEF_OUT(aabbMin);
+	BTVECTOR3_DEF_OUT(aabbMax);
 }
 
 void btPolyhedralConvexAabbCachingShape_recalcLocalAabb(btPolyhedralConvexAabbCachingShape* obj)

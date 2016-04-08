@@ -75,6 +75,12 @@ namespace BulletSharpGen
 
         public string ManagedName { get; set; }
 
+        /// <summary>
+        /// If true, the wrapper class is itself a struct instead
+        /// of being a class with a pointer to a native struct.
+        /// </summary>
+        public bool MarshalAsStruct { get; set; }
+
         public Dictionary<string, CachedProperty> CachedProperties { get; private set; } = new Dictionary<string, CachedProperty>();
 
         public IEnumerable<MethodDefinition> AbstractMethods

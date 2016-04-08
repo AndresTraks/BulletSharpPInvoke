@@ -53,15 +53,13 @@ namespace BulletSharpGen
         {
             To = WriteTo.CS;
 
-            // public void Dispose()
             WriteLine("Dispose()");
             WriteLine(level + 1, "{");
             WriteLine(level + 2, "Dispose(true);");
             WriteLine(level + 2, "GC.SuppressFinalize(this);");
             WriteLine(level + 1, "}");
-
-            // protected virtual void Dispose(bool disposing)
             WriteLine();
+
             WriteLine(level + 1, "protected virtual void Dispose(bool disposing)");
             WriteLine(level + 1, "{");
             WriteLine(level + 2, "if (_native != IntPtr.Zero)");
@@ -90,7 +88,7 @@ namespace BulletSharpGen
         }
 
         private void WriteMethodDeclaration(MethodDefinition method, int numParameters, int level, int overloadIndex,
-            MethodDefinition returnParamMethod = null)
+            ParameterDefinition outValueParameter = null)
         {
             // Do not write accessor methods of C# properties
             WriteTo cs = (method.Property == null) ? WriteTo.CS : WriteTo.None;
@@ -143,34 +141,46 @@ namespace BulletSharpGen
             }
             else
             {
-                Write($"{GetTypeName(method.ReturnType)} ", WriteTo.Header | WriteTo.Source);
+                var returnType = method.ReturnType;
 
                 if (method.IsStatic) Write("static ", cs);
-                var returnTypeCS = returnParamMethod != null ? returnParamMethod.ReturnType : method.ReturnType;
-                Write($"{GetTypeNameCS(returnTypeCS)} ", cs);
+                Write($"{GetTypeNameCS(returnType)} ", cs);
 
-                if (method.ReturnType.IsBasic)
+                if (outValueParameter != null)
                 {
-                    Write(method.ReturnType.ManagedNameCS, dllImport);
-                }
-                else if (method.ReturnType.HasTemplateTypeParameter)
-                {
-                    Write(method.ReturnType.ManagedNameCS, dllImport);
-                }
-                else if (method.ReturnType.Referenced != null)
-                {
-                    Write("IntPtr", dllImport);
+                    Write("void ", WriteTo.Header | WriteTo.Source | dllImport);
                 }
                 else
                 {
-                    // Return structures to an additional out parameter, not immediately
-                    Write("void", dllImport);
+                    Write($"{GetTypeName(returnType)} ", WriteTo.Header | WriteTo.Source);
+
+                    if (returnType.IsBasic)
+                    {
+                        Write(returnType.ManagedNameCS, dllImport);
+                    }
+                    else if (returnType.HasTemplateTypeParameter)
+                    {
+                        Write(returnType.ManagedNameCS, dllImport);
+                    }
+                    else if (returnType.Referenced != null)
+                    {
+                        Write("IntPtr", dllImport);
+                    }
+                    else
+                    {
+                        // Return structures to an additional out parameter, not immediately
+                        Write("void", dllImport);
+                    }
+                    Write(' ', dllImport);
                 }
-                Write(' ', dllImport);
             }
 
             // Name
             string methodName = method.IsConstructor ? "new" : method.Name;
+            if (overloadIndex != 0)
+            {
+                methodName += (overloadIndex + 1).ToString();
+            }
             Write($"{GetFullNameC(method.Parent)}_{methodName}",
                 WriteTo.Header | WriteTo.Source | dllImport);
 
@@ -180,337 +190,295 @@ namespace BulletSharpGen
             }
             else
             {
-                string methodNameManaged = method.IsConstructor ? method.Parent.ManagedName : method.ManagedName;
-                Write(methodNameManaged, cs);
-            }
-
-            // Index number for overloaded methods
-            if (overloadIndex != 0)
-            {
-                Write((overloadIndex + 1).ToString(), WriteTo.Header | WriteTo.Source | dllImport);
+                Write($"{method.ManagedName}(", cs);
             }
 
 
             // Parameters
-            if (!method.Name.Equals("delete"))
-            {
-                Write('(', cs);
-            }
             Write('(', WriteTo.Header | WriteTo.Source | dllImport);
+
+            var parameters = method.Parameters.Take(numParameters);
+            var parametersCs = parameters.Select(p => $"{GetTypeNameCS(p.Type)} {p.ManagedName}");
+            Write(ListToLines(parametersCs, WriteTo.CS, level + 1), cs);
+            if (!methodName.Equals("delete"))
+            {
+                WriteLine(')', cs);
+            }
+
+            if (outValueParameter != null) parameters = parameters.Concat(new[] { outValueParameter });
+
+            var parametersCpp = parameters.Select(p => $"{GetTypeName(p.Type)} {p.Name}");
+            var parametersHeader = parametersCpp;
+            var parametersSource = parametersCpp;
+            var parametersDllImport = parameters.Select(p => $"{BulletParser.GetTypeDllImport(p.Type)} {p.Name}");
 
             // The first parameter is the instance pointer (if not constructor or static method)
             if (!method.IsConstructor && !method.IsStatic)
             {
-                Write($"{GetFullNameC(method.Parent)}* obj", WriteTo.Header);
-                Write($"{method.Parent.FullyQualifiedName}* obj", WriteTo.Source);
-                Write("IntPtr obj", dllImport);
-
-                if (numParameters != 0)
-                {
-                    Write(", ", WriteTo.Header | WriteTo.Source | dllImport);
-                }
+                parametersHeader =
+                    new[] { $"{GetFullNameC(method.Parent)}* obj" }.Concat(parametersHeader);
+                parametersSource =
+                    new[] { $"{method.Parent.FullyQualifiedName}* obj" }.Concat(parametersSource);
+                parametersDllImport =
+                    new[] { "IntPtr obj" }.Concat(parametersDllImport);
             }
 
-            for (int i = 0; i < numParameters; i++)
-            {
-                bool isFinalParameter = (i == numParameters - 1);
-                bool isCsFinalParameter = returnParamMethod != null && isFinalParameter;
-                var param = method.Parameters[i];
-
-                // Parameter type
-                if (!isCsFinalParameter)
-                {
-                    if (param.Type.Referenced != null && !(param.Type.IsConst || param.Type.Referenced.IsConst) &&
-                        BulletParser.MarshalStructByValue(param.Type))
-                    {
-                        Write("out ", cs);
-                    }
-                }
-                Write(GetTypeName(param.Type), WriteTo.Header | WriteTo.Source);
-                if (!isCsFinalParameter)
-                {
-                    Write(GetTypeNameCS(param.Type), cs);
-                }
-                Write(BulletParser.GetTypeDllImport(param.Type), dllImport);
-
-                // Parameter name
-                if (!isCsFinalParameter)
-                {
-                    Write($" {param.ManagedName}", cs);
-                }
-                Write($" {param.Name}", WriteTo.Header | WriteTo.Source | dllImport);
-
-                if (!isFinalParameter)
-                {
-                    Write(", ", WriteTo.Header | WriteTo.Source | dllImport);
-                }
-                if (!(isFinalParameter || (returnParamMethod != null && i == numParameters - 2)))
-                {
-                    Write(", ", WriteTo.CS);
-                }
-            }
-            WriteLine(");", WriteTo.Header | dllImport);
-            if (!method.Name.Equals("delete"))
-            {
-                WriteLine(')', cs);
-            }
-            WriteLine(')', WriteTo.Source);
+            WriteLine($"{string.Join(", ", parametersHeader)});", WriteTo.Header);
+            WriteLine($"{ListToLines(parametersSource, WriteTo.Source)})", WriteTo.Source);
+            WriteLine($"{string.Join(", ", parametersDllImport)});", dllImport);
         }
 
-        void WriteMethodDefinition(MethodDefinition method, int numParameters, int overloadIndex, int level, MethodDefinition returnParamMethod)
+        void WriteMethodDefinitionC(MethodDefinition method, int numParameters, int overloadIndex, int level,
+            ParameterDefinition outValueParameter)
         {
-            // Skip methods wrapped by C# properties
-            WriteTo cs = (method.Property == null) ? WriteTo.CS : WriteTo.None;
+            To = WriteTo.Source;
+            string qualifier = method.IsStatic ? $"{method.Parent.Name}::" : "obj->";
 
-            // Field marshalling
-            if (method.Field != null && method.Field.Type.Referenced == null &&
-                BulletParser.MarshalStructByValue(method.Field.Type))
+            // Struct field marshalling
+            var field = method.Field;
+            if (field != null)
             {
-                string marshal;
-                if (method.Property.Getter.Name == method.Name)
+                string fieldName = $"{qualifier}{field.Name}";
+
+                if (field.Type.Target != null && field.Type.Target.MarshalAsStruct)
                 {
-                    marshal = BulletParser.GetFieldGetterMarshal(method.Parameters[0], method.Field);
+                    string macroPrefix = field.Type.Name.ToUpper();
+                    string paramName = (outValueParameter != null ? outValueParameter : method.Parameters[0]).Name;
+                    if (method.Name.Equals(method.Property.Getter.Name))
+                    {
+                        WriteLine(1, $"{macroPrefix}_SET({paramName}, {fieldName});");
+                    }
+                    else
+                    {
+                        WriteLine(1, $"{macroPrefix}_COPY(&{fieldName}, {paramName});");
+                    }
+                }
+                else if (method.Name.Equals(method.Property.Getter.Name))
+                {
+                    WriteLine(1, $"return {qualifier}{field.Name};");
                 }
                 else
                 {
-                    marshal = BulletParser.GetFieldSetterMarshal(method.Parameters[0], method.Field);
+                    WriteLine(1, $"{qualifier}{field.Name} = value;");
                 }
-                WriteLine(1, marshal, WriteTo.Source);
                 return;
             }
 
-            int numParametersOriginal = numParameters;
-            if (returnParamMethod != null)
-            {
-                numParametersOriginal--;
-            }
-
+            // Parameter marshalling prologues
             bool needTypeMarshalEpilogue = false;
-            if (!(method.Property != null && BulletParser.MarshalStructByValue(method.Property.Type) &&
-                  method.Property.Getter.Name == method.Name))
+            foreach (var param in method.Parameters.Take(numParameters))
             {
-                // Type marshalling prologue
-                for (int i = 0; i < numParametersOriginal; i++)
+                if (param.Type.IsReference && param.Type.Referenced.Target != null &&
+                    param.Type.Referenced.Target.MarshalAsStruct)
                 {
-                    var param = method.Parameters[i];
-                    string prologue = BulletParser.GetTypeMarshalPrologue(param, method);
-                    if (!string.IsNullOrEmpty(prologue))
+                    string macroPrefix = param.Type.Referenced.Target.Name.ToUpper();
+                    if (param.MarshalDirection == MarshalDirection.Out)
                     {
-                        WriteLine(1, prologue, WriteTo.Source);
+                        WriteLine(1, $"{macroPrefix}_DEF({param.Name});");
+                        needTypeMarshalEpilogue = true;
                     }
-
-                    // Do we need a type marshalling epilogue?
-                    if (!needTypeMarshalEpilogue)
+                    else
                     {
-                        string epilogue = BulletParser.GetTypeMarshalEpilogue(param);
-                        if (!string.IsNullOrEmpty(epilogue))
-                        {
-                            needTypeMarshalEpilogue = true;
-                        }
+                        WriteLine(1, $"{macroPrefix}_IN({param.Name});");
                     }
                 }
             }
 
-            WriteTabs(1, WriteTo.Source);
-
-            if (returnParamMethod != null)
-            {
-                // Temporary variable
-                WriteLine(string.Format("{0} {1};",
-                    BulletParser.GetTypeNameCS(returnParamMethod.ReturnType),
-                    method.Parameters[numParametersOriginal].ManagedName), cs);
-                WriteTabs(level + 2, cs);
-
-                Write(BulletParser.GetReturnValueMarshalStart(returnParamMethod.ReturnType), WriteTo.Source);
-            }
+            WriteTabs(1);
 
             if (method.IsConstructor)
             {
-                Write($"return new {method.Parent.FullyQualifiedName}", WriteTo.Source);
-                if (method.Parent.BaseClass == null)
-                {
-                    Write("_native = ", WriteTo.CS);
-                }
-                Write($"{GetFullNameC(method.Parent)}_new", WriteTo.CS);
+                Write($"return new {method.Parent.FullyQualifiedName}");
             }
             else
             {
                 if (!method.IsVoid)
                 {
                     var returnType = method.ReturnType;
-                    if (needTypeMarshalEpilogue)
+
+                    if (outValueParameter != null)
                     {
-                        // Store return value in a temporary variable
-                        Write($"{BulletParser.GetTypeRefName(returnType)} ret = ", WriteTo.Source);
+                        string macroPrefix = outValueParameter.Type.Referenced.Name.ToUpper();
+                        if (returnType.IsReference)
+                        {
+                            Write($"{macroPrefix}_COPY({outValueParameter.Name}, ");
+                        }
+                        else
+                        {
+                            Write($"{macroPrefix}_SET({outValueParameter.Name}, ");
+                        }
+                    }
+                    else if (needTypeMarshalEpilogue)
+                    {
+                        // Save the return value and return it after the epilogues
+                        Write($"{BulletParser.GetTypeRefName(returnType)} ret = ");
                     }
                     else
                     {
                         // Return immediately
-                        Write("return ", WriteTo.Source);
+                        Write("return ");
                     }
 
                     if (!returnType.IsBasic && !returnType.IsPointer && !returnType.IsConstantArray)
                     {
                         if (!(returnType.Target != null && returnType.Target is EnumDefinition))
                         {
-                            Write('&', WriteTo.Source);
+                            Write('&');
                         }
                     }
-
-                    Write($"return {BulletParser.GetTypeMarshalConstructorStartCS(method)}", cs);
                 }
 
-                if (method.IsStatic)
-                {
-                    Write($"{method.Parent.Name}::", WriteTo.Source);
-                }
-                else
-                {
-                    Write("obj->", WriteTo.Source);
-                }
-                if (method.Field == null)
-                {
-                    Write(method.Name, WriteTo.Source);
-                }
-
-                Write($"{GetFullNameC(method.Parent)}_{method.Name}", cs);
-            }
-            if (overloadIndex != 0)
-            {
-                Write((overloadIndex + 1).ToString(), cs);
+                Write($"{qualifier}{method.Name}");
             }
 
             // Call parameters
-            if (method.Field != null)
+            var originalParams = method.Parameters.Take(numParameters)
+                .Select(p =>
+                {
+                    if (p.Type.Target != null && p.Type.Target.MarshalAsStruct)
+                    {
+                        string macroPrefix = p.Type.Target.Name.ToUpper();
+                        return $"{macroPrefix}_USE({p.Name})";
+                    }
+
+                    if (p.Type.IsReference && p.Type.Referenced.Target != null && p.Type.Referenced.Target.MarshalAsStruct)
+                    {
+                        string macroPrefix = p.Type.Referenced.Target.Name.ToUpper();
+                        return $"{macroPrefix}_USE({p.Name})";
+                    }
+
+                    if (p.Type.IsBasic || p.Type.IsPointer || p.Type.IsConstantArray) return p.Name;
+
+                    return $"*{p.Name}";
+                });
+            Write("(");
+            Write($"{ListToLines(originalParams, WriteTo.Source, 1)})");
+            if (outValueParameter != null)
             {
-                if (method.Property.Setter != null && method.Name.Equals(method.Property.Setter.Name))
-                {
-                    WriteLine($"{method.Field.Name} = value;", WriteTo.Source);
-                }
-                else
-                {
-                    WriteLine($"{method.Field.Name};", WriteTo.Source);
-                }
+                Write(")");
             }
-            else
-            {
-                var originalParams = method.Parameters.Take(numParametersOriginal)
-                    .Select(p =>
-                    {
-                        string marshal = BulletParser.GetTypeMarshal(p);
-                        if (!string.IsNullOrEmpty(marshal)) return marshal;
-
-                        if (p.Type.IsBasic || p.Type.IsPointer || p.Type.IsConstantArray) return p.Name;
-
-                        return $"*{p.Name}";
-                    });
-                Write("(", WriteTo.Source);
-                string parameters = ListToLines(originalParams, WriteTo.Source, 2);
-                Write(parameters, WriteTo.Source);
-
-                if (returnParamMethod != null)
-                {
-                    WriteLine(BulletParser.GetReturnValueMarshalEnd(method.Parameters[numParametersOriginal]), WriteTo.Source);
-                }
-                else
-                {
-                    WriteLine(");", WriteTo.Source);
-                }
-            }
-
-            if (cs != 0)
-            {
-                Write('(', WriteTo.CS);
-                if (!method.IsConstructor && !method.IsStatic)
-                {
-                    Write("_native", WriteTo.CS);
-                    if (numParametersOriginal != 0 || returnParamMethod != null)
-                    {
-                        Write(", ", WriteTo.CS);
-                    }
-                }
-
-                for (int i = 0; i < numParameters; i++)
-                {
-                    var param = method.Parameters[i];
-                    Write(BulletParser.GetTypeCSMarshal(param), WriteTo.CS);
-
-                    if (i != numParameters - 1)
-                    {
-                        Write(", ", WriteTo.CS);
-                    }
-                }
-
-                if (method.IsConstructor && method.Parent.BaseClass != null)
-                {
-                    Write(")", WriteTo.CS);
-                    if (method.Parent.BaseClass.HasPreventDelete)
-                    {
-                        Write(", false", WriteTo.CS);
-                    }
-                    WriteLine(")", WriteTo.CS);
-                    WriteLine(level + 1, "{", WriteTo.CS);
-                }
-                else
-                {
-                    if (!method.IsConstructor && !method.IsVoid)
-                    {
-                        Write(BulletParser.GetTypeMarshalConstructorEndCS(method), cs);
-                    }
-                    WriteLine(");", WriteTo.CS);
-                }
-
-                // Cache property values
-                if (method.IsConstructor)
-                {
-                    var methodParent = method.Parent;
-                    while (methodParent != null)
-                    {
-                        foreach (var cachedProperty in methodParent.CachedProperties.OrderBy(p => p.Key))
-                        {
-                            foreach (var param in method.Parameters)
-                            {
-                                if (param.ManagedName.ToLower().Equals(cachedProperty.Key.ToLower())
-                                    && param.Type.ManagedName.Equals(cachedProperty.Value.Property.Type.ManagedName))
-                                {
-                                    WriteLine(level + 2,
-                                        $"{cachedProperty.Value.CacheFieldName} = {param.ManagedName};", WriteTo.CS);
-                                }
-                            }
-                        }
-                        methodParent = methodParent.BaseClass;
-                    }
-                }
-            }
-
-            // Return temporary variable
-            if (returnParamMethod != null)
-            {
-                WriteLine(level + 2, $"return {method.Parameters[numParametersOriginal].ManagedName};", cs);
-            }
+            WriteLine(";");
 
             // Write type marshalling epilogue
             if (needTypeMarshalEpilogue)
             {
-                for (int i = 0; i < numParametersOriginal; i++)
+                foreach (var param in method.Parameters.Take(numParameters)
+                    .Where(p => p.MarshalDirection == MarshalDirection.Out ||
+                        p.MarshalDirection == MarshalDirection.InOut))
                 {
-                    var param = method.Parameters[i];
-                    string epilogue = BulletParser.GetTypeMarshalEpilogue(param);
-                    if (!string.IsNullOrEmpty(epilogue))
+                    if (param.Type.IsReference && param.Type.Referenced.Target != null &&
+                        param.Type.Referenced.Target.MarshalAsStruct)
                     {
-                        WriteLine(1, epilogue, WriteTo.Source);
+                        string macroPrefix = param.Type.Referenced.Target.Name.ToUpper();
+                        WriteLine(1, $"{macroPrefix}_DEF_OUT({param.Name});");
                     }
                 }
 
                 if (!method.IsVoid)
                 {
-                    WriteLine(1, "return ret;", WriteTo.Source);
+                    WriteLine(1, "return ret;");
                 }
             }
         }
 
-        void WriteMethod(MethodDefinition method, int level, ref int overloadIndex, int numOptionalParams = 0,
-            MethodDefinition returnParamMethod = null)
+        void WriteMethodDefinitionCS(MethodDefinition method, int numParameters, int overloadIndex, int level,
+            ParameterDefinition outValueParameter)
+        {
+            To = WriteTo.CS;
+            if (method.IsConstructor)
+            {
+                if (method.Parent.BaseClass == null)
+                {
+                    Write("_native = ");
+                }
+                Write($"{GetFullNameC(method.Parent)}_new");
+            }
+            else
+            {
+                if (!method.IsVoid)
+                {
+                    if (outValueParameter != null)
+                    {
+                        // Temporary variable
+                        WriteLine(string.Format("{0} {1};",
+                            BulletParser.GetTypeNameCS(method.ReturnType),
+                            outValueParameter.ManagedName));
+                        WriteTabs(level + 2);
+                    }
+
+                    Write($"return {BulletParser.GetTypeMarshalConstructorStartCS(method)}");
+                }
+
+                Write($"{GetFullNameC(method.Parent)}_{method.Name}");
+            }
+
+            if (overloadIndex != 0)
+            {
+                Write((overloadIndex + 1).ToString());
+            }
+
+            Write('(');
+
+            var parameters = method.Parameters.Take(numParameters)
+                .Select(p => BulletParser.GetTypeCSMarshal(p));
+
+            // The first parameter is the instance pointer (if not constructor or static method)
+            if (!method.IsConstructor && !method.IsStatic)
+            {
+                parameters = new[] { "_native" }.Concat(parameters);
+            }
+
+            Write(ListToLines(parameters, WriteTo.CS, level + 2));
+
+            if (method.IsConstructor && method.Parent.BaseClass != null)
+            {
+                Write(")");
+                if (method.Parent.BaseClass.HasPreventDelete)
+                {
+                    Write(", false");
+                }
+                WriteLine(")");
+                WriteLine(level + 1, "{");
+            }
+            else
+            {
+                if (!method.IsConstructor && !method.IsVoid)
+                {
+                    Write(BulletParser.GetTypeMarshalConstructorEndCS(method));
+                }
+                WriteLine(");");
+            }
+
+            // Cache property values
+            if (method.IsConstructor)
+            {
+                var methodParent = method.Parent;
+                while (methodParent != null)
+                {
+                    foreach (var cachedProperty in methodParent.CachedProperties.OrderBy(p => p.Key))
+                    {
+                        foreach (var param in method.Parameters)
+                        {
+                            if (param.ManagedName.ToLower().Equals(cachedProperty.Key.ToLower())
+                                && param.Type.ManagedName.Equals(cachedProperty.Value.Property.Type.ManagedName))
+                            {
+                                WriteLine(level + 2,
+                                    $"{cachedProperty.Value.CacheFieldName} = {param.ManagedName};");
+                            }
+                        }
+                    }
+                    methodParent = methodParent.BaseClass;
+                }
+            }
+
+            // Return temporary variable
+            if (outValueParameter != null)
+            {
+                WriteLine(level + 2, $"return {outValueParameter.ManagedName};");
+            }
+        }
+        
+        void WriteMethod(MethodDefinition method, int level, ref int overloadIndex, int numOptionalParams = 0)
         {
             EnsureWhiteSpace(WriteTo.Source);
             if (!hasCppClassSeparatingWhitespace)
@@ -519,15 +487,22 @@ namespace BulletSharpGen
                 hasCppClassSeparatingWhitespace = true;
             }
 
-            // Can't return whole structures, so append an output parameter
+            // Can't return whole structures, so use an output parameter
             // referencing the struct that will hold the return value.
-            // convert "v method(param)" to "void method(param, &v)"
-            if (!method.IsConstructor && !method.ReturnType.IsBasic &&
-                !method.ReturnType.IsPointer && BulletParser.MarshalStructByValue(method.ReturnType))
+            // "v method()" -> "void method(v* value)"
+            // "v& method()" -> "void method(v* value)"
+            ParameterDefinition outValueParameter = null;
+            var returnType = method.ReturnType;
+            if ((returnType.Target != null && returnType.Target.MarshalAsStruct) ||
+                (returnType.IsReference && returnType.Referenced.Target != null && returnType.Referenced.Target.MarshalAsStruct))
             {
-                var method2 = method.Copy();
-                var paras = method2.Parameters;
-                Array.Resize(ref paras, paras.Length + 1);
+                var valueType = new TypeRefDefinition
+                {
+                    IsPointer = true,
+                    Referenced = (returnType.IsReference ? returnType.Referenced : returnType).Copy()
+                };
+                valueType.Referenced.IsConst = false;
+
                 string paramName;
                 if (method.Property != null && method.Property.Setter != null)
                 {
@@ -538,19 +513,8 @@ namespace BulletSharpGen
                 {
                     paramName = "value";
                 }
-                var valueType = new TypeRefDefinition
-                {
-                    IsPointer = true,
-                    Referenced = method2.ReturnType
-                };
-                paras[paras.Length - 1] = new ParameterDefinition(paramName, valueType)
-                {
-                    ManagedName = paramName
-                };
-                method2.Parameters = paras;
-                method2.ReturnType = new TypeRefDefinition("void");
-                WriteMethod(method2, level, ref overloadIndex, numOptionalParams, method);
-                return;
+
+                outValueParameter = new ParameterDefinition(paramName, valueType) { ManagedName = paramName };
             }
 
             EnsureWhiteSpace(WriteTo.Source | WriteTo.CS);
@@ -561,7 +525,7 @@ namespace BulletSharpGen
             int numOptionalParamsTotal = method.NumOptionalParameters;
             int numParameters = method.Parameters.Length - numOptionalParamsTotal + numOptionalParams;
 
-            WriteMethodDeclaration(method, numParameters, level, overloadIndex, returnParamMethod);
+            WriteMethodDeclaration(method, numParameters, level, overloadIndex, outValueParameter);
 
             if (method.Name.Equals("delete"))
             {
@@ -586,14 +550,14 @@ namespace BulletSharpGen
 
             // Method body
             WriteLine('{', WriteTo.Source);
-
-            WriteMethodDefinition(method, numParameters, overloadIndex, level, returnParamMethod);
-
-            WriteLine(level + 1, "}", WriteTo.CS & propertyTo);
+            WriteMethodDefinitionC(method, numParameters, overloadIndex, level, outValueParameter);
             WriteLine('}', WriteTo.Source);
             hasSourceWhiteSpace = false;
-            if (method.Property == null)
+
+            if ((propertyTo & WriteTo.CS) != 0)
             {
+                WriteMethodDefinitionCS(method, numParameters, overloadIndex, level, outValueParameter);
+                WriteLine(level + 1, "}", WriteTo.CS);
                 hasCSWhiteSpace = false;
             }
 
@@ -601,7 +565,7 @@ namespace BulletSharpGen
             overloadIndex++;
             if (numOptionalParams < numOptionalParamsTotal)
             {
-                WriteMethod(method, level, ref overloadIndex, numOptionalParams + 1, returnParamMethod);
+                WriteMethod(method, level, ref overloadIndex, numOptionalParams + 1);
             }
         }
 
@@ -1229,12 +1193,12 @@ namespace BulletSharpGen
 
             foreach (var method in cl.Methods.Where(m => !m.IsExcluded))
             {
-                if (BulletParser.TypeRequiresMarshal(method.ReturnType))
+                if (DefaultParser.TypeRequiresMarshal(method.ReturnType))
                 {
                     return true;
                 }
 
-                if (method.Parameters.Any(param => BulletParser.TypeRequiresMarshal(param.Type)))
+                if (method.Parameters.Any(param => DefaultParser.TypeRequiresMarshal(param.Type)))
                 {
                     return true;
                 }
@@ -1259,7 +1223,7 @@ namespace BulletSharpGen
             return false;
         }
 
-        private static string[] _mathClasses = { "Quaternion", "Transform", "Vector3", "Vector4" };
+        private static string[] _mathClasses = { "Quaternion", "Transform", "Vector4" };
 
         private static bool RequiresMathNamespace(HeaderDefinition header)
         {
@@ -1288,6 +1252,17 @@ namespace BulletSharpGen
 
         public static string GetFullNameC(ClassDefinition @class)
         {
+            string className;
+            ClassTemplateDefinition template = @class as ClassTemplateDefinition;
+            if (template != null)
+            {
+                className = @class.Name + string.Join("_", template.TemplateTypeParameters);
+            }
+            else
+            {
+                className = @class.Name;
+            }
+
             if (@class.Parent != null)
             {
                 return $"{GetFullNameC(@class.Parent)}_{@class.Name}";

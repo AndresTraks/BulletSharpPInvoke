@@ -3,32 +3,37 @@
 #include "conversion.h"
 #include "btGeometryUtil_wrap.h"
 
-bool btGeometryUtil_areVerticesBehindPlane(const btScalar* planeNormal, const btAlignedVector3Array* vertices, btScalar margin)
+bool btGeometryUtil_areVerticesBehindPlane(const btVector3* planeNormal, const btAlignedObjectArray_btVector3* vertices,
+	btScalar margin)
 {
-	VECTOR3_CONV(planeNormal);
-	return btGeometryUtil::areVerticesBehindPlane(VECTOR3_USE(planeNormal), *vertices,
+	BTVECTOR3_IN(planeNormal);
+	return btGeometryUtil::areVerticesBehindPlane(BTVECTOR3_USE(planeNormal), *vertices,
 		margin);
 }
 
-void btGeometryUtil_getPlaneEquationsFromVertices(btAlignedVector3Array* vertices, btAlignedVector3Array* planeEquationsOut)
+void btGeometryUtil_getPlaneEquationsFromVertices(btAlignedObjectArray_btVector3* vertices,
+	btAlignedObjectArray_btVector3* planeEquationsOut)
 {
 	btGeometryUtil::getPlaneEquationsFromVertices(*vertices, *planeEquationsOut);
 }
 
-void btGeometryUtil_getVerticesFromPlaneEquations(const btAlignedVector3Array* planeEquations, btAlignedVector3Array* verticesOut)
+void btGeometryUtil_getVerticesFromPlaneEquations(const btAlignedObjectArray_btVector3* planeEquations,
+	btAlignedObjectArray_btVector3* verticesOut)
 {
 	btGeometryUtil::getVerticesFromPlaneEquations(*planeEquations, *verticesOut);
 }
 /*
-bool btGeometryUtil_isInside(const btAlignedVector3Array* vertices, const btScalar* planeNormal, btScalar margin)
+bool btGeometryUtil_isInside(const btAlignedObjectArray_btVector3* vertices, const btVector3* planeNormal,
+	btScalar margin)
 {
-	VECTOR3_CONV(planeNormal);
-	return btGeometryUtil::isInside(*vertices, VECTOR3_USE(planeNormal), margin);
+	BTVECTOR3_IN(planeNormal);
+	return btGeometryUtil::isInside(*vertices, BTVECTOR3_USE(planeNormal), margin);
 }
 */
-bool btGeometryUtil_isPointInsidePlanes(const btAlignedVector3Array* planeEquations, const btScalar* point, btScalar margin)
+bool btGeometryUtil_isPointInsidePlanes(const btAlignedObjectArray_btVector3* planeEquations,
+	const btVector3* point, btScalar margin)
 {
-	VECTOR3_CONV(point);
-	return btGeometryUtil::isPointInsidePlanes(*planeEquations, VECTOR3_USE(point),
+	BTVECTOR3_IN(point);
+	return btGeometryUtil::isPointInsidePlanes(*planeEquations, BTVECTOR3_USE(point),
 		margin);
 }

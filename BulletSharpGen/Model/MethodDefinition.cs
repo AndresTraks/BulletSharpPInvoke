@@ -67,7 +67,7 @@
             m.IsStatic = IsStatic;
             m.ManagedName = ManagedName;
             m.Property = Property;
-            m.ReturnType = ReturnType;
+            m.ReturnType = ReturnType.Copy();
             return m;
         }
 

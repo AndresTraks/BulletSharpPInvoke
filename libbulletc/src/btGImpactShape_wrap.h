@@ -3,15 +3,15 @@
 extern "C"
 {
 	EXPORT btTetrahedronShapeEx* btTetrahedronShapeEx_new();
-	EXPORT void btTetrahedronShapeEx_setVertices(btTetrahedronShapeEx* obj, const btScalar* v0, const btScalar* v1, const btScalar* v2, const btScalar* v3);
+	EXPORT void btTetrahedronShapeEx_setVertices(btTetrahedronShapeEx* obj, const btVector3* v0, const btVector3* v1, const btVector3* v2, const btVector3* v3);
 
 	EXPORT bool btGImpactShapeInterface_childrenHasTransform(btGImpactShapeInterface* obj);
 	EXPORT const btGImpactBoxSet* btGImpactShapeInterface_getBoxSet(btGImpactShapeInterface* obj);
 	EXPORT void btGImpactShapeInterface_getBulletTetrahedron(btGImpactShapeInterface* obj, int prim_index, btTetrahedronShapeEx* tetrahedron);
 	EXPORT void btGImpactShapeInterface_getBulletTriangle(btGImpactShapeInterface* obj, int prim_index, btTriangleShapeEx* triangle);
-	EXPORT void btGImpactShapeInterface_getChildAabb(btGImpactShapeInterface* obj, int child_index, const btScalar* t, btScalar* aabbMin, btScalar* aabbMax);
+	EXPORT void btGImpactShapeInterface_getChildAabb(btGImpactShapeInterface* obj, int child_index, const btTransform* t, btVector3* aabbMin, btVector3* aabbMax);
 	EXPORT btCollisionShape* btGImpactShapeInterface_getChildShape(btGImpactShapeInterface* obj, int index);
-	EXPORT void btGImpactShapeInterface_getChildTransform(btGImpactShapeInterface* obj, int index, btScalar* value);
+	EXPORT void btGImpactShapeInterface_getChildTransform(btGImpactShapeInterface* obj, int index, btTransform* value);
 	EXPORT eGIMPACT_SHAPE_TYPE btGImpactShapeInterface_getGImpactShapeType(btGImpactShapeInterface* obj);
 	EXPORT const btAABB* btGImpactShapeInterface_getLocalBox(btGImpactShapeInterface* obj);
 	EXPORT int btGImpactShapeInterface_getNumChildShapes(btGImpactShapeInterface* obj);
@@ -22,9 +22,9 @@ extern "C"
 	EXPORT bool btGImpactShapeInterface_needsRetrieveTetrahedrons(btGImpactShapeInterface* obj);
 	EXPORT bool btGImpactShapeInterface_needsRetrieveTriangles(btGImpactShapeInterface* obj);
 	EXPORT void btGImpactShapeInterface_postUpdate(btGImpactShapeInterface* obj);
-	EXPORT void btGImpactShapeInterface_processAllTrianglesRay(btGImpactShapeInterface* obj, btTriangleCallback* __unnamed0, const btScalar* __unnamed1, const btScalar* __unnamed2);
-	EXPORT void btGImpactShapeInterface_rayTest(btGImpactShapeInterface* obj, const btScalar* rayFrom, const btScalar* rayTo, btCollisionWorld_RayResultCallback* resultCallback);
-	EXPORT void btGImpactShapeInterface_setChildTransform(btGImpactShapeInterface* obj, int index, const btScalar* transform);
+	EXPORT void btGImpactShapeInterface_processAllTrianglesRay(btGImpactShapeInterface* obj, btTriangleCallback* __unnamed0, const btVector3* __unnamed1, const btVector3* __unnamed2);
+	EXPORT void btGImpactShapeInterface_rayTest(btGImpactShapeInterface* obj, const btVector3* rayFrom, const btVector3* rayTo, btCollisionWorld_RayResultCallback* resultCallback);
+	EXPORT void btGImpactShapeInterface_setChildTransform(btGImpactShapeInterface* obj, int index, const btTransform* transform);
 	EXPORT void btGImpactShapeInterface_unlockChildShapes(btGImpactShapeInterface* obj);
 	EXPORT void btGImpactShapeInterface_updateBound(btGImpactShapeInterface* obj);
 
@@ -36,7 +36,7 @@ extern "C"
 
 	EXPORT btGImpactCompoundShape* btGImpactCompoundShape_new();
 	EXPORT btGImpactCompoundShape* btGImpactCompoundShape_new2(bool children_has_transform);
-	EXPORT void btGImpactCompoundShape_addChildShape(btGImpactCompoundShape* obj, const btScalar* localTransform, btCollisionShape* shape);
+	EXPORT void btGImpactCompoundShape_addChildShape(btGImpactCompoundShape* obj, const btTransform* localTransform, btCollisionShape* shape);
 	EXPORT void btGImpactCompoundShape_addChildShape2(btGImpactCompoundShape* obj, btCollisionShape* shape);
 	EXPORT btGImpactCompoundShape_CompoundPrimitiveManager* btGImpactCompoundShape_getCompoundPrimitiveManager(btGImpactCompoundShape* obj);
 
@@ -45,7 +45,7 @@ extern "C"
 	EXPORT btGImpactMeshShapePart_TrimeshPrimitiveManager* btGImpactMeshShapePart_TrimeshPrimitiveManager_new3();
 	EXPORT void btGImpactMeshShapePart_TrimeshPrimitiveManager_get_bullet_triangle(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj, int prim_index, btTriangleShapeEx* triangle);
 	EXPORT void btGImpactMeshShapePart_TrimeshPrimitiveManager_get_indices(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj, int face_index, unsigned int* i0, unsigned int* i1, unsigned int* i2);
-	EXPORT void btGImpactMeshShapePart_TrimeshPrimitiveManager_get_vertex(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj, unsigned int vertex_index, btScalar* vertex);
+	EXPORT void btGImpactMeshShapePart_TrimeshPrimitiveManager_get_vertex(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj, unsigned int vertex_index, btVector3* vertex);
 	EXPORT int btGImpactMeshShapePart_TrimeshPrimitiveManager_get_vertex_count(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj);
 	EXPORT const unsigned char* btGImpactMeshShapePart_TrimeshPrimitiveManager_getIndexbase(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj);
 	EXPORT int btGImpactMeshShapePart_TrimeshPrimitiveManager_getIndexstride(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj);
@@ -56,7 +56,7 @@ extern "C"
 	EXPORT int btGImpactMeshShapePart_TrimeshPrimitiveManager_getNumfaces(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj);
 	EXPORT int btGImpactMeshShapePart_TrimeshPrimitiveManager_getNumverts(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj);
 	EXPORT int btGImpactMeshShapePart_TrimeshPrimitiveManager_getPart(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj);
-	EXPORT void btGImpactMeshShapePart_TrimeshPrimitiveManager_getScale(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj, btScalar* value);
+	EXPORT void btGImpactMeshShapePart_TrimeshPrimitiveManager_getScale(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj, btVector3* value);
 	EXPORT int btGImpactMeshShapePart_TrimeshPrimitiveManager_getStride(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj);
 	EXPORT PHY_ScalarType btGImpactMeshShapePart_TrimeshPrimitiveManager_getType(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj);
 	EXPORT const unsigned char* btGImpactMeshShapePart_TrimeshPrimitiveManager_getVertexbase(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj);
@@ -70,7 +70,7 @@ extern "C"
 	EXPORT void btGImpactMeshShapePart_TrimeshPrimitiveManager_setNumfaces(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj, int value);
 	EXPORT void btGImpactMeshShapePart_TrimeshPrimitiveManager_setNumverts(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj, int value);
 	EXPORT void btGImpactMeshShapePart_TrimeshPrimitiveManager_setPart(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj, int value);
-	EXPORT void btGImpactMeshShapePart_TrimeshPrimitiveManager_setScale(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj, const btScalar* value);
+	EXPORT void btGImpactMeshShapePart_TrimeshPrimitiveManager_setScale(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj, const btVector3* value);
 	EXPORT void btGImpactMeshShapePart_TrimeshPrimitiveManager_setStride(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj, int value);
 	EXPORT void btGImpactMeshShapePart_TrimeshPrimitiveManager_setType(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj, PHY_ScalarType value);
 	EXPORT void btGImpactMeshShapePart_TrimeshPrimitiveManager_setVertexbase(btGImpactMeshShapePart_TrimeshPrimitiveManager* obj, const unsigned char* value);
@@ -80,7 +80,7 @@ extern "C"
 	EXPORT btGImpactMeshShapePart* btGImpactMeshShapePart_new2(btStridingMeshInterface* meshInterface, int part);
 	EXPORT int btGImpactMeshShapePart_getPart(btGImpactMeshShapePart* obj);
 	EXPORT btGImpactMeshShapePart_TrimeshPrimitiveManager* btGImpactMeshShapePart_getTrimeshPrimitiveManager(btGImpactMeshShapePart* obj);
-	EXPORT void btGImpactMeshShapePart_getVertex(btGImpactMeshShapePart* obj, int vertex_index, btScalar* vertex);
+	EXPORT void btGImpactMeshShapePart_getVertex(btGImpactMeshShapePart* obj, int vertex_index, btVector3* vertex);
 	EXPORT int btGImpactMeshShapePart_getVertexCount(btGImpactMeshShapePart* obj);
 
 	EXPORT btGImpactMeshShape* btGImpactMeshShape_new(btStridingMeshInterface* meshInterface);

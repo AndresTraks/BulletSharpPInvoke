@@ -11,17 +11,17 @@ extern "C"
 	EXPORT void btConstraintSetting_setTau(btConstraintSetting* obj, btScalar value);
 	EXPORT void btConstraintSetting_delete(btConstraintSetting* obj);
 
-	EXPORT btPoint2PointConstraint* btPoint2PointConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btScalar* pivotInA, const btScalar* pivotInB);
-	EXPORT btPoint2PointConstraint* btPoint2PointConstraint_new2(btRigidBody* rbA, const btScalar* pivotInA);
+	EXPORT btPoint2PointConstraint* btPoint2PointConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btVector3* pivotInA, const btVector3* pivotInB);
+	EXPORT btPoint2PointConstraint* btPoint2PointConstraint_new2(btRigidBody* rbA, const btVector3* pivotInA);
 	EXPORT int btPoint2PointConstraint_getFlags(btPoint2PointConstraint* obj);
 	EXPORT void btPoint2PointConstraint_getInfo1NonVirtual(btPoint2PointConstraint* obj, btTypedConstraint_btConstraintInfo1* info);
-	EXPORT void btPoint2PointConstraint_getInfo2NonVirtual(btPoint2PointConstraint* obj, btTypedConstraint_btConstraintInfo2* info, const btScalar* body0_trans, const btScalar* body1_trans);
-	EXPORT void btPoint2PointConstraint_getPivotInA(btPoint2PointConstraint* obj, btScalar* value);
-	EXPORT void btPoint2PointConstraint_getPivotInB(btPoint2PointConstraint* obj, btScalar* value);
+	EXPORT void btPoint2PointConstraint_getInfo2NonVirtual(btPoint2PointConstraint* obj, btTypedConstraint_btConstraintInfo2* info, const btTransform* body0_trans, const btTransform* body1_trans);
+	EXPORT void btPoint2PointConstraint_getPivotInA(btPoint2PointConstraint* obj, btVector3* value);
+	EXPORT void btPoint2PointConstraint_getPivotInB(btPoint2PointConstraint* obj, btVector3* value);
 	EXPORT btConstraintSetting* btPoint2PointConstraint_getSetting(btPoint2PointConstraint* obj);
 	EXPORT bool btPoint2PointConstraint_getUseSolveConstraintObsolete(btPoint2PointConstraint* obj);
-	EXPORT void btPoint2PointConstraint_setPivotA(btPoint2PointConstraint* obj, const btScalar* pivotA);
-	EXPORT void btPoint2PointConstraint_setPivotB(btPoint2PointConstraint* obj, const btScalar* pivotB);
+	EXPORT void btPoint2PointConstraint_setPivotA(btPoint2PointConstraint* obj, const btVector3* pivotA);
+	EXPORT void btPoint2PointConstraint_setPivotB(btPoint2PointConstraint* obj, const btVector3* pivotB);
 	EXPORT void btPoint2PointConstraint_setUseSolveConstraintObsolete(btPoint2PointConstraint* obj, bool value);
 	EXPORT void btPoint2PointConstraint_updateRHS(btPoint2PointConstraint* obj, btScalar timeStep);
 }

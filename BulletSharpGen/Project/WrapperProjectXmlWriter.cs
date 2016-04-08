@@ -19,14 +19,10 @@ namespace BulletSharpGen.Project
             {
                 writer.WriteAttributeString("Namespace", @class.NamespaceName);
             }
-            if (@class.IsExcluded)
-            {
-                writer.WriteAttributeString("IsExcluded", "true");
-            }
-            if (@class.HasPreventDelete)
-            {
-                writer.WriteAttributeString("HasPreventDelete", "true");
-            }
+
+            if (@class.IsExcluded) writer.WriteAttributeString("IsExcluded", "true");
+            if (@class.HasPreventDelete) writer.WriteAttributeString("HasPreventDelete", "true");
+            if (@class.MarshalAsStruct) writer.WriteAttributeString("MarshalAsStruct", "true");
 
             foreach (var childClass in @class.NestedClasses)
             {

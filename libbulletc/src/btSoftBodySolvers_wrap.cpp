@@ -37,12 +37,13 @@ float btSoftBodySolver_getTimeScale(btSoftBodySolver* obj)
 	return obj->getTimeScale();
 }
 /*
-void btSoftBodySolver_optimize(btSoftBodySolver* obj, btAlignedObjectArray<btSoftBody*>* softBodies)
+void btSoftBodySolver_optimize(btSoftBodySolver* obj, btAlignedObjectArray_btSoftBodyPtr* softBodies)
 {
 	obj->optimize(*softBodies);
 }
 
-void btSoftBodySolver_optimize2(btSoftBodySolver* obj, btAlignedObjectArray<btSoftBody*>* softBodies, bool forceUpdate)
+void btSoftBodySolver_optimize2(btSoftBodySolver* obj, btAlignedObjectArray_btSoftBodyPtr* softBodies,
+	bool forceUpdate)
 {
 	obj->optimize(*softBodies, forceUpdate);
 }
@@ -52,12 +53,14 @@ void btSoftBodySolver_predictMotion(btSoftBodySolver* obj, float solverdt)
 	obj->predictMotion(solverdt);
 }
 /*
-void btSoftBodySolver_processCollision(btSoftBodySolver* obj, btSoftBody* __unnamed0, const btCollisionObjectWrapper* __unnamed1)
+void btSoftBodySolver_processCollision(btSoftBodySolver* obj, btSoftBody* __unnamed0,
+	const btCollisionObjectWrapper* __unnamed1)
 {
 	obj->processCollision(__unnamed0, __unnamed1);
 }
 
-void btSoftBodySolver_processCollision2(btSoftBodySolver* obj, btSoftBody* __unnamed0, btSoftBody* __unnamed1)
+void btSoftBodySolver_processCollision2(btSoftBodySolver* obj, btSoftBody* __unnamed0,
+	btSoftBody* __unnamed1)
 {
 	obj->processCollision(__unnamed0, __unnamed1);
 }
@@ -88,7 +91,8 @@ void btSoftBodySolver_delete(btSoftBodySolver* obj)
 }
 
 /*
-void btSoftBodySolverOutput_copySoftBodyToVertexBuffer(btSoftBodySolverOutput* obj, const btSoftBody* softBody, btVertexBufferDescriptor* vertexBuffer)
+void btSoftBodySolverOutput_copySoftBodyToVertexBuffer(btSoftBodySolverOutput* obj,
+	const btSoftBody* softBody, btVertexBufferDescriptor* vertexBuffer)
 {
 	obj->copySoftBodyToVertexBuffer(softBody, vertexBuffer);
 }

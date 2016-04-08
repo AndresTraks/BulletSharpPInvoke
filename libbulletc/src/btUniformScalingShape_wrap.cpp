@@ -2,7 +2,8 @@
 
 #include "btUniformScalingShape_wrap.h"
 
-btUniformScalingShape* btUniformScalingShape_new(btConvexShape* convexChildShape, btScalar uniformScalingFactor)
+btUniformScalingShape* btUniformScalingShape_new(btConvexShape* convexChildShape,
+	btScalar uniformScalingFactor)
 {
 	return new btUniformScalingShape(convexChildShape, uniformScalingFactor);
 }

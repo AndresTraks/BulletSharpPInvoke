@@ -9,44 +9,44 @@ btJointFeedback* btJointFeedback_new()
 	return new btJointFeedback();
 }
 
-void btJointFeedback_getAppliedForceBodyA(btJointFeedback* obj, btScalar* value)
+void btJointFeedback_getAppliedForceBodyA(btJointFeedback* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_appliedForceBodyA, value);
+	BTVECTOR3_SET(value, obj->m_appliedForceBodyA);
 }
 
-void btJointFeedback_getAppliedForceBodyB(btJointFeedback* obj, btScalar* value)
+void btJointFeedback_getAppliedForceBodyB(btJointFeedback* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_appliedForceBodyB, value);
+	BTVECTOR3_SET(value, obj->m_appliedForceBodyB);
 }
 
-void btJointFeedback_getAppliedTorqueBodyA(btJointFeedback* obj, btScalar* value)
+void btJointFeedback_getAppliedTorqueBodyA(btJointFeedback* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_appliedTorqueBodyA, value);
+	BTVECTOR3_SET(value, obj->m_appliedTorqueBodyA);
 }
 
-void btJointFeedback_getAppliedTorqueBodyB(btJointFeedback* obj, btScalar* value)
+void btJointFeedback_getAppliedTorqueBodyB(btJointFeedback* obj, btVector3* value)
 {
-	VECTOR3_OUT(&obj->m_appliedTorqueBodyB, value);
+	BTVECTOR3_SET(value, obj->m_appliedTorqueBodyB);
 }
 
-void btJointFeedback_setAppliedForceBodyA(btJointFeedback* obj, const btScalar* value)
+void btJointFeedback_setAppliedForceBodyA(btJointFeedback* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_appliedForceBodyA);
+	BTVECTOR3_COPY(&obj->m_appliedForceBodyA, value);
 }
 
-void btJointFeedback_setAppliedForceBodyB(btJointFeedback* obj, const btScalar* value)
+void btJointFeedback_setAppliedForceBodyB(btJointFeedback* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_appliedForceBodyB);
+	BTVECTOR3_COPY(&obj->m_appliedForceBodyB, value);
 }
 
-void btJointFeedback_setAppliedTorqueBodyA(btJointFeedback* obj, const btScalar* value)
+void btJointFeedback_setAppliedTorqueBodyA(btJointFeedback* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_appliedTorqueBodyA);
+	BTVECTOR3_COPY(&obj->m_appliedTorqueBodyA, value);
 }
 
-void btJointFeedback_setAppliedTorqueBodyB(btJointFeedback* obj, const btScalar* value)
+void btJointFeedback_setAppliedTorqueBodyB(btJointFeedback* obj, const btVector3* value)
 {
-	VECTOR3_IN(value, &obj->m_appliedTorqueBodyB);
+	BTVECTOR3_COPY(&obj->m_appliedTorqueBodyB, value);
 }
 
 void btJointFeedback_delete(btJointFeedback* obj)
@@ -70,12 +70,14 @@ int btTypedConstraint_btConstraintInfo1_getNumConstraintRows(btTypedConstraint::
 	return obj->m_numConstraintRows;
 }
 
-void btTypedConstraint_btConstraintInfo1_setNub(btTypedConstraint::btConstraintInfo1* obj, int value)
+void btTypedConstraint_btConstraintInfo1_setNub(btTypedConstraint::btConstraintInfo1* obj,
+	int value)
 {
 	obj->nub = value;
 }
 
-void btTypedConstraint_btConstraintInfo1_setNumConstraintRows(btTypedConstraint::btConstraintInfo1* obj, int value)
+void btTypedConstraint_btConstraintInfo1_setNumConstraintRows(btTypedConstraint::btConstraintInfo1* obj,
+	int value)
 {
 	obj->m_numConstraintRows = value;
 }
@@ -161,72 +163,86 @@ btScalar* btTypedConstraint_btConstraintInfo2_getUpperLimit(btTypedConstraint::b
 	return obj->m_upperLimit;
 }
 
-void btTypedConstraint_btConstraintInfo2_setCfm(btTypedConstraint::btConstraintInfo2* obj, btScalar* value)
+void btTypedConstraint_btConstraintInfo2_setCfm(btTypedConstraint::btConstraintInfo2* obj,
+	btScalar* value)
 {
 	obj->cfm = value;
 }
 
-void btTypedConstraint_btConstraintInfo2_setConstraintError(btTypedConstraint::btConstraintInfo2* obj, btScalar* value)
+void btTypedConstraint_btConstraintInfo2_setConstraintError(btTypedConstraint::btConstraintInfo2* obj,
+	btScalar* value)
 {
 	obj->m_constraintError = value;
 }
 
-void btTypedConstraint_btConstraintInfo2_setDamping(btTypedConstraint::btConstraintInfo2* obj, btScalar value)
+void btTypedConstraint_btConstraintInfo2_setDamping(btTypedConstraint::btConstraintInfo2* obj,
+	btScalar value)
 {
 	obj->m_damping = value;
 }
 
-void btTypedConstraint_btConstraintInfo2_setErp(btTypedConstraint::btConstraintInfo2* obj, btScalar value)
+void btTypedConstraint_btConstraintInfo2_setErp(btTypedConstraint::btConstraintInfo2* obj,
+	btScalar value)
 {
 	obj->erp = value;
 }
 
-void btTypedConstraint_btConstraintInfo2_setFindex(btTypedConstraint::btConstraintInfo2* obj, int* value)
+void btTypedConstraint_btConstraintInfo2_setFindex(btTypedConstraint::btConstraintInfo2* obj,
+	int* value)
 {
 	obj->findex = value;
 }
 
-void btTypedConstraint_btConstraintInfo2_setFps(btTypedConstraint::btConstraintInfo2* obj, btScalar value)
+void btTypedConstraint_btConstraintInfo2_setFps(btTypedConstraint::btConstraintInfo2* obj,
+	btScalar value)
 {
 	obj->fps = value;
 }
 
-void btTypedConstraint_btConstraintInfo2_setJ1angularAxis(btTypedConstraint::btConstraintInfo2* obj, btScalar* value)
+void btTypedConstraint_btConstraintInfo2_setJ1angularAxis(btTypedConstraint::btConstraintInfo2* obj,
+	btScalar* value)
 {
 	obj->m_J1angularAxis = value;
 }
 
-void btTypedConstraint_btConstraintInfo2_setJ1linearAxis(btTypedConstraint::btConstraintInfo2* obj, btScalar* value)
+void btTypedConstraint_btConstraintInfo2_setJ1linearAxis(btTypedConstraint::btConstraintInfo2* obj,
+	btScalar* value)
 {
 	obj->m_J1linearAxis = value;
 }
 
-void btTypedConstraint_btConstraintInfo2_setJ2angularAxis(btTypedConstraint::btConstraintInfo2* obj, btScalar* value)
+void btTypedConstraint_btConstraintInfo2_setJ2angularAxis(btTypedConstraint::btConstraintInfo2* obj,
+	btScalar* value)
 {
 	obj->m_J2angularAxis = value;
 }
 
-void btTypedConstraint_btConstraintInfo2_setJ2linearAxis(btTypedConstraint::btConstraintInfo2* obj, btScalar* value)
+void btTypedConstraint_btConstraintInfo2_setJ2linearAxis(btTypedConstraint::btConstraintInfo2* obj,
+	btScalar* value)
 {
 	obj->m_J2linearAxis = value;
 }
 
-void btTypedConstraint_btConstraintInfo2_setLowerLimit(btTypedConstraint::btConstraintInfo2* obj, btScalar* value)
+void btTypedConstraint_btConstraintInfo2_setLowerLimit(btTypedConstraint::btConstraintInfo2* obj,
+	btScalar* value)
 {
 	obj->m_lowerLimit = value;
 }
 
-void btTypedConstraint_btConstraintInfo2_setNumIterations(btTypedConstraint::btConstraintInfo2* obj, int value)
+void btTypedConstraint_btConstraintInfo2_setNumIterations(btTypedConstraint::btConstraintInfo2* obj,
+	int value)
 {
 	obj->m_numIterations = value;
 }
 
-void btTypedConstraint_btConstraintInfo2_setRowskip(btTypedConstraint::btConstraintInfo2* obj, int value)
+void btTypedConstraint_btConstraintInfo2_setRowskip(btTypedConstraint::btConstraintInfo2* obj,
+	int value)
 {
 	obj->rowskip = value;
 }
 
-void btTypedConstraint_btConstraintInfo2_setUpperLimit(btTypedConstraint::btConstraintInfo2* obj, btScalar* value)
+void btTypedConstraint_btConstraintInfo2_setUpperLimit(btTypedConstraint::btConstraintInfo2* obj,
+	btScalar* value)
 {
 	obj->m_upperLimit = value;
 }
@@ -357,7 +373,8 @@ bool btTypedConstraint_needsFeedback(btTypedConstraint* obj)
 	return obj->needsFeedback();
 }
 
-const char* btTypedConstraint_serialize(btTypedConstraint* obj, void* dataBuffer, btSerializer* serializer)
+const char* btTypedConstraint_serialize(btTypedConstraint* obj, void* dataBuffer,
+	btSerializer* serializer)
 {
 	return obj->serialize(dataBuffer, serializer);
 }
@@ -392,12 +409,14 @@ void btTypedConstraint_setParam(btTypedConstraint* obj, int num, btScalar value)
 	obj->setParam(num, value);
 }
 
-void btTypedConstraint_setParam2(btTypedConstraint* obj, int num, btScalar value, int axis)
+void btTypedConstraint_setParam2(btTypedConstraint* obj, int num, btScalar value,
+	int axis)
 {
 	obj->setParam(num, value, axis);
 }
 
-void btTypedConstraint_setupSolverConstraint(btTypedConstraint* obj, btConstraintArray* ca, int solverBodyA, int solverBodyB, btScalar timeStep)
+void btTypedConstraint_setupSolverConstraint(btTypedConstraint* obj, btAlignedObjectArray_btSolverConstraint* ca,
+	int solverBodyA, int solverBodyB, btScalar timeStep)
 {
 	obj->setupSolverConstraint(*ca, solverBodyA, solverBodyB, timeStep);
 }
@@ -417,7 +436,8 @@ void btTypedConstraint_setUserConstraintType(btTypedConstraint* obj, int userCon
 	obj->setUserConstraintType(userConstraintType);
 }
 
-void btTypedConstraint_solveConstraintObsolete(btTypedConstraint* obj, btSolverBody* __unnamed0, btSolverBody* __unnamed1, btScalar __unnamed2)
+void btTypedConstraint_solveConstraintObsolete(btTypedConstraint* obj, btSolverBody* __unnamed0,
+	btSolverBody* __unnamed1, btScalar __unnamed2)
 {
 	obj->solveConstraintObsolete(*__unnamed0, *__unnamed1, __unnamed2);
 }
@@ -498,12 +518,14 @@ void btAngularLimit_set2(btAngularLimit* obj, btScalar low, btScalar high, btSca
 	obj->set(low, high, _softness);
 }
 
-void btAngularLimit_set3(btAngularLimit* obj, btScalar low, btScalar high, btScalar _softness, btScalar _biasFactor)
+void btAngularLimit_set3(btAngularLimit* obj, btScalar low, btScalar high, btScalar _softness,
+	btScalar _biasFactor)
 {
 	obj->set(low, high, _softness, _biasFactor);
 }
 
-void btAngularLimit_set4(btAngularLimit* obj, btScalar low, btScalar high, btScalar _softness, btScalar _biasFactor, btScalar _relaxationFactor)
+void btAngularLimit_set4(btAngularLimit* obj, btScalar low, btScalar high, btScalar _softness,
+	btScalar _biasFactor, btScalar _relaxationFactor)
 {
 	obj->set(low, high, _softness, _biasFactor, _relaxationFactor);
 }

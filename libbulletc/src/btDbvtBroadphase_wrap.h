@@ -34,7 +34,7 @@ extern "C"
 	EXPORT btScalar btDbvtBroadphase_getVelocityPrediction(btDbvtBroadphase* obj);
 	EXPORT void btDbvtBroadphase_optimize(btDbvtBroadphase* obj);
 	EXPORT void btDbvtBroadphase_performDeferredRemoval(btDbvtBroadphase* obj, btDispatcher* dispatcher);
-	EXPORT void btDbvtBroadphase_setAabbForceUpdate(btDbvtBroadphase* obj, btBroadphaseProxy* absproxy, const btScalar* aabbMin, const btScalar* aabbMax, btDispatcher* __unnamed3);
+	EXPORT void btDbvtBroadphase_setAabbForceUpdate(btDbvtBroadphase* obj, btBroadphaseProxy* absproxy, const btVector3* aabbMin, const btVector3* aabbMax, btDispatcher* __unnamed3);
 	EXPORT void btDbvtBroadphase_setCid(btDbvtBroadphase* obj, int value);
 	EXPORT void btDbvtBroadphase_setCupdates(btDbvtBroadphase* obj, int value);
 	EXPORT void btDbvtBroadphase_setDeferedcollide(btDbvtBroadphase* obj, bool value);

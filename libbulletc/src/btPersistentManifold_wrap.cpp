@@ -9,9 +9,11 @@ btPersistentManifold* btPersistentManifold_new()
 	return new btPersistentManifold();
 }
 
-btPersistentManifold* btPersistentManifold_new2(const btCollisionObject* body0, const btCollisionObject* body1, int __unnamed2, btScalar contactBreakingThreshold, btScalar contactProcessingThreshold)
+btPersistentManifold* btPersistentManifold_new2(const btCollisionObject* body0, const btCollisionObject* body1,
+	int __unnamed2, btScalar contactBreakingThreshold, btScalar contactProcessingThreshold)
 {
-	return new btPersistentManifold(body0, body1, __unnamed2, contactBreakingThreshold, contactProcessingThreshold);
+	return new btPersistentManifold(body0, body1, __unnamed2, contactBreakingThreshold,
+		contactProcessingThreshold);
 }
 
 int btPersistentManifold_addManifoldPoint(btPersistentManifold* obj, const btManifoldPoint* newPoint)
@@ -19,7 +21,8 @@ int btPersistentManifold_addManifoldPoint(btPersistentManifold* obj, const btMan
 	return obj->addManifoldPoint(*newPoint);
 }
 
-int btPersistentManifold_addManifoldPoint2(btPersistentManifold* obj, const btManifoldPoint* newPoint, bool isPredictive)
+int btPersistentManifold_addManifoldPoint2(btPersistentManifold* obj, const btManifoldPoint* newPoint,
+	bool isPredictive)
 {
 	return obj->addManifoldPoint(*newPoint, isPredictive);
 }
@@ -64,7 +67,8 @@ btScalar btPersistentManifold_getContactBreakingThreshold(btPersistentManifold* 
 	return obj->getContactBreakingThreshold();
 }
 
-btManifoldPoint* btPersistentManifold_getContactPoint(btPersistentManifold* obj, int index)
+btManifoldPoint* btPersistentManifold_getContactPoint(btPersistentManifold* obj,
+	int index)
 {
 	return &obj->getContactPoint(index);
 }
@@ -84,11 +88,12 @@ int btPersistentManifold_getNumContacts(btPersistentManifold* obj)
 	return obj->getNumContacts();
 }
 
-void btPersistentManifold_refreshContactPoints(btPersistentManifold* obj, const btScalar* trA, const btScalar* trB)
+void btPersistentManifold_refreshContactPoints(btPersistentManifold* obj, const btTransform* trA,
+	const btTransform* trB)
 {
-	TRANSFORM_CONV(trA);
-	TRANSFORM_CONV(trB);
-	obj->refreshContactPoints(TRANSFORM_USE(trA), TRANSFORM_USE(trB));
+	BTTRANSFORM_IN(trA);
+	BTTRANSFORM_IN(trB);
+	obj->refreshContactPoints(BTTRANSFORM_USE(trA), BTTRANSFORM_USE(trB));
 }
 
 void btPersistentManifold_removeContactPoint(btPersistentManifold* obj, int index)
@@ -96,12 +101,14 @@ void btPersistentManifold_removeContactPoint(btPersistentManifold* obj, int inde
 	obj->removeContactPoint(index);
 }
 
-void btPersistentManifold_replaceContactPoint(btPersistentManifold* obj, const btManifoldPoint* newPoint, int insertIndex)
+void btPersistentManifold_replaceContactPoint(btPersistentManifold* obj, const btManifoldPoint* newPoint,
+	int insertIndex)
 {
 	obj->replaceContactPoint(*newPoint, insertIndex);
 }
 
-void btPersistentManifold_setBodies(btPersistentManifold* obj, const btCollisionObject* body0, const btCollisionObject* body1)
+void btPersistentManifold_setBodies(btPersistentManifold* obj, const btCollisionObject* body0,
+	const btCollisionObject* body1)
 {
 	obj->setBodies(body0, body1);
 }
@@ -116,12 +123,14 @@ void btPersistentManifold_setCompanionIdB(btPersistentManifold* obj, int value)
 	obj->m_companionIdB = value;
 }
 
-void btPersistentManifold_setContactBreakingThreshold(btPersistentManifold* obj, btScalar contactBreakingThreshold)
+void btPersistentManifold_setContactBreakingThreshold(btPersistentManifold* obj,
+	btScalar contactBreakingThreshold)
 {
 	obj->setContactBreakingThreshold(contactBreakingThreshold);
 }
 
-void btPersistentManifold_setContactProcessingThreshold(btPersistentManifold* obj, btScalar contactProcessingThreshold)
+void btPersistentManifold_setContactProcessingThreshold(btPersistentManifold* obj,
+	btScalar contactProcessingThreshold)
 {
 	obj->setContactProcessingThreshold(contactProcessingThreshold);
 }
