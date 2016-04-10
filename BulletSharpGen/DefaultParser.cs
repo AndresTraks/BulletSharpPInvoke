@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClangSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -122,7 +123,7 @@ namespace BulletSharpGen
         public static bool TypeRequiresMarshal(TypeRefDefinition type)
         {
             if (type.Target != null && type.Target.MarshalAsStruct) return true;
-            if (type.IsReference && TypeRequiresMarshal(type.Referenced)) return true;
+            if (type.Kind == TypeKind.LValueReference && TypeRequiresMarshal(type.Referenced)) return true;
             return false;
         }
 
@@ -459,17 +460,17 @@ namespace BulletSharpGen
 
         string GetManagedMethodName(MethodDefinition method)
         {
+            if (method.IsConstructor)
+            {
+                return method.Parent.ManagedName;
+            }
+
             string mapping = Project.MethodNameMapping?.Map(method.Name);
             if (mapping != null) return mapping;
 
             if (method.Name.StartsWith("operator"))
             {
                 return method.Name;
-            }
-
-            if (method.IsConstructor)
-            {
-                return method.Parent.ManagedName;
             }
 
             return ToCamelCase(method.Name, true);
@@ -500,9 +501,12 @@ namespace BulletSharpGen
                     if (@class.BaseClass == null || (@class.BaseClass != null &&
                         @class.BaseClass.Methods.Any(m => m.IsConstructor && !m.Parameters.Any())))
                     {
-                        var constructor = new MethodDefinition(@class.Name, @class, 0);
-                        constructor.IsConstructor = true;
-                        constructor.ReturnType = new TypeRefDefinition("void");
+                        var constructor = new MethodDefinition(@class.Name, @class, 0)
+                        {
+                            IsConstructor = true,
+                            ReturnType = new TypeRefDefinition("void")
+                        };
+                        constructor.ManagedName = GetManagedMethodName(constructor);
                     }
                 }
             }
@@ -567,6 +571,18 @@ namespace BulletSharpGen
                         getter.ReturnType = field.Type;
                         getter.Field = field;
                     }
+                    var type = field.Type.Canonical;
+                    if (!type.IsBasic && type.Referenced == null)
+                    {
+                        if (!(type.Target != null && type.Target.MarshalAsStruct))
+                        {
+                            getter.ReturnType = new TypeRefDefinition(field.Type.Name)
+                            {
+                                Kind = TypeKind.Pointer,
+                                Referenced = field.Type.Copy()
+                            };
+                        }
+                    }
 
                     var prop = new PropertyDefinition(getter, GetPropertyName(getter));
 
@@ -581,7 +597,12 @@ namespace BulletSharpGen
         void CreateFieldSetter(PropertyDefinition prop, string setterName, string managedSetterName)
         {
             // Can't assign value to reference or constant array
-            if (prop.Type.IsReference || prop.Type.IsConstantArray) return;
+            switch (prop.Type.Kind)
+            {
+                case TypeKind.LValueReference:
+                case TypeKind.ConstantArray:
+                    return;
+            }
 
             if (prop.Type.Name != null && prop.Type.Name.StartsWith("btAlignedObjectArray")) return;
 
@@ -596,11 +617,11 @@ namespace BulletSharpGen
                 type = new TypeRefDefinition
                 {
                     IsConst = true,
-                    IsPointer = true,
+                    Kind = TypeKind.Pointer,
                     Referenced = type.Copy()
                 };
             }
-            else if (!type.IsBasic && !type.IsPointer)
+            else if (!type.IsBasic && type.Kind != TypeKind.Pointer)
             {
                 type = type.Copy();
                 type.IsConst = true;
@@ -660,13 +681,16 @@ namespace BulletSharpGen
                         if (method.Property != null) continue;
 
                         var paramType = method.Parameters[0].Type;
-                        if (paramType.IsPointer || paramType.IsReference)
+                        switch (paramType.Kind)
                         {
-                            // TODO: check project configuration
-                            //if (true)
-                            {
-                                new PropertyDefinition(method, GetPropertyName(method));
-                            }
+                            case TypeKind.Pointer:
+                            case TypeKind.LValueReference:
+                                // TODO: check project configuration
+                                //if (true)
+                                {
+                                    new PropertyDefinition(method, GetPropertyName(method));
+                                }
+                                break;
                         }
                     }
                 }
@@ -698,19 +722,23 @@ namespace BulletSharpGen
             }
         }
 
-        void ResolveInclude(TypeRefDefinition typeRef, HeaderDefinition parentHeader)
+        void ResolveInclude(TypeRefDefinition type, HeaderDefinition parentHeader)
         {
-            if (typeRef.IsPointer || typeRef.IsReference || typeRef.IsConstantArray)
+            switch (type.Kind)
             {
-                ResolveInclude(typeRef.Referenced, parentHeader);
+                case TypeKind.Pointer:
+                case TypeKind.LValueReference:
+                case TypeKind.ConstantArray:
+                    ResolveInclude(type.Referenced, parentHeader);
+                    return;
             }
-            else if (typeRef.TemplateParams != null)
+            if (type.TemplateParams != null)
             {
-                typeRef.TemplateParams.ForEach(p => ResolveInclude(p, parentHeader));
+                type.TemplateParams.ForEach(p => ResolveInclude(p, parentHeader));
             }
-            else if (typeRef.IsIncomplete && typeRef.Target != null)
+            else if (type.IsIncomplete && type.Target != null)
             {
-                parentHeader.Includes.Add(typeRef.Target.Header);
+                parentHeader.Includes.Add(type.Target.Header);
             }
         }
 

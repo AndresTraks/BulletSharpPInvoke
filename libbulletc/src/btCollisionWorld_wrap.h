@@ -203,7 +203,7 @@ extern "C"
 	EXPORT void btCollisionWorld_debugDrawObject(btCollisionWorld* obj, const btTransform* worldTransform, const btCollisionShape* shape, const btVector3* color);
 	EXPORT void btCollisionWorld_debugDrawWorld(btCollisionWorld* obj);
 	EXPORT btBroadphaseInterface* btCollisionWorld_getBroadphase(btCollisionWorld* obj);
-	EXPORT const btCollisionObjectArray* btCollisionWorld_getCollisionObjectArray(btCollisionWorld* obj);
+	EXPORT btAlignedObjectArray_btCollisionObjectPtr* btCollisionWorld_getCollisionObjectArray(btCollisionWorld* obj);
 	EXPORT btIDebugDraw* btCollisionWorld_getDebugDrawer(btCollisionWorld* obj);
 	EXPORT const btDispatcher* btCollisionWorld_getDispatcher(btCollisionWorld* obj);
 	EXPORT const btDispatcherInfo* btCollisionWorld_getDispatchInfo(btCollisionWorld* obj);

@@ -17,7 +17,8 @@ namespace BulletSharp
 			}
 
 			public CreateFunc(VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver pdSolver)
-				: base(btConvexConvexAlgorithm_CreateFunc_new(simplexSolver._native, pdSolver._native), false)
+				: base(btConvexConvexAlgorithm_CreateFunc_new(simplexSolver._native,
+					pdSolver._native), false)
 			{
 				_pdSolver = pdSolver;
 				_simplexSolver = simplexSolver;
@@ -62,10 +63,6 @@ namespace BulletSharp
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern int btConvexConvexAlgorithm_CreateFunc_getNumPerturbationIterations(IntPtr obj);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern IntPtr btConvexConvexAlgorithm_CreateFunc_getPdSolver(IntPtr obj);
-			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern IntPtr btConvexConvexAlgorithm_CreateFunc_getSimplexSolver(IntPtr obj);
-			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern void btConvexConvexAlgorithm_CreateFunc_setMinimumPointsPerturbationThreshold(IntPtr obj, int value);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern void btConvexConvexAlgorithm_CreateFunc_setNumPerturbationIterations(IntPtr obj, int value);
@@ -75,8 +72,12 @@ namespace BulletSharp
 			static extern void btConvexConvexAlgorithm_CreateFunc_setSimplexSolver(IntPtr obj, IntPtr value);
 		}
 
-		public ConvexConvexAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver pdSolver, int numPerturbationIterations, int minimumPointsPerturbationThreshold)
-			: base(btConvexConvexAlgorithm_new(mf._native, ci._native, body0Wrap._native, body1Wrap._native, simplexSolver._native, pdSolver._native, numPerturbationIterations, minimumPointsPerturbationThreshold))
+		public ConvexConvexAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci,
+			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, VoronoiSimplexSolver simplexSolver,
+			ConvexPenetrationDepthSolver pdSolver, int numPerturbationIterations, int minimumPointsPerturbationThreshold)
+			: base(btConvexConvexAlgorithm_new(mf._native, ci._native, body0Wrap._native,
+				body1Wrap._native, simplexSolver._native, pdSolver._native, numPerturbationIterations,
+				minimumPointsPerturbationThreshold))
 		{
 		}
 

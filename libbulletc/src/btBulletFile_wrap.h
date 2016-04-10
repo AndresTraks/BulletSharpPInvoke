@@ -11,7 +11,7 @@ extern "C"
 	EXPORT btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getCollisionObjects(bParse_btBulletFile* obj);
 	EXPORT btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getCollisionShapes(bParse_btBulletFile* obj);
 	EXPORT btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getConstraints(bParse_btBulletFile* obj);
-	EXPORT btAligendCharPtrArray* bParse_btBulletFile_getDataBlocks(bParse_btBulletFile* obj);
+	EXPORT btAlignedObjectArray_charPtr* bParse_btBulletFile_getDataBlocks(bParse_btBulletFile* obj);
 	EXPORT btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getDynamicsWorldInfo(bParse_btBulletFile* obj);
 	EXPORT btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getMultiBodies(bParse_btBulletFile* obj);
 	EXPORT btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getRigidBodies(bParse_btBulletFile* obj);

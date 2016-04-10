@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClangSharp;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -166,22 +167,26 @@ namespace BulletSharpGen
                 if (p.Type.IsBasic) { return p.ManagedName; }
 
                 string paramString = "";
-                if (p.Type.IsPointer || p.Type.IsReference)
+                switch (p.Type.Kind)
                 {
-                    if (p.Type.IsReference)
-                    {
-                        // Dereference
-                        paramString = "*";
-                    }
+                    case TypeKind.Pointer:
+                    case TypeKind.LValueReference:
+                        if (p.Type.Kind == TypeKind.LValueReference)
+                        {
+                            // Dereference
+                            paramString = "*";
+                        }
 
-                    if (p.Type.Referenced.Target?.BaseClass != null)
-                    {
-                        // Cast native pointer from base class
-                        paramString += $"({p.Type.Referenced.FullName}*)";
-                    }
+                        if (p.Type.Referenced.Target?.BaseClass != null)
+                        {
+                            // Cast native pointer from base class
+                            paramString += $"({p.Type.Referenced.FullName}*)";
+                        }
+                        break;
                 }
+
                 paramString += p.ManagedName;
-                if (p.Type.IsPointer && p.Type.ManagedName.Equals("void"))
+                if (p.Type.Kind == TypeKind.Pointer && p.Type.Referenced.Kind == TypeKind.Void)
                 {
                     paramString += ".ToPointer()";
                 }
@@ -279,20 +284,23 @@ namespace BulletSharpGen
                     else
                     {
                         Write($"{nativePointer}->{method.Field.Name} = ");
-                        if (param.Type.IsPointer || param.Type.IsReference)
+                        switch (param.Type.Kind)
                         {
-                            if (param.Type.IsReference)
-                            {
-                                // Dereference
-                                Write('*');
-                            }
+                            case TypeKind.Pointer:
+                            case TypeKind.LValueReference:
+                                if (param.Type.Kind == TypeKind.LValueReference)
+                                {
+                                    // Dereference
+                                    Write('*');
+                                }
 
-                            if (param.Type.Referenced.Target != null &&
-                                param.Type.Referenced.Target.BaseClass != null)
-                            {
-                                // Cast native pointer from base class
-                                Write($"({param.Type.Referenced.FullName}*)");
-                            }
+                                if (param.Type.Referenced.Target != null &&
+                                    param.Type.Referenced.Target.BaseClass != null)
+                                {
+                                    // Cast native pointer from base class
+                                    Write($"({param.Type.Referenced.FullName}*)");
+                                }
+                                break;
                         }
                         Write(param.ManagedName);
                         if (!param.Type.IsBasic)
@@ -941,21 +949,18 @@ namespace BulletSharpGen
 
         void AddForwardReference(List<ClassDefinition> forwardRefs, TypeRefDefinition type, HeaderDefinition header)
         {
-            if (type.IsBasic)
+            if (type.IsBasic) return;
+
+            switch (type.Kind)
             {
-                return;
+                case TypeKind.Pointer:
+                case TypeKind.LValueReference:
+                    AddForwardReference(forwardRefs, type.Referenced, header);
+                    return;
             }
 
-            if (type.IsPointer || type.IsReference)
-            {
-                AddForwardReference(forwardRefs, type.Referenced, header);
-                return;
-            }
+            if (type.Target == null) return;
 
-            if (type.Target == null)
-            {
-                return;
-            }
             if (type.Target.IsExcluded ||
                 forwardRefs.Contains(type.Target) ||
                 PrecompiledHeaderReferences.Contains(type.Target.ManagedName))

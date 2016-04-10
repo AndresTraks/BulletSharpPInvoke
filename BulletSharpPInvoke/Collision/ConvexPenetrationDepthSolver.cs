@@ -14,9 +14,13 @@ namespace BulletSharp
 			_native = native;
 		}
 
-		public bool CalcPenDepth(VoronoiSimplexSolver simplexSolver, ConvexShape convexA, ConvexShape convexB, Matrix transA, Matrix transB, out Vector3 v, out Vector3 pa, out Vector3 pb, IDebugDraw debugDraw)
+		public bool CalcPenDepth(VoronoiSimplexSolver simplexSolver, ConvexShape convexA,
+			ConvexShape convexB, Matrix transA, Matrix transB, out Vector3 v, out Vector3 pa,
+			out Vector3 pb, IDebugDraw debugDraw)
 		{
-			return btConvexPenetrationDepthSolver_calcPenDepth(_native, simplexSolver._native, convexA._native, convexB._native, ref transA, ref transB, out v, out pa, out pb, DebugDraw.GetUnmanaged(debugDraw));
+			return btConvexPenetrationDepthSolver_calcPenDepth(_native, simplexSolver._native,
+				convexA._native, convexB._native, ref transA, ref transB, out v, out pa,
+				out pb, DebugDraw.GetUnmanaged(debugDraw));
 		}
 
 		public void Dispose()

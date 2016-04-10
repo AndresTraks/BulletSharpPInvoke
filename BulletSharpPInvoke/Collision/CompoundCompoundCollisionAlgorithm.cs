@@ -38,8 +38,10 @@ namespace BulletSharp
 			static extern IntPtr btCompoundCompoundCollisionAlgorithm_SwappedCreateFunc_new();
 		}
 
-		public CompoundCompoundCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped)
-			: base(btCompoundCompoundCollisionAlgorithm_new(ci._native, body0Wrap._native, body1Wrap._native, isSwapped))
+		public CompoundCompoundCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci,
+			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped)
+			: base(btCompoundCompoundCollisionAlgorithm_new(ci._native, body0Wrap._native,
+				body1Wrap._native, isSwapped))
 		{
 		}
 

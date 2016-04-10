@@ -38,9 +38,11 @@ namespace BulletSharp
 			_collisionConfiguration = collisionConfiguration;
 		}
 
-		public static void DefaultNearCallback(BroadphasePair collisionPair, CollisionDispatcher dispatcher, DispatcherInfo dispatchInfo)
+		public static void DefaultNearCallback(BroadphasePair collisionPair, CollisionDispatcher dispatcher,
+			DispatcherInfo dispatchInfo)
 		{
-			btCollisionDispatcher_defaultNearCallback(collisionPair._native, dispatcher._native, dispatchInfo._native);
+			btCollisionDispatcher_defaultNearCallback(collisionPair._native, dispatcher._native,
+				dispatchInfo._native);
 		}
 
         private void NearCallbackUnmanaged(IntPtr collisionPair, IntPtr dispatcher, IntPtr dispatchInfo)
@@ -58,7 +60,8 @@ namespace BulletSharp
             }
             _collisionCreateFuncs.Add(createFunc);
 
-			btCollisionDispatcher_registerCollisionCreateFunc(_native, proxyType0, proxyType1, createFunc._native);
+			btCollisionDispatcher_registerCollisionCreateFunc(_native, proxyType0,
+				proxyType1, createFunc._native);
 		}
 
 		public CollisionConfiguration CollisionConfiguration

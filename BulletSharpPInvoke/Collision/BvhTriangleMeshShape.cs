@@ -21,20 +21,26 @@ namespace BulletSharp
 			_meshInterface = meshInterface;
 		}
 
-		public BvhTriangleMeshShape(StridingMeshInterface meshInterface, bool useQuantizedAabbCompression, bool buildBvh)
-			: base(btBvhTriangleMeshShape_new2(meshInterface._native, useQuantizedAabbCompression, buildBvh))
+		public BvhTriangleMeshShape(StridingMeshInterface meshInterface, bool useQuantizedAabbCompression,
+			bool buildBvh)
+			: base(btBvhTriangleMeshShape_new2(meshInterface._native, useQuantizedAabbCompression,
+				buildBvh))
 		{
 			_meshInterface = meshInterface;
 		}
 
-		public BvhTriangleMeshShape(StridingMeshInterface meshInterface, bool useQuantizedAabbCompression, Vector3 bvhAabbMin, Vector3 bvhAabbMax)
-			: base(btBvhTriangleMeshShape_new3(meshInterface._native, useQuantizedAabbCompression, ref bvhAabbMin, ref bvhAabbMax))
+		public BvhTriangleMeshShape(StridingMeshInterface meshInterface, bool useQuantizedAabbCompression,
+			Vector3 bvhAabbMin, Vector3 bvhAabbMax)
+			: base(btBvhTriangleMeshShape_new3(meshInterface._native, useQuantizedAabbCompression,
+				ref bvhAabbMin, ref bvhAabbMax))
 		{
 			_meshInterface = meshInterface;
 		}
 
-		public BvhTriangleMeshShape(StridingMeshInterface meshInterface, bool useQuantizedAabbCompression, Vector3 bvhAabbMin, Vector3 bvhAabbMax, bool buildBvh)
-			: base(btBvhTriangleMeshShape_new4(meshInterface._native, useQuantizedAabbCompression, ref bvhAabbMin, ref bvhAabbMax, buildBvh))
+		public BvhTriangleMeshShape(StridingMeshInterface meshInterface, bool useQuantizedAabbCompression,
+			Vector3 bvhAabbMin, Vector3 bvhAabbMax, bool buildBvh)
+			: base(btBvhTriangleMeshShape_new4(meshInterface._native, useQuantizedAabbCompression,
+				ref bvhAabbMin, ref bvhAabbMax, buildBvh))
 		{
 			_meshInterface = meshInterface;
 		}
@@ -45,22 +51,36 @@ namespace BulletSharp
             _optimizedBvh = null;
 		}
 
-        public void PartialRefitTree(ref Vector3 aabbMin, ref Vector3 aabbMax)
+        public void PartialRefitTreeRef(ref Vector3 aabbMin, ref Vector3 aabbMax)
+        {
+            btBvhTriangleMeshShape_partialRefitTree(_native, ref aabbMin, ref aabbMax);
+        }
+
+		public void PartialRefitTree(Vector3 aabbMin, Vector3 aabbMax)
 		{
 			btBvhTriangleMeshShape_partialRefitTree(_native, ref aabbMin, ref aabbMax);
 		}
 
-		public void PerformConvexcast(TriangleCallback callback, Vector3 boxSource, Vector3 boxTarget, Vector3 boxMin, Vector3 boxMax)
+		public void PerformConvexcast(TriangleCallback callback, Vector3 boxSource,
+			Vector3 boxTarget, Vector3 boxMin, Vector3 boxMax)
 		{
-			btBvhTriangleMeshShape_performConvexcast(_native, callback._native, ref boxSource, ref boxTarget, ref boxMin, ref boxMax);
+			btBvhTriangleMeshShape_performConvexcast(_native, callback._native, ref boxSource,
+				ref boxTarget, ref boxMin, ref boxMax);
 		}
 
-		public void PerformRaycast(TriangleCallback callback, Vector3 raySource, Vector3 rayTarget)
+		public void PerformRaycast(TriangleCallback callback, Vector3 raySource,
+			Vector3 rayTarget)
 		{
-			btBvhTriangleMeshShape_performRaycast(_native, callback._native, ref raySource, ref rayTarget);
+			btBvhTriangleMeshShape_performRaycast(_native, callback._native, ref raySource,
+				ref rayTarget);
 		}
 
-        public void RefitTree(ref Vector3 aabbMin, ref Vector3 aabbMax)
+        public void RefitTreeRef(ref Vector3 aabbMin, ref Vector3 aabbMax)
+        {
+            btBvhTriangleMeshShape_refitTree(_native, ref aabbMin, ref aabbMax);
+        }
+
+		public void RefitTree(Vector3 aabbMin, Vector3 aabbMax)
 		{
 			btBvhTriangleMeshShape_refitTree(_native, ref aabbMin, ref aabbMax);
 		}
@@ -120,11 +140,11 @@ namespace BulletSharp
                 }
                 return _triangleInfoMap;
             }
-            set
-            {
-                _triangleInfoMap = value;
+			set
+			{
                 btBvhTriangleMeshShape_setTriangleInfoMap(_native, (value != null) ? value._native : IntPtr.Zero);
-            }
+				_triangleInfoMap = value;
+			}
 		}
 
         public bool UsesQuantizedAabbCompression

@@ -35,12 +35,14 @@ btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getBvhs(bParse_bt
 	return &obj->m_bvhs;
 }
 
-btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getCollisionObjects(bParse_btBulletFile* obj)
+btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getCollisionObjects(
+	bParse_btBulletFile* obj)
 {
 	return &obj->m_collisionObjects;
 }
 
-btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getCollisionShapes(bParse_btBulletFile* obj)
+btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getCollisionShapes(
+	bParse_btBulletFile* obj)
 {
 	return &obj->m_collisionShapes;
 }
@@ -50,12 +52,13 @@ btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getConstraints(bP
 	return &obj->m_constraints;
 }
 
-btAligendCharPtrArray* bParse_btBulletFile_getDataBlocks(bParse_btBulletFile* obj)
+btAlignedObjectArray_charPtr* bParse_btBulletFile_getDataBlocks(bParse_btBulletFile* obj)
 {
-	return &obj->m_dataBlocks;
+	return obj->m_dataBlocks;
 }
 
-btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getDynamicsWorldInfo(bParse_btBulletFile* obj)
+btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getDynamicsWorldInfo(
+	bParse_btBulletFile* obj)
 {
 	return &obj->m_dynamicsWorldInfo;
 }
@@ -75,7 +78,8 @@ btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getSoftBodies(bPa
 	return &obj->m_softBodies;
 }
 
-btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getTriangleInfoMaps(bParse_btBulletFile* obj)
+btAlignedObjectArray_bParse_bStructHandle* bParse_btBulletFile_getTriangleInfoMaps(
+	bParse_btBulletFile* obj)
 {
 	return &obj->m_triangleInfoMaps;
 }

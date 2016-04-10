@@ -22,9 +22,11 @@ namespace BulletSharp
 		{
 		}
 
-		public void ProcessAllTriangles(TriangleCallback callback, Vector3 aabbMin, Vector3 aabbMax)
+		public void ProcessAllTriangles(TriangleCallback callback, Vector3 aabbMin,
+			Vector3 aabbMax)
 		{
-			btConcaveShape_processAllTriangles(_native, callback._native, ref aabbMin, ref aabbMax);
+			btConcaveShape_processAllTriangles(_native, callback._native, ref aabbMin,
+				ref aabbMax);
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

@@ -731,7 +731,8 @@ btBroadphaseInterface* btCollisionWorld_getBroadphase(btCollisionWorld* obj)
 	return obj->getBroadphase();
 }
 
-const btCollisionObjectArray* btCollisionWorld_getCollisionObjectArray(btCollisionWorld* obj)
+btAlignedObjectArray_btCollisionObjectPtr* btCollisionWorld_getCollisionObjectArray(
+	btCollisionWorld* obj)
 {
 	return &obj->getCollisionObjectArray();
 }

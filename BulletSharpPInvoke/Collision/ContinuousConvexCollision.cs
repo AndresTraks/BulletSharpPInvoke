@@ -6,8 +6,10 @@ namespace BulletSharp
 {
 	public class ContinuousConvexCollision : ConvexCast
 	{
-		public ContinuousConvexCollision(ConvexShape shapeA, ConvexShape shapeB, VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver penetrationDepthSolver)
-			: base(btContinuousConvexCollision_new(shapeA._native, shapeB._native, simplexSolver._native, penetrationDepthSolver._native))
+		public ContinuousConvexCollision(ConvexShape shapeA, ConvexShape shapeB,
+			VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver penetrationDepthSolver)
+			: base(btContinuousConvexCollision_new(shapeA._native, shapeB._native,
+				simplexSolver._native, penetrationDepthSolver._native))
 		{
 		}
 

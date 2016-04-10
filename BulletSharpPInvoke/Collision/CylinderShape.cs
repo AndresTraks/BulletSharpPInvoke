@@ -57,9 +57,9 @@ namespace BulletSharp
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern IntPtr btCylinderShape_new2(float halfExtentX, float halfExtentY, float halfExtentZ);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCylinderShape_getHalfExtentsWithMargin(IntPtr obj, [Out] out Vector3 value);
+		static extern void btCylinderShape_getHalfExtentsWithMargin(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCylinderShape_getHalfExtentsWithoutMargin(IntPtr obj, [Out] out Vector3 value);
+		static extern void btCylinderShape_getHalfExtentsWithoutMargin(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btCylinderShape_getRadius(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

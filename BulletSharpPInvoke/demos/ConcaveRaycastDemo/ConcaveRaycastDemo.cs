@@ -281,7 +281,7 @@ namespace ConcaveRaycastDemo
                 Vector3 worldMin = new Vector3(-1000, -1000, -1000);
                 Vector3 worldMax = new Vector3(1000, 1000, 1000);
 
-                groundShape.RefitTree(ref worldMin, ref worldMax);
+                groundShape.RefitTreeRef(ref worldMin, ref worldMax);
 
                 //clear all contact points involving mesh proxy. Note: this is a slow/unoptimized operation.
                 Broadphase.OverlappingPairCache.CleanProxyFromPairs(staticBody.BroadphaseHandle, Dispatcher);

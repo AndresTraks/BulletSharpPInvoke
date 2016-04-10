@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClangSharp;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,29 +32,11 @@ namespace BulletSharpGen
             };
         }
 
-        private static string GetTypeName(TypeRefDefinition type)
-        {
-            return BulletParser.GetTypeName(type).Replace("::", "_");
-        }
-
-        private static string GetTypeNameCS(TypeRefDefinition type)
-        {
-            if (type.IsBasic) return type.ManagedNameCS;
-            if (type.HasTemplateTypeParameter) return type.ManagedNameCS;
-
-            if (type.IsPointer && type.Referenced.ManagedNameCS.Equals("void")) // void*
-            {
-                return "IntPtr";
-            }
-
-            return BulletParser.GetTypeNameCS(type);
-        }
-
         void WriteDeleteMethodCS(MethodDefinition method, int level)
         {
             To = WriteTo.CS;
 
-            WriteLine("Dispose()");
+            WriteLine(level + 1, "public void Dispose()");
             WriteLine(level + 1, "{");
             WriteLine(level + 2, "Dispose(true);");
             WriteLine(level + 2, "GC.SuppressFinalize(this);");
@@ -90,58 +73,55 @@ namespace BulletSharpGen
         private void WriteMethodDeclaration(MethodDefinition method, int numParameters, int level, int overloadIndex,
             ParameterDefinition outValueParameter = null)
         {
-            // Do not write accessor methods of C# properties
-            WriteTo cs = (method.Property == null) ? WriteTo.CS : WriteTo.None;
+            Write(1, "EXPORT ", WriteTo.Header);
 
-            // Cached properties that are initialized only once do not need a DllImport for the get method
-            WriteTo dllImport;
-            if (method.Property != null && method.Property.Setter == null &&
-                method.Parent.CachedProperties.ContainsKey(method.Property.Name))
+            WriteTo cs;
+            WriteTo dllImport = WriteTo.Buffer;
+
+            if (method.Property != null)
             {
-                dllImport = WriteTo.None;
+                // Do not write accessor methods of C# properties here
+                cs = WriteTo.None;
+
+                // Cached properties that are initialized only once
+                // do not need a DllImport for the get method
+                if (method.Parent.CachedProperties.ContainsKey(method.Property.Name) &&
+                    method.Equals(method.Property.Getter))
+                {
+                    dllImport = WriteTo.None;
+                }
+            }
+            else if (method.Name.Equals("delete"))
+            {
+                WriteDeleteMethodCS(method, level);
+                cs = WriteTo.None;
             }
             else
             {
-                dllImport = WriteTo.Buffer;
+                Write(level + 1, "public ", WriteTo.CS);
+                cs = WriteTo.CS;
             }
-
-            // Skip delete methods in classes that can't be constructed (including all subclasses).
-            if (method.Name.Equals("delete"))
-            {
-                if (method.Parent.HidePublicConstructors)
-                {
-                    // TODO: Check all subclasses
-                    //return;
-                }
-            }
-
-            Write(1, "EXPORT ", WriteTo.Header);
-
-            Write(level + 1, "public ", cs);
 
             // DllImport clause
-            if (dllImport == WriteTo.Buffer)
+            To = dllImport;
+            WriteLine(level + 1,
+                "[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]");
+            if (method.ReturnType != null && method.ReturnType.IsBasic &&
+                method.ReturnType.Name.Equals("bool"))
             {
-                To = WriteTo.Buffer;
-                WriteLine(level + 1,
-                    "[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]");
-                if (method.ReturnType != null && method.ReturnType.ManagedName.Equals("bool"))
-                {
-                    WriteLine(level + 1, "[return: MarshalAs(UnmanagedType.I1)]");
-                }
-                Write(level + 1, "static extern ");
+                WriteLine(level + 1, "[return: MarshalAs(UnmanagedType.I1)]");
             }
+            Write(level + 1, "static extern ");
 
             // Return type
             if (method.IsConstructor)
             {
-                Write($"{GetFullNameC(method.Parent)}* ", WriteTo.Header);
-                Write($"{method.Parent.FullyQualifiedName}* ", WriteTo.Source);
+                Write($"{GetFullNameC(method.Parent)}* ", WriteTo.Header | WriteTo.Source);
                 Write("IntPtr ", dllImport);
             }
             else
             {
-                var returnType = method.ReturnType;
+                var returnType = method.ReturnType.Canonical;
 
                 if (method.IsStatic) Write("static ", cs);
                 Write($"{GetTypeNameCS(returnType)} ", cs);
@@ -152,15 +132,11 @@ namespace BulletSharpGen
                 }
                 else
                 {
-                    Write($"{GetTypeName(returnType)} ", WriteTo.Header | WriteTo.Source);
+                    Write($"{GetTypeNameC(returnType)} ", WriteTo.Header | WriteTo.Source);
 
                     if (returnType.IsBasic)
                     {
-                        Write(returnType.ManagedNameCS, dllImport);
-                    }
-                    else if (returnType.HasTemplateTypeParameter)
-                    {
-                        Write(returnType.ManagedNameCS, dllImport);
+                        Write(GetTypeNameCS(returnType), dllImport);
                     }
                     else if (returnType.Referenced != null)
                     {
@@ -184,47 +160,35 @@ namespace BulletSharpGen
             Write($"{GetFullNameC(method.Parent)}_{methodName}",
                 WriteTo.Header | WriteTo.Source | dllImport);
 
-            if (methodName.Equals("delete"))
-            {
-                WriteDeleteMethodCS(method, level);
-            }
-            else
-            {
-                Write($"{method.ManagedName}(", cs);
-            }
-
+            Write($"{method.ManagedName}(", cs);
 
             // Parameters
             Write('(', WriteTo.Header | WriteTo.Source | dllImport);
 
             var parameters = method.Parameters.Take(numParameters);
-            var parametersCs = parameters.Select(p => $"{GetTypeNameCS(p.Type)} {p.ManagedName}");
-            Write(ListToLines(parametersCs, WriteTo.CS, level + 1), cs);
-            if (!methodName.Equals("delete"))
-            {
-                WriteLine(')', cs);
-            }
+            var parametersCs = parameters.Select(p => {
+                string typeName = $"{GetTypeNameCS(p.Type)} {p.ManagedName}";
+                if (p.MarshalDirection == MarshalDirection.Out) typeName = "out " + typeName;
+                return typeName;
+                });
+            WriteLine($"{ListToLines(parametersCs, WriteTo.CS, level + 1)})", cs);
 
             if (outValueParameter != null) parameters = parameters.Concat(new[] { outValueParameter });
 
-            var parametersCpp = parameters.Select(p => $"{GetTypeName(p.Type)} {p.Name}");
-            var parametersHeader = parametersCpp;
-            var parametersSource = parametersCpp;
-            var parametersDllImport = parameters.Select(p => $"{BulletParser.GetTypeDllImport(p.Type)} {p.Name}");
+            var parametersCpp = parameters.Select(p => $"{GetTypeNameC(p.Type)} {p.Name}");
+            var parametersDllImport = parameters.Select(p => $"{GetTypeNameDllImport(p)} {p.Name}");
 
             // The first parameter is the instance pointer (if not constructor or static method)
             if (!method.IsConstructor && !method.IsStatic)
             {
-                parametersHeader =
-                    new[] { $"{GetFullNameC(method.Parent)}* obj" }.Concat(parametersHeader);
-                parametersSource =
-                    new[] { $"{method.Parent.FullyQualifiedName}* obj" }.Concat(parametersSource);
+                parametersCpp =
+                    new[] { $"{GetFullNameC(method.Parent)}* obj" }.Concat(parametersCpp);
                 parametersDllImport =
                     new[] { "IntPtr obj" }.Concat(parametersDllImport);
             }
 
-            WriteLine($"{string.Join(", ", parametersHeader)});", WriteTo.Header);
-            WriteLine($"{ListToLines(parametersSource, WriteTo.Source)})", WriteTo.Source);
+            WriteLine($"{string.Join(", ", parametersCpp)});", WriteTo.Header);
+            WriteLine($"{ListToLines(parametersCpp, WriteTo.Source)})", WriteTo.Source);
             WriteLine($"{string.Join(", ", parametersDllImport)});", dllImport);
         }
 
@@ -268,7 +232,8 @@ namespace BulletSharpGen
             bool needTypeMarshalEpilogue = false;
             foreach (var param in method.Parameters.Take(numParameters))
             {
-                if (param.Type.IsReference && param.Type.Referenced.Target != null &&
+                if (param.Type.Kind == TypeKind.LValueReference &&
+                    param.Type.Referenced.Target != null &&
                     param.Type.Referenced.Target.MarshalAsStruct)
                 {
                     string macroPrefix = param.Type.Referenced.Target.Name.ToUpper();
@@ -294,36 +259,42 @@ namespace BulletSharpGen
             {
                 if (!method.IsVoid)
                 {
-                    var returnType = method.ReturnType;
+                    var returnType = method.ReturnType.Canonical;
 
                     if (outValueParameter != null)
                     {
                         string macroPrefix = outValueParameter.Type.Referenced.Name.ToUpper();
-                        if (returnType.IsReference)
+                        if (returnType.Kind == TypeKind.LValueReference)
                         {
-                            Write($"{macroPrefix}_COPY({outValueParameter.Name}, ");
+                            Write($"{macroPrefix}_COPY({outValueParameter.Name}, &");
                         }
                         else
                         {
                             Write($"{macroPrefix}_SET({outValueParameter.Name}, ");
                         }
                     }
-                    else if (needTypeMarshalEpilogue)
-                    {
-                        // Save the return value and return it after the epilogues
-                        Write($"{BulletParser.GetTypeRefName(returnType)} ret = ");
-                    }
                     else
                     {
-                        // Return immediately
-                        Write("return ");
-                    }
-
-                    if (!returnType.IsBasic && !returnType.IsPointer && !returnType.IsConstantArray)
-                    {
-                        if (!(returnType.Target != null && returnType.Target is EnumDefinition))
+                        if (needTypeMarshalEpilogue)
                         {
-                            Write('&');
+                            // Save the return value and return it after the epilogues
+                            Write($"{BulletParser.GetTypeRefName(returnType)} ret = ");
+                        }
+                        else
+                        {
+                            // Return immediately
+                            Write("return ");
+                        }
+
+                        switch (returnType.Kind)
+                        {
+                            case TypeKind.LValueReference:
+                            case TypeKind.Record:
+                                if (!(returnType.Target != null && returnType.Target is EnumDefinition))
+                                {
+                                    Write('&');
+                                }
+                                break;
                         }
                     }
                 }
@@ -341,15 +312,18 @@ namespace BulletSharpGen
                         return $"{macroPrefix}_USE({p.Name})";
                     }
 
-                    if (p.Type.IsReference && p.Type.Referenced.Target != null && p.Type.Referenced.Target.MarshalAsStruct)
+                    if (p.Type.Kind == TypeKind.LValueReference && p.Type.Referenced.Target != null && p.Type.Referenced.Target.MarshalAsStruct)
                     {
                         string macroPrefix = p.Type.Referenced.Target.Name.ToUpper();
                         return $"{macroPrefix}_USE({p.Name})";
                     }
 
-                    if (p.Type.IsBasic || p.Type.IsPointer || p.Type.IsConstantArray) return p.Name;
-
-                    return $"*{p.Name}";
+                    var type = p.Type.Canonical;
+                    if (type.Kind == TypeKind.LValueReference)
+                    {
+                        return $"*{p.Name}";
+                    }
+                    return p.Name;
                 });
             Write("(");
             Write($"{ListToLines(originalParams, WriteTo.Source, 1)})");
@@ -366,7 +340,8 @@ namespace BulletSharpGen
                     .Where(p => p.MarshalDirection == MarshalDirection.Out ||
                         p.MarshalDirection == MarshalDirection.InOut))
                 {
-                    if (param.Type.IsReference && param.Type.Referenced.Target != null &&
+                    if (param.Type.Kind == TypeKind.LValueReference &&
+                        param.Type.Referenced.Target != null &&
                         param.Type.Referenced.Target.MarshalAsStruct)
                     {
                         string macroPrefix = param.Type.Referenced.Target.Name.ToUpper();
@@ -401,12 +376,14 @@ namespace BulletSharpGen
                     {
                         // Temporary variable
                         WriteLine(string.Format("{0} {1};",
-                            BulletParser.GetTypeNameCS(method.ReturnType),
+                            outValueParameter.Type.Referenced.Target.ManagedName,
                             outValueParameter.ManagedName));
                         WriteTabs(level + 2);
                     }
-
-                    Write($"return {BulletParser.GetTypeMarshalConstructorStartCS(method)}");
+                    else
+                    {
+                        Write($"return {BulletParser.GetTypeMarshalConstructorStartCS(method)}");
+                    }
                 }
 
                 Write($"{GetFullNameC(method.Parent)}_{method.Name}");
@@ -421,6 +398,10 @@ namespace BulletSharpGen
 
             var parameters = method.Parameters.Take(numParameters)
                 .Select(p => BulletParser.GetTypeCSMarshal(p));
+            if (outValueParameter != null)
+            {
+                parameters = parameters.Concat(new[] { $"out {outValueParameter.ManagedName }" });
+            }
 
             // The first parameter is the instance pointer (if not constructor or static method)
             if (!method.IsConstructor && !method.IsStatic)
@@ -494,12 +475,12 @@ namespace BulletSharpGen
             ParameterDefinition outValueParameter = null;
             var returnType = method.ReturnType;
             if ((returnType.Target != null && returnType.Target.MarshalAsStruct) ||
-                (returnType.IsReference && returnType.Referenced.Target != null && returnType.Referenced.Target.MarshalAsStruct))
+                (returnType.Kind == TypeKind.LValueReference && returnType.Referenced.Target != null && returnType.Referenced.Target.MarshalAsStruct))
             {
                 var valueType = new TypeRefDefinition
                 {
-                    IsPointer = true,
-                    Referenced = (returnType.IsReference ? returnType.Referenced : returnType).Copy()
+                    Kind = TypeKind.Pointer,
+                    Referenced = (returnType.Kind == TypeKind.LValueReference ? returnType.Referenced : returnType).Copy()
                 };
                 valueType.Referenced.IsConst = false;
 
@@ -514,7 +495,10 @@ namespace BulletSharpGen
                     paramName = "value";
                 }
 
-                outValueParameter = new ParameterDefinition(paramName, valueType) { ManagedName = paramName };
+                outValueParameter = new ParameterDefinition(paramName, valueType) {
+                    ManagedName = paramName,
+                    MarshalDirection = MarshalDirection.Out
+                };
             }
 
             EnsureWhiteSpace(WriteTo.Source | WriteTo.CS);
@@ -577,7 +561,7 @@ namespace BulletSharpGen
             WriteLine(level + 1, $"public {GetTypeNameCS(prop.Type)} {prop.Name}");
             WriteLine(level + 1, "{");
 
-            if (prop.Parent.CachedProperties.Keys.Contains(prop.Name))
+            if (prop.Parent.CachedProperties.ContainsKey(prop.Name))
             {
                 var cachedProperty = prop.Parent.CachedProperties[prop.Name];
                 WriteLine(level + 2, $"get {{ return {cachedProperty.CacheFieldName}; }}");
@@ -595,7 +579,24 @@ namespace BulletSharpGen
             }
             else
             {
-                Write(BulletParser.GetTypeGetterCSMarshal(prop, level));
+                var type = prop.Type;
+                if ((type.Target != null && type.Target.MarshalAsStruct) ||
+                    (type.Kind == TypeKind.LValueReference && type.Referenced.Target != null && type.Referenced.Target.MarshalAsStruct))
+                {
+                    WriteLine(level + 2, "get");
+                    WriteLine(level + 2, "{");
+                    WriteLine(level + 3, $"{GetTypeNameCS(type)} value;");
+                    WriteLine(level + 3, $"{GetFullNameC(prop.Parent)}_{prop.Getter.Name}(_native, out value);");
+                    WriteLine(level + 3, "return value;");
+                    WriteLine(level + 2, "}");
+                }
+                else
+                {
+                    WriteLine(level + 2, string.Format("get {{ return {0}{1}_{2}(_native){3}; }}",
+                        BulletParser.GetTypeMarshalConstructorStartCS(prop.Getter),
+                        GetFullNameC(prop.Parent), prop.Getter.Name,
+                        BulletParser.GetTypeMarshalConstructorEndCS(prop.Getter)));
+                }
 
                 if (prop.Setter != null)
                 {
@@ -729,7 +730,7 @@ namespace BulletSharpGen
                     fieldName = char.ToLower(fieldName[0]) + fieldName.Substring(1);
                     WriteLine(level + 1, string.Format("{0} {1} _{2};",
                         cachedProperty.Value.Access.ToString().ToLower(),
-                        cachedProperty.Value.Property.Type.ManagedNameCS,
+                        GetTypeNameCS(cachedProperty.Value.Property.Type),
                         fieldName));
                 }
                 hasCSWhiteSpace = false;
@@ -816,6 +817,7 @@ namespace BulletSharpGen
             }
 
             // Write delete method
+            // TODO: skip delete methods in classes that can't be constructed.
             if (@class.BaseClass == null && !@class.IsStaticClass)
             {
                 int overloadIndex = 0;
@@ -873,7 +875,7 @@ namespace BulletSharpGen
                     string methodPtr = $"p_{GetFullNameC(@class)}_{method.ManagedName}";
                     Write($"typedef {method.ReturnType.Name} (*{methodPtr})(", WriteTo.Header);
                     parameters = ListToLines(method.Parameters
-                        .Select(p => $"{GetTypeName(p.Type)} {p.Name}"), WriteTo.Header);
+                        .Select(p => $"{GetTypeNameC(p.Type)} {p.Name}"), WriteTo.Header);
                     WriteLine($"{parameters});", WriteTo.Header);
                 }
                 WriteLine();
@@ -904,7 +906,7 @@ namespace BulletSharpGen
             {
                 Write(1, $"virtual {m.ReturnType.Name} {m.Name}(");
                 string methodParams = ListToLines(
-                    m.Parameters.Select(p => $"{GetTypeName(p.Type)} {p.Name}"),
+                    m.Parameters.Select(p => $"{GetTypeNameC(p.Type)} {p.Name}"),
                     WriteTo.Header, 1);
                 WriteLine(methodParams + ");");
             }
@@ -934,7 +936,7 @@ namespace BulletSharpGen
             {
                 Write($"{method.ReturnType.Name} {wrapperClassName}::{method.Name}(");
                 parameters = ListToLines(method.Parameters
-                    .Select(p => $"{GetTypeName(p.Type)} {p.Name}"), WriteTo.Source);
+                    .Select(p => $"{GetTypeNameC(p.Type)} {p.Name}"), WriteTo.Source);
                 WriteLine($"{parameters})");
 
                 WriteLine('{');
@@ -1223,8 +1225,6 @@ namespace BulletSharpGen
             return false;
         }
 
-        private static string[] _mathClasses = { "Quaternion", "Transform", "Vector4" };
-
         private static bool RequiresMathNamespace(HeaderDefinition header)
         {
             return header.Classes.Any(RequiresMathNamespace);
@@ -1239,9 +1239,9 @@ namespace BulletSharpGen
             {
                 if (@class.HidePublicConstructors && method.IsConstructor) continue;
 
-                if (_mathClasses.Contains(method.ReturnType.ManagedName)) return true;
+                if (DefaultParser.TypeRequiresMarshal(method.ReturnType)) return true;
 
-                if (method.Parameters.Any(param => _mathClasses.Contains(param.Type.ManagedName)))
+                if (method.Parameters.Any(param => DefaultParser.TypeRequiresMarshal(param.Type)))
                 {
                     return true;
                 }
@@ -1281,6 +1281,168 @@ namespace BulletSharpGen
                 return $"{GetFullNameManaged(@class.Parent)}.{@class.ManagedName}";
             }
             return @class.ManagedName;
+        }
+
+        private static string GetTypeNameC(TypeRefDefinition type)
+        {
+            if (type.IsBasic) return type.Name;
+
+            string name = type.IsConst ? "const " : "";
+
+            switch (type.Kind)
+            {
+                case TypeKind.Typedef:
+                    if (type.Referenced.IsBasic) return type.Name;
+                    return name + GetTypeNameC(type.Referenced);
+                case TypeKind.Pointer:
+                    if (type.Referenced.Kind == TypeKind.FunctionProto) return type.Name;
+                    break;
+            }
+
+            if (type.Referenced != null) return name + GetTypeNameC(type.Referenced) + "*";
+
+            var target = type.Target;
+            if (target != null && target is EnumDefinition)
+            {
+                if (target.Parent != null && target.Parent.IsPureEnum)
+                {
+                    return target.Parent.FullName.Replace("::", "_");
+                }
+            }
+
+            // Template name to C form
+            if (type.FullName.Contains("<"))
+            {
+                string template = type.FullName.Replace('<', '_').Replace(">", "").Replace(" *", "Ptr");
+                template = template.Replace(' ', '_');
+                return name + template.Replace("::", "_");
+            }
+
+            return name + type.FullName.Replace("::", "_");
+        }
+
+        private static string GetTypeNameCS(TypeRefDefinition type)
+        {
+            if (type.Kind == TypeKind.Typedef)
+            {
+                if (type.Referenced.Kind == TypeKind.Pointer &&
+                    type.Referenced.Referenced.Kind == TypeKind.FunctionProto)
+                {
+                    return type.ManagedName;
+                }
+                return GetTypeNameCS(type.Referenced);
+            }
+
+            if (type.Kind == TypeKind.LValueReference)
+            {
+                return GetTypeNameCS(type.Referenced);
+            }
+
+            if (type.IsBasic)
+            {
+                switch (type.Name)
+                {
+                    case "unsigned short":
+                        return "ushort";
+                    case "unsigned int":
+                        return "uint";
+                    case "unsigned long":
+                        return "ulong";
+                }
+                return type.ManagedName;
+            }
+
+            if (type.HasTemplateTypeParameter) return type.ManagedName;
+
+            if (type.Kind == TypeKind.Pointer && type.Referenced.Kind == TypeKind.Void)
+            {
+                return "IntPtr";
+            }
+
+            if (type.Kind == TypeKind.ConstantArray)
+            {
+                switch (type.Referenced.Name)
+                {
+                    case "bool":
+                        return "BoolArray";
+                    case "int":
+                        return "IntArray";
+                    case "unsigned int":
+                        return "UIntArray";
+                    case "unsigned short":
+                        return "UShortArray";
+                    case "btScalar":
+                        return "FloatArray";
+                    case "btDbvt":
+                        return "DbvtArray";
+                    case "btSoftBody::Body":
+                        return "BodyArray";
+                }
+
+                if (type.Referenced.Referenced != null)
+                {
+                    switch (type.Referenced.Referenced.Name)
+                    {
+                        case "btDbvtNode":
+                            return "DbvtNodePtrArray";
+                        case "btDbvtProxy":
+                            return "DbvtProxyPtrArray";
+                        case "btSoftBody::Node":
+                            return "NodePtrArray";
+                    }
+                }
+
+                return GetTypeNameCS(type.Referenced) + "[]";
+            }
+
+            return type.ManagedName;
+        }
+
+        private static string GetTypeNameDllImport(ParameterDefinition param)
+        {
+            var type = param.Type.Canonical;
+            switch (type.Kind)
+            {
+                case TypeKind.Pointer:
+                case TypeKind.LValueReference:
+                    if (type.Referenced.Target != null && type.Referenced.Target.MarshalAsStruct)
+                    {
+                        // https://msdn.microsoft.com/en-us/library/77e6taeh%28v=vs.100%29.aspx
+                        // Default IDL attribute values:
+                        // ref - [In, Out]
+                        // out - [Out]
+                        switch (param.MarshalDirection)
+                        {
+                            case MarshalDirection.In:
+                                return $"[In] ref {GetTypeNameCS(type)}";
+                            case MarshalDirection.InOut:
+                                return $"ref {GetTypeNameCS(type)}";
+                            case MarshalDirection.Out:
+                                return $"out {GetTypeNameCS(type)}";
+                        }
+                    }
+                    break;
+            }
+
+            if (type.Kind == TypeKind.LValueReference && type.Referenced.Canonical.IsBasic)
+            {
+                switch (param.MarshalDirection)
+                {
+                    case MarshalDirection.In:
+                        return $"[In] ref {GetTypeNameCS(type.Referenced.Canonical)}";
+                    case MarshalDirection.InOut:
+                        return $"ref {GetTypeNameCS(type.Referenced.Canonical)}";
+                    case MarshalDirection.Out:
+                        return $"out {GetTypeNameCS(type.Referenced.Canonical)}";
+                }
+            }
+
+            if (type.Referenced != null)
+            {
+                return "IntPtr";
+            }
+
+            return GetTypeNameCS(type);
         }
     }
 }

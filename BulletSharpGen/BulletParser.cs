@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ClangSharp;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace BulletSharpGen
 {
@@ -181,82 +181,6 @@ namespace BulletSharpGen
             return true;
         }
 
-        public static string GetTypeName(TypeRefDefinition type)
-        {
-            string name = type.IsConst ? "const " : "";
-
-            if (type.IsBasic)
-            {
-                return name + type.Name;
-            }
-
-            if (type.Referenced != null)
-            {
-                switch (type.ManagedName)
-                {
-                    /*case "Matrix3x3":
-                    case "Quaternion":
-                    case "Transform":
-                    case "Vector4":
-                        return name + "btScalar*";*/
-                    default:
-                        return name + GetTypeName(type.Referenced) + "*";
-                }
-            }
-
-            var target = type.Target;
-            if (target != null && target is EnumDefinition)
-            {
-                if (target.Parent != null && target.Parent.IsPureEnum)
-                {
-                    return target.Parent.FullName;
-                }
-            }
-
-            return name + type.FullName;
-        }
-
-        public static string GetTypeNameCS(TypeRefDefinition type)
-        {
-            if (type.IsConstantArray)
-            {
-                switch (type.Referenced.Name)
-                {
-                    case "bool":
-                        return "BoolArray";
-                    case "int":
-                        return "IntArray";
-                    case "unsigned int":
-                        return "UIntArray";
-                    case "unsigned short":
-                        return "UShortArray";
-                    case "btScalar":
-                        return "FloatArray";
-                    case "btDbvt":
-                        return "DbvtArray";
-                    case "btSoftBody::Body":
-                        return "BodyArray";
-                }
-
-                if (type.Referenced.Referenced != null)
-                {
-                    switch (type.Referenced.Referenced.Name)
-                    {
-                        case "btDbvtNode":
-                            return "DbvtNodePtrArray";
-                        case "btDbvtProxy":
-                            return "DbvtProxyPtrArray";
-                        case "btSoftBody::Node":
-                            return "NodePtrArray";
-                    }
-                }
-
-                return GetTypeNameCS(type.Referenced) + "[]";
-            }
-
-            return type.ManagedNameCS;
-        }
-
         public static string GetTypeRefName(TypeRefDefinition type)
         {
             if (!string.IsNullOrEmpty(type.Name) && type.Name.Equals("btAlignedObjectArray"))
@@ -282,7 +206,25 @@ namespace BulletSharpGen
             {
                 return "btScalar";
             }
-            return type.ManagedTypeRefName;
+            switch (type.Kind)
+            {
+                case TypeKind.Pointer:
+                case TypeKind.LValueReference:
+                case TypeKind.ConstantArray:
+                    if (type.Referenced.Kind == TypeKind.Void)
+                    {
+                        return "IntPtr";
+                    }
+                    switch (type.ManagedName)
+                    {
+                        case "char":
+                            return "String^";
+                        case "float":
+                            return string.Format("array<{0}>^", type.Referenced.Name);
+                    }
+                    return type.ManagedName + '^';
+            }
+            return type.ManagedName;
         }
 
         public static string GetTypeMarshalPrologueCppCli(ParameterDefinition parameter)
@@ -417,133 +359,62 @@ namespace BulletSharpGen
             }
         }
 
-        public static string GetTypeDllImport(TypeRefDefinition type)
+        public static string GetTypeCSMarshal(ParameterDefinition param)
         {
-            switch (type.ManagedNameCS)
-            {
-                case "Matrix3x3":
-                case "Quaternion":
-                case "Transform":
-                case "Vector4":
-                    {
-                        if (type.Referenced != null && !(type.IsConst || type.Referenced.IsConst))
-                        {
-                            return "[Out] out " + GetTypeNameCS(type);
-                        }
-                        return "[In] ref " + GetTypeNameCS(type);
-                    }
-            }
+            var type = param.Type.Canonical;
 
-            if (type.Referenced != null && !type.IsBasic)
+            if ((type.Target != null && type.Target.MarshalAsStruct) ||
+                (type.Kind == TypeKind.LValueReference && type.Referenced.Target != null && type.Referenced.Target.MarshalAsStruct))
             {
-                if ("btScalar".Equals(type.Referenced.Name))
+                if (param.MarshalDirection == MarshalDirection.Out)
                 {
-                    if (type.IsPointer)
-                    {
-                        return type.ManagedNameCS + "[]";
-                    }
-                    // reference
-                    if (!(type.IsConst || type.Referenced.IsConst))
-                    {
-                        return "[Out] out " + type.ManagedNameCS;
-                    }
+                    return $"out {param.ManagedName}";
                 }
-                return "IntPtr";
+                return $"ref {param.ManagedName}";
             }
 
-            return type.ManagedNameCS;
-        }
-
-        public static string GetTypeCSMarshal(ParameterDefinition parameter)
-        {
-            var type = parameter.Type;
-
-            if (type.Referenced != null && !type.IsBasic)
+            if (type.Kind == TypeKind.LValueReference && type.Referenced.Canonical.IsBasic)
             {
-                switch (type.ManagedNameCS)
+                if (param.MarshalDirection == MarshalDirection.Out)
                 {
-                    case "Matrix3x3":
-                    case "Quaternion":
-                    case "Transform":
-                    case "Vector4":
-                        {
-                            if (type.Referenced != null && !(type.IsConst || type.Referenced.IsConst))
-                            {
-                                return "out " + parameter.ManagedName;
-                            }
-                            return "ref " + parameter.ManagedName;
-                        }
+                    return $"out {param.ManagedName}";
+                }
+                if (param.MarshalDirection == MarshalDirection.InOut)
+                {
+                    "".ToString();
+                }
+                return $"ref {param.ManagedName}";
+            }
+
+            if (type.Referenced != null)
+            {
+                switch (type.ManagedName)
+                {
                     case "IDebugDraw":
-                        return "DebugDraw.GetUnmanaged(" + parameter.ManagedName + ')';
+                        return "DebugDraw.GetUnmanaged(" + param.ManagedName + ')';
                 }
             }
 
             if (!type.IsBasic)
             {
-                if (!(type.IsPointer && type.ManagedName.Equals("void")))
+                if (!(type.Kind == TypeKind.Pointer && type.Referenced.Kind == TypeKind.Void))
                 {
-                    return parameter.ManagedName + "._native";
+                    return param.ManagedName + "._native";
                 }
             }
-            return parameter.ManagedName;
-        }
-
-        public static string GetTypeGetterCSMarshal(PropertyDefinition prop, int level)
-        {
-            StringBuilder output = new StringBuilder();
-            TypeRefDefinition type = prop.Type;
-
-            // If cached property can only be set in constructor,
-            // the getter can simply return the cached value
-            // TODO: check if cached value is initialized in all constructors
-            CachedProperty cachedProperty;
-            if (prop.Parent.CachedProperties.TryGetValue(prop.Name, out cachedProperty))
-            {
-                if (cachedProperty.Property.Setter == null)
-                {
-                    output.AppendLine(GetTabs(level + 2) + string.Format("get {{ return {0}; }}", cachedProperty.CacheFieldName));
-                    return output.ToString();
-                }
-            }
-
-            if (!type.IsBasic)
-            {
-                switch (type.ManagedNameCS)
-                {
-                    case "Matrix3x3":
-                    case "Quaternion":
-                    case "Transform":
-                    case "Vector4":
-                        output.AppendLine(GetTabs(level + 2) + "get");
-                        output.AppendLine(GetTabs(level + 2) + "{");
-                        output.AppendLine(GetTabs(level + 3) + GetTypeNameCS(type) + " value;");
-                        output.AppendLine(GetTabs(level + 3) + string.Format("{0}_{1}(_native, out value);", PInvokeWriter.GetFullNameC(prop.Parent), prop.Getter.Name));
-                        output.AppendLine(GetTabs(level + 3) + "return value;");
-                        output.AppendLine(GetTabs(level + 2) + '}');
-                        return output.ToString();
-                }
-            }
-
-            output.AppendLine(GetTabs(level + 2) + string.Format("get {{ return {0}{1}_{2}(_native){3}; }}",
-                GetTypeMarshalConstructorStartCS(prop.Getter),
-                PInvokeWriter.GetFullNameC(prop.Parent), prop.Getter.Name,
-                GetTypeMarshalConstructorEndCS(prop.Getter)));
-            return output.ToString();
+            return param.ManagedName;
         }
 
         public static string GetTypeSetterCSMarshal(TypeRefDefinition type)
         {
+            if ((type.Target != null && type.Target.MarshalAsStruct) ||
+                (type.Kind == TypeKind.LValueReference && type.Referenced.Target != null && type.Referenced.Target.MarshalAsStruct))
+            {
+                return "ref value";
+            }
             if (!type.IsBasic)
             {
-                switch (type.ManagedNameCS)
-                {
-                    case "Matrix3x3":
-                    case "Quaternion":
-                    case "Transform":
-                    case "Vector4":
-                        return "ref value";
-                }
-                if (type.ManagedTypeRefName.Equals("IntPtr"))
+                if (type.Kind == TypeKind.Pointer && type.Referenced.Kind == TypeKind.Void)
                 {
                     return "value";
                 }

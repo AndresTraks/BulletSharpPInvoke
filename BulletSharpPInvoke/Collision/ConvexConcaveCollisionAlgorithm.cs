@@ -11,8 +11,10 @@ namespace BulletSharp
 		{
 		}
 
-		public ConvexTriangleCallback(Dispatcher dispatcher, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped)
-			: base(btConvexTriangleCallback_new(dispatcher._native, body0Wrap._native, body1Wrap._native, isSwapped))
+		public ConvexTriangleCallback(Dispatcher dispatcher, CollisionObjectWrapper body0Wrap,
+			CollisionObjectWrapper body1Wrap, bool isSwapped)
+			: base(btConvexTriangleCallback_new(dispatcher._native, body0Wrap._native,
+				body1Wrap._native, isSwapped))
 		{
 		}
 
@@ -26,9 +28,13 @@ namespace BulletSharp
 			btConvexTriangleCallback_clearWrapperData(_native);
 		}
 
-		public void SetTimeStepAndCounters(float collisionMarginTriangle, DispatcherInfo dispatchInfo, CollisionObjectWrapper convexBodyWrap, CollisionObjectWrapper triBodyWrap, ManifoldResult resultOut)
+		public void SetTimeStepAndCounters(float collisionMarginTriangle, DispatcherInfo dispatchInfo,
+			CollisionObjectWrapper convexBodyWrap, CollisionObjectWrapper triBodyWrap,
+			ManifoldResult resultOut)
 		{
-			btConvexTriangleCallback_setTimeStepAndCounters(_native, collisionMarginTriangle, dispatchInfo._native, convexBodyWrap._native, triBodyWrap._native, resultOut._native);
+			btConvexTriangleCallback_setTimeStepAndCounters(_native, collisionMarginTriangle,
+				dispatchInfo._native, convexBodyWrap._native, triBodyWrap._native,
+				resultOut._native);
 		}
 
 		public Vector3 AabbMax
@@ -119,8 +125,10 @@ namespace BulletSharp
 			static extern IntPtr btConvexConcaveCollisionAlgorithm_SwappedCreateFunc_new();
 		}
 
-		public ConvexConcaveCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped)
-			: base(btConvexConcaveCollisionAlgorithm_new(ci._native, body0Wrap._native, body1Wrap._native, isSwapped))
+		public ConvexConcaveCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci,
+			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped)
+			: base(btConvexConcaveCollisionAlgorithm_new(ci._native, body0Wrap._native,
+				body1Wrap._native, isSwapped))
 		{
 		}
 

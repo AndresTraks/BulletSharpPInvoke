@@ -13,7 +13,8 @@ namespace BulletSharp
 			_native = native;
 		}
 
-        public abstract CollisionAlgorithmCreateFunc GetCollisionAlgorithmCreateFunc(BroadphaseNativeType proxyType0, BroadphaseNativeType proxyType1);
+        public abstract CollisionAlgorithmCreateFunc GetCollisionAlgorithmCreateFunc(BroadphaseNativeType proxyType0,
+            BroadphaseNativeType proxyType1);
         /*
 		public PoolAllocator CollisionAlgorithmPool
 		{

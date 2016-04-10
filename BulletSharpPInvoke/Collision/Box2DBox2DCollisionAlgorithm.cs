@@ -27,8 +27,10 @@ namespace BulletSharp
 		{
 		}
 
-		public Box2DBox2DCollisionAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
-			: base(btBox2dBox2dCollisionAlgorithm_new2(mf._native, ci._native, body0Wrap._native, body1Wrap._native))
+		public Box2DBox2DCollisionAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci,
+			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
+			: base(btBox2dBox2dCollisionAlgorithm_new2(mf._native, ci._native, body0Wrap._native,
+				body1Wrap._native))
 		{
 		}
 

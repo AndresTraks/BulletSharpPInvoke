@@ -165,9 +165,11 @@ namespace BulletSharp
 			_native = native;
 		}
 
-		public bool CalcTimeOfImpact(Matrix fromA, Matrix toA, Matrix fromB, Matrix toB, CastResult result)
+		public bool CalcTimeOfImpact(Matrix fromA, Matrix toA, Matrix fromB, Matrix toB,
+			CastResult result)
 		{
-			return btConvexCast_calcTimeOfImpact(_native, ref fromA, ref toA, ref fromB, ref toB, result._native);
+			return btConvexCast_calcTimeOfImpact(_native, ref fromA, ref toA, ref fromB,
+				ref toB, result._native);
 		}
 
 		public void Dispose()

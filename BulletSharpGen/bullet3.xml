@@ -173,7 +173,7 @@ else
     </Header>
     <Header Path="BulletCollision/CollisionDispatch/btCollisionObject.h">
       <Class Name="btCollisionObjectArray" />
-      <Class Name="btCollisionObject" HasPreventDelete="true">
+      <Class Name="btCollisionObject">
         <Enum Name="AnisotropicFrictionFlags" />
         <Enum Name="CollisionFlags" />
         <Enum Name="CollisionObjectTypes" />
@@ -357,7 +357,7 @@ else
         </Method>
         <Method Name="getBoundingSphere">
           <Parameter Name="center" MarshalDirection="Out" />
-          <Parameter Name="radius" />
+          <Parameter Name="radius" MarshalDirection="Out" />
         </Method>
       </Class>
       <Class Name="btCollisionShapeData" IsExcluded="true" />
@@ -381,8 +381,8 @@ else
         <Method Name="project">
           <Parameter Name="trans" />
           <Parameter Name="dir" />
-          <Parameter Name="minProj" />
-          <Parameter Name="maxProj" />
+          <Parameter Name="minProj" MarshalDirection="Out" />
+          <Parameter Name="maxProj" MarshalDirection="Out" />
           <Parameter Name="witnesPtMin" MarshalDirection="Out" />
           <Parameter Name="witnesPtMax" MarshalDirection="Out" />
         </Method>
@@ -496,7 +496,7 @@ else
         <Method Name="calculatePrincipalAxisTransform">
           <Parameter Name="principal" />
           <Parameter Name="inertia" MarshalDirection="Out" />
-          <Parameter Name="volume" />
+          <Parameter Name="volume" MarshalDirection="Out" />
         </Method>
       </Class>
     </Header>
@@ -1117,8 +1117,8 @@ else
         <Method Name="project">
           <Parameter Name="trans" />
           <Parameter Name="dir" />
-          <Parameter Name="minProj" />
-          <Parameter Name="maxProj" />
+          <Parameter Name="minProj" MarshalDirection="Out" />
+          <Parameter Name="maxProj" MarshalDirection="Out" />
           <Parameter Name="witnesPtMin" MarshalDirection="Out" />
           <Parameter Name="witnesPtMax" MarshalDirection="Out" />
         </Method>
@@ -1167,6 +1167,11 @@ else
         <Method Name="get_center_extend">
           <Parameter Name="center" MarshalDirection="Out" />
           <Parameter Name="extend" MarshalDirection="Out" />
+        </Method>
+        <Method Name="projection_interval">
+          <Parameter Name="direction" />
+          <Parameter Name="vmin" MarshalDirection="Out" />
+          <Parameter Name="vmax" MarshalDirection="Out" />
         </Method>
       </Class>
     </Header>
@@ -1224,6 +1229,12 @@ else
       </Class>
       <Class Name="btGImpactMeshShapePart">
         <Class Name="TrimeshPrimitiveManager">
+          <Method Name="get_indices">
+            <Parameter Name="face_index" />
+            <Parameter Name="i0" MarshalDirection="Out" />
+            <Parameter Name="i1" MarshalDirection="Out" />
+            <Parameter Name="i2b" MarshalDirection="Out" />
+          </Method>
           <Method Name="get_vertex">
             <Parameter Name="vertex_index" />
             <Parameter Name="vertex" MarshalDirection="Out" />
@@ -1615,6 +1626,14 @@ else
         <Class Name="tVector3Array" />
         <Class Name="tVSolverArray" />
         <Class Name="vsolver_t" />
+        <Method Name="rayTest">
+          <Parameter Name="rayFrom" />
+          <Parameter Name="rayTo" />
+          <Parameter Name="mint" />
+          <Parameter Name="feature" MarshalDirection="Out" />
+          <Parameter Name="index" MarshalDirection="Out" />
+          <Parameter Name="bcountonly" />
+        </Method>
       </Class>
     </Header>
     <Header Path="BulletSoftBody/btSoftBodyConcaveCollisionAlgorithm.h">

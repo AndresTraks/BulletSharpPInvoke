@@ -12,9 +12,11 @@ namespace BulletSharp
 		{
 		}
         /*
-		public void BatchedUnitVectorGetSupportingVertexWithoutMargin(Vector3 vectors, Vector3 supportVerticesOut, int numVectors)
+		public void BatchedUnitVectorGetSupportingVertexWithoutMargin(Vector3 vectors,
+			Vector3 supportVerticesOut, int numVectors)
 		{
-			btConvexShape_batchedUnitVectorGetSupportingVertexWithoutMargin(_native, vectors._native, supportVerticesOut._native, numVectors);
+			btConvexShape_batchedUnitVectorGetSupportingVertexWithoutMargin(_native,
+				vectors._native, supportVerticesOut._native, numVectors);
 		}
         */
 
@@ -57,13 +59,15 @@ namespace BulletSharp
 
         public void LocalGetSupportingVertexWithoutMargin(ref Vector3 vec, out Vector3 value)
         {
-            btConvexShape_localGetSupportingVertexWithoutMargin(_native, ref vec, out value);
+            btConvexShape_localGetSupportingVertexWithoutMargin(_native, ref vec,
+                out value);
         }
 
 		public Vector3 LocalGetSupportingVertexWithoutMargin(Vector3 vec)
 		{
 			Vector3 value;
-			btConvexShape_localGetSupportingVertexWithoutMargin(_native, ref vec, out value);
+			btConvexShape_localGetSupportingVertexWithoutMargin(_native, ref vec,
+				out value);
 			return value;
 		}
 
@@ -81,19 +85,23 @@ namespace BulletSharp
 
         public void LocalGetSupportVertexWithoutMarginNonVirtual(ref Vector3 vec, out Vector3 value)
         {
-            btConvexShape_localGetSupportVertexWithoutMarginNonVirtual(_native, ref vec, out value);
+            btConvexShape_localGetSupportVertexWithoutMarginNonVirtual(_native, ref vec,
+                out value);
         }
 
 		public Vector3 LocalGetSupportVertexWithoutMarginNonVirtual(Vector3 vec)
 		{
 			Vector3 value;
-			btConvexShape_localGetSupportVertexWithoutMarginNonVirtual(_native, ref vec, out value);
+			btConvexShape_localGetSupportVertexWithoutMarginNonVirtual(_native, ref vec,
+				out value);
 			return value;
 		}
 
-		public void Project(ref Matrix trans, ref Vector3 dir, out float minProj, out float maxProj, out Vector3 witnesPtMin, out Vector3 witnesPtMax)
+       public void Project(ref Matrix trans, ref Vector3 dir, out float minProj, out float maxProj,
+			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
 		{
-			btConvexShape_project(_native, ref trans, ref dir, out minProj, out maxProj, out witnesPtMin, out witnesPtMax);
+			btConvexShape_project(_native, ref trans, ref dir, out minProj, out maxProj,
+				out witnesPtMin, out witnesPtMax);
 		}
 
 		public float MarginNonVirtual
@@ -106,8 +114,8 @@ namespace BulletSharp
 			get { return btConvexShape_getNumPreferredPenetrationDirections(_native); }
 		}
 
-		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		//static extern void btConvexShape_batchedUnitVectorGetSupportingVertexWithoutMargin(IntPtr obj, IntPtr vectors, IntPtr supportVerticesOut, int numVectors);
+        //[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        //static extern void btConvexShape_batchedUnitVectorGetSupportingVertexWithoutMargin(IntPtr obj, IntPtr vectors, IntPtr supportVerticesOut, int numVectors);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConvexShape_getAabbNonVirtual(IntPtr obj, [In] ref Matrix t, [Out] out Vector3 aabbMin, [Out] out Vector3 aabbMax);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

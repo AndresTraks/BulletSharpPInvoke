@@ -18,8 +18,8 @@ namespace BulletSharp
 
 		public CollisionAlgorithmConstructionInfo(Dispatcher dispatcher, int temp)
 		{
-            _dispatcher1 = dispatcher;
             _native = btCollisionAlgorithmConstructionInfo_new2((dispatcher != null) ? dispatcher._native : IntPtr.Zero, temp);
+            _dispatcher1 = dispatcher;
 		}
 
         public Dispatcher Dispatcher
@@ -89,9 +89,11 @@ namespace BulletSharp
             _preventDelete = preventDelete;
 		}
 
-		public float CalculateTimeOfImpact(CollisionObject body0, CollisionObject body1, DispatcherInfo dispatchInfo, ManifoldResult resultOut)
+		public float CalculateTimeOfImpact(CollisionObject body0, CollisionObject body1,
+			DispatcherInfo dispatchInfo, ManifoldResult resultOut)
 		{
-			return btCollisionAlgorithm_calculateTimeOfImpact(_native, body0._native, body1._native, dispatchInfo._native, resultOut._native);
+			return btCollisionAlgorithm_calculateTimeOfImpact(_native, body0._native,
+				body1._native, dispatchInfo._native, resultOut._native);
 		}
 
         public void GetAllContactManifolds(AlignedManifoldArray manifoldArray)
@@ -99,9 +101,11 @@ namespace BulletSharp
 			btCollisionAlgorithm_getAllContactManifolds(_native, manifoldArray._native);
 		}
 
-		public void ProcessCollision(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, DispatcherInfo dispatchInfo, ManifoldResult resultOut)
+		public void ProcessCollision(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap,
+			DispatcherInfo dispatchInfo, ManifoldResult resultOut)
 		{
-			btCollisionAlgorithm_processCollision(_native, body0Wrap._native, body1Wrap._native, dispatchInfo._native, resultOut._native);
+			btCollisionAlgorithm_processCollision(_native, body0Wrap._native, body1Wrap._native,
+				dispatchInfo._native, resultOut._native);
 		}
 
 		public void Dispose()

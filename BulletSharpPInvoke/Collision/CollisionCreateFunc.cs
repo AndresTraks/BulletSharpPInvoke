@@ -20,9 +20,11 @@ namespace BulletSharp
 			_native = btCollisionAlgorithmCreateFunc_new();
 		}
 
-		public CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
+		public CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0,
+			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
 		{
-            return new CollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(_native, __unnamed0._native, body0Wrap._native, body1Wrap._native));
+            return new CollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(_native,
+                __unnamed0._native, body0Wrap._native, body1Wrap._native));
 		}
 
 		public bool Swapped

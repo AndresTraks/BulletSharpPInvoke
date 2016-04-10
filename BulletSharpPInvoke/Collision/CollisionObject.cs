@@ -164,12 +164,14 @@ namespace BulletSharp
 			btCollisionObject_setAnisotropicFriction(_native, ref anisotropicFriction);
 		}
 
-        public void SetAnisotropicFrictionRef(ref Vector3 anisotropicFriction, AnisotropicFrictionFlags frictionMode)
+        public void SetAnisotropicFrictionRef(ref Vector3 anisotropicFriction,
+            AnisotropicFrictionFlags frictionMode)
         {
             btCollisionObject_setAnisotropicFriction2(_native, ref anisotropicFriction, frictionMode);
         }
 
-        public void SetAnisotropicFriction(Vector3 anisotropicFriction, AnisotropicFrictionFlags frictionMode)
+        public void SetAnisotropicFriction(Vector3 anisotropicFriction,
+            AnisotropicFrictionFlags frictionMode)
 		{
 			btCollisionObject_setAnisotropicFriction2(_native, ref anisotropicFriction, frictionMode);
 		}

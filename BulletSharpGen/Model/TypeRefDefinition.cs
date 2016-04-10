@@ -9,6 +9,8 @@ namespace BulletSharpGen
     {
         public string Name { get; set; }
 
+        public TypeKind Kind { get; set; }
+
         /// <summary>
         /// Type is void, int, float, enum, etc.
         /// or a typedef to a basic type.
@@ -20,16 +22,19 @@ namespace BulletSharpGen
         /// </summary>
         public bool IsIncomplete { get; set; }
 
-        public bool IsPointer { get; set; }
-        public bool IsReference { get; set; }
-        public bool IsConstantArray { get; set; }
-        public bool IsConst { get; set; }
         public TypeRefDefinition Referenced { get; set; }
+
+        public bool IsConst { get; set; }
         public bool HasTemplateTypeParameter { get; set; }
         public List<TypeRefDefinition> TemplateParams { get; set; }
 
         private bool _unresolved;
         public ClassDefinition Target { get; set; }
+
+        public TypeRefDefinition Canonical
+        {
+            get { return Kind == TypeKind.Typedef ? Referenced : this; }
+        }
 
         public string FullName
         {
@@ -53,19 +58,18 @@ namespace BulletSharpGen
                     {
                         return "byte";
                     }
-                    if (Referenced != null)
-                    {
-                        return Referenced.ManagedName;
-                    }
                     return Name;
                 }
                 if (HasTemplateTypeParameter)
                 {
                     return "T";
                 }
-                if (IsPointer || IsReference || IsConstantArray)
+                switch (Kind)
                 {
-                    return Referenced.ManagedName;
+                    case TypeKind.Pointer:
+                    case TypeKind.LValueReference:
+                    case TypeKind.ConstantArray:
+                        return Referenced.ManagedName;
                 }
                 if (Target == null)
                 {
@@ -76,64 +80,14 @@ namespace BulletSharpGen
                     _unresolved = true;
                     return Name;
                 }
-                if (TemplateParams != null)
-                {
-                    return Target.ManagedName + "<" + TemplateParams.First().ManagedName + ">";
-                }
                 return Target.ManagedName;
-            }
-        }
-
-        public string ManagedNameCS
-        {
-            get
-            {
-                if (IsBasic)
-                {
-                    if (Name.Equals("unsigned short"))
-                    {
-                        return "ushort";
-                    }
-                    if (Name.Equals("unsigned int"))
-                    {
-                        return "uint";
-                    }
-                    if (Name.Equals("unsigned long"))
-                    {
-                        return "ulong";
-                    }
-                }
-                return ManagedName;
-            }
-        }
-
-        public string ManagedTypeRefName
-        {
-            get
-            {
-                if (IsPointer || IsReference || IsConstantArray)
-                {
-                    if (IsBasic)
-                    {
-                        return ManagedName + '*';
-                    }
-                    switch (ManagedName)
-                    {
-                        case "void":
-                            return "IntPtr";
-                        case "char":
-                            return "String^";
-                        case "float":
-                            return string.Format("array<{0}>^", Referenced.Name);
-                    }
-                    return ManagedName + '^';
-                }
-                return ManagedName;
             }
         }
 
         public TypeRefDefinition(ClangSharp.Type type, Cursor cursor = null)
         {
+            Kind = (TypeKind)type.TypeKind;
+
             var firstChild = cursor?.Children.FirstOrDefault();
             if (firstChild != null && firstChild.Kind == CursorKind.TemplateRef)
             {
@@ -172,70 +126,66 @@ namespace BulletSharpGen
                 Referenced = new TypeRefDefinition(type.Pointee, pointeeCursor);
             }
 
-            switch (type.TypeKind)
+            switch (Kind)
             {
-                case ClangSharp.Type.Kind.Void:
-                case ClangSharp.Type.Kind.Bool:
-                case ClangSharp.Type.Kind.CharS:
-                case ClangSharp.Type.Kind.Double:
-                case ClangSharp.Type.Kind.Float:
-                case ClangSharp.Type.Kind.Int:
-                case ClangSharp.Type.Kind.UChar:
-                case ClangSharp.Type.Kind.UInt:
+                case TypeKind.Void:
+                case TypeKind.Bool:
+                case TypeKind.Char_S:
+                case TypeKind.Double:
+                case TypeKind.Float:
+                case TypeKind.Int:
+                case TypeKind.UChar:
+                case TypeKind.UInt:
                     Name = type.Spelling;
                     IsBasic = true;
                     break;
-                case ClangSharp.Type.Kind.Long:
+                case TypeKind.Long:
                     Name = "long";
                     IsBasic = true;
                     break;
-                case ClangSharp.Type.Kind.LongLong:
+                case TypeKind.LongLong:
                     Name = "long long";
                     IsBasic = true;
                     break;
-                case ClangSharp.Type.Kind.Short:
+                case TypeKind.Short:
                     Name = "short";
                     IsBasic = true;
                     break;
-                case ClangSharp.Type.Kind.ULong:
+                case TypeKind.ULong:
                     Name = "unsigned long";
                     IsBasic = true;
                     break;
-                case ClangSharp.Type.Kind.ULongLong:
+                case TypeKind.ULongLong:
                     Name = "unsigned long long";
                     IsBasic = true;
                     break;
-                case ClangSharp.Type.Kind.UShort:
+                case TypeKind.UShort:
                     Name = "unsigned short";
                     IsBasic = true;
                     break;
-                case ClangSharp.Type.Kind.Typedef:
+
+                case TypeKind.Typedef:
                     Name = GetFullyQualifiedName(type);
                     Referenced = new TypeRefDefinition(type.Canonical);
-                    IsBasic = Referenced.IsBasic;
                     break;
-                case ClangSharp.Type.Kind.Pointer:
-                    IsPointer = true;
+
+                case TypeKind.FunctionProto:
+                case TypeKind.LValueReference:
+                case TypeKind.Pointer:
                     break;
-                case ClangSharp.Type.Kind.LValueReference:
-                    IsReference = true;
-                    break;
-                case ClangSharp.Type.Kind.ConstantArray:
+                case TypeKind.ConstantArray:
                     Referenced = new TypeRefDefinition(type.ArrayElementType);
-                    IsConstantArray = true;
                     break;
-                case ClangSharp.Type.Kind.FunctionProto:
-                    // ??
-                    break;
-                case ClangSharp.Type.Kind.Enum:
+
+                case TypeKind.Enum:
                     Name = type.Canonical.Declaration.Spelling;
                     IsBasic = true;
                     break;
-                case ClangSharp.Type.Kind.Record:
-                case ClangSharp.Type.Kind.Unexposed:
+                case TypeKind.Record:
+                case TypeKind.Unexposed:
                     Name = GetFullyQualifiedName(type);
                     break;
-                case ClangSharp.Type.Kind.DependentSizedArray:
+                case TypeKind.DependentSizedArray:
                     break;
                 default:
                     throw new NotImplementedException();
@@ -244,54 +194,87 @@ namespace BulletSharpGen
 
         public TypeRefDefinition(string name)
         {
-            if (name.EndsWith(" *"))
+            switch (name)
             {
-                Referenced = new TypeRefDefinition(name.Substring(0, name.Length - 2));
-                IsPointer = true;
-            }
-            else
-            {
-                switch (name)
-                {
-                    case "bool":
-                    case "char":
-                    case "double":
-                    case "float":
-                    case "int":
-                    case "unsigned char":
-                    case "unsigned int":
-                    case "void":
-                        Name = name;
-                        IsBasic = true;
+                case "bool":
+                    Kind = TypeKind.Bool;
+                    Name = "bool";
+                    IsBasic = true;
+                    break;
+                case "char":
+                    Kind = TypeKind.Char_U;
+                    Name = "char";
+                    IsBasic = true;
+                    break;
+                case "double":
+                    Kind = TypeKind.Double;
+                    Name = "double";
+                    IsBasic = true;
+                    break;
+                case "float":
+                    Kind = TypeKind.Float;
+                    Name = "float";
+                    IsBasic = true;
+                    break;
+                case "int":
+                    Kind = TypeKind.Int;
+                    Name = "int";
+                    IsBasic = true;
+                    break;
+                case "unsigned char":
+                    Kind = TypeKind.UChar;
+                    Name = "unsigned char";
+                    IsBasic = true;
+                    break;
+                case "unsigned int":
+                    Kind = TypeKind.UInt;
+                    Name = "unsigned int";
+                    IsBasic = true;
+                    break;
+                case "void":
+                    Kind = TypeKind.Void;
+                    Name = name;
+                    IsBasic = true;
+                    break;
+                case "long int":
+                    Kind = TypeKind.Long;
+                    Name = "long";
+                    IsBasic = true;
+                    break;
+                case "long long int":
+                    Kind = TypeKind.LongLong;
+                    Name = "long long";
+                    IsBasic = true;
+                    break;
+                case "short int":
+                    Kind = TypeKind.Short;
+                    Name = "short";
+                    IsBasic = true;
+                    break;
+                case "unsigned long int":
+                    Kind = TypeKind.ULong;
+                    Name = "unsigned long";
+                    IsBasic = true;
+                    break;
+                case "unsigned long long int":
+                    Kind = TypeKind.ULongLong;
+                    Name = "unsigned long long";
+                    IsBasic = true;
+                    break;
+                case "unsigned short int":
+                    Kind = TypeKind.UShort;
+                    Name = "unsigned short";
+                    IsBasic = true;
+                    break;
+                default:
+                    if (name.EndsWith(" *"))
+                    {
+                        Referenced = new TypeRefDefinition(name.Substring(0, name.Length - 2));
+                        Kind = TypeKind.Pointer;
                         break;
-                    case "long int":
-                        Name = "long";
-                        IsBasic = true;
-                        break;
-                    case "long long int":
-                        Name = "long long";
-                        IsBasic = true;
-                        break;
-                    case "short int":
-                        Name = "short";
-                        IsBasic = true;
-                        break;
-                    case "unsigned long int":
-                        Name = "unsigned long";
-                        IsBasic = true;
-                        break;
-                    case "unsigned long long int":
-                        Name = "unsigned long long";
-                        IsBasic = true;
-                        break;
-                    case "unsigned short int":
-                        Name = "unsigned short";
-                        IsBasic = true;
-                        break;
-                    default:
-                        Name = name;
-                        break;
-                }
+                    }
+                    Name = name;
+                    break;
             }
         }
 
@@ -306,14 +289,12 @@ namespace BulletSharpGen
                 HasTemplateTypeParameter = HasTemplateTypeParameter,
                 IsBasic = IsBasic,
                 IsConst = IsConst,
-                IsConstantArray = IsConstantArray,
                 IsIncomplete = IsIncomplete,
-                IsPointer = IsPointer,
-                IsReference = IsReference,
                 Name = Name,
                 Referenced = Referenced != null ? Referenced.Copy() : null,
                 TemplateParams = TemplateParams?.Select(p => p.Copy()).ToList(),
-                Target = Target
+                Target = Target,
+                Kind = Kind
             };
             return t;
         }
@@ -375,24 +356,14 @@ namespace BulletSharpGen
                 return false;
             }
 
-            if (t.IsBasic != IsBasic ||
-                t.IsConstantArray != IsConstantArray ||
-                t.IsPointer != IsPointer ||
-                t.IsReference != IsReference)
+            if (t.Kind != Kind) return false;
+
+            if (t.Referenced != null)
             {
-                return false;
+                if (!t.Referenced.Equals(Referenced)) return false;
             }
 
-            if (IsPointer || IsReference || IsConstantArray)
-            {
-                return t.Referenced.Equals(Referenced);
-            }
-
-            if (Name == null)
-            {
-                return t.Name == null;
-            }
-            return t.Name.Equals(Name);
+            return string.Equals(Name, t.Name);
         }
 
         public override int GetHashCode()

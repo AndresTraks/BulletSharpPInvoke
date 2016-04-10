@@ -48,14 +48,19 @@ namespace BulletSharp
 		{
 		}
 
-		public ConvexPlaneCollisionAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped, int numPerturbationIterations, int minimumPointsPerturbationThreshold)
-			: base(btConvexPlaneCollisionAlgorithm_new(mf._native, ci._native, body0Wrap._native, body1Wrap._native, isSwapped, numPerturbationIterations, minimumPointsPerturbationThreshold))
+		public ConvexPlaneCollisionAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci,
+			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped,
+			int numPerturbationIterations, int minimumPointsPerturbationThreshold)
+			: base(btConvexPlaneCollisionAlgorithm_new(mf._native, ci._native, body0Wrap._native,
+				body1Wrap._native, isSwapped, numPerturbationIterations, minimumPointsPerturbationThreshold))
 		{
 		}
 
-		public void CollideSingleContact(Quaternion perturbeRot, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, DispatcherInfo dispatchInfo, ManifoldResult resultOut)
+		public void CollideSingleContact(Quaternion perturbeRot, CollisionObjectWrapper body0Wrap,
+			CollisionObjectWrapper body1Wrap, DispatcherInfo dispatchInfo, ManifoldResult resultOut)
 		{
-			btConvexPlaneCollisionAlgorithm_collideSingleContact(_native, ref perturbeRot, body0Wrap._native, body1Wrap._native, dispatchInfo._native, resultOut._native);
+			btConvexPlaneCollisionAlgorithm_collideSingleContact(_native, ref perturbeRot,
+				body0Wrap._native, body1Wrap._native, dispatchInfo._native, resultOut._native);
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

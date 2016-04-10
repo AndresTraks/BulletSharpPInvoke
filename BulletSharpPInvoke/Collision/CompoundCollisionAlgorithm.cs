@@ -43,8 +43,10 @@ namespace BulletSharp
 		{
 		}
 
-		public CompoundCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped)
-			: base(btCompoundCollisionAlgorithm_new(ci._native, body0Wrap._native, body1Wrap._native, isSwapped))
+		public CompoundCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci,
+			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped)
+			: base(btCompoundCollisionAlgorithm_new(ci._native, body0Wrap._native,
+				body1Wrap._native, isSwapped))
 		{
 		}
 

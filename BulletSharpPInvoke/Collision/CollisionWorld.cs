@@ -332,9 +332,12 @@ namespace BulletSharp
             _localShapeInfo = new LocalShapeInfo(btCollisionWorld_LocalConvexResult_getLocalShapeInfo(_native), true);
 		}
 
-		public LocalConvexResult(CollisionObject hitCollisionObject, LocalShapeInfo localShapeInfo, Vector3 hitNormalLocal, Vector3 hitPointLocal, float hitFraction)
+		public LocalConvexResult(CollisionObject hitCollisionObject, LocalShapeInfo localShapeInfo,
+			Vector3 hitNormalLocal, Vector3 hitPointLocal, float hitFraction)
 		{
-			_native = btCollisionWorld_LocalConvexResult_new(hitCollisionObject._native, localShapeInfo._native, ref hitNormalLocal, ref hitPointLocal, hitFraction);
+			_native = btCollisionWorld_LocalConvexResult_new(hitCollisionObject._native,
+				localShapeInfo._native, ref hitNormalLocal, ref hitPointLocal,
+				hitFraction);
 			_hitCollisionObject = hitCollisionObject;
 			_localShapeInfo = localShapeInfo;
 		}
@@ -452,9 +455,11 @@ namespace BulletSharp
             _localShapeInfo = new LocalShapeInfo(btCollisionWorld_LocalRayResult_getLocalShapeInfo(_native), true);
 		}
 
-		public LocalRayResult(CollisionObject collisionObject, LocalShapeInfo localShapeInfo, Vector3 hitNormalLocal, float hitFraction)
+		public LocalRayResult(CollisionObject collisionObject, LocalShapeInfo localShapeInfo,
+			Vector3 hitNormalLocal, float hitFraction)
 		{
-			_native = btCollisionWorld_LocalRayResult_new(collisionObject._native, localShapeInfo._native, ref hitNormalLocal, hitFraction);
+			_native = btCollisionWorld_LocalRayResult_new(collisionObject._native,
+				localShapeInfo._native, ref hitNormalLocal, hitFraction);
 			_collisionObject = collisionObject;
 			_localShapeInfo = localShapeInfo;
 		}
@@ -752,8 +757,10 @@ namespace BulletSharp
             _collisionObjectArray = new AlignedCollisionObjectArray(btCollisionWorld_getCollisionObjectArray(native), this);
 		}
 
-		public CollisionWorld(Dispatcher dispatcher, BroadphaseInterface broadphasePairCache, CollisionConfiguration collisionConfiguration)
-            : this(btCollisionWorld_new(dispatcher._native, broadphasePairCache._native, collisionConfiguration._native))
+		public CollisionWorld(Dispatcher dispatcher, BroadphaseInterface broadphasePairCache,
+			CollisionConfiguration collisionConfiguration)
+            : this(btCollisionWorld_new(dispatcher._native, broadphasePairCache._native,
+                collisionConfiguration._native))
 		{
 			_dispatcher = dispatcher;
 			Broadphase = broadphasePairCache;
@@ -764,7 +771,8 @@ namespace BulletSharp
             _collisionObjectArray.Add(collisionObject);
 		}
 
-        public void AddCollisionObject(CollisionObject collisionObject, CollisionFilterGroups collisionFilterGroup, CollisionFilterGroups collisionFilterMask)
+        public void AddCollisionObject(CollisionObject collisionObject, CollisionFilterGroups collisionFilterGroup,
+            CollisionFilterGroups collisionFilterMask)
 		{
             _collisionObjectArray.Add(collisionObject, (short)collisionFilterGroup, (short)collisionFilterMask);
 		}
@@ -779,9 +787,11 @@ namespace BulletSharp
 			btCollisionWorld_computeOverlappingPairs(_native);
 		}
 
-		public void ContactPairTest(CollisionObject colObjA, CollisionObject colObjB, ContactResultCallback resultCallback)
+		public void ContactPairTest(CollisionObject colObjA, CollisionObject colObjB,
+			ContactResultCallback resultCallback)
 		{
-			btCollisionWorld_contactPairTest(_native, colObjA._native, colObjB._native, resultCallback._native);
+			btCollisionWorld_contactPairTest(_native, colObjA._native, colObjB._native,
+				resultCallback._native);
 		}
 
 		public void ContactTest(CollisionObject colObj, ContactResultCallback resultCallback)
@@ -789,29 +799,42 @@ namespace BulletSharp
 			btCollisionWorld_contactTest(_native, colObj._native, resultCallback._native);
 		}
 
-        public void ConvexSweepTestRef(ConvexShape castShape, ref Matrix from, ref Matrix to, ConvexResultCallback resultCallback)
+        public void ConvexSweepTestRef(ConvexShape castShape, ref Matrix from, ref Matrix to,
+            ConvexResultCallback resultCallback)
         {
             btCollisionWorld_convexSweepTest(_native, castShape._native, ref from, ref to, resultCallback._native);
         }
 
-		public void ConvexSweepTest(ConvexShape castShape, Matrix from, Matrix to, ConvexResultCallback resultCallback)
+		public void ConvexSweepTest(ConvexShape castShape, Matrix from, Matrix to,
+			ConvexResultCallback resultCallback)
 		{
-			btCollisionWorld_convexSweepTest(_native, castShape._native, ref from, ref to, resultCallback._native);
+			btCollisionWorld_convexSweepTest(_native, castShape._native, ref from,
+				ref to, resultCallback._native);
 		}
 
-        public void ConvexSweepTestRef(ConvexShape castShape, ref Matrix from, ref Matrix to, ConvexResultCallback resultCallback, float allowedCcdPenetration)
+        public void ConvexSweepTestRef(ConvexShape castShape, ref Matrix from, ref Matrix to,
+            ConvexResultCallback resultCallback, float allowedCcdPenetration)
         {
             btCollisionWorld_convexSweepTest2(_native, castShape._native, ref from, ref to, resultCallback._native, allowedCcdPenetration);
         }
 
-		public void ConvexSweepTest(ConvexShape castShape, Matrix from, Matrix to, ConvexResultCallback resultCallback, float allowedCcdPenetration)
+		public void ConvexSweepTest(ConvexShape castShape, Matrix from, Matrix to,
+			ConvexResultCallback resultCallback, float allowedCcdPenetration)
 		{
-			btCollisionWorld_convexSweepTest2(_native, castShape._native, ref from, ref to, resultCallback._native, allowedCcdPenetration);
+			btCollisionWorld_convexSweepTest2(_native, castShape._native, ref from,
+				ref to, resultCallback._native, allowedCcdPenetration);
 		}
 
-        public void DebugDrawObject(ref Matrix worldTransform, CollisionShape shape, ref Vector3 color)
+        public void DebugDrawObjectRef(ref Matrix worldTransform, CollisionShape shape, ref Vector3 color)
+        {
+            btCollisionWorld_debugDrawObject(_native, ref worldTransform, shape._native, ref color);
+        }
+
+		public void DebugDrawObject(Matrix worldTransform, CollisionShape shape,
+			Vector3 color)
 		{
-			btCollisionWorld_debugDrawObject(_native, ref worldTransform, shape._native, ref color);
+			btCollisionWorld_debugDrawObject(_native, ref worldTransform, shape._native,
+				ref color);
 		}
 
 		public void DebugDrawWorld()
@@ -819,24 +842,38 @@ namespace BulletSharp
 			btCollisionWorld_debugDrawWorld(_native);
 		}
 
-        public static void ObjectQuerySingleRef(ConvexShape castShape, ref Matrix rayFromTrans, ref Matrix rayToTrans, CollisionObject collisionObject, CollisionShape collisionShape, ref Matrix colObjWorldTransform, ConvexResultCallback resultCallback, float allowedPenetration)
+        public static void ObjectQuerySingleRef(ConvexShape castShape, ref Matrix rayFromTrans,
+            ref Matrix rayToTrans, CollisionObject collisionObject, CollisionShape collisionShape,
+            ref Matrix colObjWorldTransform, ConvexResultCallback resultCallback, float allowedPenetration)
         {
-            btCollisionWorld_objectQuerySingle(castShape._native, ref rayFromTrans, ref rayToTrans, collisionObject._native, collisionShape._native, ref colObjWorldTransform, resultCallback._native, allowedPenetration);
+            btCollisionWorld_objectQuerySingle(castShape._native, ref rayFromTrans,
+                ref rayToTrans, collisionObject._native, collisionShape._native, ref colObjWorldTransform,
+                resultCallback._native, allowedPenetration);
         }
 
-		public static void ObjectQuerySingle(ConvexShape castShape, Matrix rayFromTrans, Matrix rayToTrans, CollisionObject collisionObject, CollisionShape collisionShape, Matrix colObjWorldTransform, ConvexResultCallback resultCallback, float allowedPenetration)
+		public static void ObjectQuerySingle(ConvexShape castShape, Matrix rayFromTrans,
+			Matrix rayToTrans, CollisionObject collisionObject, CollisionShape collisionShape,
+			Matrix colObjWorldTransform, ConvexResultCallback resultCallback, float allowedPenetration)
 		{
-			btCollisionWorld_objectQuerySingle(castShape._native, ref rayFromTrans, ref rayToTrans, collisionObject._native, collisionShape._native, ref colObjWorldTransform, resultCallback._native, allowedPenetration);
+			btCollisionWorld_objectQuerySingle(castShape._native, ref rayFromTrans,
+				ref rayToTrans, collisionObject._native, collisionShape._native, ref colObjWorldTransform,
+				resultCallback._native, allowedPenetration);
 		}
 
-        public static void ObjectQuerySingleInternalRef(ConvexShape castShape, ref Matrix convexFromTrans, ref Matrix convexToTrans, CollisionObjectWrapper colObjWrap, ConvexResultCallback resultCallback, float allowedPenetration)
+        public static void ObjectQuerySingleInternalRef(ConvexShape castShape, ref Matrix convexFromTrans,
+            ref Matrix convexToTrans, CollisionObjectWrapper colObjWrap, ConvexResultCallback resultCallback,
+            float allowedPenetration)
         {
-            btCollisionWorld_objectQuerySingleInternal(castShape._native, ref convexFromTrans, ref convexToTrans, colObjWrap._native, resultCallback._native, allowedPenetration);
+            btCollisionWorld_objectQuerySingleInternal(castShape._native, ref convexFromTrans,
+                ref convexToTrans, colObjWrap._native, resultCallback._native, allowedPenetration);
         }
 
-		public static void ObjectQuerySingleInternal(ConvexShape castShape, Matrix convexFromTrans, Matrix convexToTrans, CollisionObjectWrapper colObjWrap, ConvexResultCallback resultCallback, float allowedPenetration)
+		public static void ObjectQuerySingleInternal(ConvexShape castShape, Matrix convexFromTrans,
+			Matrix convexToTrans, CollisionObjectWrapper colObjWrap, ConvexResultCallback resultCallback,
+			float allowedPenetration)
 		{
-			btCollisionWorld_objectQuerySingleInternal(castShape._native, ref convexFromTrans, ref convexToTrans, colObjWrap._native, resultCallback._native, allowedPenetration);
+			btCollisionWorld_objectQuerySingleInternal(castShape._native, ref convexFromTrans,
+				ref convexToTrans, colObjWrap._native, resultCallback._native, allowedPenetration);
 		}
 
 		public void PerformDiscreteCollisionDetection()
@@ -854,24 +891,33 @@ namespace BulletSharp
 			btCollisionWorld_rayTest(_native, ref rayFromWorld, ref rayToWorld, resultCallback._native);
 		}
 
-        public static void RayTestSingleRef(ref Matrix rayFromTrans, ref Matrix rayToTrans, CollisionObject collisionObject, CollisionShape collisionShape, ref Matrix colObjWorldTransform, RayResultCallback resultCallback)
+        public static void RayTestSingleRef(ref Matrix rayFromTrans, ref Matrix rayToTrans,
+            CollisionObject collisionObject, CollisionShape collisionShape, ref Matrix colObjWorldTransform,
+            RayResultCallback resultCallback)
         {
             btCollisionWorld_rayTestSingle(ref rayFromTrans, ref rayToTrans, collisionObject._native, collisionShape._native, ref colObjWorldTransform, resultCallback._native);
         }
 
-		public static void RayTestSingle(Matrix rayFromTrans, Matrix rayToTrans, CollisionObject collisionObject, CollisionShape collisionShape, Matrix colObjWorldTransform, RayResultCallback resultCallback)
+		public static void RayTestSingle(Matrix rayFromTrans, Matrix rayToTrans,
+			CollisionObject collisionObject, CollisionShape collisionShape, Matrix colObjWorldTransform,
+			RayResultCallback resultCallback)
 		{
-			btCollisionWorld_rayTestSingle(ref rayFromTrans, ref rayToTrans, collisionObject._native, collisionShape._native, ref colObjWorldTransform, resultCallback._native);
+			btCollisionWorld_rayTestSingle(ref rayFromTrans, ref rayToTrans, collisionObject._native,
+				collisionShape._native, ref colObjWorldTransform, resultCallback._native);
 		}
 
-        public static void RayTestSingleInternalRef(ref Matrix rayFromTrans, ref Matrix rayToTrans, CollisionObjectWrapper collisionObjectWrap, RayResultCallback resultCallback)
+        public static void RayTestSingleInternalRef(ref Matrix rayFromTrans, ref Matrix rayToTrans,
+            CollisionObjectWrapper collisionObjectWrap, RayResultCallback resultCallback)
         {
-            btCollisionWorld_rayTestSingleInternal(ref rayFromTrans, ref rayToTrans, collisionObjectWrap._native, resultCallback._native);
+            btCollisionWorld_rayTestSingleInternal(ref rayFromTrans, ref rayToTrans,
+                collisionObjectWrap._native, resultCallback._native);
         }
 
-		public static void RayTestSingleInternal(Matrix rayFromTrans, Matrix rayToTrans, CollisionObjectWrapper collisionObjectWrap, RayResultCallback resultCallback)
+		public static void RayTestSingleInternal(Matrix rayFromTrans, Matrix rayToTrans,
+			CollisionObjectWrapper collisionObjectWrap, RayResultCallback resultCallback)
 		{
-			btCollisionWorld_rayTestSingleInternal(ref rayFromTrans, ref rayToTrans, collisionObjectWrap._native, resultCallback._native);
+			btCollisionWorld_rayTestSingleInternal(ref rayFromTrans, ref rayToTrans,
+				collisionObjectWrap._native, resultCallback._native);
 		}
 
 		public void RemoveCollisionObject(CollisionObject collisionObject)
@@ -882,11 +928,11 @@ namespace BulletSharp
         protected void SerializeCollisionObjects(Serializer serializer)
         {
 	        // keep track of shapes already serialized
-            Dictionary<CollisionShape, int> serializedShapes = new Dictionary<CollisionShape, int>();
+            var serializedShapes = new Dictionary<CollisionShape, int>();
 
-            foreach (CollisionObject colObj in CollisionObjectArray)
+            foreach (var colObj in CollisionObjectArray)
             {
-                CollisionShape shape = colObj.CollisionShape;
+                var shape = colObj.CollisionShape;
                 if (!serializedShapes.ContainsKey(shape))
                 {
                     serializedShapes.Add(shape, 0);
@@ -895,7 +941,7 @@ namespace BulletSharp
             }
 
             // serialize all collision objects
-            foreach (CollisionObject colObj in CollisionObjectArray)
+            foreach (var colObj in CollisionObjectArray)
             {
                 if (colObj.InternalType == CollisionObjectTypes.CollisionObject)
                 {
@@ -938,10 +984,7 @@ namespace BulletSharp
 
 		public AlignedCollisionObjectArray CollisionObjectArray
 		{
-			get
-			{
-				return _collisionObjectArray;
-			}
+			get { return _collisionObjectArray; }
 		}
 
 		public IDebugDraw DebugDrawer

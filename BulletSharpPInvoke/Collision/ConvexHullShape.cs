@@ -101,9 +101,9 @@ namespace BulletSharp
 			get
 			{
                 if (_points == null || _points.Count != NumPoints)
-			    {
-			        _points = new Vector3Array(btConvexHullShape_getPoints(_native), NumPoints);
-			    }
+                {
+                    _points = new Vector3Array(btConvexHullShape_getPoints(_native), NumPoints);
+                }
                 return _points;
 			}
 		}

@@ -448,13 +448,16 @@ namespace BulletSharpGen
                     }
 
                     // Get marshalling direction
-                    if (_context.Parameter.Type.IsPointer || _context.Parameter.Type.IsReference)
+                    switch (_context.Parameter.Type.Kind)
                     {
-                        if (_context.Parameter.MarshalDirection != MarshalDirection.Out &&
+                        case TypeKind.Pointer:
+                        case TypeKind.LValueReference:
+                            if (_context.Parameter.MarshalDirection != MarshalDirection.Out &&
                             !argTokens.Any(a => a.Spelling.Equals("const")))
-                        {
-                            _context.Parameter.MarshalDirection = MarshalDirection.InOut;
-                        }
+                            {
+                                _context.Parameter.MarshalDirection = MarshalDirection.InOut;
+                            }
+                            break;
                     }
 
                     _context.Parameter = null;

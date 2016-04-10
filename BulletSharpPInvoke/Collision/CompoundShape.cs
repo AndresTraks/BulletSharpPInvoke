@@ -161,9 +161,11 @@ namespace BulletSharp
 			btCompoundShape_updateChildTransform(_native, childIndex, ref newChildTransform);
 		}
 
-		public void UpdateChildTransform(int childIndex, Matrix newChildTransform, bool shouldRecalculateLocalAabb)
+		public void UpdateChildTransform(int childIndex, Matrix newChildTransform,
+			bool shouldRecalculateLocalAabb)
 		{
-			btCompoundShape_updateChildTransform2(_native, childIndex, ref newChildTransform, shouldRecalculateLocalAabb);
+			btCompoundShape_updateChildTransform2(_native, childIndex, ref newChildTransform,
+				shouldRecalculateLocalAabb);
 		}
 
 		public CompoundShapeChildArray ChildList

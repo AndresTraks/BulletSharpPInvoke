@@ -91,11 +91,11 @@
 #endif
 
 #ifndef BT_BULLET_FILE_H
-#define btAligendCharPtrArray void
+#define btAlignedObjectArray_charPtr void
 #define btAlignedObjectArray_bParse_bStructHandle void
 #define bParse_btBulletFile void
 #else
-#define btAligendCharPtrArray btAlignedObjectArray<char*>
+#define btAlignedObjectArray_charPtr btAlignedObjectArray<char*>
 #define btAlignedObjectArray_bParse_bStructHandle btAlignedObjectArray<bParse::bStructHandle*>
 #define bParse_btBulletFile bParse::btBulletFile
 #endif
