@@ -11,8 +11,10 @@ namespace BulletSharp
 		{
 		}
 
-		public MultiBodyJointLimitConstraint(MultiBody body, int link, float lower, float upper)
-			: base(btMultiBodyJointLimitConstraint_new(body._native, link, lower, upper))
+		public MultiBodyJointLimitConstraint(MultiBody body, int link, float lower,
+			float upper)
+			: base(btMultiBodyJointLimitConstraint_new(body._native, link, lower,
+				upper))
 		{
             _multiBodyA = body;
             _multiBodyB = body;

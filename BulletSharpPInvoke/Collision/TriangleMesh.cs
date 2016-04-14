@@ -42,14 +42,18 @@ namespace BulletSharp
 			btTriangleMesh_addTriangle(_native, ref vertex0, ref vertex1, ref vertex2);
 		}
 
-        public void AddTriangleRef(ref Vector3 vertex0, ref Vector3 vertex1, ref Vector3 vertex2, bool removeDuplicateVertices)
-        {
-            btTriangleMesh_addTriangle2(_native, ref vertex0, ref vertex1, ref vertex2, removeDuplicateVertices);
-        }
+       public void AddTriangleRef(ref Vector3 vertex0, ref Vector3 vertex1, ref Vector3 vertex2,
+           bool removeDuplicateVertices)
+       {
+           btTriangleMesh_addTriangle2(_native, ref vertex0, ref vertex1, ref vertex2,
+               removeDuplicateVertices);
+       }
 
-		public void AddTriangle(Vector3 vertex0, Vector3 vertex1, Vector3 vertex2, bool removeDuplicateVertices)
+		public void AddTriangle(Vector3 vertex0, Vector3 vertex1, Vector3 vertex2,
+			bool removeDuplicateVertices)
 		{
-			btTriangleMesh_addTriangle2(_native, ref vertex0, ref vertex1, ref vertex2, removeDuplicateVertices);
+			btTriangleMesh_addTriangle2(_native, ref vertex0, ref vertex1, ref vertex2,
+				removeDuplicateVertices);
 		}
 
 		public void AddTriangleIndices(int index1, int index2, int index3)
@@ -57,9 +61,9 @@ namespace BulletSharp
 			btTriangleMesh_addTriangleIndices(_native, index1, index2, index3);
 		}
 
-        public void FindOrAddVertex(ref Vector3 vertex, bool removeDuplicateVertices, out int index)
+        public int FindOrAddVertexRef(Vector3 vertex, bool removeDuplicateVertices)
         {
-            index = btTriangleMesh_findOrAddVertex(_native, ref vertex, removeDuplicateVertices);
+            return btTriangleMesh_findOrAddVertex(_native, ref vertex, removeDuplicateVertices);
         }
 
 		public int FindOrAddVertex(Vector3 vertex, bool removeDuplicateVertices)

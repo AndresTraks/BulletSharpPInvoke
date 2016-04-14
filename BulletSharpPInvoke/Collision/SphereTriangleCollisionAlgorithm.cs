@@ -22,8 +22,10 @@ namespace BulletSharp
 			static extern IntPtr btSphereTriangleCollisionAlgorithm_CreateFunc_new();
 		}
 
-		public SphereTriangleCollisionAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool swapped)
-			: base(btSphereTriangleCollisionAlgorithm_new(mf._native, ci._native, body0Wrap._native, body1Wrap._native, swapped))
+		public SphereTriangleCollisionAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci,
+			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool swapped)
+			: base(btSphereTriangleCollisionAlgorithm_new(mf._native, ci._native,
+				body0Wrap._native, body1Wrap._native, swapped))
 		{
 		}
 

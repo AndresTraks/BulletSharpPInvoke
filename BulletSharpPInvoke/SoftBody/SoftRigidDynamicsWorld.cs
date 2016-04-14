@@ -11,8 +11,9 @@ namespace BulletSharp.SoftBody
         private bool _ownsSolver;
         private SoftBodyWorldInfo _worldInfo;
 
-		public SoftRigidDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache, ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration)
-			: base(IntPtr.Zero)
+		public SoftRigidDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
+			ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration)
+            : base(IntPtr.Zero)
 		{
             _softBodySolver = new DefaultSoftBodySolver();
             _ownsSolver = true;
@@ -23,16 +24,18 @@ namespace BulletSharp.SoftBody
 
             _collisionObjectArray = new AlignedCollisionObjectArray(btCollisionWorld_getCollisionObjectArray(_native), this);
 
-            _dispatcher = dispatcher;
             _broadphase = pairCache;
-            _constraintSolver = constraintSolver;
+			_constraintSolver = constraintSolver;
+			_dispatcher = dispatcher;
             _worldInfo = new SoftBodyWorldInfo(btSoftRigidDynamicsWorld_getWorldInfo(_native), true);
             _worldInfo.Dispatcher = dispatcher;
             _worldInfo.Broadphase = pairCache;
 		}
 
-		public SoftRigidDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache, ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration, SoftBodySolver softBodySolver)
-			: base(IntPtr.Zero)
+		public SoftRigidDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
+			ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration,
+			SoftBodySolver softBodySolver)
+            : base(IntPtr.Zero)
 		{
             if (softBodySolver != null) {
                 _softBodySolver = softBodySolver;
@@ -48,9 +51,9 @@ namespace BulletSharp.SoftBody
 
             _collisionObjectArray = new AlignedCollisionObjectArray(btCollisionWorld_getCollisionObjectArray(_native), this);
 
-            _dispatcher = dispatcher;
             _broadphase = pairCache;
-            _constraintSolver = constraintSolver;
+			_constraintSolver = constraintSolver;
+			_dispatcher = dispatcher;
             _worldInfo = new SoftBodyWorldInfo(btSoftRigidDynamicsWorld_getWorldInfo(_native), true);
             _worldInfo.Dispatcher = dispatcher;
             _worldInfo.Broadphase = pairCache;

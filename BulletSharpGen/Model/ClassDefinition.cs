@@ -69,10 +69,6 @@ namespace BulletSharpGen
 
         public bool IsExcluded { get; set; }
 
-        // For function prototypes IsTypeDef == true, but TypedefUnderlyingType == null
-        public bool IsTypedef { get; set; }
-        public TypeRefDefinition TypedefUnderlyingType { get; set; }
-
         public string ManagedName { get; set; }
 
         /// <summary>
@@ -120,7 +116,7 @@ namespace BulletSharpGen
             get { return NestedClasses.Concat(NestedClasses.SelectMany(c => c.AllNestedClasses)); }
         }
 
-        public string FullyQualifiedName
+        public virtual string FullyQualifiedName
         {
             get
             {
@@ -157,7 +153,7 @@ namespace BulletSharpGen
 
         public override string ToString()
         {
-            return Name;
+            return ManagedName ?? FullyQualifiedName;
         }
     }
 }

@@ -131,8 +131,10 @@ namespace BulletSharpGen
                     case CursorKind.ClassTemplate:
                     case CursorKind.EnumDecl:
                     case CursorKind.StructDecl:
-                    case CursorKind.TypedefDecl:
                         ParseClassCursor(cursor);
+                        break;
+                    case CursorKind.TypedefDecl:
+                        ParseTypedefCursor(cursor);
                         break;
                 }
             }
@@ -152,7 +154,7 @@ namespace BulletSharpGen
                 return;
             }
 
-            string fullyQualifiedName = TypeRefDefinition.GetFullyQualifiedName(cursor);
+            string fullyQualifiedName = GetFullyQualifiedName(cursor);
             if (project.ClassDefinitions.ContainsKey(fullyQualifiedName))
             {
                 if (project.ClassDefinitions[fullyQualifiedName].IsParsed)
@@ -233,8 +235,7 @@ namespace BulletSharpGen
                 foreach (var constantDecl in cursor.Children
                     .Where(c => c.Kind == CursorKind.EnumConstantDecl))
                 {
-                    @enum.EnumConstants.Add(constantDecl.Spelling);
-
+                    string valueSpelling = "";
                     var value = constantDecl.Children.FirstOrDefault();
                     if (value != null)
                     {
@@ -242,21 +243,9 @@ namespace BulletSharpGen
                             .Where(t => t.Kind != TokenKind.Comment &&
                                 !t.Spelling.Equals(",") &&
                                 !t.Spelling.Equals("}"));
-                        string spelling = string.Join("", valueTokens.Select(t => t.Spelling));
-                        @enum.EnumConstantValues.Add(spelling);
+                        valueSpelling = string.Join("", valueTokens.Select(t => t.Spelling));
                     }
-                    else
-                    {
-                        @enum.EnumConstantValues.Add("");
-                    }
-                }
-            }
-            else if (cursor.Kind == CursorKind.TypedefDecl)
-            {
-                _context.Class.IsTypedef = true;
-                if (cursor.TypedefDeclUnderlyingType.Canonical.TypeKind != ClangSharp.Type.Kind.FunctionProto)
-                {
-                    _context.Class.TypedefUnderlyingType = new TypeRefDefinition(cursor.TypedefDeclUnderlyingType);
+                    @enum.EnumConstants.Add(new EnumConstant(constantDecl.Spelling, valueSpelling));
                 }
             }
             else
@@ -293,8 +282,20 @@ namespace BulletSharpGen
                                 baseTokens.GetRange(templSpecStart + 1, templSpecEnd - templSpecStart - 1)
                                 .Select(t => t.Spelling));
 
-                            var classTemplate = new ClassTemplateDefinition(template, _context.Header);
-                            classTemplate.TemplateTypeParameters.Add(templateSpec);
+                            string templateName = $"{template}<{templateSpec}>";
+                            ClassDefinition classTemplate;
+                            if (!project.ClassDefinitions.TryGetValue(templateName, out classTemplate))
+                            {
+                                var classTemplateNew = new ClassTemplateDefinition(template, _context.Header);
+                                classTemplateNew.TemplateParameters.Add(templateSpec);
+
+                                var baseTemplate = project.ClassDefinitions.Where(c => c.Value.Name.Equals(template)).ToList();
+                                baseTemplate.ToString();
+
+                                project.ClassDefinitions[templateName] = classTemplateNew;
+                                classTemplate = classTemplateNew;
+                            }
+
                             _context.Class.BaseClass = classTemplate;
                         }
                     }
@@ -339,7 +340,7 @@ namespace BulletSharpGen
                     _context.MemberAccess = cursor.AccessSpecifier;
                     return Cursor.ChildVisitResult.Continue;
                 case CursorKind.CxxBaseSpecifier:
-                    string baseName = TypeRefDefinition.GetFullyQualifiedName(cursor.Type);
+                    string baseName = GetFullyQualifiedName(cursor);
                     ClassDefinition baseClass;
                     if (!project.ClassDefinitions.TryGetValue(baseName, out baseClass))
                     {
@@ -350,7 +351,7 @@ namespace BulletSharpGen
                     return Cursor.ChildVisitResult.Continue;
                 case CursorKind.TemplateTypeParameter:
                     var classTemplate = _context.Class as ClassTemplateDefinition;
-                    classTemplate.TemplateTypeParameters.Add(cursor.Spelling);
+                    classTemplate.TemplateParameters.Add(cursor.Spelling);
                     return Cursor.ChildVisitResult.Continue;
             }
 
@@ -373,125 +374,179 @@ namespace BulletSharpGen
                 }
             }
 
-            if ((cursor.Kind == CursorKind.ClassDecl || cursor.Kind == CursorKind.StructDecl ||
-                cursor.Kind == CursorKind.ClassTemplate || cursor.Kind == CursorKind.TypedefDecl ||
-                cursor.Kind == CursorKind.EnumDecl) && cursor.IsDefinition)
+            switch (cursor.Kind)
             {
-                ParseClassCursor(cursor);
+                case CursorKind.ClassDecl:
+                case CursorKind.StructDecl:
+                case CursorKind.ClassTemplate:
+                case CursorKind.EnumDecl:
+                    if (cursor.IsDefinition)
+                    {
+                        ParseClassCursor(cursor);
+                    }
+                    break;
+
+
+                case CursorKind.CxxMethod:
+                case CursorKind.Constructor:
+                    ParseMethodCursor(cursor);
+                    break;
+                case CursorKind.ConversionFunction:
+                case CursorKind.FunctionTemplate:
+                case CursorKind.Destructor:
+                    break;
+
+                case CursorKind.FieldDecl:
+                    _context.Field = new FieldDefinition(cursor.Spelling,
+                        new TypeRefDefinition(cursor.Type, cursor), _context.Class);
+                    _context.Field = null;
+                    break;
+
+                case CursorKind.TypedefDecl:
+                    ParseTypedefCursor(cursor);
+                    break;
+
+                case CursorKind.UnionDecl:
+                    return Cursor.ChildVisitResult.Recurse;
+
+                default:
+                    //Console.WriteLine(cursor.Spelling);
+                    break;
             }
-            else if (cursor.Kind == CursorKind.CxxMethod || cursor.Kind == CursorKind.Constructor)
+
+            return Cursor.ChildVisitResult.Continue;
+        }
+
+        private void ParseTypedefCursor(Cursor cursor)
+        {
+            // Does the typedef include a type declaration?
+            var underlying = cursor.TypedefDeclUnderlyingType.Canonical;
+            if (cursor.Children.Any(c => c.Equals(underlying.Declaration)))
             {
-                string methodName = cursor.Spelling;
-                if (excludedMethods.Contains(methodName))
+                ParseClassCursor(underlying.Declaration);
+            }
+        }
+
+        private void ParseMethodCursor(Cursor cursor)
+        {
+            string methodName = cursor.Spelling;
+            if (excludedMethods.Contains(methodName)) return;
+
+            var existingMethodsMatch = _context.Class.Methods.Where(
+                m => !m.IsParsed && methodName.Equals(m.Name) &&
+                     m.Parameters.Length == cursor.NumArguments);
+            int existingCount = existingMethodsMatch.Count();
+            if (existingCount == 1)
+            {
+                // TODO: check method parameter types if given
+                _context.Method = existingMethodsMatch.First();
+            }
+            else if (existingCount >= 2)
+            {
+                Console.WriteLine("Ambiguous method in project: " + methodName);
+            }
+
+            if (_context.Method == null)
+            {
+                _context.Method = new MethodDefinition(methodName, _context.Class, cursor.NumArguments);
+            }
+
+            _context.Method.ReturnType = new TypeRefDefinition(cursor.ResultType, cursor);
+            _context.Method.IsStatic = cursor.IsStaticCxxMethod;
+            _context.Method.IsVirtual = cursor.IsVirtualCxxMethod;
+            _context.Method.IsAbstract = cursor.IsPureVirtualCxxMethod;
+
+            if (cursor.Kind == CursorKind.Constructor)
+            {
+                _context.Method.IsConstructor = true;
+                if (cursor.AccessSpecifier != AccessSpecifier.Public)
                 {
-                    return Cursor.ChildVisitResult.Continue;
+                    _context.Method.IsExcluded = true;
+                }
+            }
+
+            // Check if the return type is a template
+            cursor.VisitChildren(MethodTemplateTypeVisitor);
+
+            // Parse arguments
+            for (uint i = 0; i < cursor.NumArguments; i++)
+            {
+                Cursor arg = cursor.GetArgument(i);
+
+                if (_context.Method.Parameters[i] == null)
+                {
+                    _context.Parameter = new ParameterDefinition(arg.Spelling, new TypeRefDefinition(arg.Type, arg));
+                    _context.Method.Parameters[i] = _context.Parameter;
+                }
+                else
+                {
+                    _context.Parameter = _context.Method.Parameters[i];
+                    _context.Parameter.Type = new TypeRefDefinition(arg.Type);
+                }
+                arg.VisitChildren(MethodTemplateTypeVisitor);
+
+                // Check for a default value (optional parameter)
+                var argTokens = _context.TranslationUnit.Tokenize(arg.Extent);
+                if (argTokens.Any(a => a.Spelling.Equals("=")))
+                {
+                    _context.Parameter.IsOptional = true;
                 }
 
-                var existingMethodsMatch = _context.Class.Methods.Where(
-                    m => !m.IsParsed && methodName.Equals(m.Name) &&
-                         m.Parameters.Length == cursor.NumArguments);
-                int existingCount = existingMethodsMatch.Count();
-                if (existingCount == 1)
+                // Get marshalling direction
+                if (_context.Parameter.MarshalDirection == MarshalDirection.Default)
                 {
-                    // TODO: check method parameter types if given
-                    _context.Method = existingMethodsMatch.First();
-                }
-                else if (existingCount >= 2)
-                {
-                    Console.WriteLine("Ambiguous method in project: " + methodName);
-                }
+                    _context.Parameter.MarshalDirection = MarshalDirection.In;
 
-                if (_context.Method == null)
-                {
-                    _context.Method = new MethodDefinition(methodName, _context.Class, cursor.NumArguments);
-                }
-
-                _context.Method.ReturnType = new TypeRefDefinition(cursor.ResultType);
-                _context.Method.IsStatic = cursor.IsStaticCxxMethod;
-                _context.Method.IsVirtual = cursor.IsVirtualCxxMethod;
-                _context.Method.IsAbstract = cursor.IsPureVirtualCxxMethod;
-
-                if (cursor.Kind == CursorKind.Constructor)
-                {
-                    _context.Method.IsConstructor = true;
-                    if (cursor.AccessSpecifier != AccessSpecifier.Public)
-                    {
-                        _context.Method.IsExcluded = true;
-                    }
-                }
-
-                // Check if the return type is a template
-                cursor.VisitChildren(MethodTemplateTypeVisitor);
-
-                // Parse arguments
-                for (uint i = 0; i < cursor.NumArguments; i++)
-                {
-                    Cursor arg = cursor.GetArgument(i);
-
-                    if (_context.Method.Parameters[i] == null)
-                    {
-                        _context.Parameter = new ParameterDefinition(arg.Spelling, new TypeRefDefinition(arg.Type));
-                        _context.Method.Parameters[i] = _context.Parameter;
-                    }
-                    else
-                    {
-                        _context.Parameter = _context.Method.Parameters[i];
-                        _context.Parameter.Type = new TypeRefDefinition(arg.Type);
-                    }
-                    arg.VisitChildren(MethodTemplateTypeVisitor);
-
-                    // Check for a default value (optional parameter)
-                    var argTokens = _context.TranslationUnit.Tokenize(arg.Extent);
-                    if (argTokens.Any(a => a.Spelling.Equals("=")))
-                    {
-                        _context.Parameter.IsOptional = true;
-                    }
-
-                    // Get marshalling direction
                     switch (_context.Parameter.Type.Kind)
                     {
                         case TypeKind.Pointer:
                         case TypeKind.LValueReference:
-                            if (_context.Parameter.MarshalDirection != MarshalDirection.Out &&
-                            !argTokens.Any(a => a.Spelling.Equals("const")))
+                            if (!argTokens.Any(a => a.Spelling.Equals("const")))
                             {
                                 _context.Parameter.MarshalDirection = MarshalDirection.InOut;
                             }
                             break;
                     }
-
-                    _context.Parameter = null;
                 }
 
-                // Discard any private/protected virtual method unless it
-                // implements a public abstract method
-                if (_context.MemberAccess != AccessSpecifier.Public && !_context.Method.IsConstructor)
+                _context.Parameter = null;
+            }
+
+            // Discard any private/protected virtual method unless it
+            // implements a public abstract method
+            if (_context.MemberAccess != AccessSpecifier.Public && !_context.Method.IsConstructor)
+            {
+                if (_context.Method.Parent.BaseClass == null ||
+                    !_context.Method.Parent.BaseClass.AbstractMethods.Contains(_context.Method))
                 {
-                    if (_context.Method.Parent.BaseClass == null ||
-                        !_context.Method.Parent.BaseClass.AbstractMethods.Contains(_context.Method))
-                    {
-                        _context.Method.Parent.Methods.Remove(_context.Method);
-                    }
+                    _context.Method.Parent.Methods.Remove(_context.Method);
                 }
+            }
 
-                _context.Method.IsParsed = true;
-                _context.Method = null;
-            }
-            else if (cursor.Kind == CursorKind.FieldDecl)
+            _context.Method.IsParsed = true;
+            _context.Method = null;
+        }
+
+        public static string GetFullyQualifiedName(Cursor cursor)
+        {
+            string name;
+            if (cursor.Type.TypeKind != ClangSharp.Type.Kind.Invalid)
             {
-                _context.Field = new FieldDefinition(cursor.Spelling,
-                    new TypeRefDefinition(cursor.Type, cursor), _context.Class);
-                _context.Field = null;
-            }
-            else if (cursor.Kind == CursorKind.UnionDecl)
-            {
-                return Cursor.ChildVisitResult.Recurse;
+                return TypeRefDefinition.GetFullyQualifiedName(cursor.Type);
             }
             else
             {
-                //Console.WriteLine(cursor.Spelling);
+                name = cursor.DisplayName;
+                while (cursor.SemanticParent.Kind == CursorKind.ClassDecl ||
+                    cursor.SemanticParent.Kind == CursorKind.StructDecl ||
+                    cursor.SemanticParent.Kind == CursorKind.ClassTemplate ||
+                    cursor.SemanticParent.Kind == CursorKind.Namespace)
+                {
+                    name = cursor.SemanticParent.Spelling + "::" + name;
+                    cursor = cursor.SemanticParent;
+                }
             }
-            return Cursor.ChildVisitResult.Continue;
+            return name;
         }
 
         private void ReadHeaders()

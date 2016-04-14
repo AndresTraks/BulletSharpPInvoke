@@ -73,21 +73,26 @@ namespace BulletSharp.SoftBody
             return CreateFromConvexHull(worldInfo, vtx);
 		}
 
-        public static SoftBody CreateFromConvexHull(SoftBodyWorldInfo worldInfo, Vector3[] vertices, int nVertices, bool randomizeConstraints = true)
+		public static SoftBody CreateFromConvexHull(SoftBodyWorldInfo worldInfo,
+            Vector3[] vertices, int nVertices, bool randomizeConstraints = true)
 		{
-            SoftBody body = new SoftBody(btSoftBodyHelpers_CreateFromConvexHull2(worldInfo._native, vertices, nVertices, randomizeConstraints));
+            SoftBody body = new SoftBody(btSoftBodyHelpers_CreateFromConvexHull2(
+                worldInfo._native, vertices, nVertices, randomizeConstraints));
             body.WorldInfo = worldInfo;
             return body;
-        }
+		}
 
-        public static SoftBody CreateFromConvexHull(SoftBodyWorldInfo worldInfo, Vector3[] vertices, bool randomizeConstraints = true)
-        {
-            SoftBody body = new SoftBody(btSoftBodyHelpers_CreateFromConvexHull2(worldInfo._native, vertices, vertices.Length, randomizeConstraints));
+		public static SoftBody CreateFromConvexHull(SoftBodyWorldInfo worldInfo,
+            Vector3[] vertices, bool randomizeConstraints = true)
+		{
+            SoftBody body = new SoftBody(btSoftBodyHelpers_CreateFromConvexHull2(
+                worldInfo._native, vertices, vertices.Length, randomizeConstraints));
             body.WorldInfo = worldInfo;
             return body;
-        }
+		}
 
-        public static SoftBody CreateFromTetGenData(SoftBodyWorldInfo worldInfo, string ele, string face, string node, bool faceLinks, bool tetraLinks, bool facesFromTetras)
+		public static SoftBody CreateFromTetGenData(SoftBodyWorldInfo worldInfo,
+            string ele, string face, string node, bool faceLinks, bool tetraLinks, bool facesFromTetras)
 		{
             CultureInfo culture = CultureInfo.InvariantCulture;
             char[] separator = new[] { ' ' };
@@ -165,7 +170,8 @@ namespace BulletSharp.SoftBody
             return CreateFromTetGenData(worldInfo, ele, face, File.ReadAllText(nodeFilename), faceLinks, tetraLinks, facesFromTetras);
         }
 
-		public static SoftBody CreateFromTriMesh(SoftBodyWorldInfo worldInfo, float[] vertices, int[] triangles, bool randomizeConstraints = true)
+        public static SoftBody CreateFromTriMesh(SoftBodyWorldInfo worldInfo, float[] vertices,
+            int[] triangles, bool randomizeConstraints = true)
 		{
             int numVertices = vertices.Length / 3;
             Vector3[] vtx = new Vector3[numVertices];
@@ -174,10 +180,11 @@ namespace BulletSharp.SoftBody
                 vtx[j] = new Vector3(vertices[i], vertices[i + 1], vertices[i + 2]);
             }
             return CreateFromTriMesh(worldInfo, vtx, triangles, randomizeConstraints);
-        }
+		}
 
-        public static SoftBody CreateFromTriMesh(SoftBodyWorldInfo worldInfo, Vector3[] vertices, int[] triangles, bool randomizeConstraints = true)
-        {
+		public static SoftBody CreateFromTriMesh(SoftBodyWorldInfo worldInfo, Vector3[] vertices,
+            int[] triangles, bool randomizeConstraints = true)
+		{
             int numTriangleIndices = triangles.Length;
             int numTriangles = numTriangleIndices / 3;
 
@@ -215,9 +222,11 @@ namespace BulletSharp.SoftBody
                 psb.RandomizeConstraints();
             }
             return psb;
-        }
+		}
 
-		public static SoftBody CreatePatch(SoftBodyWorldInfo worldInfo, Vector3 corner00, Vector3 corner10, Vector3 corner01, Vector3 corner11, int resx, int resy, int fixeds, bool gendiags)
+		public static SoftBody CreatePatch(SoftBodyWorldInfo worldInfo, Vector3 corner00,
+			Vector3 corner10, Vector3 corner01, Vector3 corner11, int resx, int resy,
+			int fixeds, bool gendiags)
 		{
             // Create nodes
             if ((resx < 2) || (resy < 2))
@@ -298,21 +307,29 @@ namespace BulletSharp.SoftBody
             return psb;
 		}
 
-		public static SoftBody CreatePatchUV(SoftBodyWorldInfo worldInfo, Vector3 corner00, Vector3 corner10, Vector3 corner01, Vector3 corner11, int resx, int resy, int fixeds, bool gendiags)
+		public static SoftBody CreatePatchUV(SoftBodyWorldInfo worldInfo, Vector3 corner00,
+			Vector3 corner10, Vector3 corner01, Vector3 corner11, int resx, int resy,
+			int fixeds, bool gendiags)
 		{
-			SoftBody body = new SoftBody(btSoftBodyHelpers_CreatePatchUV(worldInfo._native, ref corner00, ref corner10, ref corner01, ref corner11, resx, resy, fixeds, gendiags));
+            SoftBody body = new SoftBody(btSoftBodyHelpers_CreatePatchUV(worldInfo._native,
+                ref corner00, ref corner10, ref corner01, ref corner11, resx, resy, fixeds, gendiags));
             body.WorldInfo = worldInfo;
             return body;
 		}
 
-        public static SoftBody CreatePatchUV(SoftBodyWorldInfo worldInfo, Vector3 corner00, Vector3 corner10, Vector3 corner01, Vector3 corner11, int resx, int resy, int fixeds, bool gendiags, float[] texCoords)
+		public static SoftBody CreatePatchUV(SoftBodyWorldInfo worldInfo, Vector3 corner00,
+			Vector3 corner10, Vector3 corner01, Vector3 corner11, int resx, int resy,
+            int fixeds, bool gendiags, float[] texCoords)
 		{
-			SoftBody body = new SoftBody(btSoftBodyHelpers_CreatePatchUV2(worldInfo._native, ref corner00, ref corner10, ref corner01, ref corner11, resx, resy, fixeds, gendiags, texCoords));
+            SoftBody body = new SoftBody(btSoftBodyHelpers_CreatePatchUV2(worldInfo._native,
+                ref corner00, ref corner10, ref corner01, ref corner11, resx, resy,
+                fixeds, gendiags, texCoords));
             body.WorldInfo = worldInfo;
             return body;
 		}
 
-		public static SoftBody CreateRope(SoftBodyWorldInfo worldInfo, Vector3 from, Vector3 to, int res, int fixeds)
+		public static SoftBody CreateRope(SoftBodyWorldInfo worldInfo, Vector3 from,
+			Vector3 to, int res, int fixeds)
 		{
             // Create nodes
             int r = res + 2;
@@ -357,12 +374,15 @@ namespace BulletSharp.SoftBody
 
 		public static void DrawClusterTree(SoftBody psb, IDebugDraw iDraw, int minDepth)
 		{
-			btSoftBodyHelpers_DrawClusterTree2(psb._native, DebugDraw.GetUnmanaged(iDraw), minDepth);
+			btSoftBodyHelpers_DrawClusterTree2(psb._native, DebugDraw.GetUnmanaged(iDraw),
+				minDepth);
 		}
 
-		public static void DrawClusterTree(SoftBody psb, IDebugDraw iDraw, int minDepth, int maxDepth)
+		public static void DrawClusterTree(SoftBody psb, IDebugDraw iDraw, int minDepth,
+			int maxDepth)
 		{
-			btSoftBodyHelpers_DrawClusterTree3(psb._native, DebugDraw.GetUnmanaged(iDraw), minDepth, maxDepth);
+			btSoftBodyHelpers_DrawClusterTree3(psb._native, DebugDraw.GetUnmanaged(iDraw),
+				minDepth, maxDepth);
 		}
 
 		public static void DrawFaceTree(SoftBody psb, IDebugDraw iDraw)
@@ -372,12 +392,15 @@ namespace BulletSharp.SoftBody
 
 		public static void DrawFaceTree(SoftBody psb, IDebugDraw iDraw, int minDepth)
 		{
-			btSoftBodyHelpers_DrawFaceTree2(psb._native, DebugDraw.GetUnmanaged(iDraw), minDepth);
+			btSoftBodyHelpers_DrawFaceTree2(psb._native, DebugDraw.GetUnmanaged(iDraw),
+				minDepth);
 		}
 
-		public static void DrawFaceTree(SoftBody psb, IDebugDraw iDraw, int minDepth, int maxDepth)
+		public static void DrawFaceTree(SoftBody psb, IDebugDraw iDraw, int minDepth,
+			int maxDepth)
 		{
-			btSoftBodyHelpers_DrawFaceTree3(psb._native, DebugDraw.GetUnmanaged(iDraw), minDepth, maxDepth);
+			btSoftBodyHelpers_DrawFaceTree3(psb._native, DebugDraw.GetUnmanaged(iDraw),
+				minDepth, maxDepth);
 		}
 
 		public static void DrawFrame(SoftBody psb, IDebugDraw iDraw)
@@ -385,9 +408,11 @@ namespace BulletSharp.SoftBody
 			btSoftBodyHelpers_DrawFrame(psb._native, DebugDraw.GetUnmanaged(iDraw));
 		}
 
-		public static void DrawInfos(SoftBody psb, IDebugDraw iDraw, bool masses, bool areas, bool stress)
+		public static void DrawInfos(SoftBody psb, IDebugDraw iDraw, bool masses,
+			bool areas, bool stress)
 		{
-			btSoftBodyHelpers_DrawInfos(psb._native, DebugDraw.GetUnmanaged(iDraw), masses, areas, stress);
+			btSoftBodyHelpers_DrawInfos(psb._native, DebugDraw.GetUnmanaged(iDraw),
+				masses, areas, stress);
 		}
 
 		public static void DrawNodeTree(SoftBody psb, IDebugDraw iDraw)
@@ -397,12 +422,15 @@ namespace BulletSharp.SoftBody
 
 		public static void DrawNodeTree(SoftBody psb, IDebugDraw iDraw, int minDepth)
 		{
-			btSoftBodyHelpers_DrawNodeTree2(psb._native, DebugDraw.GetUnmanaged(iDraw), minDepth);
+			btSoftBodyHelpers_DrawNodeTree2(psb._native, DebugDraw.GetUnmanaged(iDraw),
+				minDepth);
 		}
 
-		public static void DrawNodeTree(SoftBody psb, IDebugDraw iDraw, int minDepth, int maxDepth)
+		public static void DrawNodeTree(SoftBody psb, IDebugDraw iDraw, int minDepth,
+			int maxDepth)
 		{
-			btSoftBodyHelpers_DrawNodeTree3(psb._native, DebugDraw.GetUnmanaged(iDraw), minDepth, maxDepth);
+			btSoftBodyHelpers_DrawNodeTree3(psb._native, DebugDraw.GetUnmanaged(iDraw),
+				minDepth, maxDepth);
 		}
 
         private class LinkDep

@@ -17,12 +17,12 @@ extern "C"
 	EXPORT void btAlignedObjectArray_btIndexedMesh_resizeNoInitialize(btAlignedObjectArray_btIndexedMesh* obj, int newSize);
 	EXPORT int btAlignedObjectArray_btIndexedMesh_size(btAlignedObjectArray_btIndexedMesh* obj);
 
-	EXPORT btAlignedObjectArray_btPersistendManifold* btAlignedObjectArray_btPersistendManifold_new();
-	EXPORT btPersistentManifold* btAlignedObjectArray_btPersistendManifold_at(btAlignedObjectArray_btPersistendManifold* obj, int n);
-	EXPORT void btAlignedObjectArray_btPersistendManifold_push_back(btAlignedObjectArray_btPersistendManifold* obj, btPersistentManifold* val);
-	EXPORT void btAlignedObjectArray_btPersistendManifold_resizeNoInitialize(btAlignedObjectArray_btPersistendManifold* obj, int newSize);
-	EXPORT int btAlignedObjectArray_btPersistendManifold_size(btAlignedObjectArray_btPersistendManifold* obj);
-	EXPORT void btAlignedObjectArray_btPersistendManifold_delete(btAlignedObjectArray_btPersistendManifold* obj);
+	EXPORT btAlignedObjectArray_btPersistentManifold* btAlignedObjectArray_btPersistentManifold_new();
+	EXPORT btPersistentManifold* btAlignedObjectArray_btPersistentManifold_at(btAlignedObjectArray_btPersistentManifold* obj, int n);
+	EXPORT void btAlignedObjectArray_btPersistentManifold_push_back(btAlignedObjectArray_btPersistentManifold* obj, btPersistentManifold* val);
+	EXPORT void btAlignedObjectArray_btPersistentManifold_resizeNoInitialize(btAlignedObjectArray_btPersistentManifold* obj, int newSize);
+	EXPORT int btAlignedObjectArray_btPersistentManifold_size(btAlignedObjectArray_btPersistentManifold* obj);
+	EXPORT void btAlignedObjectArray_btPersistentManifold_delete(btAlignedObjectArray_btPersistentManifold* obj);
 
 	EXPORT btSoftBody* btAlignedObjectArray_btSoftBodyPtr_at(btAlignedObjectArray_btSoftBodyPtr* obj, int n);
 	EXPORT void btAlignedObjectArray_btSoftBodyPtr_push_back(btAlignedObjectArray_btSoftBodyPtr* obj, btSoftBody* val);

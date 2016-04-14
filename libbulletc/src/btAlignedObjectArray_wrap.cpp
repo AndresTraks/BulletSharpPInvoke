@@ -90,32 +90,32 @@ int btAlignedObjectArray_btIndexedMesh_size(btAlignedObjectArray_btIndexedMesh* 
 }
 
 
-EXPORT btAlignedObjectArray_btPersistendManifold* btAlignedObjectArray_btPersistendManifold_new()
+EXPORT btAlignedObjectArray_btPersistentManifold* btAlignedObjectArray_btPersistentManifold_new()
 {
-	return new btAlignedObjectArray_btPersistendManifold();
+	return new btAlignedObjectArray_btPersistentManifold();
 }
 
-btPersistentManifold* btAlignedObjectArray_btPersistendManifold_at(btAlignedObjectArray_btPersistendManifold* obj, int n)
+btPersistentManifold* btAlignedObjectArray_btPersistentManifold_at(btAlignedObjectArray_btPersistentManifold* obj, int n)
 {
 	return obj->at(n);
 }
 
-void btAlignedObjectArray_btPersistendManifold_push_back(btAlignedObjectArray_btPersistendManifold* obj, btPersistentManifold* val)
+void btAlignedObjectArray_btPersistentManifold_push_back(btAlignedObjectArray_btPersistentManifold* obj, btPersistentManifold* val)
 {
 	obj->push_back(val);
 }
 
-void btAlignedObjectArray_btPersistendManifold_resizeNoInitialize(btAlignedObjectArray_btPersistendManifold* obj, int newSize)
+void btAlignedObjectArray_btPersistentManifold_resizeNoInitialize(btAlignedObjectArray_btPersistentManifold* obj, int newSize)
 {
 	return obj->resizeNoInitialize(newSize);
 }
 
-int btAlignedObjectArray_btPersistendManifold_size(btAlignedObjectArray_btPersistendManifold* obj)
+int btAlignedObjectArray_btPersistentManifold_size(btAlignedObjectArray_btPersistentManifold* obj)
 {
 	return obj->size();
 }
 
-void btAlignedObjectArray_btPersistendManifold_delete(btAlignedObjectArray_btPersistendManifold* obj)
+void btAlignedObjectArray_btPersistentManifold_delete(btAlignedObjectArray_btPersistentManifold* obj)
 {
 	delete obj;
 }

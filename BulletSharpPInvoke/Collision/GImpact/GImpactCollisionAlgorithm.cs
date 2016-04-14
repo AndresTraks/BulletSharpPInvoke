@@ -27,29 +27,39 @@ namespace BulletSharp
 		{
 		}
 
-		public GImpactCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
-			: base(btGImpactCollisionAlgorithm_new(ci._native, body0Wrap._native, body1Wrap._native))
+		public GImpactCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci, CollisionObjectWrapper body0Wrap,
+			CollisionObjectWrapper body1Wrap)
+			: base(btGImpactCollisionAlgorithm_new(ci._native, body0Wrap._native,
+				body1Wrap._native))
 		{
 		}
 
-		public void GImpactVsCompoundShape(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, GImpactShapeInterface shape0, CompoundShape shape1, bool swapped)
+		public void GImpactVsCompoundShape(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap,
+			GImpactShapeInterface shape0, CompoundShape shape1, bool swapped)
 		{
-			btGImpactCollisionAlgorithm_gimpact_vs_compoundshape(_native, body0Wrap._native, body1Wrap._native, shape0._native, shape1._native, swapped);
+			btGImpactCollisionAlgorithm_gimpact_vs_compoundshape(_native, body0Wrap._native,
+				body1Wrap._native, shape0._native, shape1._native, swapped);
 		}
 
-		public void GImpactVsConcave(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, GImpactShapeInterface shape0, ConcaveShape shape1, bool swapped)
+		public void GImpactVsConcave(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap,
+			GImpactShapeInterface shape0, ConcaveShape shape1, bool swapped)
 		{
-			btGImpactCollisionAlgorithm_gimpact_vs_concave(_native, body0Wrap._native, body1Wrap._native, shape0._native, shape1._native, swapped);
+			btGImpactCollisionAlgorithm_gimpact_vs_concave(_native, body0Wrap._native,
+				body1Wrap._native, shape0._native, shape1._native, swapped);
 		}
 
-		public void GImpactVsGImpact(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, GImpactShapeInterface shape0, GImpactShapeInterface shape1)
+		public void GImpactVsGImpact(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap,
+			GImpactShapeInterface shape0, GImpactShapeInterface shape1)
 		{
-			btGImpactCollisionAlgorithm_gimpact_vs_gimpact(_native, body0Wrap._native, body1Wrap._native, shape0._native, shape1._native);
+			btGImpactCollisionAlgorithm_gimpact_vs_gimpact(_native, body0Wrap._native,
+				body1Wrap._native, shape0._native, shape1._native);
 		}
 
-		public void GImpactVsShape(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, GImpactShapeInterface shape0, CollisionShape shape1, bool swapped)
+		public void GImpactVsShape(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap,
+			GImpactShapeInterface shape0, CollisionShape shape1, bool swapped)
 		{
-			btGImpactCollisionAlgorithm_gimpact_vs_shape(_native, body0Wrap._native, body1Wrap._native, shape0._native, shape1._native, swapped);
+			btGImpactCollisionAlgorithm_gimpact_vs_shape(_native, body0Wrap._native,
+				body1Wrap._native, shape0._native, shape1._native, swapped);
 		}
 
 		public ManifoldResult InternalGetResultOut()

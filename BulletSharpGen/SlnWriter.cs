@@ -22,7 +22,7 @@ namespace BulletSharpGen
         
         StreamWriter solutionWriter, projectWriter;
         TargetVS targetVS;
-        FilterType filterType = FilterType.Structured;
+        //FilterType filterType = FilterType.Structured;
 
         public string IncludeDirectories { get; set; }
         public string LibraryDirectoriesDebug { get; set; }

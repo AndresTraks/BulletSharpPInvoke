@@ -131,13 +131,13 @@ namespace BulletSharp
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern float btConvexCast_CastResult_getFraction(IntPtr obj);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern void btConvexCast_CastResult_getHitPoint(IntPtr obj, [Out] out Vector3 value);
+			static extern void btConvexCast_CastResult_getHitPoint(IntPtr obj, out Vector3 value);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern void btConvexCast_CastResult_getHitTransformA(IntPtr obj, [Out] out Matrix value);
+			static extern void btConvexCast_CastResult_getHitTransformA(IntPtr obj, out Matrix value);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern void btConvexCast_CastResult_getHitTransformB(IntPtr obj, [Out] out Matrix value);
+			static extern void btConvexCast_CastResult_getHitTransformB(IntPtr obj, out Matrix value);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern void btConvexCast_CastResult_getNormal(IntPtr obj, [Out] out Vector3 value);
+			static extern void btConvexCast_CastResult_getNormal(IntPtr obj, out Vector3 value);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern void btConvexCast_CastResult_reportFailure(IntPtr obj, int errNo, int numIterations);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

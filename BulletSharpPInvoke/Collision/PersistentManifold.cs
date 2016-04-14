@@ -92,9 +92,11 @@ namespace BulletSharp
             _native = btPersistentManifold_new();
 		}
 
-		public PersistentManifold(CollisionObject body0, CollisionObject body1, int __unnamed2, float contactBreakingThreshold, float contactProcessingThreshold)
+		public PersistentManifold(CollisionObject body0, CollisionObject body1, int __unnamed2,
+			float contactBreakingThreshold, float contactProcessingThreshold)
 		{
-            _native = btPersistentManifold_new2(body0._native, body1._native, __unnamed2, contactBreakingThreshold, contactProcessingThreshold);
+            _native = btPersistentManifold_new2(body0._native, body1._native, __unnamed2,
+                contactBreakingThreshold, contactProcessingThreshold);
 		}
 
 		public int AddManifoldPoint(ManifoldPoint newPoint)
@@ -104,7 +106,8 @@ namespace BulletSharp
 
 		public int AddManifoldPoint(ManifoldPoint newPoint, bool isPredictive)
 		{
-			return btPersistentManifold_addManifoldPoint2(_native, newPoint._native, isPredictive);
+			return btPersistentManifold_addManifoldPoint2(_native, newPoint._native,
+				isPredictive);
 		}
 
 		public void ClearManifold()

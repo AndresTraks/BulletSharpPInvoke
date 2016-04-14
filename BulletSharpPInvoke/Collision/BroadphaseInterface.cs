@@ -106,7 +106,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btBroadphaseRayCallback_getLambda_max(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btBroadphaseRayCallback_getRayDirectionInverse(IntPtr obj, [Out] out Vector3 value);
+		static extern void btBroadphaseRayCallback_getRayDirectionInverse(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btBroadphaseRayCallback_getSigns(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -143,7 +143,9 @@ namespace BulletSharp
 			btBroadphaseInterface_calculateOverlappingPairs(_native, dispatcher._native);
 		}
 
-        public abstract BroadphaseProxy CreateProxy(ref Vector3 aabbMin, ref Vector3 aabbMax, int shapeType, IntPtr userPtr, short collisionFilterGroup, short collisionFilterMask, Dispatcher dispatcher, IntPtr multiSapProxy);
+        public abstract BroadphaseProxy CreateProxy(ref Vector3 aabbMin, ref Vector3 aabbMax,
+            int shapeType, IntPtr userPtr, short collisionFilterGroup, short collisionFilterMask,
+            Dispatcher dispatcher, IntPtr multiSapProxy);
 
 		public void DestroyProxy(BroadphaseProxy proxy, Dispatcher dispatcher)
 		{
@@ -247,9 +249,9 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btBroadphaseInterface_destroyProxy(IntPtr obj, IntPtr proxy, IntPtr dispatcher);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btBroadphaseInterface_getAabb(IntPtr obj, IntPtr proxy, [Out] out Vector3 aabbMin, [Out] out Vector3 aabbMax);
+		static extern void btBroadphaseInterface_getAabb(IntPtr obj, IntPtr proxy, out Vector3 aabbMin, out Vector3 aabbMax);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btBroadphaseInterface_getBroadphaseAabb(IntPtr obj, [Out] out Vector3 aabbMin, [Out] out Vector3 aabbMax);
+		static extern void btBroadphaseInterface_getBroadphaseAabb(IntPtr obj, out Vector3 aabbMin, out Vector3 aabbMax);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		internal static extern IntPtr btBroadphaseInterface_getOverlappingPairCache(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

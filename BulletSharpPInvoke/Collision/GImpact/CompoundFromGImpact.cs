@@ -54,7 +54,7 @@ namespace BulletSharp
 				
 			MyCallback cb = new MyCallback(ref rayFrom, ref rayTo, partId, triangleIndex);
 				
-			_meshShape.ProcessAllTrianglesRay(cb, ref rayFrom, ref rayTo);
+			_meshShape.ProcessAllTrianglesRayRef(cb, ref rayFrom, ref rayTo);
 			if (cb.HitFraction < 1)
 			{
                 rayTo = Vector3.Lerp(cb.From, cb.To, cb.HitFraction);

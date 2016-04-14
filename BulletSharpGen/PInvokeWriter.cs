@@ -106,8 +106,7 @@ namespace BulletSharpGen
             To = dllImport;
             WriteLine(level + 1,
                 "[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]");
-            if (method.ReturnType != null && method.ReturnType.IsBasic &&
-                method.ReturnType.Name.Equals("bool"))
+            if (method.ReturnType != null && method.ReturnType.Kind == TypeKind.Bool)
             {
                 WriteLine(level + 1, "[return: MarshalAs(UnmanagedType.I1)]");
             }
@@ -132,7 +131,7 @@ namespace BulletSharpGen
                 }
                 else
                 {
-                    Write($"{GetTypeNameC(returnType)} ", WriteTo.Header | WriteTo.Source);
+                    Write($"{GetTypeNameC(method.ReturnType)} ", WriteTo.Header | WriteTo.Source);
 
                     if (returnType.IsBasic)
                     {
@@ -140,7 +139,15 @@ namespace BulletSharpGen
                     }
                     else if (returnType.Referenced != null)
                     {
-                        Write("IntPtr", dllImport);
+                        if (returnType.Kind == TypeKind.LValueReference && 
+                            returnType.Referenced.IsConst && returnType.Referenced.Canonical.IsBasic)
+                        {
+                            Write(GetTypeNameCS(returnType.Referenced.Canonical), dllImport);
+                        }
+                        else
+                        {
+                            Write("IntPtr", dllImport);
+                        }
                     }
                     else
                     {
@@ -167,8 +174,22 @@ namespace BulletSharpGen
 
             var parameters = method.Parameters.Take(numParameters);
             var parametersCs = parameters.Select(p => {
-                string typeName = $"{GetTypeNameCS(p.Type)} {p.ManagedName}";
-                if (p.MarshalDirection == MarshalDirection.Out) typeName = "out " + typeName;
+                var type = p.Type;
+                string typeName = $"{GetTypeNameCS(type)} {p.ManagedName}";
+                if (p.MarshalDirection == MarshalDirection.Out) return "out " + typeName;
+                if (p.MarshalDirection == MarshalDirection.InOut)
+                {
+                    type = type.Canonical;
+                    if (type.Kind == TypeKind.LValueReference)
+                    {
+                        var referencedType = type.Referenced.Canonical;
+                        if (referencedType.IsBasic ||
+                            (referencedType.Target != null && referencedType.Target.MarshalAsStruct))
+                        {
+                            return "ref " + typeName;
+                        }
+                    }
+                }
                 return typeName;
                 });
             WriteLine($"{ListToLines(parametersCs, WriteTo.CS, level + 1)})", cs);
@@ -278,7 +299,7 @@ namespace BulletSharpGen
                         if (needTypeMarshalEpilogue)
                         {
                             // Save the return value and return it after the epilogues
-                            Write($"{BulletParser.GetTypeRefName(returnType)} ret = ");
+                            Write($"{GetTypeNameCS(returnType)} ret = ");
                         }
                         else
                         {
@@ -651,14 +672,14 @@ namespace BulletSharpGen
             WriteLine(level, "{");
             for (int i = 0; i < @enum.EnumConstants.Count; i++)
             {
-                WriteTabs(level + 1);
-                if (@enum.EnumConstantValues[i].Equals(""))
+                var constant = @enum.EnumConstants[i];
+                if (constant.Value.Equals(""))
                 {
-                    Write(@enum.EnumConstants[i]);
+                    Write(level + 1, constant.Constant);
                 }
                 else
                 {
-                    Write($"{@enum.EnumConstants[i]} = {@enum.EnumConstantValues[i]}");
+                    Write(level + 1, $"{constant.Constant} = {constant.Value}");
                 }
                 if (i < @enum.EnumConstants.Count - 1)
                 {
@@ -1005,14 +1026,7 @@ namespace BulletSharpGen
         {
             // Entirely skip headers that have no classes
             // TODO: parse C++ methods outside of classes
-            if (header.AllClasses.All(@class =>
-            {
-                if (@class.IsExcluded || @class.IsTypedef) return true;
-                return false;
-            }))
-            {
-                return;
-            }
+            if (header.AllClasses.All(@class => @class.IsExcluded)) return;
 
             // Some headers only need a C# wrapper class, skip C++ part
             bool hasCppWrapper = header.AllClasses.Any(@class =>
@@ -1256,7 +1270,7 @@ namespace BulletSharpGen
             ClassTemplateDefinition template = @class as ClassTemplateDefinition;
             if (template != null)
             {
-                className = @class.Name + string.Join("_", template.TemplateTypeParameters);
+                className = @class.Name + string.Join("_", template.TemplateParameters);
             }
             else
             {
@@ -1340,19 +1354,17 @@ namespace BulletSharpGen
 
             if (type.IsBasic)
             {
-                switch (type.Name)
+                switch (type.Kind)
                 {
-                    case "unsigned short":
+                    case TypeKind.UShort:
                         return "ushort";
-                    case "unsigned int":
+                    case TypeKind.UInt:
                         return "uint";
-                    case "unsigned long":
+                    case TypeKind.ULong:
                         return "ulong";
                 }
                 return type.ManagedName;
             }
-
-            if (type.HasTemplateTypeParameter) return type.ManagedName;
 
             if (type.Kind == TypeKind.Pointer && type.Referenced.Kind == TypeKind.Void)
             {
@@ -1428,12 +1440,12 @@ namespace BulletSharpGen
             {
                 switch (param.MarshalDirection)
                 {
-                    case MarshalDirection.In:
-                        return $"[In] ref {GetTypeNameCS(type.Referenced.Canonical)}";
-                    case MarshalDirection.InOut:
-                        return $"ref {GetTypeNameCS(type.Referenced.Canonical)}";
                     case MarshalDirection.Out:
                         return $"out {GetTypeNameCS(type.Referenced.Canonical)}";
+                    case MarshalDirection.InOut:
+                        return $"ref {GetTypeNameCS(type.Referenced.Canonical)}";
+                    case MarshalDirection.In:
+                        return GetTypeNameCS(type.Referenced.Canonical);
                 }
             }
 

@@ -474,8 +474,8 @@ extern "C"
 	EXPORT void btSoftBody_addAeroForceToNode(btSoftBody* obj, const btVector3* windVelocity, int nodeIndex);
 	EXPORT void btSoftBody_addForce(btSoftBody* obj, const btVector3* force);
 	EXPORT void btSoftBody_addForce2(btSoftBody* obj, const btVector3* force, int node);
-	EXPORT void btSoftBody_addVelocity(btSoftBody* obj, const btVector3* velocity, int node);
-	EXPORT void btSoftBody_addVelocity2(btSoftBody* obj, const btVector3* velocity);
+	EXPORT void btSoftBody_addVelocity(btSoftBody* obj, const btVector3* velocity);
+	EXPORT void btSoftBody_addVelocity2(btSoftBody* obj, const btVector3* velocity, int node);
 	EXPORT void btSoftBody_appendAnchor(btSoftBody* obj, int node, btRigidBody* body, const btVector3* localPivot);
 	EXPORT void btSoftBody_appendAnchor2(btSoftBody* obj, int node, btRigidBody* body, const btVector3* localPivot, bool disableCollisionBetweenLinkedBodies);
 	EXPORT void btSoftBody_appendAnchor3(btSoftBody* obj, int node, btRigidBody* body, const btVector3* localPivot, bool disableCollisionBetweenLinkedBodies, btScalar influence);

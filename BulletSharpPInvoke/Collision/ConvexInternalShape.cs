@@ -69,9 +69,9 @@ namespace BulletSharp
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexInternalShape_getImplicitShapeDimensions(IntPtr obj, [Out] out Vector3 dimensions);
+		static extern void btConvexInternalShape_getImplicitShapeDimensions(IntPtr obj, out Vector3 dimensions);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexInternalShape_getLocalScalingNV(IntPtr obj, [Out] out Vector3 value);
+		static extern void btConvexInternalShape_getLocalScalingNV(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btConvexInternalShape_getMarginNV(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

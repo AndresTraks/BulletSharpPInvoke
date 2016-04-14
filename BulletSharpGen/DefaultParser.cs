@@ -147,11 +147,21 @@ namespace BulletSharpGen
             {
                 int prefixLength = @enum.GetCommonPrefix().Length;
                 @enum.GetCommonSuffix();
-                for (int i = 0; i < @enum.EnumConstants.Count; i++)
+                foreach (var constant in @enum.EnumConstants)
                 {
-                    string enumConstant = @enum.EnumConstants[i];
-                    enumConstant = enumConstant.Substring(prefixLength);
-                    @enum.EnumConstants[i] = ToCamelCase(enumConstant, true);
+                    string newConstant = constant.Constant.Substring(prefixLength);
+                    newConstant = ToCamelCase(newConstant, true);
+
+                    // Replace any values referring to this constant
+                    foreach (var value in @enum.EnumConstants)
+                    {
+                        if (value.Value.Equals(constant.Constant))
+                        {
+                            value.Value = newConstant;
+                        }
+                    }
+
+                    constant.Constant = newConstant;
                 }
 
                 if (@enum.Name.EndsWith("Flags"))
@@ -161,10 +171,10 @@ namespace BulletSharpGen
                 else
                 {
                     // If all values are powers of 2, then it is considered a Flags enum.
-                    @enum.IsFlags = @enum.EnumConstantValues.All(value =>
+                    @enum.IsFlags = @enum.EnumConstants.All(constant =>
                     {
                         int x;
-                        if (int.TryParse(value, out x))
+                        if (int.TryParse(constant.Value, out x))
                         {
                             return (x != 0) && ((x & (~x + 1)) == x);
                         }
@@ -172,12 +182,12 @@ namespace BulletSharpGen
                     });
                 }
 
+                // If none of the values are 0, insert a None constant
                 if (@enum.IsFlags)
                 {
-                    if (!@enum.EnumConstantValues.Any(value => value.Equals("0")))
+                    if (!@enum.EnumConstants.Any(c => c.Value.Equals("0")))
                     {
-                        @enum.EnumConstants.Insert(0, "None");
-                        @enum.EnumConstantValues.Insert(0, "0");
+                        @enum.EnumConstants.Insert(0, new EnumConstant("None", "0"));
                     }
                 }
             }
@@ -190,12 +200,6 @@ namespace BulletSharpGen
             var classDefinitionsList = new List<ClassDefinition>(Project.ClassDefinitions.Values);
             foreach (var @class in classDefinitionsList)
             {
-                // Resolve typedef
-                if (@class.TypedefUnderlyingType != null)
-                {
-                    ResolveTypeRef(@class.TypedefUnderlyingType);
-                }
-
                 // Resolve method return type and parameter types
                 foreach (var method in @class.Methods)
                 {
@@ -210,47 +214,49 @@ namespace BulletSharpGen
 
         void ResolveTypeRef(TypeRefDefinition typeRef)
         {
+            switch (typeRef.Kind)
+            {
+                case TypeKind.Enum:
+                case TypeKind.Record:
+                case TypeKind.Unexposed:
+                    if (Project.ClassDefinitions.ContainsKey(typeRef.Name))
+                    {
+                        typeRef.Target = Project.ClassDefinitions[typeRef.Name];
+                        return;
+                    }
+
+                    Console.WriteLine($"Unresolved reference: {typeRef.Name}");
+
+                    if (typeRef.TemplateParams != null)
+                    {
+                        typeRef.TemplateParams.ForEach(ResolveTypeRef);
+
+                        // Create template specialization class
+                        string templateName = typeRef.Name.Substring(0, typeRef.Name.IndexOf('<'));
+
+                        ClassDefinition template;
+                        if (Project.ClassDefinitions.TryGetValue(templateName, out template))
+                        {
+                            if (!template.IsExcluded)
+                            {
+                                //string name = $"{typeRef.Name}<{typeRef.TemplateParams.First().Name}>";
+                                string name = typeRef.Name;
+
+                                var classTemplate = template as ClassTemplateDefinition;
+                                var header = classTemplate.Header;
+                                var specializedClass = new ClassDefinition(name, header);
+                                specializedClass.BaseClass = template;
+                                header.Classes.Add(specializedClass);
+                                Project.ClassDefinitions.Add(name, specializedClass);
+                            }
+                        }
+                    }
+                    break;
+            }
+
             if (typeRef.Referenced != null)
             {
                 ResolveTypeRef(typeRef.Referenced);
-            }
-
-            if (typeRef.IsBasic) return;
-            if (typeRef.Name == null) return;
-            if (typeRef.HasTemplateTypeParameter) return;
-
-            if (Project.ClassDefinitions.ContainsKey(typeRef.Name))
-            {
-                typeRef.Target = Project.ClassDefinitions[typeRef.Name];
-            }
-            else
-            {
-                Console.WriteLine("Class " + typeRef.Name + " not found!");
-
-                if (typeRef.TemplateParams != null)
-                {
-                    typeRef.TemplateParams.ForEach(ResolveTypeRef);
-
-                    // Create template specialization class
-                    string templateName = typeRef.Name.Substring(0, typeRef.Name.IndexOf('<'));
-
-                    ClassDefinition template;
-                    if (Project.ClassDefinitions.TryGetValue(templateName, out template))
-                    {
-                        if (!template.IsExcluded)
-                        {
-                            //string name = $"{typeRef.Name}<{typeRef.TemplateParams.First().Name}>";
-                            string name = typeRef.Name;
-
-                            var classTemplate = template as ClassTemplateDefinition;
-                            var header = classTemplate.Header;
-                            var specializedClass = new ClassDefinition(name, header);
-                            specializedClass.BaseClass = template;
-                            header.Classes.Add(specializedClass);
-                            Project.ClassDefinitions.Add(name, specializedClass);
-                        }
-                    }
-                }
             }
         }
 
@@ -337,23 +343,23 @@ namespace BulletSharpGen
         {
             var scriptedNameMapping = Project.ClassNameMapping as ScriptedMapping;
 
-            // Class list may be modified with template specializations
+            // Class list may be modified with template specializations,
+            // so make a copy
             var classes = Project.ClassDefinitions.Values.ToList();
 
+            // If base class is a template, copy template methods to this class
             foreach (var @class in classes)
             {
-                var baseClassTemplate = @class.BaseClass as ClassTemplateDefinition;
-                if (baseClassTemplate != null)
+                var classTemplate = @class.BaseClass as ClassTemplateDefinition;
+                if (classTemplate != null)
                 {
+                    @class.BaseClass = classTemplate.BaseClass;
+
                     if (scriptedNameMapping != null)
                     {
                         scriptedNameMapping.Globals.Header = @class.Header;
                     }
-                    baseClassTemplate.ManagedName = Project.ClassNameMapping.Map(baseClassTemplate.Name);
-
-                    var classTemplate = Project.ClassDefinitions[baseClassTemplate.FullyQualifiedName];
-                    @class.BaseClass = classTemplate.BaseClass;
-
+                    classTemplate.ManagedName = Project.ClassNameMapping.Map(classTemplate.Name);
 
                     foreach (var templateClass in classTemplate.NestedClasses)
                     {
@@ -367,14 +373,14 @@ namespace BulletSharpGen
                             if (methodSpec.ReturnType.HasTemplateTypeParameter)
                             {
                                 methodSpec.ReturnType = new TypeRefDefinition(
-                                    baseClassTemplate.TemplateTypeParameters.First());
+                                    classTemplate.TemplateParameters.First());
                             }
 
                             foreach (var param in methodSpec.Parameters
                                 .Where(p => p.Type.HasTemplateTypeParameter))
                             {
                                 param.Type = new TypeRefDefinition(
-                                    baseClassTemplate.TemplateTypeParameters.First());
+                                    classTemplate.TemplateParameters.First());
                             }
                         }
                     }
@@ -386,14 +392,14 @@ namespace BulletSharpGen
                         if (methodSpec.ReturnType.HasTemplateTypeParameter)
                         {
                             methodSpec.ReturnType = new TypeRefDefinition(
-                                baseClassTemplate.TemplateTypeParameters.First());
+                                classTemplate.TemplateParameters.First());
                         }
 
                         foreach (var param in methodSpec.Parameters
                             .Where(p => p.Type.HasTemplateTypeParameter))
                         {
                             param.Type = new TypeRefDefinition(
-                                baseClassTemplate.TemplateTypeParameters.First());
+                                classTemplate.TemplateParameters.First());
                         }
                     }
                 }
@@ -404,24 +410,21 @@ namespace BulletSharpGen
         void MapSymbols()
         {
             // Get managed header and enum names
-            var scriptedNameMapping = Project.HeaderNameMapping as ScriptedMapping;
+            var nameMapping = Project.HeaderNameMapping as ScriptedMapping;
             foreach (var header in Project.HeaderDefinitions.Values)
             {
-                if (scriptedNameMapping != null)
+                if (nameMapping != null)
                 {
-                    scriptedNameMapping.Globals.Header = header;
+                    nameMapping.Globals.Header = header;
                 }
                 header.ManagedName = Project.HeaderNameMapping.Map(header.Name);
             }
 
             // Apply class properties
-            scriptedNameMapping = Project.ClassNameMapping as ScriptedMapping;
+            nameMapping = Project.ClassNameMapping as ScriptedMapping;
             foreach (var @class in Project.ClassDefinitions.Values)
             {
-                if (scriptedNameMapping != null)
-                {
-                    scriptedNameMapping.Globals.Header = @class.Header;
-                }
+                if (nameMapping != null) nameMapping.Globals.Header = @class.Header;
                 @class.ManagedName = Project.ClassNameMapping.Map(@class.Name);
 
                 var @enum = @class as EnumDefinition;
@@ -432,7 +435,8 @@ namespace BulletSharpGen
                         @enum.Parent.Fields.Count == 0 &&
                         @enum.Parent.NestedClasses.Count == 1)
                     {
-                        @enum.ManagedName = @enum.Parent.ManagedName;
+                        if (nameMapping != null) nameMapping.Globals.Header = @enum.Parent.Header;
+                        @enum.ManagedName = Project.ClassNameMapping.Map(@enum.Parent.Name);
                     }
                 }
             }
@@ -596,23 +600,24 @@ namespace BulletSharpGen
 
         void CreateFieldSetter(PropertyDefinition prop, string setterName, string managedSetterName)
         {
+            var type = prop.Type;
+            var typeCanonical = type.Canonical;
+
             // Can't assign value to reference or constant array
-            switch (prop.Type.Kind)
+            switch (typeCanonical.Kind)
             {
                 case TypeKind.LValueReference:
                 case TypeKind.ConstantArray:
                     return;
             }
 
-            if (prop.Type.Name != null && prop.Type.Name.StartsWith("btAlignedObjectArray")) return;
-
-            var type = prop.Getter.ReturnType;
+            if (typeCanonical.Name != null && typeCanonical.Name.StartsWith("btAlignedObjectArray")) return;
 
             var setter = new MethodDefinition(setterName, prop.Parent, 1);
             setter.ManagedName = managedSetterName;
             setter.ReturnType = new TypeRefDefinition("void");
             setter.Field = prop.Getter.Field;
-            if (type.Target != null && type.Target.MarshalAsStruct)
+            if (typeCanonical.Target != null && typeCanonical.Target.MarshalAsStruct)
             {
                 type = new TypeRefDefinition
                 {
@@ -621,13 +626,16 @@ namespace BulletSharpGen
                     Referenced = type.Copy()
                 };
             }
-            else if (!type.IsBasic && type.Kind != TypeKind.Pointer)
+            else if (!typeCanonical.IsBasic && typeCanonical.Kind != TypeKind.Pointer)
             {
                 type = type.Copy();
                 type.IsConst = true;
             }
-            setter.Parameters[0] = new ParameterDefinition("value", type);
-            setter.Parameters[0].ManagedName = "value";
+            setter.Parameters[0] = new ParameterDefinition("value", type)
+            {
+                MarshalDirection = MarshalDirection.In,
+                ManagedName = "value"
+            };
 
             prop.Setter = setter;
             prop.Setter.Property = prop;
@@ -755,12 +763,6 @@ namespace BulletSharpGen
                 if (@class.BaseClass != null && header != @class.BaseClass.Header)
                 {
                     header.Includes.Add(@class.BaseClass.Header);
-                }
-
-                // Resolve typedef
-                if (@class.TypedefUnderlyingType != null)
-                {
-                    ResolveInclude(@class.TypedefUnderlyingType, header);
                 }
 
                 // Resolve method return type and parameter types

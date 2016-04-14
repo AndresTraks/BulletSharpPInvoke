@@ -609,12 +609,12 @@
 #endif
 
 #ifndef BT_PERSISTENT_MANIFOLD_H
-#define btAlignedObjectArray_btPersistendManifold void
+#define btAlignedObjectArray_btPersistentManifold void
 #define btPersistentManifold void
 #define ContactDestroyedCallback void*
 #define ContactProcessedCallback void*
 #else
-#define btAlignedObjectArray_btPersistendManifold btAlignedObjectArray<btPersistentManifold*>
+#define btAlignedObjectArray_btPersistentManifold btAlignedObjectArray<btPersistentManifold*>
 #endif
 
 #ifndef BT_POINT_COLLECTOR_H

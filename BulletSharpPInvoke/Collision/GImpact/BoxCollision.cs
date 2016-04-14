@@ -48,24 +48,51 @@ namespace BulletSharp
 			_native = btAABB_new5(other._native, margin);
 		}
 
-		public void ApplyTransform(ref Matrix trans)
+        public void ApplyTransformRef(ref Matrix trans)
+        {
+            btAABB_appy_transform(_native, ref trans);
+        }
+
+		public void ApplyTransform(Matrix trans)
 		{
 			btAABB_appy_transform(_native, ref trans);
 		}
+        /*
+		public void AppyTransformTransCache(BT_BOX_BOX_TRANSFORM_CACHE trans)
+		{
+			btAABB_appy_transform_trans_cache(_native, trans._native);
+		}
+        */
+        public bool CollidePlaneRef(ref Vector4 plane)
+        {
+            return btAABB_collide_plane(_native, ref plane);
+        }
 
-		public bool CollidePlane(ref Vector4 plane)
+		public bool CollidePlane(Vector4 plane)
 		{
 			return btAABB_collide_plane(_native, ref plane);
 		}
 
-		public bool CollideRay(ref Vector3 vorigin, ref Vector3 vdir)
+        public bool CollideRayRef(ref Vector3 vorigin, ref Vector3 vdir)
+        {
+            return btAABB_collide_ray(_native, ref vorigin, ref vdir);
+        }
+
+		public bool CollideRay(Vector3 vorigin, Vector3 vdir)
 		{
 			return btAABB_collide_ray(_native, ref vorigin, ref vdir);
 		}
 
-		public bool CollideTriangleExact(ref Vector3 p1, ref Vector3 p2, ref Vector3 p3, ref Vector4 trianglePlane)
+        public bool CollideTriangleExactRef(ref Vector3 p1, ref Vector3 p2, ref Vector3 p3, ref Vector4 trianglePlane)
+        {
+            return btAABB_collide_triangle_exact(_native, ref p1, ref p2, ref p3,
+                ref trianglePlane);
+        }
+
+		public bool CollideTriangleExact(Vector3 p1, Vector3 p2, Vector3 p3, Vector4 trianglePlane)
 		{
-			return btAABB_collide_triangle_exact(_native, ref p1, ref p2, ref p3, ref trianglePlane);
+			return btAABB_collide_triangle_exact(_native, ref p1, ref p2, ref p3,
+				ref trianglePlane);
 		}
 
 		public void CopyWithMargin(Aabb other, float margin)
@@ -102,20 +129,42 @@ namespace BulletSharp
 		{
 			btAABB_merge(_native, box._native);
 		}
+        /*
+		public bool OverlappingTransCache(Aabb box, BT_BOX_BOX_TRANSFORM_CACHE transcache,
+			bool fulltest)
+		{
+			return btAABB_overlapping_trans_cache(_native, box._native, transcache._native,
+				fulltest);
+		}
+        */
+        public bool OverlappingTransConservativeRef(Aabb box, ref Matrix trans1To0)
+        {
+            return btAABB_overlapping_trans_conservative(_native, box._native, ref trans1To0);
+        }
 
-		public bool OverlappingTransConservative(Aabb box, ref Matrix trans1To0)
+		public bool OverlappingTransConservative(Aabb box, Matrix trans1To0)
 		{
 			return btAABB_overlapping_trans_conservative(_native, box._native, ref trans1To0);
 		}
-
+        /*
+		public bool OverlappingTransConservative2(Aabb box, BT_BOX_BOX_TRANSFORM_CACHE trans1To0)
+		{
+			return btAABB_overlapping_trans_conservative2(_native, box._native, trans1To0._native);
+		}
+        */
 		public eBT_PLANE_INTERSECTION_TYPE PlaneClassify(Vector4 plane)
 		{
 			return btAABB_plane_classify(_native, ref plane);
 		}
 
-        public void ProjectionInterval(ref Vector3 direction, out float vmin, out float vmax)
-		{
+        public void ProjectionIntervalRef(ref Vector3 direction, out float vmin, out float vmax)
+        {
             btAABB_projection_interval(_native, ref direction, out vmin, out vmax);
+        }
+
+		public void ProjectionInterval(Vector3 direction, out float vmin, out float vmax)
+		{
+			btAABB_projection_interval(_native, ref direction, out vmin, out vmax);
 		}
 
 		public Vector3 Max
@@ -191,11 +240,11 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btAABB_find_intersection(IntPtr obj, IntPtr other, IntPtr intersection);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btAABB_get_center_extend(IntPtr obj, [Out] out Vector3 center, [Out] out Vector3 extend);
+		static extern void btAABB_get_center_extend(IntPtr obj, out Vector3 center, out Vector3 extend);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btAABB_getMax(IntPtr obj, [Out] out Vector3 value);
+		static extern void btAABB_getMax(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btAABB_getMin(IntPtr obj, [Out] out Vector3 value);
+		static extern void btAABB_getMin(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btAABB_has_collision(IntPtr obj, IntPtr other);
@@ -217,7 +266,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern eBT_PLANE_INTERSECTION_TYPE btAABB_plane_classify(IntPtr obj, [In] ref Vector4 plane);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btAABB_projection_interval(IntPtr obj, [In] ref Vector3 direction, [Out] out float vmin, [Out] out float vmax);
+		static extern void btAABB_projection_interval(IntPtr obj, [In] ref Vector3 direction, out float vmin, out float vmax);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btAABB_setMax(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

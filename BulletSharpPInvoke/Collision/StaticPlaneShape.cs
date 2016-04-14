@@ -32,7 +32,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btStaticPlaneShape_getPlaneConstant(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btStaticPlaneShape_getPlaneNormal(IntPtr obj, [Out] out Vector3 value);
+		static extern void btStaticPlaneShape_getPlaneNormal(IntPtr obj, out Vector3 value);
 	}
 
     [StructLayout(LayoutKind.Sequential)]

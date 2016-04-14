@@ -173,7 +173,8 @@ namespace BulletSharp
             SetInternalTickCallback(cb, worldUserInfo, false);
 		}
 
-        public void SetInternalTickCallback(InternalTickCallback cb, Object worldUserInfo, bool isPreTick)
+        public void SetInternalTickCallback(InternalTickCallback cb, Object worldUserInfo,
+            bool isPreTick)
         {
             if (_callback != cb)
             {
@@ -209,7 +210,8 @@ namespace BulletSharp
 
 		public int StepSimulation(float timeStep, int maxSubSteps, float fixedTimeStep)
 		{
-			return btDynamicsWorld_stepSimulation3(_native, timeStep, maxSubSteps, fixedTimeStep);
+			return btDynamicsWorld_stepSimulation3(_native, timeStep, maxSubSteps,
+				fixedTimeStep);
 		}
 
 		public void SynchronizeMotionStates()
@@ -295,13 +297,13 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btDynamicsWorld_getConstraintSolver(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btDynamicsWorld_getGravity(IntPtr obj, [Out] out Vector3 gravity);
+		static extern void btDynamicsWorld_getGravity(IntPtr obj, out Vector3 gravity);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btDynamicsWorld_getNumConstraints(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btDynamicsWorld_getSolverInfo(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern DynamicsWorldType btDynamicsWorld_getWorldType(IntPtr obj);
+		static extern DynamicsWorldType btDynamicsWorld_getWorldType(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btDynamicsWorld_removeAction(IntPtr obj, IntPtr action);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

@@ -73,7 +73,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btMultiSphereShape_getSphereCount(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultiSphereShape_getSpherePosition(IntPtr obj, int index, [Out] out Vector3 value);
+		static extern void btMultiSphereShape_getSpherePosition(IntPtr obj, int index, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btMultiSphereShape_getSphereRadius(IntPtr obj, int index);
 	}

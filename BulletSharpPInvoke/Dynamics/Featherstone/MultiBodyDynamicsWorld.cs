@@ -10,8 +10,10 @@ namespace BulletSharp
         private List<MultiBody> _bodies;
         private List<MultiBodyConstraint> _constraints;
 
-		public MultiBodyDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache, MultiBodyConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration)
-			: base(btMultiBodyDynamicsWorld_new(dispatcher._native, pairCache._native, constraintSolver._native, collisionConfiguration._native))
+		public MultiBodyDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
+			MultiBodyConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration)
+			: base(btMultiBodyDynamicsWorld_new(dispatcher._native, pairCache._native,
+				constraintSolver._native, collisionConfiguration._native))
 		{
             _constraintSolver = constraintSolver;
 			_dispatcher = dispatcher;
@@ -29,7 +31,15 @@ namespace BulletSharp
 
         public void AddMultiBody(MultiBody body, CollisionFilterGroups group, CollisionFilterGroups mask)
 		{
-            btMultiBodyDynamicsWorld_addMultiBody3(_native, body._native, (short)group, (short)mask);
+            btMultiBodyDynamicsWorld_addMultiBody3(_native, body._native, (short)group,
+                (short)mask);
+            _bodies.Add(body);
+		}
+
+		public void AddMultiBody(MultiBody body, short group, short mask)
+		{
+			btMultiBodyDynamicsWorld_addMultiBody3(_native, body._native, group,
+				mask);
             _bodies.Add(body);
 		}
 

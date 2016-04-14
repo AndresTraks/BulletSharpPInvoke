@@ -169,17 +169,21 @@ namespace BulletSharp
 			btDispatcher_clearManifold(_native, manifold._native);
 		}
 
-		public void DispatchAllCollisionPairs(OverlappingPairCache pairCache, DispatcherInfo dispatchInfo, Dispatcher dispatcher)
+		public void DispatchAllCollisionPairs(OverlappingPairCache pairCache, DispatcherInfo dispatchInfo,
+			Dispatcher dispatcher)
 		{
-			btDispatcher_dispatchAllCollisionPairs(_native, pairCache._native, dispatchInfo._native, dispatcher._native);
+			btDispatcher_dispatchAllCollisionPairs(_native, pairCache._native, dispatchInfo._native,
+				dispatcher._native);
 		}
 
-		public CollisionAlgorithm FindAlgorithm(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
+		public CollisionAlgorithm FindAlgorithm(CollisionObjectWrapper body0Wrap,
+			CollisionObjectWrapper body1Wrap)
 		{
             return new CollisionAlgorithm(btDispatcher_findAlgorithm(_native, body0Wrap._native, body1Wrap._native));
 		}
 
-		public CollisionAlgorithm FindAlgorithm(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, PersistentManifold sharedManifold)
+		public CollisionAlgorithm FindAlgorithm(CollisionObjectWrapper body0Wrap,
+			CollisionObjectWrapper body1Wrap, PersistentManifold sharedManifold)
 		{
             return new CollisionAlgorithm(btDispatcher_findAlgorithm2(_native, body0Wrap._native, body1Wrap._native, sharedManifold._native));
 		}
@@ -196,7 +200,7 @@ namespace BulletSharp
 
 		public PersistentManifold GetNewManifold(CollisionObject b0, CollisionObject b1)
 		{
-			return new PersistentManifold(btDispatcher_getNewManifold(_native, b0._native, b1._native), true);
+            return new PersistentManifold(btDispatcher_getNewManifold(_native, b0._native, b1._native), true);
 		}
 
 		public bool NeedsCollision(CollisionObject body0, CollisionObject body1)

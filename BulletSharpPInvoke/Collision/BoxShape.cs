@@ -22,9 +22,9 @@ namespace BulletSharp
         {
         }
 
-		public void GetPlaneEquation(out Vector4 plane, out int i)
+		public void GetPlaneEquation(out Vector4 plane, int i)
 		{
-			btBoxShape_getPlaneEquation(_native, out plane, out i);
+			btBoxShape_getPlaneEquation(_native, out plane, i);
 		}
 
 		public Vector3 HalfExtentsWithMargin
@@ -54,10 +54,10 @@ namespace BulletSharp
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern IntPtr btBoxShape_new3(float boxHalfExtentX, float boxHalfExtentY, float boxHalfExtentZ);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btBoxShape_getHalfExtentsWithMargin(IntPtr obj, [Out] out Vector3 value);
+		static extern void btBoxShape_getHalfExtentsWithMargin(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btBoxShape_getHalfExtentsWithoutMargin(IntPtr obj, [Out] out Vector3 value);
+		static extern void btBoxShape_getHalfExtentsWithoutMargin(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btBoxShape_getPlaneEquation(IntPtr obj, [Out] out Vector4 plane, [Out] out int i);
+		static extern void btBoxShape_getPlaneEquation(IntPtr obj, out Vector4 plane, int i);
 	}
 }

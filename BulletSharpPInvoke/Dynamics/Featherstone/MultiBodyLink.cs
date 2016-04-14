@@ -15,6 +15,13 @@ namespace BulletSharp
 		Invalid
 	}
 
+	[Flags]
+	public enum MultiBodyLinkFlags
+	{
+		None = 0,
+        DisableParentCollision = 1
+	}
+
 	public class MultiBodyLink
 	{
 		internal IntPtr _native;
@@ -124,7 +131,7 @@ namespace BulletSharp
 			set { btMultibodyLink_setAppliedTorque(_native, ref value); }
 		}
 /*
-		public SpatialMotionVector Axes
+		public SpatialMotionVector[] Axes
 		{
 			get { return btMultibodyLink_getAxes(_native); }
 		}
@@ -253,12 +260,12 @@ namespace BulletSharp
 			set { btMultibodyLink_setJointName(_native, value._native); }
 		}
 
-		public ScalarArray JointPos
+		public FloatArray JointPos
 		{
 			get { return btMultibodyLink_getJointPos(_native); }
 		}
 
-        public ScalarArray JointTorque
+		public FloatArray JointTorque
 		{
 			get { return btMultibodyLink_getJointTorque(_native); }
 		}
@@ -309,25 +316,25 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_getAbsFrameTotVelocity(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_getAppliedConstraintForce(IntPtr obj, [Out] out Vector3 value);
+		static extern void btMultibodyLink_getAppliedConstraintForce(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_getAppliedConstraintTorque(IntPtr obj, [Out] out Vector3 value);
+		static extern void btMultibodyLink_getAppliedConstraintTorque(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_getAppliedForce(IntPtr obj, [Out] out Vector3 value);
+		static extern void btMultibodyLink_getAppliedForce(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_getAppliedTorque(IntPtr obj, [Out] out Vector3 value);
+		static extern void btMultibodyLink_getAppliedTorque(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btMultibodyLink_getAxes(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_getAxisBottom(IntPtr obj, int dof, [Out] out Vector3 value);
+		static extern void btMultibodyLink_getAxisBottom(IntPtr obj, int dof, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_getAxisTop(IntPtr obj, int dof, [Out] out Vector3 value);
+		static extern void btMultibodyLink_getAxisTop(IntPtr obj, int dof, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_getCachedRotParentToThis(IntPtr obj, [Out] out Quaternion value);
+		static extern void btMultibodyLink_getCachedRotParentToThis(IntPtr obj, out Quaternion value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_getCachedRVector(IntPtr obj, [Out] out Vector3 value);
+		static extern void btMultibodyLink_getCachedRVector(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_getCachedWorldTransform(IntPtr obj, [Out] out Matrix value);
+		static extern void btMultibodyLink_getCachedWorldTransform(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btMultibodyLink_getCfgOffset(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -337,13 +344,13 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btMultibodyLink_getDofOffset(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_getDVector(IntPtr obj, [Out] out Vector3 value);
+		static extern void btMultibodyLink_getDVector(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_getEVector(IntPtr obj, [Out] out Vector3 value);
+		static extern void btMultibodyLink_getEVector(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btMultibodyLink_getFlags(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_getInertiaLocal(IntPtr obj, [Out] out Vector3 value);
+		static extern void btMultibodyLink_getInertiaLocal(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btMultibodyLink_getJointDamping(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -367,11 +374,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btMultibodyLink_getPosVarCount(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_getZeroRotParentToThis(IntPtr obj, [Out] out Quaternion value);
-		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		//static extern void btMultibodyLink_setAbsFrameLocVelocity(IntPtr obj, SpatialMotionVector value);
-		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		//static extern void btMultibodyLink_setAbsFrameTotVelocity(IntPtr obj, SpatialMotionVector value);
+		static extern void btMultibodyLink_getZeroRotParentToThis(IntPtr obj, out Quaternion value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setAppliedConstraintForce(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -381,13 +384,13 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setAppliedTorque(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btMultibodyLink_setAxisBottom(IntPtr obj, int dof, float x, float y, float z);
+		static extern void btMultibodyLink_setAxisBottom(IntPtr obj, int dof, float x, float y, float z);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btMultibodyLink_setAxisBottom2(IntPtr obj, int dof, [In] ref Vector3 axis);
+		static extern void btMultibodyLink_setAxisBottom2(IntPtr obj, int dof, [In] ref Vector3 axis);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btMultibodyLink_setAxisTop(IntPtr obj, int dof, float x, float y, float z);
+		static extern void btMultibodyLink_setAxisTop(IntPtr obj, int dof, float x, float y, float z);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btMultibodyLink_setAxisTop2(IntPtr obj, int dof, [In] ref Vector3 axis);
+		static extern void btMultibodyLink_setAxisTop2(IntPtr obj, int dof, [In] ref Vector3 axis);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setCachedRotParentToThis(IntPtr obj, [In] ref Quaternion value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

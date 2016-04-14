@@ -495,7 +495,8 @@ namespace BulletSharp
 
         public bool BoxQueryTrans(Aabb box, Matrix transform, AlignedIntArray collidedResults)
 		{
-			return btGImpactBvh_boxQueryTrans(_native, box._native, ref transform, collidedResults._native);
+			return btGImpactBvh_boxQueryTrans(_native, box._native, ref transform,
+				collidedResults._native);
 		}
         */
 		public void BuildSet()
@@ -503,9 +504,11 @@ namespace BulletSharp
 			btGImpactBvh_buildSet(_native);
 		}
 
-		public static void FindCollision(GImpactBvh boxset1, Matrix trans1, GImpactBvh boxset2, Matrix trans2, PairSet collisionPairs)
+		public static void FindCollision(GImpactBvh boxset1, Matrix trans1, GImpactBvh boxset2,
+			Matrix trans2, PairSet collisionPairs)
 		{
-			btGImpactBvh_find_collision(boxset1._native, ref trans1, boxset2._native, ref trans2, collisionPairs._native);
+			btGImpactBvh_find_collision(boxset1._native, ref trans1, boxset2._native,
+				ref trans2, collisionPairs._native);
 		}
 
 		public GimBvhTreeNode GetNodePointer()

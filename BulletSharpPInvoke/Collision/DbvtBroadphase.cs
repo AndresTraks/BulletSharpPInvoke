@@ -85,9 +85,18 @@ namespace BulletSharp
 			btDbvtBroadphase_performDeferredRemoval(_native, dispatcher._native);
 		}
 
-        public void SetAabbForceUpdate(BroadphaseProxy absproxy, ref Vector3 aabbMin, ref Vector3 aabbMax, Dispatcher __unnamed3)
+        public void SetAabbForceUpdateRef(BroadphaseProxy absproxy, ref Vector3 aabbMin,
+            ref Vector3 aabbMax, Dispatcher __unnamed3)
+        {
+            btDbvtBroadphase_setAabbForceUpdate(_native, absproxy._native, ref aabbMin,
+                ref aabbMax, __unnamed3._native);
+        }
+
+		public void SetAabbForceUpdate(BroadphaseProxy absproxy, Vector3 aabbMin,
+			Vector3 aabbMax, Dispatcher __unnamed3)
 		{
-			btDbvtBroadphase_setAabbForceUpdate(_native, absproxy._native, ref aabbMin, ref aabbMax, __unnamed3._native);
+			btDbvtBroadphase_setAabbForceUpdate(_native, absproxy._native, ref aabbMin,
+				ref aabbMax, __unnamed3._native);
 		}
 
         public int CId

@@ -51,7 +51,7 @@ btScalar btCollisionAlgorithm_calculateTimeOfImpact(btCollisionAlgorithm* obj, b
 	return obj->calculateTimeOfImpact(body0, body1, *dispatchInfo, resultOut);
 }
 
-void btCollisionAlgorithm_getAllContactManifolds(btCollisionAlgorithm* obj, btAlignedObjectArray_btPersistendManifold* manifoldArray)
+void btCollisionAlgorithm_getAllContactManifolds(btCollisionAlgorithm* obj, btAlignedObjectArray_btPersistentManifold* manifoldArray)
 {
 	obj->getAllContactManifolds(*manifoldArray);
 }

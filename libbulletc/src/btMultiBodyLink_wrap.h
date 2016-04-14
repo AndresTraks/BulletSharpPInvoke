@@ -40,9 +40,9 @@ extern "C"
 	EXPORT void btMultibodyLink_setAppliedConstraintTorque(btMultibodyLink* obj, const btVector3* value);
 	EXPORT void btMultibodyLink_setAppliedForce(btMultibodyLink* obj, const btVector3* value);
 	EXPORT void btMultibodyLink_setAppliedTorque(btMultibodyLink* obj, const btVector3* value);
-	EXPORT void btMultibodyLink_setAxisBottom(btMultibodyLink* obj, int dof, const btScalar* x, const btScalar* y, const btScalar* z);
+	EXPORT void btMultibodyLink_setAxisBottom(btMultibodyLink* obj, int dof, btScalar x, btScalar y, btScalar z);
 	EXPORT void btMultibodyLink_setAxisBottom2(btMultibodyLink* obj, int dof, const btVector3* axis);
-	EXPORT void btMultibodyLink_setAxisTop(btMultibodyLink* obj, int dof, const btScalar* x, const btScalar* y, const btScalar* z);
+	EXPORT void btMultibodyLink_setAxisTop(btMultibodyLink* obj, int dof, btScalar x, btScalar y, btScalar z);
 	EXPORT void btMultibodyLink_setAxisTop2(btMultibodyLink* obj, int dof, const btVector3* axis);
 	EXPORT void btMultibodyLink_setCachedRotParentToThis(btMultibodyLink* obj, const btQuaternion* value);
 	EXPORT void btMultibodyLink_setCachedRVector(btMultibodyLink* obj, const btVector3* value);

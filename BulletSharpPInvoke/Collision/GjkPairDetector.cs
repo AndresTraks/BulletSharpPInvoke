@@ -12,19 +12,26 @@ namespace BulletSharp
 		{
 		}
 
-		public GjkPairDetector(ConvexShape objectA, ConvexShape objectB, VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver penetrationDepthSolver)
-            : base(btGjkPairDetector_new(objectA._native, objectB._native, simplexSolver._native, (penetrationDepthSolver != null) ? penetrationDepthSolver._native : IntPtr.Zero))
+		public GjkPairDetector(ConvexShape objectA, ConvexShape objectB, VoronoiSimplexSolver simplexSolver,
+			ConvexPenetrationDepthSolver penetrationDepthSolver)
+			: base(btGjkPairDetector_new(objectA._native, objectB._native, simplexSolver._native,
+                (penetrationDepthSolver != null) ? penetrationDepthSolver._native : IntPtr.Zero))
 		{
 		}
 
-		public GjkPairDetector(ConvexShape objectA, ConvexShape objectB, int shapeTypeA, int shapeTypeB, float marginA, float marginB, VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver penetrationDepthSolver)
-            : base(btGjkPairDetector_new2(objectA._native, objectB._native, shapeTypeA, shapeTypeB, marginA, marginB, simplexSolver._native, (penetrationDepthSolver != null) ? penetrationDepthSolver._native : IntPtr.Zero))
+		public GjkPairDetector(ConvexShape objectA, ConvexShape objectB, int shapeTypeA,
+			int shapeTypeB, float marginA, float marginB, VoronoiSimplexSolver simplexSolver,
+			ConvexPenetrationDepthSolver penetrationDepthSolver)
+			: base(btGjkPairDetector_new2(objectA._native, objectB._native, shapeTypeA,
+                shapeTypeB, marginA, marginB, simplexSolver._native, (penetrationDepthSolver != null) ? penetrationDepthSolver._native : IntPtr.Zero))
 		{
 		}
 
-		public void GetClosestPointsNonVirtual(ClosestPointInput input, Result output, IDebugDraw debugDraw)
+		public void GetClosestPointsNonVirtual(ClosestPointInput input, Result output,
+			IDebugDraw debugDraw)
 		{
-			btGjkPairDetector_getClosestPointsNonVirtual(_native, input._native, output._native, DebugDraw.GetUnmanaged(debugDraw));
+			btGjkPairDetector_getClosestPointsNonVirtual(_native, input._native,
+				output._native, DebugDraw.GetUnmanaged(debugDraw));
 		}
 
 		public void SetIgnoreMargin(bool ignoreMargin)
@@ -98,7 +105,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btGjkPairDetector_new2(IntPtr objectA, IntPtr objectB, int shapeTypeA, int shapeTypeB, float marginA, float marginB, IntPtr simplexSolver, IntPtr penetrationDepthSolver);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGjkPairDetector_getCachedSeparatingAxis(IntPtr obj, [Out] out Vector3 value);
+		static extern void btGjkPairDetector_getCachedSeparatingAxis(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btGjkPairDetector_getCachedSeparatingDistance(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

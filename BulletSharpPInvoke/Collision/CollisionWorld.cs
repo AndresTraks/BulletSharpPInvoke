@@ -245,7 +245,8 @@ namespace BulletSharp
 
         public virtual bool NeedsCollision(BroadphaseProxy proxy0)
 		{
-            return btCollisionWorld_ConvexResultCallbackWrapper_needsCollision(_native, proxy0._native);
+            return btCollisionWorld_ConvexResultCallbackWrapper_needsCollision(_native,
+				proxy0._native);
 		}
 
 		public float ClosestHitFraction
@@ -420,9 +421,9 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btCollisionWorld_LocalConvexResult_getHitFraction(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCollisionWorld_LocalConvexResult_getHitNormalLocal(IntPtr obj, [Out] out Vector3 value);
+		static extern void btCollisionWorld_LocalConvexResult_getHitNormalLocal(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCollisionWorld_LocalConvexResult_getHitPointLocal(IntPtr obj, [Out] out Vector3 value);
+		static extern void btCollisionWorld_LocalConvexResult_getHitPointLocal(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btCollisionWorld_LocalConvexResult_getLocalShapeInfo(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -531,7 +532,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btCollisionWorld_LocalRayResult_getHitFraction(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCollisionWorld_LocalRayResult_getHitNormalLocal(IntPtr obj, [Out] out Vector3 value);
+		static extern void btCollisionWorld_LocalRayResult_getHitNormalLocal(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btCollisionWorld_LocalRayResult_getLocalShapeInfo(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -773,11 +774,12 @@ namespace BulletSharp
 
         public void AddCollisionObject(CollisionObject collisionObject, CollisionFilterGroups collisionFilterGroup,
             CollisionFilterGroups collisionFilterMask)
-		{
+        {
             _collisionObjectArray.Add(collisionObject, (short)collisionFilterGroup, (short)collisionFilterMask);
-		}
+        }
 
-		public void AddCollisionObject(CollisionObject collisionObject, short collisionFilterGroup, short collisionFilterMask)
+		public void AddCollisionObject(CollisionObject collisionObject, short collisionFilterGroup,
+			short collisionFilterMask)
 		{
             _collisionObjectArray.Add(collisionObject, collisionFilterGroup, collisionFilterMask);
 		}

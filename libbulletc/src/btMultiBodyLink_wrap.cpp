@@ -194,10 +194,10 @@ void btMultibodyLink_setAppliedTorque(btMultibodyLink* obj, const btVector3* val
 	BTVECTOR3_COPY(&obj->m_appliedTorque, value);
 }
 
-void btMultibodyLink_setAxisBottom(btMultibodyLink* obj, int dof, const btScalar* x,
-	const btScalar* y, const btScalar* z)
+void btMultibodyLink_setAxisBottom(btMultibodyLink* obj, int dof, btScalar x, btScalar y,
+	btScalar z)
 {
-	obj->setAxisBottom(dof, *x, *y, *z);
+	obj->setAxisBottom(dof, x, y, z);
 }
 
 void btMultibodyLink_setAxisBottom2(btMultibodyLink* obj, int dof, const btVector3* axis)
@@ -206,10 +206,10 @@ void btMultibodyLink_setAxisBottom2(btMultibodyLink* obj, int dof, const btVecto
 	obj->setAxisBottom(dof, BTVECTOR3_USE(axis));
 }
 
-void btMultibodyLink_setAxisTop(btMultibodyLink* obj, int dof, const btScalar* x,
-	const btScalar* y, const btScalar* z)
+void btMultibodyLink_setAxisTop(btMultibodyLink* obj, int dof, btScalar x, btScalar y,
+	btScalar z)
 {
-	obj->setAxisTop(dof, *x, *y, *z);
+	obj->setAxisTop(dof, x, y, z);
 }
 
 void btMultibodyLink_setAxisTop2(btMultibodyLink* obj, int dof, const btVector3* axis)

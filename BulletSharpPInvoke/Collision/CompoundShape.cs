@@ -69,7 +69,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btCompoundShapeChild_getNode(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCompoundShapeChild_getTransform(IntPtr obj, [Out] out Matrix value);
+		static extern void btCompoundShapeChild_getTransform(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCompoundShapeChild_setChildMargin(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -114,9 +114,11 @@ namespace BulletSharp
             _childList.AddChildShape(ref localTransform, shape);
 		}
 
-        public void CalculatePrincipalAxisTransform(float[] masses, ref Matrix principal, ref Vector3 inertia)
+       public void CalculatePrincipalAxisTransform(float[] masses, ref Matrix principal,
+			out Vector3 inertia)
 		{
-            btCompoundShape_calculatePrincipalAxisTransform(_native, masses, ref principal, ref inertia);
+            btCompoundShape_calculatePrincipalAxisTransform(_native, masses,
+				ref principal, out inertia);
 		}
 
 		public void CreateAabbTreeFromChildren()
@@ -195,13 +197,13 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btCompoundShape_new3(bool enableDynamicAabbTree, int initialChildCapacity);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCompoundShape_calculatePrincipalAxisTransform(IntPtr obj, float[] masses, [In] ref Matrix principal, [In] ref Vector3 inertia);
+        static extern void btCompoundShape_calculatePrincipalAxisTransform(IntPtr obj, float[] masses, ref Matrix principal, out Vector3 inertia);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCompoundShape_createAabbTreeFromChildren(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btCompoundShape_getChildShape(IntPtr obj, int index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCompoundShape_getChildTransform(IntPtr obj, int index, [Out] out Matrix value);
+		static extern void btCompoundShape_getChildTransform(IntPtr obj, int index, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btCompoundShape_getDynamicAabbTree(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

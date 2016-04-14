@@ -175,12 +175,15 @@ namespace BulletSharp
 
 		public void SetConvexConvexMultipointIterations(int numPerturbationIterations)
 		{
-			btDefaultCollisionConfiguration_setConvexConvexMultipointIterations2(_native, numPerturbationIterations);
+			btDefaultCollisionConfiguration_setConvexConvexMultipointIterations2(
+				_native, numPerturbationIterations);
 		}
 
-		public void SetConvexConvexMultipointIterations(int numPerturbationIterations, int minimumPointsPerturbationThreshold)
+		public void SetConvexConvexMultipointIterations(int numPerturbationIterations,
+			int minimumPointsPerturbationThreshold)
 		{
-			btDefaultCollisionConfiguration_setConvexConvexMultipointIterations3(_native, numPerturbationIterations, minimumPointsPerturbationThreshold);
+			btDefaultCollisionConfiguration_setConvexConvexMultipointIterations3(
+				_native, numPerturbationIterations, minimumPointsPerturbationThreshold);
 		}
 
 		public void SetPlaneConvexMultipointIterations()
@@ -190,12 +193,15 @@ namespace BulletSharp
 
 		public void SetPlaneConvexMultipointIterations(int numPerturbationIterations)
 		{
-			btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations2(_native, numPerturbationIterations);
+			btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations2(_native,
+				numPerturbationIterations);
 		}
 
-		public void SetPlaneConvexMultipointIterations(int numPerturbationIterations, int minimumPointsPerturbationThreshold)
+		public void SetPlaneConvexMultipointIterations(int numPerturbationIterations,
+			int minimumPointsPerturbationThreshold)
 		{
-			btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations3(_native, numPerturbationIterations, minimumPointsPerturbationThreshold);
+			btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations3(_native,
+				numPerturbationIterations, minimumPointsPerturbationThreshold);
 		}
 
 		public VoronoiSimplexSolver SimplexSolver

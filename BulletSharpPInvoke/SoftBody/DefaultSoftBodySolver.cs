@@ -13,7 +13,8 @@ namespace BulletSharp.SoftBody
         /*
 		public void CopySoftBodyToVertexBuffer(SoftBody softBody, VertexBufferDescriptor vertexBuffer)
 		{
-			btDefaultSoftBodySolver_copySoftBodyToVertexBuffer(_native, softBody._native, vertexBuffer._native);
+			btDefaultSoftBodySolver_copySoftBodyToVertexBuffer(_native, softBody._native,
+				vertexBuffer._native);
 		}
         */
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

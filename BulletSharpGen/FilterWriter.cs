@@ -195,7 +195,7 @@ namespace BulletSharpGen
     {
         public Filter RootFilter { get; private set; }
 
-        FilterType filterType = FilterType.Structured;
+        //FilterType filterType = FilterType.Structured;
         string namespaceName;
         StreamWriter filterWriter;
 

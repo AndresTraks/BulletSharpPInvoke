@@ -56,9 +56,9 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btTriangleShape_new2([In] ref Vector3 p0, [In] ref Vector3 p1, [In] ref Vector3 p2);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btTriangleShape_calcNormal(IntPtr obj, [Out] out Vector3 normal);
+		static extern void btTriangleShape_calcNormal(IntPtr obj, out Vector3 normal);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btTriangleShape_getPlaneEquation(IntPtr obj, int i, [Out] out Vector3 planeNormal, [Out] out Vector3 planeSupport);
+		static extern void btTriangleShape_getPlaneEquation(IntPtr obj, int i, out Vector3 planeNormal, out Vector3 planeSupport);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btTriangleShape_getVertexPtr(IntPtr obj, int index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

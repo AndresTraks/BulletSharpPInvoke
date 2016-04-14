@@ -21,7 +21,7 @@
 
         public bool IsVoid
         {
-            get { return ReturnType != null && ReturnType.IsBasic && ReturnType.Name.Equals("void"); }
+            get { return ReturnType != null && ReturnType.Kind == ClangSharp.TypeKind.Void; }
         }
 
         public int NumOptionalParameters

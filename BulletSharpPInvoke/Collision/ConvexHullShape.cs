@@ -79,17 +79,17 @@ namespace BulletSharp
 			btConvexHullShape_addPoint2(_native, ref point, recalculateLocalAabb);
 		}
 
-		public void GetScaledPoint(int i, out Vector3 value)
-		{
-			btConvexHullShape_getScaledPoint(_native, i, out value);
-		}
-
-        public Vector3 GetScaledPoint(int i)
+        public void GetScaledPoint(int i, out Vector3 value)
         {
-            Vector3 value;
             btConvexHullShape_getScaledPoint(_native, i, out value);
-            return value;
         }
+
+		public Vector3 GetScaledPoint(int i)
+		{
+			Vector3 value;
+			btConvexHullShape_getScaledPoint(_native, i, out value);
+			return value;
+		}
 
 		public int NumPoints
 		{
@@ -139,7 +139,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btConvexHullShape_getPoints(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexHullShape_getScaledPoint(IntPtr obj, int i, [Out] out Vector3 value);
+		static extern void btConvexHullShape_getScaledPoint(IntPtr obj, int i, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btConvexHullShape_getUnscaledPoints(IntPtr obj);
 	}

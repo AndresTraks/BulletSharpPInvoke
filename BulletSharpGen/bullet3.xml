@@ -31,11 +31,13 @@
     <Replacement Replace="eAeroModel" With="AeroModel" />
     <Replacement Replace="eFeatherstoneJointType" With="FeatherstoneJointType" />
     <Replacement Replace="eFeature" With="FeatureType" />
+    <Replacement Replace="eGIMPACT_SHAPE_TYPE" With="GImpactShapeType" />
     <Replacement Replace="ePSolver" With="PositionSolver" />
     <Replacement Replace="eSolverPresets" With="SolverPresets" />
     <Replacement Replace="eType" With="JointType" />
     <Replacement Replace="eVSolver" With="VelocitySolver" />
     <Replacement Replace="fCollision" With="Collisions" />
+    <Replacement Replace="fDrawFlags" With="DrawFlags" />
     <Replacement Replace="fMaterial" With="MaterialFlags" />
     <Replacement Replace="GIM_BVH_DATA" With="GimBvhData" />
     <Replacement Replace="GIM_BVH_DATA_ARRAY" With="GimBvhDataArray" />
@@ -69,6 +71,7 @@ else
 }</ScriptBody>
   </ScriptedMapping>
   <ReplaceMapping Name="MethodNameMapping">
+    <Replacement Replace="appy_transform" With="ApplyTransform" />
     <Replacement Replace="collideKDOP" With="CollideKdop" />
     <Replacement Replace="collideOCL" With="CollideOcl" />
     <Replacement Replace="collideTTpersistentStack" With="CollideTTPersistentStack" />
@@ -82,6 +85,9 @@ else
   <ReplaceMapping Name="ParameterNameMapping">
     <Replacement Replace="bcheckexist" With="checkExist" />
     <Replacement Replace="bcountonly" With="countOnly" />
+    <Replacement Replace="bfacelinks" With="faceLinks" />
+    <Replacement Replace="bfacesfromtetras" With="facesFromTetras" />
+    <Replacement Replace="btetralinks" With="tetraLinks" />
     <Replacement Replace="childShapeindex" With="childShapeIndex" />
     <Replacement Replace="drawflags" With="drawFlags" />
     <Replacement Replace="dt" With="deltaTime" />
@@ -100,6 +106,7 @@ else
     <Replacement Replace="numfaces" With="numFaces" />
     <Replacement Replace="numindices" With="numIndices" />
     <Replacement Replace="numverts" With="numVerts" />
+    <Replacement Replace="ntriangles" With="nTriangles" />
     <Replacement Replace="o_alignedDataBuffer" With="alignedDataBuffer" />
     <Replacement Replace="paircache" With="pairCache" />
     <Replacement Replace="rbA" With="rigidBodyA" />
@@ -471,6 +478,28 @@ else
           <Parameter Name="aabbMin" MarshalDirection="Out" />
           <Parameter Name="aabbMax" MarshalDirection="Out" />
         </Method>
+        <Method Name="getLockedVertexIndexBase">
+          <Parameter Name="vertexbase" MarshalDirection="Out" />
+          <Parameter Name="numverts" MarshalDirection="Out" />
+          <Parameter Name="type" MarshalDirection="Out" />
+          <Parameter Name="vertexStride" MarshalDirection="Out" />
+          <Parameter Name="indexbase" MarshalDirection="Out" />
+          <Parameter Name="indexstride" MarshalDirection="Out" />
+          <Parameter Name="numfaces" MarshalDirection="Out" />
+          <Parameter Name="indicestype" MarshalDirection="Out" />
+          <Parameter Name="subpart" />
+        </Method>
+        <Method Name="getLockedReadOnlyVertexIndexBase">
+          <Parameter Name="vertexbase" MarshalDirection="Out" />
+          <Parameter Name="numverts" MarshalDirection="Out" />
+          <Parameter Name="type" MarshalDirection="Out" />
+          <Parameter Name="vertexStride" MarshalDirection="Out" />
+          <Parameter Name="indexbase" MarshalDirection="Out" />
+          <Parameter Name="indexstride" MarshalDirection="Out" />
+          <Parameter Name="numfaces" MarshalDirection="Out" />
+          <Parameter Name="indicestype" MarshalDirection="Out" />
+          <Parameter Name="subpart" />
+        </Method>
         <Method Name="getPremadeAabb">
           <Parameter Name="aabbMin" MarshalDirection="Out" />
           <Parameter Name="aabbMax" MarshalDirection="Out" />
@@ -629,6 +658,7 @@ else
       <ClassTemplate Name="btAxisSweep3Internal">
         <Class Name="Edge" />
         <Class Name="Handle" />
+        <TemplateParameter>BP_FP_INT_TYPE</TemplateParameter>
       </ClassTemplate>
       <Class Name="btAxisSweep3" />
       <Class Name="bt32BitAxisSweep3" />
@@ -1076,7 +1106,7 @@ else
           <Parameter Name="boxObjWrap" />
           <Parameter Name="v3PointOnBox" MarshalDirection="Out" />
           <Parameter Name="normal" MarshalDirection="Out" />
-          <Parameter Name="penetrationDepth" />
+          <Parameter Name="penetrationDepth" MarshalDirection="Out" />
           <Parameter Name="v3SphereCenter" />
           <Parameter Name="fRadius" />
           <Parameter Name="maxContactDistance" />
@@ -1095,7 +1125,16 @@ else
       </Class>
     </Header>
     <Header Path="BulletCollision/CollisionDispatch/SphereTriangleDetector.h">
-      <Class Name="SphereTriangleDetector" />
+      <Class Name="SphereTriangleDetector">
+        <Method Name="collide">
+          <Parameter Name="sphereCenter" />
+          <Parameter Name="point" MarshalDirection="Out" />
+          <Parameter Name="resultNormal" MarshalDirection="Out" />
+          <Parameter Name="depth" MarshalDirection="Out" />
+          <Parameter Name="timeOfImpact" MarshalDirection="Out" />
+          <Parameter Name="contactBreakingThreshold" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btBox2dShape.h">
       <Class Name="btBox2dShape">
@@ -1146,7 +1185,30 @@ else
     <Header Path="BulletCollision/CollisionShapes/btTriangleIndexVertexMaterialArray.h">
       <Class Name="btMaterialProperties" />
       <Class Name="MaterialArray" />
-      <Class Name="btTriangleIndexVertexMaterialArray" />
+      <Class Name="btTriangleIndexVertexMaterialArray">
+        <Method Name="getLockedMaterialBase">
+          <Parameter Name="materialBase" MarshalDirection="Out" />
+          <Parameter Name="numMaterials" MarshalDirection="Out" />
+          <Parameter Name="materialType" MarshalDirection="Out" />
+          <Parameter Name="materialStride" MarshalDirection="Out" />
+          <Parameter Name="triangleMaterialBase" MarshalDirection="Out" />
+          <Parameter Name="numTriangles" MarshalDirection="Out" />
+          <Parameter Name="triangleMaterialStride" MarshalDirection="Out" />
+          <Parameter Name="triangleType" MarshalDirection="Out" />
+          <Parameter Name="subpart" />
+        </Method>
+        <Method Name="getLockedReadOnlyMaterialBase">
+          <Parameter Name="materialBase" MarshalDirection="Out" />
+          <Parameter Name="numMaterials" MarshalDirection="Out" />
+          <Parameter Name="materialType" MarshalDirection="Out" />
+          <Parameter Name="materialStride" MarshalDirection="Out" />
+          <Parameter Name="triangleMaterialBase" MarshalDirection="Out" />
+          <Parameter Name="numTriangles" MarshalDirection="Out" />
+          <Parameter Name="triangleMaterialStride" MarshalDirection="Out" />
+          <Parameter Name="triangleType" MarshalDirection="Out" />
+          <Parameter Name="subpart" />
+        </Method>
+      </Class>
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btTriangleShape.h">
       <Class Name="btTriangleShape">
@@ -1167,6 +1229,10 @@ else
         <Method Name="get_center_extend">
           <Parameter Name="center" MarshalDirection="Out" />
           <Parameter Name="extend" MarshalDirection="Out" />
+        </Method>
+        <Method Name="overlapping_trans_conservative">
+          <Parameter Name="box" />
+          <Parameter Name="trans1_to_0" MarshalDirection="In" />
         </Method>
         <Method Name="projection_interval">
           <Parameter Name="direction" />
@@ -1626,6 +1692,10 @@ else
         <Class Name="tVector3Array" />
         <Class Name="tVSolverArray" />
         <Class Name="vsolver_t" />
+        <Method Name="getAabb">
+          <Parameter Name="aabbMin" MarshalDirection="Out" />
+          <Parameter Name="aabbMax" MarshalDirection="Out" />
+        </Method>
         <Method Name="rayTest">
           <Parameter Name="rayFrom" />
           <Parameter Name="rayTo" />

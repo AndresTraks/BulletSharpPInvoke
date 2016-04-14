@@ -11,7 +11,7 @@ namespace BulletSharpGen
         {
             // Classes that shouldn't be instantiated by users
             var hidePublicConstructors = new HashSet<string> {
-                "btActivatingCollisionAlgorithm", "btContactConstraint",
+                "btActivatingCollisionAlgorithm", "btBroadphaseProxy", "btContactConstraint",
                 "btDbvtProxy", "btDispatcherInfo",
                 "btUsageBitfield", "btSoftBody::Anchor", "btSoftBody::Config", "btSoftBody::Cluster",
                 "btSoftBody::Face", "btSoftBody::Tetra", "btSoftBody::Element", "btSoftBody::Feature",
@@ -375,15 +375,15 @@ namespace BulletSharpGen
 
             if (type.Kind == TypeKind.LValueReference && type.Referenced.Canonical.IsBasic)
             {
-                if (param.MarshalDirection == MarshalDirection.Out)
+                switch (param.MarshalDirection)
                 {
-                    return $"out {param.ManagedName}";
+                    case MarshalDirection.Out:
+                        return $"out {param.ManagedName}";
+                    case MarshalDirection.InOut:
+                        return $"ret {param.ManagedName}";
+                    default:
+                        return param.ManagedName;
                 }
-                if (param.MarshalDirection == MarshalDirection.InOut)
-                {
-                    "".ToString();
-                }
-                return $"ref {param.ManagedName}";
             }
 
             if (type.Referenced != null)
@@ -395,18 +395,18 @@ namespace BulletSharpGen
                 }
             }
 
-            if (!type.IsBasic)
+            if (!(type.Kind == TypeKind.Pointer && type.Referenced.Kind == TypeKind.Void))
             {
-                if (!(type.Kind == TypeKind.Pointer && type.Referenced.Kind == TypeKind.Void))
-                {
-                    return param.ManagedName + "._native";
-                }
+                return param.ManagedName + "._native";
             }
+
             return param.ManagedName;
         }
 
         public static string GetTypeSetterCSMarshal(TypeRefDefinition type)
         {
+            type = type.Canonical;
+
             if ((type.Target != null && type.Target.MarshalAsStruct) ||
                 (type.Kind == TypeKind.LValueReference && type.Referenced.Target != null && type.Referenced.Target.MarshalAsStruct))
             {

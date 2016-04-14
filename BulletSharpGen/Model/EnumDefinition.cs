@@ -3,18 +3,33 @@ using System.Linq;
 
 namespace BulletSharpGen
 {
+    class EnumConstant
+    {
+        public string Constant { get; set; }
+        public string Value { get; set; }
+
+        public EnumConstant(string constant, string value)
+        {
+            Constant = constant;
+            Value = value;
+        }
+
+        public override string ToString()
+        {
+            if (Value == "") return Constant;
+            return $"{Constant} = {Value}";
+        }
+    }
+
     class EnumDefinition : ClassDefinition
     {
-        public List<string> EnumConstants { get; private set; }
-        public List<string> EnumConstantValues { get; private set; }
+        public List<EnumConstant> EnumConstants { get; } = new List<EnumConstant>();
 
         public bool IsFlags { get; set; }
 
         public EnumDefinition(string name, HeaderDefinition header = null, ClassDefinition parent = null)
             : base(name, header, parent)
         {
-            EnumConstants = new List<string>();
-            EnumConstantValues = new List<string>();
         }
 
         public string GetCommonPrefix()
@@ -28,12 +43,12 @@ namespace BulletSharpGen
             int i = 0;
             while (true)
             {
-                char c = EnumConstants[0][i];
-                if (EnumConstants.Any(e => e[i] != c))
+                char c = EnumConstants[0].Constant[i];
+                if (EnumConstants.Any(e => e.Constant[i] != c))
                 {
                     break;
                 }
-                if (EnumConstants.Any(e => e.Length == i))
+                if (EnumConstants.Any(e => e.Constant.Length == i))
                 {
                     // Prefix is already one of the enumerators,
                     // can't use this prefix
@@ -56,9 +71,9 @@ namespace BulletSharpGen
             int i = 1;
             while (true)
             {
-                string enumConstant = EnumConstants[0];
+                string enumConstant = EnumConstants[0].Constant;
                 char c = enumConstant[enumConstant.Length - i];
-                if (EnumConstants.Any(e => e[e.Length - i] != c))
+                if (EnumConstants.Any(e => e.Constant[e.Constant.Length - i] != c))
                 {
                     break;
                 }

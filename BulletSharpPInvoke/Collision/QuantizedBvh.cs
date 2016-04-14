@@ -175,9 +175,9 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btOptimizedBvhNode_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btOptimizedBvhNode_getAabbMaxOrg(IntPtr obj, [Out] out Vector3 value);
+		static extern void btOptimizedBvhNode_getAabbMaxOrg(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btOptimizedBvhNode_getAabbMinOrg(IntPtr obj, [Out] out Vector3 value);
+		static extern void btOptimizedBvhNode_getAabbMinOrg(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btOptimizedBvhNode_getEscapeIndex(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -198,7 +198,7 @@ namespace BulletSharp
 		static extern void btOptimizedBvhNode_delete(IntPtr obj);
 	}
 
-	public class NodeOverlapCallback : IDisposable
+	public abstract class NodeOverlapCallback : IDisposable
 	{
 		internal IntPtr _native;
 
@@ -286,9 +286,11 @@ namespace BulletSharp
 			btQuantizedBvh_deSerializeFloat(_native, quantizedBvhFloatData);
 		}
         /*
-		public static QuantizedBvh DeSerializeInPlace(IntPtr alignedDataBuffer, uint dataBufferSize, bool swapEndian)
+		public static QuantizedBvh DeSerializeInPlace(IntPtr alignedDataBuffer, uint dataBufferSize,
+			bool swapEndian)
 		{
-			return btQuantizedBvh_deSerializeInPlace(alignedDataBuffer, dataBufferSize, swapEndian);
+			return btQuantizedBvh_deSerializeInPlace(alignedDataBuffer, dataBufferSize,
+				swapEndian);
 		}
 
 		public void Quantize(unsigned short out, Vector3 point, int isMax)
@@ -301,24 +303,31 @@ namespace BulletSharp
 			btQuantizedBvh_quantizeWithClamp(_native, out._native, ref point2, isMax);
 		}
         */
-		public void ReportAabbOverlappingNodex(NodeOverlapCallback nodeCallback, Vector3 aabbMin, Vector3 aabbMax)
+		public void ReportAabbOverlappingNodex(NodeOverlapCallback nodeCallback,
+			Vector3 aabbMin, Vector3 aabbMax)
 		{
-			btQuantizedBvh_reportAabbOverlappingNodex(_native, nodeCallback._native, ref aabbMin, ref aabbMax);
+			btQuantizedBvh_reportAabbOverlappingNodex(_native, nodeCallback._native,
+				ref aabbMin, ref aabbMax);
 		}
 
-		public void ReportBoxCastOverlappingNodex(NodeOverlapCallback nodeCallback, Vector3 raySource, Vector3 rayTarget, Vector3 aabbMin, Vector3 aabbMax)
+		public void ReportBoxCastOverlappingNodex(NodeOverlapCallback nodeCallback,
+			Vector3 raySource, Vector3 rayTarget, Vector3 aabbMin, Vector3 aabbMax)
 		{
-			btQuantizedBvh_reportBoxCastOverlappingNodex(_native, nodeCallback._native, ref raySource, ref rayTarget, ref aabbMin, ref aabbMax);
+			btQuantizedBvh_reportBoxCastOverlappingNodex(_native, nodeCallback._native,
+				ref raySource, ref rayTarget, ref aabbMin, ref aabbMax);
 		}
 
-		public void ReportRayOverlappingNodex(NodeOverlapCallback nodeCallback, Vector3 raySource, Vector3 rayTarget)
+		public void ReportRayOverlappingNodex(NodeOverlapCallback nodeCallback, Vector3 raySource,
+			Vector3 rayTarget)
 		{
-			btQuantizedBvh_reportRayOverlappingNodex(_native, nodeCallback._native, ref raySource, ref rayTarget);
+			btQuantizedBvh_reportRayOverlappingNodex(_native, nodeCallback._native,
+				ref raySource, ref rayTarget);
 		}
 
 		public bool Serialize(IntPtr alignedDataBuffer, uint dataBufferSize, bool swapEndian)
 		{
-			return btQuantizedBvh_serialize(_native, alignedDataBuffer, dataBufferSize, swapEndian);
+			return btQuantizedBvh_serialize(_native, alignedDataBuffer, dataBufferSize,
+				swapEndian);
 		}
 
 		public string Serialize(IntPtr dataBuffer, Serializer serializer)
@@ -331,9 +340,11 @@ namespace BulletSharp
 			btQuantizedBvh_setQuantizationValues(_native, ref bvhAabbMin, ref bvhAabbMax);
 		}
 
-		public void SetQuantizationValues(Vector3 bvhAabbMin, Vector3 bvhAabbMax, float quantizationMargin)
+		public void SetQuantizationValues(Vector3 bvhAabbMin, Vector3 bvhAabbMax,
+			float quantizationMargin)
 		{
-			btQuantizedBvh_setQuantizationValues2(_native, ref bvhAabbMin, ref bvhAabbMax, quantizationMargin);
+			btQuantizedBvh_setQuantizationValues2(_native, ref bvhAabbMin, ref bvhAabbMax,
+				quantizationMargin);
 		}
 
 		public void SetTraversalMode(TraversalMode traversalMode)
@@ -443,7 +454,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btQuantizedBvh_setTraversalMode(IntPtr obj, TraversalMode traversalMode);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btQuantizedBvh_unQuantize(IntPtr obj, IntPtr vecIn, [Out] out Vector3 value);
+		static extern void btQuantizedBvh_unQuantize(IntPtr obj, IntPtr vecIn, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btQuantizedBvh_delete(IntPtr obj);
 	}

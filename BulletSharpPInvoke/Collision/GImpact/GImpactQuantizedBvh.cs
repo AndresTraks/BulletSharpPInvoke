@@ -292,7 +292,8 @@ namespace BulletSharp
 
         public bool BoxQueryTrans(Aabb box, Matrix transform, AlignedIntArray collidedResults)
 		{
-			return btGImpactQuantizedBvh_boxQueryTrans(_native, box._native, ref transform, collidedResults._native);
+			return btGImpactQuantizedBvh_boxQueryTrans(_native, box._native, ref transform,
+				collidedResults._native);
 		}
         */
 		public void BuildSet()
@@ -300,9 +301,11 @@ namespace BulletSharp
 			btGImpactQuantizedBvh_buildSet(_native);
 		}
 
-		public static void FindCollision(GImpactQuantizedBvh boxset1, Matrix trans1, GImpactQuantizedBvh boxset2, Matrix trans2, PairSet collisionPairs)
+		public static void FindCollision(GImpactQuantizedBvh boxset1, Matrix trans1,
+			GImpactQuantizedBvh boxset2, Matrix trans2, PairSet collisionPairs)
 		{
-			btGImpactQuantizedBvh_find_collision(boxset1._native, ref trans1, boxset2._native, ref trans2, collisionPairs._native);
+			btGImpactQuantizedBvh_find_collision(boxset1._native, ref trans1, boxset2._native,
+				ref trans2, collisionPairs._native);
 		}
         /*
 		public GImpactQuantizedBvhNode GetNodePointer()
@@ -352,7 +355,8 @@ namespace BulletSharp
         /*
         public bool RayQuery(Vector3 rayDir, Vector3 rayOrigin, AlignedIntArray collidedResults)
 		{
-			return btGImpactQuantizedBvh_rayQuery(_native, ref rayDir, ref rayOrigin, collidedResults._native);
+			return btGImpactQuantizedBvh_rayQuery(_native, ref rayDir, ref rayOrigin,
+				collidedResults._native);
 		}
         */
 		public void SetNodeBound(int nodeIndex, Aabb bound)

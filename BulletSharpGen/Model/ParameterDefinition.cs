@@ -3,6 +3,11 @@
     public enum MarshalDirection
     {
         /// <summary>
+        /// Use a default value.
+        /// </summary>
+        Default,
+
+        /// <summary>
         /// The parameter is marshaled to the callee,
         /// but not back to the caller.
         /// Default for a basic type or a const pointer/reference.
@@ -41,6 +46,7 @@
         internal ParameterDefinition Copy()
         {
             var p = new ParameterDefinition(Name, Type.Copy(), IsOptional);
+            p.IsOptional = IsOptional;
             p.ManagedName = ManagedName;
             p.MarshalDirection = MarshalDirection;
             return p;

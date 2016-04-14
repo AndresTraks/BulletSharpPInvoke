@@ -37,9 +37,13 @@ namespace BulletSharp
 			btConstraintSolver_reset(_native);
 		}
         /*
-		public float SolveGroup(CollisionObject bodies, int numBodies, PersistentManifold manifold, int numManifolds, TypedConstraint constraints, int numConstraints, ContactSolverInfo info, IDebugDraw debugDrawer, Dispatcher dispatcher)
+		public float SolveGroup(CollisionObject bodies, int numBodies, PersistentManifold manifold,
+			int numManifolds, TypedConstraint constraints, int numConstraints, ContactSolverInfo info,
+			IDebugDraw debugDrawer, Dispatcher dispatcher)
 		{
-			return btConstraintSolver_solveGroup(_native, bodies._native, numBodies, manifold._native, numManifolds, constraints._native, numConstraints, info._native, DebugDraw.GetUnmanaged(debugDrawer), dispatcher._native);
+			return btConstraintSolver_solveGroup(_native, bodies._native, numBodies,
+				manifold._native, numManifolds, constraints._native, numConstraints,
+				info._native, DebugDraw.GetUnmanaged(debugDrawer), dispatcher._native);
 		}
         */
 		public ConstraintSolverType SolverType
@@ -73,7 +77,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConstraintSolver_allSolved(IntPtr obj, IntPtr __unnamed0, IntPtr __unnamed1);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern ConstraintSolverType btConstraintSolver_getSolverType(IntPtr obj);
+		static extern ConstraintSolverType btConstraintSolver_getSolverType(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConstraintSolver_prepareSolve(IntPtr obj, int __unnamed0, int __unnamed1);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

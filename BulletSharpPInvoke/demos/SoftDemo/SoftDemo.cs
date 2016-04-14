@@ -1182,7 +1182,7 @@ namespace SoftDemo
                     rayDir.Normalize();
 
                     SRayCast res = new SRayCast();
-                    if (SoftWorld.SoftBodyArray.Any(b => b.RayTest(ref rayFrom, ref rayTo, res)))
+                    if (SoftWorld.SoftBodyArray.Any(b => b.RayTestRef(ref rayFrom, ref rayTo, res)))
                     {
                         results = res;
                         impact = rayFrom + (rayTo - rayFrom) * results.Fraction;

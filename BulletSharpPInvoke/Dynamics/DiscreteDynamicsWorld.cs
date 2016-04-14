@@ -14,12 +14,10 @@ namespace BulletSharp
 		{
 		}
 
-		public DiscreteDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache, ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration)
-            : base(btDiscreteDynamicsWorld_new(
-            dispatcher != null ? dispatcher._native : IntPtr.Zero,
-            pairCache != null ? pairCache._native : IntPtr.Zero,
-            constraintSolver != null ? constraintSolver._native : IntPtr.Zero,
-            collisionConfiguration != null ? collisionConfiguration._native : IntPtr.Zero))
+		public DiscreteDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
+			ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration)
+			: base(btDiscreteDynamicsWorld_new(dispatcher != null ? dispatcher._native : IntPtr.Zero, pairCache != null ? pairCache._native : IntPtr.Zero,
+				constraintSolver != null ? constraintSolver._native : IntPtr.Zero, collisionConfiguration != null ? collisionConfiguration._native : IntPtr.Zero))
 		{
 			_constraintSolver = constraintSolver;
             Dispatcher = dispatcher;

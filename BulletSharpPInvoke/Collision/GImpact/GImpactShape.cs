@@ -6,7 +6,7 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
-    public enum GImpactShapeType
+	public enum GImpactShapeType
 	{
 		CompoundShape,
 		TrimeshShapePart,
@@ -52,7 +52,8 @@ namespace BulletSharp
 
 		public void GetChildAabb(int childIndex, Matrix t, out Vector3 aabbMin, out Vector3 aabbMax)
 		{
-			btGImpactShapeInterface_getChildAabb(_native, childIndex, ref t, out aabbMin, out aabbMax);
+			btGImpactShapeInterface_getChildAabb(_native, childIndex, ref t, out aabbMin,
+				out aabbMax);
 		}
 
 		public CollisionShape GetChildShape(int index)
@@ -82,9 +83,18 @@ namespace BulletSharp
 			btGImpactShapeInterface_postUpdate(_native);
 		}
 
-        public void ProcessAllTrianglesRay(TriangleCallback cb, ref Vector3 rayFrom, ref Vector3 rayTo)
+        public void ProcessAllTrianglesRayRef(TriangleCallback cb, ref Vector3 rayFrom,
+            ref Vector3 rayTo)
+        {
+            btGImpactShapeInterface_processAllTrianglesRay(_native, cb._native,
+                ref rayFrom, ref rayTo);
+        }
+
+		public void ProcessAllTrianglesRay(TriangleCallback cb, Vector3 rayFrom,
+			Vector3 rayTo)
 		{
-            btGImpactShapeInterface_processAllTrianglesRay(_native, cb._native, ref rayFrom, ref rayTo);
+			btGImpactShapeInterface_processAllTrianglesRay(_native, cb._native,
+				ref rayFrom, ref rayTo);
 		}
 
 		public void RayTest(Vector3 rayFrom, Vector3 rayTo, RayResultCallback resultCallback)
@@ -162,11 +172,11 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGImpactShapeInterface_getBulletTriangle(IntPtr obj, int prim_index, IntPtr triangle);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGImpactShapeInterface_getChildAabb(IntPtr obj, int child_index, [In] ref Matrix t, [Out] out Vector3 aabbMin, [Out] out Vector3 aabbMax);
+		static extern void btGImpactShapeInterface_getChildAabb(IntPtr obj, int child_index, [In] ref Matrix t, out Vector3 aabbMin, out Vector3 aabbMax);
 		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		//static extern IntPtr btGImpactShapeInterface_getChildShape(IntPtr obj, int index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGImpactShapeInterface_getChildTransform(IntPtr obj, int index, [Out] out Matrix value);
+		static extern void btGImpactShapeInterface_getChildTransform(IntPtr obj, int index, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern GImpactShapeType btGImpactShapeInterface_getGImpactShapeType(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -288,7 +298,8 @@ namespace BulletSharp
 		}
 
 		public TrimeshPrimitiveManager(StridingMeshInterface meshInterface, int part)
-			: base(btGImpactMeshShapePart_TrimeshPrimitiveManager_new(meshInterface._native, part))
+			: base(btGImpactMeshShapePart_TrimeshPrimitiveManager_new(meshInterface._native,
+				part))
 		{
 			_meshInterface = meshInterface;
 		}
@@ -305,17 +316,20 @@ namespace BulletSharp
 
 		public void GetBulletTriangle(int primIndex, TriangleShapeEx triangle)
 		{
-			btGImpactMeshShapePart_TrimeshPrimitiveManager_get_bullet_triangle(_native, primIndex, triangle._native);
+			btGImpactMeshShapePart_TrimeshPrimitiveManager_get_bullet_triangle(
+				_native, primIndex, triangle._native);
 		}
 
-        public void GetIndices(int faceIndex, out uint i0, out uint i1, out uint i2)
+		public void GetIndices(int faceIndex, out uint i0, out uint i1, out uint i2b)
 		{
-            btGImpactMeshShapePart_TrimeshPrimitiveManager_get_indices(_native, faceIndex, out i0, out i1, out i2);
+			btGImpactMeshShapePart_TrimeshPrimitiveManager_get_indices(_native,
+				faceIndex, out i0, out i1, out i2b);
 		}
 
 		public void GetVertex(uint vertexIndex, out Vector3 vertex)
 		{
-			btGImpactMeshShapePart_TrimeshPrimitiveManager_get_vertex(_native, vertexIndex, out vertex);
+			btGImpactMeshShapePart_TrimeshPrimitiveManager_get_vertex(_native,
+				vertexIndex, out vertex);
 		}
 
 		public void Lock()
@@ -429,9 +443,9 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGImpactMeshShapePart_TrimeshPrimitiveManager_get_bullet_triangle(IntPtr obj, int prim_index, IntPtr triangle);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btGImpactMeshShapePart_TrimeshPrimitiveManager_get_indices(IntPtr obj, int face_index, [Out] out uint i0, [Out] out uint i1, [Out] out uint i2);
+		static extern void btGImpactMeshShapePart_TrimeshPrimitiveManager_get_indices(IntPtr obj, int face_index, out uint i0, out uint i1, out uint i2b);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGImpactMeshShapePart_TrimeshPrimitiveManager_get_vertex(IntPtr obj, uint vertex_index, [Out] out Vector3 vertex);
+		static extern void btGImpactMeshShapePart_TrimeshPrimitiveManager_get_vertex(IntPtr obj, uint vertex_index, out Vector3 vertex);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btGImpactMeshShapePart_TrimeshPrimitiveManager_get_vertex_count(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -453,7 +467,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btGImpactMeshShapePart_TrimeshPrimitiveManager_getPart(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGImpactMeshShapePart_TrimeshPrimitiveManager_getScale(IntPtr obj, [Out] out Vector3 value);
+		static extern void btGImpactMeshShapePart_TrimeshPrimitiveManager_getScale(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btGImpactMeshShapePart_TrimeshPrimitiveManager_getStride(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -552,7 +566,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btGImpactMeshShapePart_getTrimeshPrimitiveManager(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGImpactMeshShapePart_getVertex(IntPtr obj, int vertex_index, [Out] out Vector3 vertex);
+		static extern void btGImpactMeshShapePart_getVertex(IntPtr obj, int vertex_index, out Vector3 vertex);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btGImpactMeshShapePart_getVertexCount(IntPtr obj);
 	}

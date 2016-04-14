@@ -51,7 +51,8 @@ namespace BulletSharp
 
 		public bool NeedBroadphaseCollision(BroadphaseProxy proxy0, BroadphaseProxy proxy1)
 		{
-			return btOverlapFilterCallback_needBroadphaseCollision(_native, proxy0._native, proxy1._native);
+			return btOverlapFilterCallback_needBroadphaseCollision(_native, proxy0._native,
+				proxy1._native);
 		}
 
 		public void Dispose()
@@ -108,7 +109,8 @@ namespace BulletSharp
         /*
 		public void ProcessAllOverlappingPairs(OverlapCallback __unnamed0, Dispatcher dispatcher)
 		{
-			btOverlappingPairCache_processAllOverlappingPairs(_native, __unnamed0._native, dispatcher._native);
+			btOverlappingPairCache_processAllOverlappingPairs(_native, __unnamed0._native,
+				dispatcher._native);
 		}
         */
 		public void SetInternalGhostPairCallback(OverlappingPairCallback ghostPairCallback)
@@ -189,22 +191,28 @@ namespace BulletSharp
 
         public override BroadphasePair AddOverlappingPair(BroadphaseProxy proxy0, BroadphaseProxy proxy1)
         {
-            return new BroadphasePair(btOverlappingPairCallback_addOverlappingPair(_native, proxy0._native, proxy1._native));
+            return new BroadphasePair(btOverlappingPairCallback_addOverlappingPair(_native, proxy0._native,
+                proxy1._native));
         }
 
 		public bool NeedsBroadphaseCollision(BroadphaseProxy proxy0, BroadphaseProxy proxy1)
 		{
-			return btHashedOverlappingPairCache_needsBroadphaseCollision(_native, proxy0._native, proxy1._native);
+			return btHashedOverlappingPairCache_needsBroadphaseCollision(_native,
+				proxy0._native, proxy1._native);
 		}
 
-        public override IntPtr RemoveOverlappingPair(BroadphaseProxy proxy0, BroadphaseProxy proxy1, Dispatcher dispatcher)
+        public override IntPtr RemoveOverlappingPair(BroadphaseProxy proxy0, BroadphaseProxy proxy1,
+            Dispatcher dispatcher)
         {
-            return btOverlappingPairCallback_removeOverlappingPair(_native, proxy0._native, proxy1._native, dispatcher._native);
+            return btOverlappingPairCallback_removeOverlappingPair(_native, proxy0._native,
+                proxy1._native, dispatcher._native);
         }
 
-        public override void RemoveOverlappingPairsContainingProxy(BroadphaseProxy proxy0, Dispatcher dispatcher)
+        public override void RemoveOverlappingPairsContainingProxy(BroadphaseProxy proxy0,
+            Dispatcher dispatcher)
         {
-            btOverlappingPairCallback_removeOverlappingPairsContainingProxy(_native, proxy0._native, dispatcher._native);
+            btOverlappingPairCallback_removeOverlappingPairsContainingProxy(_native,
+                proxy0._native, dispatcher._native);
         }
 
 		public int Count
@@ -237,22 +245,28 @@ namespace BulletSharp
 
         public override BroadphasePair AddOverlappingPair(BroadphaseProxy proxy0, BroadphaseProxy proxy1)
         {
-            return new BroadphasePair(btOverlappingPairCallback_addOverlappingPair(_native, proxy0._native, proxy1._native));
+            return new BroadphasePair(btOverlappingPairCallback_addOverlappingPair(_native, proxy0._native,
+                proxy1._native));
         }
 
 		public bool NeedsBroadphaseCollision(BroadphaseProxy proxy0, BroadphaseProxy proxy1)
 		{
-			return btSortedOverlappingPairCache_needsBroadphaseCollision(_native, proxy0._native, proxy1._native);
+			return btSortedOverlappingPairCache_needsBroadphaseCollision(_native,
+				proxy0._native, proxy1._native);
 		}
 
-        public override IntPtr RemoveOverlappingPair(BroadphaseProxy proxy0, BroadphaseProxy proxy1, Dispatcher dispatcher)
+        public override IntPtr RemoveOverlappingPair(BroadphaseProxy proxy0, BroadphaseProxy proxy1, 
+            Dispatcher dispatcher)
         {
-            return btOverlappingPairCallback_removeOverlappingPair(_native, proxy0._native, proxy1._native, dispatcher._native);
+            return btOverlappingPairCallback_removeOverlappingPair(_native, proxy0._native,
+                proxy1._native, dispatcher._native);
         }
 
-        public override void RemoveOverlappingPairsContainingProxy(BroadphaseProxy proxy0, Dispatcher dispatcher)
+        public override void RemoveOverlappingPairsContainingProxy(BroadphaseProxy proxy0,
+            Dispatcher dispatcher)
         {
-            btOverlappingPairCallback_removeOverlappingPairsContainingProxy(_native, proxy0._native, dispatcher._native);
+            btOverlappingPairCallback_removeOverlappingPairsContainingProxy(_native,
+                proxy0._native, dispatcher._native);
         }
 
 		public OverlapFilterCallback OverlapFilterCallback
@@ -278,17 +292,22 @@ namespace BulletSharp
 
         public override BroadphasePair AddOverlappingPair(BroadphaseProxy proxy0, BroadphaseProxy proxy1)
         {
-            return new BroadphasePair(btOverlappingPairCallback_addOverlappingPair(_native, proxy0._native, proxy1._native));
+            return new BroadphasePair(btOverlappingPairCallback_addOverlappingPair(_native, proxy0._native,
+                proxy1._native));
         }
 
-        public override IntPtr RemoveOverlappingPair(BroadphaseProxy proxy0, BroadphaseProxy proxy1, Dispatcher dispatcher)
+        public override IntPtr RemoveOverlappingPair(BroadphaseProxy proxy0, BroadphaseProxy proxy1,
+            Dispatcher dispatcher)
         {
-            return btOverlappingPairCallback_removeOverlappingPair(_native, proxy0._native, proxy1._native, dispatcher._native);
+            return btOverlappingPairCallback_removeOverlappingPair(_native, proxy0._native,
+                proxy1._native, dispatcher._native);
         }
 
-        public override void RemoveOverlappingPairsContainingProxy(BroadphaseProxy proxy0, Dispatcher dispatcher)
+        public override void RemoveOverlappingPairsContainingProxy(BroadphaseProxy proxy0,
+            Dispatcher dispatcher)
         {
-            btOverlappingPairCallback_removeOverlappingPairsContainingProxy(_native, proxy0._native, dispatcher._native);
+            btOverlappingPairCallback_removeOverlappingPairsContainingProxy(_native, proxy0._native,
+                dispatcher._native);
         }
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

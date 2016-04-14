@@ -12,12 +12,6 @@ namespace BulletSharpGen
         public TypeKind Kind { get; set; }
 
         /// <summary>
-        /// Type is void, int, float, enum, etc.
-        /// or a typedef to a basic type.
-        /// </summary>
-        public bool IsBasic { get; set; }
-
-        /// <summary>
         /// Class declaration is a forward reference.
         /// </summary>
         public bool IsIncomplete { get; set; }
@@ -30,6 +24,38 @@ namespace BulletSharpGen
 
         private bool _unresolved;
         public ClassDefinition Target { get; set; }
+
+        public bool IsBasic
+        {
+            get
+            {
+                switch (Kind)
+                {
+                    case TypeKind.Bool:
+                    case TypeKind.Char_S:
+                    case TypeKind.Double:
+                    case TypeKind.Enum:
+                    case TypeKind.Float:
+                    case TypeKind.Int:
+                    case TypeKind.Long:
+                    case TypeKind.LongLong:
+                    case TypeKind.SChar:
+                    case TypeKind.Short:
+                    case TypeKind.UChar:
+                    case TypeKind.UInt:
+                    case TypeKind.ULong:
+                    case TypeKind.ULongLong:
+                    case TypeKind.UShort:
+                    case TypeKind.Void:
+                        return true;
+                    case TypeKind.Unexposed:
+                        if (Target is EnumDefinition) return true;
+                        return false;
+                    default:
+                        return false;
+                }
+            }
+        }
 
         public TypeRefDefinition Canonical
         {
@@ -52,6 +78,38 @@ namespace BulletSharpGen
         {
             get
             {
+                switch (Kind)
+                {
+                    case TypeKind.Typedef:
+                        if (Referenced.Kind == TypeKind.Pointer &&
+                            Referenced.Referenced.Kind == TypeKind.FunctionProto)
+                        {
+                            if (Target != null) return Target.ManagedName;
+                            break;
+                        }
+                        else if (Referenced.IsBasic)
+                        {
+                            // TODO: C++/CLI: typedef to basic type can return typedef
+                            // TODO: Pinvoke: typedef to basic type returns basic type
+                            return Referenced.ManagedName;
+                        }
+                        else
+                        {
+                            return Referenced.ManagedName;
+                        }
+
+                    case TypeKind.ConstantArray:
+                    case TypeKind.LValueReference:
+                    case TypeKind.Pointer:
+                        return Referenced.ManagedName;
+
+                    case TypeKind.Enum:
+                    case TypeKind.Record:
+                    case TypeKind.Unexposed:
+                        if (Target != null) return Target.ManagedName;
+                        break;
+                }
+
                 if (IsBasic)
                 {
                     if (Name.Equals("unsigned char"))
@@ -60,51 +118,21 @@ namespace BulletSharpGen
                     }
                     return Name;
                 }
-                if (HasTemplateTypeParameter)
+
+                if (HasTemplateTypeParameter) return Name;
+
+                if (!_unresolved)
                 {
-                    return "T";
+                    Console.WriteLine("Unresolved reference to " + Name);
                 }
-                switch (Kind)
-                {
-                    case TypeKind.Pointer:
-                    case TypeKind.LValueReference:
-                    case TypeKind.ConstantArray:
-                        return Referenced.ManagedName;
-                }
-                if (Target == null)
-                {
-                    if (!_unresolved)
-                    {
-                        Console.WriteLine("Unresolved reference to " + Name);
-                    }
-                    _unresolved = true;
-                    return Name;
-                }
-                return Target.ManagedName;
+                _unresolved = true;
+                return Name;
             }
         }
 
         public TypeRefDefinition(ClangSharp.Type type, Cursor cursor = null)
         {
             Kind = (TypeKind)type.TypeKind;
-
-            var firstChild = cursor?.Children.FirstOrDefault();
-            if (firstChild != null && firstChild.Kind == CursorKind.TemplateRef)
-            {
-                if (cursor.Children.Count == 1)
-                {
-                    string displayName = cursor.Type.Declaration.DisplayName;
-                    int typeStart = displayName.IndexOf('<') + 1;
-                    int typeEnd = displayName.LastIndexOf('>');
-                    displayName = displayName.Substring(typeStart, typeEnd - typeStart);
-                    TemplateParams = new List<TypeRefDefinition> { new TypeRefDefinition(displayName) };
-                }
-                else
-                {
-                    TemplateParams = cursor.Children.Skip(1)
-                        .Select(c => new TypeRefDefinition(c.Type, c)).ToList();
-                }
-            }
 
             if (!type.Declaration.IsInvalid &&
                 !type.Declaration.IsDefinition &&
@@ -118,12 +146,33 @@ namespace BulletSharpGen
 
             if (type.Pointee.TypeKind != ClangSharp.Type.Kind.Invalid)
             {
-                Cursor pointeeCursor = null;
-                if (cursor != null)
+                Cursor pointeeCursor = cursor?.Children.FirstOrDefault(c => c.Type.Equals(type.Pointee));
+                if (pointeeCursor == null)
                 {
-                    pointeeCursor = cursor.Children.FirstOrDefault(c => c.Type.Equals(type.Pointee));
+                    pointeeCursor = cursor?.Children.FirstOrDefault(c => c.Kind == CursorKind.TypeRef)?.Referenced;
                 }
                 Referenced = new TypeRefDefinition(type.Pointee, pointeeCursor);
+            }
+            else if (Kind != TypeKind.Typedef)
+            {
+                // Capture template parameters
+                var firstChild = cursor?.Children.FirstOrDefault();
+                if (firstChild != null && firstChild.Kind == CursorKind.TemplateRef)
+                {
+                    if (cursor.Children.Count == 1)
+                    {
+                        string displayName = GetFullyQualifiedName(type, cursor);
+                        int typeStart = displayName.IndexOf('<') + 1;
+                        int typeEnd = displayName.LastIndexOf('>');
+                        displayName = displayName.Substring(typeStart, typeEnd - typeStart);
+                        TemplateParams = new List<TypeRefDefinition> { new TypeRefDefinition(displayName) };
+                    }
+                    else
+                    {
+                        TemplateParams = cursor.Children.Skip(1)
+                            .Select(c => new TypeRefDefinition(c.Type, c)).ToList();
+                    }
+                }
             }
 
             switch (Kind)
@@ -137,36 +186,29 @@ namespace BulletSharpGen
                 case TypeKind.UChar:
                 case TypeKind.UInt:
                     Name = type.Spelling;
-                    IsBasic = true;
                     break;
                 case TypeKind.Long:
                     Name = "long";
-                    IsBasic = true;
                     break;
                 case TypeKind.LongLong:
                     Name = "long long";
-                    IsBasic = true;
                     break;
                 case TypeKind.Short:
                     Name = "short";
-                    IsBasic = true;
                     break;
                 case TypeKind.ULong:
                     Name = "unsigned long";
-                    IsBasic = true;
                     break;
                 case TypeKind.ULongLong:
                     Name = "unsigned long long";
-                    IsBasic = true;
                     break;
                 case TypeKind.UShort:
                     Name = "unsigned short";
-                    IsBasic = true;
                     break;
 
                 case TypeKind.Typedef:
                     Name = GetFullyQualifiedName(type);
-                    Referenced = new TypeRefDefinition(type.Canonical);
+                    Referenced = new TypeRefDefinition(type.Canonical, cursor?.Referenced);
                     break;
 
                 case TypeKind.FunctionProto:
@@ -174,16 +216,15 @@ namespace BulletSharpGen
                 case TypeKind.Pointer:
                     break;
                 case TypeKind.ConstantArray:
-                    Referenced = new TypeRefDefinition(type.ArrayElementType);
+                    Referenced = new TypeRefDefinition(type.ArrayElementType, cursor);
                     break;
 
                 case TypeKind.Enum:
                     Name = type.Canonical.Declaration.Spelling;
-                    IsBasic = true;
                     break;
                 case TypeKind.Record:
                 case TypeKind.Unexposed:
-                    Name = GetFullyQualifiedName(type);
+                    Name = GetFullyQualifiedName(type, cursor);
                     break;
                 case TypeKind.DependentSizedArray:
                     break;
@@ -199,72 +240,58 @@ namespace BulletSharpGen
                 case "bool":
                     Kind = TypeKind.Bool;
                     Name = "bool";
-                    IsBasic = true;
                     break;
                 case "char":
                     Kind = TypeKind.Char_U;
                     Name = "char";
-                    IsBasic = true;
                     break;
                 case "double":
                     Kind = TypeKind.Double;
                     Name = "double";
-                    IsBasic = true;
                     break;
                 case "float":
                     Kind = TypeKind.Float;
                     Name = "float";
-                    IsBasic = true;
                     break;
                 case "int":
                     Kind = TypeKind.Int;
                     Name = "int";
-                    IsBasic = true;
                     break;
                 case "unsigned char":
                     Kind = TypeKind.UChar;
                     Name = "unsigned char";
-                    IsBasic = true;
                     break;
                 case "unsigned int":
                     Kind = TypeKind.UInt;
                     Name = "unsigned int";
-                    IsBasic = true;
                     break;
                 case "void":
                     Kind = TypeKind.Void;
                     Name = name;
-                    IsBasic = true;
                     break;
                 case "long int":
                     Kind = TypeKind.Long;
                     Name = "long";
-                    IsBasic = true;
                     break;
                 case "long long int":
                     Kind = TypeKind.LongLong;
                     Name = "long long";
-                    IsBasic = true;
                     break;
                 case "short int":
                     Kind = TypeKind.Short;
                     Name = "short";
-                    IsBasic = true;
                     break;
                 case "unsigned long int":
                     Kind = TypeKind.ULong;
                     Name = "unsigned long";
-                    IsBasic = true;
                     break;
                 case "unsigned long long int":
                     Kind = TypeKind.ULongLong;
                     Name = "unsigned long long";
-                    IsBasic = true;
                     break;
                 case "unsigned short int":
                     Kind = TypeKind.UShort;
                     Name = "unsigned short";
-                    IsBasic = true;
                     break;
                 default:
                     if (name.EndsWith(" *"))
@@ -287,7 +314,6 @@ namespace BulletSharpGen
             var t = new TypeRefDefinition
             {
                 HasTemplateTypeParameter = HasTemplateTypeParameter,
-                IsBasic = IsBasic,
                 IsConst = IsConst,
                 IsIncomplete = IsIncomplete,
                 Name = Name,
@@ -299,51 +325,34 @@ namespace BulletSharpGen
             return t;
         }
 
-        public static string GetFullyQualifiedName(ClangSharp.Type type)
+        public static string GetFullyQualifiedName(ClangSharp.Type type, Cursor cursor = null)
         {
-            string name;
             var decl = type.Declaration;
             if (decl.IsInvalid)
             {
-                name = "[unexposed type]";
-            }
-            else if (!decl.SpecializedCursorTemplate.IsInvalid)
-            {
-                name = decl.DisplayName;
-            }
-            else
-            {
-                name = decl.Spelling;
-                while (decl.SemanticParent.Kind == ClangSharp.CursorKind.ClassDecl ||
-                    decl.SemanticParent.Kind == ClangSharp.CursorKind.StructDecl ||
-                    decl.SemanticParent.Kind == ClangSharp.CursorKind.ClassTemplate ||
-                    decl.SemanticParent.Kind == ClangSharp.CursorKind.Namespace)
+                if (cursor.Kind == CursorKind.TypeRef) return cursor.DisplayName;
+                if (cursor.Kind == CursorKind.TemplateTypeParameter)
                 {
-                    name = decl.SemanticParent.Spelling + "::" + name;
-                    decl = decl.SemanticParent;
+                    return cursor.DisplayName;
                 }
-            }
-            return name;
-        }
 
-        public static string GetFullyQualifiedName(ClangSharp.Cursor cursor)
-        {
-            string name;
-            if (cursor.Type.TypeKind != ClangSharp.Type.Kind.Invalid)
-            {
-                return GetFullyQualifiedName(cursor.Type);
-            }
-            else
-            {
-                name = cursor.Spelling;
-                while (cursor.SemanticParent.Kind == ClangSharp.CursorKind.ClassDecl ||
-                    cursor.SemanticParent.Kind == ClangSharp.CursorKind.StructDecl ||
-                    cursor.SemanticParent.Kind == ClangSharp.CursorKind.ClassTemplate ||
-                    cursor.SemanticParent.Kind == ClangSharp.CursorKind.Namespace)
+                var typeRef = cursor.Children.FirstOrDefault(c => c.Kind == CursorKind.TypeRef);
+                if (typeRef != null)
                 {
-                    name = cursor.SemanticParent.Spelling + "::" + name;
-                    cursor = cursor.SemanticParent;
+                    return typeRef.DisplayName;
                 }
+
+                return "[unexposed type]";
+            }
+
+            string name = decl.DisplayName;
+            while (decl.SemanticParent.Kind == ClangSharp.CursorKind.ClassDecl ||
+                decl.SemanticParent.Kind == ClangSharp.CursorKind.StructDecl ||
+                decl.SemanticParent.Kind == ClangSharp.CursorKind.ClassTemplate ||
+                decl.SemanticParent.Kind == ClangSharp.CursorKind.Namespace)
+            {
+                name = decl.SemanticParent.Spelling + "::" + name;
+                decl = decl.SemanticParent;
             }
             return name;
         }

@@ -28,12 +28,23 @@ namespace BulletSharp
 /*
 		public void SetConstraintRowSolverGeneric(SingleConstraintRowSolver rowSolver)
 		{
-			btSequentialImpulseConstraintSolver_setConstraintRowSolverGeneric(_native, rowSolver._native);
+			btSequentialImpulseConstraintSolver_setConstraintRowSolverGeneric(_native,
+				rowSolver._native);
 		}
 
 		public void SetConstraintRowSolverLowerLimit(SingleConstraintRowSolver rowSolver)
 		{
-			btSequentialImpulseConstraintSolver_setConstraintRowSolverLowerLimit(_native, rowSolver._native);
+			btSequentialImpulseConstraintSolver_setConstraintRowSolverLowerLimit(
+				_native, rowSolver._native);
+		}
+
+		public float SolveGroup(CollisionObject bodies, int numBodies, PersistentManifold manifold,
+			int numManifolds, TypedConstraint constraints, int numConstraints, ContactSolverInfo info,
+			IDebugDraw debugDrawer, Dispatcher dispatcher)
+		{
+			return btSequentialImpulseConstraintSolver_solveGroup(_native, bodies._native,
+				numBodies, manifold._native, numManifolds, constraints._native, numConstraints,
+				info._native, DebugDraw.GetUnmanaged(debugDrawer), dispatcher._native);
 		}
 
 		public SingleConstraintRowSolver ActiveConstraintRowSolverGeneric

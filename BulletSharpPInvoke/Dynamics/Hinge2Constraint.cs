@@ -7,8 +7,10 @@ namespace BulletSharp
 {
 	public class Hinge2Constraint : Generic6DofSpring2Constraint
 	{
-		public Hinge2Constraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 anchor, Vector3 axis1, Vector3 axis2)
-            : base(btHinge2Constraint_new(rigidBodyA._native, rigidBodyB._native, ref anchor, ref axis1, ref axis2))
+		public Hinge2Constraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 anchor,
+			Vector3 axis1, Vector3 axis2)
+			: base(btHinge2Constraint_new(rigidBodyA._native, rigidBodyB._native,
+				ref anchor, ref axis1, ref axis2))
 		{
 			_rigidBodyA = rigidBodyA;
 			_rigidBodyB = rigidBodyB;
@@ -77,17 +79,17 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btHinge2Constraint_new(IntPtr rbA, IntPtr rbB, [In] ref Vector3 anchor, [In] ref Vector3 axis1, [In] ref Vector3 axis2);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btHinge2Constraint_getAnchor(IntPtr obj, [Out] out Vector3 value);
+		static extern void btHinge2Constraint_getAnchor(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btHinge2Constraint_getAnchor2(IntPtr obj, [Out] out Vector3 value);
+		static extern void btHinge2Constraint_getAnchor2(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btHinge2Constraint_getAngle1(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btHinge2Constraint_getAngle2(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btHinge2Constraint_getAxis1(IntPtr obj, [Out] out Vector3 value);
+		static extern void btHinge2Constraint_getAxis1(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btHinge2Constraint_getAxis2(IntPtr obj, [Out] out Vector3 value);
+		static extern void btHinge2Constraint_getAxis2(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btHinge2Constraint_setLowerLimit(IntPtr obj, float ang1min);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

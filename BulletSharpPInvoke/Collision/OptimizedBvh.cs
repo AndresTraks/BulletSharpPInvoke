@@ -17,14 +17,18 @@ namespace BulletSharp
 		{
 		}
 
-		public void Build(StridingMeshInterface triangles, bool useQuantizedAabbCompression, Vector3 bvhAabbMin, Vector3 bvhAabbMax)
+		public void Build(StridingMeshInterface triangles, bool useQuantizedAabbCompression,
+			Vector3 bvhAabbMin, Vector3 bvhAabbMax)
 		{
-			btOptimizedBvh_build(_native, triangles._native, useQuantizedAabbCompression, ref bvhAabbMin, ref bvhAabbMax);
+			btOptimizedBvh_build(_native, triangles._native, useQuantizedAabbCompression,
+				ref bvhAabbMin, ref bvhAabbMax);
 		}
 
-		public static OptimizedBvh DeSerializeInPlace(IntPtr alignedDataBuffer, uint dataBufferSize, bool swapEndian)
+		public static OptimizedBvh DeSerializeInPlace(IntPtr alignedDataBuffer, uint dataBufferSize,
+			bool swapEndian)
 		{
-            return new OptimizedBvh(btOptimizedBvh_deSerializeInPlace(alignedDataBuffer, dataBufferSize, swapEndian), true);
+            return new OptimizedBvh(btOptimizedBvh_deSerializeInPlace(alignedDataBuffer, dataBufferSize,
+                swapEndian), true);
 		}
 
 		public void Refit(StridingMeshInterface triangles, Vector3 aabbMin, Vector3 aabbMax)
@@ -32,19 +36,25 @@ namespace BulletSharp
 			btOptimizedBvh_refit(_native, triangles._native, ref aabbMin, ref aabbMax);
 		}
 
-		public void RefitPartial(StridingMeshInterface triangles, Vector3 aabbMin, Vector3 aabbMax)
+		public void RefitPartial(StridingMeshInterface triangles, Vector3 aabbMin,
+			Vector3 aabbMax)
 		{
-			btOptimizedBvh_refitPartial(_native, triangles._native, ref aabbMin, ref aabbMax);
+			btOptimizedBvh_refitPartial(_native, triangles._native, ref aabbMin,
+				ref aabbMax);
 		}
 
-		public bool SerializeInPlace(IntPtr alignedDataBuffer, uint dataBufferSize, bool swapEndian)
+		public bool SerializeInPlace(IntPtr alignedDataBuffer, uint dataBufferSize,
+			bool swapEndian)
 		{
-			return btOptimizedBvh_serializeInPlace(_native, alignedDataBuffer, dataBufferSize, swapEndian);
+			return btOptimizedBvh_serializeInPlace(_native, alignedDataBuffer, dataBufferSize,
+				swapEndian);
 		}
 
-		public void UpdateBvhNodes(StridingMeshInterface meshInterface, int firstNode, int endNode, int index)
+		public void UpdateBvhNodes(StridingMeshInterface meshInterface, int firstNode,
+			int endNode, int index)
 		{
-			btOptimizedBvh_updateBvhNodes(_native, meshInterface._native, firstNode, endNode, index);
+			btOptimizedBvh_updateBvhNodes(_native, meshInterface._native, firstNode,
+				endNode, index);
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

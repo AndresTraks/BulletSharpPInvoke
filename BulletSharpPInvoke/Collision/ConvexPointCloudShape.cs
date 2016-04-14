@@ -94,7 +94,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btConvexPointCloudShape_getNumPoints(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPointCloudShape_getScaledPoint(IntPtr obj, int index, [Out] out Vector3 value);
+		static extern void btConvexPointCloudShape_getScaledPoint(IntPtr obj, int index, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btConvexPointCloudShape_getUnscaledPoints(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

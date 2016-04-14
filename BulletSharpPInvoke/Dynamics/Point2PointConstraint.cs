@@ -60,8 +60,10 @@ namespace BulletSharp
 
 	public class Point2PointConstraint : TypedConstraint
 	{
-		public Point2PointConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 pivotInA, Vector3 pivotInB)
-			: base(btPoint2PointConstraint_new(rigidBodyA._native, rigidBodyB._native, ref pivotInA, ref pivotInB))
+		public Point2PointConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
+			Vector3 pivotInA, Vector3 pivotInB)
+			: base(btPoint2PointConstraint_new(rigidBodyA._native, rigidBodyB._native,
+				ref pivotInA, ref pivotInB))
 		{
 			_rigidBodyA = rigidBodyA;
 			_rigidBodyB = rigidBodyB;
@@ -81,7 +83,8 @@ namespace BulletSharp
 
 		public void GetInfo2NonVirtual(ConstraintInfo2 info, Matrix body0Trans, Matrix body1Trans)
 		{
-			btPoint2PointConstraint_getInfo2NonVirtual(_native, info._native, ref body0Trans, ref body1Trans);
+			btPoint2PointConstraint_getInfo2NonVirtual(_native, info._native, ref body0Trans,
+				ref body1Trans);
 		}
 
 		public void UpdateRhs(float timeStep)
@@ -138,9 +141,9 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btPoint2PointConstraint_getInfo2NonVirtual(IntPtr obj, IntPtr info, [In] ref Matrix body0_trans, [In] ref Matrix body1_trans);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btPoint2PointConstraint_getPivotInA(IntPtr obj, [Out] out Vector3 value);
+		static extern void btPoint2PointConstraint_getPivotInA(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btPoint2PointConstraint_getPivotInB(IntPtr obj, [Out] out Vector3 value);
+		static extern void btPoint2PointConstraint_getPivotInB(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btPoint2PointConstraint_getSetting(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

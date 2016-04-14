@@ -11,15 +11,19 @@ namespace BulletSharp
 		{
 		}
 
-		public MultiBodyJointMotor(MultiBody body, int link, float desiredVelocity, float maxMotorImpulse)
-			: base(btMultiBodyJointMotor_new(body._native, link, desiredVelocity, maxMotorImpulse))
+		public MultiBodyJointMotor(MultiBody body, int link, float desiredVelocity,
+			float maxMotorImpulse)
+			: base(btMultiBodyJointMotor_new(body._native, link, desiredVelocity,
+				maxMotorImpulse))
 		{
             _multiBodyA = body;
             _multiBodyB = body;
 		}
 
-		public MultiBodyJointMotor(MultiBody body, int link, int linkDoF, float desiredVelocity, float maxMotorImpulse)
-			: base(btMultiBodyJointMotor_new2(body._native, link, linkDoF, desiredVelocity, maxMotorImpulse))
+		public MultiBodyJointMotor(MultiBody body, int link, int linkDoF, float desiredVelocity,
+			float maxMotorImpulse)
+			: base(btMultiBodyJointMotor_new2(body._native, link, linkDoF, desiredVelocity,
+				maxMotorImpulse))
 		{
             _multiBodyA = body;
             _multiBodyB = body;

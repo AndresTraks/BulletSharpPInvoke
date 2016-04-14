@@ -15,9 +15,11 @@ namespace BulletSharp
 				_native = native;
 			}
             /*
-			public void ProcessIsland(CollisionObject bodies, int numBodies, PersistentManifold manifolds, int numManifolds, int islandId)
+			public void ProcessIsland(CollisionObject bodies, int numBodies, PersistentManifold manifolds,
+				int numManifolds, int islandId)
 			{
-				btSimulationIslandManager_IslandCallback_processIsland(_native, bodies._native, numBodies, manifolds._native, numManifolds, islandId);
+				btSimulationIslandManager_IslandCallback_processIsland(_native, bodies._native,
+					numBodies, manifolds._native, numManifolds, islandId);
 			}
             */
 			public void Dispose()
@@ -60,9 +62,11 @@ namespace BulletSharp
 			_native = btSimulationIslandManager_new();
 		}
 
-		public void BuildAndProcessIslands(Dispatcher dispatcher, CollisionWorld collisionWorld, IslandCallback callback)
+		public void BuildAndProcessIslands(Dispatcher dispatcher, CollisionWorld collisionWorld,
+			IslandCallback callback)
 		{
-			btSimulationIslandManager_buildAndProcessIslands(_native, dispatcher._native, collisionWorld._native, callback._native);
+			btSimulationIslandManager_buildAndProcessIslands(_native, dispatcher._native,
+				collisionWorld._native, callback._native);
 		}
 
 		public void BuildIslands(Dispatcher dispatcher, CollisionWorld colWorld)
@@ -87,7 +91,8 @@ namespace BulletSharp
 
 		public void UpdateActivationState(CollisionWorld colWorld, Dispatcher dispatcher)
 		{
-			btSimulationIslandManager_updateActivationState(_native, colWorld._native, dispatcher._native);
+			btSimulationIslandManager_updateActivationState(_native, colWorld._native,
+				dispatcher._native);
 		}
 
 		public bool SplitIslands

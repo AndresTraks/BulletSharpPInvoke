@@ -88,7 +88,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btMaterialProperties_getMaterialStride(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern PhyScalarType btMaterialProperties_getMaterialType(IntPtr obj);
+		static extern PhyScalarType btMaterialProperties_getMaterialType(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btMaterialProperties_getNumMaterials(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -98,13 +98,13 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btMaterialProperties_getTriangleMaterialStride(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern PhyScalarType btMaterialProperties_getTriangleType(IntPtr obj);
+		static extern PhyScalarType btMaterialProperties_getTriangleType(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMaterialProperties_setMaterialBase(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMaterialProperties_setMaterialStride(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btMaterialProperties_setMaterialType(IntPtr obj, PhyScalarType value);
+		static extern void btMaterialProperties_setMaterialType(IntPtr obj, PhyScalarType value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMaterialProperties_setNumMaterials(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -114,7 +114,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMaterialProperties_setTriangleMaterialStride(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btMaterialProperties_setTriangleType(IntPtr obj, PhyScalarType value);
+		static extern void btMaterialProperties_setTriangleType(IntPtr obj, PhyScalarType value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMaterialProperties_delete(IntPtr obj);
 	}
@@ -131,8 +131,14 @@ namespace BulletSharp
 		{
 		}
 
-        public TriangleIndexVertexMaterialArray(int numTriangles, IntPtr triangleIndexBase, int triangleIndexStride, int numVertices, IntPtr vertexBase, int vertexStride, int numMaterials, IntPtr materialBase, int materialStride, IntPtr triangleMaterialsBase, int materialIndexStride)
-			: base(btTriangleIndexVertexMaterialArray_new2(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride, numMaterials, materialBase, materialStride, triangleMaterialsBase, materialIndexStride))
+		public TriangleIndexVertexMaterialArray(int numTriangles, IntPtr triangleIndexBase,
+            int triangleIndexStride, int numVertices, IntPtr vertexBase, int vertexStride,
+            int numMaterials, IntPtr materialBase, int materialStride, IntPtr triangleMaterialsBase,
+			int materialIndexStride)
+			: base(btTriangleIndexVertexMaterialArray_new2(numTriangles, triangleIndexBase,
+				triangleIndexStride, numVertices, vertexBase, vertexStride,
+				numMaterials, materialBase, materialStride, triangleMaterialsBase,
+				materialIndexStride))
 		{
 		}
 
@@ -141,29 +147,50 @@ namespace BulletSharp
 			btTriangleIndexVertexMaterialArray_addMaterialProperties(_native, mat._native);
 		}
 
-        public void AddMaterialProperties(MaterialProperties mat, PhyScalarType triangleType)
+		public void AddMaterialProperties(MaterialProperties mat, PhyScalarType triangleType)
 		{
-			btTriangleIndexVertexMaterialArray_addMaterialProperties2(_native, mat._native, triangleType);
+			btTriangleIndexVertexMaterialArray_addMaterialProperties2(_native, mat._native,
+				triangleType);
 		}
 
-        public void GetLockedMaterialBase(out IntPtr materialBase, out int numMaterials, out PhyScalarType materialType, out int materialStride, out IntPtr triangleMaterialBase, out int numTriangles, out int triangleMaterialStride, out PhyScalarType triangleType)
+		public void GetLockedMaterialBase(out IntPtr materialBase, out int numMaterials,
+			out PhyScalarType materialType, out int materialStride, out IntPtr triangleMaterialBase,
+			out int numTriangles, out int triangleMaterialStride, out PhyScalarType triangleType)
 		{
-			btTriangleIndexVertexMaterialArray_getLockedMaterialBase(_native, out materialBase, out numMaterials, out materialType, out materialStride, out triangleMaterialBase, out numTriangles, out triangleMaterialStride, out triangleType);
+			btTriangleIndexVertexMaterialArray_getLockedMaterialBase(_native, out materialBase,
+				out numMaterials, out materialType, out materialStride, out triangleMaterialBase,
+				out numTriangles, out triangleMaterialStride, out triangleType);
 		}
 
-        public void GetLockedMaterialBase(out IntPtr materialBase, out int numMaterials, out PhyScalarType materialType, out int materialStride, out IntPtr triangleMaterialBase, out int numTriangles, out int triangleMaterialStride, out PhyScalarType triangleType, int subpart)
+		public void GetLockedMaterialBase(out IntPtr materialBase, out int numMaterials,
+			out PhyScalarType materialType, out int materialStride, out IntPtr triangleMaterialBase,
+			out int numTriangles, out int triangleMaterialStride, out PhyScalarType triangleType,
+			int subpart)
 		{
-            btTriangleIndexVertexMaterialArray_getLockedMaterialBase2(_native, out materialBase, out numMaterials, out materialType, out materialStride, out triangleMaterialBase, out numTriangles, out triangleMaterialStride, out triangleType, subpart);
+			btTriangleIndexVertexMaterialArray_getLockedMaterialBase2(_native, out materialBase,
+				out numMaterials, out materialType, out materialStride, out triangleMaterialBase,
+				out numTriangles, out triangleMaterialStride, out triangleType, subpart);
 		}
 
-        public void GetLockedReadOnlyMaterialBase(out IntPtr materialBase, out int numMaterials, out PhyScalarType materialType, out int materialStride, out IntPtr triangleMaterialBase, out int numTriangles, out int triangleMaterialStride, out PhyScalarType triangleType)
+		public void GetLockedReadOnlyMaterialBase(out IntPtr materialBase, out int numMaterials,
+			out PhyScalarType materialType, out int materialStride, out IntPtr triangleMaterialBase,
+			out int numTriangles, out int triangleMaterialStride, out PhyScalarType triangleType)
 		{
-            btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase(_native, out materialBase, out numMaterials, out materialType, out materialStride, out triangleMaterialBase, out numTriangles, out triangleMaterialStride, out triangleType);
+			btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase(_native,
+				out materialBase, out numMaterials, out materialType, out materialStride,
+				out triangleMaterialBase, out numTriangles, out triangleMaterialStride,
+				out triangleType);
 		}
 
-        public void GetLockedReadOnlyMaterialBase(out IntPtr materialBase, out int numMaterials, out PhyScalarType materialType, out int materialStride, out IntPtr triangleMaterialBase, out int numTriangles, out int triangleMaterialStride, out PhyScalarType triangleType, int subpart)
+		public void GetLockedReadOnlyMaterialBase(out IntPtr materialBase, out int numMaterials,
+			out PhyScalarType materialType, out int materialStride, out IntPtr triangleMaterialBase,
+			out int numTriangles, out int triangleMaterialStride, out PhyScalarType triangleType,
+			int subpart)
 		{
-            btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase2(_native, out materialBase, out numMaterials, out materialType, out materialStride, out triangleMaterialBase, out numTriangles, out triangleMaterialStride, out triangleType, subpart);
+			btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase2(_native,
+				out materialBase, out numMaterials, out materialType, out materialStride,
+				out triangleMaterialBase, out numTriangles, out triangleMaterialStride,
+				out triangleType, subpart);
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -173,14 +200,14 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btTriangleIndexVertexMaterialArray_addMaterialProperties(IntPtr obj, IntPtr mat);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btTriangleIndexVertexMaterialArray_addMaterialProperties2(IntPtr obj, IntPtr mat, PhyScalarType triangleType);
+		static extern void btTriangleIndexVertexMaterialArray_addMaterialProperties2(IntPtr obj, IntPtr mat, PhyScalarType triangleType);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btTriangleIndexVertexMaterialArray_getLockedMaterialBase(IntPtr obj, [Out] out IntPtr materialBase, [Out] out int numMaterials, [Out] out PhyScalarType materialType, [Out] out int materialStride, [Out] out IntPtr triangleMaterialBase, [Out] out int numTriangles, [Out] out int triangleMaterialStride, [Out] out PhyScalarType triangleType);
+        static extern void btTriangleIndexVertexMaterialArray_getLockedMaterialBase(IntPtr obj, out IntPtr materialBase, out int numMaterials, out PhyScalarType materialType, out int materialStride, out IntPtr triangleMaterialBase, out int numTriangles, out int triangleMaterialStride, out PhyScalarType triangleType);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btTriangleIndexVertexMaterialArray_getLockedMaterialBase2(IntPtr obj, [Out] out IntPtr materialBase, [Out] out int numMaterials, [Out] out PhyScalarType materialType, [Out] out int materialStride, [Out] out IntPtr triangleMaterialBase, [Out] out int numTriangles, [Out] out int triangleMaterialStride, [Out] out PhyScalarType triangleType, int subpart);
+        static extern void btTriangleIndexVertexMaterialArray_getLockedMaterialBase2(IntPtr obj, out IntPtr materialBase, out int numMaterials, out PhyScalarType materialType, out int materialStride, out IntPtr triangleMaterialBase, out int numTriangles, out int triangleMaterialStride, out PhyScalarType triangleType, int subpart);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase(IntPtr obj, [Out] out IntPtr materialBase, [Out] out int numMaterials, [Out] out PhyScalarType materialType, [Out] out int materialStride, [Out] out IntPtr triangleMaterialBase, [Out] out int numTriangles, [Out] out int triangleMaterialStride, [Out] out PhyScalarType triangleType);
+        static extern void btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase(IntPtr obj, out IntPtr materialBase, out int numMaterials, out PhyScalarType materialType, out int materialStride, out IntPtr triangleMaterialBase, out int numTriangles, out int triangleMaterialStride, out PhyScalarType triangleType);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase2(IntPtr obj, [Out] out IntPtr materialBase, [Out] out int numMaterials, [Out] out PhyScalarType materialType, [Out] out int materialStride, [Out] out IntPtr triangleMaterialBase, [Out] out int numTriangles, [Out] out int triangleMaterialStride, [Out] out PhyScalarType triangleType, int subpart);
+        static extern void btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase2(IntPtr obj, out IntPtr materialBase, out int numMaterials, out PhyScalarType materialType, out int materialStride, out IntPtr triangleMaterialBase, out int numTriangles, out int triangleMaterialStride, out PhyScalarType triangleType, int subpart);
 	}
 }

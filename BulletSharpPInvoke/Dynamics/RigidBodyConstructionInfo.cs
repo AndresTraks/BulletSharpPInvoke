@@ -5,28 +5,29 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
-
 	public class RigidBodyConstructionInfo : IDisposable
 	{
 		internal IntPtr _native;
 
-        private CollisionShape _collisionShape;
-        internal MotionState _motionState;
+		private CollisionShape _collisionShape;
+		private MotionState _motionState;
 
-		public RigidBodyConstructionInfo(float mass, MotionState motionState, CollisionShape collisionShape)
+		public RigidBodyConstructionInfo(float mass, MotionState motionState,
+			CollisionShape collisionShape)
 		{
-            _native = btRigidBody_btRigidBodyConstructionInfo_new(mass, (motionState != null) ? motionState._native : IntPtr.Zero,
-                (collisionShape != null) ? collisionShape._native : IntPtr.Zero);
-            _collisionShape = collisionShape;
-            _motionState = motionState;
+			_native = btRigidBody_btRigidBodyConstructionInfo_new(mass, motionState != null ? motionState._native : IntPtr.Zero,
+				collisionShape != null ? collisionShape._native : IntPtr.Zero);
+			_collisionShape = collisionShape;
+			_motionState = motionState;
 		}
 
-		public RigidBodyConstructionInfo(float mass, MotionState motionState, CollisionShape collisionShape, Vector3 localInertia)
+		public RigidBodyConstructionInfo(float mass, MotionState motionState,
+			CollisionShape collisionShape, Vector3 localInertia)
 		{
-            _native = btRigidBody_btRigidBodyConstructionInfo_new2(mass, (motionState != null) ? motionState._native : IntPtr.Zero,
-                (collisionShape != null) ? collisionShape._native : IntPtr.Zero, ref localInertia);
-            _collisionShape = collisionShape;
-            _motionState = motionState;
+			_native = btRigidBody_btRigidBodyConstructionInfo_new2(mass, motionState != null ? motionState._native : IntPtr.Zero,
+				collisionShape != null ? collisionShape._native : IntPtr.Zero, ref localInertia);
+			_collisionShape = collisionShape;
+			_motionState = motionState;
 		}
 
 		public float AdditionalAngularDampingFactor
@@ -73,12 +74,12 @@ namespace BulletSharp
 
 		public CollisionShape CollisionShape
 		{
-            get { return _collisionShape; }
-            set
-            {
-                _collisionShape = value;
-                btRigidBody_btRigidBodyConstructionInfo_setCollisionShape(_native, (value != null) ? value._native : IntPtr.Zero);
-            }
+			get { return _collisionShape; }
+			set
+			{
+				btRigidBody_btRigidBodyConstructionInfo_setCollisionShape(_native, value != null ? value._native : IntPtr.Zero);
+				_collisionShape = value;
+			}
 		}
 
 		public float Friction
@@ -118,12 +119,12 @@ namespace BulletSharp
 
 		public MotionState MotionState
 		{
-            get { return _motionState; }
-            set
-            {
-                btRigidBody_btRigidBodyConstructionInfo_setMotionState(_native, (value != null) ? value._native : IntPtr.Zero);
-                _motionState = value;
-            }
+			get { return _motionState; }
+			set
+			{
+				btRigidBody_btRigidBodyConstructionInfo_setMotionState(_native, value != null ? value._native : IntPtr.Zero);
+				_motionState = value;
+			}
 		}
 
 		public float Restitution
@@ -189,25 +190,21 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btRigidBody_btRigidBodyConstructionInfo_getAngularSleepingThreshold(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btRigidBody_btRigidBodyConstructionInfo_getCollisionShape(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btRigidBody_btRigidBodyConstructionInfo_getFriction(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btRigidBody_btRigidBodyConstructionInfo_getLinearDamping(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btRigidBody_btRigidBodyConstructionInfo_getLinearSleepingThreshold(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btRigidBody_btRigidBodyConstructionInfo_getLocalInertia(IntPtr obj, [Out] out Vector3 value);
+		static extern void btRigidBody_btRigidBodyConstructionInfo_getLocalInertia(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btRigidBody_btRigidBodyConstructionInfo_getMass(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btRigidBody_btRigidBodyConstructionInfo_getMotionState(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btRigidBody_btRigidBodyConstructionInfo_getRestitution(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btRigidBody_btRigidBodyConstructionInfo_getRollingFriction(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btRigidBody_btRigidBodyConstructionInfo_getStartWorldTransform(IntPtr obj, [Out] out Matrix value);
+		static extern void btRigidBody_btRigidBodyConstructionInfo_getStartWorldTransform(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btRigidBody_btRigidBodyConstructionInfo_setAdditionalAngularDampingFactor(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

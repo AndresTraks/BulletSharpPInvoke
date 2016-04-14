@@ -183,10 +183,9 @@ namespace BulletSharpGen.Project
             if ("true".Equals(reader.GetAttribute("HasPreventDelete"))) @class.HasPreventDelete = true;
             if ("true".Equals(reader.GetAttribute("MarshalAsStruct"))) @class.MarshalAsStruct = true;
 
-            project.ClassDefinitions.Add(@class.FullyQualifiedName, @class);
-
             if (reader.IsEmptyElement)
             {
+                project.ClassDefinitions.Add(@class.FullyQualifiedName, @class);
                 return;
             }
 
@@ -199,14 +198,16 @@ namespace BulletSharpGen.Project
                         case "Class":
                         case "ClassTemplate":
                         case "Enum":
-                            {
-                                ReadClassDefinition(project, reader, header, @class);
-                            }
+                            ReadClassDefinition(project, reader, header, @class);
                             break;
+
                         case "Method":
-                            {
-                                ReadMethodDefinition(reader, @class);
-                            }
+                            ReadMethodDefinition(reader, @class);
+                            break;
+
+                        case "TemplateParameter":
+                            (@class as ClassTemplateDefinition).TemplateParameters
+                                .Add(reader.ReadElementContentAsString());
                             break;
                     }
                 }
@@ -215,6 +216,8 @@ namespace BulletSharpGen.Project
                     break;
                 }
             }
+
+            project.ClassDefinitions.Add(@class.FullyQualifiedName, @class);
         }
 
         static void ReadMethodDefinition(XmlReader reader, ClassDefinition @class)

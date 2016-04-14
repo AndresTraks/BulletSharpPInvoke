@@ -2122,16 +2122,16 @@ void btSoftBody_addForce2(btSoftBody* obj, const btVector3* force, int node)
 	obj->addForce(BTVECTOR3_USE(force), node);
 }
 
-void btSoftBody_addVelocity(btSoftBody* obj, const btVector3* velocity, int node)
-{
-	BTVECTOR3_IN(velocity);
-	obj->addVelocity(BTVECTOR3_USE(velocity), node);
-}
-
-void btSoftBody_addVelocity2(btSoftBody* obj, const btVector3* velocity)
+void btSoftBody_addVelocity(btSoftBody* obj, const btVector3* velocity)
 {
 	BTVECTOR3_IN(velocity);
 	obj->addVelocity(BTVECTOR3_USE(velocity));
+}
+
+void btSoftBody_addVelocity2(btSoftBody* obj, const btVector3* velocity, int node)
+{
+	BTVECTOR3_IN(velocity);
+	obj->addVelocity(BTVECTOR3_USE(velocity), node);
 }
 
 void btSoftBody_appendAnchor(btSoftBody* obj, int node, btRigidBody* body, const btVector3* localPivot)

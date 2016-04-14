@@ -92,8 +92,8 @@ namespace BulletSharp
 		public void Project(Matrix trans, Vector3 dir, out float minProj, out float maxProj,
 			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
 		{
-            btConvexPolyhedron_project(_native, ref trans, ref dir, out minProj,
-                out maxProj, out witnesPtMin, out witnesPtMax);
+			btConvexPolyhedron_project(_native, ref trans, ref dir, out minProj,
+				out maxProj, out witnesPtMin, out witnesPtMax);
 		}
 
 		public bool TestContainment()
@@ -203,31 +203,31 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btConvexPolyhedron_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_getExtents(IntPtr obj, [Out] out Vector3 value);
+		static extern void btConvexPolyhedron_getExtents(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern IntPtr btConvexPolyhedron_getFaces(IntPtr obj);
+		static extern IntPtr btConvexPolyhedron_getFaces(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_getLocalCenter(IntPtr obj, [Out] out Vector3 value);
+		static extern void btConvexPolyhedron_getLocalCenter(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_getMC(IntPtr obj, [Out] out Vector3 value);
+		static extern void btConvexPolyhedron_getMC(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_getME(IntPtr obj, [Out] out Vector3 value);
+		static extern void btConvexPolyhedron_getME(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btConvexPolyhedron_getRadius(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btConvexPolyhedron_getUniqueEdges(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern IntPtr btConvexPolyhedron_getVertices(IntPtr obj);
+		static extern IntPtr btConvexPolyhedron_getVertices(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConvexPolyhedron_initialize(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btConvexPolyhedron_project(IntPtr obj, [In] ref Matrix trans, [In] ref Vector3 dir, [Out] out float minProj, [Out] out float maxProj, [Out] out Vector3 witnesPtMin, [Out] out Vector3 witnesPtMax);
+		static extern void btConvexPolyhedron_project(IntPtr obj, [In] ref Matrix trans, [In] ref Vector3 dir, out float minProj, out float maxProj, out Vector3 witnesPtMin, out Vector3 witnesPtMax);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConvexPolyhedron_setExtents(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btConvexPolyhedron_setLocalCenter(IntPtr obj, [In] ref Vector3 value);
+		static extern void btConvexPolyhedron_setLocalCenter(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btConvexPolyhedron_setMC(IntPtr obj, [In] ref Vector3 value);
+		static extern void btConvexPolyhedron_setMC(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConvexPolyhedron_setME(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

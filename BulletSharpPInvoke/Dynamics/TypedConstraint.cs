@@ -6,12 +6,12 @@ using BulletSharp.Math;
 namespace BulletSharp
 {
     public enum ConstraintParam
-    {
-        Erp = 1,
-        StopErp,
-        Cfm,
-        StopCfm
-    }
+	{
+		Erp = 1,
+		StopErp,
+		Cfm,
+		StopCfm
+	}
 
 	public enum TypedConstraintType
 	{
@@ -104,13 +104,13 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btJointFeedback_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btJointFeedback_getAppliedForceBodyA(IntPtr obj, [Out] out Vector3 value);
+		static extern void btJointFeedback_getAppliedForceBodyA(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btJointFeedback_getAppliedForceBodyB(IntPtr obj, [Out] out Vector3 value);
+		static extern void btJointFeedback_getAppliedForceBodyB(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btJointFeedback_getAppliedTorqueBodyA(IntPtr obj, [Out] out Vector3 value);
+		static extern void btJointFeedback_getAppliedTorqueBodyA(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btJointFeedback_getAppliedTorqueBodyB(IntPtr obj, [Out] out Vector3 value);
+		static extern void btJointFeedback_getAppliedTorqueBodyB(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btJointFeedback_setAppliedForceBodyA(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -441,14 +441,18 @@ namespace BulletSharp
 			btTypedConstraint_setParam2(_native, num, value, axis);
 		}
         /*
-		public void SetupSolverConstraint(ConstraintArray ca, int solverBodyA, int solverBodyB, float timeStep)
+		public void SetupSolverConstraint(btAlignedObjectArray<btSolverConstraint> ca,
+			int solverBodyA, int solverBodyB, float timeStep)
 		{
-			btTypedConstraint_setupSolverConstraint(_native, ca._native, solverBodyA, solverBodyB, timeStep);
+			btTypedConstraint_setupSolverConstraint(_native, ca._native, solverBodyA,
+				solverBodyB, timeStep);
 		}
 
-		public void SolveConstraintObsolete(SolverBody __unnamed0, SolverBody __unnamed1, float __unnamed2)
+		public void SolveConstraintObsolete(SolverBody __unnamed0, SolverBody __unnamed1,
+			float __unnamed2)
 		{
-			btTypedConstraint_solveConstraintObsolete(_native, __unnamed0._native, __unnamed1._native, __unnamed2);
+			btTypedConstraint_solveConstraintObsolete(_native, __unnamed0._native,
+				__unnamed1._native, __unnamed2);
 		}
         */
 		public float AppliedImpulse
@@ -666,7 +670,8 @@ namespace BulletSharp
 			btAngularLimit_set3(_native, low, high, softness, biasFactor);
 		}
 
-		public void Set(float low, float high, float softness, float biasFactor, float relaxationFactor)
+		public void Set(float low, float high, float softness, float biasFactor,
+			float relaxationFactor)
 		{
 			btAngularLimit_set4(_native, low, high, softness, biasFactor, relaxationFactor);
 		}

@@ -21,9 +21,11 @@ namespace BulletSharp
 			btMultiBodyConstraint_allocateJacobiansMultiDof(_native);
 		}
         /*
-		public void CreateConstraintRows(MultiBodyConstraintArray constraintRows, MultiBodyJacobianData data, ContactSolverInfo infoGlobal)
+		public void CreateConstraintRows(MultiBodyConstraintArray constraintRows,
+			MultiBodyJacobianData data, ContactSolverInfo infoGlobal)
 		{
-			btMultiBodyConstraint_createConstraintRows(_native, constraintRows._native, data._native, infoGlobal._native);
+			btMultiBodyConstraint_createConstraintRows(_native, constraintRows._native,
+				data._native, infoGlobal._native);
 		}
         */
 		public void DebugDraw(IDebugDraw drawer)

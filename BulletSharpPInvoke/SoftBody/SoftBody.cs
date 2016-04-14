@@ -209,7 +209,7 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBodyWorldInfo_getAir_density(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBodyWorldInfo_getGravity(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBodyWorldInfo_getGravity(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBodyWorldInfo_getMaxDisplacement(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -217,7 +217,7 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBodyWorldInfo_getWater_density(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBodyWorldInfo_getWater_normal(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBodyWorldInfo_getWater_normal(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBodyWorldInfo_getWater_offset(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -402,7 +402,7 @@ namespace BulletSharp.SoftBody
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern IntPtr btSoftBody_AJoint_Specs_new();
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern void btSoftBody_AJoint_Specs_getAxis(IntPtr obj, [Out] out Vector3 value);
+			static extern void btSoftBody_AJoint_Specs_getAxis(IntPtr obj, out Vector3 value);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern IntPtr btSoftBody_AJoint_Specs_getIcontrol(IntPtr obj);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -538,15 +538,15 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Anchor_getBody(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Anchor_getC0(IntPtr obj, [Out] out Matrix value);
+		static extern void btSoftBody_Anchor_getC0(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Anchor_getC1(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Anchor_getC1(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Anchor_getC2(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Anchor_getInfluence(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Anchor_getLocal(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Anchor_getLocal(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Anchor_getNode(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -748,9 +748,9 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_Body_activate(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Body_angularVelocity(IntPtr obj, [In] ref Vector3 rpos, [Out] out Vector3 value);
+		static extern void btSoftBody_Body_angularVelocity(IntPtr obj, [In] ref Vector3 rpos, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Body_angularVelocity2(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Body_angularVelocity2(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_Body_applyAImpulse(IntPtr obj, IntPtr impulse);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -774,9 +774,9 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Body_invMass(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Body_invWorldInertia(IntPtr obj, [Out] out Matrix value);
+		static extern void btSoftBody_Body_invWorldInertia(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Body_linearVelocity(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Body_linearVelocity(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_Body_setCollisionObject(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -784,9 +784,9 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_Body_setSoft(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Body_velocity(IntPtr obj, [In] ref Vector3 rpos, [Out] out Vector3 value);
+		static extern void btSoftBody_Body_velocity(IntPtr obj, [In] ref Vector3 rpos, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Body_xform(IntPtr obj, [Out] out Matrix value);
+		static extern void btSoftBody_Body_xform(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_Body_delete(IntPtr obj);
 	}
@@ -848,7 +848,7 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBody_CJoint_getMaxlife(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_CJoint_getNormal(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_CJoint_getNormal(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_CJoint_getRpos(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -1102,14 +1102,14 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Cluster_getAdamping(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Cluster_getAv(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Cluster_getAv(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBody_Cluster_getClusterIndex(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btSoftBody_Cluster_getCollide(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Cluster_getCom(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Cluster_getCom(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btSoftBody_Cluster_getContainsAnchor(IntPtr obj);
@@ -1118,19 +1118,19 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Cluster_getFramerefs(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Cluster_getFramexform(IntPtr obj, [Out] out Matrix value);
+		static extern void btSoftBody_Cluster_getFramexform(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Cluster_getIdmass(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Cluster_getImass(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Cluster_getInvwi(IntPtr obj, [Out] out Matrix value);
+		static extern void btSoftBody_Cluster_getInvwi(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Cluster_getLdamping(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Cluster_getLeaf(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Cluster_getLocii(IntPtr obj, [Out] out Matrix value);
+		static extern void btSoftBody_Cluster_getLocii(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_Cluster_getLv(IntPtr obj, [Out] out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -1607,7 +1607,7 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Face_getN(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Face_getNormal(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Face_getNormal(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Face_getRa(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -1779,9 +1779,9 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBody_Impulse_getAsVelocity(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Impulse_getDrift(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Impulse_getDrift(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Impulse_getVelocity(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Impulse_getVelocity(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_Impulse_operator_n(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -1994,15 +1994,15 @@ namespace BulletSharp.SoftBody
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btSoftBody_Joint_getDelete(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Joint_getDrift(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Joint_getDrift(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Joint_getErp(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Joint_getMassmatrix(IntPtr obj, [Out] out Matrix value);
+		static extern void btSoftBody_Joint_getMassmatrix(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Joint_getRefs(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Joint_getSdrift(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Joint_getSdrift(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Joint_getSplit(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -2100,7 +2100,7 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Link_getC2(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Link_getC3(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Link_getC3(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Link_getN(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -2142,7 +2142,7 @@ namespace BulletSharp.SoftBody
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern IntPtr btSoftBody_LJoint_Specs_new();
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern void btSoftBody_LJoint_Specs_getPosition(IntPtr obj, [Out] out Vector3 value);
+			static extern void btSoftBody_LJoint_Specs_getPosition(IntPtr obj, out Vector3 value);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern void btSoftBody_LJoint_Specs_setPosition(IntPtr obj, [In] ref Vector3 value);
 		}
@@ -2323,19 +2323,19 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBody_Node_getBattach(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Node_getF(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Node_getF(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_Node_getIm(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Node_getLeaf(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Node_getN(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Node_getN(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Node_getQ(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Node_getQ(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Node_getV(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Node_getV(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Node_getX(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Node_getX(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_Node_setArea(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -2410,7 +2410,7 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Note_getNodes(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Note_getOffset(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Note_getOffset(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBody_Note_getRank(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -2522,7 +2522,7 @@ namespace BulletSharp.SoftBody
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Pose_getAqq(IntPtr obj, [Out] out Matrix value);
+		static extern void btSoftBody_Pose_getAqq(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btSoftBody_Pose_getBframe(IntPtr obj);
@@ -2530,13 +2530,13 @@ namespace BulletSharp.SoftBody
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btSoftBody_Pose_getBvolume(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Pose_getCom(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_Pose_getCom(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Pose_getPos(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Pose_getRot(IntPtr obj, [Out] out Matrix value);
+		static extern void btSoftBody_Pose_getRot(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_Pose_getScl(IntPtr obj, [Out] out Matrix value);
+		static extern void btSoftBody_Pose_getScl(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_Pose_getWgh(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -2571,14 +2571,18 @@ namespace BulletSharp.SoftBody
 		{
 		}
 
-		public static float RayFromToTriangle(Vector3 rayFrom, Vector3 rayTo, Vector3 rayNormalizedDirection, Vector3 a, Vector3 b, Vector3 c)
+		public static float RayFromToTriangle(Vector3 rayFrom, Vector3 rayTo,
+			Vector3 rayNormalizedDirection, Vector3 a, Vector3 b, Vector3 c)
 		{
-			return btSoftBody_RayFromToCaster_rayFromToTriangle(ref rayFrom, ref rayTo, ref rayNormalizedDirection, ref a, ref b, ref c);
+			return btSoftBody_RayFromToCaster_rayFromToTriangle(ref rayFrom,
+				ref rayTo, ref rayNormalizedDirection, ref a, ref b, ref c);
 		}
 
-		public static float RayFromToTriangle(Vector3 rayFrom, Vector3 rayTo, Vector3 rayNormalizedDirection, Vector3 a, Vector3 b, Vector3 c, float maxt)
+		public static float RayFromToTriangle(Vector3 rayFrom, Vector3 rayTo,
+			Vector3 rayNormalizedDirection, Vector3 a, Vector3 b, Vector3 c, float maxt)
 		{
-			return btSoftBody_RayFromToCaster_rayFromToTriangle2(ref rayFrom, ref rayTo, ref rayNormalizedDirection, ref a, ref b, ref c, maxt);
+			return btSoftBody_RayFromToCaster_rayFromToTriangle2(ref rayFrom,
+				ref rayTo, ref rayNormalizedDirection, ref a, ref b, ref c, maxt);
 		}
 
 		public Face Face
@@ -2654,11 +2658,11 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_RayFromToCaster_getMint(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_RayFromToCaster_getRayFrom(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_RayFromToCaster_getRayFrom(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_RayFromToCaster_getRayNormalizedDirection(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_RayFromToCaster_getRayNormalizedDirection(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_RayFromToCaster_getRayTo(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_RayFromToCaster_getRayTo(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBody_RayFromToCaster_getTests(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -2788,9 +2792,9 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_RContact_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_RContact_getC0(IntPtr obj, [Out] out Matrix value);
+		static extern void btSoftBody_RContact_getC0(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_RContact_getC1(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_RContact_getC1(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_RContact_getC2(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -2879,7 +2883,7 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_sCti_getColObj(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_sCti_getNormal(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_sCti_getNormal(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_sCti_getOffset(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -3027,9 +3031,9 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_SContact_getNode(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_SContact_getNormal(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_SContact_getNormal(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_SContact_getWeights(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_SContact_getWeights(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_SContact_setFace(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -3275,14 +3279,14 @@ namespace BulletSharp.SoftBody
 			btSoftBody_addForce2(_native, ref force, node);
 		}
 
-		public void AddVelocity(Vector3 velocity, int node)
-		{
-			btSoftBody_addVelocity(_native, ref velocity, node);
-		}
-
 		public void AddVelocity(Vector3 velocity)
 		{
-			btSoftBody_addVelocity2(_native, ref velocity);
+			btSoftBody_addVelocity(_native, ref velocity);
+		}
+
+		public void AddVelocity(Vector3 velocity, int node)
+		{
+			btSoftBody_addVelocity2(_native, ref velocity, node);
 		}
 
 		public void AppendAnchor(int node, RigidBody body, Vector3 localPivot)
@@ -3292,12 +3296,15 @@ namespace BulletSharp.SoftBody
 
 		public void AppendAnchor(int node, RigidBody body, Vector3 localPivot, bool disableCollisionBetweenLinkedBodies)
 		{
-			btSoftBody_appendAnchor2(_native, node, body._native, ref localPivot, disableCollisionBetweenLinkedBodies);
+			btSoftBody_appendAnchor2(_native, node, body._native, ref localPivot,
+				disableCollisionBetweenLinkedBodies);
 		}
 
-		public void AppendAnchor(int node, RigidBody body, Vector3 localPivot, bool disableCollisionBetweenLinkedBodies, float influence)
+		public void AppendAnchor(int node, RigidBody body, Vector3 localPivot, bool disableCollisionBetweenLinkedBodies,
+			float influence)
 		{
-			btSoftBody_appendAnchor3(_native, node, body._native, ref localPivot, disableCollisionBetweenLinkedBodies, influence);
+			btSoftBody_appendAnchor3(_native, node, body._native, ref localPivot,
+				disableCollisionBetweenLinkedBodies, influence);
 		}
 
 		public void AppendAnchor(int node, RigidBody body)
@@ -3310,9 +3317,11 @@ namespace BulletSharp.SoftBody
 			btSoftBody_appendAnchor5(_native, node, body._native, disableCollisionBetweenLinkedBodies);
 		}
 
-		public void AppendAnchor(int node, RigidBody body, bool disableCollisionBetweenLinkedBodies, float influence)
+		public void AppendAnchor(int node, RigidBody body, bool disableCollisionBetweenLinkedBodies,
+			float influence)
 		{
-			btSoftBody_appendAnchor6(_native, node, body._native, disableCollisionBetweenLinkedBodies, influence);
+			btSoftBody_appendAnchor6(_native, node, body._native, disableCollisionBetweenLinkedBodies,
+				influence);
 		}
 
         private void StoreAngularJointControlRef(AngularJoint.Specs specs)
@@ -3517,9 +3526,11 @@ namespace BulletSharp.SoftBody
 			btSoftBody_applyForces(_native);
 		}
 
-		public bool CheckContact(CollisionObjectWrapper colObjWrap, Vector3 x, float margin, sCti cti)
+		public bool CheckContact(CollisionObjectWrapper colObjWrap, Vector3 x, float margin,
+			sCti cti)
 		{
-			return btSoftBody_checkContact(_native, colObjWrap._native, ref x, margin, cti._native);
+			return btSoftBody_checkContact(_native, colObjWrap._native, ref x, margin,
+				cti._native);
 		}
 
 		public bool CheckFace(int node0, int node1, int node2)
@@ -3746,7 +3757,7 @@ namespace BulletSharp.SoftBody
 			btSoftBody_randomizeConstraints(_native);
 		}
 
-        public bool RayTest(ref Vector3 rayFrom, ref Vector3 rayTo, SRayCast results)
+        public bool RayTestRef(ref Vector3 rayFrom, ref Vector3 rayTo, SRayCast results)
         {
             IntPtr rayCast = btSoftBody_sRayCast_new();
             bool ret = btSoftBody_rayTest(_native, ref rayFrom, ref rayTo, rayCast);
@@ -3757,6 +3768,25 @@ namespace BulletSharp.SoftBody
             btSoftBody_sRayCast_delete(rayCast);
             return ret;
         }
+
+		public bool RayTest(Vector3 rayFrom, Vector3 rayTo, SRayCast results)
+		{
+            IntPtr rayCast = btSoftBody_sRayCast_new();
+            bool ret = btSoftBody_rayTest(_native, ref rayFrom, ref rayTo, rayCast);
+            results.Body = this;
+            results.Feature = btSoftBody_sRayCast_getFeature(rayCast);
+            results.Fraction = btSoftBody_sRayCast_getFraction(rayCast);
+            results.Index = btSoftBody_sRayCast_getIndex(rayCast);
+            btSoftBody_sRayCast_delete(rayCast);
+            return ret;
+		}
+
+		public int RayTest(Vector3 rayFrom, Vector3 rayTo, ref float mint, out FeatureType feature,
+			out int index, bool countOnly)
+		{
+			return btSoftBody_rayTest2(_native, ref rayFrom, ref rayTo, ref mint,
+				out feature, out index, countOnly);
+		}
 
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern IntPtr btSoftBody_sRayCast_new();
@@ -3769,12 +3799,6 @@ namespace BulletSharp.SoftBody
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern void btSoftBody_sRayCast_delete(IntPtr obj);
 
-        /*
-		public int RayTest(Vector3 rayFrom, Vector3 rayTo, float mint, EFeature feature, int index, bool countOnly)
-		{
-			return btSoftBody_rayTest2(_native, ref rayFrom, ref rayTo, mint._native, feature._native, index._native, countOnly);
-		}
-        */
 		public void Refine(ImplicitFn ifn, float accurary, bool cut)
 		{
 			btSoftBody_refine(_native, ifn._native, accurary, cut);
@@ -3825,9 +3849,9 @@ namespace BulletSharp.SoftBody
 			btSoftBody_setTotalDensity(_native, density);
 		}
 
-		public void SetTotalMass(float mass, bool fromfaces)
+		public void SetTotalMass(float mass, bool fromFaces)
 		{
-			btSoftBody_setTotalMass2(_native, mass, fromfaces);
+			btSoftBody_setTotalMass2(_native, mass, fromFaces);
 		}
 
 		public void SetVelocity(Vector3 velocity)
@@ -4364,7 +4388,7 @@ namespace BulletSharp.SoftBody
 			get { return _worldInfo; }
 			set
 			{
-                btSoftBody_setWorldInfo(_native, value._native);
+				btSoftBody_setWorldInfo(_native, value._native);
 				_worldInfo = value;
 			}
 		}
@@ -4382,9 +4406,9 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_addForce2(IntPtr obj, [In] ref Vector3 force, int node);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_addVelocity(IntPtr obj, [In] ref Vector3 velocity, int node);
+		static extern void btSoftBody_addVelocity(IntPtr obj, [In] ref Vector3 velocity);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_addVelocity2(IntPtr obj, [In] ref Vector3 velocity);
+		static extern void btSoftBody_addVelocity2(IntPtr obj, [In] ref Vector3 velocity, int node);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_appendAnchor(IntPtr obj, int node, IntPtr body, [In] ref Vector3 localPivot);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -4490,9 +4514,9 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_clusterAImpulse(IntPtr cluster, IntPtr impulse);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_clusterCom(IntPtr obj, int cluster, [Out] out Vector3 value);
+		static extern void btSoftBody_clusterCom(IntPtr obj, int cluster, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_clusterCom2(IntPtr cluster, [Out] out Vector3 value);
+		static extern void btSoftBody_clusterCom2(IntPtr cluster, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBody_clusterCount(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -4506,7 +4530,7 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_clusterVAImpulse(IntPtr cluster, [In] ref Vector3 impulse);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_clusterVelocity(IntPtr cluster, [In] ref Vector3 rpos, [Out] out Vector3 value);
+		static extern void btSoftBody_clusterVelocity(IntPtr cluster, [In] ref Vector3 rpos, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_clusterVImpulse(IntPtr cluster, [In] ref Vector3 rpos, [In] ref Vector3 impulse);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -4522,7 +4546,7 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_defaultCollisionHandler2(IntPtr obj, IntPtr psb);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_evaluateCom(IntPtr obj, [Out] out Vector3 value);
+		static extern void btSoftBody_evaluateCom(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBody_generateBendingConstraints(IntPtr obj, int distance);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -4532,7 +4556,7 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBody_generateClusters2(IntPtr obj, int k, int maxiterations);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_getAabb(IntPtr obj, [Out] out Vector3 aabbMin, [Out] out Vector3 aabbMax);
+		static extern void btSoftBody_getAabb(IntPtr obj, out Vector3 aabbMin, out Vector3 aabbMax);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSoftBody_getAnchors(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -4593,9 +4617,9 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_getTotalMass(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_getUserIndexMapping(IntPtr obj);
+		static extern IntPtr btSoftBody_getUserIndexMapping(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBody_getWindVelocity(IntPtr obj, [Out] out Vector3 velocity);
+		static extern void btSoftBody_getWindVelocity(IntPtr obj, out Vector3 velocity);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBody_getVolume(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -4632,7 +4656,7 @@ namespace BulletSharp.SoftBody
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btSoftBody_rayTest(IntPtr obj, [In] ref Vector3 rayFrom, [In] ref Vector3 rayTo, IntPtr results);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern int btSoftBody_rayTest2(IntPtr obj, [In] ref Vector3 rayFrom, [In] ref Vector3 rayTo, IntPtr mint, IntPtr feature, IntPtr index, bool bcountonly);
+		static extern int btSoftBody_rayTest2(IntPtr obj, [In] ref Vector3 rayFrom, [In] ref Vector3 rayTo, ref float mint, out FeatureType feature, out int index, bool bcountonly);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_refine(IntPtr obj, IntPtr ifn, float accurary, bool cut);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -4714,37 +4738,37 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBody_VSolve_Links(IntPtr psb, float kst);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getFaceVertexData(IntPtr obj, [Out] float[] vertices);
+        static extern int btSoftBody_getFaceVertexData(IntPtr obj, [In, Out] float[] vertices);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getFaceVertexData(IntPtr obj, [Out] Vector3[] vertices);
+        static extern int btSoftBody_getFaceVertexData(IntPtr obj, [In, Out] Vector3[] vertices);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getFaceVertexNormalData(IntPtr obj, [Out] float[] data);
+        static extern int btSoftBody_getFaceVertexNormalData(IntPtr obj, [In, Out] float[] data);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getFaceVertexNormalData2(IntPtr obj, [Out] float[] vertices, [Out] float[] normals);
+        static extern int btSoftBody_getFaceVertexNormalData2(IntPtr obj, [In, Out] float[] vertices, [In, Out] float[] normals);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getFaceVertexNormalData(IntPtr obj, [Out] Vector3[] data);
+        static extern int btSoftBody_getFaceVertexNormalData(IntPtr obj, [In, Out] Vector3[] data);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getFaceVertexNormalData2(IntPtr obj, [Out] Vector3[] vertices, [Out] Vector3[] normals);
+        static extern int btSoftBody_getFaceVertexNormalData2(IntPtr obj, [In, Out] Vector3[] vertices, [In, Out] Vector3[] normals);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getLinkVertexData(IntPtr obj, [Out] float[] vertices);
+        static extern int btSoftBody_getLinkVertexData(IntPtr obj, [In, Out] float[] vertices);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getLinkVertexData(IntPtr obj, [Out] Vector3[] vertices);
+        static extern int btSoftBody_getLinkVertexData(IntPtr obj, [In, Out] Vector3[] vertices);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getLinkVertexNormalData(IntPtr obj, [Out] float[] data);
+        static extern int btSoftBody_getLinkVertexNormalData(IntPtr obj, [In, Out] float[] data);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getLinkVertexNormalData(IntPtr obj, [Out] Vector3[] data);
+        static extern int btSoftBody_getLinkVertexNormalData(IntPtr obj, [In, Out] Vector3[] data);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getTetraVertexData(IntPtr obj, [Out] float[] vertices);
+        static extern int btSoftBody_getTetraVertexData(IntPtr obj, [In, Out] float[] vertices);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getTetraVertexData(IntPtr obj, [Out] Vector3[] vertices);
+        static extern int btSoftBody_getTetraVertexData(IntPtr obj, Vector3[] vertices);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getTetraVertexNormalData(IntPtr obj, [Out] float[] data);
+        static extern int btSoftBody_getTetraVertexNormalData(IntPtr obj, [In, Out] float[] data);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getTetraVertexNormalData2(IntPtr obj, [Out] float[] vectors, [Out] float[] normals);
+        static extern int btSoftBody_getTetraVertexNormalData2(IntPtr obj, [In, Out] float[] vectors, [In, Out] float[] normals);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getTetraVertexNormalData(IntPtr obj, [Out] Vector3[] value);
+        static extern int btSoftBody_getTetraVertexNormalData(IntPtr obj, [In, Out] Vector3[] value);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btSoftBody_getTetraVertexNormalData2(IntPtr obj, [Out] Vector3[] vectors, [Out] Vector3[] normals);
+        static extern int btSoftBody_getTetraVertexNormalData2(IntPtr obj, [In, Out] Vector3[] vectors, [In, Out] Vector3[] normals);
 
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern IntPtr btCollisionObject_getCollisionShape(IntPtr obj);

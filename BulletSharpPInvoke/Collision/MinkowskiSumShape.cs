@@ -52,13 +52,9 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btMinkowskiSumShape_new(IntPtr shapeA, IntPtr shapeB);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btMinkowskiSumShape_getShapeA(IntPtr obj);
+		static extern void btMinkowskiSumShape_getTransformA(IntPtr obj, out Matrix transA);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btMinkowskiSumShape_getShapeB(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMinkowskiSumShape_getTransformA(IntPtr obj, [Out] out Matrix transA);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMinkowskiSumShape_GetTransformB(IntPtr obj, [Out] out Matrix transB);
+		static extern void btMinkowskiSumShape_GetTransformB(IntPtr obj, out Matrix transB);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMinkowskiSumShape_setTransformA(IntPtr obj, [In] ref Matrix transA);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
