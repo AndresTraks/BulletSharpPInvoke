@@ -8,7 +8,7 @@
 
         protected bool IsExcludedClass(ClassDefinition c)
         {
-            return c.IsPureEnum || c.IsExcluded ||
+            return c.IsPureEnum || c.IsExcluded || c.IsFunctionProto ||
                 c is ClassTemplateDefinition || c is EnumDefinition;
         }
     }

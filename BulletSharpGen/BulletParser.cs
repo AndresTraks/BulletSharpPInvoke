@@ -181,52 +181,6 @@ namespace BulletSharpGen
             return true;
         }
 
-        public static string GetTypeRefName(TypeRefDefinition type)
-        {
-            if (!string.IsNullOrEmpty(type.Name) && type.Name.Equals("btAlignedObjectArray"))
-            {
-                if (type.TemplateParams != null)
-                {
-                    return "Aligned" + type.TemplateParams.First().ManagedName + "Array^";
-                }
-            }
-
-            switch (type.ManagedName)
-            {
-                case "Matrix3x3":
-                    return "Matrix";
-                case "Transform":
-                    return "Matrix";
-                case "Quaternion":
-                case "Vector4":
-                    return type.ManagedName;
-            }
-            
-            if (type.ManagedName.Equals("float") && "btScalar".Equals(type.Name))
-            {
-                return "btScalar";
-            }
-            switch (type.Kind)
-            {
-                case TypeKind.Pointer:
-                case TypeKind.LValueReference:
-                case TypeKind.ConstantArray:
-                    if (type.Referenced.Kind == TypeKind.Void)
-                    {
-                        return "IntPtr";
-                    }
-                    switch (type.ManagedName)
-                    {
-                        case "char":
-                            return "String^";
-                        case "float":
-                            return string.Format("array<{0}>^", type.Referenced.Name);
-                    }
-                    return type.ManagedName + '^';
-            }
-            return type.ManagedName;
-        }
-
         public static string GetTypeMarshalPrologueCppCli(ParameterDefinition parameter)
         {
             switch (parameter.Type.ManagedName)
@@ -357,71 +311,6 @@ namespace BulletSharpGen
                 default:
                     return null;
             }
-        }
-
-        public static string GetTypeCSMarshal(ParameterDefinition param)
-        {
-            var type = param.Type.Canonical;
-
-            if ((type.Target != null && type.Target.MarshalAsStruct) ||
-                (type.Kind == TypeKind.LValueReference && type.Referenced.Target != null && type.Referenced.Target.MarshalAsStruct))
-            {
-                if (param.MarshalDirection == MarshalDirection.Out)
-                {
-                    return $"out {param.ManagedName}";
-                }
-                return $"ref {param.ManagedName}";
-            }
-
-            if (type.Kind == TypeKind.LValueReference && type.Referenced.Canonical.IsBasic)
-            {
-                switch (param.MarshalDirection)
-                {
-                    case MarshalDirection.Out:
-                        return $"out {param.ManagedName}";
-                    case MarshalDirection.InOut:
-                        return $"ret {param.ManagedName}";
-                    default:
-                        return param.ManagedName;
-                }
-            }
-
-            if (type.Referenced != null)
-            {
-                switch (type.ManagedName)
-                {
-                    case "IDebugDraw":
-                        return "DebugDraw.GetUnmanaged(" + param.ManagedName + ')';
-                }
-            }
-
-            if (!(type.Kind == TypeKind.Pointer && type.Referenced.Kind == TypeKind.Void))
-            {
-                return param.ManagedName + "._native";
-            }
-
-            return param.ManagedName;
-        }
-
-        public static string GetTypeSetterCSMarshal(TypeRefDefinition type)
-        {
-            type = type.Canonical;
-
-            if ((type.Target != null && type.Target.MarshalAsStruct) ||
-                (type.Kind == TypeKind.LValueReference && type.Referenced.Target != null && type.Referenced.Target.MarshalAsStruct))
-            {
-                return "ref value";
-            }
-            if (!type.IsBasic)
-            {
-                if (type.Kind == TypeKind.Pointer && type.Referenced.Kind == TypeKind.Void)
-                {
-                    return "value";
-                }
-                return "value._native";
-            }
-
-            return "value";
         }
 
         protected override bool IsExcludedClass(ClassDefinition cl)

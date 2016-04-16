@@ -52,6 +52,7 @@ namespace BulletSharpGen
 
         public bool IsAbstract { get; set; }
         public bool IsStruct { get; set; }
+        public bool IsFunctionProto { get; set; }
 
         public bool IsParsed { get; set; }
 

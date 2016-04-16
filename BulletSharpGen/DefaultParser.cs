@@ -252,6 +252,15 @@ namespace BulletSharpGen
                         }
                     }
                     break;
+                case TypeKind.Typedef:
+                    var underlying = typeRef.Canonical;
+                    if (underlying.Kind == TypeKind.Pointer &&
+                        underlying.Referenced.Kind == TypeKind.FunctionProto)
+                    {
+                        typeRef.Target = Project.ClassDefinitions[typeRef.Name];
+                        return;
+                    }
+                    break;
             }
 
             if (typeRef.Referenced != null)
@@ -670,7 +679,7 @@ namespace BulletSharpGen
                 foreach (var method in getterMethods)
                 {
                     if (method.ManagedName.StartsWith("Get") ||
-                        ("bool".Equals(method.ReturnType.Name) &&
+                        (method.ReturnType.Kind == TypeKind.Bool &&
                         _booleanVerbs.Any(v => method.ManagedName.StartsWith(v))))
                     {
                         if (method.Property != null) continue;
@@ -678,23 +687,23 @@ namespace BulletSharpGen
                     }
                 }
 
-                // Getters with void type and 1 pointer argument for the return value
-                // TODO: in general, it is not possible to automatically determine
-                // whether such methods can be wrapped by properties or not,
-                // so read this info from the project configuration.
+                // Getters with void type and 1 pointer argument for the return value.
+                // Can only be done for types with value semantics
                 foreach (var method in @class.Methods.Where(m => m.IsVoid && m.Parameters.Length == 1))
                 {
                     if (method.ManagedName.StartsWith("Get"))
                     {
                         if (method.Property != null) continue;
 
-                        var paramType = method.Parameters[0].Type;
+                        var paramType = method.Parameters[0].Type.Canonical;
+                        if (paramType.IsConst) continue;
+
                         switch (paramType.Kind)
                         {
                             case TypeKind.Pointer:
                             case TypeKind.LValueReference:
-                                // TODO: check project configuration
-                                //if (true)
+                                var referenced = paramType.Referenced.Canonical;
+                                if (referenced.Target != null && referenced.Target.MarshalAsStruct)
                                 {
                                     new PropertyDefinition(method, GetPropertyName(method));
                                 }

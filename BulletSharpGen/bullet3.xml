@@ -240,13 +240,13 @@ else
           <Parameter Name="transform0" />
           <Parameter Name="transform1" />
           <Parameter Name="axis" MarshalDirection="Out" />
-          <Parameter Name="angle" />
+          <Parameter Name="angle" MarshalDirection="Out" />
         </Method>
         <Method Name="calculateDiffAxisAngleQuaternion">
           <Parameter Name="orn0" />
           <Parameter Name="orn1a" />
           <Parameter Name="axis" MarshalDirection="Out" />
-          <Parameter Name="angle" />
+          <Parameter Name="angle" MarshalDirection="Out" />
         </Method>
         <Method Name="calculateVelocity">
           <Parameter Name="transform0" />

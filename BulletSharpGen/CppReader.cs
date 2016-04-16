@@ -207,25 +207,33 @@ namespace BulletSharpGen
             AccessSpecifier parentMemberAccess = _context.MemberAccess;
 
             // Default class/struct access specifier
-            if (cursor.Kind == CursorKind.ClassDecl)
+            switch (cursor.Kind)
             {
-                _context.MemberAccess = AccessSpecifier.Private;
-            }
-            else if (cursor.Kind == CursorKind.StructDecl)
-            {
-                _context.Class.IsStruct = true;
-                _context.MemberAccess = AccessSpecifier.Public;
-            }
-            else if (cursor.Kind == CursorKind.ClassTemplate)
-            {
-                if (cursor.TemplateCursorKind != CursorKind.ClassDecl)
-                {
+                case CursorKind.ClassDecl:
                     _context.MemberAccess = AccessSpecifier.Private;
-                }
-                else
-                {
+                    break;
+                case CursorKind.StructDecl:
+                    _context.Class.IsStruct = true;
                     _context.MemberAccess = AccessSpecifier.Public;
-                }
+                    break;
+                case CursorKind.ClassTemplate:
+                    if (cursor.TemplateCursorKind != CursorKind.ClassDecl)
+                    {
+                        _context.MemberAccess = AccessSpecifier.Private;
+                    }
+                    else
+                    {
+                        _context.MemberAccess = AccessSpecifier.Public;
+                    }
+                    break;
+                case CursorKind.TypedefDecl:
+                    var underlying = cursor.TypedefDeclUnderlyingType.Canonical;
+                    if (underlying.TypeKind == ClangSharp.Type.Kind.Pointer &&
+                        underlying.Pointee.TypeKind == ClangSharp.Type.Kind.FunctionProto)
+                    {
+                        _context.Class.IsFunctionProto = true;
+                    }
+                    break;
             }
 
             if (cursor.Kind == CursorKind.EnumDecl)
@@ -419,11 +427,20 @@ namespace BulletSharpGen
 
         private void ParseTypedefCursor(Cursor cursor)
         {
-            // Does the typedef include a type declaration?
             var underlying = cursor.TypedefDeclUnderlyingType.Canonical;
+
+            // Does the typedef include a type declaration?
             if (cursor.Children.Any(c => c.Equals(underlying.Declaration)))
             {
                 ParseClassCursor(underlying.Declaration);
+                return;
+            }
+
+            // Function pointer
+            if (underlying.TypeKind == ClangSharp.Type.Kind.Pointer &&
+                underlying.Pointee.TypeKind == ClangSharp.Type.Kind.FunctionProto)
+            {
+                ParseClassCursor(cursor);
             }
         }
 
