@@ -20,13 +20,10 @@
     <Replacement Replace="btMLCPSolverInterface" With="MlcpSolverInterface" />
     <Replacement Replace="btMultibodyLink" With="MultiBodyLink" />
     <Replacement Replace="btNNCGConstraintSolver" With="NncgConstraintSolver" />
-    <Replacement Replace="btQuaternion" With="Quaternion" />
     <Replacement Replace="btScalar" With="btScalar" />
     <Replacement Replace="btSparseSDF" With="SparseSdf" />
     <Replacement Replace="btMatrix3x3" With="Matrix" />
     <Replacement Replace="btTransform" With="Matrix" />
-    <Replacement Replace="btVector3" With="Vector3" />
-    <Replacement Replace="btVector4" With="Vector4" />
     <Replacement Replace="ConstraintParams" With="ConstraintParam" />
     <Replacement Replace="eAeroModel" With="AeroModel" />
     <Replacement Replace="eFeatherstoneJointType" With="FeatherstoneJointType" />
@@ -195,6 +192,7 @@ else
     <Header Path="LinearMath/btAlignedObjectArray.h">
       <ClassTemplate Name="btAlignedObjectArray">
         <Class Name="less" />
+        <TemplateParameter>T</TemplateParameter>
       </ClassTemplate>
       <Class Name="btAlignedObjectArray&lt;btCollisionObject&gt;" />
       <Class Name="btAlignedObjectArray&lt;btVector3&gt;" />
@@ -1348,7 +1346,9 @@ else
       <Class Name="gim_free_function" />
     </Header>
     <Header Path="BulletCollision/Gimpact/gim_array.h">
-      <ClassTemplate Name="gim_array" />
+      <ClassTemplate Name="gim_array">
+        <TemplateParameter>T</TemplateParameter>
+      </ClassTemplate>
       <Class Name="gim_array&lt;unsigned int&gt;" />
     </Header>
     <Header Path="BulletCollision/Gimpact/gim_geom_types.h">

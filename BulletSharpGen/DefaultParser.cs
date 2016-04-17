@@ -348,69 +348,91 @@ namespace BulletSharpGen
             }
         }
 
-        void ResolveTemplateSpecializations()
+        private void CopyTemplateMethods(ClassDefinition thisClass, ClassTemplateDefinition template,
+            Dictionary<string, string> templateParams = null)
         {
-            var scriptedNameMapping = Project.ClassNameMapping as ScriptedMapping;
+            if (templateParams == null)
+            {
+                templateParams = new Dictionary<string, string>();
+                var templateBase = template.BaseClass as ClassTemplateDefinition;
 
+                for (int i = 0; i < template.TemplateParameters.Count; i++)
+                {
+                    string param = templateBase.TemplateParameters[i];
+                    string paramValue = template.TemplateParameters[i];
+                    templateParams[param] = paramValue;
+                }
+
+                CopyTemplateMethods(thisClass, templateBase, templateParams);
+                return;
+            }
+
+            thisClass.BaseClass = template.BaseClass;
+
+            var scriptedNameMapping = Project.ClassNameMapping as ScriptedMapping;
+            if (scriptedNameMapping != null)
+            {
+                scriptedNameMapping.Globals.Header = thisClass.Header;
+            }
+            template.ManagedName = Project.ClassNameMapping.Map(template.Name);
+
+            foreach (var templateClass in template.NestedClasses)
+            {
+                var classSpec = new ClassDefinition(templateClass.Name, thisClass.Header, thisClass);
+                Project.ClassDefinitions.Add(classSpec.FullyQualifiedName, classSpec);
+
+                foreach (var templateMethod in templateClass.Methods)
+                {
+                    // Replace template parameters with concrete types
+                    var methodSpec = templateMethod.Copy(classSpec);
+                    if (methodSpec.ReturnType.HasTemplateTypeParameter)
+                    {
+                        methodSpec.ReturnType = methodSpec.ReturnType.CopyTemplated(templateParams);
+                    }
+
+                    foreach (var param in methodSpec.Parameters
+                        .Where(p => p.Type.HasTemplateTypeParameter))
+                    {
+                        param.Type = param.Type.CopyTemplated(templateParams);
+                    }
+                }
+            }
+
+            foreach (var templateMethod in template.Methods.Where(m => !m.IsConstructor))
+            {
+                // Replace template parameters with concrete types
+                var methodSpec = templateMethod.Copy(thisClass);
+                if (methodSpec.ReturnType.HasTemplateTypeParameter)
+                {
+                    methodSpec.ReturnType = methodSpec.ReturnType.CopyTemplated(templateParams);
+                }
+
+                foreach (var param in methodSpec.Parameters
+                    .Where(p => p.Type.HasTemplateTypeParameter))
+                {
+                    param.Type = param.Type.CopyTemplated(templateParams);
+                }
+            }
+        }
+
+        private void ResolveTemplateSpecializations()
+        {
             // Class list may be modified with template specializations,
             // so make a copy
             var classes = Project.ClassDefinitions.Values.ToList();
 
             // If base class is a template, copy template methods to this class
-            foreach (var @class in classes)
+            foreach (var @class in classes.Where(c => !(c is ClassTemplateDefinition)))
             {
                 var classTemplate = @class.BaseClass as ClassTemplateDefinition;
                 if (classTemplate != null)
                 {
-                    @class.BaseClass = classTemplate.BaseClass;
+                    // TODO: if the base template is a full template specialization,
+                    // decide whether it needs to be exposed as a separate class
+                    // or just have the methods copied from it.
+                    // For now, just copy the methods.
 
-                    if (scriptedNameMapping != null)
-                    {
-                        scriptedNameMapping.Globals.Header = @class.Header;
-                    }
-                    classTemplate.ManagedName = Project.ClassNameMapping.Map(classTemplate.Name);
-
-                    foreach (var templateClass in classTemplate.NestedClasses)
-                    {
-                        var classSpec = new ClassDefinition(templateClass.Name, @class.Header, @class);
-                        Project.ClassDefinitions.Add(classSpec.FullName, classSpec);
-
-                        foreach (var templateMethod in templateClass.Methods)
-                        {
-                            // Replace template parameters with concrete types
-                            var methodSpec = templateMethod.Copy(classSpec);
-                            if (methodSpec.ReturnType.HasTemplateTypeParameter)
-                            {
-                                methodSpec.ReturnType = new TypeRefDefinition(
-                                    classTemplate.TemplateParameters.First());
-                            }
-
-                            foreach (var param in methodSpec.Parameters
-                                .Where(p => p.Type.HasTemplateTypeParameter))
-                            {
-                                param.Type = new TypeRefDefinition(
-                                    classTemplate.TemplateParameters.First());
-                            }
-                        }
-                    }
-
-                    foreach (var templateMethod in classTemplate.Methods.Where(m => !m.IsConstructor))
-                    {
-                        // Replace template parameters with concrete types
-                        var methodSpec = templateMethod.Copy(@class);
-                        if (methodSpec.ReturnType.HasTemplateTypeParameter)
-                        {
-                            methodSpec.ReturnType = new TypeRefDefinition(
-                                classTemplate.TemplateParameters.First());
-                        }
-
-                        foreach (var param in methodSpec.Parameters
-                            .Where(p => p.Type.HasTemplateTypeParameter))
-                        {
-                            param.Type = new TypeRefDefinition(
-                                classTemplate.TemplateParameters.First());
-                        }
-                    }
+                    CopyTemplateMethods(@class, classTemplate);
                 }
             }
         }

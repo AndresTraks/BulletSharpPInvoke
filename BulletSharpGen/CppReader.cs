@@ -297,8 +297,8 @@ namespace BulletSharpGen
                                 var classTemplateNew = new ClassTemplateDefinition(template, _context.Header);
                                 classTemplateNew.TemplateParameters.Add(templateSpec);
 
-                                var baseTemplate = project.ClassDefinitions.Where(c => c.Value.Name.Equals(template)).ToList();
-                                baseTemplate.ToString();
+                                var baseTemplate = project.ClassDefinitions.FirstOrDefault(c => c.Value.Name.Equals(template));
+                                classTemplateNew.BaseClass = baseTemplate.Value;
 
                                 project.ClassDefinitions[templateName] = classTemplateNew;
                                 classTemplate = classTemplateNew;
@@ -359,7 +359,10 @@ namespace BulletSharpGen
                     return Cursor.ChildVisitResult.Continue;
                 case CursorKind.TemplateTypeParameter:
                     var classTemplate = _context.Class as ClassTemplateDefinition;
-                    classTemplate.TemplateParameters.Add(cursor.Spelling);
+                    if (!classTemplate.TemplateParameters.Contains(cursor.Spelling))
+                    {
+                        classTemplate.TemplateParameters.Add(cursor.Spelling);
+                    }
                     return Cursor.ChildVisitResult.Continue;
             }
 

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using ClangSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ClangSharp;
 
 namespace BulletSharpGen
 {
@@ -325,13 +325,35 @@ namespace BulletSharpGen
             return t;
         }
 
+        public TypeRefDefinition CopyTemplated(IDictionary<string, string> templateParams)
+        {
+            // Clang shows template parameters only as unexposed
+            if (HasTemplateTypeParameter && Kind == TypeKind.Unexposed)
+            {
+                return new TypeRefDefinition(templateParams[Name]);
+            }
+
+            var t = new TypeRefDefinition
+            {
+                HasTemplateTypeParameter = HasTemplateTypeParameter,
+                IsConst = IsConst,
+                IsIncomplete = IsIncomplete,
+                Name = Name,
+                Referenced = Referenced != null ? Referenced.CopyTemplated(templateParams) : null,
+                TemplateParams = TemplateParams?.Select(p => p.CopyTemplated(templateParams)).ToList(),
+                Target = Target,
+                Kind = Kind
+            };
+            return t;
+        }
+
         public static string GetFullyQualifiedName(ClangSharp.Type type, Cursor cursor = null)
         {
             var decl = type.Declaration;
             if (decl.IsInvalid)
             {
-                if (cursor.Kind == CursorKind.TypeRef) return cursor.DisplayName;
-                if (cursor.Kind == CursorKind.TemplateTypeParameter)
+                if (cursor.Kind == CursorKind.TypeRef ||
+                    cursor.Kind == CursorKind.TemplateTypeParameter)
                 {
                     return cursor.DisplayName;
                 }
@@ -346,10 +368,10 @@ namespace BulletSharpGen
             }
 
             string name = decl.DisplayName;
-            while (decl.SemanticParent.Kind == ClangSharp.CursorKind.ClassDecl ||
-                decl.SemanticParent.Kind == ClangSharp.CursorKind.StructDecl ||
-                decl.SemanticParent.Kind == ClangSharp.CursorKind.ClassTemplate ||
-                decl.SemanticParent.Kind == ClangSharp.CursorKind.Namespace)
+            while (decl.SemanticParent.Kind == CursorKind.ClassDecl ||
+                decl.SemanticParent.Kind == CursorKind.StructDecl ||
+                decl.SemanticParent.Kind == CursorKind.ClassTemplate ||
+                decl.SemanticParent.Kind == CursorKind.Namespace)
             {
                 name = decl.SemanticParent.Spelling + "::" + name;
                 decl = decl.SemanticParent;

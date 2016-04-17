@@ -1446,11 +1446,11 @@ namespace BulletSharpGen
                     case "IDebugDraw":
                         return "DebugDraw.GetUnmanaged(" + param.ManagedName + ')';
                 }
-            }
 
-            if (!(type.Kind == TypeKind.Pointer && type.Referenced.Kind == TypeKind.Void))
-            {
-                return param.ManagedName + "._native";
+                if (!(type.Kind == TypeKind.Pointer && type.Referenced.Kind == TypeKind.Void))
+                {
+                    return param.ManagedName + "._native";
+                }
             }
 
             return param.ManagedName;
