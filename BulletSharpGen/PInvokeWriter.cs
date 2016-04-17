@@ -704,6 +704,14 @@ namespace BulletSharpGen
             To = WriteTo.CS;
             EnsureWhiteSpace();
             Write(level, "public ");
+            if (@class.Parent != null && @class.Parent.BaseClass != null)
+            {
+                if (@class.Parent.BaseClass.NestedClasses
+                    .Any(c => c != @class && c.ManagedName.Equals(@class.ManagedName)))
+                {
+                    Write("new ");
+                }
+            }
             if (@class.IsAbstract) Write("abstract ");
             Write($"class {@class.ManagedName}");
             if (@class.BaseClass != null)
