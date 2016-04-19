@@ -105,6 +105,12 @@ namespace BulletSharp
 			{
 			}
 
+            public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
+            {
+                return new ConvexConcaveCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
+                    _native, __unnamed0._native, body0Wrap._native, body1Wrap._native));
+            }
+
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern IntPtr btConvexConcaveCollisionAlgorithm_CreateFunc_new();
 		}
@@ -121,8 +127,19 @@ namespace BulletSharp
 			{
 			}
 
+            public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
+            {
+                return new ConvexConcaveCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
+                    _native, __unnamed0._native, body0Wrap._native, body1Wrap._native));
+            }
+
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern IntPtr btConvexConcaveCollisionAlgorithm_SwappedCreateFunc_new();
+		}
+
+		internal ConvexConcaveCollisionAlgorithm(IntPtr native)
+			: base(native)
+		{
 		}
 
 		public ConvexConcaveCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci,

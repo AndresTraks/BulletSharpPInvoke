@@ -62,6 +62,15 @@ namespace BulletSharpGen
             get { return Kind == TypeKind.Typedef ? Referenced : this; }
         }
 
+        public bool ConstCanonical
+        {
+            get
+            {
+                if (IsConst) return true;
+                return (Referenced != null && Referenced.IsConst);
+            }
+        }
+
         public string FullName
         {
             get
@@ -377,6 +386,12 @@ namespace BulletSharpGen
                 decl = decl.SemanticParent;
             }
             return name;
+        }
+
+        public MarshalDirection GetDefaultMarshalDirection()
+        {
+            if (ConstCanonical) return MarshalDirection.In;
+            return MarshalDirection.InOut;
         }
 
         public override bool Equals(object obj)

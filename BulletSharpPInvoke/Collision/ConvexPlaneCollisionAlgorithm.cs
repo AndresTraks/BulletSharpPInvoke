@@ -19,6 +19,12 @@ namespace BulletSharp
 			{
 			}
 
+            public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
+            {
+                return new ConvexPlaneCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
+                    _native, __unnamed0._native, body0Wrap._native, body1Wrap._native));
+            }
+
 			public int MinimumPointsPerturbationThreshold
 			{
 				get { return btConvexPlaneCollisionAlgorithm_CreateFunc_getMinimumPointsPerturbationThreshold(_native); }

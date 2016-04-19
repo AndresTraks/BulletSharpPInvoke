@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using ClangSharp;
+using System.Linq;
 using System.Xml;
 
 namespace BulletSharpGen.Project
@@ -29,13 +30,27 @@ namespace BulletSharpGen.Project
                 WriteClassDefinition(writer, childClass);
             }
 
-            foreach (var method in @class.Methods)
+            foreach (var method in @class.Methods.Where(m => m.Access == AccessSpecifier.Public))
             {
                 // Write out only methods that have non-default options
-                if (method.Parameters.Any(p => p.MarshalDirection == MarshalDirection.Out) ||
+                if (method.Parameters.Any(p => p.MarshalDirection != p.Type.GetDefaultMarshalDirection()) ||
                     method.BodyText != null || method.IsExcluded)
                 {
+                    if (method.Property != null) continue;
+                    if (method.IsConstructor && method.Parent.HidePublicConstructors) continue;
+
                     WriteMethodDefinition(writer, method);
+                }
+            }
+
+            var classTemplate = @class as ClassTemplateDefinition;
+            if (classTemplate != null)
+            {
+                foreach (var param in classTemplate.TemplateParameters)
+                {
+                    writer.WriteStartElement("TemplateParameter");
+                    writer.WriteString(param);
+                    writer.WriteEndElement();
                 }
             }
 
@@ -54,7 +69,10 @@ namespace BulletSharpGen.Project
             {
                 writer.WriteStartElement("Parameter");
                 writer.WriteAttributeString("Name", param.Name);
-                writer.WriteAttributeString("MarshalDirection", param.MarshalDirection.ToString());
+                if (param.MarshalDirection != param.Type.GetDefaultMarshalDirection())
+                {
+                    writer.WriteAttributeString("MarshalDirection", param.MarshalDirection.ToString());
+                }
                 writer.WriteEndElement();
             }
             writer.WriteEndElement();

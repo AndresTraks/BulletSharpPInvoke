@@ -616,7 +616,9 @@ namespace BulletSharpGen
             }
 
             // Downcast native pointer if any methods in a derived class use it
-            if (@class.BaseClass != null && @class.Methods.Any(m => !m.IsConstructor && !m.IsStatic && !m.IsExcluded))
+            if (@class.BaseClass != null && @class.Methods
+                .Any(m => !m.IsConstructor && !m.IsStatic && !m.IsExcluded &&
+                    m.Access == AccessSpecifier.Public))
             {
                 EnsureSourceWhiteSpace();
                 WriteLine($"#define Native static_cast<{@class.FullyQualifiedName}*>(_native)", WriteTo.Source);
@@ -763,11 +765,11 @@ namespace BulletSharpGen
                 // Write public constructors
                 if (!@class.HidePublicConstructors && !@class.IsAbstract)
                 {
-                    EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Public);
-
-                    var constructors = @class.Methods.Where(m => m.IsConstructor);
+                    var constructors = @class.Methods.Where(m => m.IsConstructor && m.Access == AccessSpecifier.Public);
                     if (constructors.Any())
                     {
+                        EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Public);
+
                         foreach (var constructor in constructors)
                         {
                             WriteMethod(constructor, level);
@@ -777,15 +779,15 @@ namespace BulletSharpGen
             }
 
             // Write non-constructor methods
-            var methods = @class.Methods.Where(m => !m.IsConstructor && !m.IsExcluded);
+            var methods = @class.Methods
+                .Where(m => !m.IsConstructor && !m.IsExcluded &&
+                    m.Access == AccessSpecifier.Public && m.Property == null);
             if (methods.Any())
             {
                 EnsureHeaderWhiteSpace();
 
                 foreach (var method in methods)
                 {
-                    if (method.Property != null) continue;
-
                     EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Public);
                     WriteMethod(method, level);
                 }
@@ -984,7 +986,7 @@ namespace BulletSharpGen
                 AddForwardReference(forwardRefs, prop.Type, c.Header);
             }
 
-            IEnumerable<MethodDefinition> methods = c.Methods;
+            var methods = c.Methods.Where(m => m.Access == AccessSpecifier.Public && !m.IsExcluded);
             if (c.HidePublicConstructors) methods = methods.Where(m => !m.IsConstructor);
             foreach (var method in methods)
             {

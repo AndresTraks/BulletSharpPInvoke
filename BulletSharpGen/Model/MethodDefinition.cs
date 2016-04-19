@@ -1,4 +1,6 @@
-﻿namespace BulletSharpGen
+﻿using ClangSharp;
+
+namespace BulletSharpGen
 {
     public class MethodDefinition
     {
@@ -14,6 +16,7 @@
         public bool IsVirtual { get; set; }
         public FieldDefinition Field { get; set; } // get/set method target
         public PropertyDefinition Property { get; set; } // property that wraps this get/set method
+        public AccessSpecifier Access { get; set; } = AccessSpecifier.Public;
 
         public bool IsParsed { get; set; }
 
@@ -55,19 +58,22 @@
 
         public MethodDefinition Copy(ClassDefinition parent = null)
         {
-            var m = new MethodDefinition(Name, parent ?? Parent, Parameters.Length);
+            var m = new MethodDefinition(Name, parent ?? Parent, Parameters.Length)
+            {
+                Access = Access,
+                Field = Field,
+                IsAbstract = IsAbstract,
+                IsConstructor = IsConstructor,
+                IsExcluded = IsExcluded,
+                IsStatic = IsStatic,
+                ManagedName = ManagedName,
+                Property = Property,
+                ReturnType = ReturnType.Copy()
+            };
             for (int i = 0; i < Parameters.Length; i++)
             {
                 m.Parameters[i] = Parameters[i].Copy();
             }
-            m.Field = Field;
-            m.IsAbstract = IsAbstract;
-            m.IsConstructor = IsConstructor;
-            m.IsExcluded = IsExcluded;
-            m.IsStatic = IsStatic;
-            m.ManagedName = ManagedName;
-            m.Property = Property;
-            m.ReturnType = ReturnType.Copy();
             return m;
         }
 

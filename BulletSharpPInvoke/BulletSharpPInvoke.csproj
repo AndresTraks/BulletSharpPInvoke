@@ -71,9 +71,6 @@
     <Compile Include="Collision\OptimizedBvh.cs" />
     <Compile Include="Collision\QuantizedBvh.cs" />
     <Compile Include="Collision\RaycastCallback.cs" />
-    <Compile Include="Collision\SoftBodyConcaveCollisionAlgorithm.cs" />
-    <Compile Include="Collision\SoftRigidCollisionAlgorithm.cs" />
-    <Compile Include="Collision\SoftSoftCollisionAlgorithm.cs" />
     <Compile Include="Collision\SphereBoxCollisionAlgorithm.cs" />
     <Compile Include="Collision\SphereSphereCollisionAlgorithm.cs" />
     <Compile Include="Collision\SphereTriangleCollisionAlgorithm.cs" />
@@ -197,6 +194,7 @@
     <Compile Include="LinearMath\IDebugDraw.cs" />
     <Compile Include="LinearMath\MotionState.cs" />
     <Compile Include="LinearMath\PolarDecomposition.cs" />
+    <Compile Include="LinearMath\PoolAllocator.cs" />
     <Compile Include="LinearMath\Serializer.cs" />
     <Compile Include="LinearMath\TransformUtil.cs" />
     <Compile Include="MathUtil.cs">
@@ -223,9 +221,12 @@
     <Compile Include="SoftBody\DefaultSoftBodySolver.cs" />
     <Compile Include="SoftBody\SoftBody.cs" />
     <Compile Include="SoftBody\SoftBodyHelpers.cs" />
+    <Compile Include="SoftBody\SoftBodyConcaveCollisionAlgorithm.cs" />
     <Compile Include="SoftBody\SoftBodyRigidBodyCollisionConfiguration.cs" />
     <Compile Include="SoftBody\SoftBodySolver.cs" />
+    <Compile Include="SoftBody\SoftRigidCollisionAlgorithm.cs" />
     <Compile Include="SoftBody\SoftRigidDynamicsWorld.cs" />
+    <Compile Include="SoftBody\SoftSoftCollisionAlgorithm.cs" />
     <Compile Include="SoftBody\SparseSdf.cs" />
     <Compile Include="Utilities.cs">
       <SubType>Code</SubType>

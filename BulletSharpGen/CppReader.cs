@@ -475,15 +475,8 @@ namespace BulletSharpGen
             _context.Method.IsStatic = cursor.IsStaticCxxMethod;
             _context.Method.IsVirtual = cursor.IsVirtualCxxMethod;
             _context.Method.IsAbstract = cursor.IsPureVirtualCxxMethod;
-
-            if (cursor.Kind == CursorKind.Constructor)
-            {
-                _context.Method.IsConstructor = true;
-                if (cursor.AccessSpecifier != AccessSpecifier.Public)
-                {
-                    _context.Method.IsExcluded = true;
-                }
-            }
+            _context.Method.Access = cursor.AccessSpecifier;
+            _context.Method.IsConstructor = cursor.Kind == CursorKind.Constructor;
 
             // Check if the return type is a template
             cursor.VisitChildren(MethodTemplateTypeVisitor);
@@ -515,18 +508,7 @@ namespace BulletSharpGen
                 // Get marshalling direction
                 if (_context.Parameter.MarshalDirection == MarshalDirection.Default)
                 {
-                    _context.Parameter.MarshalDirection = MarshalDirection.In;
-
-                    switch (_context.Parameter.Type.Kind)
-                    {
-                        case TypeKind.Pointer:
-                        case TypeKind.LValueReference:
-                            if (!argTokens.Any(a => a.Spelling.Equals("const")))
-                            {
-                                _context.Parameter.MarshalDirection = MarshalDirection.InOut;
-                            }
-                            break;
-                    }
+                    _context.Parameter.MarshalDirection = _context.Parameter.Type.GetDefaultMarshalDirection();
                 }
 
                 _context.Parameter = null;

@@ -16,13 +16,13 @@
     <Replacement Replace="btConvex2dConvex2dAlgorithm" With="Convex2DConvex2DAlgorithm" />
     <Replacement Replace="btConvex2dShape" With="Convex2DShape" />
     <Replacement Replace="btCPUVertexBufferDescriptor" With="CpuVertexBufferDescriptor" />
+    <Replacement Replace="btMatrix3x3" With="Matrix" />
     <Replacement Replace="btMLCPSolver" With="MlcpSolver" />
     <Replacement Replace="btMLCPSolverInterface" With="MlcpSolverInterface" />
     <Replacement Replace="btMultibodyLink" With="MultiBodyLink" />
     <Replacement Replace="btNNCGConstraintSolver" With="NncgConstraintSolver" />
     <Replacement Replace="btScalar" With="btScalar" />
     <Replacement Replace="btSparseSDF" With="SparseSdf" />
-    <Replacement Replace="btMatrix3x3" With="Matrix" />
     <Replacement Replace="btTransform" With="Matrix" />
     <Replacement Replace="ConstraintParams" With="ConstraintParam" />
     <Replacement Replace="eAeroModel" With="AeroModel" />
@@ -100,10 +100,10 @@ else
     <Replacement Replace="maxiterations" With="maxIterations" />
     <Replacement Replace="mindepth" With="minDepth" />
     <Replacement Replace="nodeindex" With="nodeIndex" />
+    <Replacement Replace="ntriangles" With="nTriangles" />
     <Replacement Replace="numfaces" With="numFaces" />
     <Replacement Replace="numindices" With="numIndices" />
     <Replacement Replace="numverts" With="numVerts" />
-    <Replacement Replace="ntriangles" With="nTriangles" />
     <Replacement Replace="o_alignedDataBuffer" With="alignedDataBuffer" />
     <Replacement Replace="paircache" With="pairCache" />
     <Replacement Replace="rbA" With="rigidBodyA" />
@@ -130,25 +130,16 @@ else
       </Class>
     </Header>
     <Header Path="LinearMath/btScalar.h">
-      <Class Name="btScalar" />
       <Class Name="btInfMaskConverter" />
       <Class Name="btTypedObject" />
     </Header>
     <Header Path="LinearMath/btMinMax.h" IsExcluded="true" />
     <Header Path="LinearMath/btAlignedAllocator.h">
-      <Class Name="size_type" />
-      <Class Name="btAlignedAllocFunc" />
-      <Class Name="btAlignedFreeFunc" />
-      <Class Name="btAllocFunc" />
-      <Class Name="btFreeFunc" />
       <ClassTemplate Name="btAlignedAllocator">
-        <Class Name="const_pointer" />
-        <Class Name="const_reference" />
-        <Class Name="pointer" />
-        <ClassTemplate Name="rebind" />
-        <Class Name="reference" />
-        <Class Name="self_type" />
-        <Class Name="value_type" />
+        <ClassTemplate Name="rebind">
+          <TemplateParameter>O</TemplateParameter>
+        </ClassTemplate>
+        <TemplateParameter>T</TemplateParameter>
       </ClassTemplate>
     </Header>
     <Header Path="LinearMath/btVector3.h">
@@ -176,7 +167,6 @@ else
       <Class Name="btTransformDoubleData" IsExcluded="true" />
     </Header>
     <Header Path="BulletCollision/CollisionDispatch/btCollisionObject.h">
-      <Class Name="btCollisionObjectArray" />
       <Class Name="btCollisionObject">
         <Enum Name="AnisotropicFrictionFlags" />
         <Enum Name="CollisionFlags" />
@@ -186,45 +176,11 @@ else
       <Class Name="btCollisionObjectDoubleData" IsExcluded="true" />
       <Class Name="btCollisionObjectFloatData" IsExcluded="true" />
     </Header>
-    <Header Path="LinearMath/btMotionState.h">
-      <Class Name="btMotionState" />
-    </Header>
     <Header Path="LinearMath/btAlignedObjectArray.h">
       <ClassTemplate Name="btAlignedObjectArray">
         <Class Name="less" />
         <TemplateParameter>T</TemplateParameter>
       </ClassTemplate>
-      <Class Name="btAlignedObjectArray&lt;btCollisionObject&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btVector3&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btScalar&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btQuantizedBvhDoubleData&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btQuantizedBvhFloatData&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btCollisionShapeData&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btDynamicsWorldDoubleData&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btDynamicsWorldFloatData&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btRigidBodyDoubleData&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btRigidBodyFloatData&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btCollisionObjectDoubleData&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btCollisionObjectFloatData&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btTypedConstraintFloatData&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btTypedConstraintDoubleData&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btTypedConstraintData&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btSoftBodyFloatData&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btSoftBodyDoubleData&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btDbvt::sStkNN&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btDbvtNode&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btMultiSapBroadphase::btBridgeProxy&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btWheelInfo&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btFace&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btMatrix3x3&gt;" />
-      <Class Name="btAlignedObjectArray&lt;bool&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btSoftBody::Node&gt;" />
-      <Class Name="btAlignedObjectArray&lt;unsigned int&gt;" />
-      <Class Name="btAlignedObjectArray&lt;ConvexH::HalfEdge&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btPlane&gt;" />
-      <Class Name="btAlignedObjectArray&lt;btConvexHullComputer::Edge&gt;" />
-      <Class Name="btAlignedObjectArray&lt;bParse::bStructHandle&gt;" />
-      <Class Name="btAlignedObjectArray&lt;char *&gt;" />
     </Header>
     <Header Path="BulletCollision/BroadphaseCollision/btDispatcher.h">
       <Class Name="btDispatcherInfo">
@@ -234,7 +190,7 @@ else
     </Header>
     <Header Path="LinearMath/btTransformUtil.h">
       <Class Name="btTransformUtil">
-                <Method Name="calculateDiffAxisAngle">
+        <Method Name="calculateDiffAxisAngle">
           <Parameter Name="transform0" />
           <Parameter Name="transform1" />
           <Parameter Name="axis" MarshalDirection="Out" />
@@ -274,7 +230,7 @@ else
     </Header>
     <Header Path="BulletCollision/NarrowPhaseCollision/btManifoldPoint.h">
       <Class Name="btConstraintRow" IsExcluded="true" />
-      <Class Name="PfxConstraintRow" />
+      <Enum Name="btContactPointFlags" />
       <Class Name="btManifoldPoint" HasPreventDelete="true" />
     </Header>
     <Header Path="BulletCollision/NarrowPhaseCollision/btPersistentManifold.h">
@@ -333,7 +289,6 @@ else
       <Class Name="btOverlappingPairCallback" />
     </Header>
     <Header Path="BulletCollision/BroadphaseCollision/btOverlappingPairCache.h">
-      <Class Name="btBroadphasePairArray" />
       <Class Name="btOverlapCallback" />
       <Class Name="btOverlapFilterCallback" />
       <Class Name="btOverlappingPairCache" HasPreventDelete="true" />
@@ -406,7 +361,7 @@ else
           <Parameter Name="pa" MarshalDirection="Out" />
           <Parameter Name="pb" MarshalDirection="Out" />
         </Method>
-      <Method Name="getPlane">
+        <Method Name="getPlane">
           <Parameter Name="planeNormal" MarshalDirection="Out" />
           <Parameter Name="planeSupport" MarshalDirection="Out" />
           <Parameter Name="i" />
@@ -476,7 +431,7 @@ else
           <Parameter Name="aabbMin" MarshalDirection="Out" />
           <Parameter Name="aabbMax" MarshalDirection="Out" />
         </Method>
-        <Method Name="getLockedVertexIndexBase">
+        <Method Name="getLockedReadOnlyVertexIndexBase">
           <Parameter Name="vertexbase" MarshalDirection="Out" />
           <Parameter Name="numverts" MarshalDirection="Out" />
           <Parameter Name="type" MarshalDirection="Out" />
@@ -487,7 +442,7 @@ else
           <Parameter Name="indicestype" MarshalDirection="Out" />
           <Parameter Name="subpart" />
         </Method>
-        <Method Name="getLockedReadOnlyVertexIndexBase">
+        <Method Name="getLockedVertexIndexBase">
           <Parameter Name="vertexbase" MarshalDirection="Out" />
           <Parameter Name="numverts" MarshalDirection="Out" />
           <Parameter Name="type" MarshalDirection="Out" />
@@ -512,7 +467,6 @@ else
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btTriangleIndexVertexArray.h">
       <Class Name="btIndexedMesh" HasPreventDelete="true" />
-      <Class Name="IndexedMeshArray" />
       <Class Name="btTriangleIndexVertexArray" />
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btTriangleMesh.h">
@@ -535,9 +489,6 @@ else
       <Class Name="btOptimizedBvhNode" />
       <Class Name="btBvhSubtreeInfo" />
       <Class Name="btNodeOverlapCallback" />
-      <Class Name="NodeArray" />
-      <Class Name="QuantizedNodeArray" />
-      <Class Name="BvhSubtreeInfoArray" />
       <Class Name="btQuantizedBvh" HasPreventDelete="true">
         <Enum Name="btTraversalMode" />
       </Class>
@@ -555,10 +506,16 @@ else
       <Class Name="btHashString" />
       <Class Name="btHashInt" />
       <Class Name="btHashPtr" />
-      <ClassTemplate Name="btHashKeyPtr" />
-      <ClassTemplate Name="btHashKey" />
-      <ClassTemplate Name="btHashMap" />
-      <Class Name="btHashMap&lt;btHashPtr&gt;" />
+      <ClassTemplate Name="btHashKeyPtr">
+        <TemplateParameter>Value</TemplateParameter>
+      </ClassTemplate>
+      <ClassTemplate Name="btHashKey">
+        <TemplateParameter>Value</TemplateParameter>
+      </ClassTemplate>
+      <ClassTemplate Name="btHashMap">
+        <TemplateParameter>Key</TemplateParameter>
+        <TemplateParameter>Value</TemplateParameter>
+      </ClassTemplate>
     </Header>
     <Header Path="LinearMath/btSerializer.h">
       <Class Name="btChunk" />
@@ -570,7 +527,6 @@ else
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btTriangleInfoMap.h">
       <Class Name="btTriangleInfo" />
-      <Class Name="btInternalTriangleInfoMap" />
       <Class Name="btTriangleInfoMap" HasPreventDelete="true" />
       <Class Name="btTriangleInfoData" IsExcluded="true" />
       <Class Name="btTriangleInfoMapData" IsExcluded="true" />
@@ -610,7 +566,6 @@ else
       <Class Name="btUniformScalingShape" />
     </Header>
     <Header Path="BulletCollision/BroadphaseCollision/btCollisionAlgorithm.h">
-      <Class Name="btManifoldArray" />
       <Class Name="btCollisionAlgorithmConstructionInfo" />
       <Class Name="btCollisionAlgorithm" />
     </Header>
@@ -632,7 +587,6 @@ else
     <Header Path="BulletCollision/BroadphaseCollision/btSimpleBroadphase.h" IsExcluded="true" />
     <Header Path="BulletCollision/BroadphaseCollision/btDbvt.h">
       <Class Name="btDbvtAabbMm" />
-      <Class Name="btDbvtVolume" />
       <Class Name="btDbvtNode" />
       <Class Name="btDbvt" HasPreventDelete="true">
         <Enum Name="" />
@@ -647,7 +601,6 @@ else
     </Header>
     <Header Path="BulletCollision/BroadphaseCollision/btDbvtBroadphase.h">
       <Class Name="btDbvtProxy" />
-      <Class Name="btDbvtProxyArray" />
       <Class Name="btDbvtBroadphase">
         <Enum Name="" />
       </Class>
@@ -662,7 +615,6 @@ else
       <Class Name="bt32BitAxisSweep3" />
     </Header>
     <Header Path="BulletCollision/BroadphaseCollision/btMultiSapBroadphase.h">
-      <Class Name="btSapBroadphaseArray" />
       <Class Name="btMultiSapBroadphase">
         <Class Name="btMultiSapProxy" />
       </Class>
@@ -718,6 +670,12 @@ else
       <Enum Name="btRigidBodyFlags" />
       <Class Name="btRigidBody">
         <Class Name="btRigidBodyConstructionInfo" />
+        <Method Name="btRigidBody" IsExcluded="true">
+          <Parameter Name="mass" />
+          <Parameter Name="motionState" />
+          <Parameter Name="collisionShape" />
+          <Parameter Name="localInertia" />
+        </Method>
         <Method Name="getAabb">
           <Parameter Name="aabbMin" MarshalDirection="Out" />
           <Parameter Name="aabbMax" MarshalDirection="Out" />
@@ -725,12 +683,6 @@ else
         <Method Name="predictIntegratedTransform">
           <Parameter Name="step" />
           <Parameter Name="predictedTransform" MarshalDirection="Out" />
-        </Method>
-        <Method Name="btRigidBody" IsExcluded="true">
-          <Parameter Name="mass" />
-          <Parameter Name="motionState" />
-          <Parameter Name="collisionShape" />
-          <Parameter Name="localInertia" />
         </Method>
       </Class>
       <Class Name="btRigidBodyFloatData" IsExcluded="true" />
@@ -743,7 +695,6 @@ else
       <Class Name="btSolverConstraint">
         <Enum Name="btSolverConstraintType" />
       </Class>
-      <Class Name="btConstraintArray" />
     </Header>
     <Header Path="BulletDynamics/ConstraintSolver/btSolverBody.h">
       <Class Name="btSolverBody" />
@@ -1026,7 +977,6 @@ else
     </Header>
     <Header Path="BulletCollision/CollisionDispatch/btHashedSimplePairCache.h">
       <Class Name="btSimplePair" />
-      <Class Name="btSimplePairArray" />
       <Class Name="btHashedSimplePairCache" />
     </Header>
     <Header Path="BulletCollision/NarrowPhaseCollision/btGjkPairDetector.h">
@@ -1182,7 +1132,6 @@ else
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btTriangleIndexVertexMaterialArray.h">
       <Class Name="btMaterialProperties" />
-      <Class Name="MaterialArray" />
       <Class Name="btTriangleIndexVertexMaterialArray">
         <Method Name="getLockedMaterialBase">
           <Parameter Name="materialBase" MarshalDirection="Out" />
@@ -1277,7 +1226,6 @@ else
       <Class Name="btGImpactQuantizedBvh" />
     </Header>
     <Header Path="BulletCollision/Gimpact/btGImpactShape.h">
-      <Class Name="btGImpactBoxSet" />
       <Enum Name="eGIMPACT_SHAPE_TYPE" />
       <Class Name="btTetrahedronShapeEx" />
       <Class Name="btGImpactShapeInterface">
@@ -1339,42 +1287,13 @@ else
     <Header Path="BulletCollision/Gimpact/gim_math.h">
       <Enum Name="GIM_SCALAR_TYPES" />
     </Header>
-    <Header Path="BulletCollision/Gimpact/gim_memory.h">
-      <Class Name="gim_alloc_function" />
-      <Class Name="gim_alloca_function" />
-      <Class Name="gim_realloc_function" />
-      <Class Name="gim_free_function" />
-    </Header>
+    <Header Path="BulletCollision/Gimpact/gim_memory.h" />
     <Header Path="BulletCollision/Gimpact/gim_array.h">
       <ClassTemplate Name="gim_array">
         <TemplateParameter>T</TemplateParameter>
       </ClassTemplate>
-      <Class Name="gim_array&lt;unsigned int&gt;" />
     </Header>
-    <Header Path="BulletCollision/Gimpact/gim_geom_types.h">
-      <Class Name="vec2s" />
-      <Class Name="vec3s" />
-      <Class Name="vec4s" />
-      <Class Name="vec2us" />
-      <Class Name="vec3us" />
-      <Class Name="vec4us" />
-      <Class Name="vec2i" />
-      <Class Name="vec3i" />
-      <Class Name="vec4i" />
-      <Class Name="vec2ui" />
-      <Class Name="vec3ui" />
-      <Class Name="vec4ui" />
-      <Class Name="vec2f" />
-      <Class Name="vec3f" />
-      <Class Name="vec4f" />
-      <Class Name="vec2d" />
-      <Class Name="vec3d" />
-      <Class Name="vec4d" />
-      <Class Name="mat2f" />
-      <Class Name="mat3f" />
-      <Class Name="mat4f" />
-      <Class Name="quatf" />
-    </Header>
+    <Header Path="BulletCollision/Gimpact/gim_geom_types.h" />
     <Header Path="BulletCollision/Gimpact/gim_basic_geometry_operations.h">
       <Enum Name="ePLANE_INTERSECTION_TYPE" />
       <Enum Name="eLINE_PLANE_INTERSECTION_TYPE" />
@@ -1408,19 +1327,31 @@ else
       <Class Name="GIM_AABB_DATA" />
       <Class Name="GIM_BOX_TREE_NODE" />
       <Class Name="GIM_BOX_TREE" />
-      <ClassTemplate Name="GIM_BOX_TREE_TEMPLATE_SET" />
-      <ClassTemplate Name="GIM_BOX_TREE_SET" />
-      <ClassTemplate Name="GIM_TREE_TREE_COLLIDER" />
+      <ClassTemplate Name="GIM_BOX_TREE_TEMPLATE_SET">
+        <TemplateParameter>_GIM_PRIMITIVE_MANAGER_PROTOTYPE</TemplateParameter>
+        <TemplateParameter>_GIM_BOX_TREE_PROTOTYPE</TemplateParameter>
+      </ClassTemplate>
+      <ClassTemplate Name="GIM_BOX_TREE_SET">
+        <TemplateParameter>_GIM_PRIMITIVE_MANAGER_PROTOTYPE</TemplateParameter>
+      </ClassTemplate>
+      <ClassTemplate Name="GIM_TREE_TREE_COLLIDER">
+        <TemplateParameter>BOX_SET_CLASS0</TemplateParameter>
+        <TemplateParameter>BOX_SET_CLASS1</TemplateParameter>
+      </ClassTemplate>
     </Header>
     <Header Path="BulletCollision/Gimpact/gim_contact.h">
       <Class Name="gim_contact_array" />
     </Header>
     <Header Path="BulletCollision/Gimpact/gim_hash_table.h">
-      <ClassTemplate Name="GIM_HASH_TABLE_NODE" />
+      <ClassTemplate Name="GIM_HASH_TABLE_NODE">
+        <TemplateParameter>T</TemplateParameter>
+      </ClassTemplate>
       <Class Name="GIM_HASH_NODE_GET_KEY" />
       <Class Name="GIM_HASH_NODE_CMP_KEY_MACRO" />
       <Class Name="GIM_HASH_NODE_CMP_MACRO" />
-      <ClassTemplate Name="gim_hash_table" />
+      <ClassTemplate Name="gim_hash_table">
+        <TemplateParameter>T</TemplateParameter>
+      </ClassTemplate>
     </Header>
     <Header Path="BulletCollision/NarrowPhaseCollision/btGjkCollisionDescription.h">
       <Class Name="btGjkCollisionDescription" />
@@ -1431,13 +1362,17 @@ else
           <Enum Name="eStatus" />
         </Class>
       </Class>
-      <Class Name="U" />
-      <Class Name="U1" />
-      <ClassTemplate Name="MinkowskiDiff" />
+      <ClassTemplate Name="MinkowskiDiff">
+        <TemplateParameter>btConvexTemplate</TemplateParameter>
+      </ClassTemplate>
       <Enum Name="eGjkStatus" />
-      <ClassTemplate Name="GJK" />
+      <ClassTemplate Name="GJK">
+        <TemplateParameter>btConvexTemplate</TemplateParameter>
+      </ClassTemplate>
       <Enum Name="eEpaStatus" />
-      <ClassTemplate Name="EPA" />
+      <ClassTemplate Name="EPA">
+        <TemplateParameter>btConvexTemplate</TemplateParameter>
+      </ClassTemplate>
     </Header>
     <Header Path="BulletCollision/NarrowPhaseCollision/btComputeGjkEpaPenetration.h" IsExcluded="true" />
     <Header Path="BulletCollision/NarrowPhaseCollision/btConvexCast.h">
@@ -1483,15 +1418,12 @@ else
       <Class Name="btMprCollisionDescription" />
       <Class Name="btMprDistanceInfo" />
       <Class Name="_btMprSupport_t" />
-      <Class Name="btMprSupport_t" />
       <Class Name="_btMprSimplex_t" />
-      <Class Name="btMprSimplex_t" />
     </Header>
     <Header Path="BulletCollision/NarrowPhaseCollision/btPointCollector.h">
       <Class Name="btPointCollector" />
     </Header>
     <Header Path="BulletCollision/NarrowPhaseCollision/btPolyhedralContactClipping.h">
-      <Class Name="btVertexArray" />
       <Class Name="btPolyhedralContactClipping" />
     </Header>
     <Header Path="BulletCollision/NarrowPhaseCollision/btSubSimplexConvexCast.h">
@@ -1541,7 +1473,6 @@ else
       <Class Name="btMultiBodySolverConstraint">
         <Enum Name="btSolverConstraintType" />
       </Class>
-      <Class Name="btMultiBodyConstraintArray" />
     </Header>
     <Header Path="BulletDynamics/Featherstone/btMultiBodyConstraintSolver.h">
       <Class Name="btMultiBodyConstraintSolver" />
@@ -1569,12 +1500,12 @@ else
     </Header>
     <Header Path="LinearMath/btMatrixX.h">
       <Class Name="btIntSortPredicate" />
-      <ClassTemplate Name="btVectorX" />
-      <ClassTemplate Name="btMatrixX" />
-      <Class Name="btMatrixXf" />
-      <Class Name="btVectorXf" />
-      <Class Name="btMatrixXd" />
-      <Class Name="btVectorXd" />
+      <ClassTemplate Name="btVectorX">
+        <TemplateParameter>T</TemplateParameter>
+      </ClassTemplate>
+      <ClassTemplate Name="btMatrixX">
+        <TemplateParameter>T</TemplateParameter>
+      </ClassTemplate>
     </Header>
     <Header Path="BulletDynamics/MLCPSolvers/btMLCPSolverInterface.h">
       <Class Name="btMLCPSolverInterface" />
@@ -1611,7 +1542,6 @@ else
     </Header>
     <Header Path="BulletSoftBody/btSparseSDF.h">
       <ClassTemplate Name="btSparseSdf" />
-      <Class Name="btSparseSdf&lt;int&gt;" />
     </Header>
     <Header Path="BulletSoftBody/btSoftBody.h">
       <Class Name="btSoftBodyWorldInfo" />
@@ -1673,24 +1603,7 @@ else
         <Class Name="sMedium" IsExcluded="true" />
         <Class Name="SolverState" />
         <Class Name="sRayCast" />
-        <Class Name="tAnchorArray" />
-        <Class Name="tClusterArray" />
         <Class Name="Tetra" />
-        <Class Name="tFaceArray" />
-        <Class Name="tJointArray" />
-        <Class Name="tLeafArray" />
-        <Class Name="tLinkArray" />
-        <Class Name="tMaterialArray" />
-        <Class Name="tNodeArray" />
-        <Class Name="tNoteArray" />
-        <Class Name="tPSolverArray" />
-        <Class Name="tRContactArray" />
-        <Class Name="tScalarArray" />
-        <Class Name="tSContactArray" />
-        <Class Name="tSoftBodyArray" />
-        <Class Name="tTetraArray" />
-        <Class Name="tVector3Array" />
-        <Class Name="tVSolverArray" />
         <Class Name="vsolver_t" />
         <Method Name="getAabb">
           <Parameter Name="aabbMin" MarshalDirection="Out" />
@@ -1744,7 +1657,9 @@ else
       </Class>
     </Header>
     <Header Path="BulletSoftBody/btSoftBodyInternals.h">
-      <ClassTemplate Name="btSymMatrix" />
+      <ClassTemplate Name="btSymMatrix">
+        <TemplateParameter>T</TemplateParameter>
+      </ClassTemplate>
       <Class Name="btSoftBodyCollisionShape" />
       <Class Name="btSoftClusterCollisionShape" />
       <Class Name="btEigen" />
@@ -1765,7 +1680,6 @@ else
       </Class>
     </Header>
     <Header Path="BulletSoftBody/btSoftRigidDynamicsWorld.h">
-      <Class Name="btSoftBodyArray" />
       <Class Name="btSoftRigidDynamicsWorld" />
     </Header>
     <Header Path="BulletSoftBody/btSoftSoftCollisionAlgorithm.h">
@@ -1775,7 +1689,6 @@ else
     </Header>
     <Header Path="clew/clew.h" IsExcluded="true" />
     <Header Path="LinearMath/btConvexHull.h">
-      <Class Name="TUIntArray" />
       <Class Name="HullResult" />
       <Enum Name="HullFlag" />
       <Class Name="HullDesc" />
@@ -1813,14 +1726,17 @@ else
       <Class Name="btBlock" />
       <Class Name="btStackAlloc" />
     </Header>
+    <Header Path="LinearMath/btMotionState.h">
+      <Class Name="btMotionState" />
+    </Header>
   </SourceRootFolder>
   <SourceRootFolder Path="Extras/HACD/">
     <Header Path="hacdCircularList.h" IsExcluded="true" />
     <Header Path="hacdCircularList.inl" IsExcluded="true" />
     <Header Path="hacdVector.h">
-      <Class Name="Real" Namespace="HACD" IsExcluded="true" />
-      <ClassTemplate Name="Vec3" Namespace="HACD" IsExcluded="true" />
-      <Class Name="HACD::Vec3&lt;double&gt;" IsExcluded="true" />
+      <ClassTemplate Name="Vec3" Namespace="HACD">
+        <TemplateParameter>T</TemplateParameter>
+      </ClassTemplate>
     </Header>
     <Header Path="hacdVector.inl" IsExcluded="true" />
     <Header Path="hacdManifoldMesh.h" IsExcluded="true" />

@@ -24,6 +24,12 @@ namespace BulletSharp
 				_simplexSolver = simplexSolver;
 			}
 
+            public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
+            {
+                return new Convex2DConvex2DAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
+                    _native, __unnamed0._native, body0Wrap._native, body1Wrap._native));
+            }
+
 			public int MinimumPointsPerturbationThreshold
 			{
 				get { return btConvex2dConvex2dAlgorithm_CreateFunc_getMinimumPointsPerturbationThreshold(_native); }
@@ -70,6 +76,11 @@ namespace BulletSharp
 			static extern void btConvex2dConvex2dAlgorithm_CreateFunc_setPdSolver(IntPtr obj, IntPtr value);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern void btConvex2dConvex2dAlgorithm_CreateFunc_setSimplexSolver(IntPtr obj, IntPtr value);
+		}
+
+		internal Convex2DConvex2DAlgorithm(IntPtr native)
+			: base(native)
+		{
 		}
 
 		public Convex2DConvex2DAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci,
