@@ -107,7 +107,7 @@ namespace BulletSharpGen
         }
 
         // static class contains only static methods
-        public bool IsStaticClass
+        public bool IsStatic
         {
             get { return Methods.Count != 0 && Methods.All(x => x.IsStatic); }
         }

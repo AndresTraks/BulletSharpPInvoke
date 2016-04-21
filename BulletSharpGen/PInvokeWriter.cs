@@ -560,7 +560,9 @@ namespace BulletSharpGen
             To = WriteTo.CS;
             EnsureWhiteSpace();
 
-            WriteLine(level + 1, $"public {GetTypeNameCS(prop.Type)} {prop.Name}");
+            Write(level + 1, $"public ");
+            if (prop.Getter.IsStatic) Write("static ");
+            WriteLine($"{GetTypeNameCS(prop.Type)} {prop.Name}");
             WriteLine(level + 1, "{");
 
             if (prop.Parent.CachedProperties.ContainsKey(prop.Name))
@@ -572,9 +574,9 @@ namespace BulletSharpGen
                 {
                     WriteLine(level + 2, "set");
                     WriteLine(level + 2, "{");
-                    string marshal = GetTypeSetterCSMarshal(prop.Type);
-                    WriteLine(level + 3,
-                        $"{GetFullNameC(prop.Parent)}_{prop.Setter.Name}(_native, {marshal});");
+                    Write(level + 3, $"{GetFullNameC(prop.Parent)}_{prop.Setter.Name}(");
+                    if (!prop.Setter.IsStatic) Write("_native, ");
+                    WriteLine($"{GetTypeSetterCSMarshal(prop.Type)});");
                     WriteLine(level + 3, $"{cachedProperty.CacheFieldName} = value;");
                     WriteLine(level + 2, "}");
                 }
@@ -588,23 +590,29 @@ namespace BulletSharpGen
                     WriteLine(level + 2, "get");
                     WriteLine(level + 2, "{");
                     WriteLine(level + 3, $"{GetTypeNameCS(type)} value;");
-                    WriteLine(level + 3, $"{GetFullNameC(prop.Parent)}_{prop.Getter.Name}(_native, out value);");
+                    Write(level + 3, $"{GetFullNameC(prop.Parent)}_{prop.Getter.Name}(");
+                    if (!prop.Getter.IsStatic) Write("_native, ");
+                    WriteLine("out value);");
                     WriteLine(level + 3, "return value;");
                     WriteLine(level + 2, "}");
                 }
                 else
                 {
-                    WriteLine(level + 2, string.Format("get {{ return {0}{1}_{2}(_native){3}; }}",
+                    string objPtr = prop.Getter.IsStatic ? "" : "_native";
+                    WriteLine(level + 2, string.Format("get {{ return {0}{1}_{2}({3}){4}; }}",
                         BulletParser.GetTypeMarshalConstructorStartCS(prop.Getter),
                         GetFullNameC(prop.Parent), prop.Getter.Name,
+                        objPtr,
                         BulletParser.GetTypeMarshalConstructorEndCS(prop.Getter)));
                 }
 
                 if (prop.Setter != null)
                 {
                     string marshal = GetTypeSetterCSMarshal(prop.Type);
-                    WriteLine(level + 2,
-                        $"set {{ {GetFullNameC(prop.Parent)}_{prop.Setter.Name}(_native, {marshal}); }}");
+                    Write(level + 2,
+                        $"set {{ {GetFullNameC(prop.Parent)}_{prop.Setter.Name}(");
+                    if (!prop.Setter.IsStatic) Write("_native, ");
+                    WriteLine($"{marshal}); }}");
                 }
             }
 
@@ -704,6 +712,7 @@ namespace BulletSharpGen
             To = WriteTo.CS;
             EnsureWhiteSpace();
             Write(level, "public ");
+            if (@class.IsStatic) Write("static ");
             if (@class.Parent != null && @class.Parent.BaseClass != null)
             {
                 if (@class.Parent.BaseClass.NestedClasses
@@ -719,7 +728,7 @@ namespace BulletSharpGen
                 string baseClassName = GetFullNameManaged(@class.BaseClass);
                 WriteLine($" : {baseClassName}");
             }
-            else if (@class.IsStaticClass)
+            else if (@class.IsStatic)
             {
                 WriteLine();
             }
@@ -740,7 +749,7 @@ namespace BulletSharpGen
 
             // Write the native pointer to the base class
             To = WriteTo.CS;
-            if (@class.BaseClass == null && !@class.IsStaticClass)
+            if (@class.BaseClass == null && !@class.IsStatic)
             {
                 EnsureWhiteSpace();
                 WriteLine(level + 1, "internal IntPtr _native;");
@@ -771,7 +780,7 @@ namespace BulletSharpGen
             ClearBuffer();
 
             // Write constructors
-            if (!@class.IsStaticClass)
+            if (!@class.IsStatic)
             {
                 // Write C# internal constructor
                 if (!@class.NoInternalConstructor)
@@ -849,7 +858,7 @@ namespace BulletSharpGen
 
             // Write delete method
             // TODO: skip delete methods in classes that can't be constructed.
-            if (@class.BaseClass == null && !@class.IsStaticClass)
+            if (@class.BaseClass == null && !@class.IsStatic)
             {
                 int overloadIndex = 0;
                 var del = new MethodDefinition("delete", @class, 0);

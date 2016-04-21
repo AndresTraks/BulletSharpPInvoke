@@ -140,6 +140,7 @@ else
           <TemplateParameter>O</TemplateParameter>
         </ClassTemplate>
         <TemplateParameter>T</TemplateParameter>
+        <TemplateParameter>Alignment</TemplateParameter>
       </ClassTemplate>
     </Header>
     <Header Path="LinearMath/btVector3.h">
@@ -175,12 +176,6 @@ else
       </Class>
       <Class Name="btCollisionObjectDoubleData" IsExcluded="true" />
       <Class Name="btCollisionObjectFloatData" IsExcluded="true" />
-    </Header>
-    <Header Path="LinearMath/btAlignedObjectArray.h">
-      <ClassTemplate Name="btAlignedObjectArray">
-        <Class Name="less" />
-        <TemplateParameter>T</TemplateParameter>
-      </ClassTemplate>
     </Header>
     <Header Path="BulletCollision/BroadphaseCollision/btDispatcher.h">
       <Class Name="btDispatcherInfo">
@@ -1541,7 +1536,9 @@ else
       <Class Name="btDefaultSoftBodySolver" />
     </Header>
     <Header Path="BulletSoftBody/btSparseSDF.h">
-      <ClassTemplate Name="btSparseSdf" />
+      <ClassTemplate Name="btSparseSdf">
+        <TemplateParameter>CELLSIZE</TemplateParameter>
+      </ClassTemplate>
     </Header>
     <Header Path="BulletSoftBody/btSoftBody.h">
       <Class Name="btSoftBodyWorldInfo" />
@@ -1729,6 +1726,12 @@ else
     <Header Path="LinearMath/btMotionState.h">
       <Class Name="btMotionState" />
     </Header>
+    <Header Path="LinearMath/btAlignedObjectArray.h">
+      <ClassTemplate Name="btAlignedObjectArray">
+        <Class Name="less" />
+        <TemplateParameter>T</TemplateParameter>
+      </ClassTemplate>
+    </Header>
   </SourceRootFolder>
   <SourceRootFolder Path="Extras/HACD/">
     <Header Path="hacdCircularList.h" IsExcluded="true" />
@@ -1763,7 +1766,7 @@ else
       <Class Name="btWorldImporter" />
     </Header>
     <Header Path="btBulletWorldImporter.h">
-      <Class Name="btBulletWorldImporter" Namespace="bParse" />
+      <Class Name="btBulletWorldImporter" />
     </Header>
   </SourceRootFolder>
   <SourceRootFolder Path="Extras/Serialize/BulletXmlWorldImporter/">

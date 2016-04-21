@@ -29,7 +29,7 @@ namespace BulletSharp
             }
             if (BroadphaseProxy.IsConvex(proxyType0) && proxyType1 == BroadphaseNativeType.SoftBodyShape)
             {
-                return new SoftRigidCollisionAlgorithm.SwappedCreateFunc(createFunc);
+                return new SoftRigidCollisionAlgorithm.CreateFunc(createFunc);
             }
             if (proxyType0 == BroadphaseNativeType.SoftBodyShape && BroadphaseProxy.IsConcave(proxyType1))
             {

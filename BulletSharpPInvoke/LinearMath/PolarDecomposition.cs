@@ -66,7 +66,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btPolarDecomposition_new3(float tolerance, uint maxIterations);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern uint btPolarDecomposition_decompose(IntPtr obj, [In] ref Matrix a, [Out] out Matrix u, [Out] out Matrix h);
+		static extern uint btPolarDecomposition_decompose(IntPtr obj, [In] ref Matrix a, out Matrix u, out Matrix h);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern uint btPolarDecomposition_maxIterations(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

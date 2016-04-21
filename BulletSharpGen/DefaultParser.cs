@@ -34,8 +34,7 @@ namespace BulletSharpGen
             ParseEnums();
             SetClassProperties();
             RemoveRedundantMethods();
-            // TODO:
-            //FlattenClassHierarchy();
+            FlattenClassHierarchy();
             ResolveTemplateSpecializations();
             CreateDefaultConstructors();
             CreateFieldAccessors();
@@ -348,6 +347,19 @@ namespace BulletSharpGen
             }
         }
 
+        // Move all public nested classes out into the namespace scope
+        // unless there is a name conflict.
+        // https://msdn.microsoft.com/en-us/library/s9f3ty7f%28v=vs.71%29.aspx
+        private void FlattenClassHierarchy()
+        {
+            var nonNestedClasses = Project.HeaderDefinitions.SelectMany(h => h.Value.Classes);
+            var nestedClasses = nonNestedClasses.SelectMany(c => c.NestedClasses).ToList();
+            foreach (var @class in nestedClasses)
+            {
+                // TODO
+            }
+        }
+
         private void CopyTemplateMethods(ClassDefinition thisClass, ClassTemplateDefinition template,
             Dictionary<string, string> templateParams = null)
         {
@@ -525,7 +537,7 @@ namespace BulletSharpGen
             foreach (var @class in Project.ClassDefinitions.Values)
             {
                 if (@class.HidePublicConstructors) continue;
-                if (@class.IsStaticClass) continue;
+                if (@class.IsStatic) continue;
                 if (@class is EnumDefinition) continue;
                 if (@class.IsPureEnum) continue;
 

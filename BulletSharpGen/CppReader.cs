@@ -11,7 +11,7 @@ namespace BulletSharpGen
         public TranslationUnit TranslationUnit { get; set; }
         public string HeaderFilename { get; set; }
         public HeaderDefinition Header { get; set; }
-        public string Namespace { get; set; }
+        public string Namespace { get; set; } = "";
         public ClassDefinition Class { get; set; }
         public MethodDefinition Method { get; set; }
         public ParameterDefinition Parameter { get; set; }
@@ -105,24 +105,18 @@ namespace BulletSharpGen
             // Do not visit any included header
             if (!filename.Equals(_context.HeaderFilename)) return Cursor.ChildVisitResult.Continue;
 
+            headerQueue.Remove(filename);
+
             // Have we visited this header already?
-            if (project.HeaderDefinitions.ContainsKey(filename))
-            {
-                _context.Header = project.HeaderDefinitions[filename];
-            }
-            else
+            HeaderDefinition header;
+            if (!project.HeaderDefinitions.TryGetValue(filename, out header))
             {
                 // No, define a new one
-                _context.Header = new HeaderDefinition(filename);
-                project.HeaderDefinitions.Add(filename, _context.Header);
-                headerQueue.Remove(filename);
+                header = new HeaderDefinition(filename);
+                project.HeaderDefinitions[filename] = header;
             }
+            _context.Header = header;
 
-            if (cursor.Kind == CursorKind.Namespace)
-            {
-                _context.Namespace = cursor.Spelling;
-                return Cursor.ChildVisitResult.Recurse;
-            }
             if (cursor.IsDefinition)
             {
                 switch (cursor.Kind)
@@ -136,6 +130,11 @@ namespace BulletSharpGen
                     case CursorKind.TypedefDecl:
                         ParseTypedefCursor(cursor);
                         break;
+                    case CursorKind.Namespace:
+                        _context.Namespace = cursor.Spelling;
+                        cursor.VisitChildren(HeaderVisitor);
+                        _context.Namespace = "";
+                        break;
                 }
             }
 
@@ -145,50 +144,40 @@ namespace BulletSharpGen
         void ParseClassCursor(Cursor cursor)
         {
             string className = cursor.Spelling;
+            string fullyQualifiedName = TypeRefDefinition.GetFullyQualifiedName(cursor);
 
-            // Unnamed struct
-            // A combined "typedef struct {}" definition is split into separate struct and typedef statements
-            // where the struct is also a child of the typedef, so the struct can be skipped for now.
-            if (string.IsNullOrEmpty(className) && cursor.Kind == CursorKind.StructDecl)
+            ClassDefinition @class;
+            if (project.ClassDefinitions.TryGetValue(fullyQualifiedName, out @class))
             {
-                return;
-            }
+                if (@class.IsParsed) return;
 
-            string fullyQualifiedName = GetFullyQualifiedName(cursor);
-            if (project.ClassDefinitions.ContainsKey(fullyQualifiedName))
-            {
-                if (project.ClassDefinitions[fullyQualifiedName].IsParsed)
-                {
-                    return;
-                }
-                var parent = _context.Class;
-                _context.Class = project.ClassDefinitions[fullyQualifiedName];
-                _context.Class.Parent = parent;
+                @class.Parent = _context.Class;
             }
             else
             {
-                if (cursor.Kind == CursorKind.ClassTemplate)
+                switch(cursor.Kind)
                 {
-                    _context.Class = new ClassTemplateDefinition(className, _context.Header, _context.Class);
-                }
-                else if (cursor.Kind == CursorKind.EnumDecl)
-                {
-                    _context.Class = new EnumDefinition(className, _context.Header, _context.Class);
-                }
-                else
-                {
-                    _context.Class = new ClassDefinition(className, _context.Header, _context.Class);
+                    case CursorKind.ClassTemplate:
+                        @class = new ClassTemplateDefinition(className, _context.Header, _context.Class);
+                        break;
+                    case CursorKind.EnumDecl:
+                        @class = new EnumDefinition(className, _context.Header, _context.Class);
+                        break;
+                    default:
+                        @class = new ClassDefinition(className, _context.Header, _context.Class);
+                        break;
                 }
 
-                _context.Class.NamespaceName = _context.Namespace;
+                @class.NamespaceName = _context.Namespace;
 
-                if (_context.Class.FullyQualifiedName != fullyQualifiedName)
+                if (@class.FullyQualifiedName != fullyQualifiedName)
                 {
-                    // TODO
+                    Console.WriteLine("Parsing error at " + fullyQualifiedName);
                 }
-                project.ClassDefinitions.Add(fullyQualifiedName, _context.Class);
+                project.ClassDefinitions[fullyQualifiedName] = @class;
             }
 
+            _context.Class = @class;
             _context.Class.IsParsed = true;
 
             // Unnamed struct escapes to the surrounding scope
@@ -348,7 +337,11 @@ namespace BulletSharpGen
                     _context.MemberAccess = cursor.AccessSpecifier;
                     return Cursor.ChildVisitResult.Continue;
                 case CursorKind.CxxBaseSpecifier:
-                    string baseName = GetFullyQualifiedName(cursor);
+                    if (cursor.Type.Declaration.IsInvalid)
+                    {
+                        "".ToString();
+                    }
+                    string baseName = TypeRefDefinition.GetFullyQualifiedName(cursor.Type, cursor);
                     ClassDefinition baseClass;
                     if (!project.ClassDefinitions.TryGetValue(baseName, out baseClass))
                     {
@@ -529,28 +522,6 @@ namespace BulletSharpGen
             _context.Method = null;
         }
 
-        public static string GetFullyQualifiedName(Cursor cursor)
-        {
-            string name;
-            if (cursor.Type.TypeKind != ClangSharp.Type.Kind.Invalid)
-            {
-                return TypeRefDefinition.GetFullyQualifiedName(cursor.Type);
-            }
-            else
-            {
-                name = cursor.DisplayName;
-                while (cursor.SemanticParent.Kind == CursorKind.ClassDecl ||
-                    cursor.SemanticParent.Kind == CursorKind.StructDecl ||
-                    cursor.SemanticParent.Kind == CursorKind.ClassTemplate ||
-                    cursor.SemanticParent.Kind == CursorKind.Namespace)
-                {
-                    name = cursor.SemanticParent.Spelling + "::" + name;
-                    cursor = cursor.SemanticParent;
-                }
-            }
-            return name;
-        }
-
         private void ReadHeaders()
         {
             using (var index = new Index())
@@ -565,7 +536,6 @@ namespace BulletSharpGen
                         clangOptions.ToArray(), unsavedFiles, TranslationUnitFlags.SkipFunctionBodies))
                     {
                         var cur = _context.TranslationUnit.Cursor;
-                        _context.Namespace = "";
                         cur.VisitChildren(HeaderVisitor);
                     }
                     _context.TranslationUnit = null;

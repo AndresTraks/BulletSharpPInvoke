@@ -77,7 +77,7 @@ namespace BulletSharp
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMotionState_getWorldTransform(IntPtr obj, [Out] out Matrix worldTrans);
+		static extern void btMotionState_getWorldTransform(IntPtr obj, out Matrix worldTrans);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMotionState_setWorldTransform(IntPtr obj, [In] ref Matrix worldTrans);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

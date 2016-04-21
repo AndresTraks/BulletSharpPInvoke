@@ -586,7 +586,7 @@ namespace BulletSharpGen
 
             // abstract/sealed keywords
             if (@class.IsAbstract) Write(" abstract");
-            else if (@class.IsStaticClass) Write(" sealed");
+            else if (@class.IsStatic) Write(" sealed");
 
             // Inheritance
             if (@class.BaseClass != null) WriteLine($" : {@class.BaseClass.ManagedName}");
@@ -608,7 +608,7 @@ namespace BulletSharpGen
             }
 
             // Private constructor for classes that aren't instanced
-            if (@class.IsStaticClass)
+            if (@class.IsStatic)
             {
                 EnsureAccess(level, ref currentAccess, RefAccessSpecifier.Private);
                 WriteLine(level + 1, $"{@class.ManagedName}() {{}}");
@@ -626,7 +626,7 @@ namespace BulletSharpGen
             }
 
             // Write the native pointer to the base class
-            if (@class.BaseClass == null && !@class.IsStaticClass)
+            if (@class.BaseClass == null && !@class.IsStatic)
             {
                 if (@class.NestedClasses.Any(c => !IsExcludedClass(c)))
                 {
@@ -677,7 +677,7 @@ namespace BulletSharpGen
             }
 
             // Constructors and destructors
-            if (!@class.IsStaticClass)
+            if (!@class.IsStatic)
             {
                 // Write unmanaged constructor
                 // TODO: Write constructor from unmanaged pointer only if the class is ever instantiated in this way.

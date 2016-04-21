@@ -359,32 +359,39 @@ namespace BulletSharpGen
         public static string GetFullyQualifiedName(ClangSharp.Type type, Cursor cursor = null)
         {
             var decl = type.Declaration;
-            if (decl.IsInvalid)
+            if (!decl.IsInvalid) return GetFullyQualifiedName(decl);
+
+            return GetFullyQualifiedName(cursor);
+        }
+
+        public static string GetFullyQualifiedName(Cursor cursor)
+        {
+            string name;
+            switch (cursor.Kind)
             {
-                if (cursor.Kind == CursorKind.TypeRef ||
-                    cursor.Kind == CursorKind.TemplateTypeParameter)
-                {
+                case CursorKind.CxxMethod:
+                case CursorKind.FieldDecl:
+                case CursorKind.ParmDecl:
+                    var typeRef = cursor.Children.FirstOrDefault(c => c.Kind == CursorKind.TypeRef);
+                    if (typeRef != null) return GetFullyQualifiedName(typeRef);
                     return cursor.DisplayName;
-                }
-
-                var typeRef = cursor.Children.FirstOrDefault(c => c.Kind == CursorKind.TypeRef);
-                if (typeRef != null)
-                {
-                    return typeRef.DisplayName;
-                }
-
-                return "[unexposed type]";
+                case CursorKind.TemplateTypeParameter:
+                case CursorKind.TypeRef:
+                    return cursor.DisplayName;
+                default:
+                    name = cursor.DisplayName;
+                    break;
             }
 
-            string name = decl.DisplayName;
-            while (decl.SemanticParent.Kind == CursorKind.ClassDecl ||
-                decl.SemanticParent.Kind == CursorKind.StructDecl ||
-                decl.SemanticParent.Kind == CursorKind.ClassTemplate ||
-                decl.SemanticParent.Kind == CursorKind.Namespace)
+            switch (cursor.SemanticParent.Kind)
             {
-                name = decl.SemanticParent.Spelling + "::" + name;
-                decl = decl.SemanticParent;
+                case CursorKind.ClassDecl:
+                case CursorKind.StructDecl:
+                case CursorKind.ClassTemplate:
+                case CursorKind.Namespace:
+                    return GetFullyQualifiedName(cursor.SemanticParent) + "::" + name;
             }
+
             return name;
         }
 

@@ -140,7 +140,11 @@ namespace BulletSharpGen.Project
                         case "ClassTemplate":
                         case "Enum":
                             {
-                                ReadClassDefinition(project, reader, header);
+                                var classes = ReadClassDefinition(project, reader, header).ToList();
+                                foreach (var @class in classes)
+                                {
+                                    project.ClassDefinitions.Add(@class.FullyQualifiedName, @class);
+                                }
                             }
                             break;
                     }
@@ -152,7 +156,8 @@ namespace BulletSharpGen.Project
             }
         }
 
-        static void ReadClassDefinition(WrapperProject project, XmlReader reader, HeaderDefinition header, ClassDefinition parent = null)
+        static IEnumerable<ClassDefinition> ReadClassDefinition(WrapperProject project,
+            XmlReader reader, HeaderDefinition header, ClassDefinition parent = null)
         {
             string className = reader.GetAttribute("Name");
 
@@ -185,8 +190,8 @@ namespace BulletSharpGen.Project
 
             if (reader.IsEmptyElement)
             {
-                project.ClassDefinitions.Add(@class.FullyQualifiedName, @class);
-                return;
+                yield return @class;
+                yield break;
             }
 
             while (reader.Read())
@@ -198,7 +203,11 @@ namespace BulletSharpGen.Project
                         case "Class":
                         case "ClassTemplate":
                         case "Enum":
-                            ReadClassDefinition(project, reader, header, @class);
+                            var classes = ReadClassDefinition(project, reader, header, @class);
+                            foreach (var c in classes)
+                            {
+                                yield return c;
+                            }
                             break;
 
                         case "Method":
@@ -217,7 +226,7 @@ namespace BulletSharpGen.Project
                 }
             }
 
-            project.ClassDefinitions.Add(@class.FullyQualifiedName, @class);
+            yield return @class;
         }
 
         static void ReadMethodDefinition(XmlReader reader, ClassDefinition @class)
