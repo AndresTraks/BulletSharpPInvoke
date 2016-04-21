@@ -74,7 +74,7 @@
   <xsd:complexType name="ClassTemplateType">
     <xsd:complexContent>
       <xsd:extension base="ClassType">
-        <xsd:choice minOccurs="0">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
           <xsd:element name="TemplateParameter" type="xsd:string"/>
         </xsd:choice>
       </xsd:extension>
