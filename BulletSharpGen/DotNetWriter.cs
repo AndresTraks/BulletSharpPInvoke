@@ -2,14 +2,21 @@
 {
     public abstract class DotNetWriter : WrapperWriter
     {
-        protected DotNetWriter(WrapperProject project) : base(project)
+        public DotNetParser DotNetParser { get; }
+
+        protected DotNetWriter(DotNetParser parser) : base(parser)
         {
+            DotNetParser = parser;
         }
 
-        protected bool IsExcludedClass(ClassDefinition c)
+        protected string GetName(TypeRefDefinition type)
         {
-            return c.IsPureEnum || c.IsExcluded || c.IsFunctionProto ||
-                c is ClassTemplateDefinition || c is EnumDefinition;
+            return DotNetParser.GetName(type);
+        }
+
+        protected bool IsExcludedClass(ManagedClass @class)
+        {
+            return IsExcludedClass(@class.Native);
         }
     }
 }

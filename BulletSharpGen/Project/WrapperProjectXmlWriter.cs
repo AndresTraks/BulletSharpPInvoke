@@ -36,7 +36,7 @@ namespace BulletSharpGen.Project
                 if (method.Parameters.Any(p => p.MarshalDirection != p.Type.GetDefaultMarshalDirection()) ||
                     method.BodyText != null || method.IsExcluded)
                 {
-                    if (method.Property != null) continue;
+                    if (method.Field != null) continue;
                     if (method.IsConstructor && method.Parent.HidePublicConstructors) continue;
 
                     WriteMethodDefinition(writer, method);

@@ -17,21 +17,20 @@ namespace BulletSharpGenTest
             project.ReadCpp();
             project.Save();
 
-            var parser = new DefaultParser(project);
+            var parser = new DotNetParser(project);
             parser.Parse();
 
             project.CProjectPath = "Cpp1_wrap";
             project.CsProjectPath = "Cpp1_wrap";
-            var writer = new PInvokeWriter(project);
+            var writer = new PInvokeWriter(parser);
             writer.Output();
 
             Assert.AreEqual(1, project.HeaderDefinitions.Count);
-            Assert.AreEqual(1, project.ClassDefinitions.Count);
-            var cppClass1 = project.ClassDefinitions.First().Value;
+            Assert.AreEqual(1, parser.Classes.Count);
+            var cppClass1 = parser.Classes.First().Value;
             Assert.AreEqual("CppClass1", cppClass1.Name);
-            Assert.AreEqual("CppClass1", cppClass1.ManagedName);
             Assert.AreEqual(2, cppClass1.Methods.Count);
-            Assert.AreEqual("Empty", cppClass1.Methods[1].ManagedName);
+            Assert.AreEqual("Empty", cppClass1.Methods[1].Name);
         }
 
         [Test]
@@ -44,15 +43,15 @@ namespace BulletSharpGenTest
             project.ReadCpp();
             project.Save();
 
-            var parser = new DefaultParser(project);
+            var parser = new DotNetParser(project);
             parser.Parse();
 
             project.CProjectPath = "CppTemplate_wrap";
             project.CsProjectPath = "CppTemplate_wrap";
-            var writer = new PInvokeWriter(project);
+            var writer = new PInvokeWriter(parser);
             writer.Output();
 
-            var cmake = new CMakeWriter(project);
+            var cmake = new CMakeWriter(parser);
             cmake.Output();
 
             Assert.AreEqual(1, project.HeaderDefinitions.Count);

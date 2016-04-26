@@ -6,8 +6,8 @@ namespace BulletSharpGen
 {
     public class CMakeWriter : WrapperWriter
     {
-        public CMakeWriter(WrapperProject project)
-            : base(project)
+        public CMakeWriter(DefaultParser parser)
+            : base(parser)
         {
         }
 

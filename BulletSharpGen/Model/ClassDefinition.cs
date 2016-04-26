@@ -11,30 +11,6 @@ namespace BulletSharpGen
         Internal
     }
 
-    public class CachedProperty
-    {
-        public PropertyDefinition Property { get; private set; }
-        public string CacheFieldName { get; private set; }
-        public RefAccessSpecifier Access { get; set; }
-
-        public CachedProperty(PropertyDefinition property, string cacheFieldName = null)
-        {
-            Property = property;
-
-            if (cacheFieldName != null)
-            {
-                CacheFieldName = cacheFieldName;
-            }
-            else
-            {
-                string name = property.Name;
-                CacheFieldName = "_" + char.ToLower(name[0]) + name.Substring(1);
-            }
-
-            Access = RefAccessSpecifier.Private;
-        }
-    }
-
     public class ClassDefinition
     {
         public string Name { get; set; }
@@ -48,7 +24,6 @@ namespace BulletSharpGen
         public List<ClassDefinition> NestedClasses { get; } = new List<ClassDefinition>();
         public List<MethodDefinition> Methods { get; } = new List<MethodDefinition>();
         public List<FieldDefinition> Fields { get; } = new List<FieldDefinition>();
-        public List<PropertyDefinition> Properties { get; } = new List<PropertyDefinition>();
 
         public bool IsAbstract { get; set; }
         public bool IsStruct { get; set; }
@@ -70,15 +45,11 @@ namespace BulletSharpGen
 
         public bool IsExcluded { get; set; }
 
-        public string ManagedName { get; set; }
-
         /// <summary>
         /// If true, the wrapper class is itself a struct instead
         /// of being a class with a pointer to a native struct.
         /// </summary>
         public bool MarshalAsStruct { get; set; }
-
-        public Dictionary<string, CachedProperty> CachedProperties { get; private set; } = new Dictionary<string, CachedProperty>();
 
         public IEnumerable<MethodDefinition> AbstractMethods
         {
@@ -154,7 +125,7 @@ namespace BulletSharpGen
 
         public override string ToString()
         {
-            return ManagedName ?? FullyQualifiedName;
+            return FullyQualifiedName;
         }
     }
 }

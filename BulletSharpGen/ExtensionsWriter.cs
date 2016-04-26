@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace BulletSharpGen
 {
-    class ExtensionsWriter : WrapperWriter
+    class ExtensionsWriter : DotNetWriter
     {
         Dictionary<string, string> _extensionClassesInternal = new Dictionary<string, string>();
         Dictionary<string, string> _extensionClassesExternal = new Dictionary<string, string>();
@@ -13,8 +12,8 @@ namespace BulletSharpGen
 
         List<KeyValuePair<string, string>> _extensionMethods = new List<KeyValuePair<string, string>>();
 
-        public ExtensionsWriter(WrapperProject project)
-            : base(project)
+        public ExtensionsWriter(DotNetParser parser)
+            : base(parser)
         {
             _extensionClassesInternal.Add("Matrix3x3", "BulletSharp.Math.Matrix");
             _extensionClassesInternal.Add("Quaternion", "BulletSharp.Math.Quaternion");
@@ -34,17 +33,17 @@ namespace BulletSharpGen
             OpenFile(null, WriteTo.Buffer);
         }
 
-        bool MethodNeedsExtensions(MethodDefinition method)
+        bool MethodNeedsExtensions(ManagedMethod method)
         {
             // Extension constructors & static extension methods not supported
-            if (method.IsConstructor || method.IsStatic)
+            if (method.Native.IsConstructor || method.Native.IsStatic)
             {
                 return false;
             }
 
             foreach (var param in method.Parameters)
             {
-                if (_extensionClassesInternal.ContainsKey(param.Type.ManagedName))
+                if (_extensionClassesInternal.ContainsKey(GetName(param.Native.Type)))
                 {
                     return true;
                 }
@@ -52,11 +51,11 @@ namespace BulletSharpGen
             return false;
         }
 
-        bool ClassNeedsExtensions(ClassDefinition c)
+        bool ClassNeedsExtensions(ManagedClass c)
         {
             foreach (var prop in c.Properties)
             {
-                if (_extensionClassesInternal.ContainsKey(prop.Type.ManagedName))
+                if (_extensionClassesInternal.ContainsKey(GetName(prop.Type)))
                 {
                     return true;
                 }
@@ -69,14 +68,14 @@ namespace BulletSharpGen
         {
             string outDirectory = Project.NamespaceName + "_extensions";
 
-            foreach (HeaderDefinition header in Project.HeaderDefinitions.Values)
+            foreach (ManagedHeader header in DotNetParser.Headers.Values)
             {
                 if (!header.Classes.Any(ClassNeedsExtensions)) continue;
 
                 Directory.CreateDirectory(outDirectory);
 
                 // C# extensions file
-                OpenFile(Path.Combine(outDirectory, header.ManagedName + "Extensions.cs"), WriteTo.CS);
+                OpenFile(Path.Combine(outDirectory, header.Name + "Extensions.cs"), WriteTo.CS);
                 WriteLine("using System.ComponentModel;");
                 WriteLine();
                 WriteLine($"namespace {Project.NamespaceName}");
@@ -94,14 +93,14 @@ namespace BulletSharpGen
             }
         }
 
-        private void WriteClass(ClassDefinition c)
+        private void WriteClass(ManagedClass @class)
         {
-            foreach (var child in c.NestedClasses)
+            foreach (var child in @class.NestedClasses)
             {
                 WriteClass(child);
             }
 
-            if (!ClassNeedsExtensions(c))
+            if (!ClassNeedsExtensions(@class))
             {
                 return;
             }
@@ -111,27 +110,27 @@ namespace BulletSharpGen
             To = WriteTo.CS;
             EnsureWhiteSpace();
             Write(1, "[EditorBrowsable(EditorBrowsableState.Never)]");
-            WriteLine(1, $"public static class {c.ManagedName}Extensions");
+            WriteLine(1, $"public static class {@class.Name}Extensions");
             WriteLine(1, "{");
 
             To = WriteTo.Buffer;
-            foreach (var prop in c.Properties)
+            foreach (var prop in @class.Properties)
             {
-                if (_extensionClassesInternal.ContainsKey(prop.Type.ManagedName))
+                if (_extensionClassesInternal.ContainsKey(GetName(prop.Type)))
                 {
-                    string typeName = _extensionClassesExternal[prop.Type.ManagedName];
+                    string typeName = _extensionClassesExternal[GetName(prop.Type)];
 
                     // Getter with out parameter
                     ClearBuffer();
                     WriteLine(2, string.Format("public unsafe static void Get{0}(this {1} obj, out {2} value)",
-                        prop.Name, c.ManagedName, typeName));
+                        prop.Name, @class.Name, typeName));
                     WriteLine(2, "{");
 
                     WriteLine(3, $"fixed ({typeName}* valuePtr = &value)");
                     WriteLine(3, "{");
-                    Write(4, $"*({_extensionClassesInternal[prop.Type.ManagedName]}");
+                    Write(4, $"*({_extensionClassesInternal[GetName(prop.Type)]}");
                     WriteLine(string.Format("*({0}*)valuePtr = obj.{1};",
-                        _extensionClassesInternal[prop.Type.ManagedName], prop.Name));
+                        _extensionClassesInternal[GetName(prop.Type)], prop.Name));
                     WriteLine(3, "}");
 
                     WriteLine(2, "}");
@@ -141,7 +140,7 @@ namespace BulletSharpGen
                     // Getter with return value
                     ClearBuffer();
                     WriteLine(2, string.Format("public static {0} Get{1}(this {1} obj)",
-                        typeName, prop.Name, c.ManagedName));
+                        typeName, prop.Name, @class.Name));
                     WriteLine(2, "{");
 
                     WriteLine(3, $"{typeName} value;");
@@ -160,13 +159,13 @@ namespace BulletSharpGen
                     // Setter with ref parameter
                     ClearBuffer();
                     WriteLine(2, string.Format("public unsafe static void Set{0}(this {1} obj, ref {2} value)",
-                        prop.Name, c.ManagedName, typeName));
+                        prop.Name, @class.Name, typeName));
                     WriteLine(2, "{");
 
                     WriteLine(3, $"fixed ({typeName}* valuePtr = &value)");
                     WriteLine(3, "{");
                     WriteLine(4, string.Format("obj.{0} = *({1}*)valuePtr;",
-                        prop.Name, _extensionClassesInternal[prop.Type.ManagedName]));
+                        prop.Name, _extensionClassesInternal[GetName(prop.Type)]));
                     WriteLine(3, "}");
 
                     WriteLine(2, "}");
@@ -176,7 +175,7 @@ namespace BulletSharpGen
                     // Setter with non-ref parameter
                     ClearBuffer();
                     WriteLine(2, string.Format("public static void Set{0}(this {1} obj, {2} value)",
-                        prop.Name, c.ManagedName, typeName));
+                        prop.Name, @class.Name, typeName));
                     WriteLine(2, "{");
                     WriteLine(3, $"Set{prop.Name}(obj, ref value);");
                     WriteLine(2, "}");
@@ -185,7 +184,7 @@ namespace BulletSharpGen
                 }
             }
 
-            foreach (var method in c.Methods)
+            foreach (var method in @class.Methods)
             {
                 if (!MethodNeedsExtensions(method))
                 {
@@ -206,21 +205,22 @@ namespace BulletSharpGen
             hasCSWhiteSpace = false;
         }
 
-        private void WriteMethod(MethodDefinition method, int numOptionalParams = 0)
+        private void WriteMethod(ManagedMethod method, int numOptionalParams = 0)
         {
-            bool convertReturnType = _extensionClassesInternal.ContainsKey(method.ReturnType.ManagedName);
+            var returnType = method.Native.ReturnType;
+            bool convertReturnType = _extensionClassesInternal.ContainsKey(GetName(returnType));
 
             ClearBuffer();
             Write(2, "public unsafe static ");
             if (convertReturnType)
             {
-                Write(_extensionClassesExternal[method.ReturnType.ManagedName]);
+                Write(_extensionClassesExternal[GetName(returnType)]);
             }
             else
             {
-                Write(method.ReturnType.ManagedName);
+                Write(GetName(returnType));
             }
-            Write($" {method.ManagedName}(this {method.Parent.ManagedName} obj");
+            Write($" {method.Name}(this {method.Parent.Name} obj");
 
             var extendedParams = new List<ParameterDefinition>();
             int numParameters = method.Parameters.Length - numOptionalParams;
@@ -229,14 +229,14 @@ namespace BulletSharpGen
                 Write(", ");
 
                 var param = method.Parameters[i];
-                if (_extensionClassesInternal.ContainsKey(param.Type.ManagedName))
+                if (_extensionClassesInternal.ContainsKey(GetName(param.Native.Type)))
                 {
-                    Write($"ref {_extensionClassesExternal[param.Type.ManagedName]} {param.Name}");
-                    extendedParams.Add(param);
+                    Write($"ref {_extensionClassesExternal[GetName(param.Native.Type)]} {param.Name}");
+                    extendedParams.Add(param.Native);
                 }
                 else
                 {
-                    Write($"{param.Type.ManagedName} {param.Name}");
+                    Write($"{GetName(param.Native.Type)} {param.Name}");
                 }
             }
             WriteLine(')');
@@ -248,32 +248,32 @@ namespace BulletSharpGen
             foreach (var param in extendedParams)
             {
                 WriteLine(tabs, string.Format("fixed ({0}* {1}Ptr = &{2})",
-                    _extensionClassesExternal[param.Type.ManagedName], param.Name, param.Name));
+                    _extensionClassesExternal[GetName(param.Type)], param.Name, param.Name));
                 WriteLine(tabs, "{");
                 tabs++;
             }
 
             WriteTabs(tabs);
-            if (method.ReturnType.Name != "void")
+            if (returnType.Kind != ClangSharp.TypeKind.Void)
             {
                 Write("return ");
             }
-            Write($"obj.{method.ManagedName}(");
+            Write($"obj.{method.Name}(");
             bool hasOptionalParam = false;
             for (int i = 0; i < numParameters; i++)
             {
                 var param = method.Parameters[i];
-                if (_extensionClassesInternal.ContainsKey(param.Type.ManagedName))
+                if (_extensionClassesInternal.ContainsKey(GetName(param.Native.Type)))
                 {
                     Write(string.Format("ref *({0}*){1}Ptr",
-                        _extensionClassesInternal[param.Type.ManagedName], param.Name));
+                        _extensionClassesInternal[GetName(param.Native.Type)], param.Name));
                 }
                 else
                 {
                     Write(param.Name);
                 }
 
-                if (param.IsOptional)
+                if (param.Native.IsOptional)
                 {
                     hasOptionalParam = true;
                 }
@@ -286,7 +286,7 @@ namespace BulletSharpGen
             Write(')');
             if (convertReturnType)
             {
-                Write(_returnTypeConversion[method.ReturnType.ManagedName]);
+                Write(_returnTypeConversion[GetName(returnType)]);
             }
             WriteLine(';');
 

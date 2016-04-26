@@ -2,32 +2,33 @@
 {
     public class PropertyDefinition
     {
-        public MethodDefinition Getter { get; }
-        public MethodDefinition Setter { get; set; }
-        public ClassDefinition Parent { get; }
+        public ManagedMethod Getter { get; }
+        public ManagedMethod Setter { get; set; }
+        public ManagedClass Parent { get; }
         public string Name { get; }
 
         public TypeRefDefinition Type
         {
             get
             {
-                if (Getter.IsVoid)
+                if (Getter.Native.IsVoid)
                 {
-                    return Getter.Parameters[0].Type;
+                    return Getter.Native.Parameters[0].Type;
                 }
-                return Getter.ReturnType;
+                return Getter.Native.ReturnType;
             }
         }
 
         // Property from getter method
-        public PropertyDefinition(MethodDefinition getter, string name)
+        public PropertyDefinition(ManagedMethod getter, string name)
         {
             Getter = getter;
+            Name = name;
+
             Parent = getter.Parent;
             Parent.Properties.Add(this);
-            getter.Property = this;
 
-            Name = name;
+            getter.Property = this;
         }
 
         public override string ToString()

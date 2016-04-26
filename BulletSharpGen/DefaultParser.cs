@@ -30,6 +30,7 @@ namespace BulletSharpGen
         public virtual void Parse()
         {
             ResolveReferences();
+            CreateFieldAccessors();
             MapSymbols();
             ParseEnums();
             SetClassProperties();
@@ -37,8 +38,7 @@ namespace BulletSharpGen
             FlattenClassHierarchy();
             ResolveTemplateSpecializations();
             CreateDefaultConstructors();
-            CreateFieldAccessors();
-            CreateProperties();
+            SortMembers();
             ResolveIncludes();
         }
 
@@ -268,6 +268,33 @@ namespace BulletSharpGen
             }
         }
 
+        protected virtual void SortMembers()
+        {
+            // Sort methods alphabetically
+            foreach (var @class in Project.ClassDefinitions.Values)
+            {
+                // Order by name, then fix inheritance, parent classes must appear first
+                @class.NestedClasses.Sort((c1, c2) => c1.Name.CompareTo(c2.Name));
+                var classesOrdered = @class.NestedClasses;
+                for (int i = 0; i < classesOrdered.Count; i++)
+                {
+                    var thisClass = classesOrdered[i];
+                    var baseClass = thisClass.BaseClass;
+                    if (baseClass != null && classesOrdered.Contains(baseClass))
+                    {
+                        int thisIndex = classesOrdered.IndexOf(thisClass);
+                        if (thisIndex < classesOrdered.IndexOf(baseClass))
+                        {
+                            classesOrdered.Remove(baseClass);
+                            classesOrdered.Insert(thisIndex, baseClass);
+                        }
+                    }
+                }
+
+                @class.Methods.Sort((m1, m2) => m1.Name.CompareTo(m2.Name));
+            }
+        }
+
         // Remove overridden methods, methods that differ by const/non-const return values
         // and abstract class constructors
         void RemoveRedundantMethods()
@@ -386,7 +413,8 @@ namespace BulletSharpGen
             {
                 scriptedNameMapping.Globals.Header = thisClass.Header;
             }
-            template.ManagedName = Project.ClassNameMapping.Map(template.Name);
+            // TODO:
+            //template.ManagedName = Project.ClassNameMapping.Map(template.Name);
 
             foreach (var templateClass in template.NestedClasses)
             {
@@ -452,6 +480,7 @@ namespace BulletSharpGen
         // Give managed names to headers, classes and methods
         void MapSymbols()
         {
+            /*
             // Get managed header and enum names
             var nameMapping = Project.HeaderNameMapping as ScriptedMapping;
             foreach (var header in Project.HeaderDefinitions.Values)
@@ -502,33 +531,7 @@ namespace BulletSharpGen
                         param.ManagedName = GetManagedParameterName(param);
                     }
                 }
-            }
-        }
-
-        string GetManagedMethodName(MethodDefinition method)
-        {
-            if (method.IsConstructor)
-            {
-                return method.Parent.ManagedName;
-            }
-
-            string mapping = Project.MethodNameMapping?.Map(method.Name);
-            if (mapping != null) return mapping;
-
-            if (method.Name.StartsWith("operator"))
-            {
-                return method.Name;
-            }
-
-            return ToCamelCase(method.Name, true);
-        }
-
-        string GetManagedParameterName(ParameterDefinition param)
-        {
-            string mapping = Project.ParameterNameMapping?.Map(param.Name);
-            if (mapping != null) return mapping;
-
-            return ToCamelCase(param.Name, false);
+            }*/
         }
 
         // Create default constructor if no explicit C++ constructor exists.
@@ -553,97 +556,45 @@ namespace BulletSharpGen
                             IsConstructor = true,
                             ReturnType = new TypeRefDefinition("void")
                         };
-                        constructor.ManagedName = GetManagedMethodName(constructor);
+                        //TODO:
+                        //constructor.ManagedName = GetManagedMethodName(constructor);
                     }
                 }
             }
         }
 
-        string[] _booleanVerbs = { "Has", "Is", "Needs" };
-
-        // Create getters and setters for fields
-        void CreateFieldAccessors()
+        private void CreateFieldGetter(FieldDefinition field, ClassDefinition @class, string getterName, MethodDefinition setter)
         {
-            foreach (var @class in Project.ClassDefinitions.Values)
+            MethodDefinition getter;
+
+            // Use getter with an out parameter for structs
+            if (field.Type.Target != null && field.Type.Target.MarshalAsStruct)
             {
-                foreach (var field in @class.Fields)
+                getter = new MethodDefinition(getterName, @class, 1);
+                getter.ReturnType = new TypeRefDefinition("void");
+
+                string paramName = setter != null ? setter.Parameters[0].Name : "value";
+                var paramType = new TypeRefDefinition(field.Type.Name)
                 {
-                    string name = field.Name;
-                    if (name.StartsWith("m_"))
-                    {
-                        name = name.Substring(2);
-                    }
-                    name = char.ToUpper(name[0]) + name.Substring(1); // capitalize
-                    string managedName = ToCamelCase(name, true);
-
-                    // Generate getter/setter methods
-                    string getterName, setterName;
-                    string managedGetterName, managedSetterName;
-                    string verb = _booleanVerbs.FirstOrDefault(v => name.StartsWith(v));
-                    if (verb != null && "bool".Equals(field.Type.Name))
-                    {
-                        getterName = name;
-                        setterName = "set" + name.Substring(verb.Length);
-                        managedGetterName = managedName;
-                        managedSetterName = "Set" + managedName.Substring(verb.Length);
-                    }
-                    else
-                    {
-                        getterName = "get" + name;
-                        setterName = "set" + name;
-                        managedGetterName = "Get" + managedName;
-                        managedSetterName = "Set" + managedName;
-                    }
-
-                    // See if there are already accessor methods for this field
-                    MethodDefinition getter = null, setter = null;
-                    foreach (var method in @class.Methods)
-                    {
-                        if (managedGetterName.Equals(method.ManagedName) && method.Parameters.Length == 0)
-                        {
-                            getter = method;
-                            continue;
-                        }
-
-                        if (managedSetterName.Equals(method.ManagedName) && method.Parameters.Length == 1)
-                        {
-                            setter = method;
-                        }
-                    }
-
-                    if (getter == null)
-                    {
-                        getter = new MethodDefinition(getterName, @class, 0);
-                        getter.ManagedName = managedGetterName;
-                        getter.ReturnType = field.Type;
-                        getter.Field = field;
-                    }
-                    var type = field.Type.Canonical;
-                    if (!type.IsBasic && type.Referenced == null)
-                    {
-                        if (!(type.Target != null && type.Target.MarshalAsStruct))
-                        {
-                            getter.ReturnType = new TypeRefDefinition(field.Type.Name)
-                            {
-                                Kind = TypeKind.Pointer,
-                                Referenced = field.Type.Copy()
-                            };
-                        }
-                    }
-
-                    var prop = new PropertyDefinition(getter, GetPropertyName(getter));
-
-                    if (setter == null)
-                    {
-                        CreateFieldSetter(prop, setterName, managedSetterName);
-                    }
-                }
+                    Kind = TypeKind.Pointer,
+                    Referenced = field.Type.Copy()
+                };
+                getter.Parameters[0] = new ParameterDefinition(paramName, paramType)
+                {
+                    MarshalDirection = MarshalDirection.Out
+                };
             }
+            else
+            {
+                getter = new MethodDefinition(getterName, @class, 0);
+                getter.ReturnType = field.Type;
+            }
+            getter.Field = field;
         }
 
-        void CreateFieldSetter(PropertyDefinition prop, string setterName, string managedSetterName)
+        private void CreateFieldSetter(FieldDefinition field, ClassDefinition @class, string setterName)
         {
-            var type = prop.Type;
+            var type = field.Type;
             var typeCanonical = type.Canonical;
 
             // Can't assign value to reference or constant array
@@ -656,10 +607,9 @@ namespace BulletSharpGen
 
             if (typeCanonical.Name != null && typeCanonical.Name.StartsWith("btAlignedObjectArray")) return;
 
-            var setter = new MethodDefinition(setterName, prop.Parent, 1);
-            setter.ManagedName = managedSetterName;
+            var setter = new MethodDefinition(setterName, @class, 1);
             setter.ReturnType = new TypeRefDefinition("void");
-            setter.Field = prop.Getter.Field;
+            setter.Field = field;
             if (typeCanonical.Target != null && typeCanonical.Target.MarshalAsStruct)
             {
                 type = new TypeRefDefinition
@@ -676,98 +626,79 @@ namespace BulletSharpGen
             }
             setter.Parameters[0] = new ParameterDefinition("value", type)
             {
-                MarshalDirection = MarshalDirection.In,
-                ManagedName = "value"
+                MarshalDirection = MarshalDirection.In
             };
-
-            prop.Setter = setter;
-            prop.Setter.Property = prop;
         }
 
-        string GetPropertyName(MethodDefinition getter)
-        {
-            string name = getter.ManagedName;
-
-            var propertyType = getter.IsVoid ? getter.Parameters[0].Type : getter.ReturnType;
-            if ("bool".Equals(propertyType.Name) && _booleanVerbs.Any(v => name.StartsWith(v)))
-            {
-                return name;
-            }
-
-            if (name.StartsWith("Get"))
-            {
-                return name.Substring(3);
-            }
-
-            throw new NotImplementedException();
-        }
-
-        // Turn getters and setters into properties,
-        // managed method names have been resolved at this point
-        void CreateProperties()
+        private void CreateFieldAccessors()
         {
             foreach (var @class in Project.ClassDefinitions.Values)
             {
-                // Getters with return type and 0 arguments
-                var getterMethods = @class.Methods.Where(m => !m.IsConstructor && !m.IsVoid && m.Parameters.Length == 0);
-                foreach (var method in getterMethods)
+                foreach (var field in @class.Fields)
                 {
-                    if (method.ManagedName.StartsWith("Get") ||
-                        (method.ReturnType.Kind == TypeKind.Bool &&
-                        _booleanVerbs.Any(v => method.ManagedName.StartsWith(v))))
+                    string name = field.Name;
+                    if (name.StartsWith("m_"))
                     {
-                        if (method.Property != null) continue;
-                        new PropertyDefinition(method, GetPropertyName(method));
+                        name = name.Substring(2);
                     }
-                }
+                    name = char.ToUpper(name[0]) + name.Substring(1); // capitalize
 
-                // Getters with void type and 1 pointer argument for the return value.
-                // Can only be done for types with value semantics
-                foreach (var method in @class.Methods.Where(m => m.IsVoid && m.Parameters.Length == 1))
-                {
-                    if (method.ManagedName.StartsWith("Get"))
+                    // Generate getter/setter methods
+                    string getterName, setterName;
+                    /*
+                    string verb = _booleanVerbs.FirstOrDefault(v => name.StartsWith(v));
+                    if (verb != null && "bool".Equals(field.Type.Name))
                     {
-                        if (method.Property != null) continue;
+                        getterName = name;
+                        setterName = "set" + name.Substring(verb.Length);
+                    }
+                    else*/
+                    {
+                        getterName = "get" + name;
+                        setterName = "set" + name;
+                    }
 
-                        var paramType = method.Parameters[0].Type.Canonical;
-                        if (paramType.IsConst) continue;
+                    // See if there are already C++ accessor methods for this field
+                    MethodDefinition getter = null, setter = null;
 
-                        switch (paramType.Kind)
+                    foreach (var method in @class.Methods)
+                    {
+                        if (getterName.Equals(method.Name))
                         {
-                            case TypeKind.Pointer:
-                            case TypeKind.LValueReference:
-                                var referenced = paramType.Referenced.Canonical;
-                                if (referenced.Target != null && referenced.Target.MarshalAsStruct)
+                            if (method.IsVoid)
+                            {
+                                if (method.Parameters.Length == 1)
                                 {
-                                    new PropertyDefinition(method, GetPropertyName(method));
+                                    // TODO: check parameter type
+                                    getter = method;
+                                    break;
                                 }
-                                break;
+                            }
+                            else
+                            {
+                                if (method.Parameters.Length == 0)
+                                {
+                                    // TODO: check return type
+                                    getter = method;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (setterName.Equals(method.Name) && method.Parameters.Length == 1)
+                        {
+                            setter = method;
                         }
                     }
-                }
 
-                // Setters
-                foreach (var method in @class.Methods)
-                {
-                    if (method.Parameters.Length == 1 &&
-                        method.Name.StartsWith("set", StringComparison.InvariantCultureIgnoreCase))
+                    if (getter == null)
                     {
-                        string name = method.ManagedName.Substring(3);
-                        // Find the property with the matching getter
-                        foreach (var prop in @class.Properties)
-                        {
-                            if (prop.Setter != null)
-                            {
-                                continue;
-                            }
+                        CreateFieldGetter(field, @class, getterName, setter);
+                    }
 
-                            if (prop.Name.Equals(name))
-                            {
-                                prop.Setter = method;
-                                method.Property = prop;
-                                break;
-                            }
-                        }
+                    if (setter == null)
+                    {
+                        CreateFieldSetter(field, @class, setterName);
                     }
                 }
             }

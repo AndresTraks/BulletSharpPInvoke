@@ -5,7 +5,6 @@ namespace BulletSharpGen
     public class MethodDefinition
     {
         public string Name { get; }
-        public string ManagedName { get; set; }
         public ClassDefinition Parent { get; }
         public TypeRefDefinition ReturnType { get; set; }
         public ParameterDefinition[] Parameters { get; set; }
@@ -15,7 +14,6 @@ namespace BulletSharpGen
         public bool IsConstructor { get; set; }
         public bool IsVirtual { get; set; }
         public FieldDefinition Field { get; set; } // get/set method target
-        public PropertyDefinition Property { get; set; } // property that wraps this get/set method
         public AccessSpecifier Access { get; set; } = AccessSpecifier.Public;
 
         public bool IsParsed { get; set; }
@@ -24,7 +22,7 @@ namespace BulletSharpGen
 
         public bool IsVoid
         {
-            get { return ReturnType != null && ReturnType.Kind == ClangSharp.TypeKind.Void; }
+            get { return ReturnType != null && ReturnType.Kind == TypeKind.Void; }
         }
 
         public int NumOptionalParameters
@@ -66,8 +64,6 @@ namespace BulletSharpGen
                 IsConstructor = IsConstructor,
                 IsExcluded = IsExcluded,
                 IsStatic = IsStatic,
-                ManagedName = ManagedName,
-                Property = Property,
                 ReturnType = ReturnType.Copy()
             };
             for (int i = 0; i < Parameters.Length; i++)

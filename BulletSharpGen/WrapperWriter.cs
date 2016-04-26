@@ -23,6 +23,7 @@ namespace BulletSharpGen
         private const int TabWidth = 4;
         private const int LineBreakWidth = 80;
 
+        public DefaultParser Parser { get; }
         public WrapperProject Project { get; }
         public WriteTo To { get; set; }
 
@@ -34,9 +35,10 @@ namespace BulletSharpGen
         protected bool hasSourceWhiteSpace;
         protected bool hasCSWhiteSpace;
 
-        protected WrapperWriter(WrapperProject project)
+        protected WrapperWriter(DefaultParser parser)
         {
-            Project = project;
+            Parser = parser;
+            Project = parser.Project;
         }
 
         protected void OpenFile(string filename, WriteTo to)
@@ -214,6 +216,36 @@ namespace BulletSharpGen
                 if (a.Length == 0) return p;
                 return $"{a}, {p}";
             });
+        }
+
+        protected bool IsExcludedClass(ClassDefinition @class)
+        {
+            return @class is ClassTemplateDefinition || @class is EnumDefinition ||
+                @class.IsPureEnum || @class.IsExcluded || @class.IsFunctionProto;
+        }
+
+        protected static string GetFullNameC(ClassDefinition @class)
+        {
+            string className;
+            ClassTemplateDefinition template = @class as ClassTemplateDefinition;
+            if (template != null)
+            {
+                className = @class.Name + string.Join("_", template.TemplateParameters);
+            }
+            else
+            {
+                className = @class.Name;
+            }
+
+            if (@class.Parent != null)
+            {
+                return $"{GetFullNameC(@class.Parent)}_{@class.Name}";
+            }
+            if (@class.NamespaceName != "")
+            {
+                return $"{@class.NamespaceName}_{@class.Name}";
+            }
+            return @class.Name;
         }
     }
 }

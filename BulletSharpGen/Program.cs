@@ -23,35 +23,39 @@ namespace BulletSharpGen
             parser.Parse();
             Console.WriteLine("Parsing complete");
 
-            WrapperWriter writer;
+            CWriter cWriter = new CWriter(parser);
+            //project.CProjectPath = "c_temp";
+            cWriter.Output();
+
+            DotNetWriter dotNetWriter;
             if (cppCliMode)
             {
-                writer = new CppCliWriter(project);
+                dotNetWriter = new CppCliWriter(parser);
             }
             else
             {
-                writer = new PInvokeWriter(project);
+                dotNetWriter = new PInvokeWriter(parser);
 
-                var extensionWriter = new ExtensionsWriter(project);
-                extensionWriter.Output();
+                var extensionsWriter = new ExtensionsWriter(parser);
+                extensionsWriter.Output();
             }
-            writer.Output();
+            //dotNetWriter.Output();
 
-            OutputSolution(TargetVS.VS2008, project);
-            OutputSolution(TargetVS.VS2010, project);
-            OutputSolution(TargetVS.VS2012, project);
-            OutputSolution(TargetVS.VS2013, project);
-            OutputSolution(TargetVS.VS2015, project);
-            //project.Save();
+            OutputSolution(TargetVS.VS2008, parser);
+            OutputSolution(TargetVS.VS2010, parser);
+            OutputSolution(TargetVS.VS2012, parser);
+            OutputSolution(TargetVS.VS2013, parser);
+            OutputSolution(TargetVS.VS2015, parser);
+            project.Save();
 
-            CMakeWriter cmake = new CMakeWriter(project);
+            CMakeWriter cmake = new CMakeWriter(parser);
             cmake.Output();
 
             Console.Write("Press any key to continue...");
             Console.ReadKey();
         }
 
-        static void OutputSolution(TargetVS targetVS, WrapperProject project)
+        static void OutputSolution(TargetVS targetVS, DotNetParser parser)
         {
             string targetVersionString;
             switch (targetVS)
@@ -146,6 +150,7 @@ namespace BulletSharpGen
             }
             */
 
+            var project = parser.Project;
             var filterWriter = new FilterWriter(project.NamespaceName);
             var sourceFilter = new Filter("Source Files", "4FC737F1-C7A5-4376-A066-2A32D752A2FF", "cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx");
             var headerFilter = new Filter("Header Files", "93995380-89BD-4b04-88EB-625FBE52EBFB", "h;hh;hpp;hxx;hm;inl;inc;xsd");
@@ -180,15 +185,12 @@ namespace BulletSharpGen
             headerFilter.AddFile("", rootFolder + "Vector3");
             headerFilter.AddFile("", rootFolder + "Vector4");
 
-            foreach (HeaderDefinition header in project.HeaderDefinitions.Values)
+            foreach (ManagedHeader header in parser.Headers.Values)
             {
-                if (header.Classes.Count == 0)
-                {
-                    continue;
-                }
+                if (header.Classes.Count == 0) continue;
 
-                sourceFilter.AddFile(header.Filename, rootFolder + header.ManagedName);
-                headerFilter.AddFile(header.Filename, rootFolder + header.ManagedName);
+                sourceFilter.AddFile(header.Native.Filename, rootFolder + header.Name);
+                headerFilter.AddFile(header.Native.Filename, rootFolder + header.Name);
             }
 
             sourceFilter.AddFile("BulletCollision/CollisionDispatch/", rootFolder + "InternalEdgeUtility");

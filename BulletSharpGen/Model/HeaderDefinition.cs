@@ -12,8 +12,6 @@ namespace BulletSharpGen
         public HashSet<HeaderDefinition> Includes { get; } = new HashSet<HeaderDefinition>();
         public bool IsExcluded { get; set; }
 
-        public string ManagedName { get; set; }
-
         public IEnumerable<ClassDefinition> AllClasses
         {
             get { return Classes.Concat(Classes.SelectMany(c => c.AllNestedClasses)); }

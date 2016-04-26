@@ -22,7 +22,6 @@ namespace BulletSharpGen
         public bool HasTemplateTypeParameter { get; set; }
         public List<TypeRefDefinition> TemplateParams { get; set; }
 
-        private bool _unresolved;
         public ClassDefinition Target { get; set; }
 
         public bool IsBasic
@@ -79,62 +78,6 @@ namespace BulletSharpGen
                 {
                     return Target.FullyQualifiedName;
                 }
-                return Name;
-            }
-        }
-
-        public string ManagedName
-        {
-            get
-            {
-                switch (Kind)
-                {
-                    case TypeKind.Typedef:
-                        if (Referenced.Kind == TypeKind.Pointer &&
-                            Referenced.Referenced.Kind == TypeKind.FunctionProto)
-                        {
-                            if (Target != null) return Target.ManagedName;
-                            break;
-                        }
-                        else if (Referenced.IsBasic)
-                        {
-                            // TODO: C++/CLI: typedef to basic type can return typedef
-                            // TODO: Pinvoke: typedef to basic type returns basic type
-                            return Referenced.ManagedName;
-                        }
-                        else
-                        {
-                            return Referenced.ManagedName;
-                        }
-
-                    case TypeKind.ConstantArray:
-                    case TypeKind.LValueReference:
-                    case TypeKind.Pointer:
-                        return Referenced.ManagedName;
-
-                    case TypeKind.Enum:
-                    case TypeKind.Record:
-                    case TypeKind.Unexposed:
-                        if (Target != null) return Target.ManagedName;
-                        break;
-                }
-
-                if (IsBasic)
-                {
-                    if (Name.Equals("unsigned char"))
-                    {
-                        return "byte";
-                    }
-                    return Name;
-                }
-
-                if (HasTemplateTypeParameter) return Name;
-
-                if (!_unresolved)
-                {
-                    Console.WriteLine("Unresolved reference to " + Name);
-                }
-                _unresolved = true;
                 return Name;
             }
         }
@@ -426,7 +369,7 @@ namespace BulletSharpGen
 
         public override string ToString()
         {
-            return ManagedName ?? Name;
+            return Name;
         }
     }
 }

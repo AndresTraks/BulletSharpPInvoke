@@ -15,7 +15,6 @@ namespace BulletSharpGen
         public ClassDefinition Class { get; set; }
         public MethodDefinition Method { get; set; }
         public ParameterDefinition Parameter { get; set; }
-        public FieldDefinition Field { get; set; }
 
         public AccessSpecifier MemberAccess { get; set; }
     }
@@ -337,11 +336,7 @@ namespace BulletSharpGen
                     _context.MemberAccess = cursor.AccessSpecifier;
                     return Cursor.ChildVisitResult.Continue;
                 case CursorKind.CxxBaseSpecifier:
-                    if (cursor.Type.Declaration.IsInvalid)
-                    {
-                        "".ToString();
-                    }
-                    string baseName = TypeRefDefinition.GetFullyQualifiedName(cursor.Type, cursor);
+                    string baseName = TypeRefDefinition.GetFullyQualifiedName(cursor.Type.Declaration);
                     ClassDefinition baseClass;
                     if (!project.ClassDefinitions.TryGetValue(baseName, out baseClass))
                     {
@@ -401,9 +396,8 @@ namespace BulletSharpGen
                     break;
 
                 case CursorKind.FieldDecl:
-                    _context.Field = new FieldDefinition(cursor.Spelling,
+                    var field = new FieldDefinition(cursor.Spelling,
                         new TypeRefDefinition(cursor.Type, cursor), _context.Class);
-                    _context.Field = null;
                     break;
 
                 case CursorKind.TypedefDecl:

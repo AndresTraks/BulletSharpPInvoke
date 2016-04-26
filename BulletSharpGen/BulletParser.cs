@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BulletSharpGen
 {
-    class BulletParser : DefaultParser
+    class BulletParser : DotNetParser
     {
         public BulletParser(WrapperProject project)
             : base(project)
@@ -83,148 +83,54 @@ namespace BulletSharpGen
             }
         }
 
-        public override void Parse()
+        public static string GetTypeMarshalPrologueCppCli(ManagedParameter parameter)
         {
-            base.Parse();
-
-            // Check if any property values can be cached in
-            // in constructors or property setters
-            foreach (var @class in Project.ClassDefinitions.Values)
+            switch (parameter.Native.Type.Name)
             {
-                foreach (var constructor in @class.Methods.Where(m => m.IsConstructor))
-                {
-                    foreach (var param in constructor.Parameters)
-                    {
-                        var methodParent = constructor.Parent;
-                        while (methodParent != null)
-                        {
-                            foreach (var property in methodParent.Properties)
-                            {
-                                if (param.ManagedName.ToLower() == property.Name.ToLower()
-                                    && IsCacheableType(param.Type)
-                                    && param.Type.ManagedName == property.Type.ManagedName)
-                                {
-                                    CachedProperty cachedProperty;
-                                    if (methodParent.CachedProperties.TryGetValue(property.Name, out cachedProperty))
-                                    {
-                                        if (methodParent != constructor.Parent)
-                                        {
-                                            cachedProperty.Access = RefAccessSpecifier.Protected;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        cachedProperty = new CachedProperty(property);
-                                        methodParent.CachedProperties.Add(property.Name, cachedProperty);
-                                    }
-                                }
-                            }
-                            methodParent = methodParent.BaseClass;
-                        }
-                    }
-                }
-
-                foreach (var property in @class.Properties.Where(p => p.Setter != null))
-                {
-                    if (IsCacheableType(property.Type))
-                    {
-                        if (!@class.CachedProperties.ContainsKey(property.Name))
-                        {
-                            @class.CachedProperties.Add(property.Name, new CachedProperty(property));
-                        }
-                    }
-                }
-            }
-
-            // Sort methods and properties alphabetically
-            foreach (var @class in Project.ClassDefinitions.Values)
-            {
-                // Order by name, then fix inheritance, parent classes must appear first
-                @class.NestedClasses.Sort((c1, c2) => c1.Name.CompareTo(c2.Name));
-                var classesOrdered = @class.NestedClasses;
-                for (int i = 0; i < classesOrdered.Count; i++)
-                {
-                    var thisClass = classesOrdered[i];
-                    var baseClass = thisClass.BaseClass;
-                    if (baseClass != null && classesOrdered.Contains(baseClass))
-                    {
-                        int thisIndex = classesOrdered.IndexOf(thisClass);
-                        if (thisIndex < classesOrdered.IndexOf(baseClass))
-                        {
-                            classesOrdered.Remove(baseClass);
-                            classesOrdered.Insert(thisIndex, baseClass);
-                        }
-                    }
-                }
-
-                @class.Methods.Sort((m1, m2) => m1.Name.CompareTo(m2.Name));
-                @class.Properties.Sort((p1, p2) => p1.Name.CompareTo(p2.Name));
-            }
-        }
-
-        bool IsCacheableType(TypeRefDefinition t)
-        {
-            if (t.IsBasic) return false;
-            if (t.Target != null)
-            {
-                if (t.Target is EnumDefinition) return false;
-                if (t.Target.MarshalAsStruct) return false;
-            }
-            if (t.Referenced != null)
-            {
-                return IsCacheableType(t.Referenced);
-            }
-            return true;
-        }
-
-        public static string GetTypeMarshalPrologueCppCli(ParameterDefinition parameter)
-        {
-            switch (parameter.Type.ManagedName)
-            {
-                case "Matrix3x3":
-                    return "MATRIX3X3_CONV(" + parameter.ManagedName + ");";
-                case "Quaternion":
-                    return "QUATERNION_CONV(" + parameter.ManagedName + ");";
-                case "Transform":
-                    return "TRANSFORM_CONV(" + parameter.ManagedName + ");";
-                case "Vector4":
-                    return "VECTOR4_CONV(" + parameter.ManagedName + ");";
+                case "btMatrix3x3":
+                    return "MATRIX3X3_CONV(" + parameter.Name + ");";
+                case "btQuaternion":
+                    return "QUATERNION_CONV(" + parameter.Name + ");";
+                case "btTransform":
+                    return "TRANSFORM_CONV(" + parameter.Name + ");";
+                case "btVector4":
+                    return "VECTOR4_CONV(" + parameter.Name + ");";
                 default:
                     return null;
             }
         }
 
-        public static string GetTypeMarshalEpilogueCppCli(ParameterDefinition parameter)
+        public static string GetTypeMarshalEpilogueCppCli(ManagedParameter parameter)
         {
-            switch (parameter.Type.ManagedName)
+            switch (parameter.Native.Type.Name)
             {
-                case "Quaternion":
-                    return "QUATERNION_DEL(" + parameter.ManagedName + ");";
-                case "Matrix3x3":
-                    return "MATRIX3X3_DEL(" + parameter.ManagedName + ");";
-                case "Transform":
-                    return "TRANSFORM_DEL(" + parameter.ManagedName + ");";
-                case "Vector4":
-                    return "VECTOR4_DEL(" + parameter.ManagedName + ");";
+                case "btQuaternion":
+                    return "QUATERNION_DEL(" + parameter.Name + ");";
+                case "btMatrix3x3":
+                    return "MATRIX3X3_DEL(" + parameter.Name + ");";
+                case "btTransform":
+                    return "TRANSFORM_DEL(" + parameter.Name + ");";
+                case "btVector4":
+                    return "VECTOR4_DEL(" + parameter.Name + ");";
                 default:
                     return null;
             }
         }
 
-        public static string GetTypeMarshalCppCli(ParameterDefinition parameter)
+        public static string GetTypeMarshalCppCli(ManagedParameter parameter)
         {
-            switch (parameter.Type.ManagedName)
+            switch (parameter.Native.Type.Name)
             {
-                case "IDebugDraw":
-                    return "DebugDraw::GetUnmanaged(" + parameter.ManagedName + ")";
-                case "Quaternion":
-                    return "QUATERNION_USE(" + parameter.ManagedName + ")";
-                case "Transform":
-                    return "TRANSFORM_USE(" + parameter.ManagedName + ")";
-                case "Matrix3x3":
-                    return "MATRIX3X3_USE(" + parameter.ManagedName + ")";
-                case "Vector4":
-                    return "VECTOR4_USE(" + parameter.ManagedName + ")";
+                case "btIDebugDraw":
+                    return "DebugDraw::GetUnmanaged(" + parameter.Name + ")";
+                case "btQuaternion":
+                    return "QUATERNION_USE(" + parameter.Name + ")";
+                case "btTransform":
+                    return "TRANSFORM_USE(" + parameter.Name + ")";
+                case "btMatrix3x3":
+                    return "MATRIX3X3_USE(" + parameter.Name + ")";
+                case "btVector4":
+                    return "VECTOR4_USE(" + parameter.Name + ")";
                 default:
                     return null;
             }
@@ -232,19 +138,19 @@ namespace BulletSharpGen
 
         public static string GetTypeMarshalConstructorStart(MethodDefinition getter)
         {
-            switch (getter.ReturnType.ManagedName)
+            switch (getter.ReturnType.Name)
             {
-                case "CollisionShape":
+                case "btCollisionShape":
                     return "CollisionShape::GetManaged(";
-                case "IDebugDraw":
+                case "btIDebugDraw":
                     return "DebugDraw::GetManaged(";
-                case "OverlappingPairCache":
+                case "btOverlappingPairCache":
                     return "OverlappingPairCache::GetManaged(";
-                case "Quaternion":
+                case "btQuaternion":
                     return "Math::BtQuatToQuaternion(&";
-                case "Transform":
+                case "btTransform":
                     return "Math::BtTransformToMatrix(&";
-                case "Vector4":
+                case "btVector4":
                     return "Math::BtVector4ToVector4(&";
                 default:
                     return string.Empty;
@@ -253,14 +159,14 @@ namespace BulletSharpGen
 
         public static string GetTypeMarshalConstructorEnd(MethodDefinition getter)
         {
-            switch (getter.ReturnType.ManagedName)
+            switch (getter.ReturnType.Name)
             {
-                case "CollisionShape":
-                case "IDebugDraw":
-                case "OverlappingPairCache":
-                case "Quaternion":
-                case "Transform":
-                case "Vector4":
+                case "btCollisionShape":
+                case "btIDebugDraw":
+                case "btOverlappingPairCache":
+                case "btQuaternion":
+                case "btTransform":
+                case "btVector4":
                     return ")";
                 default:
                     return string.Empty;
@@ -269,17 +175,20 @@ namespace BulletSharpGen
 
         public static string GetTypeMarshalConstructorStartCS(MethodDefinition method)
         {
-            switch (method.ReturnType.ManagedName)
+            switch (method.ReturnType.Name)
             {
-                case "BroadphaseProxy":
-                case "CollisionObject":
-                case "CollisionShape":
-                case "OverlappingPairCache":
-                    return $"{method.ReturnType.ManagedName}.GetManaged(";
+                case "btBroadphaseProxy":
+                    return "BroadphaseProxy.GetManaged(";
+                case "btCollisionObject":
+                    return "CollisionObject.GetManaged(";
+                case "btCollisionShape":
+                    return "CollisionShape.GetManaged(";
+                case "btOverlappingPairCache":
+                    return "OverlappingPairCache.GetManaged(";
                 case "IDebugDraw":
                     return "DebugDraw.GetManaged(";
-                case "CollisionObjectWrapper":
-                    return $"new {method.ReturnType.ManagedName}(";
+                case "btCollisionObjectWrapper":
+                    return $"new CollisionObjectWrapper(";
                 default:
                     return "";
             }
@@ -294,16 +203,16 @@ namespace BulletSharpGen
             return "";
         }
 
-        public static string GetTypeMarshalFieldSetCppCli(FieldDefinition field, ParameterDefinition parameter, string nativePointer)
+        public static string GetTypeMarshalFieldSetCppCli(FieldDefinition field, ManagedParameter parameter, string nativePointer)
         {
-            switch (field.Type.ManagedName)
+            switch (field.Type.Name)
             {
-                case "Quaternion":
-                    return "Math::QuaternionToBtQuat(" + parameter.ManagedName + ", &" + nativePointer + "->" + field.Name + ')';
-                case "Transform":
-                    return "Math::MatrixToBtTransform(" + parameter.ManagedName + ", &" + nativePointer + "->" + field.Name + ')';
-                case "Vector4":
-                    return "Math::Vector4ToBtVector4(" + parameter.ManagedName + ", &" + nativePointer + "->" + field.Name + ')';
+                case "btQuaternion":
+                    return "Math::QuaternionToBtQuat(" + parameter.Name + ", &" + nativePointer + "->" + field.Name + ')';
+                case "btTransform":
+                    return "Math::MatrixToBtTransform(" + parameter.Name + ", &" + nativePointer + "->" + field.Name + ')';
+                case "btVector4":
+                    return "Math::Vector4ToBtVector4(" + parameter.Name + ", &" + nativePointer + "->" + field.Name + ')';
                 default:
                     return null;
             }
@@ -319,7 +228,7 @@ namespace BulletSharpGen
             // Exclude all "FloatData/DoubleData" serialization classes
             return (cl.Name.EndsWith("Data")
                 || cl.Name.EndsWith("Data2"))
-                && !cl.ManagedName.Equals("ContactSolverInfoData");
+                && !cl.Name.Equals("btContactSolverInfoData");
         }
     }
 }

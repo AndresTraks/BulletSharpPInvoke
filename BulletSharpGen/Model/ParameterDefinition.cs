@@ -33,7 +33,6 @@
         public string Name { get; set; }
         public TypeRefDefinition Type { get; set; }
         public bool IsOptional { get; set; }
-        public string ManagedName { get; set; }
         public MarshalDirection MarshalDirection { get; set; }
 
         public ParameterDefinition(string name, TypeRefDefinition type, bool isOptional = false)
@@ -47,7 +46,6 @@
         {
             var p = new ParameterDefinition(Name, Type.Copy(), IsOptional);
             p.IsOptional = IsOptional;
-            p.ManagedName = ManagedName;
             p.MarshalDirection = MarshalDirection;
             return p;
         }
