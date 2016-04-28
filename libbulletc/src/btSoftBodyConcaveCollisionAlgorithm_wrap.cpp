@@ -10,7 +10,7 @@ btSoftBodyConcaveCollisionAlgorithm::CreateFunc* btSoftBodyConcaveCollisionAlgor
 }
 
 
-btSoftBodyConcaveCollisionAlgorithm::SwappedCreateFunc* btSoftBodyConcaveCollisionAlgorithm_SwappedCreateFunc_new()
+btSoftBodyConcaveCollisionAlgorithm_SwappedCreateFunc* btSoftBodyConcaveCollisionAlgorithm_SwappedCreateFunc_new()
 {
 	return new btSoftBodyConcaveCollisionAlgorithm::SwappedCreateFunc();
 }

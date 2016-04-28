@@ -387,7 +387,9 @@ else
       <Class Name="btSphereShape" />
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btCapsuleShape.h">
-      <Class Name="btCapsuleShape" />
+      <Class Name="btCapsuleShape">
+        <Method Name="btCapsuleShape" IsExcluded="true" />
+      </Class>
       <Class Name="btCapsuleShapeX" />
       <Class Name="btCapsuleShapeZ" />
       <Class Name="btCapsuleShapeData" IsExcluded="true" />

@@ -1,9 +1,11 @@
+#include <BulletCollision/BroadphaseCollision/btCollisionAlgorithm.h>
 #include <BulletCollision/BroadphaseCollision/btDispatcher.h>
 #include <BulletCollision/BroadphaseCollision/btOverlappingPairCache.h>
 #include <BulletCollision/CollisionDispatch/btCollisionObject.h>
 #include <BulletCollision/CollisionDispatch/btCollisionObjectWrapper.h>
 #include <BulletCollision/NarrowPhaseCollision/btPersistentManifold.h>
 #include <LinearMath/btIDebugDraw.h>
+#include <LinearMath/btPoolAllocator.h>
 
 #include "btDispatcher_wrap.h"
 

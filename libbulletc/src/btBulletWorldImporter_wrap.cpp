@@ -31,7 +31,8 @@ bool btBulletWorldImporter_loadFile2(btBulletWorldImporter* obj, const char* fil
 	return obj->loadFile(fileName, preSwapFilenameOut);
 }
 
-bool btBulletWorldImporter_loadFileFromMemory(btBulletWorldImporter* obj, char* memoryBuffer, int len)
+bool btBulletWorldImporter_loadFileFromMemory(btBulletWorldImporter* obj, char* memoryBuffer,
+	int len)
 {
 	return obj->loadFileFromMemory(memoryBuffer, len);
 }

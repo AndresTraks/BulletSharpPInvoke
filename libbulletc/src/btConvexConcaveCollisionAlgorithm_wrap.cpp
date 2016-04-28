@@ -61,13 +61,13 @@ void btConvexTriangleCallback_setTriangleCount(btConvexTriangleCallback* obj, in
 }
 
 
-btConvexConcaveCollisionAlgorithm::CreateFunc* btConvexConcaveCollisionAlgorithm_CreateFunc_new()
+btConvexConcaveCollisionAlgorithm_CreateFunc* btConvexConcaveCollisionAlgorithm_CreateFunc_new()
 {
 	return new btConvexConcaveCollisionAlgorithm::CreateFunc();
 }
 
 
-btConvexConcaveCollisionAlgorithm::SwappedCreateFunc* btConvexConcaveCollisionAlgorithm_SwappedCreateFunc_new()
+btConvexConcaveCollisionAlgorithm_SwappedCreateFunc* btConvexConcaveCollisionAlgorithm_SwappedCreateFunc_new()
 {
 	return new btConvexConcaveCollisionAlgorithm::SwappedCreateFunc();
 }

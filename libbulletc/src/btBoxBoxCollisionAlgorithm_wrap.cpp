@@ -4,7 +4,7 @@
 
 #include "btBoxBoxCollisionAlgorithm_wrap.h"
 
-btBoxBoxCollisionAlgorithm::CreateFunc* btBoxBoxCollisionAlgorithm_CreateFunc_new()
+btBoxBoxCollisionAlgorithm_CreateFunc* btBoxBoxCollisionAlgorithm_CreateFunc_new()
 {
 	return new btBoxBoxCollisionAlgorithm::CreateFunc();
 }

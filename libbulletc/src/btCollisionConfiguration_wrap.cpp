@@ -1,4 +1,6 @@
 #include <BulletCollision/CollisionDispatch/btCollisionConfiguration.h>
+#include <BulletCollision/CollisionDispatch/btCollisionCreateFunc.h>
+#include <LinearMath/btPoolAllocator.h>
 
 #include "btCollisionConfiguration_wrap.h"
 

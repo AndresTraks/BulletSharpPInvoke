@@ -34,8 +34,6 @@ extern "C"
 	EXPORT int btMultibodyLink_getParent(btMultibodyLink* obj);
 	EXPORT int btMultibodyLink_getPosVarCount(btMultibodyLink* obj);
 	EXPORT void btMultibodyLink_getZeroRotParentToThis(btMultibodyLink* obj, btQuaternion* value);
-	EXPORT void btMultibodyLink_setAbsFrameLocVelocity(btMultibodyLink* obj, const btSpatialMotionVector* value);
-	EXPORT void btMultibodyLink_setAbsFrameTotVelocity(btMultibodyLink* obj, const btSpatialMotionVector* value);
 	EXPORT void btMultibodyLink_setAppliedConstraintForce(btMultibodyLink* obj, const btVector3* value);
 	EXPORT void btMultibodyLink_setAppliedConstraintTorque(btMultibodyLink* obj, const btVector3* value);
 	EXPORT void btMultibodyLink_setAppliedForce(btMultibodyLink* obj, const btVector3* value);

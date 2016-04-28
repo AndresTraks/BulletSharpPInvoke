@@ -96,7 +96,7 @@ void btMultiBody_applyDeltaVeeMultiDof2(btMultiBody* obj, const btScalar* delta_
 }
 
 void btMultiBody_calcAccelerationDeltasMultiDof(btMultiBody* obj, const btScalar* force,
-	btScalar* output, btAlignedObjectArray<float>* scratch_r, btAlignedObjectArray<btVector3>* scratch_v)
+	btScalar* output, btAlignedObjectArray_btScalar* scratch_r, btAlignedObjectArray_btVector3* scratch_v)
 {
 	obj->calcAccelerationDeltasMultiDof(force, output, *scratch_r, *scratch_v);
 }
@@ -127,7 +127,7 @@ void btMultiBody_clearVelocities(btMultiBody* obj)
 }
 
 void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof(btMultiBody* obj,
-	btScalar dt, btAlignedObjectArray<float>* scratch_r, btAlignedObjectArray<btVector3>* scratch_v,
+	btScalar dt, btAlignedObjectArray_btScalar* scratch_r, btAlignedObjectArray_btVector3* scratch_v,
 	btAlignedObjectArray_btMatrix3x3* scratch_m)
 {
 	obj->computeAccelerationsArticulatedBodyAlgorithmMultiDof(dt, *scratch_r, *scratch_v,
@@ -135,7 +135,7 @@ void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof(btMultiBod
 }
 
 void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof2(btMultiBody* obj,
-	btScalar dt, btAlignedObjectArray<float>* scratch_r, btAlignedObjectArray<btVector3>* scratch_v,
+	btScalar dt, btAlignedObjectArray_btScalar* scratch_r, btAlignedObjectArray_btVector3* scratch_v,
 	btAlignedObjectArray_btMatrix3x3* scratch_m, bool isConstraintPass)
 {
 	obj->computeAccelerationsArticulatedBodyAlgorithmMultiDof(dt, *scratch_r, *scratch_v,
@@ -143,8 +143,8 @@ void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof2(btMultiBo
 }
 
 void btMultiBody_fillConstraintJacobianMultiDof(btMultiBody* obj, int link, const btVector3* contact_point,
-	const btVector3* normal_ang, const btVector3* normal_lin, btScalar* jac, btAlignedObjectArray<float>* scratch_r,
-	btAlignedObjectArray<btVector3>* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m)
+	const btVector3* normal_ang, const btVector3* normal_lin, btScalar* jac, btAlignedObjectArray_btScalar* scratch_r,
+	btAlignedObjectArray_btVector3* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m)
 {
 	BTVECTOR3_IN(contact_point);
 	BTVECTOR3_IN(normal_ang);
@@ -154,8 +154,8 @@ void btMultiBody_fillConstraintJacobianMultiDof(btMultiBody* obj, int link, cons
 }
 
 void btMultiBody_fillContactJacobianMultiDof(btMultiBody* obj, int link, const btVector3* contact_point,
-	const btVector3* normal, btScalar* jac, btAlignedObjectArray<float>* scratch_r,
-	btAlignedObjectArray<btVector3>* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m)
+	const btVector3* normal, btScalar* jac, btAlignedObjectArray_btScalar* scratch_r,
+	btAlignedObjectArray_btVector3* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m)
 {
 	BTVECTOR3_IN(contact_point);
 	BTVECTOR3_IN(normal);
@@ -169,7 +169,7 @@ void btMultiBody_finalizeMultiDof(btMultiBody* obj)
 }
 
 void btMultiBody_forwardKinematics(btMultiBody* obj, btAlignedObjectArray_btQuaternion* scratch_q,
-	btAlignedObjectArray<btVector3>* scratch_m)
+	btAlignedObjectArray_btVector3* scratch_m)
 {
 	obj->forwardKinematics(*scratch_q, *scratch_m);
 }
@@ -562,7 +562,8 @@ void btMultiBody_setupFixed2(btMultiBody* obj, int linkIndex, btScalar mass, con
 }
 
 void btMultiBody_setupPlanar(btMultiBody* obj, int i, btScalar mass, const btVector3* inertia,
-	int parent, const btQuaternion* rotParentToThis, const btVector3* rotationAxis, const btVector3* parentComToThisComOffset)
+	int parent, const btQuaternion* rotParentToThis, const btVector3* rotationAxis,
+	const btVector3* parentComToThisComOffset)
 {
 	BTVECTOR3_IN(inertia);
 	BTQUATERNION_IN(rotParentToThis);
@@ -573,8 +574,8 @@ void btMultiBody_setupPlanar(btMultiBody* obj, int i, btScalar mass, const btVec
 }
 
 void btMultiBody_setupPlanar2(btMultiBody* obj, int i, btScalar mass, const btVector3* inertia,
-	int parent, const btQuaternion* rotParentToThis, const btVector3* rotationAxis, const btVector3* parentComToThisComOffset,
-	bool disableParentCollision)
+	int parent, const btQuaternion* rotParentToThis, const btVector3* rotationAxis,
+	const btVector3* parentComToThisComOffset, bool disableParentCollision)
 {
 	BTVECTOR3_IN(inertia);
 	BTQUATERNION_IN(rotParentToThis);
@@ -599,8 +600,8 @@ void btMultiBody_setupPrismatic(btMultiBody* obj, int i, btScalar mass, const bt
 }
 
 void btMultiBody_setupRevolute(btMultiBody* obj, int linkIndex, btScalar mass, const btVector3* inertia,
-	int parentIndex, const btQuaternion* rotParentToThis, const btVector3* jointAxis, const btVector3* parentComToThisPivotOffset,
-	const btVector3* thisPivotToThisComOffset)
+	int parentIndex, const btQuaternion* rotParentToThis, const btVector3* jointAxis,
+	const btVector3* parentComToThisPivotOffset, const btVector3* thisPivotToThisComOffset)
 {
 	BTVECTOR3_IN(inertia);
 	BTQUATERNION_IN(rotParentToThis);
@@ -612,8 +613,9 @@ void btMultiBody_setupRevolute(btMultiBody* obj, int linkIndex, btScalar mass, c
 }
 
 void btMultiBody_setupRevolute2(btMultiBody* obj, int linkIndex, btScalar mass, const btVector3* inertia,
-	int parentIndex, const btQuaternion* rotParentToThis, const btVector3* jointAxis, const btVector3* parentComToThisPivotOffset,
-	const btVector3* thisPivotToThisComOffset, bool disableParentCollision)
+	int parentIndex, const btQuaternion* rotParentToThis, const btVector3* jointAxis,
+	const btVector3* parentComToThisPivotOffset, const btVector3* thisPivotToThisComOffset,
+	bool disableParentCollision)
 {
 	BTVECTOR3_IN(inertia);
 	BTQUATERNION_IN(rotParentToThis);
@@ -677,21 +679,21 @@ void btMultiBody_stepPositionsMultiDof3(btMultiBody* obj, btScalar dt, btScalar*
 	obj->stepPositionsMultiDof(dt, pq, pqd);
 }
 
-void btMultiBody_stepVelocitiesMultiDof(btMultiBody* obj, btScalar dt, btAlignedObjectArray<float>* scratch_r,
-	btAlignedObjectArray<btVector3>* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m)
+void btMultiBody_stepVelocitiesMultiDof(btMultiBody* obj, btScalar dt, btAlignedObjectArray_btScalar* scratch_r,
+	btAlignedObjectArray_btVector3* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m)
 {
 	obj->stepVelocitiesMultiDof(dt, *scratch_r, *scratch_v, *scratch_m);
 }
 
-void btMultiBody_stepVelocitiesMultiDof2(btMultiBody* obj, btScalar dt, btAlignedObjectArray<float>* scratch_r,
-	btAlignedObjectArray<btVector3>* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m,
+void btMultiBody_stepVelocitiesMultiDof2(btMultiBody* obj, btScalar dt, btAlignedObjectArray_btScalar* scratch_r,
+	btAlignedObjectArray_btVector3* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m,
 	bool isConstraintPass)
 {
 	obj->stepVelocitiesMultiDof(dt, *scratch_r, *scratch_v, *scratch_m, isConstraintPass);
 }
 
 void btMultiBody_updateCollisionObjectWorldTransforms(btMultiBody* obj, btAlignedObjectArray_btQuaternion* scratch_q,
-	btAlignedObjectArray<btVector3>* scratch_m)
+	btAlignedObjectArray_btVector3* scratch_m)
 {
 	obj->updateCollisionObjectWorldTransforms(*scratch_q, *scratch_m);
 }

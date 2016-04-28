@@ -92,11 +92,11 @@
 
 #ifndef BT_BULLET_FILE_H
 #define btAlignedObjectArray_charPtr void
-#define btAlignedObjectArray_bParse_bStructHandle void
+#define btAlignedObjectArray_bParse_bStructHandlePtr void
 #define bParse_btBulletFile void
 #else
 #define btAlignedObjectArray_charPtr btAlignedObjectArray<char*>
-#define btAlignedObjectArray_bParse_bStructHandle btAlignedObjectArray<bParse::bStructHandle*>
+#define btAlignedObjectArray_bParse_bStructHandlePtr btAlignedObjectArray<bParse::bStructHandle*>
 #define bParse_btBulletFile bParse::btBulletFile
 #endif
 
@@ -609,12 +609,12 @@
 #endif
 
 #ifndef BT_PERSISTENT_MANIFOLD_H
-#define btAlignedObjectArray_btPersistentManifold void
+#define btAlignedObjectArray_btPersistentManifoldPtr void
 #define btPersistentManifold void
 #define ContactDestroyedCallback void*
 #define ContactProcessedCallback void*
 #else
-#define btAlignedObjectArray_btPersistentManifold btAlignedObjectArray<btPersistentManifold*>
+#define btAlignedObjectArray_btPersistentManifoldPtr btAlignedObjectArray<btPersistentManifold*>
 #endif
 
 #ifndef BT_POINT_COLLECTOR_H

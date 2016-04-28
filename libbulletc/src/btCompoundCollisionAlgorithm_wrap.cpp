@@ -3,13 +3,13 @@
 
 #include "btCompoundCollisionAlgorithm_wrap.h"
 
-btCompoundCollisionAlgorithm::CreateFunc* btCompoundCollisionAlgorithm_CreateFunc_new()
+btCompoundCollisionAlgorithm_CreateFunc* btCompoundCollisionAlgorithm_CreateFunc_new()
 {
 	return new btCompoundCollisionAlgorithm::CreateFunc();
 }
 
 
-btCompoundCollisionAlgorithm::SwappedCreateFunc* btCompoundCollisionAlgorithm_SwappedCreateFunc_new()
+btCompoundCollisionAlgorithm_SwappedCreateFunc* btCompoundCollisionAlgorithm_SwappedCreateFunc_new()
 {
 	return new btCompoundCollisionAlgorithm::SwappedCreateFunc();
 }

@@ -3,7 +3,7 @@
 #include "conversion.h"
 #include "btSphereBoxCollisionAlgorithm_wrap.h"
 
-btSphereBoxCollisionAlgorithm::CreateFunc* btSphereBoxCollisionAlgorithm_CreateFunc_new()
+btSphereBoxCollisionAlgorithm_CreateFunc* btSphereBoxCollisionAlgorithm_CreateFunc_new()
 {
 	return new btSphereBoxCollisionAlgorithm::CreateFunc();
 }

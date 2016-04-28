@@ -478,12 +478,14 @@ void btGeneric6DofConstraint_getAngularLowerLimit(btGeneric6DofConstraint* obj, 
 {
 	BTVECTOR3_IN(angularLower);
 	obj->getAngularLowerLimit(BTVECTOR3_USE(angularLower));
+	BTVECTOR3_DEF_OUT(angularLower);
 }
 
 void btGeneric6DofConstraint_getAngularUpperLimit(btGeneric6DofConstraint* obj, btVector3* angularUpper)
 {
 	BTVECTOR3_IN(angularUpper);
 	obj->getAngularUpperLimit(BTVECTOR3_USE(angularUpper));
+	BTVECTOR3_DEF_OUT(angularUpper);
 }
 
 void btGeneric6DofConstraint_getAxis(btGeneric6DofConstraint* obj, int axis_index,
@@ -542,12 +544,14 @@ void btGeneric6DofConstraint_getLinearLowerLimit(btGeneric6DofConstraint* obj, b
 {
 	BTVECTOR3_IN(linearLower);
 	obj->getLinearLowerLimit(BTVECTOR3_USE(linearLower));
+	BTVECTOR3_DEF_OUT(linearLower);
 }
 
 void btGeneric6DofConstraint_getLinearUpperLimit(btGeneric6DofConstraint* obj, btVector3* linearUpper)
 {
 	BTVECTOR3_IN(linearUpper);
 	obj->getLinearUpperLimit(BTVECTOR3_USE(linearUpper));
+	BTVECTOR3_DEF_OUT(linearUpper);
 }
 
 btScalar btGeneric6DofConstraint_getRelativePivotPosition(btGeneric6DofConstraint* obj,

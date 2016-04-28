@@ -3,7 +3,8 @@
 #include "conversion.h"
 #include "btMultiSphereShape_wrap.h"
 
-btMultiSphereShape* btMultiSphereShape_new(const btScalar* positions, const btScalar* radi, int numSpheres)
+btMultiSphereShape* btMultiSphereShape_new(const btScalar* positions, const btScalar* radi,
+	int numSpheres)
 {
 	btVector3* positionsTemp = new btVector3[numSpheres];
 	for (int i = 0; i < numSpheres; i++)

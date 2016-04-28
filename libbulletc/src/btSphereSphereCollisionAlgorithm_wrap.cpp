@@ -2,7 +2,7 @@
 
 #include "btSphereSphereCollisionAlgorithm_wrap.h"
 
-btSphereSphereCollisionAlgorithm::CreateFunc* btSphereSphereCollisionAlgorithm_CreateFunc_new()
+btSphereSphereCollisionAlgorithm_CreateFunc* btSphereSphereCollisionAlgorithm_CreateFunc_new()
 {
 	return new btSphereSphereCollisionAlgorithm::CreateFunc();
 }

@@ -2,7 +2,7 @@
 
 #include "btSoftRigidCollisionAlgorithm_wrap.h"
 
-btSoftRigidCollisionAlgorithm::CreateFunc* btSoftRigidCollisionAlgorithm_CreateFunc_new()
+btSoftRigidCollisionAlgorithm_CreateFunc* btSoftRigidCollisionAlgorithm_CreateFunc_new()
 {
 	return new btSoftRigidCollisionAlgorithm::CreateFunc();
 }

@@ -7,78 +7,78 @@
 
 #include "conversion.h"
 
-btRaycastVehicle::btVehicleTuning* btRaycastVehicle_btVehicleTuning_new()
+btRaycastVehicle_btVehicleTuning* btRaycastVehicle_btVehicleTuning_new()
 {
 	return new btRaycastVehicle::btVehicleTuning();
 }
 
-btScalar btRaycastVehicle_btVehicleTuning_getFrictionSlip(btRaycastVehicle::btVehicleTuning* obj)
+btScalar btRaycastVehicle_btVehicleTuning_getFrictionSlip(btRaycastVehicle_btVehicleTuning* obj)
 {
 	return obj->m_frictionSlip;
 }
 
-btScalar btRaycastVehicle_btVehicleTuning_getMaxSuspensionForce(btRaycastVehicle::btVehicleTuning* obj)
+btScalar btRaycastVehicle_btVehicleTuning_getMaxSuspensionForce(btRaycastVehicle_btVehicleTuning* obj)
 {
 	return obj->m_maxSuspensionForce;
 }
 
-btScalar btRaycastVehicle_btVehicleTuning_getMaxSuspensionTravelCm(btRaycastVehicle::btVehicleTuning* obj)
+btScalar btRaycastVehicle_btVehicleTuning_getMaxSuspensionTravelCm(btRaycastVehicle_btVehicleTuning* obj)
 {
 	return obj->m_maxSuspensionTravelCm;
 }
 
-btScalar btRaycastVehicle_btVehicleTuning_getSuspensionCompression(btRaycastVehicle::btVehicleTuning* obj)
+btScalar btRaycastVehicle_btVehicleTuning_getSuspensionCompression(btRaycastVehicle_btVehicleTuning* obj)
 {
 	return obj->m_suspensionCompression;
 }
 
-btScalar btRaycastVehicle_btVehicleTuning_getSuspensionDamping(btRaycastVehicle::btVehicleTuning* obj)
+btScalar btRaycastVehicle_btVehicleTuning_getSuspensionDamping(btRaycastVehicle_btVehicleTuning* obj)
 {
 	return obj->m_suspensionDamping;
 }
 
-btScalar btRaycastVehicle_btVehicleTuning_getSuspensionStiffness(btRaycastVehicle::btVehicleTuning* obj)
+btScalar btRaycastVehicle_btVehicleTuning_getSuspensionStiffness(btRaycastVehicle_btVehicleTuning* obj)
 {
 	return obj->m_suspensionStiffness;
 }
 
-void btRaycastVehicle_btVehicleTuning_setFrictionSlip(btRaycastVehicle::btVehicleTuning* obj,
+void btRaycastVehicle_btVehicleTuning_setFrictionSlip(btRaycastVehicle_btVehicleTuning* obj,
 	btScalar value)
 {
 	obj->m_frictionSlip = value;
 }
 
-void btRaycastVehicle_btVehicleTuning_setMaxSuspensionForce(btRaycastVehicle::btVehicleTuning* obj,
+void btRaycastVehicle_btVehicleTuning_setMaxSuspensionForce(btRaycastVehicle_btVehicleTuning* obj,
 	btScalar value)
 {
 	obj->m_maxSuspensionForce = value;
 }
 
-void btRaycastVehicle_btVehicleTuning_setMaxSuspensionTravelCm(btRaycastVehicle::btVehicleTuning* obj,
+void btRaycastVehicle_btVehicleTuning_setMaxSuspensionTravelCm(btRaycastVehicle_btVehicleTuning* obj,
 	btScalar value)
 {
 	obj->m_maxSuspensionTravelCm = value;
 }
 
-void btRaycastVehicle_btVehicleTuning_setSuspensionCompression(btRaycastVehicle::btVehicleTuning* obj,
+void btRaycastVehicle_btVehicleTuning_setSuspensionCompression(btRaycastVehicle_btVehicleTuning* obj,
 	btScalar value)
 {
 	obj->m_suspensionCompression = value;
 }
 
-void btRaycastVehicle_btVehicleTuning_setSuspensionDamping(btRaycastVehicle::btVehicleTuning* obj,
+void btRaycastVehicle_btVehicleTuning_setSuspensionDamping(btRaycastVehicle_btVehicleTuning* obj,
 	btScalar value)
 {
 	obj->m_suspensionDamping = value;
 }
 
-void btRaycastVehicle_btVehicleTuning_setSuspensionStiffness(btRaycastVehicle::btVehicleTuning* obj,
+void btRaycastVehicle_btVehicleTuning_setSuspensionStiffness(btRaycastVehicle_btVehicleTuning* obj,
 	btScalar value)
 {
 	obj->m_suspensionStiffness = value;
 }
 
-void btRaycastVehicle_btVehicleTuning_delete(btRaycastVehicle::btVehicleTuning* obj)
+void btRaycastVehicle_btVehicleTuning_delete(btRaycastVehicle_btVehicleTuning* obj)
 {
 	delete obj;
 }

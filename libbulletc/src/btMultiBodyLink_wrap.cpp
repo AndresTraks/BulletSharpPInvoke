@@ -163,17 +163,7 @@ void btMultibodyLink_getZeroRotParentToThis(btMultibodyLink* obj, btQuaternion* 
 {
 	BTQUATERNION_SET(value, obj->m_zeroRotParentToThis);
 }
-/*
-void btMultibodyLink_setAbsFrameLocVelocity(btMultibodyLink* obj, const btSpatialMotionVector* value)
-{
-	obj->m_absFrameLocVelocity = value;
-}
 
-void btMultibodyLink_setAbsFrameTotVelocity(btMultibodyLink* obj, const btSpatialMotionVector* value)
-{
-	obj->m_absFrameTotVelocity = value;
-}
-*/
 void btMultibodyLink_setAppliedConstraintForce(btMultibodyLink* obj, const btVector3* value)
 {
 	BTVECTOR3_COPY(&obj->m_appliedConstraintForce, value);

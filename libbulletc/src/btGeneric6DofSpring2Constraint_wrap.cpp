@@ -553,6 +553,7 @@ void btGeneric6DofSpring2Constraint_getAngularLowerLimit(btGeneric6DofSpring2Con
 {
 	BTVECTOR3_IN(angularLower);
 	obj->getAngularLowerLimit(BTVECTOR3_USE(angularLower));
+	BTVECTOR3_DEF_OUT(angularLower);
 }
 
 void btGeneric6DofSpring2Constraint_getAngularLowerLimitReversed(btGeneric6DofSpring2Constraint* obj,
@@ -560,6 +561,7 @@ void btGeneric6DofSpring2Constraint_getAngularLowerLimitReversed(btGeneric6DofSp
 {
 	BTVECTOR3_IN(angularLower);
 	obj->getAngularLowerLimitReversed(BTVECTOR3_USE(angularLower));
+	BTVECTOR3_DEF_OUT(angularLower);
 }
 
 void btGeneric6DofSpring2Constraint_getAngularUpperLimit(btGeneric6DofSpring2Constraint* obj,
@@ -567,6 +569,7 @@ void btGeneric6DofSpring2Constraint_getAngularUpperLimit(btGeneric6DofSpring2Con
 {
 	BTVECTOR3_IN(angularUpper);
 	obj->getAngularUpperLimit(BTVECTOR3_USE(angularUpper));
+	BTVECTOR3_DEF_OUT(angularUpper);
 }
 
 void btGeneric6DofSpring2Constraint_getAngularUpperLimitReversed(btGeneric6DofSpring2Constraint* obj,
@@ -574,6 +577,7 @@ void btGeneric6DofSpring2Constraint_getAngularUpperLimitReversed(btGeneric6DofSp
 {
 	BTVECTOR3_IN(angularUpper);
 	obj->getAngularUpperLimitReversed(BTVECTOR3_USE(angularUpper));
+	BTVECTOR3_DEF_OUT(angularUpper);
 }
 
 void btGeneric6DofSpring2Constraint_getAxis(btGeneric6DofSpring2Constraint* obj,
@@ -611,6 +615,7 @@ void btGeneric6DofSpring2Constraint_getLinearLowerLimit(btGeneric6DofSpring2Cons
 {
 	BTVECTOR3_IN(linearLower);
 	obj->getLinearLowerLimit(BTVECTOR3_USE(linearLower));
+	BTVECTOR3_DEF_OUT(linearLower);
 }
 
 void btGeneric6DofSpring2Constraint_getLinearUpperLimit(btGeneric6DofSpring2Constraint* obj,
@@ -618,6 +623,7 @@ void btGeneric6DofSpring2Constraint_getLinearUpperLimit(btGeneric6DofSpring2Cons
 {
 	BTVECTOR3_IN(linearUpper);
 	obj->getLinearUpperLimit(BTVECTOR3_USE(linearUpper));
+	BTVECTOR3_DEF_OUT(linearUpper);
 }
 
 btScalar btGeneric6DofSpring2Constraint_getRelativePivotPosition(btGeneric6DofSpring2Constraint* obj,

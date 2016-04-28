@@ -1,4 +1,5 @@
 #include <BulletCollision/CollisionDispatch/btCollisionConfiguration.h>
+#include <BulletDynamics/Featherstone/btMultiBody.h>
 #include <BulletDynamics/Featherstone/btMultiBodyConstraint.h>
 #include <BulletDynamics/Featherstone/btMultiBodyConstraintSolver.h>
 #include <BulletDynamics/Featherstone/btMultiBodyDynamicsWorld.h>

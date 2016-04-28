@@ -1,19 +1,19 @@
 #include "main.h"
 
 #ifndef BT_BROADPHASE_INTERFACE_H
-#define p_btBroadphaseAabbCallback_Process void*
+#define p_btBroadphaseAabbCallback_process void*
 #define btBroadphaseAabbCallbackWrapper void
 #define btBroadphaseRayCallbackWrapper void
 #else
-typedef bool (*p_btBroadphaseAabbCallback_Process)(const btBroadphaseProxy* proxy);
+typedef bool (*p_btBroadphaseAabbCallback_process)(const btBroadphaseProxy* proxy);
 
 class btBroadphaseAabbCallbackWrapper : public btBroadphaseAabbCallback
 {
 private:
-	p_btBroadphaseAabbCallback_Process _processCallback;
+	p_btBroadphaseAabbCallback_process _processCallback;
 
 public:
-	btBroadphaseAabbCallbackWrapper(p_btBroadphaseAabbCallback_Process processCallback);
+	btBroadphaseAabbCallbackWrapper(p_btBroadphaseAabbCallback_process processCallback);
 
 	virtual bool process(const btBroadphaseProxy* proxy);
 };
@@ -21,10 +21,10 @@ public:
 class btBroadphaseRayCallbackWrapper : public btBroadphaseRayCallback
 {
 private:
-	p_btBroadphaseAabbCallback_Process _processCallback;
+	p_btBroadphaseAabbCallback_process _processCallback;
 
 public:
-	btBroadphaseRayCallbackWrapper(p_btBroadphaseAabbCallback_Process processCallback);
+	btBroadphaseRayCallbackWrapper(p_btBroadphaseAabbCallback_process processCallback);
 
 	virtual bool process(const btBroadphaseProxy* proxy);
 };
@@ -32,12 +32,12 @@ public:
 
 extern "C"
 {
-	EXPORT btBroadphaseAabbCallbackWrapper* btBroadphaseAabbCallbackWrapper_new(p_btBroadphaseAabbCallback_Process processCallback);
+	EXPORT btBroadphaseAabbCallbackWrapper* btBroadphaseAabbCallbackWrapper_new(p_btBroadphaseAabbCallback_process processCallback);
 
 	EXPORT bool btBroadphaseAabbCallback_process(btBroadphaseAabbCallback* obj, const btBroadphaseProxy* proxy);
 	EXPORT void btBroadphaseAabbCallback_delete(btBroadphaseAabbCallback* obj);
 
-	EXPORT btBroadphaseRayCallbackWrapper* btBroadphaseRayCallbackWrapper_new(p_btBroadphaseAabbCallback_Process processCallback);
+	EXPORT btBroadphaseRayCallbackWrapper* btBroadphaseRayCallbackWrapper_new(p_btBroadphaseAabbCallback_process processCallback);
 
 	EXPORT btScalar btBroadphaseRayCallback_getLambda_max(btBroadphaseRayCallback* obj);
 	EXPORT void btBroadphaseRayCallback_getRayDirectionInverse(btBroadphaseRayCallback* obj, btVector3* value);

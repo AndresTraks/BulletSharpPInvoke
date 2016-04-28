@@ -3,29 +3,29 @@
 #include "conversion.h"
 #include "btConvexPlaneCollisionAlgorithm_wrap.h"
 
-btConvexPlaneCollisionAlgorithm::CreateFunc* btConvexPlaneCollisionAlgorithm_CreateFunc_new()
+btConvexPlaneCollisionAlgorithm_CreateFunc* btConvexPlaneCollisionAlgorithm_CreateFunc_new()
 {
 	return new btConvexPlaneCollisionAlgorithm::CreateFunc();
 }
 
 int btConvexPlaneCollisionAlgorithm_CreateFunc_getMinimumPointsPerturbationThreshold(
-	btConvexPlaneCollisionAlgorithm::CreateFunc* obj)
+	btConvexPlaneCollisionAlgorithm_CreateFunc* obj)
 {
 	return obj->m_minimumPointsPerturbationThreshold;
 }
 
-int btConvexPlaneCollisionAlgorithm_CreateFunc_getNumPerturbationIterations(btConvexPlaneCollisionAlgorithm::CreateFunc* obj)
+int btConvexPlaneCollisionAlgorithm_CreateFunc_getNumPerturbationIterations(btConvexPlaneCollisionAlgorithm_CreateFunc* obj)
 {
 	return obj->m_numPerturbationIterations;
 }
 
 void btConvexPlaneCollisionAlgorithm_CreateFunc_setMinimumPointsPerturbationThreshold(
-	btConvexPlaneCollisionAlgorithm::CreateFunc* obj, int value)
+	btConvexPlaneCollisionAlgorithm_CreateFunc* obj, int value)
 {
 	obj->m_minimumPointsPerturbationThreshold = value;
 }
 
-void btConvexPlaneCollisionAlgorithm_CreateFunc_setNumPerturbationIterations(btConvexPlaneCollisionAlgorithm::CreateFunc* obj,
+void btConvexPlaneCollisionAlgorithm_CreateFunc_setNumPerturbationIterations(btConvexPlaneCollisionAlgorithm_CreateFunc* obj,
 	int value)
 {
 	obj->m_numPerturbationIterations = value;

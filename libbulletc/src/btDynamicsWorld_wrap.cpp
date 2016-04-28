@@ -104,13 +104,14 @@ void btDynamicsWorld_setInternalTickCallback(btDynamicsWorld* obj, btInternalTic
 	obj->setInternalTickCallback(cb);
 }
 
-void btDynamicsWorld_setInternalTickCallback2(btDynamicsWorld* obj, btInternalTickCallback cb, void* worldUserInfo)
+void btDynamicsWorld_setInternalTickCallback2(btDynamicsWorld* obj, btInternalTickCallback cb,
+	void* worldUserInfo)
 {
 	obj->setInternalTickCallback(cb, worldUserInfo);
 }
 
-void btDynamicsWorld_setInternalTickCallback3(btDynamicsWorld* obj, btInternalTickCallback cb, void* worldUserInfo,
-	bool isPreTick)
+void btDynamicsWorld_setInternalTickCallback3(btDynamicsWorld* obj, btInternalTickCallback cb,
+	void* worldUserInfo, bool isPreTick)
 {
 	obj->setInternalTickCallback(cb, worldUserInfo, isPreTick);
 }

@@ -12,6 +12,7 @@ namespace BulletSharpGen
         public bool IsStatic { get; set; }
         public bool IsAbstract { get; set; }
         public bool IsConstructor { get; set; }
+        public bool IsDestructor { get; set; }
         public bool IsVirtual { get; set; }
         public FieldDefinition Field { get; set; } // get/set method target
         public AccessSpecifier Access { get; set; } = AccessSpecifier.Public;

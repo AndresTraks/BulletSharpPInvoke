@@ -1,17 +1,18 @@
 #include <BulletCollision/BroadphaseCollision/btDispatcher.h>
 #include <BulletCollision/CollisionDispatch/btCollisionWorld.h>
 #include <BulletCollision/CollisionDispatch/btSimulationIslandManager.h>
+#include <BulletCollision/NarrowPhaseCollision/btPersistentManifold.h>
 
 #include "btSimulationIslandManager_wrap.h"
-/*
-void btSimulationIslandManager_IslandCallback_processIsland(btSimulationIslandManager::IslandCallback* obj,
+
+void btSimulationIslandManager_IslandCallback_processIsland(btSimulationIslandManager_IslandCallback* obj,
 	btCollisionObject** bodies, int numBodies, btPersistentManifold** manifolds, int numManifolds,
 	int islandId)
 {
 	obj->processIsland(bodies, numBodies, manifolds, numManifolds, islandId);
 }
-*/
-void btSimulationIslandManager_IslandCallback_delete(btSimulationIslandManager::IslandCallback* obj)
+
+void btSimulationIslandManager_IslandCallback_delete(btSimulationIslandManager_IslandCallback* obj)
 {
 	delete obj;
 }

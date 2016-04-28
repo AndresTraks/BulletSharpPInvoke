@@ -1,30 +1,30 @@
 #include "main.h"
 
 #ifndef BT_COLLISION_WORLD_H
-#define p_btCollisionWorld_ContactResultCallback_AddSingleResult void*
-#define p_btCollisionWorld_ContactResultCallback_NeedsCollision void*
-#define p_btCollisionWorld_ConvexResultCallback_AddSingleResult void*
-#define p_btCollisionWorld_ConvexResultCallback_NeedsCollision void*
-#define p_btCollisionWorld_RayResultCallback_AddSingleResult void*
-#define p_btCollisionWorld_RayResultCallback_NeedsCollision void*
+#define p_btCollisionWorld_ContactResultCallback_addSingleResult void*
+#define p_btCollisionWorld_ContactResultCallback_needsCollision void*
+#define p_btCollisionWorld_ConvexResultCallback_addSingleResult void*
+#define p_btCollisionWorld_ConvexResultCallback_needsCollision void*
+#define p_btCollisionWorld_RayResultCallback_addSingleResult void*
+#define p_btCollisionWorld_RayResultCallback_needsCollision void*
 #define btCollisionWorld_ContactResultCallbackWrapper void
 #define btCollisionWorld_ConvexResultCallbackWrapper void
 #define btCollisionWorld_RayResultCallbackWrapper void
 #else
-typedef btScalar (*p_btCollisionWorld_ContactResultCallback_AddSingleResult)(btManifoldPoint& cp,
+typedef btScalar (*p_btCollisionWorld_ContactResultCallback_addSingleResult)(btManifoldPoint& cp,
 	const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap,
 	int partId1, int index1);
-typedef bool (*p_btCollisionWorld_ContactResultCallback_NeedsCollision)(btBroadphaseProxy* proxy0);
+typedef bool (*p_btCollisionWorld_ContactResultCallback_needsCollision)(btBroadphaseProxy* proxy0);
 
 class btCollisionWorld_ContactResultCallbackWrapper : public btCollisionWorld_ContactResultCallback
 {
 private:
-	p_btCollisionWorld_ContactResultCallback_AddSingleResult _addSingleResultCallback;
-	p_btCollisionWorld_ContactResultCallback_NeedsCollision _needsCollisionCallback;
+	p_btCollisionWorld_ContactResultCallback_addSingleResult _addSingleResultCallback;
+	p_btCollisionWorld_ContactResultCallback_needsCollision _needsCollisionCallback;
 
 public:
-	btCollisionWorld_ContactResultCallbackWrapper(p_btCollisionWorld_ContactResultCallback_AddSingleResult addSingleResultCallback,
-		p_btCollisionWorld_ContactResultCallback_NeedsCollision needsCollisionCallback);
+	btCollisionWorld_ContactResultCallbackWrapper(p_btCollisionWorld_ContactResultCallback_addSingleResult addSingleResultCallback,
+		p_btCollisionWorld_ContactResultCallback_needsCollision needsCollisionCallback);
 
 	virtual btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap,
 		int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1,
@@ -34,19 +34,19 @@ public:
 	virtual bool baseNeedsCollision(btBroadphaseProxy* proxy0) const;
 };
 
-typedef btScalar (*p_btCollisionWorld_ConvexResultCallback_AddSingleResult)(btCollisionWorld_LocalConvexResult& convexResult,
+typedef btScalar (*p_btCollisionWorld_ConvexResultCallback_addSingleResult)(btCollisionWorld_LocalConvexResult& convexResult,
 	bool normalInWorldSpace);
-typedef bool (*p_btCollisionWorld_ConvexResultCallback_NeedsCollision)(btBroadphaseProxy* proxy0);
+typedef bool (*p_btCollisionWorld_ConvexResultCallback_needsCollision)(btBroadphaseProxy* proxy0);
 
 class btCollisionWorld_ConvexResultCallbackWrapper : public btCollisionWorld_ConvexResultCallback
 {
 private:
-	p_btCollisionWorld_ConvexResultCallback_AddSingleResult _addSingleResultCallback;
-	p_btCollisionWorld_ConvexResultCallback_NeedsCollision _needsCollisionCallback;
+	p_btCollisionWorld_ConvexResultCallback_addSingleResult _addSingleResultCallback;
+	p_btCollisionWorld_ConvexResultCallback_needsCollision _needsCollisionCallback;
 
 public:
-	btCollisionWorld_ConvexResultCallbackWrapper(p_btCollisionWorld_ConvexResultCallback_AddSingleResult addSingleResultCallback,
-		p_btCollisionWorld_ConvexResultCallback_NeedsCollision needsCollisionCallback);
+	btCollisionWorld_ConvexResultCallbackWrapper(p_btCollisionWorld_ConvexResultCallback_addSingleResult addSingleResultCallback,
+		p_btCollisionWorld_ConvexResultCallback_needsCollision needsCollisionCallback);
 
 	virtual btScalar addSingleResult(btCollisionWorld_LocalConvexResult& convexResult,
 		bool normalInWorldSpace);
@@ -55,19 +55,19 @@ public:
 	virtual bool baseNeedsCollision(btBroadphaseProxy* proxy0) const;
 };
 
-typedef btScalar (*p_btCollisionWorld_RayResultCallback_AddSingleResult)(btCollisionWorld_LocalRayResult& rayResult,
+typedef btScalar (*p_btCollisionWorld_RayResultCallback_addSingleResult)(btCollisionWorld_LocalRayResult& rayResult,
 	bool normalInWorldSpace);
-typedef bool (*p_btCollisionWorld_RayResultCallback_NeedsCollision)(btBroadphaseProxy* proxy0);
+typedef bool (*p_btCollisionWorld_RayResultCallback_needsCollision)(btBroadphaseProxy* proxy0);
 
 class btCollisionWorld_RayResultCallbackWrapper : public btCollisionWorld_RayResultCallback
 {
 private:
-	p_btCollisionWorld_RayResultCallback_AddSingleResult _addSingleResultCallback;
-	p_btCollisionWorld_RayResultCallback_NeedsCollision _needsCollisionCallback;
+	p_btCollisionWorld_RayResultCallback_addSingleResult _addSingleResultCallback;
+	p_btCollisionWorld_RayResultCallback_needsCollision _needsCollisionCallback;
 
 public:
-	btCollisionWorld_RayResultCallbackWrapper(p_btCollisionWorld_RayResultCallback_AddSingleResult addSingleResultCallback,
-		p_btCollisionWorld_RayResultCallback_NeedsCollision needsCollisionCallback);
+	btCollisionWorld_RayResultCallbackWrapper(p_btCollisionWorld_RayResultCallback_addSingleResult addSingleResultCallback,
+		p_btCollisionWorld_RayResultCallback_needsCollision needsCollisionCallback);
 
 	virtual btScalar addSingleResult(btCollisionWorld_LocalRayResult& rayResult,
 		bool normalInWorldSpace);
@@ -112,8 +112,8 @@ extern "C"
 	EXPORT void btCollisionWorld_ClosestRayResultCallback_setRayToWorld(btCollisionWorld_ClosestRayResultCallback* obj, const btVector3* value);
 
 	EXPORT btCollisionWorld_ContactResultCallbackWrapper* btCollisionWorld_ContactResultCallbackWrapper_new(
-		p_btCollisionWorld_ContactResultCallback_AddSingleResult addSingleResultCallback,
-		p_btCollisionWorld_ContactResultCallback_NeedsCollision needsCollisionCallback);
+		p_btCollisionWorld_ContactResultCallback_addSingleResult addSingleResultCallback,
+		p_btCollisionWorld_ContactResultCallback_needsCollision needsCollisionCallback);
 	EXPORT bool btCollisionWorld_ContactResultCallbackWrapper_needsCollision(btCollisionWorld_ContactResultCallbackWrapper* obj, btBroadphaseProxy* proxy0);
 
 	EXPORT btScalar btCollisionWorld_ContactResultCallback_addSingleResult(btCollisionWorld_ContactResultCallback* obj, btManifoldPoint* cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1);
@@ -125,8 +125,8 @@ extern "C"
 	EXPORT void btCollisionWorld_ContactResultCallback_delete(btCollisionWorld_ContactResultCallback* obj);
 
 	EXPORT btCollisionWorld_ConvexResultCallbackWrapper* btCollisionWorld_ConvexResultCallbackWrapper_new(
-		p_btCollisionWorld_ConvexResultCallback_AddSingleResult addSingleResultCallback,
-		p_btCollisionWorld_ConvexResultCallback_NeedsCollision needsCollisionCallback);
+		p_btCollisionWorld_ConvexResultCallback_addSingleResult addSingleResultCallback,
+		p_btCollisionWorld_ConvexResultCallback_needsCollision needsCollisionCallback);
 	EXPORT bool btCollisionWorld_ConvexResultCallbackWrapper_needsCollision(btCollisionWorld_ConvexResultCallbackWrapper* obj, btBroadphaseProxy* proxy0);
 
 	EXPORT btScalar btCollisionWorld_ConvexResultCallback_addSingleResult(btCollisionWorld_ConvexResultCallback* obj, btCollisionWorld_LocalConvexResult* convexResult, bool normalInWorldSpace);
@@ -172,8 +172,8 @@ extern "C"
 	EXPORT void btCollisionWorld_LocalShapeInfo_delete(btCollisionWorld_LocalShapeInfo* obj);
 
 	EXPORT btCollisionWorld_RayResultCallbackWrapper* btCollisionWorld_RayResultCallbackWrapper_new(
-		p_btCollisionWorld_RayResultCallback_AddSingleResult addSingleResultCallback,
-		p_btCollisionWorld_RayResultCallback_NeedsCollision needsCollisionCallback);
+		p_btCollisionWorld_RayResultCallback_addSingleResult addSingleResultCallback,
+		p_btCollisionWorld_RayResultCallback_needsCollision needsCollisionCallback);
 	EXPORT bool btCollisionWorld_RayResultCallbackWrapper_needsCollision(btCollisionWorld_RayResultCallbackWrapper* obj, btBroadphaseProxy* proxy0);
 
 	EXPORT btScalar btCollisionWorld_RayResultCallback_addSingleResult(btCollisionWorld_RayResultCallback* obj, btCollisionWorld_LocalRayResult* rayResult, bool normalInWorldSpace);

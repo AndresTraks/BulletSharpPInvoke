@@ -5,47 +5,47 @@
 
 #ifndef BULLETC_DISABLE_IACTION_CLASSES
 
-btVehicleRaycaster::btVehicleRaycasterResult* btVehicleRaycaster_btVehicleRaycasterResult_new()
+btVehicleRaycaster_btVehicleRaycasterResult* btVehicleRaycaster_btVehicleRaycasterResult_new()
 {
 	return new btVehicleRaycaster::btVehicleRaycasterResult();
 }
 
-btScalar btVehicleRaycaster_btVehicleRaycasterResult_getDistFraction(btVehicleRaycaster::btVehicleRaycasterResult* obj)
+btScalar btVehicleRaycaster_btVehicleRaycasterResult_getDistFraction(btVehicleRaycaster_btVehicleRaycasterResult* obj)
 {
 	return obj->m_distFraction;
 }
 
-void btVehicleRaycaster_btVehicleRaycasterResult_getHitNormalInWorld(btVehicleRaycaster::btVehicleRaycasterResult* obj,
+void btVehicleRaycaster_btVehicleRaycasterResult_getHitNormalInWorld(btVehicleRaycaster_btVehicleRaycasterResult* obj,
 	btVector3* value)
 {
 	BTVECTOR3_SET(value, obj->m_hitNormalInWorld);
 }
 
-void btVehicleRaycaster_btVehicleRaycasterResult_getHitPointInWorld(btVehicleRaycaster::btVehicleRaycasterResult* obj,
+void btVehicleRaycaster_btVehicleRaycasterResult_getHitPointInWorld(btVehicleRaycaster_btVehicleRaycasterResult* obj,
 	btVector3* value)
 {
 	BTVECTOR3_SET(value, obj->m_hitPointInWorld);
 }
 
-void btVehicleRaycaster_btVehicleRaycasterResult_setDistFraction(btVehicleRaycaster::btVehicleRaycasterResult* obj,
+void btVehicleRaycaster_btVehicleRaycasterResult_setDistFraction(btVehicleRaycaster_btVehicleRaycasterResult* obj,
 	btScalar value)
 {
 	obj->m_distFraction = value;
 }
 
-void btVehicleRaycaster_btVehicleRaycasterResult_setHitNormalInWorld(btVehicleRaycaster::btVehicleRaycasterResult* obj,
+void btVehicleRaycaster_btVehicleRaycasterResult_setHitNormalInWorld(btVehicleRaycaster_btVehicleRaycasterResult* obj,
 	const btVector3* value)
 {
 	BTVECTOR3_COPY(&obj->m_hitNormalInWorld, value);
 }
 
-void btVehicleRaycaster_btVehicleRaycasterResult_setHitPointInWorld(btVehicleRaycaster::btVehicleRaycasterResult* obj,
+void btVehicleRaycaster_btVehicleRaycasterResult_setHitPointInWorld(btVehicleRaycaster_btVehicleRaycasterResult* obj,
 	const btVector3* value)
 {
 	BTVECTOR3_COPY(&obj->m_hitPointInWorld, value);
 }
 
-void btVehicleRaycaster_btVehicleRaycasterResult_delete(btVehicleRaycaster::btVehicleRaycasterResult* obj)
+void btVehicleRaycaster_btVehicleRaycasterResult_delete(btVehicleRaycaster_btVehicleRaycasterResult* obj)
 {
 	delete obj;
 }

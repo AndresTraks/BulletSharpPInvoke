@@ -175,8 +175,18 @@ namespace BulletSharpGen
                     Name = type.Canonical.Declaration.Spelling;
                     break;
                 case TypeKind.Record:
-                case TypeKind.Unexposed:
                     Name = GetFullyQualifiedName(type, cursor);
+                    break;
+                case TypeKind.Unexposed:
+                    if (type.Canonical.TypeKind != ClangSharp.Type.Kind.Unexposed)
+                    {
+                        Kind = (TypeKind)type.Canonical.TypeKind;
+                        Name = GetFullyQualifiedName(type.Canonical, cursor);
+                    }
+                    else
+                    {
+                        Name = GetFullyQualifiedName(type, cursor);
+                    }
                     break;
                 case TypeKind.DependentSizedArray:
                     break;
@@ -369,6 +379,16 @@ namespace BulletSharpGen
 
         public override string ToString()
         {
+            if (Name == null)
+            {
+                switch (Kind)
+                {
+                    case TypeKind.LValueReference:
+                        return $"{Referenced}&";
+                    case TypeKind.Pointer:
+                        return $"{Referenced}*";
+                }
+            }
             return Name;
         }
     }

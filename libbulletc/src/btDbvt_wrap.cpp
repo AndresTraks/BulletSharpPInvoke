@@ -179,221 +179,221 @@ void btDbvtNode_delete(btDbvtNode* obj)
 }
 
 
-btDbvt::IClone* btDbvt_IClone_new()
+btDbvt_IClone* btDbvt_IClone_new()
 {
 	return new btDbvt::IClone();
 }
 
-void btDbvt_IClone_CloneLeaf(btDbvt::IClone* obj, btDbvtNode* __unnamed0)
+void btDbvt_IClone_CloneLeaf(btDbvt_IClone* obj, btDbvtNode* __unnamed0)
 {
 	obj->CloneLeaf(__unnamed0);
 }
 
-void btDbvt_IClone_delete(btDbvt::IClone* obj)
+void btDbvt_IClone_delete(btDbvt_IClone* obj)
 {
 	delete obj;
 }
 
 
-btDbvt::ICollide* btDbvt_ICollide_new()
+btDbvt_ICollide* btDbvt_ICollide_new()
 {
 	return new btDbvt::ICollide();
 }
 
-bool btDbvt_ICollide_AllLeaves(btDbvt::ICollide* obj, const btDbvtNode* __unnamed0)
+bool btDbvt_ICollide_AllLeaves(btDbvt_ICollide* obj, const btDbvtNode* __unnamed0)
 {
 	return obj->AllLeaves(__unnamed0);
 }
 
-bool btDbvt_ICollide_Descent(btDbvt::ICollide* obj, const btDbvtNode* __unnamed0)
+bool btDbvt_ICollide_Descent(btDbvt_ICollide* obj, const btDbvtNode* __unnamed0)
 {
 	return obj->Descent(__unnamed0);
 }
 
-void btDbvt_ICollide_Process(btDbvt::ICollide* obj, const btDbvtNode* __unnamed0,
+void btDbvt_ICollide_Process(btDbvt_ICollide* obj, const btDbvtNode* __unnamed0,
 	const btDbvtNode* __unnamed1)
 {
 	obj->Process(__unnamed0, __unnamed1);
 }
 
-void btDbvt_ICollide_Process2(btDbvt::ICollide* obj, const btDbvtNode* __unnamed0)
+void btDbvt_ICollide_Process2(btDbvt_ICollide* obj, const btDbvtNode* __unnamed0)
 {
 	obj->Process(__unnamed0);
 }
 
-void btDbvt_ICollide_Process3(btDbvt::ICollide* obj, const btDbvtNode* n, btScalar __unnamed1)
+void btDbvt_ICollide_Process3(btDbvt_ICollide* obj, const btDbvtNode* n, btScalar __unnamed1)
 {
 	obj->Process(n, __unnamed1);
 }
 
-void btDbvt_ICollide_delete(btDbvt::ICollide* obj)
+void btDbvt_ICollide_delete(btDbvt_ICollide* obj)
 {
 	delete obj;
 }
 
 
-void btDbvt_IWriter_Prepare(btDbvt::IWriter* obj, const btDbvtNode* root, int numnodes)
+void btDbvt_IWriter_Prepare(btDbvt_IWriter* obj, const btDbvtNode* root, int numnodes)
 {
 	obj->Prepare(root, numnodes);
 }
 
-void btDbvt_IWriter_WriteLeaf(btDbvt::IWriter* obj, const btDbvtNode* __unnamed0,
+void btDbvt_IWriter_WriteLeaf(btDbvt_IWriter* obj, const btDbvtNode* __unnamed0,
 	int index, int parent)
 {
 	obj->WriteLeaf(__unnamed0, index, parent);
 }
 
-void btDbvt_IWriter_WriteNode(btDbvt::IWriter* obj, const btDbvtNode* __unnamed0,
+void btDbvt_IWriter_WriteNode(btDbvt_IWriter* obj, const btDbvtNode* __unnamed0,
 	int index, int parent, int child0, int child1)
 {
 	obj->WriteNode(__unnamed0, index, parent, child0, child1);
 }
 
-void btDbvt_IWriter_delete(btDbvt::IWriter* obj)
+void btDbvt_IWriter_delete(btDbvt_IWriter* obj)
 {
 	delete obj;
 }
 
 
-btDbvt::sStkCLN* btDbvt_sStkCLN_new(const btDbvtNode* n, btDbvtNode* p)
+btDbvt_sStkCLN* btDbvt_sStkCLN_new(const btDbvtNode* n, btDbvtNode* p)
 {
 	return new btDbvt::sStkCLN(n, p);
 }
 
-const btDbvtNode* btDbvt_sStkCLN_getNode(btDbvt::sStkCLN* obj)
+const btDbvtNode* btDbvt_sStkCLN_getNode(btDbvt_sStkCLN* obj)
 {
 	return obj->node;
 }
 
-btDbvtNode* btDbvt_sStkCLN_getParent(btDbvt::sStkCLN* obj)
+btDbvtNode* btDbvt_sStkCLN_getParent(btDbvt_sStkCLN* obj)
 {
 	return obj->parent;
 }
 
-void btDbvt_sStkCLN_setNode(btDbvt::sStkCLN* obj, const btDbvtNode* value)
+void btDbvt_sStkCLN_setNode(btDbvt_sStkCLN* obj, const btDbvtNode* value)
 {
 	obj->node = value;
 }
 
-void btDbvt_sStkCLN_setParent(btDbvt::sStkCLN* obj, btDbvtNode* value)
+void btDbvt_sStkCLN_setParent(btDbvt_sStkCLN* obj, btDbvtNode* value)
 {
 	obj->parent = value;
 }
 
-void btDbvt_sStkCLN_delete(btDbvt::sStkCLN* obj)
+void btDbvt_sStkCLN_delete(btDbvt_sStkCLN* obj)
 {
 	delete obj;
 }
 
 
-btDbvt::sStkNN* btDbvt_sStkNN_new()
+btDbvt_sStkNN* btDbvt_sStkNN_new()
 {
 	return new btDbvt::sStkNN();
 }
 
-btDbvt::sStkNN* btDbvt_sStkNN_new2(const btDbvtNode* na, const btDbvtNode* nb)
+btDbvt_sStkNN* btDbvt_sStkNN_new2(const btDbvtNode* na, const btDbvtNode* nb)
 {
 	return new btDbvt::sStkNN(na, nb);
 }
 
-const btDbvtNode* btDbvt_sStkNN_getA(btDbvt::sStkNN* obj)
+const btDbvtNode* btDbvt_sStkNN_getA(btDbvt_sStkNN* obj)
 {
 	return obj->a;
 }
 
-const btDbvtNode* btDbvt_sStkNN_getB(btDbvt::sStkNN* obj)
+const btDbvtNode* btDbvt_sStkNN_getB(btDbvt_sStkNN* obj)
 {
 	return obj->b;
 }
 
-void btDbvt_sStkNN_setA(btDbvt::sStkNN* obj, const btDbvtNode* value)
+void btDbvt_sStkNN_setA(btDbvt_sStkNN* obj, const btDbvtNode* value)
 {
 	obj->a = value;
 }
 
-void btDbvt_sStkNN_setB(btDbvt::sStkNN* obj, const btDbvtNode* value)
+void btDbvt_sStkNN_setB(btDbvt_sStkNN* obj, const btDbvtNode* value)
 {
 	obj->b = value;
 }
 
-void btDbvt_sStkNN_delete(btDbvt::sStkNN* obj)
+void btDbvt_sStkNN_delete(btDbvt_sStkNN* obj)
 {
 	delete obj;
 }
 
 
-btDbvt::sStkNP* btDbvt_sStkNP_new(const btDbvtNode* n, unsigned int m)
+btDbvt_sStkNP* btDbvt_sStkNP_new(const btDbvtNode* n, unsigned int m)
 {
 	return new btDbvt::sStkNP(n, m);
 }
 
-int btDbvt_sStkNP_getMask(btDbvt::sStkNP* obj)
+int btDbvt_sStkNP_getMask(btDbvt_sStkNP* obj)
 {
 	return obj->mask;
 }
 
-const btDbvtNode* btDbvt_sStkNP_getNode(btDbvt::sStkNP* obj)
+const btDbvtNode* btDbvt_sStkNP_getNode(btDbvt_sStkNP* obj)
 {
 	return obj->node;
 }
 
-void btDbvt_sStkNP_setMask(btDbvt::sStkNP* obj, int value)
+void btDbvt_sStkNP_setMask(btDbvt_sStkNP* obj, int value)
 {
 	obj->mask = value;
 }
 
-void btDbvt_sStkNP_setNode(btDbvt::sStkNP* obj, const btDbvtNode* value)
+void btDbvt_sStkNP_setNode(btDbvt_sStkNP* obj, const btDbvtNode* value)
 {
 	obj->node = value;
 }
 
-void btDbvt_sStkNP_delete(btDbvt::sStkNP* obj)
+void btDbvt_sStkNP_delete(btDbvt_sStkNP* obj)
 {
 	delete obj;
 }
 
 
-btDbvt::sStkNPS* btDbvt_sStkNPS_new()
+btDbvt_sStkNPS* btDbvt_sStkNPS_new()
 {
 	return new btDbvt::sStkNPS();
 }
 
-btDbvt::sStkNPS* btDbvt_sStkNPS_new2(const btDbvtNode* n, unsigned int m, btScalar v)
+btDbvt_sStkNPS* btDbvt_sStkNPS_new2(const btDbvtNode* n, unsigned int m, btScalar v)
 {
 	return new btDbvt::sStkNPS(n, m, v);
 }
 
-int btDbvt_sStkNPS_getMask(btDbvt::sStkNPS* obj)
+int btDbvt_sStkNPS_getMask(btDbvt_sStkNPS* obj)
 {
 	return obj->mask;
 }
 
-const btDbvtNode* btDbvt_sStkNPS_getNode(btDbvt::sStkNPS* obj)
+const btDbvtNode* btDbvt_sStkNPS_getNode(btDbvt_sStkNPS* obj)
 {
 	return obj->node;
 }
 
-btScalar btDbvt_sStkNPS_getValue(btDbvt::sStkNPS* obj)
+btScalar btDbvt_sStkNPS_getValue(btDbvt_sStkNPS* obj)
 {
 	return obj->value;
 }
 
-void btDbvt_sStkNPS_setMask(btDbvt::sStkNPS* obj, int value)
+void btDbvt_sStkNPS_setMask(btDbvt_sStkNPS* obj, int value)
 {
 	obj->mask = value;
 }
 
-void btDbvt_sStkNPS_setNode(btDbvt::sStkNPS* obj, const btDbvtNode* value)
+void btDbvt_sStkNPS_setNode(btDbvt_sStkNPS* obj, const btDbvtNode* value)
 {
 	obj->node = value;
 }
 
-void btDbvt_sStkNPS_setValue(btDbvt::sStkNPS* obj, btScalar value)
+void btDbvt_sStkNPS_setValue(btDbvt_sStkNPS* obj, btScalar value)
 {
 	obj->value = value;
 }
 
-void btDbvt_sStkNPS_delete(btDbvt::sStkNPS* obj)
+void btDbvt_sStkNPS_delete(btDbvt_sStkNPS* obj)
 {
 	delete obj;
 }

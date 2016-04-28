@@ -1,6 +1,7 @@
 #include <BulletCollision/BroadphaseCollision/btCollisionAlgorithm.h>
 #include <BulletCollision/BroadphaseCollision/btDispatcher.h>
 #include <BulletCollision/CollisionDispatch/btCollisionObject.h>
+#include <BulletCollision/CollisionDispatch/btCollisionObjectWrapper.h>
 #include <BulletCollision/CollisionDispatch/btManifoldResult.h>
 #include <BulletCollision/NarrowPhaseCollision/btPersistentManifold.h>
 
@@ -51,7 +52,7 @@ btScalar btCollisionAlgorithm_calculateTimeOfImpact(btCollisionAlgorithm* obj, b
 	return obj->calculateTimeOfImpact(body0, body1, *dispatchInfo, resultOut);
 }
 
-void btCollisionAlgorithm_getAllContactManifolds(btCollisionAlgorithm* obj, btAlignedObjectArray_btPersistentManifold* manifoldArray)
+void btCollisionAlgorithm_getAllContactManifolds(btCollisionAlgorithm* obj, btAlignedObjectArray_btPersistentManifoldPtr* manifoldArray)
 {
 	obj->getAllContactManifolds(*manifoldArray);
 }

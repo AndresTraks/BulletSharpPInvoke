@@ -2,7 +2,7 @@
 
 #include "btEmptyCollisionAlgorithm_wrap.h"
 
-btEmptyAlgorithm::CreateFunc* btEmptyAlgorithm_CreateFunc_new()
+btEmptyAlgorithm_CreateFunc* btEmptyAlgorithm_CreateFunc_new()
 {
 	return new btEmptyAlgorithm::CreateFunc();
 }

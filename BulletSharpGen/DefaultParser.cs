@@ -38,6 +38,7 @@ namespace BulletSharpGen
             FlattenClassHierarchy();
             ResolveTemplateSpecializations();
             CreateDefaultConstructors();
+            CreateDestructors();
             SortMembers();
             ResolveIncludes();
         }
@@ -45,12 +46,7 @@ namespace BulletSharpGen
         // n = 2 -> "\t\t"
         protected static string GetTabs(int n)
         {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < n; i++)
-            {
-                builder.Append('\t');
-            }
-            return builder.ToString();
+            return new string('\t', 2);
         }
 
         // one_two_three -> oneTwoThree
@@ -121,9 +117,15 @@ namespace BulletSharpGen
         // Does the type require additional lines of code to marshal?
         public static bool TypeRequiresMarshal(TypeRefDefinition type)
         {
-            if (type.Target != null && type.Target.MarshalAsStruct) return true;
-            if (type.Kind == TypeKind.LValueReference && TypeRequiresMarshal(type.Referenced)) return true;
-            return false;
+            switch (type.Kind)
+            {
+                case TypeKind.ConstantArray:
+                case TypeKind.LValueReference:
+                case TypeKind.Pointer:
+                    return TypeRequiresMarshal(type.Referenced);
+            }
+
+            return type.Target != null && type.Target.MarshalAsStruct;
         }
 
         void SetClassProperties()
@@ -481,17 +483,6 @@ namespace BulletSharpGen
         void MapSymbols()
         {
             /*
-            // Get managed header and enum names
-            var nameMapping = Project.HeaderNameMapping as ScriptedMapping;
-            foreach (var header in Project.HeaderDefinitions.Values)
-            {
-                if (nameMapping != null)
-                {
-                    nameMapping.Globals.Header = header;
-                }
-                header.ManagedName = Project.HeaderNameMapping.Map(header.Name);
-            }
-
             // Apply class properties
             nameMapping = Project.ClassNameMapping as ScriptedMapping;
             foreach (var @class in Project.ClassDefinitions.Values)
@@ -512,26 +503,20 @@ namespace BulletSharpGen
                     }
                 }
             }
+            */
 
-            // Set managed method/parameter names
+            // Rename empty parameter names to "__unnamedX"
             foreach (var method in Project.ClassDefinitions.Values.SelectMany(c => c.Methods))
             {
-                method.ManagedName = GetManagedMethodName(method);
-
                 for (int i = 0; i < method.Parameters.Length; i++)
                 {
                     var param = method.Parameters[i];
-                    if (param.Name == "")
+                    if (param.Name.Equals(""))
                     {
                         param.Name = $"__unnamed{i}";
-                        param.ManagedName = param.Name;
-                    }
-                    else
-                    {
-                        param.ManagedName = GetManagedParameterName(param);
                     }
                 }
-            }*/
+            }
         }
 
         // Create default constructor if no explicit C++ constructor exists.
@@ -563,6 +548,26 @@ namespace BulletSharpGen
             }
         }
 
+        private void CreateDestructors()
+        {
+            foreach (var @class in Project.ClassDefinitions.Values)
+            {
+                if (@class.BaseClass != null) continue;
+                if (@class.NoInternalConstructor && @class.HidePublicConstructors) continue;
+                if (@class.IsStatic) continue;
+                if (@class is EnumDefinition) continue;
+                if (@class.IsPureEnum) continue;
+
+                var overloadIndex = @class.Methods.Count(m => m.Name.Equals("delete"));
+                string name = overloadIndex == 0 ? "delete" : $"delete{overloadIndex + 1}";
+                var deleteMethod = new MethodDefinition(name, @class, 0)
+                {
+                    IsDestructor = true,
+                    ReturnType = new TypeRefDefinition("void")
+                };
+            }
+        }
+
         private void CreateFieldGetter(FieldDefinition field, ClassDefinition @class, string getterName, MethodDefinition setter)
         {
             MethodDefinition getter;
@@ -586,10 +591,31 @@ namespace BulletSharpGen
             }
             else
             {
+                TypeRefDefinition type;
+                if (field.Type.Canonical.Kind == TypeKind.Record)
+                {
+                    type = new TypeRefDefinition()
+                    {
+                        Kind = TypeKind.Pointer,
+                        Referenced = field.Type.Copy()
+                    };
+                }
+                else if (field.Type.Canonical.Kind == TypeKind.Unexposed)
+                {
+                    // TODO:
+                    type = field.Type;
+                }
+                else
+                {
+                    type = field.Type;
+                }
+
                 getter = new MethodDefinition(getterName, @class, 0);
-                getter.ReturnType = field.Type;
+                getter.ReturnType = type;
             }
+
             getter.Field = field;
+            field.Getter = getter;
         }
 
         private void CreateFieldSetter(FieldDefinition field, ClassDefinition @class, string setterName)
@@ -603,31 +629,33 @@ namespace BulletSharpGen
                 case TypeKind.LValueReference:
                 case TypeKind.ConstantArray:
                     return;
+                case TypeKind.Record:
+                    if (typeCanonical.Target == null) return;
+                    if (!typeCanonical.Target.MarshalAsStruct) return;
+
+                    type = new TypeRefDefinition
+                    {
+                        IsConst = true,
+                        Kind = TypeKind.Pointer,
+                        Referenced = type.Copy()
+                    };
+                    break;
+                default:
+                    type = type.Copy();
+                    break;
             }
 
-            if (typeCanonical.Name != null && typeCanonical.Name.StartsWith("btAlignedObjectArray")) return;
-
-            var setter = new MethodDefinition(setterName, @class, 1);
-            setter.ReturnType = new TypeRefDefinition("void");
-            setter.Field = field;
-            if (typeCanonical.Target != null && typeCanonical.Target.MarshalAsStruct)
+            var setter = new MethodDefinition(setterName, @class, 1)
             {
-                type = new TypeRefDefinition
-                {
-                    IsConst = true,
-                    Kind = TypeKind.Pointer,
-                    Referenced = type.Copy()
-                };
-            }
-            else if (!typeCanonical.IsBasic && typeCanonical.Kind != TypeKind.Pointer)
-            {
-                type = type.Copy();
-                type.IsConst = true;
-            }
+                Field = field,
+                ReturnType = new TypeRefDefinition("void")
+            };
             setter.Parameters[0] = new ParameterDefinition("value", type)
             {
                 MarshalDirection = MarshalDirection.In
             };
+
+            field.Setter = setter;
         }
 
         private void CreateFieldAccessors()
@@ -720,6 +748,8 @@ namespace BulletSharpGen
             }
             else if (type.IsIncomplete && type.Target != null)
             {
+                if (type.Target.MarshalAsStruct) return;
+
                 parentHeader.Includes.Add(type.Target.Header);
             }
         }
@@ -728,8 +758,7 @@ namespace BulletSharpGen
         // Should be done after removing redundant methods.
         void ResolveIncludes()
         {
-            var classDefinitionsList = new List<ClassDefinition>(Project.ClassDefinitions.Values);
-            foreach (var @class in classDefinitionsList.Where(c => !c.IsExcluded))
+            foreach (var @class in Project.ClassDefinitions.Values.Where(c => !c.IsExcluded))
             {
                 var header = @class.Header;
 
@@ -743,7 +772,7 @@ namespace BulletSharpGen
                 foreach (var method in @class.Methods)
                 {
                     ResolveInclude(method.ReturnType, header);
-                    foreach (ParameterDefinition param in method.Parameters)
+                    foreach (var param in method.Parameters)
                     {
                         ResolveInclude(param.Type, header);
                     }

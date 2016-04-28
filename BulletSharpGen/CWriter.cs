@@ -83,6 +83,13 @@ namespace BulletSharpGen
             ParameterDefinition outValueParameter)
         {
             To = WriteTo.Source;
+
+            if (method.IsDestructor)
+            {
+                WriteLine(1, "delete obj;", WriteTo.Source);
+                return;
+            }
+
             string qualifier = method.IsStatic ? $"{method.Parent.Name}::" : "obj->";
 
             // Struct field marshalling
@@ -91,12 +98,11 @@ namespace BulletSharpGen
             {
                 string fieldName = $"{qualifier}{field.Name}";
                 // TODO:
-                /*
                 if (field.Type.Target != null && field.Type.Target.MarshalAsStruct)
                 {
                     string macroPrefix = field.Type.Name.ToUpper();
                     string paramName = (outValueParameter != null ? outValueParameter : method.Parameters[0]).Name;
-                    if (method.Name.Equals(method.Property.Getter.Name))
+                    if (method == field.Getter)
                     {
                         WriteLine(1, $"{macroPrefix}_SET({paramName}, {fieldName});");
                     }
@@ -105,14 +111,21 @@ namespace BulletSharpGen
                         WriteLine(1, $"{macroPrefix}_COPY(&{fieldName}, {paramName});");
                     }
                 }
-                else if (method.Name.Equals(method.Property.Getter.Name))
+                else if (method == field.Getter)
                 {
-                    WriteLine(1, $"return {qualifier}{field.Name};");
+                    if (field.Type.Kind == TypeKind.Record)
+                    {
+                        WriteLine(1, $"return &{qualifier}{field.Name};");
+                    }
+                    else
+                    {
+                        WriteLine(1, $"return {qualifier}{field.Name};");
+                    }
                 }
                 else
                 {
                     WriteLine(1, $"{qualifier}{field.Name} = value;");
-                }*/
+                }
                 return;
             }
 
@@ -133,6 +146,10 @@ namespace BulletSharpGen
                     else
                     {
                         WriteLine(1, $"{macroPrefix}_IN({param.Name});");
+                        if (param.MarshalDirection == MarshalDirection.InOut)
+                        {
+                            needTypeMarshalEpilogue = true;
+                        }
                     }
                 }
             }
@@ -166,7 +183,7 @@ namespace BulletSharpGen
                         if (needTypeMarshalEpilogue)
                         {
                             // Save the return value and return it after the epilogues
-                            Write($"{GetTypeNameC(returnType)} ret = ");
+                            Write($"{GetTypeNameC(method.ReturnType)} ret = ");
                         }
                         else
                         {
@@ -296,15 +313,6 @@ namespace BulletSharpGen
 
             WriteMethodDeclaration(method, numParameters, level, overloadIndex, outValueParameter);
 
-            if (method.Name.Equals("delete"))
-            {
-                WriteLine('{', WriteTo.Source);
-                WriteLine(1, "delete obj;", WriteTo.Source);
-                WriteLine('}', WriteTo.Source);
-                hasSourceWhiteSpace = false;
-                return;
-            }
-
             // Method body
             WriteLine('{', WriteTo.Source);
             WriteMethodDefinition(method, numParameters, overloadIndex, level, outValueParameter);
@@ -334,33 +342,49 @@ namespace BulletSharpGen
                 WriteClass(c, level + 1);
             }
 
-
-            // Write methods
-            // Write constructors
-            if (!@class.IsStatic)
+            // Group methods into constructors, destructors and methods
+            var methodGroups = @class.Methods.GroupBy(m =>
             {
-                // Write public constructors
-                if (!@class.HidePublicConstructors && !@class.IsAbstract)
+                if (m.IsExcluded) return (CursorKind)0;
+                if (m.IsConstructor) return CursorKind.Constructor;
+                if (m.IsDestructor) return CursorKind.Destructor;
+                return CursorKind.CxxMethod;
+            }).ToDictionary(g => g.Key);
+
+            // Constructors
+            if (!@class.HidePublicConstructors && !@class.IsAbstract && !@class.IsStatic)
+            {
+                IGrouping<CursorKind, MethodDefinition> constructors;
+                if (methodGroups.TryGetValue(CursorKind.Constructor, out constructors))
                 {
                     int overloadIndex = 0;
-                    var constructors = @class.Methods.Where(m => m.IsConstructor && !m.IsExcluded);
-                    if (constructors.Any())
+                    foreach (var constructor in methodGroups[CursorKind.Constructor])
                     {
-                        foreach (var constructor in constructors)
-                        {
-                            WriteMethod(constructor, level, ref overloadIndex);
-                        }
+                        WriteMethod(constructor, level, ref overloadIndex);
                     }
                 }
             }
 
-            // Write methods
-            var methods = @class.Methods.Where(m => !m.IsConstructor && !m.IsExcluded).OrderBy(m => m.Name);
-            var methodsOverloads = methods.GroupBy(m => m.Name);
-            foreach (var groupByName in methodsOverloads)
+            // Methods
+            IGrouping<CursorKind, MethodDefinition> methods;
+            if (methodGroups.TryGetValue(CursorKind.CxxMethod, out methods))
+            {
+                foreach (var groupByName in methods.GroupBy(m => m.Name))
+                {
+                    int overloadIndex = 0;
+                    foreach (var method in groupByName)
+                    {
+                        WriteMethod(method, level, ref overloadIndex);
+                    }
+                }
+            }
+
+            // Destructors
+            IGrouping<CursorKind, MethodDefinition> destructors;
+            if (methodGroups.TryGetValue(CursorKind.Destructor, out destructors))
             {
                 int overloadIndex = 0;
-                foreach (var method in groupByName)
+                foreach (var method in destructors)
                 {
                     WriteMethod(method, level, ref overloadIndex);
                 }
@@ -544,80 +568,80 @@ namespace BulletSharpGen
                     !(@class is ClassTemplateDefinition));
             if (!hasCWrapper) return;
 
-                // C++ header file
-                string headerPath = header.Name + "_wrap.h";
-                string headerFullPath = Path.Combine(Project.CProjectPathFull, headerPath);
-                OpenFile(headerFullPath, WriteTo.Header);
-                WriteLine("#include \"main.h\"");
-                WriteLine();
+            // C++ header file
+            string headerPath = header.Name + "_wrap.h";
+            string headerFullPath = Path.Combine(Project.CProjectPathFull, headerPath);
+            OpenFile(headerFullPath, WriteTo.Header);
+            WriteLine("#include \"main.h\"");
+            WriteLine();
 
-                // C++ source file
-                string sourcePath = header.Name + "_wrap.cpp";
-                string sourceFullPath = Path.Combine(Project.CProjectPathFull, sourcePath);
-                OpenFile(sourceFullPath, WriteTo.Source);
+            // C++ source file
+            string sourcePath = header.Name + "_wrap.cpp";
+            string sourceFullPath = Path.Combine(Project.CProjectPathFull, sourcePath);
+            OpenFile(sourceFullPath, WriteTo.Source);
 
-                // C++ #includes
-                var includes = new List<string>();
-                foreach (var includeHeader in header.Includes.Concat(new[] { header }))
+            // C++ #includes
+            var includes = new List<string>();
+            foreach (var includeHeader in header.Includes.Concat(new[] { header }))
+            {
+                // No need to include the base class header,
+                // it will already be included by the header of this class.
+                if (includeHeader != header &&
+                    header.AllClasses.Any(c => c.BaseClass != null && c.BaseClass.Header == includeHeader))
                 {
-                    // No need to include the base class header,
-                    // it will already be included by the header of this class.
-                    if (includeHeader != header &&
-                        header.AllClasses.Any(c => c.BaseClass != null && c.BaseClass.Header == includeHeader))
-                    {
-                        continue;
-                    }
-
-                    string includePath =
-                        WrapperProject.MakeRelativePath(sourceRootFolder, includeHeader.Filename).Replace('\\', '/');
-                    includes.Add(includePath);
+                    continue;
                 }
-                includes.Sort();
-                foreach (var include in includes)
-                {
-                    WriteLine($"#include <{include}>");
-                }
-                WriteLine();
-                if (RequiresConversionHeader(header))
-                {
-                    WriteLine("#include \"conversion.h\"");
-                }
-                WriteLine($"#include \"{headerPath}\"");
 
-
-                // Write wrapper class headers
-                To = WriteTo.Header;
-                _hasCppClassSeparatingWhitespace = true;
-                var wrappedClasses = header.AllClasses
-                    .Where(x => _wrapperHeaderGuards.ContainsKey(x.Name))
-                    .OrderBy(GetFullNameC).ToList();
-                if (wrappedClasses.Count != 0)
-                {
-                    WriteLine($"#ifndef {_wrapperHeaderGuards[wrappedClasses[0].Name]}");
-                    foreach (var @class in wrappedClasses)
-                    {
-                        foreach (var method in @class.Methods.Where(m => m.IsVirtual))
-                        {
-                            WriteLine($"#define p_{GetFullNameC(@class)}_{method.Name} void*");
-                        }
-                    }
-                    foreach (var @class in wrappedClasses)
-                    {
-                        WriteLine($"#define {GetFullNameC(@class)}Wrapper void");
-                    }
-                    WriteLine("#else");
-                    foreach (var @class in wrappedClasses)
-                    {
-                        WriteWrapperClass(@class);
-                    }
-                    WriteLine("#endif");
-                    WriteLine();
-
-                // Write classes
-                WriteLine("extern \"C\"");
-                WriteLine("{");
-                _hasCppClassSeparatingWhitespace = true;
+                string includePath =
+                    WrapperProject.MakeRelativePath(sourceRootFolder, includeHeader.Filename).Replace('\\', '/');
+                includes.Add(includePath);
             }
+            includes.Sort();
+            foreach (var include in includes)
+            {
+                WriteLine($"#include <{include}>");
+            }
+            WriteLine();
+            if (RequiresConversionHeader(header))
+            {
+                WriteLine("#include \"conversion.h\"");
+            }
+            WriteLine($"#include \"{headerPath}\"");
+
+
+            // Write wrapper class headers
+            To = WriteTo.Header;
+            _hasCppClassSeparatingWhitespace = true;
+            var wrappedClasses = header.AllClasses
+                .Where(x => _wrapperHeaderGuards.ContainsKey(x.Name))
+                .OrderBy(GetFullNameC).ToList();
+            if (wrappedClasses.Count != 0)
+            {
+                WriteLine($"#ifndef {_wrapperHeaderGuards[wrappedClasses[0].Name]}");
+                foreach (var @class in wrappedClasses)
+                {
+                    foreach (var method in @class.Methods.Where(m => m.IsVirtual))
+                    {
+                        WriteLine($"#define p_{GetFullNameC(@class)}_{method.Name} void*");
+                    }
+                }
+                foreach (var @class in wrappedClasses)
+                {
+                    WriteLine($"#define {GetFullNameC(@class)}Wrapper void");
+                }
+                WriteLine("#else");
+                foreach (var @class in wrappedClasses)
+                {
+                    WriteWrapperClass(@class);
+                }
+                WriteLine("#endif");
+                WriteLine();
+            }
+
+            // Write classes
+            WriteLine("extern \"C\"");
+            WriteLine("{");
+            _hasCppClassSeparatingWhitespace = true;
 
             foreach (var @class in header.Classes
                 .Where(c => !IsExcludedClass(c)))
@@ -668,14 +692,15 @@ namespace BulletSharpGen
 
             string name = type.IsConst ? "const " : "";
 
-            switch (type.Kind)
+            if (type.Kind == TypeKind.Typedef)
             {
-                case TypeKind.Typedef:
-                    if (type.Referenced.IsBasic) return type.Name;
-                    return name + GetTypeNameC(type.Referenced);
-                case TypeKind.Pointer:
-                    if (type.Referenced.Kind == TypeKind.FunctionProto) return type.Name;
-                    break;
+                if (type.Referenced.IsBasic) return type.Name;
+                if (type.Referenced.Kind == TypeKind.Pointer &&
+                    type.Referenced.Referenced.Kind == TypeKind.FunctionProto)
+                {
+                    return type.Name;
+                }
+                return name + GetTypeNameC(type.Referenced);
             }
 
             if (type.Referenced != null) return name + GetTypeNameC(type.Referenced) + "*";
@@ -705,24 +730,15 @@ namespace BulletSharpGen
             return header.Classes.Any(RequiresConversionHeader);
         }
 
-        private static bool RequiresConversionHeader(ClassDefinition cl)
+        private static bool RequiresConversionHeader(ClassDefinition @class)
         {
-            if (cl.NestedClasses.Any(RequiresConversionHeader))
-            {
-                return true;
-            }
+            if (@class.NestedClasses.Any(RequiresConversionHeader)) return true;
 
-            foreach (var method in cl.Methods.Where(m => !m.IsExcluded))
+            foreach (var method in @class.Methods.Where(m => !m.IsExcluded))
             {
-                if (DefaultParser.TypeRequiresMarshal(method.ReturnType))
-                {
-                    return true;
-                }
+                if (DefaultParser.TypeRequiresMarshal(method.ReturnType)) return true;
 
-                if (method.Parameters.Any(param => DefaultParser.TypeRequiresMarshal(param.Type)))
-                {
-                    return true;
-                }
+                if (method.Parameters.Any(p => DefaultParser.TypeRequiresMarshal(p.Type))) return true;
             }
 
             return false;

@@ -2,7 +2,7 @@
 
 extern "C"
 {
-	//EXPORT void btSimulationIslandManager_IslandCallback_processIsland(btSimulationIslandManager_IslandCallback* obj, * bodies, int numBodies, * manifolds, int numManifolds, int islandId);
+	EXPORT void btSimulationIslandManager_IslandCallback_processIsland(btSimulationIslandManager_IslandCallback* obj, btCollisionObject** bodies, int numBodies, btPersistentManifold** manifolds, int numManifolds, int islandId);
 	EXPORT void btSimulationIslandManager_IslandCallback_delete(btSimulationIslandManager_IslandCallback* obj);
 
 	EXPORT btSimulationIslandManager* btSimulationIslandManager_new();

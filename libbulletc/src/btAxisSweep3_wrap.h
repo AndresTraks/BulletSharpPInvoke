@@ -9,7 +9,7 @@ extern "C"
 	EXPORT unsigned short btAxisSweep3_addHandle(btAxisSweep3* obj, const btVector3* aabbMin, const btVector3* aabbMax, void* pOwner, short collisionFilterGroup, short collisionFilterMask, btDispatcher* dispatcher, void* multiSapProxy);
 	EXPORT btAxisSweep3_Handle* btAxisSweep3_getHandle(btAxisSweep3* obj, unsigned short index);
 	EXPORT unsigned short btAxisSweep3_getNumHandles(btAxisSweep3* obj);
-	EXPORT btOverlappingPairCallback* btAxisSweep3_getOverlappingPairUserCallback(btAxisSweep3* obj);
+	EXPORT const btOverlappingPairCallback* btAxisSweep3_getOverlappingPairUserCallback(btAxisSweep3* obj);
 	//EXPORT void btAxisSweep3_processAllOverlappingPairs(btAxisSweep3* obj, btOverlapCallback* callback);
 	EXPORT void btAxisSweep3_quantize(btAxisSweep3* obj, unsigned short* out, const btVector3* point, int isMax);
 	EXPORT void btAxisSweep3_removeHandle(btAxisSweep3* obj, unsigned short handle, btDispatcher* dispatcher);
@@ -25,7 +25,7 @@ extern "C"
 	EXPORT unsigned int bt32BitAxisSweep3_addHandle(bt32BitAxisSweep3* obj, const btVector3* aabbMin, const btVector3* aabbMax, void* pOwner, short collisionFilterGroup, short collisionFilterMask, btDispatcher* dispatcher, void* multiSapProxy);
 	EXPORT bt32BitAxisSweep3_Handle* bt32BitAxisSweep3_getHandle(bt32BitAxisSweep3* obj, unsigned int index);
 	EXPORT unsigned int bt32BitAxisSweep3_getNumHandles(bt32BitAxisSweep3* obj);
-	EXPORT btOverlappingPairCallback* bt32BitAxisSweep3_getOverlappingPairUserCallback(bt32BitAxisSweep3* obj);
+	EXPORT const btOverlappingPairCallback* bt32BitAxisSweep3_getOverlappingPairUserCallback(bt32BitAxisSweep3* obj);
 	//EXPORT void bt32BitAxisSweep3_processAllOverlappingPairs(bt32BitAxisSweep3* obj, btOverlapCallback* callback);
 	EXPORT void bt32BitAxisSweep3_quantize(bt32BitAxisSweep3* obj, unsigned int* out, const btVector3* point, int isMax);
 	EXPORT void bt32BitAxisSweep3_removeHandle(bt32BitAxisSweep3* obj, unsigned int handle, btDispatcher* dispatcher);

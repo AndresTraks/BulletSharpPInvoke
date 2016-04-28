@@ -4,29 +4,6 @@
 #include "conversion.h"
 #include "btBroadphaseProxy_wrap.h"
 
-btBroadphaseProxy* btBroadphaseProxy_new()
-{
-	return new btBroadphaseProxy();
-}
-
-btBroadphaseProxy* btBroadphaseProxy_new2(const btVector3* aabbMin, const btVector3* aabbMax,
-	void* userPtr, short collisionFilterGroup, short collisionFilterMask)
-{
-	BTVECTOR3_IN(aabbMin);
-	BTVECTOR3_IN(aabbMax);
-	return new btBroadphaseProxy(BTVECTOR3_USE(aabbMin), BTVECTOR3_USE(aabbMax),
-		userPtr, collisionFilterGroup, collisionFilterMask);
-}
-
-btBroadphaseProxy* btBroadphaseProxy_new3(const btVector3* aabbMin, const btVector3* aabbMax,
-	void* userPtr, short collisionFilterGroup, short collisionFilterMask, void* multiSapParentProxy)
-{
-	BTVECTOR3_IN(aabbMin);
-	BTVECTOR3_IN(aabbMax);
-	return new btBroadphaseProxy(BTVECTOR3_USE(aabbMin), BTVECTOR3_USE(aabbMax),
-		userPtr, collisionFilterGroup, collisionFilterMask, multiSapParentProxy);
-}
-
 void btBroadphaseProxy_getAabbMax(btBroadphaseProxy* obj, btVector3* value)
 {
 	BTVECTOR3_SET(value, obj->m_aabbMax);

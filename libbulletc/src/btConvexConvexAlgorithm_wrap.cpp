@@ -3,51 +3,51 @@
 
 #include "btConvexConvexAlgorithm_wrap.h"
 
-btConvexConvexAlgorithm::CreateFunc* btConvexConvexAlgorithm_CreateFunc_new(btVoronoiSimplexSolver* simplexSolver,
+btConvexConvexAlgorithm_CreateFunc* btConvexConvexAlgorithm_CreateFunc_new(btVoronoiSimplexSolver* simplexSolver,
 	btConvexPenetrationDepthSolver* pdSolver)
 {
 	return new btConvexConvexAlgorithm::CreateFunc(simplexSolver, pdSolver);
 }
 
-int btConvexConvexAlgorithm_CreateFunc_getMinimumPointsPerturbationThreshold(btConvexConvexAlgorithm::CreateFunc* obj)
+int btConvexConvexAlgorithm_CreateFunc_getMinimumPointsPerturbationThreshold(btConvexConvexAlgorithm_CreateFunc* obj)
 {
 	return obj->m_minimumPointsPerturbationThreshold;
 }
 
-int btConvexConvexAlgorithm_CreateFunc_getNumPerturbationIterations(btConvexConvexAlgorithm::CreateFunc* obj)
+int btConvexConvexAlgorithm_CreateFunc_getNumPerturbationIterations(btConvexConvexAlgorithm_CreateFunc* obj)
 {
 	return obj->m_numPerturbationIterations;
 }
 
-btConvexPenetrationDepthSolver* btConvexConvexAlgorithm_CreateFunc_getPdSolver(btConvexConvexAlgorithm::CreateFunc* obj)
+btConvexPenetrationDepthSolver* btConvexConvexAlgorithm_CreateFunc_getPdSolver(btConvexConvexAlgorithm_CreateFunc* obj)
 {
 	return obj->m_pdSolver;
 }
 
-btVoronoiSimplexSolver* btConvexConvexAlgorithm_CreateFunc_getSimplexSolver(btConvexConvexAlgorithm::CreateFunc* obj)
+btVoronoiSimplexSolver* btConvexConvexAlgorithm_CreateFunc_getSimplexSolver(btConvexConvexAlgorithm_CreateFunc* obj)
 {
 	return obj->m_simplexSolver;
 }
 
-void btConvexConvexAlgorithm_CreateFunc_setMinimumPointsPerturbationThreshold(btConvexConvexAlgorithm::CreateFunc* obj,
+void btConvexConvexAlgorithm_CreateFunc_setMinimumPointsPerturbationThreshold(btConvexConvexAlgorithm_CreateFunc* obj,
 	int value)
 {
 	obj->m_minimumPointsPerturbationThreshold = value;
 }
 
-void btConvexConvexAlgorithm_CreateFunc_setNumPerturbationIterations(btConvexConvexAlgorithm::CreateFunc* obj,
+void btConvexConvexAlgorithm_CreateFunc_setNumPerturbationIterations(btConvexConvexAlgorithm_CreateFunc* obj,
 	int value)
 {
 	obj->m_numPerturbationIterations = value;
 }
 
-void btConvexConvexAlgorithm_CreateFunc_setPdSolver(btConvexConvexAlgorithm::CreateFunc* obj,
+void btConvexConvexAlgorithm_CreateFunc_setPdSolver(btConvexConvexAlgorithm_CreateFunc* obj,
 	btConvexPenetrationDepthSolver* value)
 {
 	obj->m_pdSolver = value;
 }
 
-void btConvexConvexAlgorithm_CreateFunc_setSimplexSolver(btConvexConvexAlgorithm::CreateFunc* obj,
+void btConvexConvexAlgorithm_CreateFunc_setSimplexSolver(btConvexConvexAlgorithm_CreateFunc* obj,
 	btVoronoiSimplexSolver* value)
 {
 	obj->m_simplexSolver = value;

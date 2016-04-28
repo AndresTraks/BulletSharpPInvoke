@@ -2,9 +2,6 @@
 
 extern "C"
 {
-	EXPORT btBroadphaseProxy* btBroadphaseProxy_new();
-	EXPORT btBroadphaseProxy* btBroadphaseProxy_new2(const btVector3* aabbMin, const btVector3* aabbMax, void* userPtr, short collisionFilterGroup, short collisionFilterMask);
-	EXPORT btBroadphaseProxy* btBroadphaseProxy_new3(const btVector3* aabbMin, const btVector3* aabbMax, void* userPtr, short collisionFilterGroup, short collisionFilterMask, void* multiSapParentProxy);
 	EXPORT void btBroadphaseProxy_getAabbMax(btBroadphaseProxy* obj, btVector3* value);
 	EXPORT void btBroadphaseProxy_getAabbMin(btBroadphaseProxy* obj, btVector3* value);
 	EXPORT void* btBroadphaseProxy_getClientObject(btBroadphaseProxy* obj);

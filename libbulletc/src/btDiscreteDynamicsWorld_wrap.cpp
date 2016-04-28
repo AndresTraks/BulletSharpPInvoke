@@ -1,7 +1,10 @@
 #include <BulletCollision/CollisionDispatch/btCollisionConfiguration.h>
+#include <BulletCollision/CollisionDispatch/btSimulationIslandManager.h>
 #include <BulletDynamics/ConstraintSolver/btConstraintSolver.h>
 #include <BulletDynamics/ConstraintSolver/btTypedConstraint.h>
+#include <BulletDynamics/Dynamics/btActionInterface.h>
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+#include <BulletDynamics/Dynamics/btRigidBody.h>
 
 #include "btDiscreteDynamicsWorld_wrap.h"
 

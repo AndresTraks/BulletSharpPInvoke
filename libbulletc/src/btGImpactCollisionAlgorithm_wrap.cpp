@@ -2,7 +2,7 @@
 
 #include "btGImpactCollisionAlgorithm_wrap.h"
 
-btGImpactCollisionAlgorithm::CreateFunc* btGImpactCollisionAlgorithm_CreateFunc_new()
+btGImpactCollisionAlgorithm_CreateFunc* btGImpactCollisionAlgorithm_CreateFunc_new()
 {
 	return new btGImpactCollisionAlgorithm::CreateFunc();
 }
