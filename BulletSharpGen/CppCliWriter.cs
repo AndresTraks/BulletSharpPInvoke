@@ -807,7 +807,7 @@ namespace BulletSharpGen
 
             // Write properties (includes unmanaged fields and getters/setters)
             To = WriteTo.Header;
-            foreach (PropertyDefinition prop in @class.Properties)
+            foreach (ManagedProperty prop in @class.Properties)
             {
                 string typeConditional = GetTypeConditional(prop.Type, @class.Header);
                 if (typeConditional != null)

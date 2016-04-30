@@ -264,7 +264,7 @@ namespace BulletSharpGen
                         _booleanVerbs.Any(v => method.Name.StartsWith(v))))
                     {
                         if (method.Property != null) continue;
-                        new PropertyDefinition(method, GetPropertyName(method));
+                        new ManagedProperty(method, GetPropertyName(method));
                     }
                 }
 
@@ -286,7 +286,7 @@ namespace BulletSharpGen
                                 var referenced = paramType.Referenced.Canonical;
                                 if (referenced.Target != null && referenced.Target.MarshalAsStruct)
                                 {
-                                    new PropertyDefinition(method, GetPropertyName(method));
+                                    new ManagedProperty(method, GetPropertyName(method));
                                 }
                                 break;
                         }

@@ -389,6 +389,62 @@ namespace BulletSharpGen
             }
         }
 
+        public TypeRefDefinition CopyTypeTemplated(TypeRefDefinition templateType, IDictionary<string, string> templateParams)
+        {
+            // Clang shows template parameters only as unexposed
+            if (templateType.HasTemplateTypeParameter)
+            {
+                return new TypeRefDefinition(templateParams[templateType.Name]);
+            }
+
+            if (templateType.Target != null)
+            {
+                // TODO: smarter replacement
+                string specializedName = templateType.Target.FullyQualifiedName;
+                foreach (var param in templateParams)
+                {
+                    specializedName = specializedName.Replace(param.Key, param.Value);
+                }
+                if (!specializedName.Equals(templateType.Target.FullyQualifiedName))
+                {
+                    var specializedType = new TypeRefDefinition(specializedName)
+                    {
+                        Kind = templateType.Kind
+                    };
+                    ResolveTypeRef(specializedType);
+                    return specializedType;
+                }
+            }
+
+            var t = new TypeRefDefinition
+            {
+                HasTemplateTypeParameter = templateType.HasTemplateTypeParameter,
+                IsConst = templateType.IsConst,
+                IsIncomplete = templateType.IsIncomplete,
+                Name = templateType.Name,
+                Referenced = templateType.Referenced != null ? CopyTypeTemplated(templateType.Referenced, templateParams) : null,
+                TemplateParams = templateType.TemplateParams?.Select(p => CopyTypeTemplated(p, templateParams)).ToList(),
+                Target = templateType.Target,
+                Kind = templateType.Kind
+            };
+            return t;
+        }
+
+        public MethodDefinition SpecializeTemplateMethod(ClassDefinition thisClass, MethodDefinition templateMethod,
+            IDictionary<string, string> templateParams)
+        {
+            var methodSpec = templateMethod.Copy(thisClass);
+
+            // Replace template parameters with concrete types
+            methodSpec.ReturnType = CopyTypeTemplated(methodSpec.ReturnType, templateParams);
+            foreach (var param in methodSpec.Parameters)
+            {
+                param.Type = CopyTypeTemplated(param.Type, templateParams);
+            }
+
+            return methodSpec;
+        }
+
         private void CopyTemplateMethods(ClassDefinition thisClass, ClassTemplateDefinition template,
             Dictionary<string, string> templateParams = null)
         {
@@ -401,7 +457,7 @@ namespace BulletSharpGen
                 {
                     string param = templateBase.TemplateParameters[i];
                     string paramValue = template.TemplateParameters[i];
-                    templateParams[param] = paramValue;
+                    templateParams[param] = TypeRefDefinition.GetBasicName(paramValue);
                 }
 
                 CopyTemplateMethods(thisClass, templateBase, templateParams);
@@ -425,35 +481,13 @@ namespace BulletSharpGen
 
                 foreach (var templateMethod in templateClass.Methods)
                 {
-                    // Replace template parameters with concrete types
-                    var methodSpec = templateMethod.Copy(classSpec);
-                    if (methodSpec.ReturnType.HasTemplateTypeParameter)
-                    {
-                        methodSpec.ReturnType = methodSpec.ReturnType.CopyTemplated(templateParams);
-                    }
-
-                    foreach (var param in methodSpec.Parameters
-                        .Where(p => p.Type.HasTemplateTypeParameter))
-                    {
-                        param.Type = param.Type.CopyTemplated(templateParams);
-                    }
+                    SpecializeTemplateMethod(classSpec, templateMethod, templateParams);
                 }
             }
 
             foreach (var templateMethod in template.Methods.Where(m => !m.IsConstructor))
             {
-                // Replace template parameters with concrete types
-                var methodSpec = templateMethod.Copy(thisClass);
-                if (methodSpec.ReturnType.HasTemplateTypeParameter)
-                {
-                    methodSpec.ReturnType = methodSpec.ReturnType.CopyTemplated(templateParams);
-                }
-
-                foreach (var param in methodSpec.Parameters
-                    .Where(p => p.Type.HasTemplateTypeParameter))
-                {
-                    param.Type = param.Type.CopyTemplated(templateParams);
-                }
+                SpecializeTemplateMethod(thisClass, templateMethod, templateParams);
             }
         }
 

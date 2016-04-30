@@ -309,7 +309,7 @@ namespace BulletSharpGen
             }
         }
 
-        void WriteProperty(PropertyDefinition prop, int level)
+        void WriteProperty(ManagedProperty prop, int level)
         {
             var getterNative = prop.Getter.Native;
             var setterNative = prop.Setter?.Native;

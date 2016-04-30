@@ -86,6 +86,7 @@ namespace BulletSharpGen
             excludedMethods.Add("operator==");
             excludedMethods.Add("operator!=");
             excludedMethods.Add("operator()");
+            excludedMethods.Add("operator=");
 
             Console.Write("Reading headers");
 
@@ -138,6 +139,54 @@ namespace BulletSharpGen
             }
 
             return Cursor.ChildVisitResult.Continue;
+        }
+
+        void ParseTemplateBaseCursor(Cursor cursor)
+        {
+            var tokens = _context.TranslationUnit.Tokenize(cursor.Extent)
+                .TakeWhile(t => !t.Spelling.Equals("{"))
+                .SkipWhile(t => !t.Spelling.Equals(":"));
+            if (!tokens.Any()) return;
+
+            var baseTokens = tokens.ToList();
+            int templSpecStart = -1, templSpecEnd = -1;
+            for (int i = 0; i < baseTokens.Count; i++)
+            {
+                var token = baseTokens[i];
+                if (token.Spelling == "<")
+                {
+                    templSpecStart = i;
+                }
+                else if (token.Spelling == ">")
+                {
+                    templSpecEnd = i;
+                }
+            }
+
+            if (templSpecStart != -1 && templSpecEnd != -1)
+            {
+                string template = baseTokens[templSpecStart - 1].Spelling;
+                string templateSpec = string.Join(" ",
+                    baseTokens.GetRange(templSpecStart + 1, templSpecEnd - templSpecStart - 1)
+                    .Select(t => t.Spelling));
+                templateSpec = TypeRefDefinition.GetBasicName(templateSpec);
+
+                string templateName = $"{template}<{templateSpec}>";
+                ClassDefinition classTemplate;
+                if (!project.ClassDefinitions.TryGetValue(templateName, out classTemplate))
+                {
+                    var classTemplateNew = new ClassTemplateDefinition(template, _context.Header);
+                    classTemplateNew.TemplateParameters.Add(templateSpec);
+
+                    var baseTemplate = project.ClassDefinitions.FirstOrDefault(c => c.Value.Name.Equals(template));
+                    classTemplateNew.BaseClass = baseTemplate.Value;
+
+                    project.ClassDefinitions[templateName] = classTemplateNew;
+                    classTemplate = classTemplateNew;
+                }
+
+                _context.Class.BaseClass = classTemplate;
+            }
         }
 
         void ParseClassCursor(Cursor cursor)
@@ -252,80 +301,13 @@ namespace BulletSharpGen
                 {
                     // Clang doesn't give the base class if it's a template,
                     // tokenize the class definition and extract the base template if it exists
-                    var tokens = _context.TranslationUnit.Tokenize(cursor.Extent)
-                        .TakeWhile(t => !t.Spelling.Equals("{"))
-                        .SkipWhile(t => !t.Spelling.Equals(":"));
-                    if (tokens.Any())
-                    {
-                        var baseTokens = tokens.ToList();
-                        int templSpecStart = -1, templSpecEnd = -1;
-                        for (int i = 0; i < baseTokens.Count; i++)
-                        {
-                            var token = baseTokens[i];
-                            if (token.Spelling == "<")
-                            {
-                                templSpecStart = i;
-                            }
-                            else if (token.Spelling == ">")
-                            {
-                                templSpecEnd = i;
-                            }
-                        }
-                        if (templSpecStart != -1 && templSpecEnd != -1)
-                        {
-                            string template = baseTokens[templSpecStart - 1].Spelling;
-                            string templateSpec = string.Join(" ",
-                                baseTokens.GetRange(templSpecStart + 1, templSpecEnd - templSpecStart - 1)
-                                .Select(t => t.Spelling));
-
-                            string templateName = $"{template}<{templateSpec}>";
-                            ClassDefinition classTemplate;
-                            if (!project.ClassDefinitions.TryGetValue(templateName, out classTemplate))
-                            {
-                                var classTemplateNew = new ClassTemplateDefinition(template, _context.Header);
-                                classTemplateNew.TemplateParameters.Add(templateSpec);
-
-                                var baseTemplate = project.ClassDefinitions.FirstOrDefault(c => c.Value.Name.Equals(template));
-                                classTemplateNew.BaseClass = baseTemplate.Value;
-
-                                project.ClassDefinitions[templateName] = classTemplateNew;
-                                classTemplate = classTemplateNew;
-                            }
-
-                            _context.Class.BaseClass = classTemplate;
-                        }
-                    }
+                    ParseTemplateBaseCursor(cursor);
                 }
             }
 
             // Restore parent state
             _context.Class = _context.Class.Parent;
             _context.MemberAccess = parentMemberAccess;
-        }
-
-        Cursor.ChildVisitResult MethodTemplateTypeVisitor(Cursor cursor, Cursor parent)
-        {
-            if (cursor.Kind == CursorKind.TypeRef)
-            {
-                if (cursor.Referenced.Kind == CursorKind.TemplateTypeParameter)
-                {
-                    if (_context.Parameter != null)
-                    {
-                        _context.Parameter.Type.HasTemplateTypeParameter = true;
-                    }
-                    else
-                    {
-                        _context.Method.ReturnType.HasTemplateTypeParameter = true;
-                    }
-                    return Cursor.ChildVisitResult.Break;
-                }
-            }
-            else if (cursor.Kind == CursorKind.TemplateRef)
-            {
-                // TODO
-                return Cursor.ChildVisitResult.Recurse;
-            }
-            return Cursor.ChildVisitResult.Continue;
         }
 
         Cursor.ChildVisitResult ClassVisitor(Cursor cursor, Cursor parent)
@@ -465,9 +447,6 @@ namespace BulletSharpGen
             _context.Method.Access = cursor.AccessSpecifier;
             _context.Method.IsConstructor = cursor.Kind == CursorKind.Constructor;
 
-            // Check if the return type is a template
-            cursor.VisitChildren(MethodTemplateTypeVisitor);
-
             // Parse arguments
             for (uint i = 0; i < cursor.NumArguments; i++)
             {
@@ -483,7 +462,6 @@ namespace BulletSharpGen
                     _context.Parameter = _context.Method.Parameters[i];
                     _context.Parameter.Type = new TypeRefDefinition(arg.Type);
                 }
-                arg.VisitChildren(MethodTemplateTypeVisitor);
 
                 // Check for a default value (optional parameter)
                 var argTokens = _context.TranslationUnit.Tokenize(arg.Extent);

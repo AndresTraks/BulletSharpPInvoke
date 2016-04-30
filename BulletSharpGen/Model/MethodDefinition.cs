@@ -1,4 +1,5 @@
 ﻿using ClangSharp;
+using System.Collections.Generic;
 
 namespace BulletSharpGen
 {

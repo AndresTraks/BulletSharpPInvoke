@@ -9,7 +9,7 @@ namespace BulletSharpGen
         public string Name { get; }
         public ManagedClass Parent { get; }
         public ManagedParameter[] Parameters { get; set; }
-        public PropertyDefinition Property { get; set; } // property that wraps this get/set method
+        public ManagedProperty Property { get; set; } // property that wraps this get/set method
 
         public ManagedMethod(MethodDefinition nativeMethod, ManagedClass parent, string name)
         {

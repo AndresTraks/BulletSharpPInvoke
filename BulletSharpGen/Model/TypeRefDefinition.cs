@@ -107,6 +107,40 @@ namespace BulletSharpGen
             }
             else if (Kind != TypeKind.Typedef)
             {
+                if (cursor != null && (Kind == TypeKind.Record || Kind == TypeKind.Unexposed))
+                {
+                    if (cursor.Kind == CursorKind.TypeRef)
+                    {
+                        if (cursor.Referenced.Kind == CursorKind.TemplateTypeParameter)
+                        {
+                            HasTemplateTypeParameter = true;
+                        }
+                    }
+                    else if (cursor.Kind == CursorKind.CxxMethod)
+                    {
+                        var children = cursor.Children.TakeWhile(c => c.Kind != CursorKind.ParmDecl);
+                        var typeRef = children.FirstOrDefault();
+                        if (typeRef != null && typeRef.Kind == CursorKind.TypeRef)
+                        {
+                            if (typeRef.Referenced.Kind == CursorKind.TemplateTypeParameter)
+                            {
+                                HasTemplateTypeParameter = true;
+                            }
+                        }
+                    }
+                    else if (cursor.Kind == CursorKind.ParmDecl)
+                    {
+                        var typeRef = cursor.Children.FirstOrDefault();
+                        if (typeRef != null && typeRef.Kind == CursorKind.TypeRef)
+                        {
+                            if (typeRef.Referenced.Kind == CursorKind.TemplateTypeParameter)
+                            {
+                                HasTemplateTypeParameter = true;
+                            }
+                        }
+                    }
+                }
+
                 // Capture template parameters
                 var firstChild = cursor?.Children.FirstOrDefault();
                 if (firstChild != null && firstChild.Kind == CursorKind.TemplateRef)
@@ -201,69 +235,60 @@ namespace BulletSharpGen
             {
                 case "bool":
                     Kind = TypeKind.Bool;
-                    Name = "bool";
                     break;
                 case "char":
                     Kind = TypeKind.Char_U;
-                    Name = "char";
                     break;
                 case "double":
                     Kind = TypeKind.Double;
-                    Name = "double";
                     break;
                 case "float":
                     Kind = TypeKind.Float;
-                    Name = "float";
                     break;
                 case "int":
                     Kind = TypeKind.Int;
-                    Name = "int";
                     break;
                 case "unsigned char":
                     Kind = TypeKind.UChar;
-                    Name = "unsigned char";
                     break;
                 case "unsigned int":
                     Kind = TypeKind.UInt;
-                    Name = "unsigned int";
                     break;
                 case "void":
                     Kind = TypeKind.Void;
-                    Name = name;
                     break;
                 case "long int":
                     Kind = TypeKind.Long;
-                    Name = "long";
                     break;
                 case "long long int":
                     Kind = TypeKind.LongLong;
-                    Name = "long long";
                     break;
                 case "short int":
                     Kind = TypeKind.Short;
-                    Name = "short";
                     break;
                 case "unsigned long int":
                     Kind = TypeKind.ULong;
-                    Name = "unsigned long";
                     break;
                 case "unsigned long long int":
                     Kind = TypeKind.ULongLong;
-                    Name = "unsigned long long";
                     break;
                 case "unsigned short int":
                     Kind = TypeKind.UShort;
-                    Name = "unsigned short";
                     break;
-                default:
-                    if (name.EndsWith(" *"))
-                    {
-                        Referenced = new TypeRefDefinition(name.Substring(0, name.Length - 2));
-                        Kind = TypeKind.Pointer;
-                        break;
-                    }
-                    Name = name;
-                    break;
+            }
+
+            if (IsBasic)
+            {
+                Name = GetBasicName(name);
+            }
+            else if (name.EndsWith(" *"))
+            {
+                Referenced = new TypeRefDefinition(name.Substring(0, name.Length - 2));
+                Kind = TypeKind.Pointer;
+            }
+            else
+            {
+                Name = name;
             }
         }
 
@@ -287,26 +312,25 @@ namespace BulletSharpGen
             return t;
         }
 
-        public TypeRefDefinition CopyTemplated(IDictionary<string, string> templateParams)
+        public static string GetBasicName(string name)
         {
-            // Clang shows template parameters only as unexposed
-            if (HasTemplateTypeParameter && Kind == TypeKind.Unexposed)
+            switch (name)
             {
-                return new TypeRefDefinition(templateParams[Name]);
+                case "long int":
+                    return "long";
+                case "long long int":
+                    return "long long";
+                case "short int":
+                    return "short";
+                case "unsigned long int":
+                    return "unsigned long";
+                case "unsigned long long int":
+                    return "unsigned long long";
+                case "unsigned short int":
+                    return "unsigned short";
+                default:
+                    return name;
             }
-
-            var t = new TypeRefDefinition
-            {
-                HasTemplateTypeParameter = HasTemplateTypeParameter,
-                IsConst = IsConst,
-                IsIncomplete = IsIncomplete,
-                Name = Name,
-                Referenced = Referenced != null ? Referenced.CopyTemplated(templateParams) : null,
-                TemplateParams = TemplateParams?.Select(p => p.CopyTemplated(templateParams)).ToList(),
-                Target = Target,
-                Kind = Kind
-            };
-            return t;
         }
 
         public static string GetFullyQualifiedName(ClangSharp.Type type, Cursor cursor = null)

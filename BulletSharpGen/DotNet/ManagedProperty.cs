@@ -1,6 +1,6 @@
 ﻿namespace BulletSharpGen
 {
-    public class PropertyDefinition
+    public class ManagedProperty
     {
         public ManagedMethod Getter { get; }
         public ManagedMethod Setter { get; set; }
@@ -20,7 +20,7 @@
         }
 
         // Property from getter method
-        public PropertyDefinition(ManagedMethod getter, string name)
+        public ManagedProperty(ManagedMethod getter, string name)
         {
             Getter = getter;
             Name = name;

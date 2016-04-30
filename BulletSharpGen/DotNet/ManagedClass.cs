@@ -5,11 +5,11 @@ namespace BulletSharpGen
 {
     public class CachedProperty
     {
-        public PropertyDefinition Property { get; private set; }
+        public ManagedProperty Property { get; private set; }
         public string CacheFieldName { get; private set; }
         public RefAccessSpecifier Access { get; set; }
 
-        public CachedProperty(PropertyDefinition property, string cacheFieldName = null)
+        public CachedProperty(ManagedProperty property, string cacheFieldName = null)
         {
             Property = property;
 
@@ -40,7 +40,7 @@ namespace BulletSharpGen
         // members
         public List<ManagedMethod> Methods { get; } = new List<ManagedMethod>();
         public List<ManagedClass> NestedClasses { get; } = new List<ManagedClass>();
-        public List<PropertyDefinition> Properties { get; } = new List<PropertyDefinition>();
+        public List<ManagedProperty> Properties { get; } = new List<ManagedProperty>();
 
         public Dictionary<string, CachedProperty> CachedProperties { get; private set; } = new Dictionary<string, CachedProperty>();
 
