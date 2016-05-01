@@ -7,7 +7,7 @@ extern "C"
 	EXPORT btAxisSweep3* btAxisSweep3_new3(const btVector3* worldAabbMin, const btVector3* worldAabbMax, unsigned short maxHandles, btOverlappingPairCache* pairCache);
 	EXPORT btAxisSweep3* btAxisSweep3_new4(const btVector3* worldAabbMin, const btVector3* worldAabbMax, unsigned short maxHandles, btOverlappingPairCache* pairCache, bool disableRaycastAccelerator);
 	EXPORT unsigned short btAxisSweep3_addHandle(btAxisSweep3* obj, const btVector3* aabbMin, const btVector3* aabbMax, void* pOwner, short collisionFilterGroup, short collisionFilterMask, btDispatcher* dispatcher, void* multiSapProxy);
-	EXPORT btAxisSweep3_Handle* btAxisSweep3_getHandle(btAxisSweep3* obj, unsigned short index);
+	EXPORT btAxisSweep3Internal_unsigned_short_Handle* btAxisSweep3_getHandle(btAxisSweep3* obj, unsigned short index);
 	EXPORT unsigned short btAxisSweep3_getNumHandles(btAxisSweep3* obj);
 	EXPORT const btOverlappingPairCallback* btAxisSweep3_getOverlappingPairUserCallback(btAxisSweep3* obj);
 	//EXPORT void btAxisSweep3_processAllOverlappingPairs(btAxisSweep3* obj, btOverlapCallback* callback);
@@ -23,7 +23,7 @@ extern "C"
 	EXPORT bt32BitAxisSweep3* bt32BitAxisSweep3_new3(const btVector3* worldAabbMin, const btVector3* worldAabbMax, unsigned int maxHandles, btOverlappingPairCache* pairCache);
 	EXPORT bt32BitAxisSweep3* bt32BitAxisSweep3_new4(const btVector3* worldAabbMin, const btVector3* worldAabbMax, unsigned int maxHandles, btOverlappingPairCache* pairCache, bool disableRaycastAccelerator);
 	EXPORT unsigned int bt32BitAxisSweep3_addHandle(bt32BitAxisSweep3* obj, const btVector3* aabbMin, const btVector3* aabbMax, void* pOwner, short collisionFilterGroup, short collisionFilterMask, btDispatcher* dispatcher, void* multiSapProxy);
-	EXPORT bt32BitAxisSweep3_Handle* bt32BitAxisSweep3_getHandle(bt32BitAxisSweep3* obj, unsigned int index);
+	EXPORT btAxisSweep3Internal_unsigned_int_Handle* bt32BitAxisSweep3_getHandle(bt32BitAxisSweep3* obj, unsigned int index);
 	EXPORT unsigned int bt32BitAxisSweep3_getNumHandles(bt32BitAxisSweep3* obj);
 	EXPORT const btOverlappingPairCallback* bt32BitAxisSweep3_getOverlappingPairUserCallback(bt32BitAxisSweep3* obj);
 	//EXPORT void bt32BitAxisSweep3_processAllOverlappingPairs(bt32BitAxisSweep3* obj, btOverlapCallback* callback);

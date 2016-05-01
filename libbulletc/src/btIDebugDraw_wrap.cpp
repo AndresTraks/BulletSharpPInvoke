@@ -12,7 +12,7 @@ btIDebugDrawWrapper::btIDebugDrawWrapper(void* debugDrawGCHandle,
 	p_btIDebugDraw_drawPlane drawPlaneCallback, p_btIDebugDraw_drawSphere drawSphereCallback,
 	p_btIDebugDraw_drawSpherePatch drawSpherePatchCallback,
 	p_btIDebugDraw_drawTransform drawTransformCallback, p_btIDebugDraw_drawTriangle drawTriangleCallback,
-	p_btIDebugDraw_GetDebugMode getDebugModeCallback, pSimpleCallback cb)
+	p_btIDebugDraw_getDebugMode getDebugModeCallback, pSimpleCallback cb)
 {
 	_debugDrawGCHandle = debugDrawGCHandle;
 	_drawAabbCallback = drawAabbCallback;
@@ -221,7 +221,7 @@ btIDebugDrawWrapper* btIDebugDrawWrapper_new(void* debugDrawGCHandle,
 	p_btIDebugDraw_drawPlane drawPlaneCallback, p_btIDebugDraw_drawSphere drawSphereCallback,
 	p_btIDebugDraw_drawSpherePatch drawSpherePatchCallback,
 	p_btIDebugDraw_drawTransform drawTransformCallback, p_btIDebugDraw_drawTriangle drawTriangleCallback,
-	p_btIDebugDraw_GetDebugMode getDebugModeCallback, pSimpleCallback cb)
+	p_btIDebugDraw_getDebugMode getDebugModeCallback, pSimpleCallback cb)
 {
 	return new btIDebugDrawWrapper(debugDrawGCHandle, drawAabbCallback, drawArcCallback,
 		drawBoxCallback, drawCapsuleCallback, drawConeCallback, drawContactPointCallback,

@@ -102,7 +102,7 @@ btCompoundShapeChild* btCompoundShape_getChildList(btCompoundShape* obj)
 	return obj->getChildList();
 }
 
-const btCollisionShape* btCompoundShape_getChildShape(btCompoundShape* obj, int index)
+btCollisionShape* btCompoundShape_getChildShape(btCompoundShape* obj, int index)
 {
 	return obj->getChildShape(index);
 }

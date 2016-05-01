@@ -50,8 +50,7 @@ namespace BulletSharpGen
         }
 
 
-        private void WriteMethodDeclaration(ManagedMethod method, int numParameters, int level, int overloadIndex,
-            ManagedParameter outValueParameter = null)
+        private void WriteMethodDeclaration(ManagedMethod method, int numParameters, int level, int overloadIndex)
         {
             var nativeMethod = method.Native;
 
@@ -106,7 +105,7 @@ namespace BulletSharpGen
                 if (nativeMethod.IsStatic) Write("static ", cs);
                 Write($"{GetTypeNameCS(returnType)} ", cs);
 
-                if (outValueParameter != null)
+                if (method.OutValueParameter != null)
                 {
                     Write("void ", dllImport);
                 }
@@ -153,7 +152,7 @@ namespace BulletSharpGen
             var parametersCs = parameters.Select(p => $"{GetParameterTypeNameCS(p.Native)} {p.Name}");
             WriteLine($"{ListToLines(parametersCs, WriteTo.CS, level + 1)})", cs);
 
-            if (outValueParameter != null) parameters = parameters.Concat(new[] { outValueParameter });
+            if (method.OutValueParameter != null) parameters = parameters.Concat(new[] { method.OutValueParameter });
 
             var parametersDllImport = parameters.Select(p => $"{GetParameterTypeNameDllImport(p.Native)} {p.Native.Name}");
 
@@ -167,8 +166,7 @@ namespace BulletSharpGen
             WriteLine($"{string.Join(", ", parametersDllImport)});", dllImport);
         }
 
-        void WriteMethodDefinition(ManagedMethod method, int numParameters, int overloadIndex, int level,
-            ManagedParameter outValueParameter)
+        void WriteMethodDefinition(ManagedMethod method, int numParameters, int overloadIndex, int level)
         {
             var nativeMethod = method.Native;
             if (nativeMethod.IsConstructor)
@@ -183,12 +181,12 @@ namespace BulletSharpGen
             {
                 if (!nativeMethod.IsVoid)
                 {
-                    if (outValueParameter != null)
+                    if (method.OutValueParameter != null)
                     {
                         // Temporary variable
                         WriteLine(string.Format("{0} {1};",
-                            DotNetParser.GetManaged(outValueParameter.Native.Type.Referenced.Target).Name,
-                            outValueParameter.Name));
+                            DotNetParser.GetManaged(method.OutValueParameter.Native.Type.Referenced.Target).Name,
+                            method.OutValueParameter.Name));
                         WriteTabs(level + 2);
                     }
                     else
@@ -209,9 +207,9 @@ namespace BulletSharpGen
 
             var parameters = method.Parameters.Take(numParameters)
                 .Select(p => GetParameterMarshal(p));
-            if (outValueParameter != null)
+            if (method.OutValueParameter != null)
             {
-                parameters = parameters.Concat(new[] { $"out {outValueParameter.Name }" });
+                parameters = parameters.Concat(new[] { $"out {method.OutValueParameter.Name }" });
             }
 
             // The first parameter is the instance pointer (if not constructor or static method)
@@ -264,9 +262,9 @@ namespace BulletSharpGen
             }
 
             // Return temporary variable
-            if (outValueParameter != null)
+            if (method.OutValueParameter != null)
             {
-                WriteLine(level + 2, $"return {outValueParameter.Name};");
+                WriteLine(level + 2, $"return {method.OutValueParameter.Name};");
             }
         }
 
@@ -277,8 +275,7 @@ namespace BulletSharpGen
             int numOptionalParamsTotal = nativeMethod.NumOptionalParameters;
             int numParameters = method.Parameters.Length - numOptionalParamsTotal + numOptionalParams;
 
-            // TODO: outValueParameter
-            WriteMethodDeclaration(method, numParameters, level, overloadIndex, null);
+            WriteMethodDeclaration(method, numParameters, level, overloadIndex);
 
             // Skip methods wrapped by C# properties
             if (method.Property == null)
@@ -294,8 +291,7 @@ namespace BulletSharpGen
                     WriteTabs(level + 2, WriteTo.CS);
                 }
 
-                // TODO: outValueParameter
-                WriteMethodDefinition(method, numParameters, overloadIndex, level, null);
+                WriteMethodDefinition(method, numParameters, overloadIndex, level);
                 WriteLine(level + 1, "}", WriteTo.CS);
                 hasCSWhiteSpace = false;
             }

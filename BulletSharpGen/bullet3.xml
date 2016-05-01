@@ -419,7 +419,9 @@ else
       <Class Name="btStaticPlaneShapeData" IsExcluded="true" />
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btConvexHullShape.h">
-      <Class Name="btConvexHullShape" />
+      <Class Name="btConvexHullShape">
+        <Method Name="getPoints" IsExcluded="true" />
+      </Class>
       <Class Name="btConvexHullShapeData" IsExcluded="true" />
     </Header>
     <Header Path="BulletCollision/CollisionShapes/btStridingMeshInterface.h">

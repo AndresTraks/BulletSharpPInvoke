@@ -7,7 +7,7 @@ btConvex2dShape* btConvex2dShape_new(btConvexShape* convexChildShape)
 	return new btConvex2dShape(convexChildShape);
 }
 
-const btConvexShape* btConvex2dShape_getChildShape(btConvex2dShape* obj)
+btConvexShape* btConvex2dShape_getChildShape(btConvex2dShape* obj)
 {
 	return obj->getChildShape();
 }

@@ -6,7 +6,7 @@
 
 HACD_HACD* HACD_HACD_new()
 {
-	return new HACD_HACD();
+	return new HACD::HACD();
 }
 
 bool HACD_HACD_Compute(HACD_HACD* obj)

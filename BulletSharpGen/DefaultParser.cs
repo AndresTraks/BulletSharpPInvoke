@@ -31,6 +31,7 @@ namespace BulletSharpGen
         {
             ResolveReferences();
             CreateFieldAccessors();
+            CreateStructOutParameters();
             MapSymbols();
             ParseEnums();
             SetClassProperties();
@@ -766,7 +767,47 @@ namespace BulletSharpGen
             }
         }
 
-        void ResolveInclude(TypeRefDefinition type, HeaderDefinition parentHeader)
+        /// <summary>
+        /// If a method returns a type that is marshalled as struct,
+        /// then this is incompatible with C.
+        /// Append an out parameter that will receive the struct.
+        /// </summary>
+        private void CreateStructOutParameters()
+        {
+            foreach (var method in Project.ClassDefinitions.Values.SelectMany(c => c.Methods))
+            {
+                var type = method.ReturnType;
+                TypeRefDefinition targetType;
+                if (type.Target != null && type.Target.MarshalAsStruct)
+                {
+                    targetType = type;
+                }
+                else if (type.Kind == TypeKind.LValueReference &&
+                    type.Referenced.Target != null && type.Referenced.Target.MarshalAsStruct)
+                {
+                    targetType = type.Referenced;
+                }
+                else
+                {
+                    continue;
+                }
+
+                targetType = targetType.Copy();
+                targetType.IsConst = false;
+
+                var outType = new TypeRefDefinition
+                {
+                    Kind = TypeKind.Pointer,
+                    Referenced = targetType
+                };
+                method.OutValueParameter = new ParameterDefinition("value", outType)
+                {
+                    MarshalDirection = MarshalDirection.Out
+                };
+            }
+        }
+
+        private void ResolveInclude(TypeRefDefinition type, HeaderDefinition parentHeader)
         {
             switch (type.Kind)
             {

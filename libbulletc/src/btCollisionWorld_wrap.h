@@ -205,8 +205,8 @@ extern "C"
 	EXPORT btBroadphaseInterface* btCollisionWorld_getBroadphase(btCollisionWorld* obj);
 	EXPORT btAlignedObjectArray_btCollisionObjectPtr* btCollisionWorld_getCollisionObjectArray(btCollisionWorld* obj);
 	EXPORT btIDebugDraw* btCollisionWorld_getDebugDrawer(btCollisionWorld* obj);
-	EXPORT const btDispatcher* btCollisionWorld_getDispatcher(btCollisionWorld* obj);
-	EXPORT const btDispatcherInfo* btCollisionWorld_getDispatchInfo(btCollisionWorld* obj);
+	EXPORT btDispatcher* btCollisionWorld_getDispatcher(btCollisionWorld* obj);
+	EXPORT btDispatcherInfo* btCollisionWorld_getDispatchInfo(btCollisionWorld* obj);
 	EXPORT bool btCollisionWorld_getForceUpdateAllAabbs(btCollisionWorld* obj);
 	EXPORT int btCollisionWorld_getNumCollisionObjects(btCollisionWorld* obj);
 	EXPORT btOverlappingPairCache* btCollisionWorld_getPairCache(btCollisionWorld* obj);

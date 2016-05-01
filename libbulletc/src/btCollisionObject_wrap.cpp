@@ -111,19 +111,19 @@ int btCollisionObject_getInternalType(btCollisionObject* obj)
 	return obj->getInternalType();
 }
 
-void btCollisionObject_getInterpolationAngularVelocity(btCollisionObject* obj, btVector3* angvel)
+void btCollisionObject_getInterpolationAngularVelocity(btCollisionObject* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(angvel, &obj->getInterpolationAngularVelocity());
+	BTVECTOR3_COPY(value, &obj->getInterpolationAngularVelocity());
 }
 
-void btCollisionObject_getInterpolationLinearVelocity(btCollisionObject* obj, btVector3* linvel)
+void btCollisionObject_getInterpolationLinearVelocity(btCollisionObject* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(linvel, &obj->getInterpolationLinearVelocity());
+	BTVECTOR3_COPY(value, &obj->getInterpolationLinearVelocity());
 }
 
-void btCollisionObject_getInterpolationWorldTransform(btCollisionObject* obj, btTransform* trans)
+void btCollisionObject_getInterpolationWorldTransform(btCollisionObject* obj, btTransform* value)
 {
-	BTTRANSFORM_COPY(trans, &obj->getInterpolationWorldTransform());
+	BTTRANSFORM_COPY(value, &obj->getInterpolationWorldTransform());
 }
 
 int btCollisionObject_getIslandTag(btCollisionObject* obj)
@@ -151,9 +151,9 @@ void* btCollisionObject_getUserPointer(btCollisionObject* obj)
 	return obj->getUserPointer();
 }
 
-void btCollisionObject_getWorldTransform(btCollisionObject* obj, btTransform* worldTrans)
+void btCollisionObject_getWorldTransform(btCollisionObject* obj, btTransform* value)
 {
-	BTTRANSFORM_COPY(worldTrans, &obj->getWorldTransform());
+	BTTRANSFORM_COPY(value, &obj->getWorldTransform());
 }
 
 bool btCollisionObject_hasAnisotropicFriction(btCollisionObject* obj)

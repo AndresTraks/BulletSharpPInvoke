@@ -10,7 +10,7 @@ extern "C"
 	EXPORT void btCollisionShape_getAnisotropicRollingFrictionDirection(btCollisionShape* obj, btVector3* value);
 	EXPORT void btCollisionShape_getBoundingSphere(btCollisionShape* obj, btVector3* center, btScalar* radius);
 	EXPORT btScalar btCollisionShape_getContactBreakingThreshold(btCollisionShape* obj, btScalar defaultContactThresholdFactor);
-	EXPORT void btCollisionShape_getLocalScaling(btCollisionShape* obj, btVector3* scaling);
+	EXPORT void btCollisionShape_getLocalScaling(btCollisionShape* obj, btVector3* value);
 	EXPORT btScalar btCollisionShape_getMargin(btCollisionShape* obj);
 	EXPORT const char* btCollisionShape_getName(btCollisionShape* obj);
 	EXPORT int btCollisionShape_getShapeType(btCollisionShape* obj);

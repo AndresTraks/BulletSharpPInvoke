@@ -26,7 +26,8 @@ bool btBulletWorldImporter_loadFile(btBulletWorldImporter* obj, const char* file
 	return obj->loadFile(fileName);
 }
 
-bool btBulletWorldImporter_loadFile2(btBulletWorldImporter* obj, const char* fileName, const char* preSwapFilenameOut)
+bool btBulletWorldImporter_loadFile2(btBulletWorldImporter* obj, const char* fileName,
+	const char* preSwapFilenameOut)
 {
 	return obj->loadFile(fileName, preSwapFilenameOut);
 }

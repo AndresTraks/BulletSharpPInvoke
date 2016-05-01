@@ -22,9 +22,9 @@ btMultiBodyPoint2Point* btMultiBodyPoint2Point_new2(btMultiBody* bodyA, int link
 		BTVECTOR3_USE(pivotInB));
 }
 
-void btMultiBodyPoint2Point_getPivotInB(btMultiBodyPoint2Point* obj, btVector3* pivotInB)
+void btMultiBodyPoint2Point_getPivotInB(btMultiBodyPoint2Point* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(pivotInB, &obj->getPivotInB());
+	BTVECTOR3_COPY(value, &obj->getPivotInB());
 }
 
 void btMultiBodyPoint2Point_setPivotInB(btMultiBodyPoint2Point* obj, const btVector3* pivotInB)

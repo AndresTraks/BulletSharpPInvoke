@@ -10,7 +10,7 @@ extern "C"
 	EXPORT void btDynamicsWorld_clearForces(btDynamicsWorld* obj);
 	EXPORT btTypedConstraint* btDynamicsWorld_getConstraint(btDynamicsWorld* obj, int index);
 	EXPORT btConstraintSolver* btDynamicsWorld_getConstraintSolver(btDynamicsWorld* obj);
-	EXPORT void btDynamicsWorld_getGravity(btDynamicsWorld* obj, btVector3* gravity);
+	EXPORT void btDynamicsWorld_getGravity(btDynamicsWorld* obj, btVector3* value);
 	EXPORT int btDynamicsWorld_getNumConstraints(btDynamicsWorld* obj);
 	EXPORT btContactSolverInfo* btDynamicsWorld_getSolverInfo(btDynamicsWorld* obj);
 	EXPORT btDynamicsWorldType btDynamicsWorld_getWorldType(btDynamicsWorld* obj);

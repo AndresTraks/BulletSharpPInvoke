@@ -2,7 +2,7 @@
 
 extern "C"
 {
-	EXPORT void btConvexInternalShape_getImplicitShapeDimensions(btConvexInternalShape* obj, btVector3* dimensions);
+	EXPORT void btConvexInternalShape_getImplicitShapeDimensions(btConvexInternalShape* obj, btVector3* value);
 	EXPORT void btConvexInternalShape_getLocalScalingNV(btConvexInternalShape* obj, btVector3* value);
 	EXPORT btScalar btConvexInternalShape_getMarginNV(btConvexInternalShape* obj);
 	EXPORT void btConvexInternalShape_setImplicitShapeDimensions(btConvexInternalShape* obj, const btVector3* dimensions);

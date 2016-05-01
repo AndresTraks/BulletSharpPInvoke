@@ -14,7 +14,7 @@
 #define p_btIDebugDraw_drawSpherePatch void*
 #define p_btIDebugDraw_drawTransform void*
 #define p_btIDebugDraw_drawTriangle void*
-#define p_btIDebugDraw_GetDebugMode void*
+#define p_btIDebugDraw_getDebugMode void*
 #define pSimpleCallback void*
 
 #define btIDebugDrawWrapper void
@@ -46,7 +46,7 @@ typedef void (*p_btIDebugDraw_drawSpherePatch)(const btVector3* center, const bt
 typedef void (*p_btIDebugDraw_drawTransform)(const btTransform* transform, btScalar orthoLen);
 typedef void (*p_btIDebugDraw_drawTriangle)(const btVector3* v0, const btVector3* v1,
 	const btVector3* v2, const btVector3* color, btScalar __unnamed4);
-typedef int (*p_btIDebugDraw_GetDebugMode)();
+typedef int (*p_btIDebugDraw_getDebugMode)();
 typedef void (*pSimpleCallback)(int x);
 
 class btIDebugDrawWrapper : public btIDebugDraw
@@ -65,7 +65,7 @@ private:
 	p_btIDebugDraw_drawSpherePatch _drawSpherePatchCallback;
 	p_btIDebugDraw_drawTransform _drawTransformCallback;
 	p_btIDebugDraw_drawTriangle _drawTriangleCallback;
-	p_btIDebugDraw_GetDebugMode _getDebugModeCallback;
+	p_btIDebugDraw_getDebugMode _getDebugModeCallback;
 
 public:
 	void* _debugDrawGCHandle;
@@ -80,7 +80,7 @@ public:
 		p_btIDebugDraw_drawCylinder drawCylinderCallback, p_btIDebugDraw_drawLine drawLineCallback,
 		p_btIDebugDraw_drawPlane drawPlaneCallback, p_btIDebugDraw_drawSphere drawSphereCallback,
 		p_btIDebugDraw_drawSpherePatch drawSpherePatchCallback, p_btIDebugDraw_drawTransform drawTransformCallback,
-		p_btIDebugDraw_drawTriangle drawTriangleCallback, p_btIDebugDraw_GetDebugMode getDebugModeCallback,
+		p_btIDebugDraw_drawTriangle drawTriangleCallback, p_btIDebugDraw_getDebugMode getDebugModeCallback,
 		pSimpleCallback cb);
 
 	virtual void draw3dText(const btVector3& location, const char* textString);
@@ -148,7 +148,7 @@ extern "C"
 		p_btIDebugDraw_drawPlane drawPlaneCallback, p_btIDebugDraw_drawSphere drawSphereCallback,
 		p_btIDebugDraw_drawSpherePatch drawSpherePatchCallback,
 		p_btIDebugDraw_drawTransform drawTransformCallback, p_btIDebugDraw_drawTriangle drawTriangleCallback,
-		p_btIDebugDraw_GetDebugMode getDebugModeCallback, pSimpleCallback cb);
+		p_btIDebugDraw_getDebugMode getDebugModeCallback, pSimpleCallback cb);
 	EXPORT void* btIDebugDrawWrapper_getGCHandle(btIDebugDrawWrapper* obj);
 
 	EXPORT void btIDebugDraw_delete(btIDebugDraw* obj);

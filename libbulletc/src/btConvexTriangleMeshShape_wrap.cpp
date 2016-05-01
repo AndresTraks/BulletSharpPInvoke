@@ -26,7 +26,7 @@ void btConvexTriangleMeshShape_calculatePrincipalAxisTransform(btConvexTriangleM
 	BTVECTOR3_DEF_OUT(inertia);
 }
 
-const btStridingMeshInterface* btConvexTriangleMeshShape_getMeshInterface(btConvexTriangleMeshShape* obj)
+btStridingMeshInterface* btConvexTriangleMeshShape_getMeshInterface(btConvexTriangleMeshShape* obj)
 {
 	return obj->getMeshInterface();
 }

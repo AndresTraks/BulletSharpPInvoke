@@ -11,6 +11,8 @@ namespace BulletSharpGen
         public ManagedParameter[] Parameters { get; set; }
         public ManagedProperty Property { get; set; } // property that wraps this get/set method
 
+        public ManagedParameter OutValueParameter { get; set; }
+
         public ManagedMethod(MethodDefinition nativeMethod, ManagedClass parent, string name)
         {
             Native = nativeMethod;
@@ -18,6 +20,10 @@ namespace BulletSharpGen
             Name = name;
 
             Parameters = nativeMethod.Parameters.Select(p => new ManagedParameter(p)).ToArray();
+            if (nativeMethod.OutValueParameter != null)
+            {
+                OutValueParameter = new ManagedParameter(nativeMethod.OutValueParameter);
+            }
 
             if (parent != null)
             {

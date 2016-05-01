@@ -48,7 +48,8 @@ unsigned short btAxisSweep3_addHandle(btAxisSweep3* obj, const btVector3* aabbMi
 		collisionFilterGroup, collisionFilterMask, dispatcher, multiSapProxy);
 }
 
-btAxisSweep3_Handle* btAxisSweep3_getHandle(btAxisSweep3* obj, unsigned short index)
+btAxisSweep3Internal_unsigned_short_Handle* btAxisSweep3_getHandle(btAxisSweep3* obj,
+	unsigned short index)
 {
 	return obj->getHandle(index);
 }
@@ -60,7 +61,7 @@ unsigned short btAxisSweep3_getNumHandles(btAxisSweep3* obj)
 
 const btOverlappingPairCallback* btAxisSweep3_getOverlappingPairUserCallback(btAxisSweep3* obj)
 {
-	return const_cast<btOverlappingPairCallback*>(obj->getOverlappingPairUserCallback());
+	return obj->getOverlappingPairUserCallback();
 }
 /*
 void btAxisSweep3_processAllOverlappingPairs(btAxisSweep3* obj, btOverlapCallback* callback)
@@ -153,7 +154,7 @@ unsigned int bt32BitAxisSweep3_addHandle(bt32BitAxisSweep3* obj, const btVector3
 		collisionFilterGroup, collisionFilterMask, dispatcher, multiSapProxy);
 }
 
-bt32BitAxisSweep3_Handle* bt32BitAxisSweep3_getHandle(bt32BitAxisSweep3* obj,
+btAxisSweep3Internal_unsigned_int_Handle* bt32BitAxisSweep3_getHandle(bt32BitAxisSweep3* obj,
 	unsigned int index)
 {
 	return obj->getHandle(index);
@@ -167,7 +168,7 @@ unsigned int bt32BitAxisSweep3_getNumHandles(bt32BitAxisSweep3* obj)
 const btOverlappingPairCallback* bt32BitAxisSweep3_getOverlappingPairUserCallback(
 	bt32BitAxisSweep3* obj)
 {
-	return const_cast<btOverlappingPairCallback*>(obj->getOverlappingPairUserCallback());
+	return obj->getOverlappingPairUserCallback();
 }
 /*
 void bt32BitAxisSweep3_processAllOverlappingPairs(bt32BitAxisSweep3* obj, btOverlapCallback* callback)

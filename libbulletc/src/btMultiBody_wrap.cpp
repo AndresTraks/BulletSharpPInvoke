@@ -194,9 +194,9 @@ void btMultiBody_getBaseForce(btMultiBody* obj, btVector3* value)
 	BTVECTOR3_COPY(value, &obj->getBaseForce());
 }
 
-void btMultiBody_getBaseInertia(btMultiBody* obj, btVector3* inertia)
+void btMultiBody_getBaseInertia(btMultiBody* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(inertia, &obj->getBaseInertia());
+	BTVECTOR3_COPY(value, &obj->getBaseInertia());
 }
 
 btScalar btMultiBody_getBaseMass(btMultiBody* obj)
@@ -209,14 +209,14 @@ const char* btMultiBody_getBaseName(btMultiBody* obj)
 	return obj->getBaseName();
 }
 
-void btMultiBody_getBaseOmega(btMultiBody* obj, btVector3* omega)
+void btMultiBody_getBaseOmega(btMultiBody* obj, btVector3* value)
 {
-	BTVECTOR3_SET(omega, obj->getBaseOmega());
+	BTVECTOR3_SET(value, obj->getBaseOmega());
 }
 
-void btMultiBody_getBasePos(btMultiBody* obj, btVector3* pos)
+void btMultiBody_getBasePos(btMultiBody* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(pos, &obj->getBasePos());
+	BTVECTOR3_COPY(value, &obj->getBasePos());
 }
 
 void btMultiBody_getBaseTorque(btMultiBody* obj, btVector3* value)
@@ -224,14 +224,14 @@ void btMultiBody_getBaseTorque(btMultiBody* obj, btVector3* value)
 	BTVECTOR3_COPY(value, &obj->getBaseTorque());
 }
 
-void btMultiBody_getBaseVel(btMultiBody* obj, btVector3* vel)
+void btMultiBody_getBaseVel(btMultiBody* obj, btVector3* value)
 {
-	BTVECTOR3_SET(vel, obj->getBaseVel());
+	BTVECTOR3_SET(value, obj->getBaseVel());
 }
 
-void btMultiBody_getBaseWorldTransform(btMultiBody* obj, btTransform* tr)
+void btMultiBody_getBaseWorldTransform(btMultiBody* obj, btTransform* value)
 {
-	BTTRANSFORM_SET(tr, obj->getBaseWorldTransform());
+	BTTRANSFORM_SET(value, obj->getBaseWorldTransform());
 }
 
 bool btMultiBody_getCanSleep(btMultiBody* obj)
@@ -359,9 +359,9 @@ const btScalar* btMultiBody_getVelocityVector(btMultiBody* obj)
 	return obj->getVelocityVector();
 }
 
-void btMultiBody_getWorldToBaseRot(btMultiBody* obj, btQuaternion* rot)
+void btMultiBody_getWorldToBaseRot(btMultiBody* obj, btQuaternion* value)
 {
-	BTQUATERNION_COPY(rot, &obj->getWorldToBaseRot());
+	BTQUATERNION_COPY(value, &obj->getWorldToBaseRot());
 }
 
 void btMultiBody_goToSleep(btMultiBody* obj)

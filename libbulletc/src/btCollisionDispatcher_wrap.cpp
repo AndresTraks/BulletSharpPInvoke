@@ -14,7 +14,7 @@ void btCollisionDispatcher_defaultNearCallback(btBroadphasePair* collisionPair, 
 	btCollisionDispatcher::defaultNearCallback(*collisionPair, *dispatcher, *dispatchInfo);
 }
 
-const btCollisionConfiguration* btCollisionDispatcher_getCollisionConfiguration(btCollisionDispatcher* obj)
+btCollisionConfiguration* btCollisionDispatcher_getCollisionConfiguration(btCollisionDispatcher* obj)
 {
 	return obj->getCollisionConfiguration();
 }

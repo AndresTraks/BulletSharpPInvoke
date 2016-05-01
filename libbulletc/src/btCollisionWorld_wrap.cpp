@@ -743,12 +743,12 @@ btIDebugDraw* btCollisionWorld_getDebugDrawer(btCollisionWorld* obj)
 	return obj->getDebugDrawer();
 }
 
-const btDispatcher* btCollisionWorld_getDispatcher(btCollisionWorld* obj)
+btDispatcher* btCollisionWorld_getDispatcher(btCollisionWorld* obj)
 {
 	return obj->getDispatcher();
 }
 
-const btDispatcherInfo* btCollisionWorld_getDispatchInfo(btCollisionWorld* obj)
+btDispatcherInfo* btCollisionWorld_getDispatchInfo(btCollisionWorld* obj)
 {
 	return &obj->getDispatchInfo();
 }

@@ -2,6 +2,7 @@
 #include <BulletDynamics/ConstraintSolver/btTypedConstraint.h>
 #include <BulletDynamics/Dynamics/btActionInterface.h>
 #include <BulletDynamics/Dynamics/btDynamicsWorld.h>
+#include <BulletDynamics/Dynamics/btRigidBody.h>
 
 #include "conversion.h"
 #include "btDynamicsWorld_wrap.h"
@@ -48,9 +49,9 @@ btConstraintSolver* btDynamicsWorld_getConstraintSolver(btDynamicsWorld* obj)
 	return obj->getConstraintSolver();
 }
 
-void btDynamicsWorld_getGravity(btDynamicsWorld* obj, btVector3* gravity)
+void btDynamicsWorld_getGravity(btDynamicsWorld* obj, btVector3* value)
 {
-	BTVECTOR3_SET(gravity, obj->getGravity());
+	BTVECTOR3_SET(value, obj->getGravity());
 }
 
 int btDynamicsWorld_getNumConstraints(btDynamicsWorld* obj)

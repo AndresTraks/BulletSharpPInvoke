@@ -104,6 +104,7 @@
     <Compile Include="DotNetWriter.cs" />
     <Compile Include="DotNet\ManagedHeader.cs" />
     <Compile Include="DotNet\ManagedParameter.cs" />
+    <Compile Include="DotNet\ManagedProperty.cs" />
     <Compile Include="ExtensionsWriter.cs" />
     <Compile Include="FilterWriter.cs" />
     <Compile Include="Model\ClassDefinition.cs" />
@@ -115,7 +116,6 @@
     <Compile Include="Model\HeaderDefinition.cs" />
     <Compile Include="Model\MethodDefinition.cs" />
     <Compile Include="Model\ParameterDefinition.cs" />
-    <Compile Include="Model\PropertyDefinition.cs" />
     <Compile Include="Model\TypeRefDefinition.cs" />
     <Compile Include="PInvokeWriter.cs" />
     <Compile Include="Project\WrapperProjectXmlReader.cs" />
@@ -131,6 +131,7 @@
   <ItemGroup>
     <Content Include="bullet3.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>

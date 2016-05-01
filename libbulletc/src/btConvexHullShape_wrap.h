@@ -9,7 +9,6 @@ extern "C"
 	EXPORT void btConvexHullShape_addPoint(btConvexHullShape* obj, const btVector3* point);
 	EXPORT void btConvexHullShape_addPoint2(btConvexHullShape* obj, const btVector3* point, bool recalculateLocalAabb);
 	EXPORT int btConvexHullShape_getNumPoints(btConvexHullShape* obj);
-	EXPORT const btVector3* btConvexHullShape_getPoints(btConvexHullShape* obj);
 	EXPORT void btConvexHullShape_getScaledPoint(btConvexHullShape* obj, int i, btVector3* value);
-	EXPORT const btVector3* btConvexHullShape_getUnscaledPoints(btConvexHullShape* obj);
+	EXPORT btVector3* btConvexHullShape_getUnscaledPoints(btConvexHullShape* obj);
 }

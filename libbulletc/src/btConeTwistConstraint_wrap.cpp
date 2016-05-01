@@ -115,9 +115,9 @@ btScalar btConeTwistConstraint_getMaxMotorImpulse(btConeTwistConstraint* obj)
 	return obj->getMaxMotorImpulse();
 }
 
-void btConeTwistConstraint_getMotorTarget(btConeTwistConstraint* obj, btQuaternion* q)
+void btConeTwistConstraint_getMotorTarget(btConeTwistConstraint* obj, btQuaternion* value)
 {
-	BTQUATERNION_COPY(q, &obj->getMotorTarget());
+	BTQUATERNION_COPY(value, &obj->getMotorTarget());
 }
 
 void btConeTwistConstraint_GetPointForAngle(btConeTwistConstraint* obj, btScalar fAngleInRadians,

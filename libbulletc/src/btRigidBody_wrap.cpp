@@ -326,9 +326,9 @@ btScalar btRigidBody_getAngularDamping(btRigidBody* obj)
 	return obj->getAngularDamping();
 }
 
-void btRigidBody_getAngularFactor(btRigidBody* obj, btVector3* angFac)
+void btRigidBody_getAngularFactor(btRigidBody* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(angFac, &obj->getAngularFactor());
+	BTVECTOR3_COPY(value, &obj->getAngularFactor());
 }
 
 btScalar btRigidBody_getAngularSleepingThreshold(btRigidBody* obj)
@@ -336,9 +336,9 @@ btScalar btRigidBody_getAngularSleepingThreshold(btRigidBody* obj)
 	return obj->getAngularSleepingThreshold();
 }
 
-void btRigidBody_getAngularVelocity(btRigidBody* obj, btVector3* ang_vel)
+void btRigidBody_getAngularVelocity(btRigidBody* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(ang_vel, &obj->getAngularVelocity());
+	BTVECTOR3_COPY(value, &obj->getAngularVelocity());
 }
 
 btBroadphaseProxy* btRigidBody_getBroadphaseProxy(btRigidBody* obj)
@@ -351,9 +351,9 @@ void btRigidBody_getCenterOfMassPosition(btRigidBody* obj, btVector3* value)
 	BTVECTOR3_COPY(value, &obj->getCenterOfMassPosition());
 }
 
-void btRigidBody_getCenterOfMassTransform(btRigidBody* obj, btTransform* xform)
+void btRigidBody_getCenterOfMassTransform(btRigidBody* obj, btTransform* value)
 {
-	BTTRANSFORM_COPY(xform, &obj->getCenterOfMassTransform());
+	BTTRANSFORM_COPY(value, &obj->getCenterOfMassTransform());
 }
 
 btTypedConstraint* btRigidBody_getConstraintRef(btRigidBody* obj, int index)
@@ -376,14 +376,14 @@ int btRigidBody_getFrictionSolverType(btRigidBody* obj)
 	return obj->m_frictionSolverType;
 }
 
-void btRigidBody_getGravity(btRigidBody* obj, btVector3* acceleration)
+void btRigidBody_getGravity(btRigidBody* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(acceleration, &obj->getGravity());
+	BTVECTOR3_COPY(value, &obj->getGravity());
 }
 
-void btRigidBody_getInvInertiaDiagLocal(btRigidBody* obj, btVector3* diagInvInertia)
+void btRigidBody_getInvInertiaDiagLocal(btRigidBody* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(diagInvInertia, &obj->getInvInertiaDiagLocal());
+	BTVECTOR3_COPY(value, &obj->getInvInertiaDiagLocal());
 }
 
 void btRigidBody_getInvInertiaTensorWorld(btRigidBody* obj, btMatrix3x3* value)
@@ -401,9 +401,9 @@ btScalar btRigidBody_getLinearDamping(btRigidBody* obj)
 	return obj->getLinearDamping();
 }
 
-void btRigidBody_getLinearFactor(btRigidBody* obj, btVector3* linearFactor)
+void btRigidBody_getLinearFactor(btRigidBody* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(linearFactor, &obj->getLinearFactor());
+	BTVECTOR3_COPY(value, &obj->getLinearFactor());
 }
 
 btScalar btRigidBody_getLinearSleepingThreshold(btRigidBody* obj)
@@ -411,9 +411,9 @@ btScalar btRigidBody_getLinearSleepingThreshold(btRigidBody* obj)
 	return obj->getLinearSleepingThreshold();
 }
 
-void btRigidBody_getLinearVelocity(btRigidBody* obj, btVector3* lin_vel)
+void btRigidBody_getLinearVelocity(btRigidBody* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(lin_vel, &obj->getLinearVelocity());
+	BTVECTOR3_COPY(value, &obj->getLinearVelocity());
 }
 
 void btRigidBody_getLocalInertia(btRigidBody* obj, btVector3* value)

@@ -20,14 +20,14 @@ btGearConstraint* btGearConstraint_new2(btRigidBody* rbA, btRigidBody* rbB, cons
 		ratio);
 }
 
-void btGearConstraint_getAxisA(btGearConstraint* obj, btVector3* axisA)
+void btGearConstraint_getAxisA(btGearConstraint* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(axisA, &obj->getAxisA());
+	BTVECTOR3_COPY(value, &obj->getAxisA());
 }
 
-void btGearConstraint_getAxisB(btGearConstraint* obj, btVector3* axisB)
+void btGearConstraint_getAxisB(btGearConstraint* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(axisB, &obj->getAxisB());
+	BTVECTOR3_COPY(value, &obj->getAxisB());
 }
 
 btScalar btGearConstraint_getRatio(btGearConstraint* obj)

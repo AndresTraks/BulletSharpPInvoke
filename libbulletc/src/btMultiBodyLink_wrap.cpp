@@ -1,3 +1,4 @@
+#include <BulletDynamics/Featherstone/btMultiBodyJointFeedback.h>
 #include <BulletDynamics/Featherstone/btMultiBodyLink.h>
 #include <BulletDynamics/Featherstone/btMultiBodyLinkCollider.h>
 

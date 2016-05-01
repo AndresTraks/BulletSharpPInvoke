@@ -31,8 +31,7 @@ namespace BulletSharpGen
             };
         }
 
-        private void WriteMethodDeclaration(MethodDefinition method, int numParameters, int level, int overloadIndex,
-            ParameterDefinition outValueParameter = null)
+        private void WriteMethodDeclaration(MethodDefinition method, int numParameters, int level, int overloadIndex)
         {
             Write(1, "EXPORT ", WriteTo.Header);
 
@@ -41,7 +40,7 @@ namespace BulletSharpGen
             {
                 Write($"{GetFullNameC(method.Parent)}* ", WriteTo.Header | WriteTo.Source);
             }
-            else if (outValueParameter != null)
+            else if (method.OutValueParameter != null)
             {
                 Write("void ", WriteTo.Header | WriteTo.Source);
             }
@@ -64,7 +63,9 @@ namespace BulletSharpGen
             // Parameters
             var parameters = method.Parameters.Take(numParameters);
 
-            if (outValueParameter != null) parameters = parameters.Concat(new[] { outValueParameter });
+            if (method.OutValueParameter != null) parameters = parameters.Concat(new[] {
+                method.OutValueParameter
+            });
 
             var parametersCpp = parameters.Select(p => $"{GetTypeNameC(p.Type)} {p.Name}");
 
@@ -79,8 +80,7 @@ namespace BulletSharpGen
             WriteLine($"{ListToLines(parametersCpp, WriteTo.Source)})", WriteTo.Source);
         }
 
-        void WriteMethodDefinition(MethodDefinition method, int numParameters, int overloadIndex, int level,
-            ParameterDefinition outValueParameter)
+        void WriteMethodDefinition(MethodDefinition method, int numParameters, int level, int overloadIndex)
         {
             To = WriteTo.Source;
 
@@ -97,11 +97,10 @@ namespace BulletSharpGen
             if (field != null)
             {
                 string fieldName = $"{qualifier}{field.Name}";
-                // TODO:
                 if (field.Type.Target != null && field.Type.Target.MarshalAsStruct)
                 {
                     string macroPrefix = field.Type.Name.ToUpper();
-                    string paramName = (outValueParameter != null ? outValueParameter : method.Parameters[0]).Name;
+                    string paramName = (method.OutValueParameter != null ? method.OutValueParameter : method.Parameters[0]).Name;
                     if (method == field.Getter)
                     {
                         WriteLine(1, $"{macroPrefix}_SET({paramName}, {fieldName});");
@@ -166,16 +165,16 @@ namespace BulletSharpGen
                 {
                     var returnType = method.ReturnType.Canonical;
 
-                    if (outValueParameter != null)
+                    if (method.OutValueParameter != null)
                     {
-                        string macroPrefix = outValueParameter.Type.Referenced.Name.ToUpper();
+                        string macroPrefix = method.OutValueParameter.Type.Referenced.Name.ToUpper();
                         if (returnType.Kind == TypeKind.LValueReference)
                         {
-                            Write($"{macroPrefix}_COPY({outValueParameter.Name}, &");
+                            Write($"{macroPrefix}_COPY({method.OutValueParameter.Name}, &");
                         }
                         else
                         {
-                            Write($"{macroPrefix}_SET({outValueParameter.Name}, ");
+                            Write($"{macroPrefix}_SET({method.OutValueParameter.Name}, ");
                         }
                     }
                     else
@@ -232,7 +231,7 @@ namespace BulletSharpGen
                 });
             Write("(");
             Write($"{ListToLines(originalParams, WriteTo.Source, 1)})");
-            if (outValueParameter != null)
+            if (method.OutValueParameter != null)
             {
                 Write(")");
             }
@@ -270,52 +269,16 @@ namespace BulletSharpGen
                 _hasCppClassSeparatingWhitespace = true;
             }
 
-            // Can't return whole structures, so use an output parameter
-            // referencing the struct that will hold the return value.
-            // "v method()" -> "void method(v* value)"
-            // "v& method()" -> "void method(v* value)"
-            ParameterDefinition outValueParameter = null;
-            var returnType = method.ReturnType;
-            if ((returnType.Target != null && returnType.Target.MarshalAsStruct) ||
-                (returnType.Kind == TypeKind.LValueReference && returnType.Referenced.Target != null && returnType.Referenced.Target.MarshalAsStruct))
-            {
-                var valueType = new TypeRefDefinition
-                {
-                    Kind = TypeKind.Pointer,
-                    Referenced = (returnType.Kind == TypeKind.LValueReference ? returnType.Referenced : returnType).Copy()
-                };
-                valueType.Referenced.IsConst = false;
-                // TODO:
-                /*
-                string paramName;
-                if (method.Property != null && method.Property.Setter != null)
-                {
-                    // Borrow out parameter name from setter
-                    paramName = method.Property.Setter.Parameters[0].Name;
-                }
-                else
-                {
-                    paramName = "value";
-                }
-
-                outValueParameter = new ParameterDefinition(paramName, valueType)
-                {
-                    ManagedName = paramName,
-                    MarshalDirection = MarshalDirection.Out
-                };
-                */
-            }
-
             EnsureWhiteSpace(WriteTo.Source);
 
             int numOptionalParamsTotal = method.NumOptionalParameters;
             int numParameters = method.Parameters.Length - numOptionalParamsTotal + numOptionalParams;
 
-            WriteMethodDeclaration(method, numParameters, level, overloadIndex, outValueParameter);
+            WriteMethodDeclaration(method, numParameters, level, overloadIndex);
 
             // Method body
             WriteLine('{', WriteTo.Source);
-            WriteMethodDefinition(method, numParameters, overloadIndex, level, outValueParameter);
+            WriteMethodDefinition(method, numParameters, level, overloadIndex);
             WriteLine('}', WriteTo.Source);
             hasSourceWhiteSpace = false;
 
@@ -688,9 +651,18 @@ namespace BulletSharpGen
 
         private static string GetTypeNameC(TypeRefDefinition type)
         {
-            if (type.IsBasic) return type.Name;
+            string name = "";
+            if (type.IsConst)
+            {
+                // Note: basic type can be const
+                if (type.Referenced == null ||
+                    (type.Referenced != null && !type.Referenced.ConstCanonical))
+                {
+                    name = "const";
+                }
+            }
 
-            string name = type.IsConst ? "const " : "";
+            if (type.IsBasic) return name + type.Name;
 
             if (type.Kind == TypeKind.Typedef)
             {

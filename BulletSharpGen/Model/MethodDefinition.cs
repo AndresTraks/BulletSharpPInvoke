@@ -19,7 +19,7 @@ namespace BulletSharpGen
         public AccessSpecifier Access { get; set; } = AccessSpecifier.Public;
 
         public bool IsParsed { get; set; }
-
+        public ParameterDefinition OutValueParameter { get; set; }
         public string BodyText { get; set; }
 
         public bool IsVoid
@@ -66,6 +66,7 @@ namespace BulletSharpGen
                 IsConstructor = IsConstructor,
                 IsExcluded = IsExcluded,
                 IsStatic = IsStatic,
+                OutValueParameter = OutValueParameter?.Copy(),
                 ReturnType = ReturnType.Copy()
             };
             for (int i = 0; i < Parameters.Length; i++)
@@ -100,6 +101,12 @@ namespace BulletSharpGen
                 {
                     return false;
                 }
+            }
+
+            if (m.OutValueParameter != null && OutValueParameter != null &&
+                !m.OutValueParameter.Type.Equals(OutValueParameter.Type))
+            {
+                return false;
             }
 
             return m.IsStatic == IsStatic;

@@ -21,7 +21,7 @@ extern "C"
 	EXPORT btScalar btConeTwistConstraint_getLimit(btConeTwistConstraint* obj, int limitIndex);
 	EXPORT btScalar btConeTwistConstraint_getLimitSoftness(btConeTwistConstraint* obj);
 	EXPORT btScalar btConeTwistConstraint_getMaxMotorImpulse(btConeTwistConstraint* obj);
-	EXPORT void btConeTwistConstraint_getMotorTarget(btConeTwistConstraint* obj, btQuaternion* q);
+	EXPORT void btConeTwistConstraint_getMotorTarget(btConeTwistConstraint* obj, btQuaternion* value);
 	EXPORT void btConeTwistConstraint_GetPointForAngle(btConeTwistConstraint* obj, btScalar fAngleInRadians, btScalar fLength, btVector3* value);
 	EXPORT btScalar btConeTwistConstraint_getRelaxationFactor(btConeTwistConstraint* obj);
 	EXPORT int btConeTwistConstraint_getSolveSwingLimit(btConeTwistConstraint* obj);

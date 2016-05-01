@@ -68,9 +68,9 @@ void btStridingMeshInterface_getPremadeAabb(btStridingMeshInterface* obj, btVect
 	BTVECTOR3_DEF_OUT(aabbMax);
 }
 
-void btStridingMeshInterface_getScaling(btStridingMeshInterface* obj, btVector3* scaling)
+void btStridingMeshInterface_getScaling(btStridingMeshInterface* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(scaling, &obj->getScaling());
+	BTVECTOR3_COPY(value, &obj->getScaling());
 }
 
 bool btStridingMeshInterface_hasPremadeAabb(btStridingMeshInterface* obj)

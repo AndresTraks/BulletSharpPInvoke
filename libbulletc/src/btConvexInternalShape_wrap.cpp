@@ -4,9 +4,9 @@
 #include "btConvexInternalShape_wrap.h"
 
 void btConvexInternalShape_getImplicitShapeDimensions(btConvexInternalShape* obj,
-	btVector3* dimensions)
+	btVector3* value)
 {
-	BTVECTOR3_COPY(dimensions, &obj->getImplicitShapeDimensions());
+	BTVECTOR3_COPY(value, &obj->getImplicitShapeDimensions());
 }
 
 void btConvexInternalShape_getLocalScalingNV(btConvexInternalShape* obj, btVector3* value)

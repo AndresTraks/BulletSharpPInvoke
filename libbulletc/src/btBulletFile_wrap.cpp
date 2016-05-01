@@ -6,17 +6,17 @@
 
 bParse_btBulletFile* bParse_btBulletFile_new()
 {
-	return new bParse_btBulletFile();
+	return new bParse::btBulletFile();
 }
 
 bParse_btBulletFile* bParse_btBulletFile_new2(const char* fileName)
 {
-	return new bParse_btBulletFile(fileName);
+	return new bParse::btBulletFile(fileName);
 }
 
 bParse_btBulletFile* bParse_btBulletFile_new3(char* memoryBuffer, int len)
 {
-	return new bParse_btBulletFile(memoryBuffer, len);
+	return new bParse::btBulletFile(memoryBuffer, len);
 }
 
 void bParse_btBulletFile_addDataBlock(bParse_btBulletFile* obj, char* dataBlock)
@@ -47,7 +47,8 @@ btAlignedObjectArray_bParse_bStructHandlePtr* bParse_btBulletFile_getCollisionSh
 	return &obj->m_collisionShapes;
 }
 
-btAlignedObjectArray_bParse_bStructHandlePtr* bParse_btBulletFile_getConstraints(bParse_btBulletFile* obj)
+btAlignedObjectArray_bParse_bStructHandlePtr* bParse_btBulletFile_getConstraints(
+	bParse_btBulletFile* obj)
 {
 	return &obj->m_constraints;
 }
@@ -63,12 +64,14 @@ btAlignedObjectArray_bParse_bStructHandlePtr* bParse_btBulletFile_getDynamicsWor
 	return &obj->m_dynamicsWorldInfo;
 }
 
-btAlignedObjectArray_bParse_bStructHandlePtr* bParse_btBulletFile_getMultiBodies(bParse_btBulletFile* obj)
+btAlignedObjectArray_bParse_bStructHandlePtr* bParse_btBulletFile_getMultiBodies(
+	bParse_btBulletFile* obj)
 {
 	return &obj->m_multiBodies;
 }
 
-btAlignedObjectArray_bParse_bStructHandlePtr* bParse_btBulletFile_getRigidBodies(bParse_btBulletFile* obj)
+btAlignedObjectArray_bParse_bStructHandlePtr* bParse_btBulletFile_getRigidBodies(
+	bParse_btBulletFile* obj)
 {
 	return &obj->m_rigidBodies;
 }

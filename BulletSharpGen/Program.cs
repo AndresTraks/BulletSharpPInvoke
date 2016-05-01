@@ -39,14 +39,14 @@ namespace BulletSharpGen
                 var extensionsWriter = new ExtensionsWriter(parser);
                 extensionsWriter.Output();
             }
-            //dotNetWriter.Output();
+            dotNetWriter.Output();
 
             OutputSolution(TargetVS.VS2008, parser);
             OutputSolution(TargetVS.VS2010, parser);
             OutputSolution(TargetVS.VS2012, parser);
             OutputSolution(TargetVS.VS2013, parser);
             OutputSolution(TargetVS.VS2015, parser);
-            project.Save();
+            //project.Save();
 
             CMakeWriter cmake = new CMakeWriter(parser);
             cmake.Output();

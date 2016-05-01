@@ -1,4 +1,5 @@
 #include <BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h>
+#include <BulletCollision/NarrowPhaseCollision/btVoronoiSimplexSolver.h>
 #include <LinearMath/btPoolAllocator.h>
 
 #include "btDefaultCollisionConfiguration_wrap.h"

@@ -67,9 +67,9 @@ btScalar btCollisionShape_getContactBreakingThreshold(btCollisionShape* obj, btS
 	return obj->getContactBreakingThreshold(defaultContactThresholdFactor);
 }
 
-void btCollisionShape_getLocalScaling(btCollisionShape* obj, btVector3* scaling)
+void btCollisionShape_getLocalScaling(btCollisionShape* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(scaling, &obj->getLocalScaling());
+	BTVECTOR3_COPY(value, &obj->getLocalScaling());
 }
 
 btScalar btCollisionShape_getMargin(btCollisionShape* obj)

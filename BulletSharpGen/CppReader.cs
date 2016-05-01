@@ -182,6 +182,7 @@ namespace BulletSharpGen
                     classTemplateNew.BaseClass = baseTemplate.Value;
 
                     project.ClassDefinitions[templateName] = classTemplateNew;
+                    _context.Header.Classes.Add(classTemplateNew);
                     classTemplate = classTemplateNew;
                 }
 

@@ -3,7 +3,7 @@
 
 #include "btContactConstraint_wrap.h"
 
-const btPersistentManifold* btContactConstraint_getContactManifold(btContactConstraint* obj)
+btPersistentManifold* btContactConstraint_getContactManifold(btContactConstraint* obj)
 {
 	return obj->getContactManifold();
 }

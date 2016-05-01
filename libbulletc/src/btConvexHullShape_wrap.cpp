@@ -42,17 +42,12 @@ int btConvexHullShape_getNumPoints(btConvexHullShape* obj)
 	return obj->getNumPoints();
 }
 
-const btVector3* btConvexHullShape_getPoints(btConvexHullShape* obj)
-{
-	return obj->getPoints();
-}
-
 void btConvexHullShape_getScaledPoint(btConvexHullShape* obj, int i, btVector3* value)
 {
 	BTVECTOR3_SET(value, obj->getScaledPoint(i));
 }
 
-const btVector3* btConvexHullShape_getUnscaledPoints(btConvexHullShape* obj)
+btVector3* btConvexHullShape_getUnscaledPoints(btConvexHullShape* obj)
 {
 	return obj->getUnscaledPoints();
 }
