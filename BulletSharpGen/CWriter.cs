@@ -652,13 +652,14 @@ namespace BulletSharpGen
         private static string GetTypeNameC(TypeRefDefinition type)
         {
             string name = "";
+
             if (type.IsConst)
             {
                 // Note: basic type can be const
                 if (type.Referenced == null ||
                     (type.Referenced != null && !type.Referenced.ConstCanonical))
                 {
-                    name = "const";
+                    name = "const ";
                 }
             }
 

@@ -131,6 +131,12 @@ namespace BulletSharpGen
             string mapping = Project.ParameterNameMapping?.Map(param.Name);
             if (mapping != null) return mapping;
 
+            switch (param.Name)
+            {
+                case "out":
+                    return $"@{param.Name}";
+            }
+
             return ToCamelCase(param.Name, false);
         }
 

@@ -257,21 +257,27 @@ namespace BulletSharpGen
                 case "void":
                     Kind = TypeKind.Void;
                     break;
+                case "long":
                 case "long int":
                     Kind = TypeKind.Long;
                     break;
+                case "long long":
                 case "long long int":
                     Kind = TypeKind.LongLong;
                     break;
+                case "short":
                 case "short int":
                     Kind = TypeKind.Short;
                     break;
+                case "unsigned long":
                 case "unsigned long int":
                     Kind = TypeKind.ULong;
                     break;
+                case "unsigned long long":
                 case "unsigned long long int":
                     Kind = TypeKind.ULongLong;
                     break;
+                case "unsigned short":
                 case "unsigned short int":
                     Kind = TypeKind.UShort;
                     break;

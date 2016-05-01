@@ -97,15 +97,17 @@
     <Compile Include="AssemblySubset.cs" />
     <Compile Include="BulletParser.cs" />
     <Compile Include="CMakeWriter.cs" />
-    <Compile Include="CppCliWriter.cs" />
     <Compile Include="CWriter.cs" />
     <Compile Include="DefaultParser.cs" />
+    <Compile Include="DotNet\CppCliWriter.cs" />
     <Compile Include="DotNet\DotNetParser.cs" />
-    <Compile Include="DotNetWriter.cs" />
+    <Compile Include="DotNet\DotNetWriter.cs" />
+    <Compile Include="DotNet\ExtensionsWriter.cs" />
     <Compile Include="DotNet\ManagedHeader.cs" />
     <Compile Include="DotNet\ManagedParameter.cs" />
     <Compile Include="DotNet\ManagedProperty.cs" />
-    <Compile Include="ExtensionsWriter.cs" />
+    <Compile Include="DotNet\PInvokeWriter.cs" />
+    <Compile Include="DotNet\SymbolMapping.cs" />
     <Compile Include="FilterWriter.cs" />
     <Compile Include="Model\ClassDefinition.cs" />
     <Compile Include="Model\ClassTemplateDefinition.cs" />
@@ -117,7 +119,6 @@
     <Compile Include="Model\MethodDefinition.cs" />
     <Compile Include="Model\ParameterDefinition.cs" />
     <Compile Include="Model\TypeRefDefinition.cs" />
-    <Compile Include="PInvokeWriter.cs" />
     <Compile Include="Project\WrapperProjectXmlReader.cs" />
     <Compile Include="Project\WrapperProjectXmlWriter.cs" />
     <Compile Include="Project\WrapperProject.cs" />
@@ -125,7 +126,6 @@
     <Compile Include="SlnWriter.cs" />
     <Compile Include="CppReader.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="SymbolMapping.cs" />
     <Compile Include="WrapperWriter.cs" />
   </ItemGroup>
   <ItemGroup>
