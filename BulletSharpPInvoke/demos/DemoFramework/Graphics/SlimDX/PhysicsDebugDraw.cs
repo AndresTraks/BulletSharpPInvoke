@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using BulletSharp;
+﻿using BulletSharp;
 using SlimDX.Direct3D9;
 
 namespace DemoFramework.SlimDX
@@ -16,7 +15,7 @@ namespace DemoFramework.SlimDX
         public void DrawDebugWorld(DynamicsWorld world)
         {
             world.DebugDrawWorld();
-            if (lines.Count == 0)
+            if (LineIndex == 0)
                 return;
 
             int lighting = device.GetRenderState(RenderState.Lighting);
@@ -24,8 +23,8 @@ namespace DemoFramework.SlimDX
             device.SetTransform(TransformState.World, global::SlimDX.Matrix.Identity);
             device.VertexFormat = VertexFormat.Position | VertexFormat.Diffuse;
 
-            device.DrawUserPrimitives(PrimitiveType.LineList, lines.Count / 2, lines.ToArray());
-            lines.Clear();
+            device.DrawUserPrimitives(PrimitiveType.LineList, LineIndex / 2, Lines);
+            LineIndex = 0;
 
             device.SetRenderState(RenderState.Lighting, lighting);
         }

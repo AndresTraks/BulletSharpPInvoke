@@ -257,7 +257,7 @@ namespace DemoFramework.SlimDX
                 int i;
                 for (i = 0; i < faceCount; i++)
                 {
-                    NodePtrArray nodes = faces[i].N;
+                    NodePtrArray nodes = faces[i].Nodes;
                     Node n0 = nodes[0];
                     Node n1 = nodes[1];
                     Node n2 = nodes[2];
@@ -346,9 +346,9 @@ namespace DemoFramework.SlimDX
                     for (int i = 0; i < linkCount; i++)
                     {
                         Link link = links[i];
-                        linkArray[i * 2].Position = link.N[0].Position;
+                        linkArray[i * 2].Position = link.Nodes[0].Position;
                         linkArray[i * 2].Color = linkColor;
-                        linkArray[i * 2 + 1].Position = link.N[1].Position;
+                        linkArray[i * 2 + 1].Position = link.Nodes[1].Position;
                         linkArray[i * 2 + 1].Color = linkColor;
                     }
                     device.DrawUserPrimitives(PrimitiveType.LineList, links.Count, linkArray);
