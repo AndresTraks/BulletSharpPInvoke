@@ -113,11 +113,6 @@ btScalar btTypedConstraint_btConstraintInfo2_getErp(btTypedConstraint_btConstrai
 	return obj->erp;
 }
 
-int* btTypedConstraint_btConstraintInfo2_getFindex(btTypedConstraint_btConstraintInfo2* obj)
-{
-	return obj->findex;
-}
-
 btScalar btTypedConstraint_btConstraintInfo2_getFps(btTypedConstraint_btConstraintInfo2* obj)
 {
 	return obj->fps;
@@ -185,12 +180,6 @@ void btTypedConstraint_btConstraintInfo2_setErp(btTypedConstraint_btConstraintIn
 	btScalar value)
 {
 	obj->erp = value;
-}
-
-void btTypedConstraint_btConstraintInfo2_setFindex(btTypedConstraint_btConstraintInfo2* obj,
-	int* value)
-{
-	obj->findex = value;
 }
 
 void btTypedConstraint_btConstraintInfo2_setFps(btTypedConstraint_btConstraintInfo2* obj,

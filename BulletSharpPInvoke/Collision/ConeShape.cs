@@ -25,11 +25,13 @@ namespace BulletSharp
 		public float Height
 		{
 			get { return btConeShape_getHeight(_native); }
+			set { btConeShape_setHeight(_native, value); }
 		}
 
 		public float Radius
 		{
 			get { return btConeShape_getRadius(_native); }
+			set { btConeShape_setRadius(_native, value); }
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -42,6 +44,10 @@ namespace BulletSharp
 		static extern float btConeShape_getRadius(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConeShape_setConeUpIndex(IntPtr obj, int upIndex);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btConeShape_setHeight(IntPtr obj, float height);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btConeShape_setRadius(IntPtr obj, float radius);
 	}
 
 	public class ConeShapeX : ConeShape

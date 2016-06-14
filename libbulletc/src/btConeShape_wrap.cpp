@@ -27,6 +27,16 @@ void btConeShape_setConeUpIndex(btConeShape* obj, int upIndex)
 	obj->setConeUpIndex(upIndex);
 }
 
+void btConeShape_setHeight(btConeShape* obj, btScalar height)
+{
+	obj->setHeight(height);
+}
+
+void btConeShape_setRadius(btConeShape* obj, btScalar radius)
+{
+	obj->setRadius(radius);
+}
+
 
 btConeShapeX* btConeShapeX_new(btScalar radius, btScalar height)
 {
