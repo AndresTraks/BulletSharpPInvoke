@@ -1,3 +1,4 @@
+#include <new>
 #include <LinearMath/btMotionState.h>
 
 #include "conversion.h"
