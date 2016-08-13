@@ -16,7 +16,8 @@ btCylinderShape* btCylinderShape_new2(btScalar halfExtentX, btScalar halfExtentY
 
 void btCylinderShape_getHalfExtentsWithMargin(btCylinderShape* obj, btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->getHalfExtentsWithMargin());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getHalfExtentsWithMargin();
+	BTVECTOR3_SET(value, temp);
 }
 
 void btCylinderShape_getHalfExtentsWithoutMargin(btCylinderShape* obj, btVector3* value)

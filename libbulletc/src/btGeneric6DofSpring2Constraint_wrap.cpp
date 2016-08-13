@@ -583,7 +583,8 @@ void btGeneric6DofSpring2Constraint_getAngularUpperLimitReversed(btGeneric6DofSp
 void btGeneric6DofSpring2Constraint_getAxis(btGeneric6DofSpring2Constraint* obj,
 	int axis_index, btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->getAxis(axis_index));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getAxis(axis_index);
+	BTVECTOR3_SET(value, temp);
 }
 
 void btGeneric6DofSpring2Constraint_getCalculatedTransformA(btGeneric6DofSpring2Constraint* obj,

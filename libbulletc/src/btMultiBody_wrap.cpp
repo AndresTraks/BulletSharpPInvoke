@@ -181,7 +181,8 @@ btScalar btMultiBody_getAngularDamping(btMultiBody* obj)
 
 void btMultiBody_getAngularMomentum(btMultiBody* obj, btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->getAngularMomentum());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getAngularMomentum();
+	BTVECTOR3_SET(value, temp);
 }
 
 btMultiBodyLinkCollider* btMultiBody_getBaseCollider(btMultiBody* obj)
@@ -191,12 +192,14 @@ btMultiBodyLinkCollider* btMultiBody_getBaseCollider(btMultiBody* obj)
 
 void btMultiBody_getBaseForce(btMultiBody* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(value, &obj->getBaseForce());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getBaseForce();
+	BTVECTOR3_SET(value, temp);
 }
 
 void btMultiBody_getBaseInertia(btMultiBody* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(value, &obj->getBaseInertia());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getBaseInertia();
+	BTVECTOR3_SET(value, temp);
 }
 
 btScalar btMultiBody_getBaseMass(btMultiBody* obj)
@@ -211,27 +214,32 @@ const char* btMultiBody_getBaseName(btMultiBody* obj)
 
 void btMultiBody_getBaseOmega(btMultiBody* obj, btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->getBaseOmega());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getBaseOmega();
+	BTVECTOR3_SET(value, temp);
 }
 
 void btMultiBody_getBasePos(btMultiBody* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(value, &obj->getBasePos());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getBasePos();
+	BTVECTOR3_SET(value, temp);
 }
 
 void btMultiBody_getBaseTorque(btMultiBody* obj, btVector3* value)
 {
-	BTVECTOR3_COPY(value, &obj->getBaseTorque());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getBaseTorque();
+	BTVECTOR3_SET(value, temp);
 }
 
 void btMultiBody_getBaseVel(btMultiBody* obj, btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->getBaseVel());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getBaseVel();
+	BTVECTOR3_SET(value, temp);
 }
 
 void btMultiBody_getBaseWorldTransform(btMultiBody* obj, btTransform* value)
 {
-	BTTRANSFORM_SET(value, obj->getBaseWorldTransform());
+	ATTRIBUTE_ALIGNED16(btTransform) temp = obj->getBaseWorldTransform();
+	BTTRANSFORM_SET(value, temp);
 }
 
 bool btMultiBody_getCanSleep(btMultiBody* obj)
@@ -407,13 +415,15 @@ bool btMultiBody_isUsingRK4Integration(btMultiBody* obj)
 void btMultiBody_localDirToWorld(btMultiBody* obj, int i, const btVector3* vec, btVector3* value)
 {
 	BTVECTOR3_IN(vec);
-	BTVECTOR3_SET(value, obj->localDirToWorld(i, BTVECTOR3_USE(vec)));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->localDirToWorld(i, BTVECTOR3_USE(vec));
+	BTVECTOR3_SET(value, temp);
 }
 
 void btMultiBody_localPosToWorld(btMultiBody* obj, int i, const btVector3* vec, btVector3* value)
 {
 	BTVECTOR3_IN(vec);
-	BTVECTOR3_SET(value, obj->localPosToWorld(i, BTVECTOR3_USE(vec)));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->localPosToWorld(i, BTVECTOR3_USE(vec));
+	BTVECTOR3_SET(value, temp);
 }
 
 void btMultiBody_processDeltaVeeMultiDof2(btMultiBody* obj)
@@ -716,13 +726,15 @@ void btMultiBody_wakeUp(btMultiBody* obj)
 void btMultiBody_worldDirToLocal(btMultiBody* obj, int i, const btVector3* vec, btVector3* value)
 {
 	BTVECTOR3_IN(vec);
-	BTVECTOR3_SET(value, obj->worldDirToLocal(i, BTVECTOR3_USE(vec)));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->worldDirToLocal(i, BTVECTOR3_USE(vec));
+	BTVECTOR3_SET(value, temp);
 }
 
 void btMultiBody_worldPosToLocal(btMultiBody* obj, int i, const btVector3* vec, btVector3* value)
 {
 	BTVECTOR3_IN(vec);
-	BTVECTOR3_SET(value, obj->worldPosToLocal(i, BTVECTOR3_USE(vec)));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->worldPosToLocal(i, BTVECTOR3_USE(vec));
+	BTVECTOR3_SET(value, temp);
 }
 
 void btMultiBody_delete(btMultiBody* obj)

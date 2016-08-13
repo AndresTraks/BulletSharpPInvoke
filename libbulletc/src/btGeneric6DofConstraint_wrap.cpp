@@ -491,7 +491,8 @@ void btGeneric6DofConstraint_getAngularUpperLimit(btGeneric6DofConstraint* obj, 
 void btGeneric6DofConstraint_getAxis(btGeneric6DofConstraint* obj, int axis_index,
 	btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->getAxis(axis_index));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getAxis(axis_index);
+	BTVECTOR3_SET(value, temp);
 }
 
 void btGeneric6DofConstraint_getCalculatedTransformA(btGeneric6DofConstraint* obj,

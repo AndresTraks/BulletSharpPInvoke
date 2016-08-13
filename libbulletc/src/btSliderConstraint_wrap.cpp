@@ -29,12 +29,14 @@ void btSliderConstraint_calculateTransforms(btSliderConstraint* obj, const btTra
 
 void btSliderConstraint_getAncorInA(btSliderConstraint* obj, btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->getAncorInA());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getAncorInA();
+	BTVECTOR3_SET(value, temp);
 }
 
 void btSliderConstraint_getAncorInB(btSliderConstraint* obj, btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->getAncorInB());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getAncorInB();
+	BTVECTOR3_SET(value, temp);
 }
 
 btScalar btSliderConstraint_getAngDepth(btSliderConstraint* obj)

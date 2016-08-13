@@ -80,7 +80,7 @@ btScalar btRigidBody_btRigidBodyConstructionInfo_getLinearSleepingThreshold(btRi
 void btRigidBody_btRigidBodyConstructionInfo_getLocalInertia(btRigidBody_btRigidBodyConstructionInfo* obj,
 	btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->m_localInertia);
+	BTVECTOR3_COPY(value, &obj->m_localInertia);
 }
 
 btScalar btRigidBody_btRigidBodyConstructionInfo_getMass(btRigidBody_btRigidBodyConstructionInfo* obj)
@@ -289,19 +289,22 @@ btScalar btRigidBody_computeAngularImpulseDenominator(btRigidBody* obj, const bt
 void btRigidBody_computeGyroscopicForceExplicit(btRigidBody* obj, btScalar maxGyroscopicForce,
 	btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->computeGyroscopicForceExplicit(maxGyroscopicForce));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->computeGyroscopicForceExplicit(maxGyroscopicForce);
+	BTVECTOR3_SET(value, temp);
 }
 
 void btRigidBody_computeGyroscopicImpulseImplicit_Body(btRigidBody* obj, btScalar step,
 	btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->computeGyroscopicImpulseImplicit_Body(step));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->computeGyroscopicImpulseImplicit_Body(step);
+	BTVECTOR3_SET(value, temp);
 }
 
 void btRigidBody_computeGyroscopicImpulseImplicit_World(btRigidBody* obj, btScalar dt,
 	btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->computeGyroscopicImpulseImplicit_World(dt));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->computeGyroscopicImpulseImplicit_World(dt);
+	BTVECTOR3_SET(value, temp);
 }
 
 btScalar btRigidBody_computeImpulseDenominator(btRigidBody* obj, const btVector3* pos,
@@ -418,7 +421,8 @@ void btRigidBody_getLinearVelocity(btRigidBody* obj, btVector3* value)
 
 void btRigidBody_getLocalInertia(btRigidBody* obj, btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->getLocalInertia());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getLocalInertia();
+	BTVECTOR3_SET(value, temp);
 }
 
 btMotionState* btRigidBody_getMotionState(btRigidBody* obj)
@@ -450,7 +454,8 @@ void btRigidBody_getVelocityInLocalPoint(btRigidBody* obj, const btVector3* rel_
 	btVector3* value)
 {
 	BTVECTOR3_IN(rel_pos);
-	BTVECTOR3_SET(value, obj->getVelocityInLocalPoint(BTVECTOR3_USE(rel_pos)));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getVelocityInLocalPoint(BTVECTOR3_USE(rel_pos));
+	BTVECTOR3_SET(value, temp);
 }
 
 void btRigidBody_integrateVelocities(btRigidBody* obj, btScalar step)

@@ -51,7 +51,8 @@ btConstraintSolver* btDynamicsWorld_getConstraintSolver(btDynamicsWorld* obj)
 
 void btDynamicsWorld_getGravity(btDynamicsWorld* obj, btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->getGravity());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getGravity();
+	BTVECTOR3_SET(value, temp);
 }
 
 int btDynamicsWorld_getNumConstraints(btDynamicsWorld* obj)

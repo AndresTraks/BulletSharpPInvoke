@@ -26,7 +26,8 @@ void btBox2dShape_getCentroid(btBox2dShape* obj, btVector3* value)
 
 void btBox2dShape_getHalfExtentsWithMargin(btBox2dShape* obj, btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->getHalfExtentsWithMargin());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getHalfExtentsWithMargin();
+	BTVECTOR3_SET(value, temp);
 }
 
 void btBox2dShape_getHalfExtentsWithoutMargin(btBox2dShape* obj, btVector3* value)

@@ -54,28 +54,32 @@ void btConvexShape_localGetSupportingVertex(btConvexShape* obj, const btVector3*
 	btVector3* value)
 {
 	BTVECTOR3_IN(vec);
-	BTVECTOR3_SET(value, obj->localGetSupportingVertex(BTVECTOR3_USE(vec)));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->localGetSupportingVertex(BTVECTOR3_USE(vec));
+	BTVECTOR3_SET(value, temp);
 }
 
 void btConvexShape_localGetSupportingVertexWithoutMargin(btConvexShape* obj, const btVector3* vec,
 	btVector3* value)
 {
 	BTVECTOR3_IN(vec);
-	BTVECTOR3_SET(value, obj->localGetSupportingVertexWithoutMargin(BTVECTOR3_USE(vec)));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->localGetSupportingVertexWithoutMargin(BTVECTOR3_USE(vec));
+	BTVECTOR3_SET(value, temp);
 }
 
 void btConvexShape_localGetSupportVertexNonVirtual(btConvexShape* obj, const btVector3* vec,
 	btVector3* value)
 {
 	BTVECTOR3_IN(vec);
-	BTVECTOR3_SET(value, obj->localGetSupportVertexNonVirtual(BTVECTOR3_USE(vec)));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->localGetSupportVertexNonVirtual(BTVECTOR3_USE(vec));
+	BTVECTOR3_SET(value, temp);
 }
 
 void btConvexShape_localGetSupportVertexWithoutMarginNonVirtual(btConvexShape* obj,
 	const btVector3* vec, btVector3* value)
 {
 	BTVECTOR3_IN(vec);
-	BTVECTOR3_SET(value, obj->localGetSupportVertexWithoutMarginNonVirtual(BTVECTOR3_USE(vec)));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->localGetSupportVertexWithoutMarginNonVirtual(BTVECTOR3_USE(vec));
+	BTVECTOR3_SET(value, temp);
 }
 
 void btConvexShape_project(btConvexShape* obj, const btTransform* trans, const btVector3* dir,

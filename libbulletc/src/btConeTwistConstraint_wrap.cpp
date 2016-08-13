@@ -123,7 +123,8 @@ void btConeTwistConstraint_getMotorTarget(btConeTwistConstraint* obj, btQuaterni
 void btConeTwistConstraint_GetPointForAngle(btConeTwistConstraint* obj, btScalar fAngleInRadians,
 	btScalar fLength, btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->GetPointForAngle(fAngleInRadians, fLength));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->GetPointForAngle(fAngleInRadians, fLength);
+	BTVECTOR3_SET(value, temp);
 }
 
 btScalar btConeTwistConstraint_getRelaxationFactor(btConeTwistConstraint* obj)

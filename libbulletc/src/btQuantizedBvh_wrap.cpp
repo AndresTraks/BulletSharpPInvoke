@@ -267,7 +267,8 @@ void btQuantizedBvh_setTraversalMode(btQuantizedBvh* obj, btQuantizedBvh::btTrav
 void btQuantizedBvh_unQuantize(btQuantizedBvh* obj, const unsigned short* vecIn,
 	btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->unQuantize(vecIn));
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->unQuantize(vecIn);
+	BTVECTOR3_SET(value, temp);
 }
 
 void btQuantizedBvh_delete(btQuantizedBvh* obj)

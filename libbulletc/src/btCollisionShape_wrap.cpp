@@ -51,7 +51,8 @@ btScalar btCollisionShape_getAngularMotionDisc(btCollisionShape* obj)
 void btCollisionShape_getAnisotropicRollingFrictionDirection(btCollisionShape* obj,
 	btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->getAnisotropicRollingFrictionDirection());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getAnisotropicRollingFrictionDirection();
+	BTVECTOR3_SET(value, temp);
 }
 
 void btCollisionShape_getBoundingSphere(btCollisionShape* obj, btVector3* center,

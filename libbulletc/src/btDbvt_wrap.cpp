@@ -10,7 +10,8 @@ btDbvtAabbMm* btDbvtAabbMm_new()
 
 void btDbvtAabbMm_Center(btDbvtAabbMm* obj, btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->Center());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->Center();
+	BTVECTOR3_SET(value, temp);
 }
 
 int btDbvtAabbMm_Classify(btDbvtAabbMm* obj, const btVector3* n, btScalar o, int s)
@@ -32,7 +33,8 @@ void btDbvtAabbMm_Expand(btDbvtAabbMm* obj, const btVector3* e)
 
 void btDbvtAabbMm_Extents(btDbvtAabbMm* obj, btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->Extents());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->Extents();
+	BTVECTOR3_SET(value, temp);
 }
 
 btDbvtAabbMm* btDbvtAabbMm_FromCE(const btVector3* c, const btVector3* e)
@@ -77,7 +79,8 @@ btDbvtAabbMm* btDbvtAabbMm_FromPoints2(const btVector3* pts, int n)
 
 void btDbvtAabbMm_Lengths(btDbvtAabbMm* obj, btVector3* value)
 {
-	BTVECTOR3_SET(value, obj->Lengths());
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->Lengths();
+	BTVECTOR3_SET(value, temp);
 }
 
 void btDbvtAabbMm_Maxs(btDbvtAabbMm* obj, btVector3* value)
