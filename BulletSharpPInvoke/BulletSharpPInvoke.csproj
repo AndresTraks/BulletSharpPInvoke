@@ -88,11 +88,13 @@
     <Compile Include="Dynamics\Featherstone\MultiBodyConstraint.cs" />
     <Compile Include="Dynamics\Featherstone\MultiBodyConstraintSolver.cs" />
     <Compile Include="Dynamics\Featherstone\MultiBodyDynamicsWorld.cs" />
+    <Compile Include="Dynamics\Featherstone\MultiBodyFixedConstraint.cs" />
     <Compile Include="Dynamics\Featherstone\MultiBodyJointLimitConstraint.cs" />
     <Compile Include="Dynamics\Featherstone\MultiBodyJointMotor.cs" />
     <Compile Include="Dynamics\Featherstone\MultiBodyLink.cs" />
     <Compile Include="Dynamics\Featherstone\MultiBodyLinkCollider.cs" />
     <Compile Include="Dynamics\Featherstone\MultiBodyPoint2Point.cs" />
+    <Compile Include="Dynamics\Featherstone\MultiBodySliderConstraint.cs" />
     <Compile Include="Dynamics\Featherstone\MultiBodySolverConstraint.cs" />
     <Compile Include="Dynamics\FixedConstraint.cs" />
     <Compile Include="Dynamics\IAction.cs" />

@@ -266,6 +266,13 @@ namespace BulletSharp
 			return value;
 		}
 
+		public Matrix LocalFrameToWorld(int i, Matrix mat)
+		{
+			Matrix value;
+			btMultiBody_localFrameToWorld(_native, i, ref mat, out value);
+			return value;
+		}
+
 		public Vector3 LocalPosToWorld(int i, Vector3 vec)
 		{
 			Vector3 value;
@@ -633,6 +640,24 @@ namespace BulletSharp
 			get { return btMultiBody_getUseGyroTerm(_native); }
 			set { btMultiBody_setUseGyroTerm(_native, value); }
 		}
+
+		public int UserIndex
+		{
+			get { return btMultiBody_getUserIndex(_native); }
+			set { btMultiBody_setUserIndex(_native, value); }
+		}
+
+		public int UserIndex2
+		{
+			get { return btMultiBody_getUserIndex2(_native); }
+			set { btMultiBody_setUserIndex2(_native, value); }
+		}
+
+		public IntPtr UserPointer
+		{
+			get { return btMultiBody_getUserPointer(_native); }
+			set { btMultiBody_setUserPointer(_native, value); }
+		}
         /*
 		public float VelocityVector
 		{
@@ -797,6 +822,12 @@ namespace BulletSharp
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btMultiBody_getUseGyroTerm(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern int btMultiBody_getUserIndex(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern int btMultiBody_getUserIndex2(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern IntPtr btMultiBody_getUserPointer(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btMultiBody_getVelocityVector(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBody_getWorldToBaseRot(IntPtr obj, out Quaternion rot);
@@ -825,6 +856,8 @@ namespace BulletSharp
 		static extern bool btMultiBody_isUsingRK4Integration(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBody_localDirToWorld(IntPtr obj, int i, [In] ref Vector3 vec, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultiBody_localFrameToWorld(IntPtr obj, int i, [In] ref Matrix mat, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBody_localPosToWorld(IntPtr obj, int i, [In] ref Vector3 vec, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -876,6 +909,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBody_setupFixed(IntPtr obj, int linkIndex, float mass, [In] ref Vector3 inertia, int parent, [In] ref Quaternion rotParentToThis, [In] ref Vector3 parentComToThisPivotOffset, [In] ref Vector3 thisPivotToThisComOffset);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultiBody_setupFixed2(IntPtr obj, int linkIndex, float mass, [In] ref Vector3 inertia, int parent, [In] ref Quaternion rotParentToThis, [In] ref Vector3 parentComToThisPivotOffset, [In] ref Vector3 thisPivotToThisComOffset, bool deprecatedDisableParentCollision);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBody_setupPlanar(IntPtr obj, int i, float mass, [In] ref Vector3 inertia, int parent, [In] ref Quaternion rotParentToThis, [In] ref Vector3 rotationAxis, [In] ref Vector3 parentComToThisComOffset);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBody_setupPlanar2(IntPtr obj, int i, float mass, [In] ref Vector3 inertia, int parent, [In] ref Quaternion rotParentToThis, [In] ref Vector3 rotationAxis, [In] ref Vector3 parentComToThisComOffset, bool disableParentCollision);
@@ -891,6 +926,12 @@ namespace BulletSharp
 		static extern void btMultiBody_setupSpherical2(IntPtr obj, int linkIndex, float mass, [In] ref Vector3 inertia, int parent, [In] ref Quaternion rotParentToThis, [In] ref Vector3 parentComToThisPivotOffset, [In] ref Vector3 thisPivotToThisComOffset, bool disableParentCollision);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBody_setUseGyroTerm(IntPtr obj, bool useGyro);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultiBody_setUserIndex(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultiBody_setUserIndex2(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultiBody_setUserPointer(IntPtr obj, IntPtr userPointer);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBody_setWorldToBaseRot(IntPtr obj, [In] ref Quaternion rot);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

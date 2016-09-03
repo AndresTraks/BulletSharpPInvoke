@@ -11,7 +11,8 @@ namespace BulletSharp
 		None = 0,
 		LateralFrictionInitialized = 1,
 		HasContactCfm = 2,
-		HasContactErp = 4
+		HasContactErp = 4,
+		ContactStiffnessDamping = 8
 	}
 
     public delegate void ContactAddedEventHandler(ManifoldPoint cp, CollisionObjectWrapper colObj0Wrap, int partId0, int index0, CollisionObjectWrapper colObj1Wrap, int partId1, int index1);
@@ -88,6 +89,18 @@ namespace BulletSharp
 		{
 			get { return btManifoldPoint_getAppliedImpulseLateral2(_native); }
 			set { btManifoldPoint_setAppliedImpulseLateral2(_native, value); }
+		}
+
+		public float CombinedContactDamping1
+		{
+			get { return btManifoldPoint_getCombinedContactDamping1(_native); }
+			set { btManifoldPoint_setCombinedContactDamping1(_native, value); }
+		}
+
+		public float CombinedContactStiffness1
+		{
+			get { return btManifoldPoint_getCombinedContactStiffness1(_native); }
+			set { btManifoldPoint_setCombinedContactStiffness1(_native, value); }
 		}
 
 		public float CombinedFriction
@@ -328,6 +341,10 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btManifoldPoint_getAppliedImpulseLateral2(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btManifoldPoint_getCombinedContactDamping1(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btManifoldPoint_getCombinedContactStiffness1(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btManifoldPoint_getCombinedFriction(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btManifoldPoint_getCombinedRestitution(IntPtr obj);
@@ -381,6 +398,10 @@ namespace BulletSharp
 		static extern void btManifoldPoint_setAppliedImpulseLateral1(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btManifoldPoint_setAppliedImpulseLateral2(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btManifoldPoint_setCombinedContactDamping1(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btManifoldPoint_setCombinedContactStiffness1(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btManifoldPoint_setCombinedFriction(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

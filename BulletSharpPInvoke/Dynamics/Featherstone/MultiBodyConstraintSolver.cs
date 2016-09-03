@@ -11,14 +11,22 @@ namespace BulletSharp
 		{
 		}
         /*
-		public float SolveGroupCacheFriendlyFinish(CollisionObject bodies, int numBodies, ContactSolverInfo infoGlobal)
+		public float SolveGroupCacheFriendlyFinish(CollisionObject bodies, int numBodies,
+			ContactSolverInfo infoGlobal)
 		{
-			return btMultiBodyConstraintSolver_solveGroupCacheFriendlyFinish(_native, bodies._native, numBodies, infoGlobal._native);
+			return btMultiBodyConstraintSolver_solveGroupCacheFriendlyFinish(_native,
+				bodies._native, numBodies, infoGlobal._native);
 		}
 
-		public void SolveMultiBodyGroup(CollisionObject bodies, int numBodies, PersistentManifold manifold, int numManifolds, TypedConstraint constraints, int numConstraints, MultiBodyConstraint multiBodyConstraints, int numMultiBodyConstraints, ContactSolverInfo info, IDebugDraw debugDrawer, Dispatcher dispatcher)
+		public void SolveMultiBodyGroup(CollisionObject bodies, int numBodies, PersistentManifold manifold,
+			int numManifolds, TypedConstraint constraints, int numConstraints, MultiBodyConstraint multiBodyConstraints,
+			int numMultiBodyConstraints, ContactSolverInfo info, IDebugDraw debugDrawer,
+			Dispatcher dispatcher)
 		{
-			btMultiBodyConstraintSolver_solveMultiBodyGroup(_native, bodies._native, numBodies, manifold._native, numManifolds, constraints._native, numConstraints, multiBodyConstraints._native, numMultiBodyConstraints, info._native, DebugDraw.GetUnmanaged(debugDrawer), dispatcher._native);
+			btMultiBodyConstraintSolver_solveMultiBodyGroup(_native, bodies._native,
+				numBodies, manifold._native, numManifolds, constraints._native, numConstraints,
+				multiBodyConstraints._native, numMultiBodyConstraints, info._native,
+				debugDrawer._native, dispatcher._native);
 		}
         */
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

@@ -300,6 +300,11 @@ namespace BulletSharp
 			set { btMultibodyLink_setPosVarCount(_native, value); }
 		}
 
+		public IntPtr UserPtr
+		{
+			get { return btMultibodyLink_getUserPtr(_native); }
+			set { btMultibodyLink_setUserPtr(_native, value); }
+		}
 		public Quaternion ZeroRotParentToThis
 		{
 			get
@@ -376,6 +381,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_getZeroRotParentToThis(IntPtr obj, out Quaternion value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern IntPtr btMultibodyLink_getUserPtr(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setAppliedConstraintForce(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setAppliedConstraintTorque(IntPtr obj, [In] ref Vector3 value);
@@ -433,6 +440,8 @@ namespace BulletSharp
 		static extern void btMultibodyLink_setPosVarCount(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setZeroRotParentToThis(IntPtr obj, [In] ref Quaternion value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btMultibodyLink_setUserPtr(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_updateCacheMultiDof(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

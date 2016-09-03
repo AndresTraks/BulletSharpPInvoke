@@ -91,6 +91,11 @@ namespace BulletSharp
 			return value;
 		}
 
+		public void OptimizeConvexHull()
+		{
+			btConvexHullShape_optimizeConvexHull(_native);
+		}
+
 		public int NumPoints
 		{
 			get { return btConvexHullShape_getNumPoints(_native); }
@@ -142,6 +147,8 @@ namespace BulletSharp
 		static extern void btConvexHullShape_getScaledPoint(IntPtr obj, int i, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btConvexHullShape_getUnscaledPoints(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btConvexHullShape_optimizeConvexHull(IntPtr obj);
 	}
 
     [StructLayout(LayoutKind.Sequential)]

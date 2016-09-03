@@ -700,6 +700,11 @@ namespace BulletSharp
 			_rigidBodyB = rigidBodyB;
 		}
 
+		public static float BtGetMatrixElem(Matrix mat, int index)
+		{
+			return btGeneric6DofSpring2Constraint_btGetMatrixElem(ref mat, index);
+		}
+
 		public void CalculateTransforms(Matrix transA, Matrix transB)
 		{
 			btGeneric6DofSpring2Constraint_calculateTransforms(_native, ref transA,
@@ -751,6 +756,36 @@ namespace BulletSharp
 		public bool IsLimited(int limitIndex)
 		{
 			return btGeneric6DofSpring2Constraint_isLimited(_native, limitIndex);
+		}
+
+		public static bool MatrixToEulerZXY(Matrix mat, ref Vector3 xyz)
+		{
+			return btGeneric6DofSpring2Constraint_matrixToEulerZXY(ref mat, ref xyz);
+		}
+
+		public static bool MatrixToEulerZYX(Matrix mat, ref Vector3 xyz)
+		{
+			return btGeneric6DofSpring2Constraint_matrixToEulerZYX(ref mat, ref xyz);
+		}
+
+		public static bool MatrixToEulerXZY(Matrix mat, ref Vector3 xyz)
+		{
+			return btGeneric6DofSpring2Constraint_matrixToEulerXZY(ref mat, ref xyz);
+		}
+
+		public static bool MatrixToEulerXYZ(Matrix mat, ref Vector3 xyz)
+		{
+			return btGeneric6DofSpring2Constraint_matrixToEulerXYZ(ref mat, ref xyz);
+		}
+
+		public static bool MatrixToEulerYZX(Matrix mat, ref Vector3 xyz)
+		{
+			return btGeneric6DofSpring2Constraint_matrixToEulerYZX(ref mat, ref xyz);
+		}
+
+		public static bool MatrixToEulerYXZ(Matrix mat, ref Vector3 xyz)
+		{
+			return btGeneric6DofSpring2Constraint_matrixToEulerYXZ(ref mat, ref xyz);
 		}
 
 		public void SetAxis(Vector3 axis1, Vector3 axis2)
@@ -967,6 +1002,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btGeneric6DofSpring2Constraint_new4(IntPtr rbB, [In] ref Matrix frameInB, RotateOrder rotOrder);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btGeneric6DofSpring2Constraint_btGetMatrixElem([In] ref Matrix mat, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpring2Constraint_calculateTransforms(IntPtr obj, [In] ref Matrix transA, [In] ref Matrix transB);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpring2Constraint_calculateTransforms2(IntPtr obj);
@@ -1009,6 +1046,24 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btGeneric6DofSpring2Constraint_isLimited(IntPtr obj, int limitIndex);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
+		static extern bool btGeneric6DofSpring2Constraint_matrixToEulerZXY([In] ref Matrix mat, ref Vector3 xyz);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
+		static extern bool btGeneric6DofSpring2Constraint_matrixToEulerZYX([In] ref Matrix mat, ref Vector3 xyz);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
+		static extern bool btGeneric6DofSpring2Constraint_matrixToEulerXZY([In] ref Matrix mat, ref Vector3 xyz);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
+		static extern bool btGeneric6DofSpring2Constraint_matrixToEulerXYZ([In] ref Matrix mat, ref Vector3 xyz);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
+		static extern bool btGeneric6DofSpring2Constraint_matrixToEulerYZX([In] ref Matrix mat, ref Vector3 xyz);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[return: MarshalAs(UnmanagedType.I1)]
+		static extern bool btGeneric6DofSpring2Constraint_matrixToEulerYXZ([In] ref Matrix mat, ref Vector3 xyz);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpring2Constraint_setAngularLowerLimit(IntPtr obj, [In] ref Vector3 angularLower);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
