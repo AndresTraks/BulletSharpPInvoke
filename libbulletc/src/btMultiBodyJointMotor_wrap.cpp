@@ -14,7 +14,24 @@ btMultiBodyJointMotor* btMultiBodyJointMotor_new2(btMultiBody* body, int link, i
 	return new btMultiBodyJointMotor(body, link, linkDoF, desiredVelocity, maxMotorImpulse);
 }
 
+void btMultiBodyJointMotor_setPositionTarget(btMultiBodyJointMotor* obj, btScalar posTarget)
+{
+	obj->setPositionTarget(posTarget);
+}
+
+void btMultiBodyJointMotor_setPositionTarget2(btMultiBodyJointMotor* obj, btScalar posTarget,
+	btScalar kp)
+{
+	obj->setPositionTarget(posTarget, kp);
+}
+
 void btMultiBodyJointMotor_setVelocityTarget(btMultiBodyJointMotor* obj, btScalar velTarget)
 {
 	obj->setVelocityTarget(velTarget);
+}
+
+void btMultiBodyJointMotor_setVelocityTarget2(btMultiBodyJointMotor* obj, btScalar velTarget,
+	btScalar kd)
+{
+	obj->setVelocityTarget(velTarget, kd);
 }

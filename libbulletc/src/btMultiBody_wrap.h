@@ -64,6 +64,9 @@ extern "C"
 	EXPORT void btMultiBody_getParentToLocalRot(btMultiBody* obj, int i, btQuaternion* value);
 	EXPORT void btMultiBody_getRVector(btMultiBody* obj, int i, btVector3* value);
 	EXPORT bool btMultiBody_getUseGyroTerm(btMultiBody* obj);
+	EXPORT int btMultiBody_getUserIndex(btMultiBody* obj);
+	EXPORT int btMultiBody_getUserIndex2(btMultiBody* obj);
+	EXPORT void* btMultiBody_getUserPointer(btMultiBody* obj);
 	EXPORT const btScalar* btMultiBody_getVelocityVector(btMultiBody* obj);
 	EXPORT void btMultiBody_getWorldToBaseRot(btMultiBody* obj, btQuaternion* value);
 	EXPORT void btMultiBody_goToSleep(btMultiBody* obj);
@@ -75,6 +78,7 @@ extern "C"
 	EXPORT bool btMultiBody_isUsingGlobalVelocities(btMultiBody* obj);
 	EXPORT bool btMultiBody_isUsingRK4Integration(btMultiBody* obj);
 	EXPORT void btMultiBody_localDirToWorld(btMultiBody* obj, int i, const btVector3* vec, btVector3* value);
+	EXPORT void btMultiBody_localFrameToWorld(btMultiBody* obj, int i, const btMatrix3x3* mat, btMatrix3x3* value);
 	EXPORT void btMultiBody_localPosToWorld(btMultiBody* obj, int i, const btVector3* vec, btVector3* value);
 	EXPORT void btMultiBody_processDeltaVeeMultiDof2(btMultiBody* obj);
 	EXPORT const char* btMultiBody_serialize(btMultiBody* obj, void* dataBuffer, btSerializer* serializer);
@@ -100,6 +104,7 @@ extern "C"
 	EXPORT void btMultiBody_setNumLinks(btMultiBody* obj, int numLinks);
 	EXPORT void btMultiBody_setPosUpdated(btMultiBody* obj, bool updated);
 	EXPORT void btMultiBody_setupFixed(btMultiBody* obj, int linkIndex, btScalar mass, const btVector3* inertia, int parent, const btQuaternion* rotParentToThis, const btVector3* parentComToThisPivotOffset, const btVector3* thisPivotToThisComOffset);
+	EXPORT void btMultiBody_setupFixed2(btMultiBody* obj, int linkIndex, btScalar mass, const btVector3* inertia, int parent, const btQuaternion* rotParentToThis, const btVector3* parentComToThisPivotOffset, const btVector3* thisPivotToThisComOffset, bool deprecatedDisableParentCollision);
 	EXPORT void btMultiBody_setupPlanar(btMultiBody* obj, int i, btScalar mass, const btVector3* inertia, int parent, const btQuaternion* rotParentToThis, const btVector3* rotationAxis, const btVector3* parentComToThisComOffset);
 	EXPORT void btMultiBody_setupPlanar2(btMultiBody* obj, int i, btScalar mass, const btVector3* inertia, int parent, const btQuaternion* rotParentToThis, const btVector3* rotationAxis, const btVector3* parentComToThisComOffset, bool disableParentCollision);
 	EXPORT void btMultiBody_setupPrismatic(btMultiBody* obj, int i, btScalar mass, const btVector3* inertia, int parent, const btQuaternion* rotParentToThis, const btVector3* jointAxis, const btVector3* parentComToThisPivotOffset, const btVector3* thisPivotToThisComOffset, bool disableParentCollision);
@@ -108,10 +113,15 @@ extern "C"
 	EXPORT void btMultiBody_setupSpherical(btMultiBody* obj, int linkIndex, btScalar mass, const btVector3* inertia, int parent, const btQuaternion* rotParentToThis, const btVector3* parentComToThisPivotOffset, const btVector3* thisPivotToThisComOffset);
 	EXPORT void btMultiBody_setupSpherical2(btMultiBody* obj, int linkIndex, btScalar mass, const btVector3* inertia, int parent, const btQuaternion* rotParentToThis, const btVector3* parentComToThisPivotOffset, const btVector3* thisPivotToThisComOffset, bool disableParentCollision);
 	EXPORT void btMultiBody_setUseGyroTerm(btMultiBody* obj, bool useGyro);
+	EXPORT void btMultiBody_setUserIndex(btMultiBody* obj, int index);
+	EXPORT void btMultiBody_setUserIndex2(btMultiBody* obj, int index);
+	EXPORT void btMultiBody_setUserPointer(btMultiBody* obj, void* userPointer);
 	EXPORT void btMultiBody_setWorldToBaseRot(btMultiBody* obj, const btQuaternion* rot);
 	EXPORT void btMultiBody_stepPositionsMultiDof(btMultiBody* obj, btScalar dt);
 	EXPORT void btMultiBody_stepPositionsMultiDof2(btMultiBody* obj, btScalar dt, btScalar* pq);
 	EXPORT void btMultiBody_stepPositionsMultiDof3(btMultiBody* obj, btScalar dt, btScalar* pq, btScalar* pqd);
+	EXPORT void btMultiBody_stepVelocitiesMultiDof(btMultiBody* obj, btScalar dt, btAlignedObjectArray_btScalar* scratch_r, btAlignedObjectArray_btVector3* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m);
+	EXPORT void btMultiBody_stepVelocitiesMultiDof2(btMultiBody* obj, btScalar dt, btAlignedObjectArray_btScalar* scratch_r, btAlignedObjectArray_btVector3* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m, bool isConstraintPass);
 	EXPORT void btMultiBody_updateCollisionObjectWorldTransforms(btMultiBody* obj, btAlignedObjectArray_btQuaternion* scratch_q, btAlignedObjectArray_btVector3* scratch_m);
 	EXPORT void btMultiBody_useGlobalVelocities(btMultiBody* obj, bool use);
 	EXPORT void btMultiBody_useRK4Integration(btMultiBody* obj, bool use);

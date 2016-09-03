@@ -86,9 +86,19 @@ int btCollisionObject_getCompanionId(btCollisionObject* obj)
 	return obj->getCompanionId();
 }
 
+btScalar btCollisionObject_getContactDamping(btCollisionObject* obj)
+{
+	return obj->getContactDamping();
+}
+
 btScalar btCollisionObject_getContactProcessingThreshold(btCollisionObject* obj)
 {
 	return obj->getContactProcessingThreshold();
+}
+
+btScalar btCollisionObject_getContactStiffness(btCollisionObject* obj)
+{
+	return obj->getContactStiffness();
 }
 
 btScalar btCollisionObject_getDeactivationTime(btCollisionObject* obj)
@@ -144,6 +154,11 @@ btScalar btCollisionObject_getRollingFriction(btCollisionObject* obj)
 int btCollisionObject_getUserIndex(btCollisionObject* obj)
 {
 	return obj->getUserIndex();
+}
+
+int btCollisionObject_getUserIndex2(btCollisionObject* obj)
+{
+	return obj->getUserIndex2();
 }
 
 void* btCollisionObject_getUserPointer(btCollisionObject* obj)
@@ -270,6 +285,12 @@ void btCollisionObject_setContactProcessingThreshold(btCollisionObject* obj, btS
 	obj->setContactProcessingThreshold(contactProcessingThreshold);
 }
 
+void btCollisionObject_setContactStiffnessAndDamping(btCollisionObject* obj, btScalar stiffness,
+	btScalar damping)
+{
+	obj->setContactStiffnessAndDamping(stiffness, damping);
+}
+
 void btCollisionObject_setDeactivationTime(btCollisionObject* obj, btScalar time)
 {
 	obj->setDeactivationTime(time);
@@ -327,6 +348,11 @@ void btCollisionObject_setRollingFriction(btCollisionObject* obj, btScalar frict
 void btCollisionObject_setUserIndex(btCollisionObject* obj, int index)
 {
 	obj->setUserIndex(index);
+}
+
+void btCollisionObject_setUserIndex2(btCollisionObject* obj, int index)
+{
+	obj->setUserIndex2(index);
 }
 
 void btCollisionObject_setUserPointer(btCollisionObject* obj, void* userPointer)

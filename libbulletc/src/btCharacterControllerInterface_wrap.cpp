@@ -17,6 +17,12 @@ void btCharacterControllerInterface_jump(btCharacterControllerInterface* obj)
 	obj->jump();
 }
 
+void btCharacterControllerInterface_jump2(btCharacterControllerInterface* obj, const btVector3* dir)
+{
+	BTVECTOR3_IN(dir);
+	obj->jump(BTVECTOR3_USE(dir));
+}
+
 bool btCharacterControllerInterface_onGround(btCharacterControllerInterface* obj)
 {
 	return obj->onGround();

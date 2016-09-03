@@ -4,8 +4,11 @@ extern "C"
 {
 	EXPORT btManifoldResult* btManifoldResult_new();
 	EXPORT btManifoldResult* btManifoldResult_new2(const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap);
+	EXPORT btScalar btManifoldResult_calculateCombinedContactDamping(const btCollisionObject* body0, const btCollisionObject* body1);
+	EXPORT btScalar btManifoldResult_calculateCombinedContactStiffness(const btCollisionObject* body0, const btCollisionObject* body1);
 	EXPORT btScalar btManifoldResult_calculateCombinedFriction(const btCollisionObject* body0, const btCollisionObject* body1);
 	EXPORT btScalar btManifoldResult_calculateCombinedRestitution(const btCollisionObject* body0, const btCollisionObject* body1);
+	EXPORT btScalar btManifoldResult_calculateCombinedRollingFriction(const btCollisionObject* body0, const btCollisionObject* body1);
 	EXPORT const btCollisionObject* btManifoldResult_getBody0Internal(btManifoldResult* obj);
 	EXPORT const btCollisionObjectWrapper* btManifoldResult_getBody0Wrap(btManifoldResult* obj);
 	EXPORT const btCollisionObject* btManifoldResult_getBody1Internal(btManifoldResult* obj);

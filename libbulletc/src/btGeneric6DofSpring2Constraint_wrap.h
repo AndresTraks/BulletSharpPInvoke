@@ -100,6 +100,7 @@ extern "C"
 	EXPORT btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new2(btRigidBody* rbA, btRigidBody* rbB, const btTransform* frameInA, const btTransform* frameInB, RotateOrder rotOrder);
 	EXPORT btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new3(btRigidBody* rbB, const btTransform* frameInB);
 	EXPORT btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new4(btRigidBody* rbB, const btTransform* frameInB, RotateOrder rotOrder);
+	EXPORT btScalar btGeneric6DofSpring2Constraint_btGetMatrixElem(const btMatrix3x3* mat, int index);
 	EXPORT void btGeneric6DofSpring2Constraint_calculateTransforms(btGeneric6DofSpring2Constraint* obj, const btTransform* transA, const btTransform* transB);
 	EXPORT void btGeneric6DofSpring2Constraint_calculateTransforms2(btGeneric6DofSpring2Constraint* obj);
 	EXPORT void btGeneric6DofSpring2Constraint_enableMotor(btGeneric6DofSpring2Constraint* obj, int index, bool onOff);
@@ -121,6 +122,12 @@ extern "C"
 	EXPORT RotateOrder btGeneric6DofSpring2Constraint_getRotationOrder(btGeneric6DofSpring2Constraint* obj);
 	EXPORT btTranslationalLimitMotor2* btGeneric6DofSpring2Constraint_getTranslationalLimitMotor(btGeneric6DofSpring2Constraint* obj);
 	EXPORT bool btGeneric6DofSpring2Constraint_isLimited(btGeneric6DofSpring2Constraint* obj, int limitIndex);
+	EXPORT bool btGeneric6DofSpring2Constraint_matrixToEulerZXY(const btMatrix3x3* mat, btVector3* xyz);
+	EXPORT bool btGeneric6DofSpring2Constraint_matrixToEulerZYX(const btMatrix3x3* mat, btVector3* xyz);
+	EXPORT bool btGeneric6DofSpring2Constraint_matrixToEulerXZY(const btMatrix3x3* mat, btVector3* xyz);
+	EXPORT bool btGeneric6DofSpring2Constraint_matrixToEulerXYZ(const btMatrix3x3* mat, btVector3* xyz);
+	EXPORT bool btGeneric6DofSpring2Constraint_matrixToEulerYZX(const btMatrix3x3* mat, btVector3* xyz);
+	EXPORT bool btGeneric6DofSpring2Constraint_matrixToEulerYXZ(const btMatrix3x3* mat, btVector3* xyz);
 	EXPORT void btGeneric6DofSpring2Constraint_setAngularLowerLimit(btGeneric6DofSpring2Constraint* obj, const btVector3* angularLower);
 	EXPORT void btGeneric6DofSpring2Constraint_setAngularLowerLimitReversed(btGeneric6DofSpring2Constraint* obj, const btVector3* angularLower);
 	EXPORT void btGeneric6DofSpring2Constraint_setAngularUpperLimit(btGeneric6DofSpring2Constraint* obj, const btVector3* angularUpper);

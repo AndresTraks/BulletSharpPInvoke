@@ -2,65 +2,66 @@ CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
 PROJECT (libbulletc)
 
 IF (NOT CMAKE_BUILD_TYPE)
-# SET(CMAKE_BUILD_TYPE "Debug")
- SET(CMAKE_BUILD_TYPE "MinSizeRel")
+    # SET(CMAKE_BUILD_TYPE "Debug")
+    SET(CMAKE_BUILD_TYPE "Release")
 ENDIF (NOT CMAKE_BUILD_TYPE)
 
 FIND_PATH(BULLET_INCLUDE_DIR NAMES btBulletCollisionCommon.h
-  PATHS
-  ${PROJECT_SOURCE_DIR}/../../bullet/src/
-  ${PROJECT_SOURCE_DIR}/../bullet/src/
-  ${PROJECT_SOURCE_DIR}/../../bullet3/src/
-  ${PROJECT_SOURCE_DIR}/../bullet3/src/
-  ENV CPATH
-  /usr/include
-  /usr/local/include
-  /opt/local/include
-  NO_DEFAULT_PATH
+    PATHS
+    ${PROJECT_SOURCE_DIR}/../../bullet/src/
+    ${PROJECT_SOURCE_DIR}/../bullet/src/
+    ${PROJECT_SOURCE_DIR}/../../bullet3/src/
+    ${PROJECT_SOURCE_DIR}/../bullet3/src/
+    ENV CPATH
+    /usr/include
+    /usr/local/include
+    /opt/local/include
+    NO_DEFAULT_PATH
 )
+
+OPTION(BUILD_BULLET2_DEMOS "" OFF)
+OPTION(BUILD_BULLET3 "" OFF)
+OPTION(BUILD_CPU_DEMOS "" OFF)
+OPTION(BUILD_UNIT_TESTS "" OFF)
+OPTION(USE_MSVC_RUNTIME_LIBRARY_DLL "Use MSVC Runtime Library DLL (/MD or /MDd)" ON)
+
+add_subdirectory("${BULLET_INCLUDE_DIR}/.." "${CMAKE_CURRENT_BINARY_DIR}/bullet")
+
 INCLUDE_DIRECTORIES(${BULLET_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${BULLET_INCLUDE_DIR}/../Extras/HACD/)
-INCLUDE_DIRECTORIES(${BULLET_INCLUDE_DIR}/../Extras/Serialize/BulletWorldImporter/)
-INCLUDE_DIRECTORIES(${BULLET_INCLUDE_DIR}/../Extras/Serialize/BulletXmlWorldImporter/)
+INCLUDE_DIRECTORIES(${BULLET_PHYSICS_SOURCE_DIR}/Extras/HACD/)
+INCLUDE_DIRECTORIES(${BULLET_PHYSICS_SOURCE_DIR}/Extras/Serialize/BulletWorldImporter/)
+INCLUDE_DIRECTORIES(${BULLET_PHYSICS_SOURCE_DIR}/Extras/Serialize/BulletXmlWorldImporter/)
 
 IF(${CMAKE_GENERATOR} MATCHES "Unix Makefiles")
-    SET(BULLET_LIB_DIR ${BULLET_INCLUDE_DIR}/..)
-    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/BulletCollision)
-    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/BulletDynamics)
-    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/BulletSoftBody)
-    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/src/LinearMath)
-    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/Extras/HACD)
-    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/Extras/Serialize/BulletFileLoader)
-    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/Extras/Serialize/BulletWorldImporter)
-    LINK_DIRECTORIES(${BULLET_LIB_DIR}/build/Extras/Serialize/BulletXmlWorldImporter)
     SET(BULLETC_LIB bulletc)
 ELSE()
-    IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9 2008")
-        SET(REL_LIB_DIR msvc/2008)
-    ELSEIF(${CMAKE_GENERATOR} MATCHES "Visual Studio 10")
-        SET(REL_LIB_DIR msvc/2010)
-    ELSEIF(${CMAKE_GENERATOR} MATCHES "Visual Studio 11")
-        SET(REL_LIB_DIR msvc/2012)
-    ELSEIF(${CMAKE_GENERATOR} MATCHES "Visual Studio 12")
-        SET(REL_LIB_DIR msvc/2013)
-    ELSEIF(${CMAKE_GENERATOR} MATCHES "Visual Studio 14")
-        SET(REL_LIB_DIR msvc/2015)
-    ENDIF()
-    LINK_DIRECTORIES(${BULLET_INCLUDE_DIR}/../${REL_LIB_DIR}/lib/${CMAKE_CFG_INTDIR})
     SET(BULLETC_LIB libbulletc)
-    SET(LIB_SUFFIX _${CMAKE_CFG_INTDIR}.lib)
 ENDIF()
 
+IF (USE_DOUBLE_PRECISION)
+    ADD_DEFINITIONS( -DBT_USE_DOUBLE_PRECISION)
+ENDIF (USE_DOUBLE_PRECISION)
+
 IF(MSVC)
+    IF (NOT USE_MSVC_RUNTIME_LIBRARY_DLL)
+        #We statically link to reduce dependancies
+        FOREACH(flag_var CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_RELWITHDEBINFO )
+            IF(${flag_var} MATCHES "/MD")
+                STRING(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+            ENDIF(${flag_var} MATCHES "/MD")
+            IF(${flag_var} MATCHES "/MDd")
+                STRING(REGEX REPLACE "/MDd" "/MTd" ${flag_var} "${${flag_var}}")
+            ENDIF(${flag_var} MATCHES "/MDd")
+        ENDFOREACH(flag_var)
+    ENDIF()
+
     IF (CMAKE_CL_64)
         ADD_DEFINITIONS(-D_WIN64)
     ELSE()
-        OPTION(USE_MSVC_SSE "Use MSVC /arch:sse option" ON)
         IF (USE_MSVC_SSE)
             ADD_DEFINITIONS(/arch:SSE)
         ENDIF()
     ENDIF()
-    OPTION(USE_MSVC_FAST_FLOATINGPOINT "Use MSVC /fp:fast option" ON)
     IF (USE_MSVC_FAST_FLOATINGPOINT)
         ADD_DEFINITIONS(/fp:fast)
     ENDIF()
@@ -260,6 +261,8 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btMultiBodyConstraintSolver_wrap.h
     src/btMultiBodyDynamicsWorld_wrap.cpp
     src/btMultiBodyDynamicsWorld_wrap.h
+    src/btMultiBodyFixedConstraint_wrap.cpp
+    src/btMultiBodyFixedConstraint_wrap.h
     src/btMultiBodyJointLimitConstraint_wrap.cpp
     src/btMultiBodyJointLimitConstraint_wrap.h
     src/btMultiBodyJointMotor_wrap.cpp
@@ -270,6 +273,8 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btMultiBodyLinkCollider_wrap.h
     src/btMultiBodyPoint2Point_wrap.cpp
     src/btMultiBodyPoint2Point_wrap.h
+    src/btMultiBodySliderConstraint_wrap.cpp
+    src/btMultiBodySliderConstraint_wrap.h
     src/btMultiBodySolverConstraint_wrap.cpp
     src/btMultiBodySolverConstraint_wrap.h
     src/btMultimaterialTriangleMeshShape_wrap.cpp
@@ -382,11 +387,4 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/hacdHACD_wrap.h
 )
 
-TARGET_LINK_LIBRARIES(${BULLETC_LIB} BulletCollision${LIB_SUFFIX})
-TARGET_LINK_LIBRARIES(${BULLETC_LIB} BulletDynamics${LIB_SUFFIX})
-TARGET_LINK_LIBRARIES(${BULLETC_LIB} LinearMath${LIB_SUFFIX})
-TARGET_LINK_LIBRARIES(${BULLETC_LIB} BulletFileLoader${LIB_SUFFIX})
-TARGET_LINK_LIBRARIES(${BULLETC_LIB} BulletSoftBody${LIB_SUFFIX})
-TARGET_LINK_LIBRARIES(${BULLETC_LIB} BulletWorldImporter${LIB_SUFFIX})
-TARGET_LINK_LIBRARIES(${BULLETC_LIB} BulletXmlWorldImporter${LIB_SUFFIX})
-TARGET_LINK_LIBRARIES(${BULLETC_LIB} HACD${LIB_SUFFIX})
+TARGET_LINK_LIBRARIES(${BULLETC_LIB} BulletCollision BulletDynamics LinearMath BulletFileLoader BulletSoftBody BulletWorldImporter BulletXmlWorldImporter HACD)

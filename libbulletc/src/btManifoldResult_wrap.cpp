@@ -13,6 +13,18 @@ btManifoldResult* btManifoldResult_new2(const btCollisionObjectWrapper* body0Wra
 	return new btManifoldResult(body0Wrap, body1Wrap);
 }
 
+btScalar btManifoldResult_calculateCombinedContactDamping(const btCollisionObject* body0,
+	const btCollisionObject* body1)
+{
+	return btManifoldResult::calculateCombinedContactDamping(body0, body1);
+}
+
+btScalar btManifoldResult_calculateCombinedContactStiffness(const btCollisionObject* body0,
+	const btCollisionObject* body1)
+{
+	return btManifoldResult::calculateCombinedContactStiffness(body0, body1);
+}
+
 btScalar btManifoldResult_calculateCombinedFriction(const btCollisionObject* body0,
 	const btCollisionObject* body1)
 {
@@ -23,6 +35,12 @@ btScalar btManifoldResult_calculateCombinedRestitution(const btCollisionObject* 
 	const btCollisionObject* body1)
 {
 	return btManifoldResult::calculateCombinedRestitution(body0, body1);
+}
+
+btScalar btManifoldResult_calculateCombinedRollingFriction(const btCollisionObject* body0,
+	const btCollisionObject* body1)
+{
+	return btManifoldResult::calculateCombinedRollingFriction(body0, body1);
 }
 
 const btCollisionObject* btManifoldResult_getBody0Internal(btManifoldResult* obj)

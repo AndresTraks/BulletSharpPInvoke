@@ -52,3 +52,8 @@ btVector3* btConvexHullShape_getUnscaledPoints(btConvexHullShape* obj)
 {
 	return obj->getUnscaledPoints();
 }
+
+void btConvexHullShape_optimizeConvexHull(btConvexHullShape* obj)
+{
+	obj->optimizeConvexHull();
+}

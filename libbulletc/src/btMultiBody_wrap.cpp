@@ -362,6 +362,21 @@ bool btMultiBody_getUseGyroTerm(btMultiBody* obj)
 	return obj->getUseGyroTerm();
 }
 
+int btMultiBody_getUserIndex(btMultiBody* obj)
+{
+	return obj->getUserIndex();
+}
+
+int btMultiBody_getUserIndex2(btMultiBody* obj)
+{
+	return obj->getUserIndex2();
+}
+
+void* btMultiBody_getUserPointer(btMultiBody* obj)
+{
+	return obj->getUserPointer();
+}
+
 const btScalar* btMultiBody_getVelocityVector(btMultiBody* obj)
 {
 	return obj->getVelocityVector();
@@ -417,6 +432,14 @@ void btMultiBody_localDirToWorld(btMultiBody* obj, int i, const btVector3* vec, 
 	BTVECTOR3_IN(vec);
 	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->localDirToWorld(i, BTVECTOR3_USE(vec));
 	BTVECTOR3_SET(value, temp);
+}
+
+void btMultiBody_localFrameToWorld(btMultiBody* obj, int i, const btMatrix3x3* mat,
+	btMatrix3x3* value)
+{
+	BTMATRIX3X3_IN(mat);
+	ATTRIBUTE_ALIGNED16(btMatrix3x3) temp = obj->localFrameToWorld(i, BTMATRIX3X3_USE(mat));
+	BTMATRIX3X3_OUT(value, &temp);
 }
 
 void btMultiBody_localPosToWorld(btMultiBody* obj, int i, const btVector3* vec, btVector3* value)
@@ -665,6 +688,21 @@ void btMultiBody_setupSpherical2(btMultiBody* obj, int linkIndex, btScalar mass,
 void btMultiBody_setUseGyroTerm(btMultiBody* obj, bool useGyro)
 {
 	obj->setUseGyroTerm(useGyro);
+}
+
+void btMultiBody_setUserIndex(btMultiBody* obj, int index)
+{
+	obj->setUserIndex(index);
+}
+
+void btMultiBody_setUserIndex2(btMultiBody* obj, int index)
+{
+	obj->setUserIndex2(index);
+}
+
+void btMultiBody_setUserPointer(btMultiBody* obj, void* userPointer)
+{
+	obj->setUserPointer(userPointer);
 }
 
 void btMultiBody_setWorldToBaseRot(btMultiBody* obj, const btQuaternion* rot)

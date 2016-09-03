@@ -517,6 +517,13 @@ btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new4(btRigidBody*
 	return new btGeneric6DofSpring2Constraint(*rbB, BTTRANSFORM_USE(frameInB), rotOrder);
 }
 
+btScalar btGeneric6DofSpring2Constraint_btGetMatrixElem(const btMatrix3x3* mat, int index)
+{
+	BTMATRIX3X3_IN(mat);
+	return btGeneric6DofSpring2Constraint::btGetMatrixElem(BTMATRIX3X3_USE(mat),
+		index);
+}
+
 void btGeneric6DofSpring2Constraint_calculateTransforms(btGeneric6DofSpring2Constraint* obj,
 	const btTransform* transA, const btTransform* transB)
 {
@@ -654,6 +661,66 @@ bool btGeneric6DofSpring2Constraint_isLimited(btGeneric6DofSpring2Constraint* ob
 	int limitIndex)
 {
 	return obj->isLimited(limitIndex);
+}
+
+bool btGeneric6DofSpring2Constraint_matrixToEulerZXY(const btMatrix3x3* mat, btVector3* xyz)
+{
+	BTMATRIX3X3_IN(mat);
+	BTVECTOR3_IN(xyz);
+	bool ret = btGeneric6DofSpring2Constraint::matrixToEulerZXY(BTMATRIX3X3_USE(mat),
+		BTVECTOR3_USE(xyz));
+	BTVECTOR3_DEF_OUT(xyz);
+	return ret;
+}
+
+bool btGeneric6DofSpring2Constraint_matrixToEulerZYX(const btMatrix3x3* mat, btVector3* xyz)
+{
+	BTMATRIX3X3_IN(mat);
+	BTVECTOR3_IN(xyz);
+	bool ret = btGeneric6DofSpring2Constraint::matrixToEulerZYX(BTMATRIX3X3_USE(mat),
+		BTVECTOR3_USE(xyz));
+	BTVECTOR3_DEF_OUT(xyz);
+	return ret;
+}
+
+bool btGeneric6DofSpring2Constraint_matrixToEulerXZY(const btMatrix3x3* mat, btVector3* xyz)
+{
+	BTMATRIX3X3_IN(mat);
+	BTVECTOR3_IN(xyz);
+	bool ret = btGeneric6DofSpring2Constraint::matrixToEulerXZY(BTMATRIX3X3_USE(mat),
+		BTVECTOR3_USE(xyz));
+	BTVECTOR3_DEF_OUT(xyz);
+	return ret;
+}
+
+bool btGeneric6DofSpring2Constraint_matrixToEulerXYZ(const btMatrix3x3* mat, btVector3* xyz)
+{
+	BTMATRIX3X3_IN(mat);
+	BTVECTOR3_IN(xyz);
+	bool ret = btGeneric6DofSpring2Constraint::matrixToEulerXYZ(BTMATRIX3X3_USE(mat),
+		BTVECTOR3_USE(xyz));
+	BTVECTOR3_DEF_OUT(xyz);
+	return ret;
+}
+
+bool btGeneric6DofSpring2Constraint_matrixToEulerYZX(const btMatrix3x3* mat, btVector3* xyz)
+{
+	BTMATRIX3X3_IN(mat);
+	BTVECTOR3_IN(xyz);
+	bool ret = btGeneric6DofSpring2Constraint::matrixToEulerYZX(BTMATRIX3X3_USE(mat),
+		BTVECTOR3_USE(xyz));
+	BTVECTOR3_DEF_OUT(xyz);
+	return ret;
+}
+
+bool btGeneric6DofSpring2Constraint_matrixToEulerYXZ(const btMatrix3x3* mat, btVector3* xyz)
+{
+	BTMATRIX3X3_IN(mat);
+	BTVECTOR3_IN(xyz);
+	bool ret = btGeneric6DofSpring2Constraint::matrixToEulerYXZ(BTMATRIX3X3_USE(mat),
+		BTVECTOR3_USE(xyz));
+	BTVECTOR3_DEF_OUT(xyz);
+	return ret;
 }
 
 void btGeneric6DofSpring2Constraint_setAngularLowerLimit(btGeneric6DofSpring2Constraint* obj,

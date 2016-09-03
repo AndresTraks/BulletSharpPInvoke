@@ -7,6 +7,8 @@ extern "C"
 	EXPORT btScalar btManifoldPoint_getAppliedImpulse(btManifoldPoint* obj);
 	EXPORT btScalar btManifoldPoint_getAppliedImpulseLateral1(btManifoldPoint* obj);
 	EXPORT btScalar btManifoldPoint_getAppliedImpulseLateral2(btManifoldPoint* obj);
+	EXPORT btScalar btManifoldPoint_getCombinedContactDamping1(btManifoldPoint* obj);
+	EXPORT btScalar btManifoldPoint_getCombinedContactStiffness1(btManifoldPoint* obj);
 	EXPORT btScalar btManifoldPoint_getCombinedFriction(btManifoldPoint* obj);
 	EXPORT btScalar btManifoldPoint_getCombinedRestitution(btManifoldPoint* obj);
 	EXPORT btScalar btManifoldPoint_getCombinedRollingFriction(btManifoldPoint* obj);
@@ -34,6 +36,8 @@ extern "C"
 	EXPORT void btManifoldPoint_setAppliedImpulse(btManifoldPoint* obj, btScalar value);
 	EXPORT void btManifoldPoint_setAppliedImpulseLateral1(btManifoldPoint* obj, btScalar value);
 	EXPORT void btManifoldPoint_setAppliedImpulseLateral2(btManifoldPoint* obj, btScalar value);
+	EXPORT void btManifoldPoint_setCombinedContactDamping1(btManifoldPoint* obj, btScalar value);
+	EXPORT void btManifoldPoint_setCombinedContactStiffness1(btManifoldPoint* obj, btScalar value);
 	EXPORT void btManifoldPoint_setCombinedFriction(btManifoldPoint* obj, btScalar value);
 	EXPORT void btManifoldPoint_setCombinedRestitution(btManifoldPoint* obj, btScalar value);
 	EXPORT void btManifoldPoint_setCombinedRollingFriction(btManifoldPoint* obj, btScalar value);

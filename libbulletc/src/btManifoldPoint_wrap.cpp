@@ -34,6 +34,16 @@ btScalar btManifoldPoint_getAppliedImpulseLateral2(btManifoldPoint* obj)
 	return obj->m_appliedImpulseLateral2;
 }
 
+btScalar btManifoldPoint_getCombinedContactDamping1(btManifoldPoint* obj)
+{
+	return obj->m_combinedContactDamping1;
+}
+
+btScalar btManifoldPoint_getCombinedContactStiffness1(btManifoldPoint* obj)
+{
+	return obj->m_combinedContactStiffness1;
+}
+
 btScalar btManifoldPoint_getCombinedFriction(btManifoldPoint* obj)
 {
 	return obj->m_combinedFriction;
@@ -167,6 +177,16 @@ void btManifoldPoint_setAppliedImpulseLateral1(btManifoldPoint* obj, btScalar va
 void btManifoldPoint_setAppliedImpulseLateral2(btManifoldPoint* obj, btScalar value)
 {
 	obj->m_appliedImpulseLateral2 = value;
+}
+
+void btManifoldPoint_setCombinedContactDamping1(btManifoldPoint* obj, btScalar value)
+{
+	obj->m_combinedContactDamping1 = value;
+}
+
+void btManifoldPoint_setCombinedContactStiffness1(btManifoldPoint* obj, btScalar value)
+{
+	obj->m_combinedContactStiffness1 = value;
 }
 
 void btManifoldPoint_setCombinedFriction(btManifoldPoint* obj, btScalar value)

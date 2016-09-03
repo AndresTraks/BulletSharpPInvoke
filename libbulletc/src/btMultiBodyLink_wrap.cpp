@@ -165,6 +165,11 @@ void btMultibodyLink_getZeroRotParentToThis(btMultibodyLink* obj, btQuaternion* 
 	BTQUATERNION_SET(value, obj->m_zeroRotParentToThis);
 }
 
+const void* btMultibodyLink_getUserPtr(btMultibodyLink* obj)
+{
+	return obj->m_userPtr;
+}
+
 void btMultibodyLink_setAppliedConstraintForce(btMultibodyLink* obj, const btVector3* value)
 {
 	BTVECTOR3_COPY(&obj->m_appliedConstraintForce, value);
@@ -312,6 +317,11 @@ void btMultibodyLink_setPosVarCount(btMultibodyLink* obj, int value)
 void btMultibodyLink_setZeroRotParentToThis(btMultibodyLink* obj, const btQuaternion* value)
 {
 	BTQUATERNION_COPY(&obj->m_zeroRotParentToThis, value);
+}
+
+void btMultibodyLink_setUserPtr(btMultibodyLink* obj, const void* value)
+{
+	obj->m_userPtr = value;
 }
 
 void btMultibodyLink_updateCacheMultiDof(btMultibodyLink* obj)

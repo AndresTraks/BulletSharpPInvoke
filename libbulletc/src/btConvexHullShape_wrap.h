@@ -11,4 +11,5 @@ extern "C"
 	EXPORT int btConvexHullShape_getNumPoints(btConvexHullShape* obj);
 	EXPORT void btConvexHullShape_getScaledPoint(btConvexHullShape* obj, int i, btVector3* value);
 	EXPORT btVector3* btConvexHullShape_getUnscaledPoints(btConvexHullShape* obj);
+	EXPORT void btConvexHullShape_optimizeConvexHull(btConvexHullShape* obj);
 }

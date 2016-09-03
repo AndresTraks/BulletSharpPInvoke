@@ -34,6 +34,7 @@ extern "C"
 	EXPORT int btMultibodyLink_getParent(btMultibodyLink* obj);
 	EXPORT int btMultibodyLink_getPosVarCount(btMultibodyLink* obj);
 	EXPORT void btMultibodyLink_getZeroRotParentToThis(btMultibodyLink* obj, btQuaternion* value);
+	EXPORT const void* btMultibodyLink_getUserPtr(btMultibodyLink* obj);
 	EXPORT void btMultibodyLink_setAppliedConstraintForce(btMultibodyLink* obj, const btVector3* value);
 	EXPORT void btMultibodyLink_setAppliedConstraintTorque(btMultibodyLink* obj, const btVector3* value);
 	EXPORT void btMultibodyLink_setAppliedForce(btMultibodyLink* obj, const btVector3* value);
@@ -63,6 +64,7 @@ extern "C"
 	EXPORT void btMultibodyLink_setParent(btMultibodyLink* obj, int value);
 	EXPORT void btMultibodyLink_setPosVarCount(btMultibodyLink* obj, int value);
 	EXPORT void btMultibodyLink_setZeroRotParentToThis(btMultibodyLink* obj, const btQuaternion* value);
+	EXPORT void btMultibodyLink_setUserPtr(btMultibodyLink* obj, const void* value);
 	EXPORT void btMultibodyLink_updateCacheMultiDof(btMultibodyLink* obj);
 	EXPORT void btMultibodyLink_updateCacheMultiDof2(btMultibodyLink* obj, btScalar* pq);
 }

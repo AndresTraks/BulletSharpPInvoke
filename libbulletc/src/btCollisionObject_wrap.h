@@ -18,7 +18,9 @@ extern "C"
 	EXPORT int btCollisionObject_getCollisionFlags(btCollisionObject* obj);
 	EXPORT btCollisionShape* btCollisionObject_getCollisionShape(btCollisionObject* obj);
 	EXPORT int btCollisionObject_getCompanionId(btCollisionObject* obj);
+	EXPORT btScalar btCollisionObject_getContactDamping(btCollisionObject* obj);
 	EXPORT btScalar btCollisionObject_getContactProcessingThreshold(btCollisionObject* obj);
+	EXPORT btScalar btCollisionObject_getContactStiffness(btCollisionObject* obj);
 	EXPORT btScalar btCollisionObject_getDeactivationTime(btCollisionObject* obj);
 	EXPORT btScalar btCollisionObject_getFriction(btCollisionObject* obj);
 	EXPORT btScalar btCollisionObject_getHitFraction(btCollisionObject* obj);
@@ -30,6 +32,7 @@ extern "C"
 	EXPORT btScalar btCollisionObject_getRestitution(btCollisionObject* obj);
 	EXPORT btScalar btCollisionObject_getRollingFriction(btCollisionObject* obj);
 	EXPORT int btCollisionObject_getUserIndex(btCollisionObject* obj);
+	EXPORT int btCollisionObject_getUserIndex2(btCollisionObject* obj);
 	EXPORT void* btCollisionObject_getUserPointer(btCollisionObject* obj);
 	EXPORT void btCollisionObject_getWorldTransform(btCollisionObject* obj, btTransform* value);
 	EXPORT bool btCollisionObject_hasAnisotropicFriction(btCollisionObject* obj);
@@ -54,6 +57,7 @@ extern "C"
 	EXPORT void btCollisionObject_setCollisionShape(btCollisionObject* obj, btCollisionShape* collisionShape);
 	EXPORT void btCollisionObject_setCompanionId(btCollisionObject* obj, int id);
 	EXPORT void btCollisionObject_setContactProcessingThreshold(btCollisionObject* obj, btScalar contactProcessingThreshold);
+	EXPORT void btCollisionObject_setContactStiffnessAndDamping(btCollisionObject* obj, btScalar stiffness, btScalar damping);
 	EXPORT void btCollisionObject_setDeactivationTime(btCollisionObject* obj, btScalar time);
 	EXPORT void btCollisionObject_setFriction(btCollisionObject* obj, btScalar frict);
 	EXPORT void btCollisionObject_setHitFraction(btCollisionObject* obj, btScalar hitFraction);
@@ -65,6 +69,7 @@ extern "C"
 	EXPORT void btCollisionObject_setRestitution(btCollisionObject* obj, btScalar rest);
 	EXPORT void btCollisionObject_setRollingFriction(btCollisionObject* obj, btScalar frict);
 	EXPORT void btCollisionObject_setUserIndex(btCollisionObject* obj, int index);
+	EXPORT void btCollisionObject_setUserIndex2(btCollisionObject* obj, int index);
 	EXPORT void btCollisionObject_setUserPointer(btCollisionObject* obj, void* userPointer);
 	EXPORT void btCollisionObject_setWorldTransform(btCollisionObject* obj, const btTransform* worldTrans);
 	EXPORT void btCollisionObject_delete(btCollisionObject* obj);
