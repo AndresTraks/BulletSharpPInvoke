@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
 using BulletSharp.Math;
+using System.Collections.Generic;
+using System.Text;
 
 namespace BulletSharp
 {
-    class BulletReader : BinaryReader
+    public class BulletReader : BinaryReader
     {
         public BulletReader(Stream stream)
             : base(stream)
@@ -62,6 +64,18 @@ namespace BulletSharp
         {
             BaseStream.Position = position;
             return ReadMatrix();
+        }
+
+        public string ReadNullTerminatedString()
+        {
+            List<byte> name = new List<byte>();
+            byte ch = ReadByte();
+            while (ch != 0)
+            {
+                name.Add(ch);
+                ch = ReadByte();
+            }
+            return Encoding.ASCII.GetString(name.ToArray());
         }
 
         public long ReadPtr()

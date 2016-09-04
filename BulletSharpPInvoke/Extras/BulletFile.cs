@@ -142,8 +142,8 @@ namespace BulletSharp
                     }
 
                     // same as (BHEAD+DATA dependency)
-			        long dataPtrHead = dataPtr + ChunkUtils.GetOffset(_flags);
-                    if (dataChunk.DnaNR >= 0)
+			        long dataPtrHead = dataPtr + ChunkUtils.GetChunkSize(_flags);
+                    if (dataChunk.StructIndex >= 0)
                     {
                         byte[] id = ReadStruct(reader, dataChunk);
 

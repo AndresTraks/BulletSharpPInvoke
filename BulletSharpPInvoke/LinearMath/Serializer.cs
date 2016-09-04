@@ -516,11 +516,11 @@ namespace BulletSharp
             Marshal.Copy(bdnaOrg, 0, _dna, _dnaLength);
 
             Stream stream = new UnmanagedMemoryStream((byte*)_dna.ToPointer(), _dnaLength);
-            BinaryReader reader = new BinaryReader(stream);
+            BulletReader reader = new BulletReader(stream);
 
             // SDNA
             byte[] code = reader.ReadBytes(8);
-            string codes = ASCIIEncoding.ASCII.GetString(code);
+            string codes = Encoding.ASCII.GetString(code);
 
             // NAME
             if (!codes.Equals("SDNANAME"))
@@ -531,21 +531,14 @@ namespace BulletSharp
             _names = new Dna.NameInfo[dataLen];
             for (int i = 0; i < dataLen; i++)
             {
-                List<byte> name = new List<byte>();
-                byte ch = reader.ReadByte();
-                while (ch != 0)
-                {
-                    name.Add(ch);
-                    ch = reader.ReadByte();
-                }
-
-                _names[i] = new Dna.NameInfo(ASCIIEncoding.ASCII.GetString(name.ToArray()));
+                string name = reader.ReadNullTerminatedString();
+                _names[i] = new Dna.NameInfo(name);
             }
             stream.Position = (stream.Position + 3) & ~3;
 
             // TYPE
             code = reader.ReadBytes(4);
-            codes = ASCIIEncoding.ASCII.GetString(code);
+            codes = Encoding.ASCII.GetString(code);
             if (!codes.Equals("TYPE"))
             {
                 throw new InvalidDataException();
@@ -554,21 +547,14 @@ namespace BulletSharp
             _types = new Dna.TypeDecl[dataLen];
             for (int i = 0; i < dataLen; i++)
             {
-                List<byte> name = new List<byte>();
-                byte ch = reader.ReadByte();
-                while (ch != 0)
-                {
-                    name.Add(ch);
-                    ch = reader.ReadByte();
-                }
-                string type = ASCIIEncoding.ASCII.GetString(name.ToArray());
+                string type = reader.ReadNullTerminatedString();
                 _types[i] = new Dna.TypeDecl(type);
             }
             stream.Position = (stream.Position + 3) & ~3;
 
             // TLEN
             code = reader.ReadBytes(4);
-            codes = ASCIIEncoding.ASCII.GetString(code);
+            codes = Encoding.ASCII.GetString(code);
             if (!codes.Equals("TLEN"))
             {
                 throw new InvalidDataException();
@@ -581,7 +567,7 @@ namespace BulletSharp
 
             // STRC
             code = reader.ReadBytes(4);
-            codes = ASCIIEncoding.ASCII.GetString(code);
+            codes = Encoding.ASCII.GetString(code);
             if (!codes.Equals("STRC"))
             {
                 throw new InvalidDataException();

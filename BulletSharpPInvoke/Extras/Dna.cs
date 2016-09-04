@@ -83,7 +83,7 @@ namespace BulletSharp
 
         public class TypeDecl
         {
-            public Dna.StructDecl Struct { get; set; }
+            public StructDecl Struct { get; set; }
             public short Length { get; set; }
             public string Name { get; private set; }
 
@@ -112,13 +112,6 @@ namespace BulletSharp
                 return Name;
             }
         }
-
-        private enum FileDnaFlags
-        {
-            None = 0,
-            StructNotEqual,
-            StructEqual
-        };
 
         public class NameInfo
         {
@@ -190,11 +183,11 @@ namespace BulletSharp
             }
         }
 
-        private FileDnaFlags[] _cmpFlags;
+        private bool[] _structChanged;
         private NameInfo[] _names;
         private StructDecl[] _structs;
         private TypeDecl[] _types;
-        private Dictionary<string, int> _structReverse;
+        private Dictionary<string, StructDecl> _structReverse;
 
         private int _ptrLen;
 
@@ -202,10 +195,10 @@ namespace BulletSharp
         {
         }
 
-        public bool FlagEqual(int dnaNR)
+        public bool StructChanged(int structIndex)
         {
-            Debug.Assert(dnaNR < _cmpFlags.Length);
-            return _cmpFlags[dnaNR] == FileDnaFlags.StructEqual;
+            Debug.Assert(structIndex < _structChanged.Length);
+            return _structChanged[structIndex];
         }
 
         public int GetElementSize(ElementDecl element)
@@ -223,92 +216,78 @@ namespace BulletSharp
             return _structs[i];
         }
 
-        public int GetReverseType(string typeName)
+        public StructDecl GetReverseType(string typeName)
         {
-            int s;
+            StructDecl s;
             if (_structReverse.TryGetValue(typeName, out s))
             {
                 return s;
             }
-            return -1;
+            return null;
         }
 
-        public void Init(BinaryReader reader, bool swap)
+        public void Init(BulletReader reader, bool swap)
         {
             Stream stream = reader.BaseStream;
 
             // SDNA
             byte[] code = reader.ReadBytes(8);
-            string codes = ASCIIEncoding.ASCII.GetString(code);
+            string codes = Encoding.ASCII.GetString(code);
 
             // NAME
             if (!codes.Equals("SDNANAME"))
             {
                 throw new InvalidDataException();
             }
-            int dataLen = reader.ReadInt32();
-            _names = new NameInfo[dataLen];
-            for (int i = 0; i < dataLen; i++)
+            int numNames = reader.ReadInt32();
+            _names = new NameInfo[numNames];
+            for (int i = 0; i < numNames; i++)
             {
-                List<byte> name = new List<byte>();
-                byte ch = reader.ReadByte();
-                while (ch != 0)
-                {
-                    name.Add(ch);
-                    ch = reader.ReadByte();
-                }
-
-                _names[i] = new NameInfo(ASCIIEncoding.ASCII.GetString(name.ToArray()));
+                string name = reader.ReadNullTerminatedString();
+                _names[i] = new NameInfo(name);
             }
             stream.Position = (stream.Position + 3) & ~3;
 
-            // TYPE
+            // Type names
             code = reader.ReadBytes(4);
-            codes = ASCIIEncoding.ASCII.GetString(code);
+            codes = Encoding.ASCII.GetString(code);
             if (!codes.Equals("TYPE"))
             {
                 throw new InvalidDataException();
             }
-            dataLen = reader.ReadInt32();
-            _types = new TypeDecl[dataLen];
-            for (int i = 0; i < dataLen; i++)
+            int numTypes = reader.ReadInt32();
+            _types = new TypeDecl[numTypes];
+            for (int i = 0; i < numTypes; i++)
             {
-                List<byte> name = new List<byte>();
-                byte ch = reader.ReadByte();
-                while (ch != 0)
-                {
-                    name.Add(ch);
-                    ch = reader.ReadByte();
-                }
-                string type = ASCIIEncoding.ASCII.GetString(name.ToArray());
+                string type = reader.ReadNullTerminatedString();
                 _types[i] = new TypeDecl(type);
             }
             stream.Position = (stream.Position + 3) & ~3;
 
-            // TLEN
+            // Type lengths
             code = reader.ReadBytes(4);
-            codes = ASCIIEncoding.ASCII.GetString(code);
+            codes = Encoding.ASCII.GetString(code);
             if (!codes.Equals("TLEN"))
             {
                 throw new InvalidDataException();
             }
-            for (int i = 0; i < _types.Length; i++)
+            for (int i = 0; i < numTypes; i++)
             {
                 _types[i].Length = reader.ReadInt16();
             }
             stream.Position = (stream.Position + 3) & ~3;
 
-            // STRC
+            // Structures
             code = reader.ReadBytes(4);
-            codes = ASCIIEncoding.ASCII.GetString(code);
+            codes = Encoding.ASCII.GetString(code);
             if (!codes.Equals("STRC"))
             {
                 throw new InvalidDataException();
             }
-            dataLen = reader.ReadInt32();
-            _structs = new StructDecl[dataLen];
+            int numStructs = reader.ReadInt32();
+            _structs = new StructDecl[numStructs];
             long shtPtr = stream.Position;
-            for (int i = 0; i < dataLen; i++)
+            for (int i = 0; i < numStructs; i++)
             {
                 StructDecl structDecl = new StructDecl();
                 _structs[i] = structDecl;
@@ -319,8 +298,10 @@ namespace BulletSharp
                 else
                 {
                     short typeNr = reader.ReadInt16();
-                    structDecl.Type = _types[typeNr];
-                    structDecl.Type.Struct = structDecl;
+                    TypeDecl type = _types[typeNr];
+                    structDecl.Type = type;
+                    type.Struct = structDecl;
+
                     int numElements = reader.ReadInt16();
                     structDecl.Elements = new ElementDecl[numElements];
                     for (int j = 0; j < numElements; j++)
@@ -332,16 +313,15 @@ namespace BulletSharp
                 }
             }
 
-            // build reverse lookups
-            _structReverse = new Dictionary<string, int>(_structs.Length);
-            for (int i = 0; i < _structs.Length; i++)
+            // Build reverse lookup
+            _structReverse = new Dictionary<string, StructDecl>(_structs.Length);
+            foreach (var s in _structs)
             {
-                StructDecl s = _structs[i];
+                _structReverse.Add(s.Type.Name, s);
                 if (_ptrLen == 0 && s.Type.Name.Equals("ListBase"))
                 {
                     _ptrLen = s.Type.Length / 2;
                 }
-                _structReverse.Add(s.Type.Name, i);
             }
         }
 
@@ -351,30 +331,20 @@ namespace BulletSharp
             // this ptr should be the file data
 
             Debug.Assert(_names.Length != 0); // SDNA empty!
-            _cmpFlags = new FileDnaFlags[_structs.Length];
+            _structChanged = new bool[_structs.Length];
 
             for (int i = 0; i < _structs.Length; i++)
             {
-                Dna.StructDecl oldStruct = _structs[i];
-                int oldLookup = GetReverseType(oldStruct.Type.Name);
-                if (oldLookup == -1)
-                {
-                    _cmpFlags[i] = FileDnaFlags.None;
-                    continue;
-                }
+                StructDecl oldStruct = _structs[i];
+                StructDecl curStruct = memoryDna.GetReverseType(oldStruct.Type.Name);
 
-                if (oldLookup < memoryDna._structs.Length)
-                {
-                    Dna.StructDecl curStruct = memoryDna.GetStruct(oldLookup);
-
-                    _cmpFlags[i] = oldStruct.Equals(curStruct) ? FileDnaFlags.StructEqual : FileDnaFlags.StructNotEqual;
-                }
+                _structChanged[i] = !oldStruct.Equals(curStruct);
             }
 
             // Recurse in
             for (int i = 0; i < _structs.Length; i++)
             {
-                if (_cmpFlags[i] == FileDnaFlags.StructNotEqual)
+                if (_structChanged[i])
                 {
                     InitRecurseCmpFlags(_structs[i]);
                 }
@@ -382,18 +352,18 @@ namespace BulletSharp
         }
 
         // Structs containing non-equal structs are also non-equal
-        private void InitRecurseCmpFlags(Dna.StructDecl iter)
+        private void InitRecurseCmpFlags(StructDecl iter)
         {
             for (int i = 0; i < _structs.Length; i++)
             {
-                Dna.StructDecl curStruct = _structs[i];
-                if (curStruct != iter && _cmpFlags[i] == FileDnaFlags.StructEqual)
+                StructDecl curStruct = _structs[i];
+                if (curStruct != iter && !_structChanged[i])
                 {
-                    foreach (Dna.ElementDecl element in curStruct.Elements)
+                    foreach (ElementDecl element in curStruct.Elements)
                     {
                         if (curStruct.Type == iter.Type && element.Name.IsPointer)
                         {
-                            _cmpFlags[i] = FileDnaFlags.StructNotEqual;
+                            _structChanged[i] = true;
                             InitRecurseCmpFlags(curStruct);
                         }
                     }
