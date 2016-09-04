@@ -34,7 +34,7 @@ extern "C"
 	EXPORT void btSubSimplexClosestResult_setBarycentricCoordinates5(btSubSimplexClosestResult* obj, btScalar a, btScalar b, btScalar c, btScalar d);
 	EXPORT void btSubSimplexClosestResult_setClosestPointOnSimplex(btSubSimplexClosestResult* obj, const btVector3* value);
 	EXPORT void btSubSimplexClosestResult_setDegenerate(btSubSimplexClosestResult* obj, bool value);
-	EXPORT void btSubSimplexClosestResult_setUsedVertices(btSubSimplexClosestResult* obj, const btUsageBitfield value);
+	EXPORT void btSubSimplexClosestResult_setUsedVertices(btSubSimplexClosestResult* obj, const btUsageBitfield* value);
 	EXPORT void btSubSimplexClosestResult_delete(btSubSimplexClosestResult* obj);
 
 	EXPORT btVoronoiSimplexSolver* btVoronoiSimplexSolver_new();

@@ -141,7 +141,7 @@
 
 #ifndef BT_COLLISION_OBJECT_H
 #define btAlignedObjectArray_btCollisionObjectPtr void
-#define btAlignedObjectArray_const_btCollisionObject void
+#define btAlignedObjectArray_const_btCollisionObjectPtr void
 #define btCollisionObject void
 #define btCollisionObjectArray void
 #else
