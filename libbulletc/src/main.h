@@ -528,6 +528,10 @@
 #define btMultiBodyDynamicsWorld void
 #endif
 
+#ifndef BT_MULTIBODY_FIXED_CONSTRAINT_H
+#define btMultiBodyFixedConstraint void
+#endif
+
 #ifndef BT_MULTIBODY_JOINT_LIMIT_CONSTRAINT_H
 #define btMultiBodyJointLimitConstraint void
 #endif
@@ -547,6 +551,10 @@
 
 #ifndef BT_MULTIBODY_POINT2POINT_H
 #define btMultiBodyPoint2Point void
+#endif
+
+#ifndef BT_MULTIBODY_SLIDER_CONSTRAINT_H
+#define btMultiBodySliderConstraint void
 #endif
 
 #ifndef BT_MULTIBODY_SOLVER_CONSTRAINT_H
