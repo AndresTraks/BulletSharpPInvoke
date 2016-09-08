@@ -45,6 +45,28 @@ namespace BulletSharp
             public TypeDecl Type { get; set; }
             public ElementDecl[] Elements { get; set; }
 
+            public ElementDecl FindElement(Dna dna, bool brokenDna, NameInfo name, out int offset)
+            {
+                offset = 0;
+                foreach (ElementDecl element in Elements)
+                {
+                    if (element.Name.Equals(name))
+                    {
+                        return element;
+                    }
+                    int eleLen = dna.GetElementSize(element);
+                    if (brokenDna)
+                    {
+                        if (element.Type.Name.Equals("short") && element.Name.Name.Equals("int"))
+                        {
+                            eleLen = 0;
+                        }
+                    }
+                    offset += eleLen;
+                }
+                return null;
+            }
+
             public override bool Equals(object obj)
             {
                 StructDecl other = obj as StructDecl;
@@ -183,7 +205,6 @@ namespace BulletSharp
             }
         }
 
-        private bool[] _structChanged;
         private NameInfo[] _names;
         private StructDecl[] _structs;
         private TypeDecl[] _types;
@@ -191,14 +212,11 @@ namespace BulletSharp
 
         private int _ptrLen;
 
-        public Dna()
+        public static Dna Load(BulletReader reader, bool swap)
         {
-        }
-
-        public bool StructChanged(int structIndex)
-        {
-            Debug.Assert(structIndex < _structChanged.Length);
-            return _structChanged[structIndex];
+            var dna = new Dna();
+            dna.Init(reader, swap);
+            return dna;
         }
 
         public int GetElementSize(ElementDecl element)
@@ -216,7 +234,7 @@ namespace BulletSharp
             return _structs[i];
         }
 
-        public StructDecl GetReverseType(string typeName)
+        public StructDecl GetStruct(string typeName)
         {
             StructDecl s;
             if (_structReverse.TryGetValue(typeName, out s))
@@ -325,20 +343,17 @@ namespace BulletSharp
             }
         }
 
-        public void InitCmpFlags(Dna memoryDna)
+        public bool[] CompareDna(Dna memoryDna)
         {
-            // compare the file to memory
-            // this ptr should be the file data
-
             Debug.Assert(_names.Length != 0); // SDNA empty!
-            _structChanged = new bool[_structs.Length];
+            bool[] _structChanged = new bool[_structs.Length];
 
             for (int i = 0; i < _structs.Length; i++)
             {
                 StructDecl oldStruct = _structs[i];
-                StructDecl curStruct = memoryDna.GetReverseType(oldStruct.Type.Name);
+                StructDecl curStruct = memoryDna.GetStruct(oldStruct.Type.Name);
 
-                _structChanged[i] = !oldStruct.Equals(curStruct);
+                _structChanged[i] = !_structs[i].Equals(curStruct);
             }
 
             // Recurse in
@@ -346,13 +361,15 @@ namespace BulletSharp
             {
                 if (_structChanged[i])
                 {
-                    InitRecurseCmpFlags(_structs[i]);
+                    CompareStruct(_structs[i], _structChanged);
                 }
             }
+
+            return _structChanged;
         }
 
         // Structs containing non-equal structs are also non-equal
-        private void InitRecurseCmpFlags(StructDecl iter)
+        private void CompareStruct(StructDecl iter, bool[] _structChanged)
         {
             for (int i = 0; i < _structs.Length; i++)
             {
@@ -364,16 +381,11 @@ namespace BulletSharp
                         if (curStruct.Type == iter.Type && element.Name.IsPointer)
                         {
                             _structChanged[i] = true;
-                            InitRecurseCmpFlags(curStruct);
+                            CompareStruct(curStruct, _structChanged);
                         }
                     }
                 }
             }
-        }
-
-        public bool LessThan(Dna file)
-        {
-            return _names.Length < _names.Length;
         }
 
         public int NumNames

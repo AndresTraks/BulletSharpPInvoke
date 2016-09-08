@@ -286,14 +286,14 @@ namespace BulletSharp
         
         public bool LoadFileFromMemory(BulletFile bulletFile)
 		{
-            if ((bulletFile.Flags & FileFlags.OK) != FileFlags.OK)
+            if ((bulletFile.Flags & FileFlags.OK) == 0)
             {
                 return false;
             }
 
             bulletFile.Parse(_verboseMode);
 
-            if ((_verboseMode & FileVerboseMode.DumpChunks) == FileVerboseMode.DumpChunks)
+            if ((_verboseMode & FileVerboseMode.DumpChunks) != 0)
             {
                 //bulletFile.DumpChunks(bulletFile->FileDna);
             }

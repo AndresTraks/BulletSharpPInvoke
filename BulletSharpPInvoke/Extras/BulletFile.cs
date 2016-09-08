@@ -54,8 +54,6 @@ namespace BulletSharp
     */
 	public class BulletFile : bFile
 	{
-        protected byte[] _dnaCopy;
-
         public List<byte[]> Bvhs = new List<byte[]>();
         public List<byte[]> CollisionObjects = new List<byte[]>();
         public List<byte[]> CollisionShapes = new List<byte[]>();
@@ -65,20 +63,22 @@ namespace BulletSharp
         public List<byte[]> RigidBodies = new List<byte[]>();
 
 		public BulletFile()
-			: base("", "BULLET ")
+			: base("")
 		{
             throw new NotImplementedException();
 		}
         
 		public BulletFile(string fileName)
-            : base(fileName, "BULLET ")
+            : base(fileName)
 		{
 		}
 
 		public BulletFile(byte[] memoryBuffer, int len)
-            : base(memoryBuffer, len, "BULLET ")
+            : base(memoryBuffer, len)
 		{
 		}
+
+        protected override string HeaderTag => "BULLET";
 
         public override void AddDataBlock(byte[] dataBlock)
         {
@@ -93,17 +93,12 @@ namespace BulletSharp
         */
         public override void Parse(FileVerboseMode verboseMode)
         {
-            byte[] dna = (IntPtr.Size == 8) ? Serializer.GetBulletDna64() : Serializer.GetBulletDna();
-
-            _dnaCopy = new byte[dna.Length];
-            Buffer.BlockCopy(dna, 0, _dnaCopy, 0, _dnaCopy.Length);
-
-            ParseInternal(verboseMode, _dnaCopy);
+            ParseInternal(verboseMode);
 
             //the parsing will convert to cpu endian
             _flags &= ~FileFlags.EndianSwap;
             
-            _fileBuffer[8] = BitConverter.IsLittleEndian ? (byte)'v' : (byte)'V';
+            _fileBuffer[8] = (byte)(BitConverter.IsLittleEndian ? 'v' : 'V');
         }
 
 		public override void ParseData()
@@ -118,7 +113,7 @@ namespace BulletSharp
             MemoryStream memory = new MemoryStream(_fileBuffer, false);
             BinaryReader reader = new BinaryReader(memory);
 
-            _dataStart = 12;
+            _dataStart = SizeOfBlenderHeader;
             long dataPtr = _dataStart;
             memory.Position = dataPtr;
 
