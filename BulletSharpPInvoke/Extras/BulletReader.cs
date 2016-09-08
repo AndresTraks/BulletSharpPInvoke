@@ -89,6 +89,19 @@ namespace BulletSharp
             return ReadPtr();
         }
 
+        public string[] ReadStringList()
+        {
+            int count = ReadInt32();
+            string[] list = new string[count];
+            for (int i = 0; i < count; i++)
+            {
+                list[i] = ReadNullTerminatedString();
+            }
+
+            BaseStream.Position = (BaseStream.Position + 3) & ~3;
+            return list;
+        }
+
         public Vector3 ReadVector3()
         {
             float x = ReadSingle();

@@ -16,7 +16,6 @@ namespace BulletSharp
         EndianSwap = 0x4,
         File64 = 0x8,
         BitsVaries = 0x10,
-        VersionVaries = 0x20,
         DoublePrecision = 0x40,
         BrokenDna = 0x80
     }
@@ -392,17 +391,10 @@ namespace BulletSharp
             bool swap = (_flags & FileFlags.EndianSwap) != 0;
             _fileDna = Dna.Load(reader, swap);
 
-            if (_version == 276)
+            if (_fileDna.IsBroken(_version))
             {
-                for (i = 0; i < _fileDna.NumNames; i++)
-                {
-                    if (_fileDna.GetName(i).Equals("int"))
-                    {
-                        //Console.WriteLine("warning: fixing some broken DNA version");
-                        _flags |= FileFlags.BrokenDna;
-                        break;
-                    }
-                }
+                //Console.WriteLine("warning: fixing some broken DNA version");
+                _flags |= FileFlags.BrokenDna;
             }
 
             //if ((verboseMode & FileVerboseMode.DumpDnaTypeDefinitions) != 0)
@@ -414,17 +406,6 @@ namespace BulletSharp
                 using (BulletReader dnaReader = new BulletReader(dnaStream))
                 {
                     _memoryDna = Dna.Load(dnaReader, !BitConverter.IsLittleEndian);
-                }
-            }
-
-            if (_fileDna.NumNames != _memoryDna.NumNames)
-            {
-                _flags |= FileFlags.VersionVaries;
-                //Console.WriteLine ("Warning, file DNA is different than built in, performance is reduced. Best to re-export file with a matching version/platform");
-
-                if (_fileDna.NumNames > _memoryDna.NumNames)
-                {
-                    //Console.WriteLine ("Warning, file DNA is newer than built in.");
                 }
             }
 

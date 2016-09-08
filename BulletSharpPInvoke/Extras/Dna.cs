@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace BulletSharp
@@ -224,11 +225,6 @@ namespace BulletSharp
             return element.Name.ArraySizeNew * (element.Name.IsPointer ? _ptrLen : element.Type.Length);
 		}
 
-        public string GetName(int i)
-        {
-            return _names[i].Name;
-        }
-
         public StructDecl GetStruct(int i)
         {
             return _structs[i];
@@ -246,77 +242,43 @@ namespace BulletSharp
 
         public void Init(BulletReader reader, bool swap)
         {
+            ReadTag(reader, "SDNA");
+
+            ReadTag(reader, "NAME");
+            _names = reader.ReadStringList()
+                .Select(s => new NameInfo(s))
+                .ToArray();
+
+            ReadTag(reader, "TYPE");
+            _types = reader.ReadStringList()
+                .Select(s => new TypeDecl(s))
+                .ToArray();
+
             Stream stream = reader.BaseStream;
 
-            // SDNA
-            byte[] code = reader.ReadBytes(8);
-            string codes = Encoding.ASCII.GetString(code);
-
-            // NAME
-            if (!codes.Equals("SDNANAME"))
-            {
-                throw new InvalidDataException();
-            }
-            int numNames = reader.ReadInt32();
-            _names = new NameInfo[numNames];
-            for (int i = 0; i < numNames; i++)
-            {
-                string name = reader.ReadNullTerminatedString();
-                _names[i] = new NameInfo(name);
-            }
-            stream.Position = (stream.Position + 3) & ~3;
-
-            // Type names
-            code = reader.ReadBytes(4);
-            codes = Encoding.ASCII.GetString(code);
-            if (!codes.Equals("TYPE"))
-            {
-                throw new InvalidDataException();
-            }
-            int numTypes = reader.ReadInt32();
-            _types = new TypeDecl[numTypes];
-            for (int i = 0; i < numTypes; i++)
-            {
-                string type = reader.ReadNullTerminatedString();
-                _types[i] = new TypeDecl(type);
-            }
-            stream.Position = (stream.Position + 3) & ~3;
-
             // Type lengths
-            code = reader.ReadBytes(4);
-            codes = Encoding.ASCII.GetString(code);
-            if (!codes.Equals("TLEN"))
-            {
-                throw new InvalidDataException();
-            }
-            for (int i = 0; i < numTypes; i++)
+            ReadTag(reader, "TLEN");
+            for (int i = 0; i < _types.Length; i++)
             {
                 _types[i].Length = reader.ReadInt16();
             }
             stream.Position = (stream.Position + 3) & ~3;
 
-            // Structures
-            code = reader.ReadBytes(4);
-            codes = Encoding.ASCII.GetString(code);
-            if (!codes.Equals("STRC"))
-            {
-                throw new InvalidDataException();
-            }
+            // Structs
+            ReadTag(reader, "STRC");
             int numStructs = reader.ReadInt32();
             _structs = new StructDecl[numStructs];
-            long shtPtr = stream.Position;
             for (int i = 0; i < numStructs; i++)
             {
                 StructDecl structDecl = new StructDecl();
-                _structs[i] = structDecl;
                 if (swap)
                 {
                     throw new NotImplementedException();
                 }
                 else
                 {
-                    short typeNr = reader.ReadInt16();
-                    TypeDecl type = _types[typeNr];
+                    short typeIndex = reader.ReadInt16();
+                    TypeDecl type = _types[typeIndex];
                     structDecl.Type = type;
                     type.Struct = structDecl;
 
@@ -324,11 +286,12 @@ namespace BulletSharp
                     structDecl.Elements = new ElementDecl[numElements];
                     for (int j = 0; j < numElements; j++)
                     {
-                        typeNr = reader.ReadInt16();
-                        short nameNr = reader.ReadInt16();
-                        structDecl.Elements[j] = new ElementDecl(_types[typeNr], _names[nameNr]);
+                        typeIndex = reader.ReadInt16();
+                        short nameIndex = reader.ReadInt16();
+                        structDecl.Elements[j] = new ElementDecl(_types[typeIndex], _names[nameIndex]);
                     }
                 }
+                _structs[i] = structDecl;
             }
 
             // Build reverse lookup
@@ -340,6 +303,16 @@ namespace BulletSharp
                 {
                     _ptrLen = s.Type.Length / 2;
                 }
+            }
+        }
+
+        private static void ReadTag(BulletReader reader, string tag)
+        {
+            byte[] codeData = reader.ReadBytes(tag.Length);
+            string code = Encoding.ASCII.GetString(codeData);
+            if (code != tag)
+            {
+                throw new InvalidDataException($"Expected tag: {tag}");
             }
         }
 
@@ -388,16 +361,9 @@ namespace BulletSharp
             }
         }
 
-        public int NumNames
+        public bool IsBroken(int fileVersion)
         {
-            get
-            {
-                if (_names == null)
-                {
-                    return 0;
-                }
-                return _names.Length;
-            }
+            return fileVersion == 276 && _names.Any(n => n.Name == "int");
         }
 
         public int NumStructs
