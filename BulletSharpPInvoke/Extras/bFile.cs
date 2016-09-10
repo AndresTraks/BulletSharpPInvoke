@@ -10,14 +10,13 @@ namespace BulletSharp
     [Flags]
     public enum FileFlags
     {
-        None = 0x0,
-        OK = 0x1,
-        VoidIs8 = 0x2,
-        EndianSwap = 0x4,
-        File64 = 0x8,
-        BitsVaries = 0x10,
-        DoublePrecision = 0x40,
-        BrokenDna = 0x80
+        None = 0,
+        OK = 1,
+        EndianSwap = 2,
+        File64 = 4,
+        BitsVaries = 8,
+        DoublePrecision = 0x10,
+        BrokenDna = 0x20
     }
 
     [Flags]
@@ -119,7 +118,7 @@ namespace BulletSharp
         {
             foreach (Dna.ElementDecl element in firstStruct.Elements)
             {
-                if (element.Name.Equals(lookupElement.Name))
+                if (element.NameInfo.Equals(lookupElement.NameInfo))
                 {
                     if (element.Type.Name.Equals(lookupElement.Type.Name))
                     {
@@ -140,7 +139,7 @@ namespace BulletSharp
             bool brokenDna = (_flags & FileFlags.BrokenDna) != 0;
 
             int elementOffset;
-            Dna.ElementDecl element = fileStruct.FindElement(_fileDna, brokenDna, memoryElement.Name, out elementOffset);
+            Dna.ElementDecl element = fileStruct.FindElement(_fileDna, brokenDna, memoryElement.NameInfo, out elementOffset);
             if (element != null)
             {
                 int elementLength = _fileDna.GetElementSize(element);
@@ -153,11 +152,11 @@ namespace BulletSharp
             MemoryStream dataStream = new MemoryStream(_fileBuffer, false);
             BinaryReader dataReader = new BinaryReader(dataStream);
 
-            int arrayLen = element.Name.ArraySizeNew;
+            int arrayLen = element.NameInfo.ArraySizeNew;
 
             dataStream.Position = data;
 
-            if (element.Name.Name[0] == '*')
+            if (element.NameInfo.Name[0] == '*')
             {
                 SafeSwapPtr(dataWriter, dataReader);
 
@@ -169,7 +168,7 @@ namespace BulletSharp
                     }
                     else
                     {
-                        if (element.Name.Name[1] == '*')
+                        if (element.NameInfo.Name[1] == '*')
                         {
                             throw new NotImplementedException();
                         }
@@ -357,7 +356,6 @@ namespace BulletSharp
                     // Some Bullet files are missing the DNA1 block
                     // In Blender it's DNA1 + ChunkUtils::getOffset() + SDNA + NAME
                     // In Bullet tests its SDNA + NAME
-
                     chunk.OldPtr = i;
                     chunk.Length = (int)memory.Length - i;
 
@@ -432,7 +430,7 @@ namespace BulletSharp
             foreach (Dna.ElementDecl element in memoryStruct.Elements)
             {
                 int memorySize = _memoryDna.GetElementSize(element);
-                if (element.Type.Struct != null && element.Name.Name[0] != '*')
+                if (element.Type.Struct != null && element.NameInfo.Name[0] != '*')
                 {
                     Dna.ElementDecl elementOld;
                     long elementOffset = GetFileElement(fileStruct, element, dataPtr, out elementOld);
@@ -440,7 +438,7 @@ namespace BulletSharp
                     {
                         Dna.StructDecl oldStruct = _fileDna.GetStruct(element.Type.Name);
                         data.BaseStream.Position = elementOffset;
-                        int arrayLen = elementOld.Name.ArraySizeNew;
+                        int arrayLen = elementOld.NameInfo.ArraySizeNew;
                         if (arrayLen == 1)
                         {
                             strc.BaseStream.Position = strcPtr;
@@ -619,9 +617,9 @@ namespace BulletSharp
             foreach (Dna.ElementDecl element in oldStruct.Elements)
             {
                 int size = fileDna.GetElementSize(element);
-                int arrayLen = element.Name.ArraySizeNew;
+                int arrayLen = element.NameInfo.ArraySizeNew;
 
-                if (element.Name.Name[0] == '*')
+                if (element.NameInfo.Name[0] == '*')
                 {
                     if (arrayLen > 1)
                     {
@@ -636,7 +634,7 @@ namespace BulletSharp
                             {
                                 Console.Write("  ");
                             }
-                            Console.WriteLine("<{0} type=\"pointer\"> {1} </{0}>", element.Name.Name.Substring(1), ptr);
+                            Console.WriteLine("<{0} type=\"pointer\"> {1} </{0}>", element.NameInfo.Name.Substring(1), ptr);
                         }
                         byte[] ptrChunk = FindLibPointer(ptr);
                         if (ptrChunk != null)
@@ -662,11 +660,11 @@ namespace BulletSharp
 
                             if (arrayLen > 1)
                             {
-                                Console.WriteLine("<{0} type=\"{1}\" count={2}>", element.Name.CleanName, element.Type.Name, arrayLen);
+                                Console.WriteLine("<{0} type=\"{1}\" count={2}>", element.NameInfo.CleanName, element.Type.Name, arrayLen);
                             }
                             else
                             {
-                                Console.WriteLine("<{0} type=\"{1}\">", element.Name.CleanName, element.Type.Name);
+                                Console.WriteLine("<{0} type=\"{1}\">", element.NameInfo.CleanName, element.Type.Name);
                             }
                         }
 
@@ -683,7 +681,7 @@ namespace BulletSharp
                             {
                                 Console.Write("  ");
                             }
-                            Console.WriteLine("</{0}>", element.Name.CleanName);
+                            Console.WriteLine("</{0}>", element.NameInfo.CleanName);
                         }
                     }
                     else
@@ -747,17 +745,17 @@ namespace BulletSharp
                                     }
                                     if (arrayLen == 1)
                                     {
-                                        Console.Write("<{0} type=\"{1}\">", element.Name.Name, element.Type.Name);
+                                        Console.Write("<{0} type=\"{1}\">", element.NameInfo.Name, element.Type.Name);
                                     }
                                     else
                                     {
-                                        Console.Write("<{0} type=\"{1}\" count=\"{2}\">", element.Name.CleanName, element.Type.Name, arrayLen);
+                                        Console.Write("<{0} type=\"{1}\" count=\"{2}\">", element.NameInfo.CleanName, element.Type.Name, arrayLen);
                                     }
                                     for (int i = 0; i < arrayLen; i++)
                                     {
                                         Console.Write(" {0} ", dbArray[i].ToString(CultureInfo.InvariantCulture));
                                     }
-                                    Console.WriteLine("</{0}>", element.Name.CleanName);
+                                    Console.WriteLine("</{0}>", element.NameInfo.CleanName);
                                 }
                             }
                         }

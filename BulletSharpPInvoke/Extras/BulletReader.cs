@@ -102,6 +102,16 @@ namespace BulletSharp
             return list;
         }
 
+        public void ReadTag(string tag)
+        {
+            byte[] codeData = ReadBytes(tag.Length);
+            string code = Encoding.ASCII.GetString(codeData);
+            if (code != tag)
+            {
+                throw new InvalidDataException($"Expected tag: {tag}");
+            }
+        }
+
         public Vector3 ReadVector3()
         {
             float x = ReadSingle();

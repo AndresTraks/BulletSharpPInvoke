@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
@@ -330,9 +331,7 @@ namespace BulletSharp
         IntPtr _dna;
         int _dnaLength;
 
-        private Dna.NameInfo[] _names;
         private Dna.StructDecl[] _structs;
-        private Dna.TypeDecl[] _types;
         private Dictionary<string, Dna.StructDecl> _structReverse;
 
 		public DefaultSerializer(int totalSize)
@@ -510,6 +509,10 @@ namespace BulletSharp
             {
                 return;
             }
+            if (!BitConverter.IsLittleEndian)
+            {
+                throw new NotImplementedException();
+            }
 
             _dnaLength = bdnaOrg.Length;
             _dna = Marshal.AllocHGlobal(bdnaOrg.Length);
@@ -518,96 +521,54 @@ namespace BulletSharp
             Stream stream = new UnmanagedMemoryStream((byte*)_dna.ToPointer(), _dnaLength);
             BulletReader reader = new BulletReader(stream);
 
-            // SDNA
-            byte[] code = reader.ReadBytes(8);
-            string codes = Encoding.ASCII.GetString(code);
+            reader.ReadTag("SDNA");
 
-            // NAME
-            if (!codes.Equals("SDNANAME"))
+            reader.ReadTag("NAME");
+            var names = reader.ReadStringList()
+                .Select(n => new Dna.NameInfo(n))
+                .ToArray();
+            stream.Position = (stream.Position + 3) & ~3;
+
+            // Types
+            reader.ReadTag("TYPE");
+            Dna.TypeDecl[] types = reader.ReadStringList()
+                .Select(s => new Dna.TypeDecl(s))
+                .ToArray();
+            stream.Position = (stream.Position + 3) & ~3;
+            reader.ReadTag("TLEN");
+            foreach (var type in types)
             {
-                throw new InvalidDataException();
-            }
-            int dataLen = reader.ReadInt32();
-            _names = new Dna.NameInfo[dataLen];
-            for (int i = 0; i < dataLen; i++)
-            {
-                string name = reader.ReadNullTerminatedString();
-                _names[i] = new Dna.NameInfo(name);
+                type.Length = reader.ReadInt16();
             }
             stream.Position = (stream.Position + 3) & ~3;
 
-            // TYPE
-            code = reader.ReadBytes(4);
-            codes = Encoding.ASCII.GetString(code);
-            if (!codes.Equals("TYPE"))
+            // Structs
+            reader.ReadTag("STRC");
+            int numStructs = reader.ReadInt32();
+            _structs = new Dna.StructDecl[numStructs];
+            _structReverse = new Dictionary<string, Dna.StructDecl>(numStructs);
+            for (int i = 0; i < numStructs; i++)
             {
-                throw new InvalidDataException();
-            }
-            dataLen = reader.ReadInt32();
-            _types = new Dna.TypeDecl[dataLen];
-            for (int i = 0; i < dataLen; i++)
-            {
-                string type = reader.ReadNullTerminatedString();
-                _types[i] = new Dna.TypeDecl(type);
-            }
-            stream.Position = (stream.Position + 3) & ~3;
+                short typeIndex = reader.ReadInt16();
+                Dna.TypeDecl type = types[typeIndex];
 
-            // TLEN
-            code = reader.ReadBytes(4);
-            codes = Encoding.ASCII.GetString(code);
-            if (!codes.Equals("TLEN"))
-            {
-                throw new InvalidDataException();
-            }
-            for (int i = 0; i < _types.Length; i++)
-            {
-                _types[i].Length = reader.ReadInt16();
-            }
-            stream.Position = (stream.Position + 3) & ~3;
+                int numElements = reader.ReadInt16();
+                var elements = new Dna.ElementDecl[numElements];
+                for (int j = 0; j < numElements; j++)
+                {
+                    typeIndex = reader.ReadInt16();
+                    short nameIndex = reader.ReadInt16();
+                    elements[j] = new Dna.ElementDecl(types[typeIndex], names[nameIndex]);
+                }
 
-            // STRC
-            code = reader.ReadBytes(4);
-            codes = Encoding.ASCII.GetString(code);
-            if (!codes.Equals("STRC"))
-            {
-                throw new InvalidDataException();
-            }
-            dataLen = reader.ReadInt32();
-            _structs = new Dna.StructDecl[dataLen];
-            long shtPtr = stream.Position;
-            for (int i = 0; i < dataLen; i++)
-            {
-                Dna.StructDecl structDecl = new Dna.StructDecl();
+                var structDecl = new Dna.StructDecl(type, elements);
+                type.Struct = structDecl;
                 _structs[i] = structDecl;
-                if (!BitConverter.IsLittleEndian)
-                {
-                    throw new NotImplementedException();
-                }
-                else
-                {
-                    short typeNr = reader.ReadInt16();
-                    structDecl.Type = _types[typeNr];
-                    structDecl.Type.Struct = structDecl;
-                    int numElements = reader.ReadInt16();
-                    structDecl.Elements = new Dna.ElementDecl[numElements];
-                    for (int j = 0; j < numElements; j++)
-                    {
-                        typeNr = reader.ReadInt16();
-                        short nameNr = reader.ReadInt16();
-                        structDecl.Elements[j] = new Dna.ElementDecl(_types[typeNr], _names[nameNr]);
-                    }
-                }
+                _structReverse.Add(type.Name, structDecl);
             }
 
             reader.Dispose();
             stream.Dispose();
-
-            // build reverse lookups
-            _structReverse = new Dictionary<string, Dna.StructDecl>(_structs.Length);
-            foreach (Dna.StructDecl s in _structs)
-            {
-                _structReverse.Add(s.Type.Name, s);
-            }
         }
 
         public override void RegisterNameForObject(Object obj, string name)

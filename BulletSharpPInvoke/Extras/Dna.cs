@@ -11,14 +11,14 @@ namespace BulletSharp
     {
         public class ElementDecl
         {
-            public TypeDecl Type { get; private set; }
-            public NameInfo Name { get; private set; }
-
-            public ElementDecl(TypeDecl type, NameInfo name)
+            public ElementDecl(TypeDecl type, NameInfo nameInfo)
             {
                 Type = type;
-                Name = name;
+                NameInfo = nameInfo;
             }
+
+            public TypeDecl Type { get; }
+            public NameInfo NameInfo { get; }
 
             public override bool Equals(object obj)
             {
@@ -27,38 +27,44 @@ namespace BulletSharp
                 {
                     return false;
                 }
-                return Type.Equals(other.Type) && Name.Equals(other.Name);
+                return Type.Equals(other.Type) && NameInfo.Equals(other.NameInfo);
             }
 
             public override int GetHashCode()
             {
-                return Type.GetHashCode() + Name.GetHashCode();
+                return Type.GetHashCode() + NameInfo.GetHashCode();
             }
 
             public override string ToString()
             {
-                return Type + ": " + Name.ToString();
+                return Type + ": " + NameInfo.ToString();
             }
         }
 
         public class StructDecl
         {
-            public TypeDecl Type { get; set; }
-            public ElementDecl[] Elements { get; set; }
+            public StructDecl(TypeDecl type, ElementDecl[] elements)
+            {
+                Type = type;
+                Elements = elements;
+            }
+
+            public TypeDecl Type { get; }
+            public ElementDecl[] Elements { get; }
 
             public ElementDecl FindElement(Dna dna, bool brokenDna, NameInfo name, out int offset)
             {
                 offset = 0;
                 foreach (ElementDecl element in Elements)
                 {
-                    if (element.Name.Equals(name))
+                    if (element.NameInfo.Equals(name))
                     {
                         return element;
                     }
                     int eleLen = dna.GetElementSize(element);
                     if (brokenDna)
                     {
-                        if (element.Type.Name.Equals("short") && element.Name.Name.Equals("int"))
+                        if (element.Type.Name.Equals("short") && element.NameInfo.Name.Equals("int"))
                         {
                             eleLen = 0;
                         }
@@ -138,12 +144,12 @@ namespace BulletSharp
 
         public class NameInfo
         {
-            public string Name { get; private set; }
-            public bool IsPointer { get; private set; }
-            public int Dim0 { get; set; }
-            public int Dim1 { get; set; }
+            public string Name { get; }
+            public bool IsPointer { get; }
+            public int Dimension0 { get; }
+            public int Dimension1 { get; }
 
-            public int ArraySizeNew { get { return Dim0 * Dim1; } }
+            public int ArraySizeNew { get { return Dimension0 * Dimension1; } }
 
             public string CleanName
             {
@@ -166,23 +172,23 @@ namespace BulletSharp
                 int bp = name.IndexOf('[') + 1;
                 if (bp == 0)
                 {
-                    Dim0 = 1;
-                    Dim1 = 1;
+                    Dimension0 = 1;
+                    Dimension1 = 1;
                     return;
                 }
                 int bp2 = name.IndexOf(']');
-                Dim1 = int.Parse(name.Substring(bp, bp2 - bp));
+                Dimension1 = int.Parse(name.Substring(bp, bp2 - bp));
 
                 // find second dim, if any
                 bp = name.IndexOf('[', bp2) + 1;
                 if (bp == 0)
                 {
-                    Dim0 = 1;
+                    Dimension0 = 1;
                     return;
                 }
                 bp2 = name.IndexOf(']');
-                Dim0 = Dim1;
-                Dim1 = int.Parse(name.Substring(bp, bp2 - bp));
+                Dimension0 = Dimension1;
+                Dimension1 = int.Parse(name.Substring(bp, bp2 - bp));
             }
 
             public override bool Equals(object obj)
@@ -206,11 +212,10 @@ namespace BulletSharp
             }
         }
 
-        private NameInfo[] _names;
         private StructDecl[] _structs;
-        private TypeDecl[] _types;
         private Dictionary<string, StructDecl> _structReverse;
 
+        private bool _hasIntType;
         private int _ptrLen;
 
         public static Dna Load(BulletReader reader, bool swap)
@@ -222,7 +227,8 @@ namespace BulletSharp
 
         public int GetElementSize(ElementDecl element)
 		{
-            return element.Name.ArraySizeNew * (element.Name.IsPointer ? _ptrLen : element.Type.Length);
+            int typeLength = element.NameInfo.IsPointer ? _ptrLen : element.Type.Length;
+            return element.NameInfo.ArraySizeNew * typeLength;
 		}
 
         public StructDecl GetStruct(int i)
@@ -242,83 +248,67 @@ namespace BulletSharp
 
         public void Init(BulletReader reader, bool swap)
         {
-            ReadTag(reader, "SDNA");
+            if (swap)
+            {
+                throw new NotImplementedException();
+            }
 
-            ReadTag(reader, "NAME");
-            _names = reader.ReadStringList()
-                .Select(s => new NameInfo(s))
+            reader.ReadTag("SDNA");
+
+            // Names
+            reader.ReadTag("NAME");
+            string[] names = reader.ReadStringList();
+            var nameInfos = names
+                .Select(n => new NameInfo(n))
                 .ToArray();
+            _hasIntType = names.Contains("int");
 
-            ReadTag(reader, "TYPE");
-            _types = reader.ReadStringList()
+            // Types
+            reader.ReadTag("TYPE");
+            TypeDecl[] types = reader.ReadStringList()
                 .Select(s => new TypeDecl(s))
                 .ToArray();
-
             Stream stream = reader.BaseStream;
-
-            // Type lengths
-            ReadTag(reader, "TLEN");
-            for (int i = 0; i < _types.Length; i++)
+            stream.Position = (stream.Position + 3) & ~3;
+            reader.ReadTag("TLEN");
+            foreach (var type in types)
             {
-                _types[i].Length = reader.ReadInt16();
+                type.Length = reader.ReadInt16();
+                if (_ptrLen == 0 && type.Name == "ListBase")
+                {
+                    _ptrLen = type.Length / 2;
+                }
             }
             stream.Position = (stream.Position + 3) & ~3;
 
             // Structs
-            ReadTag(reader, "STRC");
+            reader.ReadTag("STRC");
             int numStructs = reader.ReadInt32();
             _structs = new StructDecl[numStructs];
+            _structReverse = new Dictionary<string, StructDecl>(numStructs);
             for (int i = 0; i < numStructs; i++)
             {
-                StructDecl structDecl = new StructDecl();
-                if (swap)
-                {
-                    throw new NotImplementedException();
-                }
-                else
-                {
-                    short typeIndex = reader.ReadInt16();
-                    TypeDecl type = _types[typeIndex];
-                    structDecl.Type = type;
-                    type.Struct = structDecl;
+                short typeIndex = reader.ReadInt16();
+                TypeDecl type = types[typeIndex];
 
-                    int numElements = reader.ReadInt16();
-                    structDecl.Elements = new ElementDecl[numElements];
-                    for (int j = 0; j < numElements; j++)
-                    {
-                        typeIndex = reader.ReadInt16();
-                        short nameIndex = reader.ReadInt16();
-                        structDecl.Elements[j] = new ElementDecl(_types[typeIndex], _names[nameIndex]);
-                    }
+                int numElements = reader.ReadInt16();
+                var elements = new ElementDecl[numElements];
+                for (int j = 0; j < numElements; j++)
+                {
+                    typeIndex = reader.ReadInt16();
+                    short nameIndex = reader.ReadInt16();
+                    elements[j] = new ElementDecl(types[typeIndex], nameInfos[nameIndex]);
                 }
+
+                var structDecl = new StructDecl(type, elements);
+                type.Struct = structDecl;
                 _structs[i] = structDecl;
-            }
-
-            // Build reverse lookup
-            _structReverse = new Dictionary<string, StructDecl>(_structs.Length);
-            foreach (var s in _structs)
-            {
-                _structReverse.Add(s.Type.Name, s);
-                if (_ptrLen == 0 && s.Type.Name.Equals("ListBase"))
-                {
-                    _ptrLen = s.Type.Length / 2;
-                }
-            }
-        }
-
-        private static void ReadTag(BulletReader reader, string tag)
-        {
-            byte[] codeData = reader.ReadBytes(tag.Length);
-            string code = Encoding.ASCII.GetString(codeData);
-            if (code != tag)
-            {
-                throw new InvalidDataException($"Expected tag: {tag}");
+                _structReverse.Add(type.Name, structDecl);
             }
         }
 
         public bool[] CompareDna(Dna memoryDna)
         {
-            Debug.Assert(_names.Length != 0); // SDNA empty!
             bool[] _structChanged = new bool[_structs.Length];
 
             for (int i = 0; i < _structs.Length; i++)
@@ -351,7 +341,7 @@ namespace BulletSharp
                 {
                     foreach (ElementDecl element in curStruct.Elements)
                     {
-                        if (curStruct.Type == iter.Type && element.Name.IsPointer)
+                        if (curStruct.Type == iter.Type && element.NameInfo.IsPointer)
                         {
                             _structChanged[i] = true;
                             CompareStruct(curStruct, _structChanged);
@@ -363,19 +353,7 @@ namespace BulletSharp
 
         public bool IsBroken(int fileVersion)
         {
-            return fileVersion == 276 && _names.Any(n => n.Name == "int");
-        }
-
-        public int NumStructs
-        {
-            get
-            {
-                if (_structs == null)
-                {
-                    return 0;
-                }
-                return _structs.Length;
-            }
+            return fileVersion == 276 && _hasIntType;
         }
 
         public int PointerSize
