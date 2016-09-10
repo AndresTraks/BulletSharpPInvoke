@@ -406,7 +406,7 @@ namespace BulletSharp
                 Debug.Assert(FindPointer(oldPtr) == IntPtr.Zero);
             }
 
-            chunk.DnaNr = Array.IndexOf(_structs, GetReverseType(structType));
+            chunk.DnaNr = Array.IndexOf(_structs, GetStruct(structType));
             chunk.ChunkCode = (int)chunkCode;
             IntPtr uniquePtr = GetUniquePointer(oldPtr);
 
@@ -433,7 +433,6 @@ namespace BulletSharp
             WriteDna();
 
 			//if we didn't pre-allocate a buffer, we need to create a contiguous buffer now
-			int mysize = 0;
 			if (_totalSize == 0)
 			{
 				if (_buffer != IntPtr.Zero)
@@ -447,14 +446,22 @@ namespace BulletSharp
 				IntPtr currentPtr = _buffer;
                 WriteHeader(_buffer);
 				currentPtr += 12;
-                mysize += 12;
-				for (int i=0;i<	_chunkPtrs.Count;i++)
-				{
-					int curLength = ChunkInd.Size + _chunkPtrs[i].Length;
-                    Marshal.StructureToPtr(_chunkPtrs[i], currentPtr, false);
-					currentPtr+=curLength;
-					mysize+=curLength;
-				}
+                foreach (Chunk chunk in _chunkPtrs)
+                {
+                    if (IntPtr.Size == 8)
+                    {
+                        var chunkPtr = new ChunkPtr8();
+                        Marshal.PtrToStructure(chunk._native, chunkPtr);
+                        Marshal.StructureToPtr(chunkPtr, currentPtr, false);
+                    }
+                    else
+                    {
+                        var chunkPtr = new ChunkPtr4();
+                        Marshal.PtrToStructure(chunk._native, chunkPtr);
+                        Marshal.StructureToPtr(chunkPtr, currentPtr, false);
+                    }
+                    currentPtr += ChunkInd.Size + chunk.Length;
+                }
 			}
 
             foreach (IntPtr ptr in _nameMap.Values)
@@ -479,7 +486,7 @@ namespace BulletSharp
             return _chunkPtrs.Count;
         }
 
-        public Dna.StructDecl GetReverseType(string typeName)
+        public Dna.StructDecl GetStruct(string typeName)
         {
             Dna.StructDecl s;
             _structReverse.TryGetValue(typeName, out s);
@@ -523,6 +530,7 @@ namespace BulletSharp
 
             reader.ReadTag("SDNA");
 
+            // Element names
             reader.ReadTag("NAME");
             var names = reader.ReadStringList()
                 .Select(n => new Dna.NameInfo(n))
@@ -531,15 +539,13 @@ namespace BulletSharp
 
             // Types
             reader.ReadTag("TYPE");
-            Dna.TypeDecl[] types = reader.ReadStringList()
-                .Select(s => new Dna.TypeDecl(s))
-                .ToArray();
+            string[] typeNames = reader.ReadStringList();
             stream.Position = (stream.Position + 3) & ~3;
+
             reader.ReadTag("TLEN");
-            foreach (var type in types)
-            {
-                type.Length = reader.ReadInt16();
-            }
+            Dna.TypeDecl[] types = typeNames
+                .Select(name => new Dna.TypeDecl(name, reader.ReadInt16()))
+                .ToArray();
             stream.Position = (stream.Position + 3) & ~3;
 
             // Structs
@@ -558,7 +564,7 @@ namespace BulletSharp
                 {
                     typeIndex = reader.ReadInt16();
                     short nameIndex = reader.ReadInt16();
-                    elements[j] = new Dna.ElementDecl(types[typeIndex], names[nameIndex]);
+                    elements[j] = new Dna.ElementDecl(type, names[nameIndex]);
                 }
 
                 var structDecl = new Dna.StructDecl(type, elements);
@@ -649,10 +655,7 @@ namespace BulletSharp
 
 		public unsafe void WriteHeader(IntPtr buffer)
 		{
-            byte[] header = new byte[] {
-                (byte)'B', (byte)'U', (byte)'L', (byte)'L', (byte)'E', (byte)'T',
-                (byte)'f', (byte)'_',
-                (byte)'v', (byte)'2', (byte)'8', (byte)'2' };
+            byte[] header = Encoding.ASCII.GetBytes("BULLETf_v285");
             if (IntPtr.Size == 8)
             {
                 header[7] = (byte)'-';

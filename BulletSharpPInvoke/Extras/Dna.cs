@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace BulletSharp
 {
@@ -32,7 +30,7 @@ namespace BulletSharp
 
             public override int GetHashCode()
             {
-                return Type.GetHashCode() + NameInfo.GetHashCode();
+                return Type.GetHashCode() ^ NameInfo.GetHashCode();
             }
 
             public override string ToString()
@@ -101,7 +99,7 @@ namespace BulletSharp
 
             public override int GetHashCode()
             {
-                return Type.GetHashCode() + Elements.Length;
+                return Type.GetHashCode() ^ Elements.Length;
             }
 
             public override string ToString()
@@ -113,13 +111,15 @@ namespace BulletSharp
         public class TypeDecl
         {
             public StructDecl Struct { get; set; }
-            public short Length { get; set; }
-            public string Name { get; private set; }
 
-            public TypeDecl(string name)
+            public TypeDecl(string name, short length)
             {
                 Name = name;
+                Length = length;
             }
+
+            public string Name { get; }
+            public short Length { get; }
 
             public override bool Equals(object obj)
             {
@@ -133,7 +133,7 @@ namespace BulletSharp
 
             public override int GetHashCode()
             {
-                return Name.GetHashCode() + Length;
+                return Name.GetHashCode() ^ Length;
             }
 
             public override string ToString()
@@ -144,51 +144,51 @@ namespace BulletSharp
 
         public class NameInfo
         {
-            public string Name { get; }
-            public bool IsPointer { get; }
-            public int Dimension0 { get; }
-            public int Dimension1 { get; }
-
-            public int ArraySizeNew { get { return Dimension0 * Dimension1; } }
-
-            public string CleanName
-            {
-                get
-                {
-                    int p = Name.IndexOf('[');
-                    if (p != -1)
-                    {
-                        return Name.Substring(0, Name.IndexOf('['));
-                    }
-                    return Name;
-                }
-            }
-
             public NameInfo(string name)
             {
                 Name = name;
                 IsPointer = name[0] == '*' || name[1] == '*';
                 
-                int bp = name.IndexOf('[') + 1;
-                if (bp == 0)
+                int bracketStart = name.IndexOf('[') + 1;
+                if (bracketStart == 0)
                 {
                     Dimension0 = 1;
                     Dimension1 = 1;
                     return;
                 }
-                int bp2 = name.IndexOf(']');
-                Dimension1 = int.Parse(name.Substring(bp, bp2 - bp));
+                int bracketEnd = name.IndexOf(']', bracketStart);
+                Dimension1 = int.Parse(name.Substring(bracketStart, bracketEnd - bracketStart));
 
-                // find second dim, if any
-                bp = name.IndexOf('[', bp2) + 1;
-                if (bp == 0)
+                // find second dimension, if any
+                bracketStart = name.IndexOf('[', bracketEnd) + 1;
+                if (bracketStart == 0)
                 {
                     Dimension0 = 1;
                     return;
                 }
-                bp2 = name.IndexOf(']');
+                bracketEnd = name.IndexOf(']', bracketStart);
                 Dimension0 = Dimension1;
-                Dimension1 = int.Parse(name.Substring(bp, bp2 - bp));
+                Dimension1 = int.Parse(name.Substring(bracketStart, bracketEnd - bracketStart));
+            }
+
+            public string Name { get; }
+            public bool IsPointer { get; }
+            public int Dimension0 { get; }
+            public int Dimension1 { get; }
+
+            public int ArrayLength { get { return Dimension0 * Dimension1; } }
+
+            public string CleanName
+            {
+                get
+                {
+                    int bracketStart = Name.IndexOf('[');
+                    if (bracketStart != -1)
+                    {
+                        return Name.Substring(0, bracketStart);
+                    }
+                    return Name;
+                }
             }
 
             public override bool Equals(object obj)
@@ -228,7 +228,7 @@ namespace BulletSharp
         public int GetElementSize(ElementDecl element)
 		{
             int typeLength = element.NameInfo.IsPointer ? _ptrLen : element.Type.Length;
-            return element.NameInfo.ArraySizeNew * typeLength;
+            return element.NameInfo.ArrayLength * typeLength;
 		}
 
         public StructDecl GetStruct(int i)
@@ -253,9 +253,10 @@ namespace BulletSharp
                 throw new NotImplementedException();
             }
 
+            Stream stream = reader.BaseStream;
             reader.ReadTag("SDNA");
 
-            // Names
+            // Element names
             reader.ReadTag("NAME");
             string[] names = reader.ReadStringList();
             var nameInfos = names
@@ -265,20 +266,19 @@ namespace BulletSharp
 
             // Types
             reader.ReadTag("TYPE");
-            TypeDecl[] types = reader.ReadStringList()
-                .Select(s => new TypeDecl(s))
-                .ToArray();
-            Stream stream = reader.BaseStream;
+            string[] typeNames = reader.ReadStringList();
             stream.Position = (stream.Position + 3) & ~3;
+
             reader.ReadTag("TLEN");
-            foreach (var type in types)
+            TypeDecl[] types = typeNames.Select(name =>
             {
-                type.Length = reader.ReadInt16();
-                if (_ptrLen == 0 && type.Name == "ListBase")
+                short length = reader.ReadInt16();
+                if (_ptrLen == 0 && name == "ListBase")
                 {
-                    _ptrLen = type.Length / 2;
+                    _ptrLen = length / 2;
                 }
-            }
+                return new TypeDecl(name, length);
+            }).ToArray();
             stream.Position = (stream.Position + 3) & ~3;
 
             // Structs
@@ -297,7 +297,7 @@ namespace BulletSharp
                 {
                     typeIndex = reader.ReadInt16();
                     short nameIndex = reader.ReadInt16();
-                    elements[j] = new ElementDecl(types[typeIndex], nameInfos[nameIndex]);
+                    elements[j] = new ElementDecl(type, nameInfos[nameIndex]);
                 }
 
                 var structDecl = new StructDecl(type, elements);

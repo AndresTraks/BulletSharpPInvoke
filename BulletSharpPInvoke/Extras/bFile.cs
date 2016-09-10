@@ -152,7 +152,7 @@ namespace BulletSharp
             MemoryStream dataStream = new MemoryStream(_fileBuffer, false);
             BinaryReader dataReader = new BinaryReader(dataStream);
 
-            int arrayLen = element.NameInfo.ArraySizeNew;
+            int arrayLen = element.NameInfo.ArrayLength;
 
             dataStream.Position = data;
 
@@ -438,7 +438,7 @@ namespace BulletSharp
                     {
                         Dna.StructDecl oldStruct = _fileDna.GetStruct(element.Type.Name);
                         data.BaseStream.Position = elementOffset;
-                        int arrayLen = elementOld.NameInfo.ArraySizeNew;
+                        int arrayLen = elementOld.NameInfo.ArrayLength;
                         if (arrayLen == 1)
                         {
                             strc.BaseStream.Position = strcPtr;
@@ -617,7 +617,7 @@ namespace BulletSharp
             foreach (Dna.ElementDecl element in oldStruct.Elements)
             {
                 int size = fileDna.GetElementSize(element);
-                int arrayLen = element.NameInfo.ArraySizeNew;
+                int arrayLen = element.NameInfo.ArrayLength;
 
                 if (element.NameInfo.Name[0] == '*')
                 {
