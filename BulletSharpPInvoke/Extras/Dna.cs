@@ -213,16 +213,25 @@ namespace BulletSharp
         }
 
         private StructDecl[] _structs;
-        private Dictionary<string, StructDecl> _structReverse;
+        private Dictionary<string, StructDecl> _structByTypeName;
 
         private bool _hasIntType;
         private int _ptrLen;
 
-        public static Dna Load(BulletReader reader, bool swap)
+        private Dna()
         {
-            var dna = new Dna();
-            dna.Init(reader, swap);
-            return dna;
+        }
+
+        public int NumStructs
+        {
+            get
+            {
+                if (_structs == null)
+                {
+                    return 0;
+                }
+                return _structs.Length;
+            }
         }
 
         public int GetElementSize(ElementDecl element)
@@ -239,14 +248,21 @@ namespace BulletSharp
         public StructDecl GetStruct(string typeName)
         {
             StructDecl s;
-            if (_structReverse.TryGetValue(typeName, out s))
+            if (_structByTypeName.TryGetValue(typeName, out s))
             {
                 return s;
             }
             return null;
         }
 
-        public void Init(BulletReader reader, bool swap)
+        public static Dna Load(BulletReader reader, bool swap)
+        {
+            var dna = new Dna();
+            dna.Init(reader, swap);
+            return dna;
+        }
+
+        private void Init(BulletReader reader, bool swap)
         {
             if (swap)
             {
@@ -285,11 +301,11 @@ namespace BulletSharp
             reader.ReadTag("STRC");
             int numStructs = reader.ReadInt32();
             _structs = new StructDecl[numStructs];
-            _structReverse = new Dictionary<string, StructDecl>(numStructs);
+            _structByTypeName = new Dictionary<string, StructDecl>(numStructs);
             for (int i = 0; i < numStructs; i++)
             {
                 short typeIndex = reader.ReadInt16();
-                TypeDecl type = types[typeIndex];
+                TypeDecl structType = types[typeIndex];
 
                 int numElements = reader.ReadInt16();
                 var elements = new ElementDecl[numElements];
@@ -297,17 +313,17 @@ namespace BulletSharp
                 {
                     typeIndex = reader.ReadInt16();
                     short nameIndex = reader.ReadInt16();
-                    elements[j] = new ElementDecl(type, nameInfos[nameIndex]);
+                    elements[j] = new ElementDecl(types[typeIndex], nameInfos[nameIndex]);
                 }
 
-                var structDecl = new StructDecl(type, elements);
-                type.Struct = structDecl;
+                var structDecl = new StructDecl(structType, elements);
+                structType.Struct = structDecl;
                 _structs[i] = structDecl;
-                _structReverse.Add(type.Name, structDecl);
+                _structByTypeName.Add(structType.Name, structDecl);
             }
         }
 
-        public bool[] CompareDna(Dna memoryDna)
+        public bool[] Compare(Dna memoryDna)
         {
             bool[] _structChanged = new bool[_structs.Length];
 

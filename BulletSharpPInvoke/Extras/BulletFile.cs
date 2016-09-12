@@ -118,7 +118,7 @@ namespace BulletSharp
             memory.Position = dataPtr;
 
             ChunkInd dataChunk;
-            int seek = GetNextBlock(out dataChunk, reader, _flags);
+            int seek = GetNextBlock(out dataChunk, reader);
 
             if (swap)
             {
@@ -194,7 +194,7 @@ namespace BulletSharp
                 dataPtr += seek;
                 memory.Position = dataPtr;
 
-                seek = GetNextBlock(out dataChunk, reader, _flags);
+                seek = GetNextBlock(out dataChunk, reader);
                 if (swap)
                 {
                     throw new NotImplementedException();

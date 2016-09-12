@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 
 namespace BulletSharp
 {
-	public class Chunk
+    public class Chunk
 	{
 		internal IntPtr _native;
         private bool _preventDelete;
@@ -245,7 +244,7 @@ namespace BulletSharp
         public abstract IntPtr GetChunk(int chunkIndex);
         public abstract IntPtr GetUniquePointer(IntPtr oldPtr);
         public abstract int GetNumChunks();
-        public abstract void RegisterNameForObject(Object obj, string name);
+        public abstract void RegisterNameForObject(object obj, string name);
         public abstract void SerializeName(IntPtr ptr);
         public abstract void StartSerialization();
         
@@ -325,29 +324,26 @@ namespace BulletSharp
 
         private Dictionary<IntPtr, IntPtr> _chunkP = new Dictionary<IntPtr, IntPtr>();
         private Dictionary<IntPtr, IntPtr> _uniquePointers = new Dictionary<IntPtr, IntPtr>();
-        private Dictionary<Object, IntPtr> _nameMap = new Dictionary<object, IntPtr>();
-        private List<Chunk> _chunkPtrs = new List<Chunk>();
+        private Dictionary<object, IntPtr> _nameMap = new Dictionary<object, IntPtr>();
+        private List<Chunk> _chunks = new List<Chunk>();
 
-        IntPtr _dna;
-        int _dnaLength;
+        private byte[] _dnaData;
+        private Dna _dna;
 
-        private Dna.StructDecl[] _structs;
-        private Dictionary<string, Dna.StructDecl> _structReverse;
+        public DefaultSerializer()
+            : this(0)
+        {
+        }
 
-		public DefaultSerializer(int totalSize)
+        public DefaultSerializer(int totalSize)
 		{
             _currentSize = 0;
             _totalSize = totalSize;
 
             _buffer = (_totalSize != 0) ? Marshal.AllocHGlobal(_totalSize) : IntPtr.Zero;
 
-            InitDna((IntPtr.Size == 8) ? GetBulletDna64() : GetBulletDna());
-		}
-
-		public DefaultSerializer()
-            : this(0)
-		{
-		}
+            InitDna();
+        }
 
         protected override void Dispose(bool disposing)
         {
@@ -355,12 +351,6 @@ namespace BulletSharp
             {
                 Marshal.FreeHGlobal(_buffer);
                 _buffer = IntPtr.Zero;
-            }
-
-            if (_dna != IntPtr.Zero)
-            {
-                Marshal.FreeHGlobal(_dna);
-                _dna = IntPtr.Zero;
             }
 
             base.Dispose(disposing);
@@ -395,7 +385,7 @@ namespace BulletSharp
                 Length = length,
                 Number = numElements
             };
-            _chunkPtrs.Add(chunk);
+            _chunks.Add(chunk);
             return chunk;
         }
 
@@ -406,7 +396,16 @@ namespace BulletSharp
                 Debug.Assert(FindPointer(oldPtr) == IntPtr.Zero);
             }
 
-            chunk.DnaNr = Array.IndexOf(_structs, GetStruct(structType));
+            Dna.StructDecl structDecl = _dna.GetStruct(structType);
+            for (int i = 0; i < _dna.NumStructs; i++)
+            {
+                if (_dna.GetStruct(i) == structDecl)
+                {
+                    chunk.DnaNr = i;
+                    break;
+                }
+            }
+
             chunk.ChunkCode = (int)chunkCode;
             IntPtr uniquePtr = GetUniquePointer(oldPtr);
 
@@ -446,17 +445,17 @@ namespace BulletSharp
 				IntPtr currentPtr = _buffer;
                 WriteHeader(_buffer);
 				currentPtr += 12;
-                foreach (Chunk chunk in _chunkPtrs)
+                foreach (Chunk chunk in _chunks)
                 {
                     if (IntPtr.Size == 8)
                     {
-                        var chunkPtr = new ChunkPtr8();
+                        var chunkPtr = new Chunk8();
                         Marshal.PtrToStructure(chunk._native, chunkPtr);
                         Marshal.StructureToPtr(chunkPtr, currentPtr, false);
                     }
                     else
                     {
-                        var chunkPtr = new ChunkPtr4();
+                        var chunkPtr = new Chunk4();
                         Marshal.PtrToStructure(chunk._native, chunkPtr);
                         Marshal.StructureToPtr(chunkPtr, currentPtr, false);
                     }
@@ -469,34 +468,25 @@ namespace BulletSharp
                 Marshal.FreeHGlobal(ptr);
             }
 
-			_structReverse.Clear();
 			_chunkP.Clear();
 			_nameMap.Clear();
 			_uniquePointers.Clear();
-			_chunkPtrs.Clear();
+			_chunks.Clear();
 		}
 
         public override IntPtr GetChunk(int chunkIndex)
         {
-            return _chunkPtrs[chunkIndex]._native;
+            return _chunks[chunkIndex]._native;
         }
 
         public override int GetNumChunks()
         {
-            return _chunkPtrs.Count;
-        }
-
-        public Dna.StructDecl GetStruct(string typeName)
-        {
-            Dna.StructDecl s;
-            _structReverse.TryGetValue(typeName, out s);
-            return s;
+            return _chunks.Count;
         }
 
         public override IntPtr GetUniquePointer(IntPtr oldPtr)
         {
-            if (oldPtr == IntPtr.Zero)
-                return IntPtr.Zero;
+            if (oldPtr == IntPtr.Zero) return IntPtr.Zero;
 
             IntPtr uniquePtr;
             if (_uniquePointers.TryGetValue(oldPtr, out uniquePtr))
@@ -510,74 +500,20 @@ namespace BulletSharp
             return _uniqueIdGenerator;
         }
 
-        protected unsafe void InitDna(byte[] bdnaOrg)
+        private void InitDna()
         {
-            if (_dna != IntPtr.Zero)
+            _dnaData = IntPtr.Size == 8 ? GetBulletDna64() : GetBulletDna();
+            bool swap = !BitConverter.IsLittleEndian;
+            using (var stream = new MemoryStream(_dnaData))
             {
-                return;
-            }
-            if (!BitConverter.IsLittleEndian)
-            {
-                throw new NotImplementedException();
-            }
-
-            _dnaLength = bdnaOrg.Length;
-            _dna = Marshal.AllocHGlobal(bdnaOrg.Length);
-            Marshal.Copy(bdnaOrg, 0, _dna, _dnaLength);
-
-            Stream stream = new UnmanagedMemoryStream((byte*)_dna.ToPointer(), _dnaLength);
-            BulletReader reader = new BulletReader(stream);
-
-            reader.ReadTag("SDNA");
-
-            // Element names
-            reader.ReadTag("NAME");
-            var names = reader.ReadStringList()
-                .Select(n => new Dna.NameInfo(n))
-                .ToArray();
-            stream.Position = (stream.Position + 3) & ~3;
-
-            // Types
-            reader.ReadTag("TYPE");
-            string[] typeNames = reader.ReadStringList();
-            stream.Position = (stream.Position + 3) & ~3;
-
-            reader.ReadTag("TLEN");
-            Dna.TypeDecl[] types = typeNames
-                .Select(name => new Dna.TypeDecl(name, reader.ReadInt16()))
-                .ToArray();
-            stream.Position = (stream.Position + 3) & ~3;
-
-            // Structs
-            reader.ReadTag("STRC");
-            int numStructs = reader.ReadInt32();
-            _structs = new Dna.StructDecl[numStructs];
-            _structReverse = new Dictionary<string, Dna.StructDecl>(numStructs);
-            for (int i = 0; i < numStructs; i++)
-            {
-                short typeIndex = reader.ReadInt16();
-                Dna.TypeDecl type = types[typeIndex];
-
-                int numElements = reader.ReadInt16();
-                var elements = new Dna.ElementDecl[numElements];
-                for (int j = 0; j < numElements; j++)
+                using (var reader = new BulletReader(stream))
                 {
-                    typeIndex = reader.ReadInt16();
-                    short nameIndex = reader.ReadInt16();
-                    elements[j] = new Dna.ElementDecl(type, names[nameIndex]);
+                    _dna = Dna.Load(reader, swap);
                 }
-
-                var structDecl = new Dna.StructDecl(type, elements);
-                type.Struct = structDecl;
-                _structs[i] = structDecl;
-                _structReverse.Add(type.Name, structDecl);
             }
-
-            reader.Dispose();
-            stream.Dispose();
         }
 
-        public override void RegisterNameForObject(Object obj, string name)
+        public override void RegisterNameForObject(object obj, string name)
 		{
             IntPtr ptr;
             if (obj is CollisionObject)
@@ -646,11 +582,10 @@ namespace BulletSharp
 
         public void WriteDna()
         {
-            Chunk dnaChunk = Allocate((uint)_dnaLength, 1);
-            byte[] tempDna = new byte[_dnaLength];
-            Marshal.Copy(_dna, tempDna, 0, _dnaLength);
-            Marshal.Copy(tempDna, 0, dnaChunk.OldPtr, _dnaLength);
-            FinalizeChunk(dnaChunk, "DNA1", DnaID.Dna, _dna);
+            Chunk dnaChunk = Allocate((uint)_dnaData.Length, 1);
+            GCHandle dnaHandle = GCHandle.Alloc(_dnaData, GCHandleType.Pinned);
+            FinalizeChunk(dnaChunk, "DNA1", DnaID.Dna, dnaHandle.AddrOfPinnedObject());
+            dnaHandle.Free();
         }
 
 		public unsafe void WriteHeader(IntPtr buffer)

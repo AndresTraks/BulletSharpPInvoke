@@ -286,7 +286,7 @@ namespace BulletSharp
         
         public bool LoadFileFromMemory(BulletFile bulletFile)
 		{
-            if ((bulletFile.Flags & FileFlags.OK) == 0)
+            if (!bulletFile.OK)
             {
                 return false;
             }

@@ -11,22 +11,21 @@ namespace BulletSharp
     public enum FileFlags
     {
         None = 0,
-        OK = 1,
-        EndianSwap = 2,
-        File64 = 4,
-        BitsVaries = 8,
-        DoublePrecision = 0x10,
-        BrokenDna = 0x20
+        EndianSwap = 1,
+        File64 = 2,
+        BitsVaries = 4,
+        DoublePrecision = 8,
+        BrokenDna = 0x10
     }
 
     [Flags]
     public enum FileVerboseMode
     {
-        None = 0x0,
-        ExportXml = 0x1,
-        DumpDnaTypeDefinitions = 0x2,
-        DumpChunks = 0x4,
-        DumpFileInfo = 0x8
+        None = 0,
+        ExportXml = 1,
+        DumpDnaTypeDefinitions = 2,
+        DumpChunks = 4,
+        DumpFileInfo = 8
     }
 
     class PointerFixup
@@ -41,8 +40,8 @@ namespace BulletSharp
         }
     }
 
-	public abstract class bFile
-	{
+    public abstract class bFile
+    {
         protected const int SizeOfBlenderHeader = 12;
         const int MaxArrayLength = 512;
         const int MaxStringLength = 1024;
@@ -53,7 +52,7 @@ namespace BulletSharp
         protected Dna _fileDna, _memoryDna;
         private bool[] _structChanged;
         protected FileFlags _flags;
-        protected Dictionary<long, byte[]> _libPointers = new Dictionary<long,byte[]>();
+        protected Dictionary<long, byte[]> _libPointers = new Dictionary<long, byte[]>();
         protected int _version;
 
         public bFile(string filename)
@@ -77,6 +76,7 @@ namespace BulletSharp
         }
 
         protected abstract string HeaderTag { get; }
+        public bool OK { get; protected set; }
 
         public abstract void AddDataBlock(byte[] dataBlock);
 
@@ -86,15 +86,15 @@ namespace BulletSharp
 			bFile_dumpChunks(_native, dna._native);
 		}
         */
-		public byte[] FindLibPointer(long ptr)
-		{
+        public byte[] FindLibPointer(long ptr)
+        {
             byte[] data;
             if (LibPointers.TryGetValue(ptr, out data))
             {
                 return data;
             }
             return null;
-		}
+        }
 
         private void GetElement(BinaryReader reader, int ArrayLen, Dna.TypeDecl type, double[] data)
         {
@@ -200,28 +200,26 @@ namespace BulletSharp
         }
 
         // buffer offset util
-        protected int GetNextBlock(out ChunkInd dataChunk, BinaryReader reader, FileFlags flags)
+        protected int GetNextBlock(out ChunkInd dataChunk, BinaryReader reader)
         {
-            bool swap = (flags & FileFlags.EndianSwap) != 0;
-            bool varies = (flags & FileFlags.BitsVaries) != 0;
+            bool swap = (_flags & FileFlags.EndianSwap) != 0;
+            bool varies = (_flags & FileFlags.BitsVaries) != 0;
 
             if (swap)
             {
                 throw new NotImplementedException();
             }
 
-            dataChunk = new ChunkInd();
-
             if (IntPtr.Size == 8)
             {
                 if (varies)
                 {
-                    ChunkPtr4 c = new ChunkPtr4(reader);
+                    Chunk4 c = new Chunk4(reader);
                     dataChunk = new ChunkInd(ref c);
                 }
                 else
                 {
-                    ChunkPtr8 c = new ChunkPtr8(reader);
+                    Chunk8 c = new Chunk8(reader);
                     dataChunk = new ChunkInd(ref c);
                 }
             }
@@ -229,7 +227,7 @@ namespace BulletSharp
             {
                 if (varies)
                 {
-                    ChunkPtr8 c = new ChunkPtr8(reader);
+                    Chunk8 c = new Chunk8(reader);
                     if (c.UniqueInt1 == c.UniqueInt2)
                     {
                         c.UniqueInt2 = 0;
@@ -242,7 +240,7 @@ namespace BulletSharp
                 }
                 else
                 {
-                    ChunkPtr4 c = new ChunkPtr4(reader);
+                    Chunk4 c = new Chunk4(reader);
                     dataChunk = new ChunkInd(ref c);
                 }
             }
@@ -250,15 +248,10 @@ namespace BulletSharp
             if (dataChunk.Length < 0)
                 return -1;
 
-            return dataChunk.Length + ChunkUtils.GetChunkSize(flags);
+            return dataChunk.Length + ChunkUtils.GetChunkSize(_flags);
         }
 
-		public bool OK
-		{
-            get { return (_flags & FileFlags.OK) != 0; }
-		}
-
-		public abstract void Parse(FileVerboseMode verboseMode);
+        public abstract void Parse(FileVerboseMode verboseMode);
         public abstract void ParseData();
 
         protected void ParseHeader()
@@ -277,12 +270,12 @@ namespace BulletSharp
             int.TryParse(header.Substring(9), out _version);
 
             // swap ptr sizes...
-	        if (header[7] == '-')
-	        {
-		        _flags |= FileFlags.File64;
-		        if (IntPtr.Size != 8)
-			        _flags |= FileFlags.BitsVaries;
-	        }
+            if (header[7] == '-')
+            {
+                _flags |= FileFlags.File64;
+                if (IntPtr.Size != 8)
+                    _flags |= FileFlags.BitsVaries;
+            }
             else if (IntPtr.Size == 8)
             {
                 _flags |= FileFlags.BitsVaries;
@@ -300,28 +293,29 @@ namespace BulletSharp
                     _flags |= FileFlags.EndianSwap;
             }
 
-            _flags |= FileFlags.OK;
+            OK = true;
         }
 
         protected void ParseInternal(FileVerboseMode verboseMode)
         {
-            if ((_flags & FileFlags.OK) != FileFlags.OK)
+            if (!OK)
             {
                 return;
             }
 
-            ChunkInd chunk = new ChunkInd();
-            chunk.OldPtr = 0;
-
             MemoryStream memory = new MemoryStream(_fileBuffer, false);
             BulletReader reader = new BulletReader(memory);
 
+            long dnaStart = 0;
+            int dnaLength = 0;
+
             int i = 0;
-            while (memory.Position < memory.Length)
+            while (i < memory.Length)
             {
+                memory.Position = i;
+
                 // looking for the data's starting position
                 // and the start of SDNA decls
-
                 byte[] code = reader.ReadBytes(4);
                 string codes = Encoding.ASCII.GetString(code);
 
@@ -334,58 +328,42 @@ namespace BulletSharp
                 {
                     // read the DNA1 block and extract SDNA
                     memory.Position = i;
-                    if (GetNextBlock(out chunk, reader, _flags) > 0)
+                    ChunkInd chunk;
+                    if (GetNextBlock(out chunk, reader) > 0)
                     {
                         string sdnaname = Encoding.ASCII.GetString(reader.ReadBytes(8));
                         if (sdnaname.Equals("SDNANAME"))
                         {
-                            chunk.OldPtr = i + ChunkUtils.GetChunkSize(_flags);
+                            dnaStart = i + ChunkUtils.GetChunkSize(_flags);
+                            dnaLength = chunk.Length;
+                            break;
                         }
-                        else
-                        {
-                            chunk.OldPtr = 0;
-                        }
-                    }
-                    else
-                    {
-                        chunk.OldPtr = 0;
                     }
                 }
                 else if (codes.Equals("SDNA"))
                 {
                     // Some Bullet files are missing the DNA1 block
-                    // In Blender it's DNA1 + ChunkUtils::getOffset() + SDNA + NAME
+                    // In Blender it's DNA1 + ChunkUtils.GetOffset() + SDNA + NAME
                     // In Bullet tests its SDNA + NAME
-                    chunk.OldPtr = i;
-                    chunk.Length = (int)memory.Length - i;
-
-                    // Also no REND block, so exit now.
-                    if (_version == 276)
-                    {
-                        break;
-                    }
-                }
-
-                if (_dataStart != 0 && chunk.OldPtr != 0)
-                {
+                    dnaStart = i;
+                    dnaLength = (int)memory.Length - i;
                     break;
                 }
 
                 i++;
-                memory.Position = i;
             }
 
-            if (chunk.OldPtr == 0 || chunk.Length == 0)
+            if (dnaStart == 0 || dnaLength == 0)
             {
                 //Console.WriteLine("Failed to find DNA1+SDNA pair");
-                _flags &= ~FileFlags.OK;
+                OK = false;
                 reader.Dispose();
                 memory.Dispose();
                 return;
             }
 
             // _fileDna.Init will convert part of DNA file endianness to current CPU endianness if necessary
-            memory.Position = chunk.OldPtr;
+            memory.Position = dnaStart;
             bool swap = (_flags & FileFlags.EndianSwap) != 0;
             _fileDna = Dna.Load(reader, swap);
 
@@ -407,7 +385,7 @@ namespace BulletSharp
                 }
             }
 
-            _structChanged = _fileDna.CompareDna(_memoryDna);
+            _structChanged = _fileDna.Compare(_memoryDna);
 
             ParseData();
 
@@ -468,10 +446,10 @@ namespace BulletSharp
             }
         }
 
-		public void PreSwap()
-		{
+        public void PreSwap()
+        {
             throw new NotImplementedException();
-		}
+        }
 
         protected byte[] ReadStruct(BinaryReader head, ChunkInd dataChunk)
         {
@@ -541,8 +519,8 @@ namespace BulletSharp
             return dataAlloc;
         }
 
-		public void ResolvePointers(FileVerboseMode verboseMode)
-		{
+        public void ResolvePointers(FileVerboseMode verboseMode)
+        {
             Dna fileDna = (_fileDna != null) ? _fileDna : _memoryDna;
 
             if (true) // && ((_flags & FileFlags.BitsVaries | FileFlags.VersionVaries) != 0))
@@ -584,7 +562,7 @@ namespace BulletSharp
             {
                 Console.WriteLine("</bullet_physics>");
             }
-		}
+        }
 
         protected void ResolvePointersChunk(ChunkInd dataChunk, FileVerboseMode verboseMode)
         {
@@ -602,7 +580,7 @@ namespace BulletSharp
                     {
                         long streamPosition = stream.Position;
                         ResolvePointersStructRecursive(reader, fileDna.GetStruct(dataChunk.StructIndex), verboseMode, 1);
-                        System.Diagnostics.Debug.Assert(stream.Position == streamPosition + oldLen);
+                        Debug.Assert(stream.Position == streamPosition + oldLen);
                     }
                 }
             }
@@ -737,7 +715,7 @@ namespace BulletSharp
                                 }
                                 else
                                 {
-							        double[] dbArray = new double[arrayLen];
+                                    double[] dbArray = new double[arrayLen];
                                     GetElement(reader, arrayLen, element.Type, dbArray);
                                     for (int i = 0; i < recursion; i++)
                                     {
@@ -770,16 +748,16 @@ namespace BulletSharp
 
         protected void SafeSwapPtr(BinaryWriter strcData, BinaryReader data)
         {
-            int ptrFile = _fileDna.PointerSize;
-            int ptrMem = _memoryDna.PointerSize;
+            int filePtrSize = _fileDna.PointerSize;
+            int memPtrSize = _memoryDna.PointerSize;
 
-            if (ptrFile == ptrMem)
+            if (filePtrSize == memPtrSize)
             {
-                byte[] mem = new byte[ptrMem];
-                data.Read(mem, 0, ptrMem);
+                byte[] mem = new byte[memPtrSize];
+                data.Read(mem, 0, memPtrSize);
                 strcData.Write(mem);
             }
-            else if (ptrMem == 4 && ptrFile == 8)
+            else if (memPtrSize == 4 && filePtrSize == 8)
             {
                 int uniqueId1 = data.ReadInt32();
                 int uniqueId2 = data.ReadInt32();
@@ -798,11 +776,11 @@ namespace BulletSharp
                         throw new NotImplementedException();
                     }
                     longValue = longValue >> 3;
-                    int intValue = (int) longValue;
+                    int intValue = (int)longValue;
                     strcData.Write(intValue);
                 }
             }
-            else if (ptrMem == 8 && ptrFile == 4)
+            else if (memPtrSize == 8 && filePtrSize == 4)
             {
                 int uniqueId1 = data.ReadInt32();
                 int uniqueId2 = data.ReadInt32();
@@ -819,7 +797,7 @@ namespace BulletSharp
             }
             else
             {
-                Console.WriteLine("Invalid pointer len {0} {1}", ptrFile, ptrMem);
+                Console.WriteLine("Invalid pointer len {0} {1}", filePtrSize, memPtrSize);
             }
         }
 
@@ -830,14 +808,14 @@ namespace BulletSharp
         }
 
         public void UpdateOldPointers()
-		{
+        {
             for (int i = 0; i < _chunks.Count; i++)
             {
                 //_chunks[i].OldPtr
                 byte[] data = FindLibPointer(_chunks[i].OldPtr);
                 data.ToString();
             }
-		}
+        }
         /*
 		public int Write(char fileName, bool fixupPointers)
 		{
@@ -870,18 +848,18 @@ namespace BulletSharp
 		}
         */
         public FileFlags Flags
-		{
+        {
             get { return _flags; }
-		}
-        
-		public Dictionary<long, byte[]> LibPointers
-		{
+        }
+
+        public Dictionary<long, byte[]> LibPointers
+        {
             get { return _libPointers; }
-		}
-        
-		public int Version
-		{
+        }
+
+        public int Version
+        {
             get { return _version; }
-		}
-	}
+        }
+    }
 }
