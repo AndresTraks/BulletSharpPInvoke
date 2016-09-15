@@ -114,24 +114,22 @@ namespace BulletSharp
             }
         }
 
-        protected long GetFileElement(Dna.StructDecl firstStruct, Dna.ElementDecl lookupElement, long data, out Dna.ElementDecl found)
+        protected Dna.ElementDecl GetFileElement(Dna.StructDecl fileStruct, Dna.ElementDecl lookupElement, out long elementOffset)
         {
-            foreach (Dna.ElementDecl element in firstStruct.Elements)
+            elementOffset = 0;
+            foreach (Dna.ElementDecl element in fileStruct.Elements)
             {
                 if (element.NameInfo.Equals(lookupElement.NameInfo))
                 {
                     if (element.Type.Name.Equals(lookupElement.Type.Name))
                     {
-                        found = element;
-                        return data;
+                        return element;
                     }
-                    found = null;
-                    return 0;
+                    break;
                 }
-                data += _fileDna.GetElementSize(element);
+                elementOffset += _fileDna.GetElementSize(element);
             }
-            found = null;
-            return 0;
+            return null;
         }
 
         protected void FindFileElement(Dna.StructDecl fileStruct, Dna.ElementDecl memoryElement, BinaryWriter dataOutput, long data, bool fixupPointers)
@@ -215,12 +213,12 @@ namespace BulletSharp
                 if (varies)
                 {
                     Chunk4 c = new Chunk4(reader);
-                    dataChunk = new ChunkInd(ref c);
+                    dataChunk = new ChunkInd(c);
                 }
                 else
                 {
                     Chunk8 c = new Chunk8(reader);
-                    dataChunk = new ChunkInd(ref c);
+                    dataChunk = new ChunkInd(c);
                 }
             }
             else
@@ -236,12 +234,12 @@ namespace BulletSharp
                     {
                         throw new NotImplementedException();
                     }
-                    dataChunk = new ChunkInd(ref c);
+                    dataChunk = new ChunkInd(c);
                 }
                 else
                 {
                     Chunk4 c = new Chunk4(reader);
-                    dataChunk = new ChunkInd(ref c);
+                    dataChunk = new ChunkInd(c);
                 }
             }
 
@@ -303,67 +301,81 @@ namespace BulletSharp
                 return;
             }
 
-            MemoryStream memory = new MemoryStream(_fileBuffer, false);
-            BulletReader reader = new BulletReader(memory);
+            using (var fileStream = new MemoryStream(_fileBuffer, false))
+            {
+                using (var reader = new BulletReader(fileStream))
+                {
+                    long dnaStart = FindDnaChunk(reader);
+                    OK = dnaStart != -1;
 
-            long dnaStart = 0;
-            int dnaLength = 0;
+                    if (OK)
+                    {
+                        fileStream.Position = dnaStart;
+                        LoadDna(reader);
+                    }
+                    else
+                    {
+                        //Console.WriteLine("Failed to find DNA1+SDNA pair");
+                    }
+                }
+            }
+
+            if (OK)
+            {
+                ParseData();
+                //ResolvePointers(verboseMode);
+                //UpdateOldPointers();
+            }
+        }
+
+        private long FindDnaChunk(BinaryReader reader)
+        {
+            var stream = reader.BaseStream;
 
             int i = 0;
-            while (i < memory.Length)
+            while (i < stream.Length)
             {
-                memory.Position = i;
+                stream.Position = i;
 
                 // looking for the data's starting position
                 // and the start of SDNA decls
-                byte[] code = reader.ReadBytes(4);
-                string codes = Encoding.ASCII.GetString(code);
+                byte[] codeData = reader.ReadBytes(4);
+                string code = Encoding.ASCII.GetString(codeData);
 
-                if (_dataStart == 0 && codes.Equals("REND"))
+                if (_dataStart == 0 && code.Equals("REND"))
                 {
-                    _dataStart = memory.Position;
+                    _dataStart = stream.Position;
                 }
 
-                if (codes.Equals("DNA1"))
+                if (code == "DNA1")
                 {
                     // read the DNA1 block and extract SDNA
-                    memory.Position = i;
+                    stream.Position = i;
                     ChunkInd chunk;
                     if (GetNextBlock(out chunk, reader) > 0)
                     {
                         string sdnaname = Encoding.ASCII.GetString(reader.ReadBytes(8));
-                        if (sdnaname.Equals("SDNANAME"))
+                        if (sdnaname == "SDNANAME")
                         {
-                            dnaStart = i + ChunkUtils.GetChunkSize(_flags);
-                            dnaLength = chunk.Length;
-                            break;
+                            return i + ChunkUtils.GetChunkSize(_flags);
                         }
                     }
                 }
-                else if (codes.Equals("SDNA"))
+                else if (code == "SDNA")
                 {
                     // Some Bullet files are missing the DNA1 block
                     // In Blender it's DNA1 + ChunkUtils.GetOffset() + SDNA + NAME
                     // In Bullet tests its SDNA + NAME
-                    dnaStart = i;
-                    dnaLength = (int)memory.Length - i;
-                    break;
+                    return i;
                 }
 
                 i++;
             }
+            return 0;
+        }
 
-            if (dnaStart == 0 || dnaLength == 0)
-            {
-                //Console.WriteLine("Failed to find DNA1+SDNA pair");
-                OK = false;
-                reader.Dispose();
-                memory.Dispose();
-                return;
-            }
-
-            // _fileDna.Init will convert part of DNA file endianness to current CPU endianness if necessary
-            memory.Position = dnaStart;
+        private void LoadDna(BulletReader reader)
+        {
             bool swap = (_flags & FileFlags.EndianSwap) != 0;
             _fileDna = Dna.Load(reader, swap);
 
@@ -376,52 +388,45 @@ namespace BulletSharp
             //if ((verboseMode & FileVerboseMode.DumpDnaTypeDefinitions) != 0)
             //    _fileDna.DumpTypeDefinitions();
 
-            byte[] memoryDnaData = (IntPtr.Size == 8) ? Serializer.GetBulletDna64() : Serializer.GetBulletDna();
-            using (MemoryStream dnaStream = new MemoryStream(memoryDnaData, false))
+            byte[] memoryDnaData = IntPtr.Size == 8
+                ? Serializer.GetBulletDna64()
+                : Serializer.GetBulletDna();
+            using (var dnaStream = new MemoryStream(memoryDnaData, false))
             {
-                using (BulletReader dnaReader = new BulletReader(dnaStream))
+                using (var dnaReader = new BulletReader(dnaStream))
                 {
                     _memoryDna = Dna.Load(dnaReader, !BitConverter.IsLittleEndian);
                 }
             }
 
             _structChanged = _fileDna.Compare(_memoryDna);
-
-            ParseData();
-
-            ResolvePointers(verboseMode);
-
-            UpdateOldPointers();
-
-            reader.Dispose();
-            memory.Dispose();
         }
 
-        protected void ParseStruct(BinaryWriter strc, BinaryReader data, Dna.StructDecl fileStruct, Dna.StructDecl memoryStruct, bool fixupPointers)
+        protected void ParseStruct(BinaryWriter writer, BinaryReader reader, Dna.StructDecl fileStruct, Dna.StructDecl memoryStruct, bool fixupPointers)
         {
             if (fileStruct == null) return;
             if (memoryStruct == null) return;
 
-            long dataPtr = data.BaseStream.Position;
-            long strcPtr = strc.BaseStream.Position;
+            long readPtr = reader.BaseStream.Position;
+            long writePtr = writer.BaseStream.Position;
 
             foreach (Dna.ElementDecl element in memoryStruct.Elements)
             {
                 int memorySize = _memoryDna.GetElementSize(element);
                 if (element.Type.Struct != null && element.NameInfo.Name[0] != '*')
                 {
-                    Dna.ElementDecl elementOld;
-                    long elementOffset = GetFileElement(fileStruct, element, dataPtr, out elementOld);
-                    if (elementOffset != 0)
+                    long elementOffset;
+                    Dna.ElementDecl elementOld = GetFileElement(fileStruct, element, out elementOffset);
+                    if (elementOld != null)
                     {
-                        Dna.StructDecl oldStruct = _fileDna.GetStruct(element.Type.Name);
-                        data.BaseStream.Position = elementOffset;
+                        Dna.StructDecl structOld = _fileDna.GetStruct(element.Type.Name);
+                        reader.BaseStream.Position = elementOffset;
                         int arrayLen = elementOld.NameInfo.ArrayLength;
                         if (arrayLen == 1)
                         {
-                            strc.BaseStream.Position = strcPtr;
-                            ParseStruct(strc, data, oldStruct, element.Type.Struct, fixupPointers);
-                            strcPtr += memorySize;
+                            writer.BaseStream.Position = writePtr;
+                            ParseStruct(writer, reader, structOld, element.Type.Struct, fixupPointers);
+                            writePtr += memorySize;
                         }
                         else
                         {
@@ -429,19 +434,19 @@ namespace BulletSharp
                             memorySize /= arrayLen;
                             for (int i = 0; i < arrayLen; i++)
                             {
-                                strc.BaseStream.Position = strcPtr;
-                                ParseStruct(strc, data, oldStruct, element.Type.Struct, fixupPointers);
-                                data.BaseStream.Position += fileSize;
-                                strcPtr += memorySize;
+                                writer.BaseStream.Position = writePtr;
+                                ParseStruct(writer, reader, structOld, element.Type.Struct, fixupPointers);
+                                reader.BaseStream.Position += fileSize;
+                                writePtr += memorySize;
                             }
                         }
                     }
                 }
                 else
                 {
-                    strc.BaseStream.Position = strcPtr;
-                    FindFileElement(fileStruct, element, strc, dataPtr, fixupPointers);
-                    strcPtr += memorySize;
+                    writer.BaseStream.Position = writePtr;
+                    FindFileElement(fileStruct, element, writer, readPtr, fixupPointers);
+                    writePtr += memorySize;
                 }
             }
         }
@@ -451,7 +456,7 @@ namespace BulletSharp
             throw new NotImplementedException();
         }
 
-        protected byte[] ReadStruct(BinaryReader head, ChunkInd dataChunk)
+        protected byte[] ReadStruct(BinaryReader reader, ChunkInd dataChunk)
         {
             //bool ignoreEndianFlag = false;
 
@@ -494,12 +499,12 @@ namespace BulletSharp
                         {
                             using (BinaryWriter writer = new BinaryWriter(stream))
                             {
-                                long headerPtr = head.BaseStream.Position;
+                                long readPtr = reader.BaseStream.Position;
                                 for (int block = 0; block < dataChunk.NumBlocks; block++)
                                 {
-                                    head.BaseStream.Position = headerPtr;
-                                    ParseStruct(writer, head, oldStruct, curStruct, true);
-                                    headerPtr += oldStruct.Type.Length;
+                                    reader.BaseStream.Position = readPtr;
+                                    ParseStruct(writer, reader, oldStruct, curStruct, true);
+                                    readPtr += oldStruct.Type.Length;
                                     //_libPointers.Add(old, cur);
                                 }
                             }
@@ -515,7 +520,7 @@ namespace BulletSharp
             }
 
             byte[] dataAlloc = new byte[dataChunk.Length];
-            head.Read(dataAlloc, 0, dataAlloc.Length);
+            reader.Read(dataAlloc, 0, dataAlloc.Length);
             return dataAlloc;
         }
 
