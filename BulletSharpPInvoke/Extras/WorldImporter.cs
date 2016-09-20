@@ -81,9 +81,9 @@ namespace BulletSharp
                     int numChildShapes = reader.ReadInt32();
                     //float collisionMargin = reader.ReadInt32();
                     CompoundShape compoundShape = CreateCompoundShape();
-                    using (MemoryStream shapeStream = new MemoryStream(childShapes, false))
+                    using (var shapeStream = new MemoryStream(childShapes, false))
                     {
-                        using (BulletReader shapeReader = new BulletReader(shapeStream))
+                        using (var shapeReader = new BulletReader(shapeStream))
                         {
                             for (int i = 0; i < numChildShapes; i++)
                             {
@@ -171,9 +171,9 @@ namespace BulletSharp
 
                             byte[] points = libPointers[unscaledPointsFloatPtr];
                             ConvexHullShape hullShape = CreateConvexHullShape();
-                            using (MemoryStream pointStream = new MemoryStream(points, false))
+                            using (var pointStream = new MemoryStream(points, false))
                             {
-                                using (BulletReader pointReader = new BulletReader(pointStream))
+                                using (var pointReader = new BulletReader(pointStream))
                                 {
                                     for (int i = 0; i < numPoints; i++)
                                     {
@@ -214,9 +214,9 @@ namespace BulletSharp
                             int localPositionArraySize = reader.ReadInt32();
                             Vector3[] positions = new Vector3[localPositionArraySize];
                             float[] radi = new float[localPositionArraySize];
-                            using (MemoryStream localPositionArrayStream = new MemoryStream(localPositionArray, false))
+                            using (var localPositionArrayStream = new MemoryStream(localPositionArray, false))
                             {
-                                using (BulletReader localPositionArrayReader = new BulletReader(localPositionArrayStream))
+                                using (var localPositionArrayReader = new BulletReader(localPositionArrayStream))
                                 {
                                     for (int i = 0; i < localPositionArraySize; i++)
                                     {
@@ -290,8 +290,8 @@ namespace BulletSharp
         protected void ConvertConstraintFloat(RigidBody rigidBodyA, RigidBody rigidBodyB, byte[] constraintData, int fileVersion, Dictionary<long, byte[]> libPointers)
         {
             TypedConstraint constraint = null;
-            MemoryStream stream = new MemoryStream(constraintData, false);
-            BulletReader reader = new BulletReader(stream);
+            var stream = new MemoryStream(constraintData, false);
+            var reader = new BulletReader(stream);
 
             TypedConstraintType type = (TypedConstraintType)reader.ReadInt32(TypedConstraintFloatData.Offset("ObjectType"));
             switch (type)
@@ -601,9 +601,9 @@ namespace BulletSharp
             float friction, restitution;
             Vector3 angularFactor, linearFactor;
 
-            using (MemoryStream stream = new MemoryStream(bodyData, false))
+            using (var stream = new MemoryStream(bodyData, false))
             {
-                using (BulletReader reader = new BulletReader(stream))
+                using (var reader = new BulletReader(stream))
                 {
                     int cod = RigidBodyFloatData.Offset("CollisionObjectData");
                     collisionShapePtr = reader.ReadPtr(cod + CollisionObjectFloatData.Offset("CollisionShape"));
@@ -848,9 +848,9 @@ namespace BulletSharp
             byte[] meshParts;
             Vector3 scaling;
             int numMeshParts;
-            using (MemoryStream shapeStream = new MemoryStream(meshData, false))
+            using (var shapeStream = new MemoryStream(meshData, false))
             {
-                using (BulletReader shapeReader = new BulletReader(shapeStream))
+                using (var shapeReader = new BulletReader(shapeStream))
                 {
                     shapeStream.Position += offset;
                     long meshPartsPtr = shapeReader.ReadPtr();
@@ -859,9 +859,9 @@ namespace BulletSharp
                     numMeshParts = shapeReader.ReadInt32();
                 }
             }
-            using (MemoryStream meshStream = new MemoryStream(meshParts, false))
+            using (var meshStream = new MemoryStream(meshParts, false))
             {
-                using (BulletReader meshReader = new BulletReader(meshStream))
+                using (var meshReader = new BulletReader(meshStream))
                 {
                     for (int i = 0; i < numMeshParts; i++)
                     {

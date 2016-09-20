@@ -255,10 +255,21 @@ namespace BulletSharp
             return null;
         }
 
-        public static Dna Load(BulletReader reader, bool swap)
+        public static Dna Load(byte[] dnaData, bool swap)
+        {
+            using (var stream = new MemoryStream(dnaData))
+            {
+                using (var reader = new BulletReader(stream))
+                {
+                    return Load(reader, swap);
+                }
+            }
+        }
+
+        public static Dna Load(BulletReader dnaReader, bool swap)
         {
             var dna = new Dna();
-            dna.Init(reader, swap);
+            dna.Init(dnaReader, swap);
             return dna;
         }
 

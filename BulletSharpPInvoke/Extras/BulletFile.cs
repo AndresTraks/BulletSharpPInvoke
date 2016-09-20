@@ -52,8 +52,8 @@ namespace BulletSharp
         }
     }
     */
-	public class BulletFile : bFile
-	{
+    public class BulletFile : bFile
+    {
         public List<byte[]> Bvhs = new List<byte[]>();
         public List<byte[]> CollisionObjects = new List<byte[]>();
         public List<byte[]> CollisionShapes = new List<byte[]>();
@@ -62,21 +62,15 @@ namespace BulletSharp
         public List<byte[]> MultiBodies = new List<byte[]>();
         public List<byte[]> RigidBodies = new List<byte[]>();
 
-		public BulletFile()
-			: base("")
-		{
-            throw new NotImplementedException();
-		}
-        
-		public BulletFile(string fileName)
+        public BulletFile(string fileName)
             : base(fileName)
-		{
-		}
+        {
+        }
 
-		public BulletFile(byte[] memoryBuffer, int len)
+        public BulletFile(byte[] memoryBuffer, int len)
             : base(memoryBuffer, len)
-		{
-		}
+        {
+        }
 
         protected override string HeaderTag => "BULLET";
 
@@ -96,93 +90,76 @@ namespace BulletSharp
             ParseInternal(verboseMode);
 
             //the parsing will convert to cpu endian
-            _flags &= ~FileFlags.EndianSwap;
-            
+            Flags &= ~FileFlags.EndianSwap;
+
             _fileBuffer[8] = (byte)(BitConverter.IsLittleEndian ? 'v' : 'V');
         }
 
-		public override void ParseData()
-		{
-            //Console.WriteLine("Building datablocks");
-            //Console.WriteLine("Chunk size = {0}", CHUNK_HEADER_LEN);
-            //Console.WriteLine("File chunk size = {0}", ChunkUtils.GetOffset(_flags));
-
-            bool brokenDna = (_flags & FileFlags.BrokenDna) != 0;
-            bool swap = (_flags & FileFlags.EndianSwap) != 0;
-
-            MemoryStream memory = new MemoryStream(_fileBuffer, false);
-            BinaryReader reader = new BinaryReader(memory);
+        protected override void ReadChunks()
+        {
+            bool brokenDna = (Flags & FileFlags.BrokenDna) != 0;
 
             _dataStart = SizeOfBlenderHeader;
-            long dataPtr = _dataStart;
-            memory.Position = dataPtr;
+            long chunkPtr = _dataStart;
+            Stream stream = ChunkReader.BaseStream;
+            stream.Position = chunkPtr;
 
-            ChunkInd dataChunk;
-            int seek = GetNextBlock(out dataChunk, reader);
-
-            if (swap)
+            ChunkInd chunk = GetNextBlock(ChunkReader);
+            while (chunk.Code != DnaID.Dna)
             {
-                throw new NotImplementedException();
-                //swapLen(dataPtr);
-            }
+                long chunkDataOffset = chunkPtr + ChunkUtils.GetChunkSize(Flags);
 
-            while (dataChunk.Code != DnaID.Dna)
-            {
-                if (!brokenDna || dataChunk.Code != DnaID.QuantizedBvh)
+                if (!brokenDna || chunk.Code != DnaID.QuantizedBvh)
                 {
                     // One behind
-                    if (dataChunk.Code == DnaID.Sdna)
+                    if (chunk.Code == DnaID.Sdna)
                     {
                         break;
                     }
 
-                    // same as (BHEAD+DATA dependency)
-			        long dataPtrHead = dataPtr + ChunkUtils.GetChunkSize(_flags);
-                    if (dataChunk.StructIndex >= 0)
+                    byte[] chunkData;
+                    if (chunk.StructIndex >= 0)
                     {
-                        byte[] id = ReadStruct(reader, dataChunk);
+                        _chunks.Add(chunk);
 
-                        //m_chunkPtrPtrMap.insert(dataChunk.oldPtr, dataChunk);
-                        _libPointers.Add(dataChunk.OldPtr, id);
-                        _chunks.Add(dataChunk);
-
-                        switch(dataChunk.Code)
+                        chunkData = ReadChunkData(chunk, chunkDataOffset);
+                        switch (chunk.Code)
                         {
                             case DnaID.CollisionObject:
-                                CollisionObjects.Add(id);
+                                CollisionObjects.Add(chunkData);
                                 break;
                             case DnaID.Constraint:
-                                Constraints.Add(id);
+                                Constraints.Add(chunkData);
                                 break;
                             case DnaID.DynamicsWorld:
-                                DynamicsWorldInfo.Add(id);
+                                DynamicsWorldInfo.Add(chunkData);
                                 break;
                             case DnaID.MultiBody:
-                                MultiBodies.Add(id);
+                                MultiBodies.Add(chunkData);
                                 break;
                             case DnaID.SoftBody:
                             case DnaID.TriangleInfoMap:
                                 throw new NotImplementedException();
                             case DnaID.QuantizedBvh:
-                                Bvhs.Add(id);
+                                Bvhs.Add(chunkData);
                                 break;
                             case DnaID.RigidBody:
-                                RigidBodies.Add(id);
+                                RigidBodies.Add(chunkData);
                                 break;
                             case DnaID.Shape:
-                                CollisionShapes.Add(id);
+                                CollisionShapes.Add(chunkData);
                                 break;
                         }
                     }
                     else
                     {
 #if DEBUG
-                        Console.WriteLine("unknown chunk " + dataChunk.Code);
+                        Console.WriteLine("unknown chunk " + chunk.Code);
 #endif
-                        byte[] data = new byte[dataChunk.Length];
-                        reader.Read(data, 0, dataChunk.Length);
-                        _libPointers.Add(dataChunk.OldPtr, data);
+                        chunkData = new byte[chunk.Length];
+                        ChunkReader.Read(chunkData, 0, chunk.Length);
                     }
+                    LibPointers.Add(chunk.OldPtr, chunkData);
                 }
                 else
                 {
@@ -191,23 +168,15 @@ namespace BulletSharp
 #endif
                 }
 
-                dataPtr += seek;
-                memory.Position = dataPtr;
+                chunkPtr = chunkDataOffset + chunk.Length;
+                stream.Position = chunkPtr;
 
-                seek = GetNextBlock(out dataChunk, reader);
-                if (swap)
-                {
-                    throw new NotImplementedException();
-                    //swapLen(dataPtr);
-                }
-
-                if (seek < 0)
+                chunk = GetNextBlock(ChunkReader);
+                if (chunk.Length < 0)
                     break;
             }
-
-            reader.Dispose();
-            memory.Dispose();
-		}
+        }
+    }
         /*
 		public void Bvhs
 		{

@@ -76,7 +76,7 @@ namespace BulletSharp
 	    public static CompoundShape Create(GImpactMeshShape gImpactMesh, float depth)
 	    {
             CompoundShape colShape = new CompoundShape();
-            using (MyInternalTriangleIndexCallback cb = new MyInternalTriangleIndexCallback(colShape, gImpactMesh, depth))
+            using (var cb = new MyInternalTriangleIndexCallback(colShape, gImpactMesh, depth))
             {
                 Vector3 aabbMin, aabbMax;
                 gImpactMesh.GetAabb(Matrix.Identity, out aabbMin, out aabbMax);

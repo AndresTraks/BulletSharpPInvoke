@@ -39,9 +39,9 @@ namespace BulletSharp
             int len = 88;
             Chunk chunk = serializer.Allocate((uint)len, 1);
 
-            using (UnmanagedMemoryStream stream = new UnmanagedMemoryStream((byte*)chunk.OldPtr.ToPointer(), len, len, FileAccess.Write))
+            using (var stream = new UnmanagedMemoryStream((byte*)chunk.OldPtr.ToPointer(), len, len, FileAccess.Write))
             {
-                using (BinaryWriter writer = new BinaryWriter(stream))
+                using (var writer = new BinaryWriter(stream))
                 {
                     ContactSolverInfo solverInfo = SolverInfo;
                     writer.Write(solverInfo.Tau);

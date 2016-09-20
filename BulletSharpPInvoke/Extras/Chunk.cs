@@ -54,7 +54,7 @@ namespace BulletSharp
 
     public class ChunkInd
     {
-        public ChunkInd(ref Chunk4 c)
+        public ChunkInd(Chunk4 c)
         {
             Code = (DnaID)c.Code;
             Length = c.Length;
@@ -63,7 +63,7 @@ namespace BulletSharp
             NumBlocks = c.NumBlocks;
         }
 
-        public ChunkInd(ref Chunk8 c)
+        public ChunkInd(Chunk8 c)
         {
             Code = (DnaID)c.Code;
             Length = c.Length;

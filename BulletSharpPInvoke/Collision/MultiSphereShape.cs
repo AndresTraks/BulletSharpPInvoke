@@ -39,9 +39,9 @@ namespace BulletSharp
             {
                 Chunk chunk = serializer.Allocate(16 + sizeof(int), numElem);
                 Marshal.WriteInt64(dataBuffer, 0, serializer.GetUniquePointer(_native + 4));
-                using (UnmanagedMemoryStream stream = new UnmanagedMemoryStream((byte*)chunk.OldPtr.ToPointer(), chunk.Length, chunk.Length, FileAccess.Write))
+                using (var stream = new UnmanagedMemoryStream((byte*)chunk.OldPtr.ToPointer(), chunk.Length, chunk.Length, FileAccess.Write))
                 {
-                    using (BulletWriter writer = new BulletWriter(stream))
+                    using (var writer = new BulletWriter(stream))
                     {
                         for (int i = 0; i < SphereCount; i++)
                         {

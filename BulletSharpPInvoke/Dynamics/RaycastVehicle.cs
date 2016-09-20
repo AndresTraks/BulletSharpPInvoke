@@ -734,7 +734,7 @@ namespace BulletSharp
         public Object CastRay(ref Vector3 from, ref Vector3 to, VehicleRaycasterResult result)
         {
             //	RayResultCallback& resultCallback;
-            using (ClosestRayResultCallback rayCallback = new ClosestRayResultCallback(ref from, ref to))
+            using (var rayCallback = new ClosestRayResultCallback(ref from, ref to))
             {
                 m_dynamicsWorld.RayTestRef(ref from, ref to, rayCallback);
 

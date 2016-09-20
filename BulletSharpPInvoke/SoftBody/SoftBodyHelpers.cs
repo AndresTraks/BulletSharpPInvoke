@@ -76,7 +76,7 @@ namespace BulletSharp.SoftBody
 		public static SoftBody CreateFromConvexHull(SoftBodyWorldInfo worldInfo,
             Vector3[] vertices, int nVertices, bool randomizeConstraints = true)
 		{
-            SoftBody body = new SoftBody(btSoftBodyHelpers_CreateFromConvexHull2(
+            var body = new SoftBody(btSoftBodyHelpers_CreateFromConvexHull2(
                 worldInfo._native, vertices, nVertices, randomizeConstraints));
             body.WorldInfo = worldInfo;
             return body;
@@ -85,7 +85,7 @@ namespace BulletSharp.SoftBody
 		public static SoftBody CreateFromConvexHull(SoftBodyWorldInfo worldInfo,
             Vector3[] vertices, bool randomizeConstraints = true)
 		{
-            SoftBody body = new SoftBody(btSoftBodyHelpers_CreateFromConvexHull2(
+            var body = new SoftBody(btSoftBodyHelpers_CreateFromConvexHull2(
                 worldInfo._native, vertices, vertices.Length, randomizeConstraints));
             body.WorldInfo = worldInfo;
             return body;
@@ -98,7 +98,7 @@ namespace BulletSharp.SoftBody
             char[] separator = new[] { ' ' };
             Vector3[] pos;
 
-            using (StringReader nodeReader = new StringReader(node))
+            using (var nodeReader = new StringReader(node))
             {
                 string[] nodeHeader = nodeReader.ReadLine().Split(separator, StringSplitOptions.RemoveEmptyEntries);
                 int numNodes = int.Parse(nodeHeader[0]);
@@ -116,7 +116,7 @@ namespace BulletSharp.SoftBody
                         float.Parse(nodeLine[3], culture));
                 }
             }
-            SoftBody psb = new SoftBody(worldInfo, pos.Length, pos, null);
+            var psb = new SoftBody(worldInfo, pos.Length, pos, null);
             /*
             if (!string.IsNullOrEmpty(face))
             {
@@ -125,7 +125,7 @@ namespace BulletSharp.SoftBody
             */
             if (!string.IsNullOrEmpty(ele))
             {
-                using (StringReader eleReader = new StringReader(ele))
+                using (var eleReader = new StringReader(ele))
                 {
                     string[] eleHeader = eleReader.ReadLine().Split(separator, StringSplitOptions.RemoveEmptyEntries);
                     int numTetras = int.Parse(eleHeader[0]);
@@ -198,7 +198,7 @@ namespace BulletSharp.SoftBody
             }
             maxIndex++;
 
-            SoftBody psb = new SoftBody(worldInfo, maxIndex, vertices, null);
+            var psb = new SoftBody(worldInfo, maxIndex, vertices, null);
 
             BitArray chks = new BitArray(maxIndex * maxIndex);
             for (int i = 0; i < numTriangleIndices; i += 3)
@@ -253,7 +253,7 @@ namespace BulletSharp.SoftBody
                 }
             }
 
-            SoftBody psb = new SoftBody(worldInfo, tot, x, m);
+            var psb = new SoftBody(worldInfo, tot, x, m);
 
             if ((fixeds & 1) != 0)
                 psb.SetMass(0, 0);
@@ -311,7 +311,7 @@ namespace BulletSharp.SoftBody
 			Vector3 corner10, Vector3 corner01, Vector3 corner11, int resx, int resy,
 			int fixeds, bool gendiags)
 		{
-            SoftBody body = new SoftBody(btSoftBodyHelpers_CreatePatchUV(worldInfo._native,
+            var body = new SoftBody(btSoftBodyHelpers_CreatePatchUV(worldInfo._native,
                 ref corner00, ref corner10, ref corner01, ref corner11, resx, resy, fixeds, gendiags));
             body.WorldInfo = worldInfo;
             return body;
@@ -321,7 +321,7 @@ namespace BulletSharp.SoftBody
 			Vector3 corner10, Vector3 corner01, Vector3 corner11, int resx, int resy,
             int fixeds, bool gendiags, float[] texCoords)
 		{
-            SoftBody body = new SoftBody(btSoftBodyHelpers_CreatePatchUV2(worldInfo._native,
+            var body = new SoftBody(btSoftBodyHelpers_CreatePatchUV2(worldInfo._native,
                 ref corner00, ref corner10, ref corner01, ref corner11, resx, resy,
                 fixeds, gendiags, texCoords));
             body.WorldInfo = worldInfo;
@@ -342,7 +342,7 @@ namespace BulletSharp.SoftBody
                 m[i] = 1;
             }
 
-            SoftBody psb = new SoftBody(worldInfo, r, x, m);
+            var psb = new SoftBody(worldInfo, r, x, m);
             if ((fixeds & 1) != 0)
                 psb.SetMass(0, 0);
             if ((fixeds & 2) != 0)
