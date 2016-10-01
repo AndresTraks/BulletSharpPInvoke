@@ -176,7 +176,7 @@ namespace BulletSharp
                     break;
             }
         }
-    }
+
         /*
 		public void Bvhs
 		{
