@@ -4,6 +4,7 @@ using BulletSharp.SoftBody;
 using DemoFramework;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -564,9 +565,10 @@ namespace SoftDemo
 
         void Init_TetraCube()
         {
-            String path = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
+            string path = Path.GetDirectoryName(Application.ExecutablePath);
             SoftBody psb = SoftBodyHelpers.CreateFromTetGenFile(softBodyWorldInfo,
-                path + "\\data\\cube.ele", null, path + "\\data\\cube.node", false, true, true);
+                Path.Combine(path, "data", "cube.ele"), null,
+                Path.Combine(path, "data", "cube.node"), false, true, true);
             SoftWorld.AddSoftBody(psb);
             psb.Scale(new Vector3(4, 4, 4));
             psb.Translate(0, 5, 0);

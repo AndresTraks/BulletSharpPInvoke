@@ -7,9 +7,9 @@ namespace CollisionInterfaceDemo
 {
     class DrawingResult : ContactResultCallback
     {
-        Vector3 _blue = new Vector3(0, 0, 1);
+        private Vector3 _blue = new Vector3(0, 0, 1);
+        private DynamicsWorld _world;
 
-        DynamicsWorld _world;
         public DrawingResult(DynamicsWorld world)
         {
             _world = world;
@@ -31,7 +31,7 @@ namespace CollisionInterfaceDemo
         Vector3 eye = new Vector3(6, 4, 1);
         Vector3 target = new Vector3(0, 3, 0);
 
-        CollisionObject[] objects = new CollisionObject[2];
+        CollisionObject objectA, objectB;
         DrawingResult renderCallback;
 
         Vector3 boxMin = new Vector3(-1, -1, -1);
@@ -53,55 +53,61 @@ namespace CollisionInterfaceDemo
             CollisionConf = new DefaultCollisionConfiguration();
             Dispatcher = new CollisionDispatcher(CollisionConf);
 
-            Broadphase = new AxisSweep3(new Vector3(-1000, -1000, -1000), new Vector3(1000, 1000, 1000));
+            Broadphase = new AxisSweep3(
+                new Vector3(-1000, -1000, -1000),
+                new Vector3(1000, 1000, 1000));
 
             World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConf);
             World.Gravity = new Vector3(0, -10, 0);
 
             renderCallback = new DrawingResult(World);
 
-
-            BoxShape boxA = new BoxShape(new Vector3(1, 1, 1));
-            boxA.Margin = 0;
-
-            BoxShape boxB = new BoxShape(new Vector3(0.5f, 0.5f, 0.5f));
-            boxB.Margin = 0;
-
+            var boxA = new BoxShape(1.0f) { Margin = 0 };
+            var boxB = new BoxShape(0.5f) { Margin = 0 };
             CollisionShapes.Add(boxA);
             CollisionShapes.Add(boxB);
-
-            objects[0] = new CollisionObject();
-            objects[1] = new CollisionObject();
-
-            objects[0].CollisionShape = boxA;
-            objects[1].CollisionShape = boxB;
-
-            //World.AddCollisionObject(objects[0]);
-            World.AddCollisionObject(objects[1]);
 
             Quaternion rotA = new Quaternion(0.739f, -0.204f, 0.587f, 0.257f);
             rotA.Normalize();
 
-            objects[0].WorldTransform = Matrix.RotationQuaternion(rotA) * Matrix.Translation(0, 3, 0);
-            objects[1].WorldTransform = Matrix.Translation(0, 4.248f, 0);
+            objectA = new CollisionObject
+            {
+                CollisionShape = boxA,
+                WorldTransform = Matrix.RotationQuaternion(rotA) * Matrix.Translation(0, 3, 0)
+            };
+            objectB = new CollisionObject
+            {
+                CollisionShape = boxB,
+                WorldTransform = Matrix.Translation(0, 4.248f, 0)
+            };
+
+            //World.AddCollisionObject(objectA);
+            World.AddCollisionObject(objectB);
         }
 
         public override void OnUpdate()
         {
             base.OnUpdate();
 
-            Matrix t = objects[0].WorldTransform;
-            Vector3 pos = t.Origin;
-            t.Origin = Vector3.Zero;
-            t *= Matrix.RotationYawPitchRoll(0.1f * FrameDelta, 0.05f * FrameDelta, 0);
-            t.Origin = pos;
-            objects[0].WorldTransform = t;
+            Matrix transform = objectA.WorldTransform;
+            Vector3 position = transform.Origin;
+            transform.Origin = Vector3.Zero;
+            transform *= Matrix.RotationYawPitchRoll(0.1f * FrameDelta, 0.05f * FrameDelta, 0);
+            transform.Origin = position;
+            objectA.WorldTransform = transform;
 
             if (IsDebugDrawEnabled)
             {
-                World.DebugDrawer.DrawBox(ref boxMin, ref boxMax, ref t, ref white);
-                World.ContactTest(objects[0], renderCallback);
+                World.DebugDrawer.DrawBox(ref boxMin, ref boxMax, ref transform, ref white);
+                World.ContactTest(objectA, renderCallback);
             }
+        }
+
+        public override void ExitPhysics()
+        {
+            renderCallback.Dispose();
+
+            base.ExitPhysics();
         }
     }
 

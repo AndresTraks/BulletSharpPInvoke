@@ -2,16 +2,17 @@
 using BulletSharp.Math;
 using DemoFramework;
 using System;
+using System.IO;
 
 namespace BspDemo
 {
     public class BspToBulletConverter : BspConverter
     {
-        Demo demo;
+        private Demo _demo;
 
         public BspToBulletConverter(Demo demo)
         {
-            this.demo = demo;
+            _demo = demo;
         }
 
         public override void AddConvexVerticesCollider(AlignedVector3Array vertices, bool isEntity, Vector3 entityTargetLocation)
@@ -19,16 +20,15 @@ namespace BspDemo
             // perhaps we can do something special with entities (isEntity)
             // like adding a collision Triggering (as example)
 
-            if (vertices.Count == 0)
-                return;
+            if (vertices.Count == 0) return;
 
             float mass = 0.0f;
             //can use a shift
             Matrix startTransform = Matrix.Translation(0, 0, -10.0f);
             CollisionShape shape = new ConvexHullShape(vertices);
-            demo.CollisionShapes.Add(shape);
+            _demo.CollisionShapes.Add(shape);
 
-            demo.LocalCreateRigidBody(mass, startTransform, shape);
+            _demo.LocalCreateRigidBody(mass, startTransform, shape);
         }
     }
 
@@ -61,7 +61,7 @@ namespace BspDemo
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length == 1)
             {
-                bspLoader.LoadBspFile("data/BspDemo.bsp");
+                bspLoader.LoadBspFile(Path.Combine("data", "BspDemo.bsp"));
             }
             else
             {

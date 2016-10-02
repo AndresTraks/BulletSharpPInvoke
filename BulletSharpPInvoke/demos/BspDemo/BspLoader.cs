@@ -162,7 +162,7 @@ namespace BspDemo
     {
         public BspBrush[] Brushes { get; set; }
         public BspBrushSide[] BrushSides { get; set; }
-        public List<BspEntity> Entities { get; set; }
+        public Dictionary<string, BspEntity> Entities { get; set; }
         public BspLeaf[] Leaves { get; set; }
         public int[] LeafBrushes { get; set; }
         public BspPlane[] Planes { get; set; }
@@ -256,7 +256,7 @@ namespace BspDemo
 
 
             // read entities
-            Entities = new List<BspEntity>();
+            Entities = new Dictionary<string, BspEntity>();
             buffer.Position = lumps[(int)IBspLumpType.Entities].Offset;
             length = lumps[(int)IBspLumpType.Entities].Length;
 
@@ -279,7 +279,7 @@ namespace BspDemo
                         break;
 
                     case "}":
-                        Entities.Add(bspEntity);
+                        Entities.Add(bspEntity.ClassName, bspEntity);
                         break;
 
                     default:
@@ -434,20 +434,6 @@ namespace BspDemo
             }
 
             return true;
-        }
-
-        public bool FindVectorByName(string name, ref Vector3 outVector)
-        {
-            foreach (BspEntity entity in Entities)
-            {
-                if (entity.ClassName == name)
-                {
-                    outVector = entity.Origin;
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

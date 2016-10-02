@@ -12,8 +12,8 @@ namespace BenchmarkDemo
 
         int benchmark = 2;
 
-        float collisionRadius = 0.0f;
-        float defaultContactProcessingThreshold = 0.0f;
+        const float collisionRadius = 0.0f;
+        const float defaultContactProcessingThreshold = 0.0f;
 
         protected override void OnInitialize()
         {
@@ -29,9 +29,11 @@ namespace BenchmarkDemo
         protected override void OnInitializePhysics()
         {
             // collision configuration contains default setup for memory, collision setup
-            DefaultCollisionConstructionInfo cci = new DefaultCollisionConstructionInfo();
-            cci.DefaultMaxPersistentManifoldPoolSize = 32768;
-            CollisionConf = new DefaultCollisionConfiguration(cci);
+            using (var cci = new DefaultCollisionConstructionInfo()
+                { DefaultMaxPersistentManifoldPoolSize = 32768 })
+            {
+                CollisionConf = new DefaultCollisionConfiguration(cci);
+            }
 
             Dispatcher = new CollisionDispatcher(CollisionConf);
             Dispatcher.DispatcherFlags = DispatcherFlags.DisableContactPoolDynamicAllocation;
@@ -55,9 +57,9 @@ namespace BenchmarkDemo
             if (benchmark < 5)
             {
                 // create the ground
-                CollisionShape groundShape = new BoxShape(250, 50, 250);
+                var groundShape = new BoxShape(250, 50, 250);
                 CollisionShapes.Add(groundShape);
-                CollisionObject ground = base.LocalCreateRigidBody(0, Matrix.Translation(0, -50, 0), groundShape);
+                var ground = base.LocalCreateRigidBody(0, Matrix.Translation(0, -50, 0), groundShape);
                 ground.UserObject = "Ground";
             }
 
@@ -80,10 +82,10 @@ namespace BenchmarkDemo
                     {
                         for (int j = 0; j < size; j++)
                         {
-                            pos[2] = offset + (float)j * (cubeSize * 2.0f + spacing);
+                            pos[2] = offset + j * (cubeSize * 2.0f + spacing);
                             for (int i = 0; i < size; i++)
                             {
-                                pos[0] = offset + (float)i * (cubeSize * 2.0f + spacing);
+                                pos[0] = offset + i * (cubeSize * 2.0f + spacing);
                                 RigidBody cmbody = LocalCreateRigidBody(mass, Matrix.Translation(pos), blockShape);
                             }
                         }
@@ -127,16 +129,16 @@ namespace BenchmarkDemo
                     {
                         for (int j = 0; j < size; j++)
                         {
-                            pos[2] = offset + (float)j * (cubeSize * 2.0f + spacing);
+                            pos[2] = offset + j * (cubeSize * 2.0f + spacing);
                             for (int i = 0; i < size; i++)
                             {
-                                pos[0] = offset + (float)i * (cubeSize * 2.0f + spacing);
+                                pos[0] = offset + i * (cubeSize * 2.0f + spacing);
                                 LocalCreateRigidBody(mass, Matrix.Translation(pos), convexHullShape);
                             }
                         }
                         offset -= 0.05f * spacing * (size - 1);
                         spacing *= 1.01f;
-                        pos[1] += (cubeSize * 2.0f + spacing);
+                        pos.Y += cubeSize * 2.0f + spacing;
                     }
                     break;
 
@@ -165,10 +167,10 @@ namespace BenchmarkDemo
                     {
                         for (int j = 0; j < size; j++)
                         {
-                            pos[2] = offset + (float)j * (cubeSize * 2.0f + spacing);
+                            pos[2] = offset + j * (cubeSize * 2.0f + spacing);
                             for (int i = 0; i < size; i++)
                             {
-                                pos[0] = offset + (float)i * (cubeSize * 2.0f + spacing);
+                                pos[0] = offset + i * (cubeSize * 2.0f + spacing);
                                 Vector3 bpos = new Vector3(0, 25, 0) + new Vector3(5.0f * pos.X, pos.Y, 5.0f * pos.Z);
                                 int idx = random.Next(10);
                                 Matrix trans = Matrix.Translation(bpos);
@@ -219,7 +221,7 @@ namespace BenchmarkDemo
                     break;
 
                 case 6:
-                    boxSize = new Vector3(1.5f, 1.5f, 1.5f);
+                    boxSize = new Vector3(1.5f);
 
                     convexHullShape = new ConvexHullShape();
 
@@ -242,10 +244,10 @@ namespace BenchmarkDemo
                     {
                         for (int j = 0; j < size; j++)
                         {
-                            pos[2] = offset + (float)j * (cubeSize * 2.0f + spacing);
+                            pos[2] = offset + j * (cubeSize * 2.0f + spacing);
                             for (int i = 0; i < size; i++)
                             {
-                                pos[0] = offset + (float)i * (cubeSize * 2.0f + spacing);
+                                pos[0] = offset + i * (cubeSize * 2.0f + spacing);
                                 Vector3 bpos = new Vector3(0, 25, 0) + new Vector3(5.0f * pos.X, pos.Y, 5.0f * pos.Z);
 
                                 LocalCreateRigidBody(mass, Matrix.Translation(bpos), convexHullShape);
@@ -270,88 +272,77 @@ namespace BenchmarkDemo
 
         void CreatePyramid(Vector3 offsetPosition, int stackSize, Vector3 boxSize)
         {
+            const float mass = 1.0f;
             const float space = 0.0001f;
-            Vector3 pos = new Vector3(0.0f, boxSize[1], 0.0f);
 
-            BoxShape blockShape = new BoxShape(boxSize[0] - collisionRadius, boxSize[1] - collisionRadius, boxSize[2] - collisionRadius);
+            var blockShape = new BoxShape(boxSize - new Vector3(collisionRadius));
 
-            float mass = 1.0f;
+            Vector3 diff = boxSize * 1.02f;
+            Vector3 offset = -stackSize * 0.5f * (diff * 2 + new Vector3(space));
+            Vector3 position = new Vector3(0.0f, boxSize.Y, 0.0f);
 
-            float diffX = boxSize[0] * 1.02f;
-            float diffY = boxSize[1] * 1.02f;
-            float diffZ = boxSize[2] * 1.02f;
-
-            float offsetX = -stackSize * (diffX * 2.0f + space) * 0.5f;
-            float offsetZ = -stackSize * (diffZ * 2.0f + space) * 0.5f;
             while (stackSize > 0)
             {
                 for (int j = 0; j < stackSize; j++)
                 {
-                    pos[2] = offsetZ + (float)j * (diffZ * 2.0f + space);
+                    position.Z = offset.Z + j * (diff.Z * 2.0f + space);
                     for (int i = 0; i < stackSize; i++)
                     {
-                        pos[0] = offsetX + (float)i * (diffX * 2.0f + space);
-                        RigidBody body = LocalCreateRigidBody(mass, Matrix.Translation(offsetPosition + pos), blockShape);
+                        position.X = offset.X + i * (diff.X * 2.0f + space);
+                        LocalCreateRigidBody(mass, Matrix.Translation(offsetPosition + position), blockShape);
                     }
                 }
-                offsetX += diffX;
-                offsetZ += diffZ;
-                pos[1] += (diffY * 2.0f + space);
+                offset += diff;
+                position.Y += diff.Y * 2.0f + space;
                 stackSize--;
             }
         }
 
         void CreateWall(Vector3 offsetPosition, int stackSize, Vector3 boxSize)
         {
-            BoxShape blockShape = new BoxShape(boxSize[0] - collisionRadius, boxSize[1] - collisionRadius, boxSize[2] - collisionRadius);
+            var blockShape = new BoxShape(boxSize - new Vector3(collisionRadius));
 
-            float mass = 1.0f;
+            const float mass = 1.0f;
+            var position = Matrix.Identity;
 
-            //	float diffX = boxSize[0] * 1.0f;
-            float diffY = boxSize[1] * 1.0f;
-            float diffZ = boxSize[2] * 1.0f;
-
-            float offset = -stackSize * (diffZ * 2.0f) * 0.5f;
-            Vector3 pos = new Vector3(0.0f, diffY, 0.0f);
-
-            while (stackSize > 0)
+            for (int y = 0; y < stackSize; y++)
             {
-                for (int i = 0; i < stackSize; i++)
+                float offset = 1 - y;
+                float height = ((stackSize - y) * 2 - 1) * boxSize.Y;
+                for (int i = 0; i < y; i++)
                 {
-                    pos[2] = offset + (float)i * (diffZ * 2.0f);
-                    LocalCreateRigidBody(mass, Matrix.Translation(offsetPosition + pos), blockShape);
+                    position.Origin = offsetPosition +
+                        new Vector3(0, height, (offset + i * 2) * boxSize.Z);
+                    LocalCreateRigidBody(mass, position, blockShape);
                 }
-                offset += diffZ;
-                pos[1] += (diffY * 2.0f);
-                stackSize--;
             }
         }
 
         void CreateTowerCircle(Vector3 offsetPosition, int stackSize, int rotSize, Vector3 boxSize)
         {
-            BoxShape blockShape = new BoxShape(boxSize[0] - collisionRadius, boxSize[1] - collisionRadius, boxSize[2] - collisionRadius);
+            var blockShape = new BoxShape(boxSize - new Vector3(collisionRadius));
 
-            float mass = 1.0f;
-            float radius = 1.3f * rotSize * boxSize[0] / (float)Math.PI;
+            const float mass = 1.0f;
+            float radius = 1.3f * rotSize * boxSize.X / (float)Math.PI;
 
             // create active boxes
-            float posY = boxSize[1];
-            float rot = 0;
+            float positionY = boxSize.Y;
+            float rotation = 0;
 
             for (int i = 0; i < stackSize; i++)
             {
                 for (int j = 0; j < rotSize; j++)
                 {
-                    Matrix trans = Matrix.Translation(0, 0, radius);
-                    trans *= Matrix.RotationY(rot);
-                    trans *= Matrix.Translation(offsetPosition + new Vector3(0, posY, 0));
+                    Matrix trans = Matrix.Translation(0, positionY, radius);
+                    trans *= Matrix.RotationY(rotation);
+                    trans.Origin += offsetPosition;
                     LocalCreateRigidBody(mass, trans, blockShape);
 
-                    rot += (2.0f * (float)Math.PI) / rotSize;
+                    rotation += (2.0f * (float)Math.PI) / rotSize;
                 }
 
-                posY += boxSize[1] * 2.0f;
-                rot += (float)Math.PI / (float)rotSize;
+                positionY += boxSize.Y * 2.0f;
+                rotation += (float)Math.PI / rotSize;
             }
         }
 
@@ -359,21 +350,19 @@ namespace BenchmarkDemo
         {
             //rigidbody is dynamic if and only if mass is non zero, otherwise static
             bool isDynamic = (mass != 0.0f);
+            Vector3 localInertia = isDynamic ? shape.CalculateLocalInertia(mass) : Vector3.Zero;
 
-            Vector3 localInertia = Vector3.Zero;
-            if (isDynamic)
-                shape.CalculateLocalInertia(mass, out localInertia);
-
-            //using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
-
-            RigidBodyConstructionInfo rbInfo = new RigidBodyConstructionInfo(mass, null, shape, localInertia);
-            RigidBody body = new RigidBody(rbInfo);
-            rbInfo.Dispose();
-            body.ContactProcessingThreshold = defaultContactProcessingThreshold;
-            body.WorldTransform = startTransform;
+            RigidBody body;
+            using (var rbInfo = new RigidBodyConstructionInfo(mass, null, shape, localInertia))
+            {
+                body = new RigidBody(rbInfo)
+                {
+                    ContactProcessingThreshold = defaultContactProcessingThreshold,
+                    WorldTransform = startTransform
+                };
+            }
 
             World.AddRigidBody(body);
-
             return body;
         }
     }

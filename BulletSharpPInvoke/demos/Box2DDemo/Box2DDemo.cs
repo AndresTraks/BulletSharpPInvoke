@@ -50,19 +50,19 @@ namespace Box2DDemo
             // create a few basic rigid bodies
             CollisionShape groundShape = new BoxShape(150, 7, 150);
             CollisionShapes.Add(groundShape);
-            RigidBody ground = LocalCreateRigidBody(0, Matrix.Identity, groundShape);
+            var ground = LocalCreateRigidBody(0, Matrix.Identity, groundShape);
             ground.UserObject = "Ground";
 
             // create a few dynamic rigidbodies
             // Re-using the same collision is better for memory usage and performance
             float u = 0.96f;
             Vector3[] points = { new Vector3(0, u, 0), new Vector3(-u, -u, 0), new Vector3(u, -u, 0) };
-            ConvexShape childShape0 = new BoxShape(1, 1, Depth);
-            ConvexShape colShape = new Convex2DShape(childShape0);
-            ConvexShape childShape1 = new ConvexHullShape(points);
-            ConvexShape colShape2 = new Convex2DShape(childShape1);
-            ConvexShape childShape2 = new CylinderShapeZ(1, 1, Depth);
-            ConvexShape colShape3 = new Convex2DShape(childShape2);
+            var childShape0 = new BoxShape(1, 1, Depth);
+            var colShape = new Convex2DShape(childShape0);
+            var childShape1 = new ConvexHullShape(points);
+            var colShape2 = new Convex2DShape(childShape1);
+            var childShape2 = new CylinderShapeZ(1, 1, Depth);
+            var colShape3 = new Convex2DShape(childShape2);
 
             CollisionShapes.Add(colShape);
             CollisionShapes.Add(colShape2);
@@ -77,7 +77,7 @@ namespace Box2DDemo
             float mass = 1.0f;
             Vector3 localInertia = colShape.CalculateLocalInertia(mass);
 
-            RigidBodyConstructionInfo rbInfo = new RigidBodyConstructionInfo(mass, null, colShape, localInertia);
+            var rbInfo = new RigidBodyConstructionInfo(mass, null, colShape, localInertia);
 
             Vector3 x = new Vector3(-ArraySizeX, 8, -20);
             Vector3 y = Vector3.Zero;

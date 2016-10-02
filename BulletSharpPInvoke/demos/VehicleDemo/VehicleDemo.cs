@@ -14,7 +14,7 @@ namespace VehicleDemo
         Vector3 target = Vector3.Zero;
 
         //bool UseTrimeshGround = false;
-        //string heightfieldFile = "data/heightfield128x128.raw";
+        //string heightfieldFile = Path.Combine("data", "heightfield128x128.raw");
 
         const int rightIndex = 0;
         const int upIndex = 1;

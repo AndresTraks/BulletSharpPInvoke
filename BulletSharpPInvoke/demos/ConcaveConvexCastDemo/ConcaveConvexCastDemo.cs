@@ -9,150 +9,14 @@ using DemoFramework;
 
 namespace ConcaveConvexCastDemo
 {
-    // Scrolls back and forth over terrain
-    class ConvexcastBatch
+    static class Program
     {
-        const int NumRays = 100;
-
-        Vector3[] _source = new Vector3[NumRays];
-        Vector3[] _destination = new Vector3[NumRays];
-        Vector3[] _direction = new Vector3[NumRays];
-        Vector3[] _hitCenterOfMass = new Vector3[NumRays];
-        Vector3[] _hitPoint = new Vector3[NumRays];
-        float[] _hitFraction = new float[NumRays];
-        Vector3[] _normal = new Vector3[NumRays];
-
-        int _frameCount;
-        float _time;
-        float _timeMin = float.MaxValue;
-        float _timeMax;
-        float _timeTotal;
-        int _sampleCount;
-
-        float _dx = 10;
-        float _minX = -40;
-        float _maxX = 20;
-        float _sign = 1;
-
-        Vector3 _boxBoundMin;
-        Vector3 _boxBoundMax;
-        BoxShape _boxShape;
-
-        const float NormalScale = 10.0f; // easier to see if this is big
-
-        Matrix _fromRotation = Matrix.Identity; //Matrix.RotationX(0.7f);
-        Matrix _toRotation = Matrix.RotationX(0.7f);
-
-        public ConvexcastBatch(float rayLength, float z, float minY, float maxY)
+        [STAThread]
+        static void Main()
         {
-            _boxBoundMax = new Vector3(1.0f, 1.0f, 1.0f);
-            _boxBoundMin = -_boxBoundMax;
-            _boxShape = new BoxShape(_boxBoundMax);
-
-            const float dalpha = 4 * (float)Math.PI / NumRays;
-            for (int i = 0; i < NumRays; i++)
+            using (Demo demo = new ConcaveConvexCastDemo())
             {
-                float alpha = dalpha * i;
-                // rotate around by alpha degrees y
-                Matrix transform = Matrix.RotationY(alpha);
-                _direction[i] = new Vector3(1.0f, 0.0f, 0.0f);
-                _direction[i] = Vector3.TransformCoordinate(_direction[i], transform);
-                _source[i] = new Vector3(_minX, maxY, z);
-                _destination[i] = _source[i] + _direction[i] * rayLength;
-                _destination[i].Y = minY;
-                _normal[i] = new Vector3(1.0f, 0.0f, 0.0f);
-            }
-        }
-
-        public void Move(float frameDelta)
-        {
-            if (frameDelta > 1.0f / 60.0f)
-                frameDelta = 1.0f / 60.0f;
-
-            float move = _sign * _dx * frameDelta;
-            for (int i = 0; i < NumRays; i++)
-            {
-                _source[i].X += move;
-                _destination[i].X += move;
-            }
-
-            if (_source[0].X < _minX)
-                _sign = 1.0f;
-            else if (_source[0].X > _maxX)
-                _sign = -1.0f;
-        }
-
-        public void Cast(CollisionWorld cw, float frameDelta)
-        {
-            using (var cb = new ClosestConvexResultCallback())
-            {
-                for (int i = 0; i < NumRays; i++)
-                {
-                    cb.ClosestHitFraction = 1.0f;
-                    cb.ConvexFromWorld = _source[i];
-                    cb.ConvexToWorld = _destination[i];
-
-                    Matrix from = _fromRotation * Matrix.Translation(_source[i]);
-                    Matrix to = _toRotation * Matrix.Translation(_destination[i]);
-                    cw.ConvexSweepTestRef(_boxShape, ref from, ref to, cb);
-                    if (cb.HasHit)
-                    {
-                        _hitPoint[i] = cb.HitPointWorld;
-                        Vector3.Lerp(ref _source[i], ref _destination[i], cb.ClosestHitFraction, out _hitCenterOfMass[i]);
-                        _hitFraction[i] = cb.ClosestHitFraction;
-                        _normal[i] = cb.HitNormalWorld;
-                        _normal[i].Normalize();
-                    }
-                    else
-                    {
-                        _hitCenterOfMass[i] = _destination[i];
-                        _hitPoint[i] = _destination[i];
-                        _hitFraction[i] = 1.0f;
-                        _normal[i] = new Vector3(1.0f, 0.0f, 0.0f);
-                    }
-                }
-            }
-
-            _time += frameDelta;
-            _frameCount++;
-            if (_frameCount > 50)
-            {
-                if (_time < _timeMin) _timeMin = _time;
-                if (_time > _timeMax) _timeMax = _time;
-                _timeTotal += _time;
-                _sampleCount++;
-                float timeMean = _timeTotal / _sampleCount;
-                Console.WriteLine("{0} rays in {1} s, min {2}, max {3}, mean {4}",
-                    NumRays * _frameCount,
-                    _time.ToString("0.000", CultureInfo.InvariantCulture),
-                    _timeMin.ToString("0.000", CultureInfo.InvariantCulture),
-                    _timeMax.ToString("0.000", CultureInfo.InvariantCulture),
-                    timeMean.ToString("0.000", CultureInfo.InvariantCulture));
-                _time = 0;
-                _frameCount = 0;
-            }
-        }
-
-        static Vector3 _green = new Vector3(0.0f, 1.0f, 0.0f);
-        static Vector3 _white = new Vector3(1.0f, 1.0f, 1.0f);
-        static Vector3 _cyan = new Vector3(0.0f, 1.0f, 1.0f);
-
-        public void Draw(IDebugDraw drawer)
-        {
-            for (int i = 0; i < NumRays; i++)
-            {
-                drawer.DrawLine(ref _source[i], ref _hitCenterOfMass[i], ref _green);
-
-                Vector3 to = _hitPoint[i] + NormalScale * _normal[i];
-                drawer.DrawLine(ref _hitPoint[i], ref to, ref _white);
-
-                Matrix fromTransform = _fromRotation * Matrix.Translation(_source[i]);
-                Matrix toTransform = _toRotation * Matrix.Translation(_destination[i]);
-                Vector3 linVel, angVel;
-                TransformUtil.CalculateVelocity(ref fromTransform, ref toTransform, 1.0f, out linVel, out angVel);
-                Matrix transform;
-                TransformUtil.IntegrateTransform(ref fromTransform, ref linVel, ref angVel, _hitFraction[i], out transform);
-                drawer.DrawBox(ref _boxBoundMin, ref _boxBoundMax, ref transform, ref _cyan);
+                GraphicsLibraryManager.Run(demo);
             }
         }
     }
@@ -177,6 +41,7 @@ namespace ConcaveConvexCastDemo
         BvhTriangleMeshShape groundShape;
         static ConvexcastBatch convexcastBatch;
         RigidBody staticBody;
+        ClosestConvexResultCallback callback;
 
         protected override void OnInitialize()
         {
@@ -198,7 +63,7 @@ namespace ConcaveConvexCastDemo
                     for (int j = 0; j < NumVertsY; j++)
                     {
                         vertexWriter.Write((i - NumVertsX * 0.5f) * TriangleSize);
-                        vertexWriter.Write(waveheight * (float)Math.Sin((float)i + offset) * (float)Math.Cos((float)j + offset));
+                        vertexWriter.Write(waveheight * (float)Math.Sin(i + offset) * (float)Math.Cos(j + offset));
                         vertexWriter.Write((j - NumVertsY * 0.5f) * TriangleSize);
                     }
                 }
@@ -225,13 +90,17 @@ namespace ConcaveConvexCastDemo
             const int totalTriangles = 2 * (NumVertsX - 1) * (NumVertsY - 1);
             indexVertexArrays = new TriangleIndexVertexArray();
 
-            IndexedMesh mesh = new IndexedMesh();
-            mesh.NumTriangles = totalTriangles;
-            mesh.NumVertices = totalVerts;
-            mesh.TriangleIndexStride = 3 * sizeof(int);
-            mesh.VertexStride = Vector3.SizeInBytes;
-            mesh.TriangleIndexBase = Marshal.AllocHGlobal(mesh.TriangleIndexStride * totalTriangles);
-            mesh.VertexBase = Marshal.AllocHGlobal(mesh.VertexStride * totalVerts);
+            int triangleIndexStride = 3 * sizeof(int);
+            int vertexStride = Vector3.SizeInBytes;
+            var mesh = new IndexedMesh
+            {
+                NumTriangles = totalTriangles,
+                NumVertices = totalVerts,
+                TriangleIndexStride = triangleIndexStride,
+                VertexStride = vertexStride,
+                TriangleIndexBase = Marshal.AllocHGlobal(triangleIndexStride * totalTriangles),
+                VertexBase = Marshal.AllocHGlobal(vertexStride * totalVerts)
+            };
             var indicesStream = mesh.GetTriangleStream();
             using (var indices = new BinaryWriter(indicesStream))
             {
@@ -277,7 +146,12 @@ namespace ConcaveConvexCastDemo
             staticBody = LocalCreateRigidBody(0.0f, Matrix.Identity, groundShape);
             staticBody.CollisionFlags |= CollisionFlags.StaticObject;
             staticBody.UserObject = "Ground";
+
+            callback = new ClosestConvexResultCallback();
         }
+
+        private static Vector3 worldMin = new Vector3(-1000, -1000, -1000);
+        private static Vector3 worldMax = new Vector3(1000, 1000, 1000);
 
         public override void OnUpdate()
         {
@@ -287,9 +161,6 @@ namespace ConcaveConvexCastDemo
                 SetVertexPositions(WaveHeight, offset);
                 Graphics.MeshFactory.RemoveShape(groundShape);
 
-                Vector3 worldMin = new Vector3(-1000, -1000, -1000);
-                Vector3 worldMax = new Vector3(1000, 1000, 1000);
-
                 groundShape.RefitTreeRef(ref worldMin, ref worldMax);
 
                 //clear all contact points involving mesh proxy. Note: this is a slow/unoptimized operation.
@@ -297,7 +168,7 @@ namespace ConcaveConvexCastDemo
             }
 
             convexcastBatch.Move(FrameDelta);
-            convexcastBatch.Cast(World, FrameDelta);
+            convexcastBatch.Cast(World, callback, FrameDelta);
             if (IsDebugDrawEnabled)
             {
                 convexcastBatch.Draw(World.DebugDrawer);
@@ -324,17 +195,172 @@ namespace ConcaveConvexCastDemo
             }
             base.OnHandleInput();
         }
+
+        public override void ExitPhysics()
+        {
+            callback.Dispose();
+
+            base.ExitPhysics();
+        }
     }
 
-    static class Program
+    // Scrolls back and forth over terrain
+    class ConvexcastBatch
     {
-        [STAThread]
-        static void Main()
+        const int NumRays = 100;
+        Ray[] _rays = new Ray[NumRays];
+
+        int _frameCount;
+        float _time;
+        float _timeMin = float.MaxValue;
+        float _timeMax;
+        float _timeTotal;
+        int _sampleCount;
+
+        float _dx = 10;
+        float _minX = -40;
+        float _maxX = 20;
+        float _sign = 1;
+
+        Vector3 _boxBoundMin, _boxBoundMax;
+        BoxShape _boxShape;
+
+        const float NormalScale = 10.0f; // easier to see if this is big
+
+        Matrix _fromRotation = Matrix.Identity; //Matrix.RotationX(0.7f);
+        Matrix _toRotation = Matrix.RotationX(0.7f);
+
+        public ConvexcastBatch(float rayLength, float z, float minY, float maxY)
         {
-            using (Demo demo = new ConcaveConvexCastDemo())
+            _boxBoundMax = new Vector3(1.0f, 1.0f, 1.0f);
+            _boxBoundMin = -_boxBoundMax;
+            _boxShape = new BoxShape(_boxBoundMax);
+
+            const float alpha = 4 * (float)Math.PI / NumRays;
+            for (int i = 0; i < NumRays; i++)
             {
-                GraphicsLibraryManager.Run(demo);
+                Matrix transform = Matrix.RotationY(alpha * i);
+                var direction = Vector3.TransformCoordinate(new Vector3(1.0f, 0.0f, 0.0f), transform);
+
+                _rays[i] = new Ray
+                {
+                    Source = new Vector3(_minX, maxY, z),
+                    Destination = new Vector3(
+                        _minX + direction.X * rayLength,
+                        minY,
+                        z + direction.Z * rayLength),
+                    Normal = new Vector3(1, 0, 0)
+                };
             }
+        }
+
+        public void Move(float frameDelta)
+        {
+            if (frameDelta > 1.0f / 60.0f)
+                frameDelta = 1.0f / 60.0f;
+
+            float move = _sign * _dx * frameDelta;
+            foreach (var ray in _rays)
+            {
+                ray.MoveX(move);
+            }
+
+            if (_rays[0].Source.X < _minX)
+                _sign = 1.0f;
+            else if (_rays[0].Source.X > _maxX)
+                _sign = -1.0f;
+        }
+
+        public void Cast(CollisionWorld cw, ClosestConvexResultCallback callback, float frameDelta)
+        {
+            foreach (var ray in _rays)
+            {
+                callback.ClosestHitFraction = 1.0f;
+                callback.ConvexFromWorld = ray.Source;
+                callback.ConvexToWorld = ray.Destination;
+
+                Matrix from = _fromRotation * Matrix.Translation(ray.Source);
+                Matrix to = _toRotation * Matrix.Translation(ray.Destination);
+                cw.ConvexSweepTestRef(_boxShape, ref from, ref to, callback);
+                if (callback.HasHit)
+                {
+                    ray.HitPoint = callback.HitPointWorld;
+                    Vector3.Lerp(ref ray.Source, ref ray.Destination, callback.ClosestHitFraction, out ray.HitCenterOfMass);
+                    ray.HitFraction = callback.ClosestHitFraction;
+                    ray.Normal = callback.HitNormalWorld;
+                    ray.Normal.Normalize();
+                }
+                else
+                {
+                    ray.HitCenterOfMass = ray.Destination;
+                    ray.HitPoint = ray.Destination;
+                    ray.HitFraction = 1.0f;
+                    ray.Normal = new Vector3(1.0f, 0.0f, 0.0f);
+                }
+            }
+
+            _time += frameDelta;
+            _frameCount++;
+            if (_frameCount > 50)
+            {
+                if (_time < _timeMin) _timeMin = _time;
+                if (_time > _timeMax) _timeMax = _time;
+                _timeTotal += _time;
+                _sampleCount++;
+                PrintStats();
+                _time = 0;
+                _frameCount = 0;
+            }
+        }
+
+        private void PrintStats()
+        {
+            float timeMean = _timeTotal / _sampleCount;
+            Console.WriteLine("{0} rays in {1} s, min {2}, max {3}, mean {4}",
+                    NumRays * _frameCount,
+                    _time.ToString("0.000", CultureInfo.InvariantCulture),
+                    _timeMin.ToString("0.000", CultureInfo.InvariantCulture),
+                    _timeMax.ToString("0.000", CultureInfo.InvariantCulture),
+                    timeMean.ToString("0.000", CultureInfo.InvariantCulture));
+        }
+
+        static Vector3 _green = new Vector3(0.0f, 1.0f, 0.0f);
+        static Vector3 _white = new Vector3(1.0f, 1.0f, 1.0f);
+        static Vector3 _cyan = new Vector3(0.0f, 1.0f, 1.0f);
+
+        public void Draw(IDebugDraw drawer)
+        {
+            foreach (var ray in _rays)
+            {
+                drawer.DrawLine(ref ray.Source, ref ray.HitCenterOfMass, ref _green);
+
+                Vector3 to = ray.HitPoint + NormalScale * ray.Normal;
+                drawer.DrawLine(ref ray.HitPoint, ref to, ref _white);
+
+                Matrix fromTransform = _fromRotation * Matrix.Translation(ray.Source);
+                Matrix toTransform = _toRotation * Matrix.Translation(ray.Destination);
+                Vector3 linVel, angVel;
+                TransformUtil.CalculateVelocity(ref fromTransform, ref toTransform, 1.0f, out linVel, out angVel);
+                Matrix transform;
+                TransformUtil.IntegrateTransform(ref fromTransform, ref linVel, ref angVel, ray.HitFraction, out transform);
+                drawer.DrawBox(ref _boxBoundMin, ref _boxBoundMax, ref transform, ref _cyan);
+            }
+        }
+    }
+
+    class Ray
+    {
+        public Vector3 Source;
+        public Vector3 Destination;
+        public Vector3 HitCenterOfMass;
+        public Vector3 HitPoint;
+        public float HitFraction;
+        public Vector3 Normal;
+
+        public void MoveX(float move)
+        {
+            Source.X += move;
+            Destination.X += move;
         }
     }
 }
