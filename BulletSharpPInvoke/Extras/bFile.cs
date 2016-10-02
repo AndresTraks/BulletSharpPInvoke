@@ -232,16 +232,13 @@ namespace BulletSharp
 
         protected void ParseInternal(FileVerboseMode verboseMode)
         {
-            if (OK)
-            {
-                LoadDna(verboseMode);
-            }
+            if (!OK) return;
 
-            if (OK)
-            {
-                ParseData();
-                //ResolvePointers(verboseMode);
-            }
+            LoadDna(verboseMode);
+            if (!OK) return;
+
+            ParseData();
+            //ResolvePointers(verboseMode);
         }
 
         private void LoadDna(FileVerboseMode verboseMode)

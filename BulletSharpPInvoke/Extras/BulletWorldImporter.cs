@@ -150,7 +150,7 @@ namespace BulletSharp
             {
                 if ((file.Flags & FileFlags.DoublePrecision) != 0)
                 {
-                    throw new NotImplementedException();
+                    ConvertRigidBodyDouble(bodyData, file.LibPointers);
                 }
                 else
                 {
@@ -160,15 +160,27 @@ namespace BulletSharp
 
             foreach (byte[] colObjData in file.CollisionObjects)
             {
-                if ((file.Flags & FileFlags.DoublePrecision) != 0)
+                using (var colObjStream = new MemoryStream(colObjData, false))
                 {
-                    throw new NotImplementedException();
-                }
-                else
-                {
-                    using (var colObjStream = new MemoryStream(colObjData, false))
+                    using (var colObjReader = new BulletReader(colObjStream))
                     {
-                        using (var colObjReader = new BulletReader(colObjStream))
+                        if ((file.Flags & FileFlags.DoublePrecision) != 0)
+                        {
+                            long shapePtr = colObjReader.ReadPtr(CollisionObjectDoubleData.Offset("CollisionShape"));
+                            CollisionShape shape = _shapeMap[shapePtr];
+                            Math.Matrix startTransform = colObjReader.ReadMatrixDouble(CollisionObjectDoubleData.Offset("WorldTransform"));
+                            long namePtr = colObjReader.ReadPtr(CollisionObjectDoubleData.Offset("Name"));
+                            string name = null;
+                            if (namePtr != 0)
+                            {
+                                byte[] nameData = file.FindLibPointer(namePtr);
+                                int length = Array.IndexOf(nameData, (byte)0);
+                                name = System.Text.Encoding.ASCII.GetString(nameData, 0, length);
+                            }
+                            CollisionObject colObj = CreateCollisionObject(ref startTransform, shape, name);
+                            _bodyMap.Add(colObjData, colObj);
+                        }
+                        else
                         {
                             long shapePtr = colObjReader.ReadPtr(CollisionObjectFloatData.Offset("CollisionShape"));
                             CollisionShape shape = _shapeMap[shapePtr];

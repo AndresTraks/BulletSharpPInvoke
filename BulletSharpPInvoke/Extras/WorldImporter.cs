@@ -168,8 +168,9 @@ namespace BulletSharp
                             long unscaledPointsFloatPtr = reader.ReadPtr();
                             long unscaledPointsDoublePtr = reader.ReadPtr();
                             int numPoints = reader.ReadInt32();
+                            bool isFloat = unscaledPointsFloatPtr != 0;
 
-                            byte[] points = libPointers[unscaledPointsFloatPtr];
+                            byte[] points = libPointers[isFloat ? unscaledPointsFloatPtr : unscaledPointsDoublePtr];
                             ConvexHullShape hullShape = CreateConvexHullShape();
                             using (var pointStream = new MemoryStream(points, false))
                             {
@@ -177,7 +178,9 @@ namespace BulletSharp
                                 {
                                     for (int i = 0; i < numPoints; i++)
                                     {
-                                        hullShape.AddPoint(pointReader.ReadVector3());
+                                        hullShape.AddPoint(isFloat
+                                            ? pointReader.ReadVector3()
+                                            : pointReader.ReadVector3Double());
                                     }
                                 }
                             }
@@ -556,6 +559,31 @@ namespace BulletSharp
                     slider.UpperAngularLimit = reader.ReadSingle(SliderConstraintFloatData.Offset("AngularUpperLimit"));
                     slider.UseFrameOffset =
                         reader.ReadInt32(SliderConstraintFloatData.Offset("UseOffsetForConstraintFrame")) != 0;
+                    constraint = slider;
+                    break;
+                }
+                case TypedConstraintType.Fixed:
+                {
+                    if (rigidBodyA == null || rigidBodyB == null)
+                    {
+                        throw new InvalidDataException("Error: requires rigidBodyA && rigidBodyB");
+                    }
+
+                    Matrix rbaFrame = rigidBodyA.WorldTransform;
+                    Matrix rbbFrame = rigidBodyB.WorldTransform;
+                    Matrix sharedFrame = Matrix.Translation(0.5f * (rbaFrame.Origin + rbbFrame.Origin));
+                    rbaFrame.Invert();
+                    rbbFrame.Invert();
+                    rbaFrame = rbaFrame * sharedFrame;
+                    rbbFrame = rbbFrame * sharedFrame;
+                    Generic6DofSpring2Constraint dof = new Generic6DofSpring2Constraint(rigidBodyA, rigidBodyB, rbaFrame, rbbFrame, RotateOrder.XYZ)
+                    {
+                        LinearLowerLimit = Vector3.Zero,
+                        LinearUpperLimit = Vector3.Zero,
+                        AngularLowerLimit = Vector3.Zero,
+                        AngularUpperLimit = Vector3.Zero
+                    };
+                    constraint = dof;
                     break;
                 }
                 default:
@@ -648,7 +676,62 @@ namespace BulletSharp
             _bodyMap.Add(bodyData, body);
         }
 
-		public CollisionShape CreateBoxShape(ref Vector3 halfExtents)
+        protected void ConvertRigidBodyDouble(byte[] bodyData, Dictionary<long, byte[]> libPointers)
+        {
+            long collisionShapePtr, namePtr;
+            Matrix startTransform;
+            double inverseMass;
+            double friction, restitution;
+            Vector3 angularFactor, linearFactor;
+
+            using (var stream = new MemoryStream(bodyData, false))
+            {
+                using (var reader = new BulletReader(stream))
+                {
+                    int cod = RigidBodyDoubleData.Offset("CollisionObjectData");
+                    collisionShapePtr = reader.ReadPtr(cod + CollisionObjectDoubleData.Offset("CollisionShape"));
+                    startTransform = reader.ReadMatrixDouble(cod + CollisionObjectDoubleData.Offset("WorldTransform"));
+                    namePtr = reader.ReadPtr(cod + CollisionObjectDoubleData.Offset("Name"));
+                    friction = reader.ReadDouble(cod + CollisionObjectDoubleData.Offset("Friction"));
+                    restitution = reader.ReadDouble(cod + CollisionObjectDoubleData.Offset("Restitution"));
+
+                    inverseMass = reader.ReadDouble(RigidBodyDoubleData.Offset("InverseMass"));
+                    angularFactor = reader.ReadVector3Double(RigidBodyDoubleData.Offset("AngularFactor"));
+                    linearFactor = reader.ReadVector3Double(RigidBodyDoubleData.Offset("LinearFactor"));
+                }
+            }
+
+            CollisionShape shape = _shapeMap[collisionShapePtr];
+
+            float mass;
+            bool isDynamic;
+            if (shape.IsNonMoving)
+            {
+                mass = 0.0f;
+                isDynamic = false;
+            }
+            else
+            {
+                isDynamic = inverseMass != 0;
+                mass = isDynamic ? 1.0f / (float)inverseMass : 0;
+            }
+            string name = null;
+            if (namePtr != 0)
+            {
+                byte[] nameData = libPointers[namePtr];
+                int length = Array.IndexOf(nameData, (byte)0);
+                name = Encoding.ASCII.GetString(nameData, 0, length);
+            }
+
+            RigidBody body = CreateRigidBody(isDynamic, mass, ref startTransform, shape, name);
+            body.Friction = (float)friction;
+            body.Restitution = (float)restitution;
+            body.AngularFactor = angularFactor;
+            body.LinearFactor = linearFactor;
+            _bodyMap.Add(bodyData, body);
+        }
+
+        public CollisionShape CreateBoxShape(ref Vector3 halfExtents)
 		{
             BoxShape shape = new BoxShape(halfExtents);
             _allocatedCollisionShapes.Add(shape);
@@ -972,7 +1055,7 @@ namespace BulletSharp
             if (bodyName != null)
             {
                 _objectNameMap.Add(body, bodyName);
-                _nameBodyMap.Add(bodyName, body);
+                _nameBodyMap[bodyName] = body;
             }
             _allocatedRigidBodies.Add(body);
             return body;

@@ -641,4 +641,33 @@ namespace BulletSharp
 
         public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(RigidBodyFloatData), fieldName).ToInt32(); }
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct RigidBodyDoubleData
+    {
+        public CollisionObjectDoubleData CollisionObjectData;
+        public Matrix3x3DoubleData InvInertiaTensorWorld;
+        public Vector3DoubleData LinearVelocity;
+        public Vector3DoubleData AngularVelocity;
+        public Vector3DoubleData AngularFactor;
+        public Vector3DoubleData LinearFactor;
+        public Vector3DoubleData Gravity;
+        public Vector3DoubleData GravityAcceleration;
+        public Vector3DoubleData InvInertiaLocal;
+        public Vector3DoubleData TotalForce;
+        public Vector3DoubleData TotalTorque;
+        public double InverseMass;
+        public double LinearDamping;
+        public double AngularDamping;
+        public double AdditionalDampingFactor;
+        public double AdditionalLinearDampingThresholdSqr;
+        public double AdditionalAngularDampingThresholdSqr;
+        public double AdditionalAngularDampingFactor;
+        public double LinearSleepingThreshold;
+        public double AngularSleepingThreshold;
+        public int AdditionalDamping;
+        //public int Padding;
+
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(RigidBodyDoubleData), fieldName).ToInt32(); }
+    }
 }

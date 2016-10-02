@@ -1916,4 +1916,10 @@ namespace BulletSharp.Math
     {
         public fixed float floats[4];
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal unsafe struct Vector3DoubleData
+    {
+        public fixed double floats[4];
+    }
 }

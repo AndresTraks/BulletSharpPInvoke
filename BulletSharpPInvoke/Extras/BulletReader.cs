@@ -19,6 +19,12 @@ namespace BulletSharp
             return ReadByte();
         }
 
+        public double ReadDouble(int position)
+        {
+            BaseStream.Position = position;
+            return ReadDouble();
+        }
+
         public float ReadSingle(int position)
         {
             BaseStream.Position = position;
@@ -60,10 +66,39 @@ namespace BulletSharp
             return new Matrix(m);
         }
 
+        public Matrix ReadMatrixDouble()
+        {
+            float[] m = new float[16];
+            m[0] = (float)ReadDouble();
+            m[4] = (float)ReadDouble();
+            m[8] = (float)ReadDouble();
+            ReadDouble();
+            m[1] = (float)ReadDouble();
+            m[5] = (float)ReadDouble();
+            m[9] = (float)ReadDouble();
+            ReadDouble();
+            m[2] = (float)ReadDouble();
+            m[6] = (float)ReadDouble();
+            m[10] = (float)ReadDouble();
+            ReadDouble();
+            m[12] = (float)ReadDouble();
+            m[13] = (float)ReadDouble();
+            m[14] = (float)ReadDouble();
+            ReadDouble();
+            m[15] = 1;
+            return new Matrix(m);
+        }
+
         public Matrix ReadMatrix(int position)
         {
             BaseStream.Position = position;
             return ReadMatrix();
+        }
+
+        public Matrix ReadMatrixDouble(int position)
+        {
+            BaseStream.Position = position;
+            return ReadMatrixDouble();
         }
 
         public string ReadNullTerminatedString()
@@ -121,10 +156,25 @@ namespace BulletSharp
             return new Vector3(x, y, z);
         }
 
+        public Vector3 ReadVector3Double()
+        {
+            double x = ReadDouble();
+            double y = ReadDouble();
+            double z = ReadDouble();
+            BaseStream.Position += sizeof(double); // double w = ReadDouble();
+            return new Vector3((float)x, (float)y, (float)z);
+        }
+
         public Vector3 ReadVector3(int position)
         {
             BaseStream.Position = position;
             return ReadVector3();
+        }
+
+        public Vector3 ReadVector3Double(int position)
+        {
+            BaseStream.Position = position;
+            return ReadVector3Double();
         }
     }
 }

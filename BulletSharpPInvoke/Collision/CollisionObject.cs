@@ -623,4 +623,38 @@ namespace BulletSharp
 
         public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CollisionObjectFloatData), fieldName).ToInt32(); }
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct CollisionObjectDoubleData
+    {
+        public IntPtr BroadphaseHandle;
+        public IntPtr CollisionShape;
+        public IntPtr RootCollisionShape;
+        public IntPtr Name;
+        public TransformDoubleData WorldTransform;
+        public TransformDoubleData InterpolationWorldTransform;
+        public Vector3DoubleData InterpolationLinearVelocity;
+        public Vector3DoubleData InterpolationAngularVelocity;
+        public Vector3DoubleData AnisotropicFriction;
+        public double ContactProcessingThreshold;
+        public double DeactivationTime;
+        public double Friction;
+        public double RollingFriction;
+        public double ContactDamping;
+        public double ContactStiffness;
+        public double Restitution;
+        public double HitFraction;
+        public double CcdSweptSphereRadius;
+        public double CcdMotionThreshold;
+        public int HasAnisotropicFriction;
+        public int CollisionFlags;
+        public int IslandTag1;
+        public int CompanionId;
+        public int ActivationState1;
+        public int InternalType;
+        public int CheckCollideWith;
+        public int Padding;
+
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CollisionObjectDoubleData), fieldName).ToInt32(); }
+    }
 }
