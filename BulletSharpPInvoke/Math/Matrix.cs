@@ -40,7 +40,7 @@ namespace BulletSharp.Math
         /// <summary>
         /// The size of the <see cref="SlimMath.Matrix"/> type, in bytes.
         /// </summary>
-        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Matrix));
+        public const int SizeInBytes = 16 * sizeof(float);
 
         /// <summary>
         /// A <see cref="SlimMath.Matrix"/> with all of its components set to zero.

@@ -240,7 +240,7 @@ namespace ConcaveConvexCastDemo
             for (int i = 0; i < NumRays; i++)
             {
                 Matrix transform = Matrix.RotationY(alpha * i);
-                var direction = Vector3.TransformCoordinate(new Vector3(1.0f, 0.0f, 0.0f), transform);
+                var direction = Vector3.TransformCoordinate(Vector3.UnitX, transform);
 
                 _rays[i] = new Ray
                 {

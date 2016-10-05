@@ -38,7 +38,7 @@ namespace BulletSharp.Math
         /// <summary>
         /// The size of the <see cref="Vector3"/> type, in bytes.
         /// </summary>
-        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Vector3));
+        public const int SizeInBytes = 3 * sizeof(float);
 
         /// <summary>
         /// A <see cref="Vector3"/> with all of its components set to zero.

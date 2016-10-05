@@ -266,12 +266,14 @@ namespace VehicleDemo
 
             CollisionShapes.Add(groundShape);
 
-
-            //create ground object
             RigidBody ground = LocalCreateRigidBody(0, tr, groundShape);
             ground.UserObject = "Ground";
 
+            CreateVehicle(vehicleTr);
+        }
 
+        private void CreateVehicle(Matrix transform)
+        {
             CollisionShape chassisShape = new BoxShape(1.0f, 0.5f, 2.0f);
             CollisionShapes.Add(chassisShape);
 
@@ -285,12 +287,6 @@ namespace VehicleDemo
             carChassis.UserObject = "Chassis";
             //carChassis.SetDamping(0.2f, 0.2f);
 
-            //CylinderShapeX wheelShape = new CylinderShapeX(wheelWidth, wheelRadius, wheelRadius);
-
-
-            // clientResetScene();
-
-            // create vehicle
             VehicleTuning tuning = new VehicleTuning();
             IVehicleRaycaster vehicleRayCaster = new DefaultVehicleRaycaster(World);
             //vehicle = new RaycastVehicle(tuning, carChassis, vehicleRayCaster);
@@ -306,7 +302,7 @@ namespace VehicleDemo
             // choose coordinate system
             vehicle.SetCoordinateSystem(rightIndex, upIndex, forwardIndex);
 
-            BulletSharp.Math.Vector3 connectionPointCS0 = new Vector3(CUBE_HALF_EXTENTS - (0.3f * wheelWidth), connectionHeight, 2 * CUBE_HALF_EXTENTS - wheelRadius);
+            Vector3 connectionPointCS0 = new Vector3(CUBE_HALF_EXTENTS - (0.3f * wheelWidth), connectionHeight, 2 * CUBE_HALF_EXTENTS - wheelRadius);
             vehicle.AddWheel(connectionPointCS0, wheelDirectionCS0, wheelAxleCS, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
 
             connectionPointCS0 = new Vector3(-CUBE_HALF_EXTENTS + (0.3f * wheelWidth), connectionHeight, 2 * CUBE_HALF_EXTENTS - wheelRadius);
@@ -320,7 +316,7 @@ namespace VehicleDemo
             vehicle.AddWheel(connectionPointCS0, wheelDirectionCS0, wheelAxleCS, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
 
 
-            for (i = 0; i < vehicle.NumWheels; i++)
+            for (int i = 0; i < vehicle.NumWheels; i++)
             {
                 WheelInfo wheel = vehicle.GetWheelInfo(i);
                 wheel.SuspensionStiffness = suspensionStiffness;
@@ -330,7 +326,7 @@ namespace VehicleDemo
                 wheel.RollInfluence = rollInfluence;
             }
 
-            vehicle.RigidBody.WorldTransform = vehicleTr;
+            vehicle.RigidBody.WorldTransform = transform;
         }
 
         public override void OnUpdate()

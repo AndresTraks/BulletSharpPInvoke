@@ -8,7 +8,7 @@ namespace DemoFramework
     [StructLayout(LayoutKind.Sequential)]
     public struct PositionColored
     {
-        public static readonly int Stride = Vector3.SizeInBytes + sizeof(int);
+        public const int Stride = Vector3.SizeInBytes + sizeof(int);
 
         public Vector3 Position;
         public int Color;
