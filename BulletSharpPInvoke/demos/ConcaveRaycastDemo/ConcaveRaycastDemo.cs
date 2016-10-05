@@ -71,11 +71,19 @@ namespace ConcaveRaycastDemo
             World.SolverInfo.SplitImpulse = 1;
             World.Gravity = new Vector3(0, -10, 0);
 
+            raycastBar = new RaycastBar(4000.0f, 0.0f, -1000.0f, 10);
+            //raycastBar = new RaycastBar(true, 40.0f, -50.0f, 50.0f);
 
+            CreateBoxes();
+            CreateGround();
+        }
+
+        private void CreateGround()
+        {
             const int totalVerts = NumVertsX * NumVertsY;
             const int totalTriangles = 2 * (NumVertsX - 1) * (NumVertsY - 1);
             const int triangleIndexStride = 3 * sizeof(int);
-            const int vertexStride = Vector3.SizeInBytes;
+            int vertexStride = Vector3.SizeInBytes;
 
             var mesh = new IndexedMesh();
             mesh.Allocate(totalTriangles, totalVerts, triangleIndexStride, vertexStride);
@@ -102,11 +110,6 @@ namespace ConcaveRaycastDemo
 
             indexVertexArrays = new TriangleIndexVertexArray();
             indexVertexArrays.AddIndexedMesh(mesh);
-
-            raycastBar = new RaycastBar(4000.0f, 0.0f, -1000.0f, 10);
-            //raycastBar = new RaycastBar(true, 40.0f, -50.0f, 50.0f);
-
-            CreateBoxes();
 
             SetVertexPositions(waveHeight, 0.0f);
 

@@ -102,13 +102,11 @@ namespace SoftDemo
             get { return World as SoftRigidDynamicsWorld; }
         }
 
-        delegate void DemoConstructor();
-
-        DemoConstructor[] demos;
+        Action[] demos;
 
         public SoftDemo()
         {
-            demos = new DemoConstructor[] { Init_Cloth, Init_Pressure, Init_Volume, Init_Ropes, Init_RopeAttach,
+            demos = new Action[] { Init_Cloth, Init_Pressure, Init_Volume, Init_Ropes, Init_RopeAttach,
                 Init_ClothAttach, Init_Sticks, Init_CapsuleCollision, Init_Collide, Init_Collide2, Init_Collide3, Init_Impact, Init_Aero,
                 Init_Aero2, Init_Friction, Init_Torus, Init_TorusMatch, Init_Bunny, Init_BunnyMatch, Init_Cutting1,
                 Init_ClusterDeform, Init_ClusterCollide1, Init_ClusterCollide2, Init_ClusterSocket, Init_ClusterHinge,
