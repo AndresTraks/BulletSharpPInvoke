@@ -10,18 +10,6 @@ using DemoFramework;
 
 namespace ConcaveRaycastDemo
 {
-    static class Program
-    {
-        [STAThread]
-        static void Main()
-        {
-            using (Demo demo = new ConcaveRaycastDemo())
-            {
-                GraphicsLibraryManager.Run(demo);
-            }
-        }
-    }
-
     class ConcaveRaycastDemo : Demo
     {
         Vector3 eye = new Vector3(0, 15, 60);
@@ -41,7 +29,7 @@ namespace ConcaveRaycastDemo
 
         TriangleIndexVertexArray indexVertexArrays;
         BvhTriangleMeshShape groundShape;
-        static RaycastBar raycastBar;
+        RaycastBar raycastBar;
         RigidBody staticBody;
 
         protected override void OnInitialize()
@@ -83,7 +71,7 @@ namespace ConcaveRaycastDemo
             const int totalVerts = NumVertsX * NumVertsY;
             const int totalTriangles = 2 * (NumVertsX - 1) * (NumVertsY - 1);
             const int triangleIndexStride = 3 * sizeof(int);
-            int vertexStride = Vector3.SizeInBytes;
+            const int vertexStride = Vector3.SizeInBytes;
 
             var mesh = new IndexedMesh();
             mesh.Allocate(totalTriangles, totalVerts, triangleIndexStride, vertexStride);
@@ -343,6 +331,18 @@ namespace ConcaveRaycastDemo
         {
             Source.X += move;
             Destination.X += move;
+        }
+    }
+
+    static class Program
+    {
+        [STAThread]
+        static void Main()
+        {
+            using (Demo demo = new ConcaveRaycastDemo())
+            {
+                GraphicsLibraryManager.Run(demo);
+            }
         }
     }
 }

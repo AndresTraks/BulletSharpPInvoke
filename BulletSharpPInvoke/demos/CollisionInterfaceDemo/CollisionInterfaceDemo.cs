@@ -5,27 +5,6 @@ using System;
 
 namespace CollisionInterfaceDemo
 {
-    class DrawingResult : ContactResultCallback
-    {
-        private Vector3 _blue = new Vector3(0, 0, 1);
-        private DynamicsWorld _world;
-
-        public DrawingResult(DynamicsWorld world)
-        {
-            _world = world;
-        }
-
-        public override float AddSingleResult(ManifoldPoint cp,
-            CollisionObjectWrapper colObj0Wrap, int partId0, int index0,
-            CollisionObjectWrapper colObj1Wrap, int partId1, int index1)
-        {
-            Vector3 ptA = cp.PositionWorldOnA;
-            Vector3 ptB = cp.PositionWorldOnB;
-            _world.DebugDrawer.DrawLine(ref ptA, ref ptB, ref _blue);
-            return 0;
-        }
-    };
-
     class CollisionInterfaceDemo : Demo
     {
         Vector3 eye = new Vector3(6, 4, 1);
@@ -110,6 +89,27 @@ namespace CollisionInterfaceDemo
             base.ExitPhysics();
         }
     }
+
+    class DrawingResult : ContactResultCallback
+    {
+        private Vector3 _blue = new Vector3(0, 0, 1);
+        private DynamicsWorld _world;
+
+        public DrawingResult(DynamicsWorld world)
+        {
+            _world = world;
+        }
+
+        public override float AddSingleResult(ManifoldPoint cp,
+            CollisionObjectWrapper colObj0Wrap, int partId0, int index0,
+            CollisionObjectWrapper colObj1Wrap, int partId1, int index1)
+        {
+            Vector3 ptA = cp.PositionWorldOnA;
+            Vector3 ptB = cp.PositionWorldOnB;
+            _world.DebugDrawer.DrawLine(ref ptA, ref ptB, ref _blue);
+            return 0;
+        }
+    };
 
     static class Program
     {
