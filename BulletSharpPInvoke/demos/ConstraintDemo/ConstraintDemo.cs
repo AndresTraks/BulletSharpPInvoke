@@ -12,15 +12,8 @@ namespace ConstraintDemo
 
         const DebugDrawModes debugMode = DebugDrawModes.DrawConstraints | DebugDrawModes.DrawConstraintLimits;
 
-        public const float CubeHalfExtent = 1.0f;
-        Vector3 lowerSliderLimit = new Vector3(-10, 0, 0);
-        Vector3 hiSliderLimit = new Vector3(10, 0, 0);
-
-        public RigidBody d6body0;
-        Generic6DofConstraint spSlider6Dof;
-        HingeConstraint spDoorHinge;
-        HingeConstraint spHingeDynAB;
-        ConeTwistConstraint coneTwist;
+        private const float CubeHalfExtent = 1.0f;
+        BoxShape cubeShape;
 
         protected override void OnInitialize()
         {
@@ -32,6 +25,30 @@ namespace ConstraintDemo
             DebugDrawMode = debugMode;
         }
 
+        protected override void OnInitializePhysics()
+        {
+            SetupDynamicsWorld();
+
+            CreateGround();
+
+            cubeShape = new BoxShape(CubeHalfExtent);
+            CollisionShapes.Add(cubeShape);
+
+            CreateGears();
+            CreateHingedBoxes();
+            CreateMotorHinge();
+            CreateMotorHinge2();
+            CreateSlider();
+            CreateD6Slider();
+            CreateDoor();
+            CreateGeneric6DofConstraint();
+            CreateConeTwist();
+            CreateUniversalConstraint();
+            CreateGeneric6DofSpringConstraint();
+            CreateHinge();
+            CreateHinge2();
+        }
+
         void SetupDynamicsWorld()
         {
             CollisionConf = new DefaultCollisionConfiguration();
@@ -40,354 +57,6 @@ namespace ConstraintDemo
             Solver = new SequentialImpulseConstraintSolver();
             World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConf);
             World.Gravity = new Vector3(0, -10, 0);
-        }
-
-        protected override void OnInitializePhysics()
-        {
-            SetupDynamicsWorld();
-
-            CreateGround();
-
-            CreateGears();
-
-
-            float mass = 1.0f;
-            var shape = new BoxShape(new Vector3(CubeHalfExtent));
-            CollisionShapes.Add(shape);
-            RigidBody body0 = LocalCreateRigidBody(mass, Matrix.Translation(0, 20, 0), shape);
-
-            RigidBody body1 = null;//LocalCreateRigidBody(mass, Matrix.Translation(2*CUBE_HALF_EXTENTS,20,0), shape);
-            //RigidBody body1 = LocalCreateRigidBody(0, Matrix.Translation(2*CUBE_HALF_EXTENTS,20,0), null);
-            //body1.ActivationState = ActivationState.DisableDeactivation;
-            //body1.SetDamping(0.3f, 0.3f);
-
-            Vector3 pivotInA = new Vector3(CubeHalfExtent, -CubeHalfExtent, -CubeHalfExtent);
-            Vector3 axisInA = new Vector3(0, 0, 1);
-
-            Vector3 pivotInB;
-            if (body1 != null)
-            {
-                Matrix transform = Matrix.Invert(body1.CenterOfMassTransform) * body0.CenterOfMassTransform;
-                pivotInB = Vector3.TransformCoordinate(pivotInA, transform);
-            }
-            else
-            {
-                pivotInB = pivotInA;
-            }
-
-            Vector3 axisInB;
-            if (body1 != null)
-            {
-                Matrix transform = Matrix.Invert(body1.CenterOfMassTransform) * body1.CenterOfMassTransform;
-                axisInB = Vector3.TransformCoordinate(axisInA, transform);
-            }
-            else
-            {
-                axisInB = Vector3.TransformCoordinate(axisInA, body0.CenterOfMassTransform);
-            }
-
-#if P2P
-            {
-                TypedConstraint p2p = new Point2PointConstraint(body0, pivotInA);
-                //TypedConstraint p2p = new Point2PointConstraint(body0, body1, pivotInA, pivotInB);
-                //TypedConstraint hinge = new HingeConstraint(body0, body1, pivotInA, pivotInB, axisInA, axisInB);
-                World.AddConstraint(p2p);
-                p2p.DebugDrawSize = 5;
-            }
-#else
-            {
-                var hinge = new HingeConstraint(body0, pivotInA, axisInA);
-
-                //use zero targetVelocity and a small maxMotorImpulse to simulate joint friction
-                //float	targetVelocity = 0.f;
-                //float	maxMotorImpulse = 0.01;
-                const float targetVelocity = 1.0f;
-                const float maxMotorImpulse = 1.0f;
-                hinge.EnableAngularMotor(true, targetVelocity, maxMotorImpulse);
-                World.AddConstraint(hinge);
-                hinge.DebugDrawSize = 5;
-            }
-#endif
-
-            RigidBody pRbA1 = LocalCreateRigidBody(mass, Matrix.Translation(-20, 0, 30), shape);
-            //RigidBody pRbA1 = LocalCreateRigidBody(0.0f, Matrix.Translation(-20, 0, 30), shape);
-            pRbA1.ActivationState = ActivationState.DisableDeactivation;
-
-            // add dynamic rigid body B1
-            RigidBody pRbB1 = LocalCreateRigidBody(mass, Matrix.Translation(-20, 0, 30), shape);
-            //RigidBody pRbB1 = LocalCreateRigidBody(0.0f, Matrix.Translation(-20, 0, 30), shape);
-            pRbB1.ActivationState = ActivationState.DisableDeactivation;
-
-            // create slider constraint between A1 and B1 and add it to world
-            SliderConstraint spSlider1 = new SliderConstraint(pRbA1, pRbB1, Matrix.Identity, Matrix.Identity, true);
-            //spSlider1 = new SliderConstraint(pRbA1, pRbB1, Matrix.Identity, Matrix.Identity, false);
-            spSlider1.LowerLinearLimit = -15.0f;
-            spSlider1.UpperLinearLimit = -5.0f;
-            spSlider1.LowerLinearLimit = 5.0f;
-            spSlider1.UpperLinearLimit = 15.0f;
-            spSlider1.LowerLinearLimit = -10.0f;
-            spSlider1.UpperLinearLimit = -10.0f;
-
-            spSlider1.LowerAngularLimit = -(float)Math.PI / 3.0f;
-            spSlider1.UpperAngularLimit = (float)Math.PI / 3.0f;
-
-            World.AddConstraint(spSlider1, true);
-            spSlider1.DebugDrawSize = 5.0f;
-
-
-            //create a slider, using the generic D6 constraint
-            Vector3 sliderWorldPos = new Vector3(0, 10, 0);
-            Vector3 sliderAxis = Vector3.UnitX;
-            const float angle = 0; //SIMD_RADS_PER_DEG * 10.f;
-            Matrix trans = Matrix.RotationAxis(sliderAxis, angle) * Matrix.Translation(sliderWorldPos);
-            d6body0 = LocalCreateRigidBody(mass, trans, shape);
-            d6body0.ActivationState = ActivationState.DisableDeactivation;
-
-            RigidBody fixedBody1 = LocalCreateRigidBody(0, trans, null);
-            World.AddRigidBody(fixedBody1);
-
-            Matrix frameInA = Matrix.Translation(0, 5, 0);
-            Matrix frameInB = Matrix.Translation(0, 5, 0);
-
-            //bool useLinearReferenceFrameA = false;//use fixed frame B for linear llimits
-            const bool useLinearReferenceFrameA = true; //use fixed frame A for linear llimits
-            spSlider6Dof = new Generic6DofConstraint(fixedBody1, d6body0, frameInA, frameInB, useLinearReferenceFrameA)
-            {
-                LinearLowerLimit = lowerSliderLimit,
-                LinearUpperLimit = hiSliderLimit,
-
-                //range should be small, otherwise singularities will 'explode' the constraint
-                //AngularLowerLimit = new Vector3(-1.5f,0,0),
-                //AngularUpperLimit = new Vector3(1.5f,0,0),
-                //AngularLowerLimit = new Vector3(0,0,0),
-                //AngularUpperLimit = new Vector3(0,0,0),
-                AngularLowerLimit = new Vector3((float)-Math.PI, 0, 0),
-                AngularUpperLimit = new Vector3(1.5f, 0, 0)
-            };
-
-            //spSlider6Dof.TranslationalLimitMotor.EnableMotor[0] = true;
-            spSlider6Dof.TranslationalLimitMotor.TargetVelocity = new Vector3(-5.0f, 0, 0);
-            spSlider6Dof.TranslationalLimitMotor.MaxMotorForce = new Vector3(0.1f, 0, 0);
-
-            World.AddConstraint(spSlider6Dof);
-            spSlider6Dof.DebugDrawSize = 5;
-
-
-
-            // create a door using hinge constraint attached to the world
-
-            CollisionShape pDoorShape = new BoxShape(2.0f, 5.0f, 0.2f);
-            CollisionShapes.Add(pDoorShape);
-            RigidBody pDoorBody = LocalCreateRigidBody(1.0f, Matrix.Translation(-5.0f, -2.0f, 0.0f), pDoorShape);
-            pDoorBody.ActivationState = ActivationState.DisableDeactivation;
-            Vector3 btPivotA = new Vector3(10.0f + 2.1f, -2.0f, 0.0f); // right next to the door slightly outside
-            Vector3 btAxisA = Vector3.UnitY; // pointing upwards, aka Y-axis
-
-            spDoorHinge = new HingeConstraint(pDoorBody, btPivotA, btAxisA);
-
-            //spDoorHinge.SetLimit(0.0f, (float)Math.PI / 2);
-            // test problem values
-            //spDoorHinge.SetLimit(-(float)Math.PI, (float)Math.PI * 0.8f);
-
-            //spDoorHinge.SetLimit(1, -1);
-            //spDoorHinge.SetLimit(-(float)Math.PI * 0.8f, (float)Math.PI);
-            //spDoorHinge.SetLimit(-(float)Math.PI * 0.8f, (float)Math.PI, 0.9f, 0.3f, 0.0f);
-            //spDoorHinge.SetLimit(-(float)Math.PI * 0.8f, (float)Math.PI, 0.9f, 0.01f, 0.0f); // "sticky limits"
-            spDoorHinge.SetLimit(-(float)Math.PI * 0.25f, (float)Math.PI * 0.25f);
-            //spDoorHinge.SetLimit(0, 0);
-            World.AddConstraint(spDoorHinge);
-            spDoorHinge.DebugDrawSize = 5;
-
-            RigidBody pDropBody = LocalCreateRigidBody(10.0f, Matrix.Translation(-5.0f, 2.0f, 0.0f), shape);
-
-
-
-            // create a generic 6DOF constraint
-
-            //RigidBody pBodyA = LocalCreateRigidBody(mass, Matrix.Translation(10.0f, 6.0f, 0), shape);
-            RigidBody pBodyA = LocalCreateRigidBody(0, Matrix.Translation(10, 6, 0), shape);
-            //RigidBody pBodyA = LocalCreateRigidBody(0, Matrix.Translation(10, 6, 0), null);
-            pBodyA.ActivationState = ActivationState.DisableDeactivation;
-
-            RigidBody pBodyB = LocalCreateRigidBody(mass, Matrix.Translation(0, 6, 0), shape);
-            //RigidBody pBodyB = LocalCreateRigidBody(0, Matrix.Translation(0, 6, 0), shape);
-            pBodyB.ActivationState = ActivationState.DisableDeactivation;
-
-            frameInA = Matrix.Translation(-5, 0, 0);
-            frameInB = Matrix.Translation(5, 0, 0);
-
-            Generic6DofConstraint pGen6DOF = new Generic6DofConstraint(pBodyA, pBodyB, frameInA, frameInB, true);
-            //Generic6DofConstraint pGen6DOF = new Generic6DofConstraint(pBodyA, pBodyB, frameInA, frameInB, false);
-            pGen6DOF.LinearLowerLimit = new Vector3(-10, -2, -1);
-            pGen6DOF.LinearUpperLimit = new Vector3(10, 2, 1);
-            //pGen6DOF.LinearLowerLimit = new Vector3(-10, 0, 0);
-            //pGen6DOF.LinearUpperLimit = new Vector3(10, 0, 0);
-            //pGen6DOF.LinearLowerLimit = new Vector3(0, 0, 0);
-            //pGen6DOF.LinearUpperLimit = new Vector3(0, 0, 0);
-
-            //pGen6DOF.TranslationalLimitMotor.EnableMotor[0] = true;
-            //pGen6DOF.TranslationalLimitMotor.TargetVelocity = new Vector3(5, 0, 0);
-            //pGen6DOF.TranslationalLimitMotor.MaxMotorForce = new Vector3(0.1f, 0, 0);
-
-            //pGen6DOF.AngularLowerLimit = new Vector3(0, (float)Math.PI * 0.9f, 0);
-            //pGen6DOF.AngularUpperLimit = new Vector3(0, -(float)Math.PI * 0.9f, 0);
-            //pGen6DOF.AngularLowerLimit = new Vector3(0, 0, -(float)Math.PI);
-            //pGen6DOF.AngularUpperLimit = new Vector3(0, 0, (float)Math.PI);
-
-            pGen6DOF.AngularLowerLimit = new Vector3(-(float)Math.PI / 4, -0.75f, -(float)Math.PI * 0.4f);
-            pGen6DOF.AngularUpperLimit = new Vector3((float)Math.PI / 4, 0.75f, (float)Math.PI * 0.4f);
-            //pGen6DOF.AngularLowerLimit = new Vector3(0, -0.75f, (float)Math.PI * 0.8f);
-            //pGen6DOF.AngularUpperLimit = new Vector3(0, 0.75f, -(float)Math.PI * 0.8f);
-            //pGen6DOF.AngularLowerLimit = new Vector3(0, -(float)Math.PI * 0.8f, (float)Math.PI * 1.98f);
-            //pGen6DOF.AngularUpperLimit = new Vector3(0, (float)Math.PI * 0.8f, -(float)Math.PI * 1.98f);
-
-            //pGen6DOF.AngularLowerLimit = new Vector3(-0.75f, -0.5f, -0.5f);
-            //pGen6DOF.AngularUpperLimit = new Vector3(0.75f, 0.5f, 0.5f);
-            //pGen6DOF.AngularLowerLimit = new Vector3(-0.75f, 0, 0);
-            //pGen6DOF.AngularUpperLimit = new Vector3(0.75f, 0, 0);
-            //pGen6DOF.AngularLowerLimit = new Vector3(0, -0.7f, 0);
-            //pGen6DOF.AngularUpperLimit = new Vector3(0, 0.7f, 0);
-            //pGen6DOF.AngularLowerLimit = new Vector3(-1, 0, 0);
-            //pGen6DOF.AngularUpperLimit = new Vector3(1, 0, 0);
-
-
-
-            // create a ConeTwist constraint
-
-            pBodyA = LocalCreateRigidBody(1.0f, Matrix.Translation(-10, 5, 0), shape);
-            //pBodyA = LocalCreateRigidBody(0, Matrix.Translation(-10, 5, 0), shape);
-            pBodyA.ActivationState = ActivationState.DisableDeactivation;
-
-            pBodyB = LocalCreateRigidBody(0, Matrix.Translation(-10, -5, 0), shape);
-            //pBodyB = LocalCreateRigidBody(1.0f, Matrix.Translation(-10, -5, 0), shape);
-
-            frameInA = Matrix.RotationYawPitchRoll(0, 0, (float)Math.PI / 2);
-            frameInA *= Matrix.Translation(0, -5, 0);
-            frameInB = Matrix.RotationYawPitchRoll(0, 0, (float)Math.PI / 2);
-            frameInB *= Matrix.Translation(0, 5, 0);
-
-            coneTwist = new ConeTwistConstraint(pBodyA, pBodyB, frameInA, frameInB);
-            //coneTwist.SetLimit((float)Math.PI / 4, (float)Math.PI / 4, (float)Math.PI * 0.8f);
-            //coneTwist.SetLimit((((float)Math.PI / 4) * 0.6f), (float)Math.PI / 4, (float)Math.PI * 0.8f, 1.0f); // soft limit == hard limit
-            coneTwist.SetLimit((((float)Math.PI / 4) * 0.6f), (float)Math.PI / 4, (float)Math.PI * 0.8f, 0.5f);
-            World.AddConstraint(coneTwist, true);
-            coneTwist.DebugDrawSize = 5;
-
-
-
-            // Hinge connected to the world, with motor (to hinge motor with new and old constraint solver)
-
-            RigidBody pBody = LocalCreateRigidBody(1.0f, Matrix.Identity, shape);
-            pBody.ActivationState = ActivationState.DisableDeactivation;
-            Vector3 pivotA = new Vector3(10.0f, 0.0f, 0.0f);
-            btAxisA = new Vector3(0.0f, 0.0f, 1.0f);
-
-            HingeConstraint pHinge = new HingeConstraint(pBody, pivotA, btAxisA);
-            //pHinge.EnableAngularMotor(true, -1.0f, 0.165f); // use for the old solver
-            pHinge.EnableAngularMotor(true, -1.0f, 1.65f); // use for the new SIMD solver
-            World.AddConstraint(pHinge);
-            pHinge.DebugDrawSize = 5;
-
-
-
-            // create a universal joint using generic 6DOF constraint
-            // create two rigid bodies
-            // static bodyA (parent) on top:
-            pBodyA = LocalCreateRigidBody(0, Matrix.Translation(20, 4, 0), shape);
-            pBodyA.ActivationState = ActivationState.DisableDeactivation;
-            // dynamic bodyB (child) below it :
-            pBodyB = LocalCreateRigidBody(1.0f, Matrix.Translation(20, 0, 0), shape);
-            pBodyB.ActivationState = ActivationState.DisableDeactivation;
-            // add some (arbitrary) data to build constraint frames
-            Vector3 parentAxis = new Vector3(1, 0, 0);
-            Vector3 childAxis = new Vector3(0, 0, 1);
-            Vector3 anchor = new Vector3(20, 2, 0);
-
-            UniversalConstraint pUniv = new UniversalConstraint(pBodyA, pBodyB, anchor, parentAxis, childAxis);
-            pUniv.SetLowerLimit(-(float)Math.PI / 4, -(float)Math.PI / 4);
-            pUniv.SetUpperLimit((float)Math.PI / 4, (float)Math.PI / 4);
-            // add constraint to world
-            World.AddConstraint(pUniv, true);
-            // draw constraint frames and limits for debugging
-            pUniv.DebugDrawSize = 5;
-
-            World.AddConstraint(pGen6DOF, true);
-            pGen6DOF.DebugDrawSize = 5;
-
-
-
-            // create a generic 6DOF constraint with springs 
-
-            pBodyA = LocalCreateRigidBody(0, Matrix.Translation(-20, 16, 0), shape);
-            pBodyA.ActivationState = ActivationState.DisableDeactivation;
-
-            pBodyB = LocalCreateRigidBody(1.0f, Matrix.Translation(-10, 16, 0), shape);
-            pBodyB.ActivationState = ActivationState.DisableDeactivation;
-
-            frameInA = Matrix.Translation(10, 0, 0);
-            frameInB = Matrix.Identity;
-
-            Generic6DofSpringConstraint pGen6DOFSpring = new Generic6DofSpringConstraint(pBodyA, pBodyB, frameInA, frameInB, true)
-            {
-                LinearUpperLimit = new Vector3(5, 0, 0),
-                LinearLowerLimit = new Vector3(-5, 0, 0),
-                AngularLowerLimit = new Vector3(0, 0, -1.5f),
-                AngularUpperLimit = new Vector3(0, 0, 1.5f),
-                DebugDrawSize = 5
-            };
-            World.AddConstraint(pGen6DOFSpring, true);
-
-            pGen6DOFSpring.EnableSpring(0, true);
-            pGen6DOFSpring.SetStiffness(0, 39.478f);
-            pGen6DOFSpring.SetDamping(0, 0.5f);
-            pGen6DOFSpring.EnableSpring(5, true);
-            pGen6DOFSpring.SetStiffness(5, 39.478f);
-            pGen6DOFSpring.SetDamping(0, 0.3f);
-            pGen6DOFSpring.SetEquilibriumPoint();
-
-
-
-            // create a Hinge2 joint
-            // create two rigid bodies
-            // static bodyA (parent) on top:
-            pBodyA = LocalCreateRigidBody(0, Matrix.Translation(-20, 4, 0), shape);
-            pBodyA.ActivationState = ActivationState.DisableDeactivation;
-            // dynamic bodyB (child) below it :
-            pBodyB = LocalCreateRigidBody(1.0f, Matrix.Translation(-20, 0, 0), shape);
-            pBodyB.ActivationState = ActivationState.DisableDeactivation;
-            // add some data to build constraint frames
-            parentAxis = new Vector3(0, 1, 0);
-            childAxis = new Vector3(1, 0, 0);
-            anchor = new Vector3(-20, 0, 0);
-            Hinge2Constraint pHinge2 = new Hinge2Constraint(pBodyA, pBodyB, anchor, parentAxis, childAxis);
-            pHinge2.SetLowerLimit(-(float)Math.PI / 4);
-            pHinge2.SetUpperLimit((float)Math.PI / 4);
-            // add constraint to world
-            World.AddConstraint(pHinge2, true);
-            // draw constraint frames and limits for debugging
-            pHinge2.DebugDrawSize = 5;
-
-
-
-            // create a Hinge joint between two dynamic bodies
-            // create two rigid bodies
-            // static bodyA (parent) on top:
-            pBodyA = LocalCreateRigidBody(1.0f, Matrix.Translation(-20, -2, 0), shape);
-            pBodyA.ActivationState = ActivationState.DisableDeactivation;
-            // dynamic bodyB:
-            pBodyB = LocalCreateRigidBody(10.0f, Matrix.Translation(-30, -2, 0), shape);
-            pBodyB.ActivationState = ActivationState.DisableDeactivation;
-            // add some data to build constraint frames
-            var axisA = new Vector3(0, 1, 0);
-            var axisB = new Vector3(0, 1, 0);
-            Vector3 pivotA2 = new Vector3(-5, 0, 0);
-            Vector3 pivotB = new Vector3(5, 0, 0);
-            spHingeDynAB = new HingeConstraint(pBodyA, pBodyB, pivotA2, pivotB, axisA, axisB);
-            spHingeDynAB.SetLimit(-(float)Math.PI / 4, (float)Math.PI / 4);
-            // add constraint to world
-            World.AddConstraint(spHingeDynAB, true);
-            // draw constraint frames and limits for debugging
-            spHingeDynAB.DebugDrawSize = 5;
         }
 
         private void CreateGround()
@@ -438,20 +107,344 @@ namespace ConstraintDemo
             shape.AddChildShape(Matrix.Identity, axle);
             shape.AddChildShape(Matrix.Identity, wheel);
 
-            Vector3 localInertia;
-            shape.CalculateLocalInertia(mass, out localInertia);
-            using (var ci = new RigidBodyConstructionInfo(mass, null, shape, localInertia)
+            RigidBody body = LocalCreateRigidBody(mass, transform, shape);
+            body.LinearFactor = Vector3.Zero;
+            return body;
+        }
+
+        private void CreateHingedBoxes()
+        {
+            const float mass = 1.0f;
+
+            RigidBody body0 = LocalCreateRigidBody(mass, Matrix.Translation(0, 24, 0), cubeShape);
+            RigidBody body1 = LocalCreateRigidBody(mass, Matrix.Translation(2 * CubeHalfExtent, 24, 0), cubeShape);
+
+            Vector3 pivotInA = new Vector3(CubeHalfExtent, -CubeHalfExtent, -CubeHalfExtent);
+            Vector3 axisInA = new Vector3(0, 0, 1);
+
+            Matrix transform = Matrix.Invert(body1.CenterOfMassTransform) * body0.CenterOfMassTransform;
+            Vector3 pivotInB = Vector3.TransformCoordinate(pivotInA, transform);
+
+            transform = Matrix.Invert(body1.CenterOfMassTransform) * body1.CenterOfMassTransform;
+            Vector3 axisInB = Vector3.TransformCoordinate(axisInA, transform);
+
+            //var pointToPoint = new Point2PointConstraint(body0, body1, pivotInA, pivotInB);
+            //pointToPoint.DebugDrawSize = 5;
+            //World.AddConstraint(pointToPoint);
+
+            var hinge = new HingeConstraint(body0, body1, pivotInA, pivotInB, axisInA, axisInB);
+            World.AddConstraint(hinge);
+        }
+
+        // Hinge connected to the world, with motor
+        private void CreateMotorHinge()
+        {
+            const float mass = 1.0f;
+            RigidBody body = LocalCreateRigidBody(mass, Matrix.Translation(0, 20, 0), cubeShape);
+
+            Vector3 pivotInA = new Vector3(CubeHalfExtent, -CubeHalfExtent, -CubeHalfExtent);
+            Vector3 axisInA = new Vector3(0, 0, 1);
+
+            var hinge = new HingeConstraint(body, pivotInA, axisInA);
+
+            //use zero targetVelocity and a small maxMotorImpulse to simulate joint friction
+            //const float targetVelocity = 0;
+            //const float maxMotorImpulse = 0.01f;
+            const float targetVelocity = 1.0f;
+            const float maxMotorImpulse = 1.0f;
+            hinge.EnableAngularMotor(true, targetVelocity, maxMotorImpulse);
+            hinge.DebugDrawSize = 5;
+            World.AddConstraint(hinge);
+        }
+
+        private void CreateMotorHinge2()
+        {
+            RigidBody body = LocalCreateRigidBody(1.0f, Matrix.Identity, cubeShape);
+            body.ActivationState = ActivationState.DisableDeactivation;
+
+            Vector3 pivotInA = new Vector3(10.0f, 0.0f, 0.0f);
+            Vector3 axisInA = new Vector3(0, 0, 1);
+
+            var hinge = new HingeConstraint(body, pivotInA, axisInA);
+            const float targetVelocity = -1.0f;
+            const float maxMotorImpulse = 1.65f;
+            hinge.EnableAngularMotor(true, targetVelocity, maxMotorImpulse);
+            hinge.DebugDrawSize = 5;
+            World.AddConstraint(hinge);
+        }
+
+        private void CreateSlider()
+        {
+            float mass = 1.0f;
+
+            RigidBody bodyA = LocalCreateRigidBody(mass, Matrix.Translation(-20, 0, 15), cubeShape);
+            bodyA.ActivationState = ActivationState.DisableDeactivation;
+
+            // add dynamic rigid body B1
+            RigidBody bodyB = LocalCreateRigidBody(0, Matrix.Translation(-30, 0, 15), cubeShape);
+            //RigidBody bodyB = LocalCreateRigidBody(mass, Matrix.Translation(-20, 0, 15), cubeShape);
+            bodyB.ActivationState = ActivationState.DisableDeactivation;
+
+            // create slider constraint between A1 and B1 and add it to world
+            var slider = new SliderConstraint(bodyA, bodyB, Matrix.Identity, Matrix.Identity, true)
             {
-                StartWorldTransform = transform
-            })
+                LowerLinearLimit = -15.0f,
+                UpperLinearLimit = -5.0f,
+                //LowerLinearLimit = -10.0f,
+                //UpperLinearLimit = -10.0f,
+                LowerAngularLimit = -(float)Math.PI / 3.0f,
+                UpperAngularLimit = (float)Math.PI / 3.0f,
+                DebugDrawSize = 5.0f
+            };
+            World.AddConstraint(slider, true);
+        }
+
+        // Create a slider using the generic D6 constraint
+        private void CreateD6Slider()
+        {
+            const float mass = 1.0f;
+
+            Vector3 sliderAxis = Vector3.UnitX;
+            const float angle = (float)Math.PI / 4;
+            Matrix trans = Matrix.RotationAxis(sliderAxis, angle) * Matrix.Translation(0, 10, 0);
+            RigidBody body = LocalCreateRigidBody(mass, trans, cubeShape);
+            body.ActivationState = ActivationState.DisableDeactivation;
+
+            RigidBody fixedBody = LocalCreateRigidBody(0, trans, null);
+            World.AddRigidBody(fixedBody);
+
+            Matrix frameInA = Matrix.Translation(0, 5, 0);
+            Matrix frameInB = Matrix.Translation(0, 5, 0);
+
+            Vector3 lowerSliderLimit = new Vector3(-10, 0, 0);
+            Vector3 hiSliderLimit = new Vector3(10, 0, 0);
+
+            //const bool useLinearReferenceFrameA = false; //use fixed frame B for linear llimits
+            const bool useLinearReferenceFrameA = true; //use fixed frame A for linear llimits
+            var slider = new Generic6DofConstraint(fixedBody, body, frameInA, frameInB, useLinearReferenceFrameA)
             {
-                var body = new RigidBody(ci)
-                {
-                    LinearFactor = Vector3.Zero
-                };
-                World.AddRigidBody(body);
-                return body;
-            }
+                LinearLowerLimit = lowerSliderLimit,
+                LinearUpperLimit = hiSliderLimit,
+
+                //range should be small, otherwise singularities will 'explode' the constraint
+                //AngularLowerLimit = new Vector3(-1.5f,0,0),
+                //AngularUpperLimit = new Vector3(1.5f,0,0),
+                //AngularLowerLimit = new Vector3(0,0,0),
+                //AngularUpperLimit = new Vector3(0,0,0),
+                AngularLowerLimit = new Vector3((float)-Math.PI, 0, 0),
+                AngularUpperLimit = new Vector3(1.5f, 0, 0),
+                DebugDrawSize = 5
+            };
+
+            //slider.TranslationalLimitMotor.EnableMotor[0] = true;
+            slider.TranslationalLimitMotor.TargetVelocity = new Vector3(-5.0f, 0, 0);
+            slider.TranslationalLimitMotor.MaxMotorForce = new Vector3(0.1f, 0, 0);
+
+            World.AddConstraint(slider);
+        }
+
+        // Create a door using a hinge constraint attached to the world
+        private void CreateDoor()
+        {
+            const float mass = 1.0f;
+
+            var doorShape = new BoxShape(2.0f, 5.0f, 0.2f);
+            CollisionShapes.Add(doorShape);
+            RigidBody doorBody = LocalCreateRigidBody(mass, Matrix.Translation(-5.0f, -2.0f, 0.0f), doorShape);
+            doorBody.ActivationState = ActivationState.DisableDeactivation;
+
+            var pivotA = new Vector3(10.0f + 2.1f, -2.0f, 0.0f); // right next to the door slightly outside
+            var axisA = Vector3.UnitY; // pointing upwards, aka Y-axis
+
+            var hinge = new HingeConstraint(doorBody, pivotA, axisA);
+            hinge.DebugDrawSize = 5;
+
+            //hinge.SetLimit(0.0f, (float)Math.PI / 2);
+            // test problem values
+            //hinge.SetLimit(-(float)Math.PI, (float)Math.PI * 0.8f);
+            //hinge.SetLimit(1, -1);
+            //hinge.SetLimit(-(float)Math.PI * 0.8f, (float)Math.PI);
+            //hinge.SetLimit(-(float)Math.PI * 0.8f, (float)Math.PI, 0.9f, 0.3f, 0.0f);
+            //hinge.SetLimit(-(float)Math.PI * 0.8f, (float)Math.PI, 0.9f, 0.01f, 0.0f); // "sticky limits"
+            hinge.SetLimit(-(float)Math.PI * 0.25f, (float)Math.PI * 0.25f);
+            //hinge.SetLimit(0, 0);
+            World.AddConstraint(hinge);
+        }
+
+        private void CreateGeneric6DofConstraint()
+        {
+            const float mass = 1.0f;
+
+            RigidBody fixedBody = LocalCreateRigidBody(0, Matrix.Translation(10, 6, 0), cubeShape);
+            fixedBody.ActivationState = ActivationState.DisableDeactivation;
+
+            RigidBody dynamicbody = LocalCreateRigidBody(mass, Matrix.Translation(0, 6, 0), cubeShape);
+            dynamicbody.ActivationState = ActivationState.DisableDeactivation;
+
+            Matrix frameInA = Matrix.Translation(-5, 0, 0);
+            Matrix frameInB = Matrix.Translation(5, 0, 0);
+
+            bool useLinearReferenceFrameA = true;
+            var generic6Dof = new Generic6DofConstraint(fixedBody, dynamicbody, frameInA, frameInB, useLinearReferenceFrameA)
+            {
+                LinearLowerLimit = new Vector3(-10, -2, -1),
+                LinearUpperLimit = new Vector3(10, 2, 1),
+                //LinearLowerLimit = new Vector3(-10, 0, 0),
+                //LinearUpperLimit = new Vector3(10, 0, 0),
+                //LinearLowerLimit = new Vector3(0, 0, 0),
+                //LinearUpperLimit = new Vector3(0, 0, 0),
+
+                AngularLowerLimit = new Vector3(-(float)Math.PI / 4, -0.75f, -(float)Math.PI * 0.4f),
+                AngularUpperLimit = new Vector3((float)Math.PI / 4, 0.75f, (float)Math.PI * 0.4f),
+                //AngularLowerLimit = new Vector3(0, (float)Math.PI * 0.9f, 0),
+                //AngularUpperLimit = new Vector3(0, -(float)Math.PI * 0.9f, 0),
+                //AngularLowerLimit = new Vector3(0, 0, -(float)Math.PI),
+                //AngularUpperLimit = new Vector3(0, 0, (float)Math.PI),
+
+                //AngularLowerLimit = new Vector3(0, -0.75f, (float)Math.PI * 0.8f),
+                //AngularUpperLimit = new Vector3(0, 0.75f, -(float)Math.PI * 0.8f),
+                //AngularLowerLimit = new Vector3(0, -(float)Math.PI * 0.8f, (float)Math.PI * 1.98f),
+                //AngularUpperLimit = new Vector3(0, (float)Math.PI * 0.8f, -(float)Math.PI * 1.98f),
+
+                //AngularLowerLimit = new Vector3(-0.75f, -0.5f, -0.5f),
+                //AngularUpperLimit = new Vector3(0.75f, 0.5f, 0.5f),
+                //AngularLowerLimit = new Vector3(-1, 0, 0),
+                //AngularUpperLimit = new Vector3(1, 0, 0),
+
+                DebugDrawSize = 5.0f
+            };
+
+            //generic6Dof.TranslationalLimitMotor.EnableMotor[0] = true;
+            //generic6Dof.TranslationalLimitMotor.TargetVelocity = new Vector3(5, 0, 0);
+            //generic6Dof.TranslationalLimitMotor.MaxMotorForce = new Vector3(0.1f, 0, 0);
+
+            World.AddConstraint(generic6Dof, true);
+        }
+
+        private void CreateConeTwist()
+        {
+            RigidBody bodyA = LocalCreateRigidBody(1.0f, Matrix.Translation(-10, 5, 0), cubeShape);
+            //bodyA = LocalCreateRigidBody(0, Matrix.Translation(-10, 5, 0), cubeShape);
+            bodyA.ActivationState = ActivationState.DisableDeactivation;
+
+            RigidBody bodyB = LocalCreateRigidBody(0, Matrix.Translation(-10, -5, 0), cubeShape);
+            //bodyB = LocalCreateRigidBody(1.0f, Matrix.Translation(-10, -5, 0), cubeShape);
+
+            Matrix frameInA = Matrix.RotationYawPitchRoll(0, 0, (float)Math.PI / 2);
+            frameInA *= Matrix.Translation(0, -5, 0);
+            Matrix frameInB = Matrix.RotationYawPitchRoll(0, 0, (float)Math.PI / 2);
+            frameInB *= Matrix.Translation(0, 5, 0);
+
+            var coneTwist = new ConeTwistConstraint(bodyA, bodyB, frameInA, frameInB);
+            //coneTwist.SetLimit((float)Math.PI / 4, (float)Math.PI / 4, (float)Math.PI * 0.8f);
+            //coneTwist.SetLimit((((float)Math.PI / 4) * 0.6f), (float)Math.PI / 4, (float)Math.PI * 0.8f, 1.0f); // soft limit == hard limit
+            coneTwist.SetLimit((((float)Math.PI / 4) * 0.6f), (float)Math.PI / 4, (float)Math.PI * 0.8f, 0.5f);
+            coneTwist.DebugDrawSize = 5;
+            World.AddConstraint(coneTwist, true);
+        }
+
+        private void CreateUniversalConstraint()
+        {
+            // create two rigid bodies
+            // static body A (parent) on top:
+            RigidBody bodyA = LocalCreateRigidBody(0, Matrix.Translation(20, 4, 0), cubeShape);
+            bodyA.ActivationState = ActivationState.DisableDeactivation;
+            // dynamic bodyB (child) below it :
+            RigidBody bodyB = LocalCreateRigidBody(1.0f, Matrix.Translation(20, 0, 0), cubeShape);
+            bodyB.ActivationState = ActivationState.DisableDeactivation;
+
+            // add some (arbitrary) data to build constraint frames
+            Vector3 parentAxis = new Vector3(1, 0, 0);
+            Vector3 childAxis = new Vector3(0, 0, 1);
+            Vector3 anchor = new Vector3(20, 2, 0);
+
+            var universal = new UniversalConstraint(bodyA, bodyB, anchor, parentAxis, childAxis);
+            universal.SetLowerLimit(-(float)Math.PI / 4, -(float)Math.PI / 4);
+            universal.SetUpperLimit((float)Math.PI / 4, (float)Math.PI / 4);
+
+            // draw constraint frames and limits for debugging
+            universal.DebugDrawSize = 5;
+
+            World.AddConstraint(universal, true);
+        }
+
+        private void CreateGeneric6DofSpringConstraint()
+        {
+            RigidBody bodyA = LocalCreateRigidBody(0, Matrix.Translation(-20, 16, 0), cubeShape);
+            bodyA.ActivationState = ActivationState.DisableDeactivation;
+
+            RigidBody bodyB = LocalCreateRigidBody(1.0f, Matrix.Translation(-10, 16, 0), cubeShape);
+            bodyB.ActivationState = ActivationState.DisableDeactivation;
+
+            Matrix frameInA = Matrix.Translation(10, 0, 0);
+            Matrix frameInB = Matrix.Identity;
+
+            var generic6DofSpring = new Generic6DofSpringConstraint(bodyA, bodyB, frameInA, frameInB, true)
+            {
+                LinearUpperLimit = new Vector3(5, 0, 0),
+                LinearLowerLimit = new Vector3(-5, 0, 0),
+                AngularLowerLimit = new Vector3(0, 0, -1.5f),
+                AngularUpperLimit = new Vector3(0, 0, 1.5f),
+                DebugDrawSize = 5
+            };
+
+            generic6DofSpring.EnableSpring(0, true);
+            generic6DofSpring.SetStiffness(0, 39.478f);
+            generic6DofSpring.SetDamping(0, 0.5f);
+            generic6DofSpring.EnableSpring(5, true);
+            generic6DofSpring.SetStiffness(5, 39.478f);
+            generic6DofSpring.SetDamping(0, 0.3f);
+            generic6DofSpring.SetEquilibriumPoint();
+
+            World.AddConstraint(generic6DofSpring, true);
+        }
+
+        // Create a Hinge joint between two dynamic bodies
+        private void CreateHinge()
+        {
+            // static body (parent) on top
+            RigidBody bodyA = LocalCreateRigidBody(1.0f, Matrix.Translation(-20, -2, 0), cubeShape);
+            bodyA.ActivationState = ActivationState.DisableDeactivation;
+            // dynamic body
+            RigidBody bodyB = LocalCreateRigidBody(10.0f, Matrix.Translation(-30, -2, 0), cubeShape);
+            bodyB.ActivationState = ActivationState.DisableDeactivation;
+
+            // add some data to build constraint frames
+            var axisA = new Vector3(0, 1, 0);
+            var axisB = new Vector3(0, 1, 0);
+            var pivotA = new Vector3(-5, 0, 0);
+            var pivotB = new Vector3(5, 0, 0);
+            var hinge = new HingeConstraint(bodyA, bodyB, pivotA, pivotB, axisA, axisB);
+            hinge.SetLimit(-(float)Math.PI / 4, (float)Math.PI / 4);
+
+            // draw constraint frames and limits for debugging
+            hinge.DebugDrawSize = 5;
+
+            World.AddConstraint(hinge, true);
+        }
+
+        private void CreateHinge2()
+        {
+            // static bodyA (parent) on top
+            RigidBody bodyA = LocalCreateRigidBody(0, Matrix.Translation(-20, 4, 0), cubeShape);
+            bodyA.ActivationState = ActivationState.DisableDeactivation;
+            // dynamic bodyB (child) below it
+            RigidBody bodyB = LocalCreateRigidBody(1.0f, Matrix.Translation(-20, 0, 0), cubeShape);
+            bodyB.ActivationState = ActivationState.DisableDeactivation;
+
+            // add some data to build constraint frames
+            Vector3 parentAxis = new Vector3(0, 1, 0);
+            Vector3 childAxis = new Vector3(1, 0, 0);
+            Vector3 anchor = new Vector3(-20, 0, 0);
+            var hinge2 = new Hinge2Constraint(bodyA, bodyB, anchor, parentAxis, childAxis);
+
+            hinge2.SetLowerLimit(-(float)Math.PI / 4);
+            hinge2.SetUpperLimit((float)Math.PI / 4);
+
+            // draw constraint frames and limits for debugging
+            hinge2.DebugDrawSize = 5;
+
+            World.AddConstraint(hinge2, true);
         }
     }
 
