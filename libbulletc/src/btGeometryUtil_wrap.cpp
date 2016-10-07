@@ -3,6 +3,8 @@
 #include "conversion.h"
 #include "btGeometryUtil_wrap.h"
 
+#ifndef BULLETC_DISABLE_GEOMETRY_UTIL
+
 bool btGeometryUtil_areVerticesBehindPlane(const btVector3* planeNormal, const btAlignedObjectArray_btVector3* vertices,
 	btScalar margin)
 {
@@ -37,3 +39,5 @@ bool btGeometryUtil_isPointInsidePlanes(const btAlignedObjectArray_btVector3* pl
 	return btGeometryUtil::isPointInsidePlanes(*planeEquations, BTVECTOR3_USE(point),
 		margin);
 }
+
+#endif

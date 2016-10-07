@@ -1,4 +1,5 @@
 using BulletSharp.Math;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -7,8 +8,8 @@ namespace ConvexDecompositionDemo
 {
     class WavefrontObj
     {
-        readonly char[] faceSplitSchars = { '/' };
-        readonly char[] lineSplitChars = { ' ' };
+        private readonly char[] _faceSplitSchars = { '/' };
+        private readonly char[] _lineSplitChars = { ' ' };
 
         //Vector2 ToVector2(string f0, string f1)
         //{
@@ -27,16 +28,15 @@ namespace ConvexDecompositionDemo
 
         int GetVertex(string[] faceVertex)
         {
-            int vindex = int.Parse(faceVertex[0]);
-            if (vindex < 0)
+            int vertexIndex = int.Parse(faceVertex[0]);
+            if (vertexIndex < 0)
             {
-                indices.Add(indices[indices.Count + vindex]);
+                indices.Add(indices[indices.Count + vertexIndex]);
             }
-            Vector3 position = vertices[vindex - 1];
+            Vector3 position = vertices[vertexIndex - 1];
 
             // Search for a duplicate
-            int i;
-            for (i = 0; i < finalVertices.Count; i++)
+            for (int i = 0; i < finalVertices.Count; i++)
             {
                 if (finalVertices[i].Equals(position))
                 {
@@ -45,9 +45,10 @@ namespace ConvexDecompositionDemo
                 }
             }
 
+            int newIndex = finalVertices.Count;
             finalVertices.Add(position);
-            indices.Add(i);
-            return i;
+            indices.Add(newIndex);
+            return newIndex;
         }
 
         void ProcessLine(string line)
@@ -57,10 +58,10 @@ namespace ConvexDecompositionDemo
                 return;
             }
 
-            string[] parts = line.Split(lineSplitChars, System.StringSplitOptions.RemoveEmptyEntries);
-            string cmd = parts[0];
+            string[] parts = line.Split(_lineSplitChars, StringSplitOptions.RemoveEmptyEntries);
+            string command = parts[0];
 
-            switch (cmd)
+            switch (command)
             {
                 case "v":
                     vertices.Add(ToVector3(parts[1], parts[2], parts[3]));
@@ -72,24 +73,25 @@ namespace ConvexDecompositionDemo
                     //texels.Add(ToVector2(parts[1], parts[2]));
                     break;
                 case "f":
-                    int[] face = new int[parts.Length - 1];
+                    int numVertices = parts.Length - 1;
+                    int[] face = new int[numVertices];
 
-                    face[0] = GetVertex(parts[1].Split(faceSplitSchars, System.StringSplitOptions.RemoveEmptyEntries));
-                    face[1] = GetVertex(parts[2].Split(faceSplitSchars, System.StringSplitOptions.RemoveEmptyEntries));
-                    face[2] = GetVertex(parts[3].Split(faceSplitSchars, System.StringSplitOptions.RemoveEmptyEntries));
+                    face[0] = GetVertex(parts[1].Split(_faceSplitSchars, StringSplitOptions.RemoveEmptyEntries));
+                    face[1] = GetVertex(parts[2].Split(_faceSplitSchars, StringSplitOptions.RemoveEmptyEntries));
+                    face[2] = GetVertex(parts[3].Split(_faceSplitSchars, StringSplitOptions.RemoveEmptyEntries));
 
-                    if (face.Length == 4)
+                    if (numVertices == 4)
                     {
                         indices.Add(face[0]);
                         indices.Add(face[2]);
-                        face[3] = GetVertex(parts[4].Split(faceSplitSchars, System.StringSplitOptions.RemoveEmptyEntries));
+                        face[3] = GetVertex(parts[4].Split(_faceSplitSchars, StringSplitOptions.RemoveEmptyEntries));
                     }
                     break;
             }
         }
 
-        // load a wavefront obj returns number of triangles that were loaded.  Data is persists until the class is destructed.
-        public int LoadObj(string fname)
+        // Loads a wavefront obj returns the number of triangles that were loaded.
+        public int LoadObj(string filename)
         {
             indices = new List<int>();
             normals = new List<Vector3>();
@@ -97,16 +99,14 @@ namespace ConvexDecompositionDemo
             vertices = new List<Vector3>();
             finalVertices = new List<Vector3>();
 
-            using (var file = File.OpenRead(fname))
+            using (var file = File.OpenRead(filename))
             {
-                StreamReader reader = new StreamReader(file);
+                var reader = new StreamReader(file);
                 while (!reader.EndOfStream)
                 {
                     ProcessLine(reader.ReadLine());
                 }
             }
-
-            vertices = null;
 
             return indices.Count / 3;
         }

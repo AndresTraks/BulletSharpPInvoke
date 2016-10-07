@@ -106,6 +106,9 @@ namespace ConstraintDemo
             var wheel = new CylinderShape(radius, 0.025f, radius);
             shape.AddChildShape(Matrix.Identity, axle);
             shape.AddChildShape(Matrix.Identity, wheel);
+            CollisionShapes.Add(shape);
+            CollisionShapes.Add(axle);
+            CollisionShapes.Add(wheel);
 
             RigidBody body = LocalCreateRigidBody(mass, transform, shape);
             body.LinearFactor = Vector3.Zero;
