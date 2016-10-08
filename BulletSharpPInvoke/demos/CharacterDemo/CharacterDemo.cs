@@ -2,6 +2,7 @@
 using BulletSharp.Math;
 using DemoFramework;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -17,10 +18,9 @@ namespace CharacterDemo
             _demo = demo;
         }
 
-        public override void AddConvexVerticesCollider(AlignedVector3Array vertices, bool isEntity, Vector3 entityTargetLocation)
+        public override void AddConvexVerticesCollider(List<Vector3> vertices, bool isEntity, Vector3 entityTargetLocation)
         {
-            if (vertices.Count == 0)
-                return;
+            if (vertices.Count == 0) return;
 
             //ConvexHullShape creates an internal copy of the vertices
             var verticesTransformed = vertices.Select(v => new Vector3(0.5f * v.X, 0.375f * v.Z, -0.5f * v.Y));

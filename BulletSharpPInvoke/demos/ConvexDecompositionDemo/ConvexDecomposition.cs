@@ -10,7 +10,6 @@ namespace ConvexDecompositionDemo
     class ConvexDecomposition
     {
         StreamWriter _output;
-        ConvexDecompositionDemo _demo;
         CultureInfo floatFormat = new CultureInfo("en-US");
         int baseIndex = 0;
 
@@ -19,13 +18,33 @@ namespace ConvexDecompositionDemo
 
         public Vector3 LocalScaling { get; set; } = new Vector3(1, 1, 1);
 
-        public ConvexDecomposition(StreamWriter output, ConvexDecompositionDemo demo)
+        public ConvexDecomposition(StreamWriter output)
         {
             _output = output;
-            _demo = demo;
         }
 
-        public void ConvexDecompResult(Vector3[] hullVertices, int[] hullIndices)
+        public void Result(Vector3[] hullVertices, int[] hullIndices)
+        {
+            OutputResult(hullVertices, hullIndices);
+
+            // Calculate centroid, to shift vertices around center of mass
+            Vector3 centroid = CalculateCentroid(hullVertices);
+            convexCentroids.Add(centroid);
+
+            List<Vector3> outVertices = hullVertices.Select(v => v * LocalScaling - centroid).ToList();
+
+            // This is a tools issue:
+            // due to collision margin, convex objects overlap, compensate for it here.
+#if false
+            outVertices = ShrinkObjectInwards(hullVertices);
+#endif
+
+            var convexShape = new ConvexHullShape(outVertices);
+            convexShape.Margin = 0.01f;
+            convexShapes.Add(convexShape);
+        }
+
+        private void OutputResult(Vector3[] hullVertices, int[] hullIndices)
         {
             if (_output == null)
                 return;
@@ -49,22 +68,6 @@ namespace ConvexDecompositionDemo
                 _output.WriteLine("f {0} {1} {2}", index0 + 1, index1 + 1, index2 + 1);
             }
             baseIndex += hullVertices.Length;
-
-            // Calculate centroid, to shift vertices around center of mass
-            Vector3 centroid = CalculateCentroid(hullVertices);
-            convexCentroids.Add(centroid);
-
-            List<Vector3> outVertices = hullVertices.Select(v => v * LocalScaling - centroid).ToList();
-
-            // This is a tools issue:
-            // due to collision margin, convex objects overlap, compensate for it here.
-#if true
-            outVertices = ShrinkObjectInwards(hullVertices);
-#endif
-
-            var convexShape = new ConvexHullShape(outVertices);
-            convexShape.Margin = 0.01f;
-            convexShapes.Add(convexShape);
         }
 
         private Vector3 CalculateCentroid(ICollection<Vector3> vertices)

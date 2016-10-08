@@ -1,5 +1,6 @@
 using BulletSharp;
 using BulletSharp.Math;
+using System.Collections.Generic;
 
 namespace BspDemo
 {
@@ -28,32 +29,26 @@ namespace BspDemo
 
                     if ((flags & ContentFlags.Solid) == 0) continue;
 
-                    var planeEquations = new AlignedVector3Array();
+                    var planeEquations = new List<Vector4>();
                     brush.ShaderNum = -1;
 
                     for (int p = 0; p < brush.NumSides; p++)
                     {
-                        int sideid = brush.FirstSide + p;
+                        int sideId = brush.FirstSide + p;
 
-                        BspBrushSide brushside = bspLoader.BrushSides[sideid];
-                        int planeId = brushside.PlaneNum;
-                        BspPlane plane = bspLoader.Planes[planeId];
-                        Vector4 planeEq = new Vector4(plane.Normal, scaling * -plane.Distance);
-                        planeEquations.Add(planeEq);
+                        BspBrushSide brushside = bspLoader.BrushSides[sideId];
+                        BspPlane plane = bspLoader.Planes[brushside.PlaneNum];
+                        Vector4 planeEquation = new Vector4(plane.Normal, scaling * -plane.Distance);
+                        planeEquations.Add(planeEquation);
                         isValidBrush = true;
                     }
                     if (isValidBrush)
                     {
-                        var vertices = new AlignedVector3Array();
-                        GeometryUtil.GetVerticesFromPlaneEquations(planeEquations, vertices);
-
+                        List<Vector3> vertices = GeometryUtil.GetVerticesFromPlaneEquations(planeEquations);
                         const bool isEntity = false;
                         Vector3 entityTarget = Vector3.Zero;
                         AddConvexVerticesCollider(vertices, isEntity, entityTarget);
-                        vertices.Dispose();
                     }
-
-                    planeEquations.Dispose();
                 }
             }
             /*
@@ -80,6 +75,6 @@ namespace BspDemo
             return new Vector3(0, 0, 100);
         }
 
-        public abstract void AddConvexVerticesCollider(AlignedVector3Array vertices, bool isEntity, Vector3 entityTargetLocation);
+        public abstract void AddConvexVerticesCollider(List<Vector3> vertices, bool isEntity, Vector3 entityTargetLocation);
     }
 }

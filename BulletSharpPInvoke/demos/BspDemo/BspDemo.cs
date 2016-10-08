@@ -2,6 +2,7 @@
 using BulletSharp.Math;
 using DemoFramework;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace BspDemo
@@ -15,7 +16,7 @@ namespace BspDemo
             _demo = demo;
         }
 
-        public override void AddConvexVerticesCollider(AlignedVector3Array vertices, bool isEntity, Vector3 entityTargetLocation)
+        public override void AddConvexVerticesCollider(List<Vector3> vertices, bool isEntity, Vector3 entityTargetLocation)
         {
             // perhaps we can do something special with entities (isEntity)
             // like adding a collision Triggering (as example)
@@ -57,7 +58,7 @@ namespace BspDemo
             World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConf);
             World.Gravity = Freelook.Up * -10.0f;
 
-            BspLoader bspLoader = new BspLoader();
+            var bspLoader = new BspLoader();
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length == 1)
             {

@@ -11,44 +11,28 @@ namespace ConvexDecompositionDemo
         private readonly char[] _faceSplitSchars = { '/' };
         private readonly char[] _lineSplitChars = { ' ' };
 
-        //Vector2 ToVector2(string f0, string f1)
-        //{
-        //    return new Vector2(
-        //        float.Parse(f0, CultureInfo.InvariantCulture),
-        //        float.Parse(f1, CultureInfo.InvariantCulture));
-        //}
+        private List<Vector3> _vertices = new List<Vector3>();
 
-        Vector3 ToVector3(string f0, string f1, string f2)
+        private WavefrontObj(string filename)
         {
-            return new Vector3(
-                float.Parse(f0, CultureInfo.InvariantCulture),
-                float.Parse(f1, CultureInfo.InvariantCulture),
-                float.Parse(f2, CultureInfo.InvariantCulture));
-        }
-
-        int GetVertex(string[] faceVertex)
-        {
-            int vertexIndex = int.Parse(faceVertex[0]);
-            if (vertexIndex < 0)
+            using (var file = File.OpenRead(filename))
             {
-                indices.Add(indices[indices.Count + vertexIndex]);
-            }
-            Vector3 position = vertices[vertexIndex - 1];
-
-            // Search for a duplicate
-            for (int i = 0; i < finalVertices.Count; i++)
-            {
-                if (finalVertices[i].Equals(position))
+                var reader = new StreamReader(file);
+                while (!reader.EndOfStream)
                 {
-                    indices.Add(i);
-                    return i;
+                    ProcessLine(reader.ReadLine());
                 }
             }
+        }
 
-            int newIndex = finalVertices.Count;
-            finalVertices.Add(position);
-            indices.Add(newIndex);
-            return newIndex;
+        public List<int> Indices { get; } = new List<int>();
+        public List<Vector3> Vertices { get; } = new List<Vector3>();
+        public List<Vector3> Normals { get; } = new List<Vector3>();
+        //public List<Vector2> Texels { get; } = new List<Vector2>();
+
+        public static WavefrontObj Load(string filename)
+        {
+            return new WavefrontObj(filename);
         }
 
         void ProcessLine(string line)
@@ -64,13 +48,13 @@ namespace ConvexDecompositionDemo
             switch (command)
             {
                 case "v":
-                    vertices.Add(ToVector3(parts[1], parts[2], parts[3]));
+                    _vertices.Add(ToVector3(parts[1], parts[2], parts[3]));
                     break;
                 case "vn":
-                    normals.Add(ToVector3(parts[1], parts[2], parts[3]));
+                    Normals.Add(ToVector3(parts[1], parts[2], parts[3]));
                     break;
                 case "vt":
-                    //texels.Add(ToVector2(parts[1], parts[2]));
+                    //Texels.Add(ToVector2(parts[1], parts[2]));
                     break;
                 case "f":
                     int numVertices = parts.Length - 1;
@@ -82,49 +66,52 @@ namespace ConvexDecompositionDemo
 
                     if (numVertices == 4)
                     {
-                        indices.Add(face[0]);
-                        indices.Add(face[2]);
+                        Indices.Add(face[0]);
+                        Indices.Add(face[2]);
                         face[3] = GetVertex(parts[4].Split(_faceSplitSchars, StringSplitOptions.RemoveEmptyEntries));
                     }
                     break;
             }
         }
 
-        // Loads a wavefront obj returns the number of triangles that were loaded.
-        public int LoadObj(string filename)
-        {
-            indices = new List<int>();
-            normals = new List<Vector3>();
-            //texels = new List<Vector2>();
-            vertices = new List<Vector3>();
-            finalVertices = new List<Vector3>();
+        //Vector2 ToVector2(string f0, string f1)
+        //{
+        //    return new Vector2(
+        //        float.Parse(f0, CultureInfo.InvariantCulture),
+        //        float.Parse(f1, CultureInfo.InvariantCulture));
+        //}
 
-            using (var file = File.OpenRead(filename))
+        Vector3 ToVector3(string f0, string f1, string f2)
+        {
+            return new Vector3(
+                float.Parse(f0, CultureInfo.InvariantCulture),
+                float.Parse(f1, CultureInfo.InvariantCulture),
+                float.Parse(f2, CultureInfo.InvariantCulture));
+        }
+
+        private int GetVertex(string[] faceVertex)
+        {
+            int vertexIndex = int.Parse(faceVertex[0]);
+            if (vertexIndex < 0)
             {
-                var reader = new StreamReader(file);
-                while (!reader.EndOfStream)
+                Indices.Add(Indices[Indices.Count + vertexIndex]);
+            }
+            Vector3 position = _vertices[vertexIndex - 1];
+
+            // Search for a duplicate
+            for (int i = 0; i < Vertices.Count; i++)
+            {
+                if (Vertices[i].Equals(position))
                 {
-                    ProcessLine(reader.ReadLine());
+                    Indices.Add(i);
+                    return i;
                 }
             }
 
-            return indices.Count / 3;
-        }
-
-        List<int> indices;
-        List<Vector3> normals;
-        //List<Vector2> texels;
-        List<Vector3> vertices;
-        List<Vector3> finalVertices;
-
-        public List<int> Indices
-        {
-            get { return indices; }
-        }
-
-        public List<Vector3> Vertices
-        {
-            get { return finalVertices; }
+            int newIndex = Vertices.Count;
+            Vertices.Add(position);
+            Indices.Add(newIndex);
+            return newIndex;
         }
     }
 }

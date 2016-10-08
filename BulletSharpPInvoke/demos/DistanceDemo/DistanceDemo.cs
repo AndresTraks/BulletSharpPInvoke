@@ -82,22 +82,22 @@ namespace DistanceDemo
                 TransformB = body2Position
             };
 
-            var result = new PointCollector();
-
-            using (var detector = new GjkPairDetector(colShape0, colShape1, sGjkSimplexSolver, null))
+            using (var result = new PointCollector())
             {
-                detector.CachedSeparatingAxis = new Vector3(0.00000000f, 0.059727669f, 0.29259586f);
-                detector.GetClosestPoints(input, result, null);
-            }
+                using (var detector = new GjkPairDetector(colShape0, colShape1, sGjkSimplexSolver, null))
+                {
+                    detector.CachedSeparatingAxis = new Vector3(0.00000000f, 0.059727669f, 0.29259586f);
+                    detector.GetClosestPoints(input, result, null);
+                }
 
-            if (result.HasResult)
-            {
-                distanceFrom = result.PointInWorld;
-                distanceTo = result.PointInWorld + result.NormalOnBInWorld * result.Distance;
-                distance = result.Distance;
-                World.DebugDrawer.DrawLine(ref distanceFrom, ref distanceTo, ref red);
+                if (result.HasResult)
+                {
+                    distanceFrom = result.PointInWorld;
+                    distanceTo = result.PointInWorld + result.NormalOnBInWorld * result.Distance;
+                    distance = result.Distance;
+                    World.DebugDrawer.DrawLine(ref distanceFrom, ref distanceTo, ref red);
+                }
             }
-            result.Dispose();
         }
     }
 

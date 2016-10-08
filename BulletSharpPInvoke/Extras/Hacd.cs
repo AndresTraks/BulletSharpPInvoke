@@ -13,17 +13,17 @@ namespace BulletSharp
         [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
         delegate bool CallbackFunctionUnmanagedDelegate(IntPtr msg, double progress, double globalConcavity, IntPtr n);
 
-        public delegate bool CallBackFunction(string msg, double progress, double globalConcativity, int n);
+        public delegate bool CallbackFunction(string msg, double progress, double globalConcativity, int n);
 
         CallbackFunctionUnmanagedDelegate _callbackFunctionUnmanaged;
-        CallBackFunction _callbackFunction;
+        CallbackFunction _callbackFunction;
 
 		public Hacd()
 		{
 			_native = HACD_HACD_new();
 		}
 
-        bool CallbackFunctionUnmanaged(IntPtr msg, double progress, double globalConcavity, IntPtr n)
+        private bool CallbackFunctionUnmanaged(IntPtr msg, double progress, double globalConcavity, IntPtr n)
         {
             string msg2 = Marshal.PtrToStringAnsi(msg);
             return _callbackFunction(msg2, progress, globalConcavity, n.ToInt32());
@@ -215,7 +215,7 @@ namespace BulletSharp
 			set { HACD_HACD_SetAddNeighboursDistPoints(_native, value); }
 		}
 
-		public CallBackFunction CallBack
+		public CallbackFunction Callback
 		{
             get { return _callbackFunction; }
             set
@@ -269,7 +269,7 @@ namespace BulletSharp
 			set { HACD_HACD_SetNTriangles(_native, value); }
 		}
 
-        public int NVerticesPerCH
+        public int VerticesPerConvexHull
 		{
 			get { return HACD_HACD_GetNVerticesPerCH(_native); }
 			set { HACD_HACD_SetNVerticesPerCH(_native, value); }
