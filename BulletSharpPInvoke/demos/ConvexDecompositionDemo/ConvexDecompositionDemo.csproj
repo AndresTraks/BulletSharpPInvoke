@@ -74,7 +74,6 @@
   <ItemGroup>
     <Compile Include="ConvexDecomposition.cs" />
     <Compile Include="ConvexDecompositionDemo.cs" />
-    <Compile Include="Wavefront.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

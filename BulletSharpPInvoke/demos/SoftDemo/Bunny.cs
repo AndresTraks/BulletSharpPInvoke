@@ -1,6 +1,6 @@
 namespace SoftDemo
 {
-    static class Bunny
+    static class BunnyNodes
     {
         public static string GetNodes()
         {

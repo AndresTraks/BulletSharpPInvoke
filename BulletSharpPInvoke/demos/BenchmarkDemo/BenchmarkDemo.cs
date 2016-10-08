@@ -1,6 +1,7 @@
 ﻿using BulletSharp;
 using BulletSharp.Math;
 using DemoFramework;
+using DemoFramework.Meshes;
 using System;
 
 namespace BenchmarkDemo

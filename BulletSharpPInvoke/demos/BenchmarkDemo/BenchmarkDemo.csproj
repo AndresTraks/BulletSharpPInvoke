@@ -54,7 +54,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BenchmarkDemo.cs" />
-    <Compile Include="Taru.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BulletSharp, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">

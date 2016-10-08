@@ -56,9 +56,7 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="BspConverter.cs" />
     <Compile Include="CharacterDemo.cs" />
-    <Compile Include="BspLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BulletSharp, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">

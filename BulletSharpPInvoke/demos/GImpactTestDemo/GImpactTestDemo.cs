@@ -6,6 +6,7 @@
 using BulletSharp;
 using BulletSharp.Math;
 using DemoFramework;
+using DemoFramework.Meshes;
 using System;
 using System.Windows.Forms;
 
@@ -175,7 +176,7 @@ namespace GImpactTestDemo
         {
             // Create Torus Shape
 
-            indexVertexArrays = new TriangleIndexVertexArray(TorusMesh.Indices, TorusMesh.Vertices);
+            indexVertexArrays = new TriangleIndexVertexArray(Torus.Indices, Torus.Vertices);
 
 #if BULLET_GIMPACT
 #if BULLET_GIMPACT_CONVEX_DECOMPOSITION
@@ -201,7 +202,7 @@ namespace GImpactTestDemo
 
 
             // Create Bunny Shape
-            indexVertexArrays2 = new TriangleIndexVertexArray(BunnyMesh.Indices, BunnyMesh.Vertices);
+            indexVertexArrays2 = new TriangleIndexVertexArray(Bunny.Indices, Bunny.Vertices);
 
 #if BULLET_GIMPACT
 #if BULLET_GIMPACT_CONVEX_DECOMPOSITION

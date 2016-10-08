@@ -2,6 +2,7 @@
 using BulletSharp.Math;
 using BulletSharp.SoftBody;
 using DemoFramework;
+using DemoFramework.Meshes;
 using System;
 using System.Drawing;
 using System.IO;
@@ -372,7 +373,7 @@ namespace SoftDemo
         {
             for (int i = 0; i < 3; ++i)
             {
-                SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, TorusMesh.Vertices, TorusMesh.Indices);
+                SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, Torus.Vertices, Torus.Indices);
                 psb.GenerateBendingConstraints(2);
                 psb.Cfg.PositionIterations = 2;
                 psb.Cfg.Collisions |= Collisions.VertexFaceSoftSoft;
@@ -391,7 +392,7 @@ namespace SoftDemo
         {
             for (int i = 0; i < 3; ++i)
             {
-                SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, BunnyMesh.Vertices, BunnyMesh.Indices);
+                SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, Bunny.Vertices, Bunny.Indices);
                 Material pm = psb.AppendMaterial();
                 pm.LinearStiffness = 0.5f;
                 pm.Flags -= MaterialFlags.DebugDraw;
@@ -543,7 +544,7 @@ namespace SoftDemo
         void Init_TetraBunny()
         {
             SoftBody psb = SoftBodyHelpers.CreateFromTetGenData(softBodyWorldInfo,
-                Bunny.GetElements(), null, Bunny.GetNodes(), false, true, true);
+                BunnyNodes.GetElements(), null, BunnyNodes.GetNodes(), false, true, true);
             SoftWorld.AddSoftBody(psb);
             psb.Rotate(Quaternion.RotationYawPitchRoll((float)Math.PI / 2, 0, 0));
             psb.SetVolumeMass(150);
@@ -679,7 +680,7 @@ namespace SoftDemo
 
         void Init_Bunny()
         {
-            SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, BunnyMesh.Vertices, BunnyMesh.Indices);
+            SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, Bunny.Vertices, Bunny.Indices);
             Material pm = psb.AppendMaterial();
             pm.LinearStiffness = 0.5f;
             pm.Flags -= MaterialFlags.DebugDraw;
@@ -698,7 +699,7 @@ namespace SoftDemo
 
         void Init_BunnyMatch()
         {
-            SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, BunnyMesh.Vertices, BunnyMesh.Indices);
+            SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, Bunny.Vertices, Bunny.Indices);
             psb.Cfg.DynamicFriction = 0.5f;
             psb.Cfg.PoseMatching = 0.05f;
             psb.Cfg.PositionIterations = 5;
@@ -711,7 +712,7 @@ namespace SoftDemo
 
         void Init_Torus()
         {
-            SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, TorusMesh.Vertices, TorusMesh.Indices);
+            SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, Torus.Vertices, Torus.Indices);
             psb.GenerateBendingConstraints(2);
             psb.Cfg.PositionIterations = 2;
             psb.RandomizeConstraints();
@@ -726,7 +727,7 @@ namespace SoftDemo
 
         void Init_TorusMatch()
         {
-            SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, TorusMesh.Vertices, TorusMesh.Indices);
+            SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, Torus.Vertices, Torus.Indices);
             psb.Materials[0].LinearStiffness = 0.1f;
             psb.Cfg.PoseMatching = 0.05f;
             psb.RandomizeConstraints();
@@ -776,7 +777,7 @@ namespace SoftDemo
 
         SoftBody Create_ClusterBunny(Vector3 x, Vector3 a)
         {
-            SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, BunnyMesh.Vertices, BunnyMesh.Indices);
+            SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, Bunny.Vertices, Bunny.Indices);
             Material pm = psb.AppendMaterial();
             pm.LinearStiffness = 1;
             pm.Flags -= MaterialFlags.DebugDraw;
@@ -796,7 +797,7 @@ namespace SoftDemo
 
         SoftBody Create_ClusterTorus(Vector3 x, Vector3 a, Vector3 s)
         {
-            SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, TorusMesh.Vertices, TorusMesh.Indices);
+            SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, Torus.Vertices, Torus.Indices);
             Material pm = psb.AppendMaterial();
             pm.LinearStiffness = 1;
             pm.Flags -= MaterialFlags.DebugDraw;
@@ -862,7 +863,7 @@ namespace SoftDemo
         {
             for (int i = 0; i < 3; ++i)
             {
-                SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, TorusMesh.Vertices, TorusMesh.Indices);
+                SoftBody psb = SoftBodyHelpers.CreateFromTriMesh(softBodyWorldInfo, Torus.Vertices, Torus.Indices);
                 Material pm = psb.AppendMaterial();
                 pm.Flags -= MaterialFlags.DebugDraw;
                 psb.GenerateBendingConstraints(2, pm);

@@ -55,9 +55,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="BspConverter.cs" />
     <Compile Include="BspDemo.cs" />
-    <Compile Include="BspLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BulletSharp, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">

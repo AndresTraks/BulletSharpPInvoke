@@ -56,9 +56,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Bunny.cs" />
-    <Compile Include="BunnyMesh.cs" />
     <Compile Include="SoftDemo.cs" />
-    <Compile Include="TorusMesh.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BulletSharp, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
