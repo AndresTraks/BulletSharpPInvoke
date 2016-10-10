@@ -198,7 +198,7 @@ namespace BulletSharp
 			get { return btCollisionShape_getShapeType(_native); }
 		}
 
-        public Object UserObject { get; set; }
+        public object UserObject { get; set; }
 
 		public int UserIndex
 		{
