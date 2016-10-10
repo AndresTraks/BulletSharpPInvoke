@@ -16,7 +16,7 @@ namespace DemoFramework.OpenTK
         public Color Color;
     }
 
-    public class ShapeData : System.IDisposable
+    public class ShapeData : IDisposable
     {
         public int VertexCount;
         public int ElementCount;

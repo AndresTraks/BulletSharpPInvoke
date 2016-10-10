@@ -12,6 +12,7 @@ using DataStream = SharpDX.DataStream;
 using Device = SharpDX.Direct3D11.Device;
 using Matrix = BulletSharp.Math.Matrix;
 using Vector3 = BulletSharp.Math.Vector3;
+using System;
 
 namespace DemoFramework.SharpDX11
 {
@@ -24,7 +25,7 @@ namespace DemoFramework.SharpDX11
     }
 
     // Contains the geometry buffers and information of all instances of a particular shape.
-    public class ShapeData : System.IDisposable
+    public class ShapeData : IDisposable
     {
         public Buffer VertexBuffer;
         public int VertexCount;

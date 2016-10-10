@@ -70,7 +70,7 @@ namespace DemoFramework.SlimDX
         bool isFormClosed = false;
         bool formIsResizing = false;
         bool deviceLost = false;
-        System.IDisposable apiContext;
+        IDisposable apiContext;
         FormWindowState currentFormWindowState;
         FormWindowState windowedFormWindowState;
         FormBorderStyle windowedFormBorderStyle;
