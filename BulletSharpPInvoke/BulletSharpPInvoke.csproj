@@ -84,6 +84,7 @@
     <Compile Include="Collision\UnionFind.cs" />
     <Compile Include="Dynamics\ContactConstraint.cs" />
     <Compile Include="Dynamics\DantzigSolver.cs" />
+    <Compile Include="Dynamics\DiscreteDynamicsWorldMultiThreaded.cs" />
     <Compile Include="Dynamics\Featherstone\MultiBody.cs" />
     <Compile Include="Dynamics\Featherstone\MultiBodyConstraint.cs" />
     <Compile Include="Dynamics\Featherstone\MultiBodyConstraintSolver.cs" />

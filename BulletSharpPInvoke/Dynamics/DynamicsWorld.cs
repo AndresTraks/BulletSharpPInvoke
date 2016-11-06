@@ -30,8 +30,8 @@ namespace BulletSharp
         Dictionary<IAction, ActionInterfaceWrapper> _actions;
         List<TypedConstraint> _constraints = new List<TypedConstraint>();
 
-		internal DynamicsWorld(IntPtr native)
-			: base(native)
+		internal DynamicsWorld(IntPtr native, Dispatcher dispatcher, BroadphaseInterface pairCache)
+			: base(native, dispatcher, pairCache)
 		{
 		}
 

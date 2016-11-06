@@ -199,7 +199,7 @@ namespace BulletSharp
 			get { return btSliderConstraint_getLinDepth(_native); }
 		}
 
-		public float LinearPos
+		public float LinearPosition
 		{
 			get { return btSliderConstraint_getLinearPos(_native); }
 		}

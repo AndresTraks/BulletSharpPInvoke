@@ -191,6 +191,8 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btDiscreteCollisionDetectorInterface_wrap.h
     src/btDiscreteDynamicsWorld_wrap.cpp
     src/btDiscreteDynamicsWorld_wrap.h
+    src/btDiscreteDynamicsWorldMt_wrap.cpp
+    src/btDiscreteDynamicsWorldMt_wrap.h
     src/btDispatcher_wrap.cpp
     src/btDispatcher_wrap.h
     src/btDynamicsWorld_wrap.cpp

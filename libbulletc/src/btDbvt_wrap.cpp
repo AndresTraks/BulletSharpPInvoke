@@ -522,11 +522,6 @@ unsigned int btDbvt_getOpath(btDbvt* obj)
 	return obj->m_opath;
 }
 
-btAlignedObjectArray_const_btDbvtNodePtr* btDbvt_getRayTestStack(btDbvt* obj)
-{
-	return &obj->m_rayTestStack;
-}
-
 btDbvtNode* btDbvt_getRoot(btDbvt* obj)
 {
 	return obj->m_root;

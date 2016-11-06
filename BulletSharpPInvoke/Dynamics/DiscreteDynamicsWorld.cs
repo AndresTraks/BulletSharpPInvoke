@@ -9,19 +9,18 @@ namespace BulletSharp
 	{
 		private SimulationIslandManager _simulationIslandManager;
 
-		internal DiscreteDynamicsWorld(IntPtr native)
-			: base(native)
+		internal DiscreteDynamicsWorld(IntPtr native, Dispatcher dispatcher, BroadphaseInterface pairCache)
+			: base(native, dispatcher, pairCache)
 		{
 		}
 
 		public DiscreteDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
 			ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration)
-			: base(btDiscreteDynamicsWorld_new(dispatcher != null ? dispatcher._native : IntPtr.Zero, pairCache != null ? pairCache._native : IntPtr.Zero,
-				constraintSolver != null ? constraintSolver._native : IntPtr.Zero, collisionConfiguration != null ? collisionConfiguration._native : IntPtr.Zero))
+			: this(btDiscreteDynamicsWorld_new(dispatcher != null ? dispatcher._native : IntPtr.Zero, pairCache != null ? pairCache._native : IntPtr.Zero,
+				constraintSolver != null ? constraintSolver._native : IntPtr.Zero, collisionConfiguration != null ? collisionConfiguration._native : IntPtr.Zero),
+                  dispatcher, pairCache)
 		{
 			_constraintSolver = constraintSolver;
-            Dispatcher = dispatcher;
-            Broadphase = pairCache;
 		}
 
 		public void ApplyGravity()

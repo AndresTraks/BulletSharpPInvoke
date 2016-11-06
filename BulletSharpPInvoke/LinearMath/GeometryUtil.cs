@@ -67,16 +67,24 @@ namespace BulletSharp
 
 		public static List<Vector3> GetVerticesFromPlaneEquations(ICollection<Vector4> planeEquations)
 		{
-			int numPlaneEquations = planeEquations.Count;
-			Vector3[] planeNormals = planeEquations.Select(p => new Vector3(p.X, p.Y, p.Z)).ToArray();
-			float[] planeConstants = planeEquations.Select(p => p.W).ToArray();
+			int numPlanes = planeEquations.Count;
+			Vector3[] planeNormals = new Vector3[numPlanes];
+			float[] planeConstants = new float[numPlanes];
+			int i = 0;
+			foreach (Vector4 plane in planeEquations)
+			{
+				planeNormals[i] = new Vector3(plane.X, plane.Y, plane.Z);
+				planeConstants[i] = plane.W;
+				i++;
+			}
+
 			var vertices = new List<Vector3>();
 
-			for (int i = 0; i < numPlaneEquations; i++)
+			for (i = 0; i < numPlanes; i++)
 			{
-				for (int j = i + 1; j < numPlaneEquations; j++)
+				for (int j = i + 1; j < numPlanes; j++)
 				{
-					for (int k = j + 1; k < numPlaneEquations; k++)
+					for (int k = j + 1; k < numPlanes; k++)
 					{
 						Vector3 n2n3 = planeNormals[j].Cross(planeNormals[k]);
 						Vector3 n3n1 = planeNormals[k].Cross(planeNormals[i]);

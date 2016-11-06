@@ -92,11 +92,6 @@ btDefaultCollisionConfiguration* btDefaultCollisionConfiguration_new2(const btDe
 	return new btDefaultCollisionConfiguration(*constructionInfo);
 }
 
-btVoronoiSimplexSolver* btDefaultCollisionConfiguration_getSimplexSolver(btDefaultCollisionConfiguration* obj)
-{
-	return obj->getSimplexSolver();
-}
-
 void btDefaultCollisionConfiguration_setConvexConvexMultipointIterations(btDefaultCollisionConfiguration* obj)
 {
 	obj->setConvexConvexMultipointIterations();

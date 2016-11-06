@@ -13,11 +13,9 @@ namespace BulletSharp
 		public MultiBodyDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
 			MultiBodyConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration)
 			: base(btMultiBodyDynamicsWorld_new(dispatcher._native, pairCache._native,
-				constraintSolver._native, collisionConfiguration._native))
+				constraintSolver._native, collisionConfiguration._native), dispatcher, pairCache)
 		{
             _constraintSolver = constraintSolver;
-			_dispatcher = dispatcher;
-            _broadphase = pairCache;
 
             _bodies = new List<MultiBody>();
             _constraints = new List<MultiBodyConstraint>();

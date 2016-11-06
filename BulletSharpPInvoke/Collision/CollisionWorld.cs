@@ -742,13 +742,13 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
-		protected BroadphaseInterface _broadphase;
 		protected AlignedCollisionObjectArray _collisionObjectArray;
         internal IDebugDraw _debugDrawer;
-		protected Dispatcher _dispatcher;
+        private BroadphaseInterface _broadphase;
+        private Dispatcher _dispatcher;
         private DispatcherInfo _dispatchInfo;
 
-		internal CollisionWorld(IntPtr native)
+		internal CollisionWorld(IntPtr native, Dispatcher dispatcher, BroadphaseInterface broadphase)
 		{
             if (native == IntPtr.Zero)
             {
@@ -756,15 +756,16 @@ namespace BulletSharp
             }
 			_native = native;
             _collisionObjectArray = new AlignedCollisionObjectArray(btCollisionWorld_getCollisionObjectArray(native), this);
+
+            _dispatcher = dispatcher;
+            Broadphase = broadphase;
 		}
 
 		public CollisionWorld(Dispatcher dispatcher, BroadphaseInterface broadphasePairCache,
 			CollisionConfiguration collisionConfiguration)
             : this(btCollisionWorld_new(dispatcher._native, broadphasePairCache._native,
-                collisionConfiguration._native))
+                collisionConfiguration._native), dispatcher, broadphasePairCache)
 		{
-			_dispatcher = dispatcher;
-			Broadphase = broadphasePairCache;
 		}
 
 		public void AddCollisionObject(CollisionObject collisionObject)

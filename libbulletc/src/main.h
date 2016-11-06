@@ -342,6 +342,10 @@
 #define btDiscreteDynamicsWorld void
 #endif
 
+#ifndef BT_DISCRETE_DYNAMICS_WORLD_MT_H
+#define btDiscreteDynamicsWorldMt void
+#endif
+
 #ifndef BT_DISPATCHER_H
 #define btDispatcher void
 #define btDispatcherInfo void

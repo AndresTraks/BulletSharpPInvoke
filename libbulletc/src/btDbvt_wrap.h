@@ -106,7 +106,6 @@ extern "C"
 	EXPORT int btDbvt_getLeaves(btDbvt* obj);
 	EXPORT int btDbvt_getLkhd(btDbvt* obj);
 	EXPORT unsigned int btDbvt_getOpath(btDbvt* obj);
-	EXPORT btAlignedObjectArray_const_btDbvtNodePtr* btDbvt_getRayTestStack(btDbvt* obj);
 	EXPORT btDbvtNode* btDbvt_getRoot(btDbvt* obj);
 	EXPORT btAlignedObjectArray_btDbvt_sStkNN* btDbvt_getStkStack(btDbvt* obj);
 	EXPORT btDbvtNode* btDbvt_insert(btDbvt* obj, const btDbvtVolume* box, void* data);
