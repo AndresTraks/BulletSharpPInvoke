@@ -750,15 +750,15 @@ namespace BulletSharp
 
 		internal CollisionWorld(IntPtr native, Dispatcher dispatcher, BroadphaseInterface broadphase)
 		{
+            _dispatcher = dispatcher;
+            Broadphase = broadphase;
+
             if (native == IntPtr.Zero)
             {
                 return;
             }
 			_native = native;
             _collisionObjectArray = new AlignedCollisionObjectArray(btCollisionWorld_getCollisionObjectArray(native), this);
-
-            _dispatcher = dispatcher;
-            Broadphase = broadphase;
 		}
 
 		public CollisionWorld(Dispatcher dispatcher, BroadphaseInterface broadphasePairCache,
@@ -979,7 +979,11 @@ namespace BulletSharp
                 {
                     _broadphase._worldRefs.Remove(this);
                 }
-				btCollisionWorld_setBroadphase(_native, value._native);
+                // _native can be zero from a constructor argument
+                if (_native != IntPtr.Zero)
+                {
+                    btCollisionWorld_setBroadphase(_native, value._native);
+                }
 				_broadphase = value;
                 value._worldRefs.Add(this);
 			}

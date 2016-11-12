@@ -88,7 +88,7 @@ namespace BulletSharpTest
             */
         }
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             _conf = new DefaultCollisionConfiguration();
@@ -98,7 +98,7 @@ namespace BulletSharpTest
             _world = new DiscreteDynamicsWorld(_dispatcher, _broadphase, _solver, _conf);
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void TearDown()
         {
             _world.Dispose();
