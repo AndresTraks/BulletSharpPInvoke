@@ -292,6 +292,11 @@ btScalar btCollisionWorld_ContactResultCallback_addSingleResult(btCollisionWorld
 		index1);
 }
 
+btScalar btCollisionWorld_ContactResultCallback_getClosestDistanceThreshold(btCollisionWorld_ContactResultCallback* obj)
+{
+	return obj->m_closestDistanceThreshold;
+}
+
 short btCollisionWorld_ContactResultCallback_getCollisionFilterGroup(btCollisionWorld_ContactResultCallback* obj)
 {
 	return obj->m_collisionFilterGroup;
@@ -306,6 +311,12 @@ bool btCollisionWorld_ContactResultCallback_needsCollision(btCollisionWorld_Cont
 	btBroadphaseProxy* proxy0)
 {
 	return obj->needsCollision(proxy0);
+}
+
+void btCollisionWorld_ContactResultCallback_setClosestDistanceThreshold(btCollisionWorld_ContactResultCallback* obj,
+	btScalar value)
+{
+	obj->m_closestDistanceThreshold = value;
 }
 
 void btCollisionWorld_ContactResultCallback_setCollisionFilterGroup(btCollisionWorld_ContactResultCallback* obj,

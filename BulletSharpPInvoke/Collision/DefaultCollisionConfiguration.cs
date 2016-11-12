@@ -101,8 +101,6 @@ namespace BulletSharp
 
 	public class DefaultCollisionConfiguration : CollisionConfiguration
 	{
-        private VoronoiSimplexSolver _simplexSolver;
-
 		internal DefaultCollisionConfiguration(IntPtr native)
 			: base(native)
 		{
@@ -204,24 +202,10 @@ namespace BulletSharp
 				numPerturbationIterations, minimumPointsPerturbationThreshold);
 		}
 
-		public VoronoiSimplexSolver SimplexSolver
-		{
-            get
-            {
-                if (_simplexSolver == null)
-                {
-                    _simplexSolver = new VoronoiSimplexSolver(btDefaultCollisionConfiguration_getSimplexSolver(_native), true);
-                }
-                return _simplexSolver;
-            }
-		}
-
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btDefaultCollisionConfiguration_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btDefaultCollisionConfiguration_new2(IntPtr constructionInfo);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btDefaultCollisionConfiguration_getSimplexSolver(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btDefaultCollisionConfiguration_setConvexConvexMultipointIterations(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

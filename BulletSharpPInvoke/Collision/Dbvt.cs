@@ -958,12 +958,7 @@ namespace BulletSharp
 			get { return btDbvt_getOpath(_native); }
 			set { btDbvt_setOpath(_native, value); }
 		}
-        /*
-		public AlignedObjectArray<DbvtNode> RayTestStack
-		{
-			get { return btDbvt_getRayTestStack(_native); }
-		}
-        */
+
 		public DbvtNode Root
 		{
             get
@@ -1047,8 +1042,6 @@ namespace BulletSharp
 		static extern int btDbvt_getLkhd(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern uint btDbvt_getOpath(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btDbvt_getRayTestStack(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btDbvt_getRoot(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

@@ -128,12 +128,7 @@ namespace BulletSharp
 			get { return btDiscreteDynamicsWorld_getApplySpeculativeContactRestitution(_native); }
 			set { btDiscreteDynamicsWorld_setApplySpeculativeContactRestitution(_native, value); }
 		}
-        /*
-		public CollisionWorld CollisionWorld
-		{
-			get { return btDiscreteDynamicsWorld_getCollisionWorld(_native); }
-		}
-        */
+
 		public bool LatencyMotionStateInterpolation
 		{
 			get { return btDiscreteDynamicsWorld_getLatencyMotionStateInterpolation(_native); }
@@ -167,8 +162,6 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btDiscreteDynamicsWorld_getApplySpeculativeContactRestitution(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btDiscreteDynamicsWorld_getCollisionWorld(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btDiscreteDynamicsWorld_getLatencyMotionStateInterpolation(IntPtr obj);

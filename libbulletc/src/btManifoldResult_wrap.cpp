@@ -43,6 +43,11 @@ btScalar btManifoldResult_calculateCombinedRollingFriction(const btCollisionObje
 	return btManifoldResult::calculateCombinedRollingFriction(body0, body1);
 }
 
+btScalar btManifoldResult_getClosestPointDistanceThreshold(btManifoldResult * obj)
+{
+	return obj->m_closestPointDistanceThreshold;
+}
+
 const btCollisionObject* btManifoldResult_getBody0Internal(btManifoldResult* obj)
 {
 	return obj->getBody0Internal();
@@ -81,6 +86,11 @@ void btManifoldResult_setBody0Wrap(btManifoldResult* obj, const btCollisionObjec
 void btManifoldResult_setBody1Wrap(btManifoldResult* obj, const btCollisionObjectWrapper* obj1Wrap)
 {
 	obj->setBody1Wrap(obj1Wrap);
+}
+
+void btManifoldResult_setClosestPointDistanceThreshold(btManifoldResult * obj, btScalar value)
+{
+	obj->m_closestPointDistanceThreshold = value;
 }
 
 void btManifoldResult_setPersistentManifold(btManifoldResult* obj, btPersistentManifold* manifoldPtr)

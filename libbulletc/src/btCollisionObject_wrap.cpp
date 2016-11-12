@@ -151,6 +151,11 @@ btScalar btCollisionObject_getRollingFriction(btCollisionObject* obj)
 	return obj->getRollingFriction();
 }
 
+int btCollisionObject_getUniqueId(btCollisionObject * obj)
+{
+	return obj->getUniqueId();
+}
+
 int btCollisionObject_getUserIndex(btCollisionObject* obj)
 {
 	return obj->getUserIndex();
@@ -343,6 +348,11 @@ void btCollisionObject_setRestitution(btCollisionObject* obj, btScalar rest)
 void btCollisionObject_setRollingFriction(btCollisionObject* obj, btScalar frict)
 {
 	obj->setRollingFriction(frict);
+}
+
+void btCollisionObject_setUniqueId(btCollisionObject * obj, int id)
+{
+	obj->setUniqueId(id);
 }
 
 void btCollisionObject_setUserIndex(btCollisionObject* obj, int index)

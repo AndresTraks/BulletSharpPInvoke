@@ -79,6 +79,12 @@ namespace BulletSharp
 			set { btManifoldResult_setBody1Wrap(_native, value._native); }
 		}
 
+		public float ClosestPointDistanceThreshold
+		{
+			get { return btManifoldResult_getClosestPointDistanceThreshold(_native); }
+			set { btManifoldResult_setClosestPointDistanceThreshold(_native, value); }
+		}
+
 		public PersistentManifold PersistentManifold
 		{
             get { return new PersistentManifold(btManifoldResult_getPersistentManifold(_native), true); }
@@ -108,6 +114,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btManifoldResult_getBody1Wrap(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btManifoldResult_getClosestPointDistanceThreshold(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btManifoldResult_getPersistentManifold(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btManifoldResult_refreshContactPoints(IntPtr obj);
@@ -115,6 +123,8 @@ namespace BulletSharp
 		static extern void btManifoldResult_setBody0Wrap(IntPtr obj, IntPtr obj0Wrap);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btManifoldResult_setBody1Wrap(IntPtr obj, IntPtr obj1Wrap);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btManifoldResult_setClosestPointDistanceThreshold(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btManifoldResult_setPersistentManifold(IntPtr obj, IntPtr manifoldPtr);
 	}

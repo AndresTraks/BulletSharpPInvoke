@@ -160,6 +160,12 @@ namespace BulletSharp
             return btCollisionWorld_ContactResultCallbackWrapper_needsCollision(_native, proxy0._native);
 		}
 
+		public float ClosestDistanceThreshold
+		{
+			get { return btCollisionWorld_ContactResultCallback_getClosestDistanceThreshold(_native); }
+			set { btCollisionWorld_ContactResultCallback_setClosestDistanceThreshold(_native, value); }
+		}
+
 		public short CollisionFilterGroup
 		{
 			get { return btCollisionWorld_ContactResultCallback_getCollisionFilterGroup(_native); }
@@ -193,9 +199,13 @@ namespace BulletSharp
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btCollisionWorld_ContactResultCallback_getClosestDistanceThreshold(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern short btCollisionWorld_ContactResultCallback_getCollisionFilterGroup(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern short btCollisionWorld_ContactResultCallback_getCollisionFilterMask(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btCollisionWorld_ContactResultCallback_setClosestDistanceThreshold(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionWorld_ContactResultCallback_setCollisionFilterGroup(IntPtr obj, short value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

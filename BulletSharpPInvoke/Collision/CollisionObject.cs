@@ -367,6 +367,12 @@ namespace BulletSharp
 			set { btCollisionObject_setRollingFriction(_native, value); }
 		}
 
+		public int UniqueId
+		{
+			get { return btCollisionObject_getUniqueId(_native); }
+			set { btCollisionObject_setUniqueId(_native, value); }
+		}
+
         public object UserObject { get; set; }
 
 		public int UserIndex
@@ -497,6 +503,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btCollisionObject_getRollingFriction(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern int btCollisionObject_getUniqueId(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btCollisionObject_getUserIndex(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btCollisionObject_getUserIndex2(IntPtr obj);
@@ -578,6 +586,8 @@ namespace BulletSharp
 		static extern void btCollisionObject_setRestitution(IntPtr obj, float rest);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionObject_setRollingFriction(IntPtr obj, float frict);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btCollisionObject_setUniqueId(IntPtr obj, int id);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionObject_setUserIndex(IntPtr obj, int index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

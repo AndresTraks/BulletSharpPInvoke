@@ -9,19 +9,16 @@ namespace BulletSharp
 		public class CreateFunc : CollisionAlgorithmCreateFunc
 		{
 			private ConvexPenetrationDepthSolver _pdSolver;
-			private VoronoiSimplexSolver _simplexSolver;
 
 			internal CreateFunc(IntPtr native)
 				: base(native, true)
 			{
 			}
 
-			public CreateFunc(VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver pdSolver)
-				: base(btConvexConvexAlgorithm_CreateFunc_new(simplexSolver._native,
-					pdSolver._native), false)
+			public CreateFunc(ConvexPenetrationDepthSolver pdSolver)
+				: base(btConvexConvexAlgorithm_CreateFunc_new(pdSolver._native), false)
 			{
 				_pdSolver = pdSolver;
-				_simplexSolver = simplexSolver;
 			}
 
             public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
@@ -52,18 +49,8 @@ namespace BulletSharp
 				}
 			}
 
-			public VoronoiSimplexSolver SimplexSolver
-			{
-				get { return _simplexSolver; }
-				set
-				{
-					btConvexConvexAlgorithm_CreateFunc_setSimplexSolver(_native, value._native);
-					_simplexSolver = value;
-				}
-			}
-
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern IntPtr btConvexConvexAlgorithm_CreateFunc_new(IntPtr simplexSolver, IntPtr pdSolver);
+			static extern IntPtr btConvexConvexAlgorithm_CreateFunc_new(IntPtr pdSolver);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern int btConvexConvexAlgorithm_CreateFunc_getMinimumPointsPerturbationThreshold(IntPtr obj);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -74,8 +61,6 @@ namespace BulletSharp
 			static extern void btConvexConvexAlgorithm_CreateFunc_setNumPerturbationIterations(IntPtr obj, int value);
 			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 			static extern void btConvexConvexAlgorithm_CreateFunc_setPdSolver(IntPtr obj, IntPtr value);
-			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern void btConvexConvexAlgorithm_CreateFunc_setSimplexSolver(IntPtr obj, IntPtr value);
 		}
 
 		internal ConvexConvexAlgorithm(IntPtr native)
