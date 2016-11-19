@@ -367,12 +367,6 @@ namespace BulletSharp
 			set { btCollisionObject_setRollingFriction(_native, value); }
 		}
 
-		public int UniqueId
-		{
-			get { return btCollisionObject_getUniqueId(_native); }
-			set { btCollisionObject_setUniqueId(_native, value); }
-		}
-
         public object UserObject { get; set; }
 
 		public int UserIndex
@@ -385,6 +379,12 @@ namespace BulletSharp
 		{
 			get { return btCollisionObject_getUserIndex2(_native); }
 			set { btCollisionObject_setUserIndex2(_native, value); }
+		}
+
+		public int WorldArrayIndex
+		{
+			get { return btCollisionObject_getWorldArrayIndex(_native); }
+			set { btCollisionObject_setWorldArrayIndex(_native, value); }
 		}
 
 		public Matrix WorldTransform
@@ -503,7 +503,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btCollisionObject_getRollingFriction(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern int btCollisionObject_getUniqueId(IntPtr obj);
+		static extern int btCollisionObject_getWorldArrayIndex(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btCollisionObject_getUserIndex(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -587,7 +587,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionObject_setRollingFriction(IntPtr obj, float frict);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCollisionObject_setUniqueId(IntPtr obj, int id);
+		static extern void btCollisionObject_setWorldArrayIndex(IntPtr obj, int id);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionObject_setUserIndex(IntPtr obj, int index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
