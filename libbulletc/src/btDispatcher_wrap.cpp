@@ -149,15 +149,10 @@ void btDispatcher_dispatchAllCollisionPairs(btDispatcher* obj, btOverlappingPair
 }
 
 btCollisionAlgorithm* btDispatcher_findAlgorithm(btDispatcher* obj, const btCollisionObjectWrapper* body0Wrap,
-	const btCollisionObjectWrapper* body1Wrap)
+	const btCollisionObjectWrapper* body1Wrap, btPersistentManifold* sharedManifold,
+	ebtDispatcherQueryType queryType)
 {
-	return obj->findAlgorithm(body0Wrap, body1Wrap);
-}
-
-btCollisionAlgorithm* btDispatcher_findAlgorithm2(btDispatcher* obj, const btCollisionObjectWrapper* body0Wrap,
-	const btCollisionObjectWrapper* body1Wrap, btPersistentManifold* sharedManifold)
-{
-	return obj->findAlgorithm(body0Wrap, body1Wrap, sharedManifold);
+	return obj->findAlgorithm(body0Wrap, body1Wrap, sharedManifold, queryType);
 }
 
 void btDispatcher_freeCollisionAlgorithm(btDispatcher* obj, void* ptr)

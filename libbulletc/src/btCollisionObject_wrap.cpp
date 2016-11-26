@@ -101,6 +101,11 @@ btScalar btCollisionObject_getContactStiffness(btCollisionObject* obj)
 	return obj->getContactStiffness();
 }
 
+bool btCollisionObject_getCustomDebugColor(btCollisionObject* obj, btVector3* colorRGB)
+{
+	return obj->getCustomDebugColor(*colorRGB);
+}
+
 btScalar btCollisionObject_getDeactivationTime(btCollisionObject* obj)
 {
 	return obj->getDeactivationTime();
@@ -226,6 +231,11 @@ bool btCollisionObject_mergesSimulationIslands(btCollisionObject* obj)
 	return obj->mergesSimulationIslands();
 }
 
+void btCollisionObject_removeCustomDebugColor(btCollisionObject * obj)
+{
+	obj->removeCustomDebugColor();
+}
+
 const char* btCollisionObject_serialize(btCollisionObject* obj, void* dataBuffer,
 	btSerializer* serializer)
 {
@@ -294,6 +304,11 @@ void btCollisionObject_setContactStiffnessAndDamping(btCollisionObject* obj, btS
 	btScalar damping)
 {
 	obj->setContactStiffnessAndDamping(stiffness, damping);
+}
+
+void btCollisionObject_setCustomDebugColor(btCollisionObject* obj, const btVector3* colorRGB)
+{
+	obj->setCustomDebugColor(*colorRGB);
 }
 
 void btCollisionObject_setDeactivationTime(btCollisionObject* obj, btScalar time)

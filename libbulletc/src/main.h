@@ -349,6 +349,7 @@
 #ifndef BT_DISPATCHER_H
 #define btDispatcher void
 #define btDispatcherInfo void
+#define ebtDispatcherQueryType int
 #endif
 
 #ifndef BT_DYNAMIC_BOUNDING_VOLUME_TREE_H

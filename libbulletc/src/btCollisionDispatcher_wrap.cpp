@@ -35,6 +35,12 @@ void btCollisionDispatcher_registerCollisionCreateFunc(btCollisionDispatcher* ob
 	obj->registerCollisionCreateFunc(proxyType0, proxyType1, createFunc);
 }
 
+void btCollisionDispatcher_registerClosestPointsCreateFunc(btCollisionDispatcher * obj,
+	int proxyType0, int proxyType1, btCollisionAlgorithmCreateFunc * createFunc)
+{
+	obj->registerCollisionCreateFunc(proxyType0, proxyType1, createFunc);
+}
+
 void btCollisionDispatcher_setCollisionConfiguration(btCollisionDispatcher* obj,
 	btCollisionConfiguration* config)
 {

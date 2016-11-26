@@ -64,6 +64,18 @@ namespace BulletSharp
 				proxyType1, createFunc._native);
 		}
 
+        public void RegisterClosestPointsCreateFunc(BroadphaseNativeType proxyType0, BroadphaseNativeType proxyType1, CollisionAlgorithmCreateFunc createFunc)
+        {
+            if (_collisionCreateFuncs == null)
+            {
+                _collisionCreateFuncs = new List<CollisionAlgorithmCreateFunc>();
+            }
+            _collisionCreateFuncs.Add(createFunc);
+
+            btCollisionDispatcher_registerClosestPointsCreateFunc(_native, proxyType0,
+                proxyType1, createFunc._native);
+        }
+
 		public CollisionConfiguration CollisionConfiguration
 		{
 			get { return _collisionConfiguration; }
@@ -115,7 +127,9 @@ namespace BulletSharp
 		static extern IntPtr btCollisionDispatcher_getNearCallback(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern void btCollisionDispatcher_registerCollisionCreateFunc(IntPtr obj, BroadphaseNativeType proxyType0, BroadphaseNativeType proxyType1, IntPtr createFunc);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern void btCollisionDispatcher_registerClosestPointsCreateFunc(IntPtr obj, BroadphaseNativeType proxyType0, BroadphaseNativeType proxyType1, IntPtr createFunc);
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionDispatcher_setCollisionConfiguration(IntPtr obj, IntPtr config);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern void btCollisionDispatcher_setDispatcherFlags(IntPtr obj, DispatcherFlags flags);

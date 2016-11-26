@@ -8,6 +8,7 @@ extern "C"
 	EXPORT int btCollisionDispatcher_getDispatcherFlags(btCollisionDispatcher* obj);
 	EXPORT btNearCallback btCollisionDispatcher_getNearCallback(btCollisionDispatcher* obj);
 	EXPORT void btCollisionDispatcher_registerCollisionCreateFunc(btCollisionDispatcher* obj, int proxyType0, int proxyType1, btCollisionAlgorithmCreateFunc* createFunc);
+	EXPORT void btCollisionDispatcher_registerClosestPointsCreateFunc(btCollisionDispatcher* obj, int proxyType0, int proxyType1, btCollisionAlgorithmCreateFunc* createFunc);
 	EXPORT void btCollisionDispatcher_setCollisionConfiguration(btCollisionDispatcher* obj, btCollisionConfiguration* config);
 	EXPORT void btCollisionDispatcher_setDispatcherFlags(btCollisionDispatcher* obj, int flags);
 	EXPORT void btCollisionDispatcher_setNearCallback(btCollisionDispatcher* obj, btNearCallback nearCallback);

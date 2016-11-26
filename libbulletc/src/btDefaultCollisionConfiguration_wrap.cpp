@@ -92,6 +92,12 @@ btDefaultCollisionConfiguration* btDefaultCollisionConfiguration_new2(const btDe
 	return new btDefaultCollisionConfiguration(*constructionInfo);
 }
 
+btCollisionAlgorithmCreateFunc* btDefaultCollisionConfiguration_getClosestPointsAlgorithmCreateFunc(
+	btDefaultCollisionConfiguration* obj, int proxyType0, int proxyType1)
+{
+	return obj->getClosestPointsAlgorithmCreateFunc(proxyType0, proxyType1);
+}
+
 void btDefaultCollisionConfiguration_setConvexConvexMultipointIterations(btDefaultCollisionConfiguration* obj)
 {
 	obj->setConvexConvexMultipointIterations();

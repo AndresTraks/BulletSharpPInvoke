@@ -30,8 +30,7 @@ extern "C"
 	EXPORT void* btDispatcher_allocateCollisionAlgorithm(btDispatcher* obj, int size);
 	EXPORT void btDispatcher_clearManifold(btDispatcher* obj, btPersistentManifold* manifold);
 	EXPORT void btDispatcher_dispatchAllCollisionPairs(btDispatcher* obj, btOverlappingPairCache* pairCache, const btDispatcherInfo* dispatchInfo, btDispatcher* dispatcher);
-	EXPORT btCollisionAlgorithm* btDispatcher_findAlgorithm(btDispatcher* obj, const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap);
-	EXPORT btCollisionAlgorithm* btDispatcher_findAlgorithm2(btDispatcher* obj, const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap, btPersistentManifold* sharedManifold);
+	EXPORT btCollisionAlgorithm* btDispatcher_findAlgorithm(btDispatcher* obj, const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap, btPersistentManifold* sharedManifold, ebtDispatcherQueryType queryType);
 	EXPORT void btDispatcher_freeCollisionAlgorithm(btDispatcher* obj, void* ptr);
 	EXPORT btPersistentManifold** btDispatcher_getInternalManifoldPointer(btDispatcher* obj);
 	EXPORT btPoolAllocator* btDispatcher_getInternalManifoldPool(btDispatcher* obj);

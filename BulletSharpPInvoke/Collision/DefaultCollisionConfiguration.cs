@@ -116,6 +116,56 @@ namespace BulletSharp
 		{
 		}
 
+        public CollisionAlgorithmCreateFunc GetClosestPointsAlgorithmCreateFunc(BroadphaseNativeType proxyType0, BroadphaseNativeType proxyType1)
+        {
+            IntPtr createFunc = btCollisionConfiguration_getClosestPointsAlgorithmCreateFunc(_native, (int)proxyType0, (int)proxyType1);
+            if (proxyType0 == BroadphaseNativeType.BoxShape && proxyType1 == BroadphaseNativeType.BoxShape)
+            {
+                return new BoxBoxCollisionAlgorithm.CreateFunc(createFunc);
+            }
+            if (proxyType0 == BroadphaseNativeType.SphereShape && proxyType1 == BroadphaseNativeType.SphereShape)
+            {
+                return new SphereSphereCollisionAlgorithm.CreateFunc(createFunc);
+            }
+            if (proxyType0 == BroadphaseNativeType.SphereShape && proxyType1 == BroadphaseNativeType.TriangleShape)
+            {
+                return new SphereTriangleCollisionAlgorithm.CreateFunc(createFunc);
+            }
+            if (proxyType0 == BroadphaseNativeType.TriangleShape && proxyType1 == BroadphaseNativeType.SphereShape)
+            {
+                return new SphereTriangleCollisionAlgorithm.CreateFunc(createFunc);
+            }
+            if (proxyType0 == BroadphaseNativeType.StaticPlaneShape && BroadphaseProxy.IsConvex(proxyType1))
+            {
+                return new ConvexPlaneCollisionAlgorithm.CreateFunc(createFunc);
+            }
+            if (proxyType1 == BroadphaseNativeType.StaticPlaneShape && BroadphaseProxy.IsConvex(proxyType0))
+            {
+                return new ConvexPlaneCollisionAlgorithm.CreateFunc(createFunc);
+            }
+            if (BroadphaseProxy.IsConvex(proxyType0) && BroadphaseProxy.IsConvex(proxyType1))
+            {
+                return new ConvexConvexAlgorithm.CreateFunc(createFunc);
+            }
+            if (BroadphaseProxy.IsConvex(proxyType0) && BroadphaseProxy.IsConcave(proxyType1))
+            {
+                return new ConvexConcaveCollisionAlgorithm.CreateFunc(createFunc);
+            }
+            if (BroadphaseProxy.IsConvex(proxyType1) && BroadphaseProxy.IsConcave(proxyType0))
+            {
+                return new ConvexConcaveCollisionAlgorithm.SwappedCreateFunc(createFunc);
+            }
+            if (BroadphaseProxy.IsCompound(proxyType0))
+            {
+                return new CompoundCompoundCollisionAlgorithm.CreateFunc(createFunc);
+            }
+            if (BroadphaseProxy.IsCompound(proxyType1))
+            {
+                return new CompoundCompoundCollisionAlgorithm.SwappedCreateFunc(createFunc);
+            }
+            return new EmptyAlgorithm.CreateFunc(createFunc);
+        }
+
         public override CollisionAlgorithmCreateFunc GetCollisionAlgorithmCreateFunc(BroadphaseNativeType proxyType0, BroadphaseNativeType proxyType1)
         {
             IntPtr createFunc = btCollisionConfiguration_getCollisionAlgorithmCreateFunc(_native, (int)proxyType0, (int)proxyType1);
@@ -206,6 +256,8 @@ namespace BulletSharp
 		static extern IntPtr btDefaultCollisionConfiguration_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btDefaultCollisionConfiguration_new2(IntPtr constructionInfo);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		protected static extern IntPtr btCollisionConfiguration_getClosestPointsAlgorithmCreateFunc(IntPtr obj, int proxyType0, int proxyType1);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btDefaultCollisionConfiguration_setConvexConvexMultipointIterations(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

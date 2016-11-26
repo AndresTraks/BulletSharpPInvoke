@@ -11,6 +11,12 @@ namespace BulletSharp
 		Continuous
 	}
 
+	public enum DispatcherQueryType
+	{
+		ContactPointAlgorithms = 1,
+		ClosestPointAlgorithms = 2
+	}
+
 	public class DispatcherInfo
 	{
 		internal IntPtr _native;
@@ -177,15 +183,10 @@ namespace BulletSharp
 		}
 
 		public CollisionAlgorithm FindAlgorithm(CollisionObjectWrapper body0Wrap,
-			CollisionObjectWrapper body1Wrap)
+			CollisionObjectWrapper body1Wrap, PersistentManifold sharedManifold,
+			DispatcherQueryType queryType)
 		{
-            return new CollisionAlgorithm(btDispatcher_findAlgorithm(_native, body0Wrap._native, body1Wrap._native));
-		}
-
-		public CollisionAlgorithm FindAlgorithm(CollisionObjectWrapper body0Wrap,
-			CollisionObjectWrapper body1Wrap, PersistentManifold sharedManifold)
-		{
-            return new CollisionAlgorithm(btDispatcher_findAlgorithm2(_native, body0Wrap._native, body1Wrap._native, sharedManifold._native));
+            return new CollisionAlgorithm(btDispatcher_findAlgorithm(_native, body0Wrap._native, body1Wrap._native, sharedManifold._native, queryType));
 		}
 
 		public void FreeCollisionAlgorithm(IntPtr ptr)
@@ -269,9 +270,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btDispatcher_dispatchAllCollisionPairs(IntPtr obj, IntPtr pairCache, IntPtr dispatchInfo, IntPtr dispatcher);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btDispatcher_findAlgorithm(IntPtr obj, IntPtr body0Wrap, IntPtr body1Wrap);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btDispatcher_findAlgorithm2(IntPtr obj, IntPtr body0Wrap, IntPtr body1Wrap, IntPtr sharedManifold);
+		static extern IntPtr btDispatcher_findAlgorithm(IntPtr obj, IntPtr body0Wrap, IntPtr body1Wrap, IntPtr sharedManifold, DispatcherQueryType queryType);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btDispatcher_freeCollisionAlgorithm(IntPtr obj, IntPtr ptr);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

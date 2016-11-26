@@ -21,6 +21,7 @@ extern "C"
 	EXPORT btScalar btCollisionObject_getContactDamping(btCollisionObject* obj);
 	EXPORT btScalar btCollisionObject_getContactProcessingThreshold(btCollisionObject* obj);
 	EXPORT btScalar btCollisionObject_getContactStiffness(btCollisionObject* obj);
+	EXPORT bool btCollisionObject_getCustomDebugColor(btCollisionObject* obj, btVector3* colorRGB);
 	EXPORT btScalar btCollisionObject_getDeactivationTime(btCollisionObject* obj);
 	EXPORT btScalar btCollisionObject_getFriction(btCollisionObject* obj);
 	EXPORT btScalar btCollisionObject_getHitFraction(btCollisionObject* obj);
@@ -46,6 +47,7 @@ extern "C"
 	EXPORT bool btCollisionObject_isStaticObject(btCollisionObject* obj);
 	EXPORT bool btCollisionObject_isStaticOrKinematicObject(btCollisionObject* obj);
 	EXPORT bool btCollisionObject_mergesSimulationIslands(btCollisionObject* obj);
+	EXPORT void btCollisionObject_removeCustomDebugColor(btCollisionObject* obj);
 	EXPORT const char* btCollisionObject_serialize(btCollisionObject* obj, void* dataBuffer, btSerializer* serializer);
 	EXPORT void btCollisionObject_serializeSingleObject(btCollisionObject* obj, btSerializer* serializer);
 	EXPORT void btCollisionObject_setActivationState(btCollisionObject* obj, int newState);
@@ -59,6 +61,7 @@ extern "C"
 	EXPORT void btCollisionObject_setCompanionId(btCollisionObject* obj, int id);
 	EXPORT void btCollisionObject_setContactProcessingThreshold(btCollisionObject* obj, btScalar contactProcessingThreshold);
 	EXPORT void btCollisionObject_setContactStiffnessAndDamping(btCollisionObject* obj, btScalar stiffness, btScalar damping);
+	EXPORT void btCollisionObject_setCustomDebugColor(btCollisionObject* obj, const btVector3* colorRGB);
 	EXPORT void btCollisionObject_setDeactivationTime(btCollisionObject* obj, btScalar time);
 	EXPORT void btCollisionObject_setFriction(btCollisionObject* obj, btScalar frict);
 	EXPORT void btCollisionObject_setHitFraction(btCollisionObject* obj, btScalar hitFraction);

@@ -34,7 +34,8 @@ namespace BulletSharp
 		CharacterObject = 16,
 		DisableVisualizeObject = 32,
 		DisableSpuCollisionProcessing = 64,
-		HasContactStiffnessDamping = 128
+		HasContactStiffnessDamping = 128,
+		HasCustomDebugRenderingColor = 256
 	}
 
 	[Flags]
@@ -115,6 +116,11 @@ namespace BulletSharp
 			btCollisionObject_forceActivationState(_native, newState);
 		}
 
+		public bool GetCustomDebugColor(out Vector3 colorRgb)
+		{
+			return btCollisionObject_getCustomDebugColor(_native, out colorRgb);
+		}
+
         public void GetWorldTransform(out Matrix transform)
         {
             btCollisionObject_getWorldTransform(_native, out transform);
@@ -143,6 +149,11 @@ namespace BulletSharp
 		public bool MergesSimulationIslands()
 		{
 			return btCollisionObject_mergesSimulationIslands(_native);
+		}
+
+		public void RemoveCustomDebugColor()
+		{
+			btCollisionObject_removeCustomDebugColor(_native);
 		}
 
 		public string Serialize(IntPtr dataBuffer, Serializer serializer)
@@ -179,6 +190,11 @@ namespace BulletSharp
 		public void SetContactStiffnessAndDamping(float stiffness, float damping)
 		{
 			btCollisionObject_setContactStiffnessAndDamping(_native, stiffness, damping);
+		}
+
+		public void SetCustomDebugColor(Vector3 colorRgb)
+		{
+			btCollisionObject_setCustomDebugColor(_native, ref colorRgb);
 		}
 
 		public void SetIgnoreCollisionCheck(CollisionObject co, bool ignoreCollisionCheck)
@@ -483,6 +499,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btCollisionObject_getContactStiffness(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern bool btCollisionObject_getCustomDebugColor(IntPtr obj, out Vector3 colorRGB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btCollisionObject_getDeactivationTime(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btCollisionObject_getFriction(IntPtr obj);
@@ -541,6 +559,8 @@ namespace BulletSharp
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btCollisionObject_mergesSimulationIslands(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btCollisionObject_removeCustomDebugColor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btCollisionObject_serialize(IntPtr obj, IntPtr dataBuffer, IntPtr serializer);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionObject_serializeSingleObject(IntPtr obj, IntPtr serializer);
@@ -566,6 +586,8 @@ namespace BulletSharp
 		static extern void btCollisionObject_setContactProcessingThreshold(IntPtr obj, float contactProcessingThreshold);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionObject_setContactStiffnessAndDamping(IntPtr obj, float stiffness, float damping);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btCollisionObject_setCustomDebugColor(IntPtr obj, ref Vector3 colorRGB);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionObject_setDeactivationTime(IntPtr obj, float time);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
