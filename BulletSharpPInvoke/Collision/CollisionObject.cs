@@ -498,6 +498,7 @@ namespace BulletSharp
 		static extern float btCollisionObject_getContactProcessingThreshold(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btCollisionObject_getContactStiffness(IntPtr obj);
+		[return: MarshalAs(UnmanagedType.I1)]
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern bool btCollisionObject_getCustomDebugColor(IntPtr obj, out Vector3 colorRGB);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
