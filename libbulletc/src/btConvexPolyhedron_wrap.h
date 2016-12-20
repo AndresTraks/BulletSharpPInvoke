@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btFace* btFace_new();
 	EXPORT btAlignedObjectArray_int* btFace_getIndices(btFace* obj);
 	EXPORT btScalar* btFace_getPlane(btFace* obj);
@@ -25,4 +26,6 @@ extern "C"
 	EXPORT void btConvexPolyhedron_setRadius(btConvexPolyhedron* obj, btScalar value);
 	EXPORT bool btConvexPolyhedron_testContainment(btConvexPolyhedron* obj);
 	EXPORT void btConvexPolyhedron_delete(btConvexPolyhedron* obj);
+#ifdef __cplusplus
 }
+#endif

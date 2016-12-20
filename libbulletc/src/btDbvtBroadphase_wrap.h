@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btDbvtNode* btDbvtProxy_getLeaf(btDbvtProxy* obj);
 	EXPORT btDbvtProxy** btDbvtProxy_getLinks(btDbvtProxy* obj);
 	EXPORT int btDbvtProxy_getStage(btDbvtProxy* obj);
@@ -53,4 +54,6 @@ extern "C"
 	EXPORT void btDbvtBroadphase_setUpdates_done(btDbvtBroadphase* obj, unsigned int value);
 	EXPORT void btDbvtBroadphase_setUpdates_ratio(btDbvtBroadphase* obj, btScalar value);
 	EXPORT void btDbvtBroadphase_setVelocityPrediction(btDbvtBroadphase* obj, btScalar prediction);
+#ifdef __cplusplus
 }
+#endif

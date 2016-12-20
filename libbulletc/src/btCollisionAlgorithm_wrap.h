@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btCollisionAlgorithmConstructionInfo* btCollisionAlgorithmConstructionInfo_new();
 	EXPORT btCollisionAlgorithmConstructionInfo* btCollisionAlgorithmConstructionInfo_new2(btDispatcher* dispatcher, int temp);
 	EXPORT btDispatcher* btCollisionAlgorithmConstructionInfo_getDispatcher1(btCollisionAlgorithmConstructionInfo* obj);
@@ -14,4 +15,6 @@ extern "C"
 	EXPORT void btCollisionAlgorithm_getAllContactManifolds(btCollisionAlgorithm* obj, btAlignedObjectArray_btPersistentManifoldPtr* manifoldArray);
 	EXPORT void btCollisionAlgorithm_processCollision(btCollisionAlgorithm* obj, const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap, const btDispatcherInfo* dispatchInfo, btManifoldResult* resultOut);
 	EXPORT void btCollisionAlgorithm_delete(btCollisionAlgorithm* obj);
+#ifdef __cplusplus
 }
+#endif

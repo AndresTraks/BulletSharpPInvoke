@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT void btSimulationIslandManager_IslandCallback_processIsland(btSimulationIslandManager_IslandCallback* obj, btCollisionObject** bodies, int numBodies, btPersistentManifold** manifolds, int numManifolds, int islandId);
 	EXPORT void btSimulationIslandManager_IslandCallback_delete(btSimulationIslandManager_IslandCallback* obj);
 
@@ -16,4 +17,6 @@ extern "C"
 	EXPORT void btSimulationIslandManager_storeIslandActivationState(btSimulationIslandManager* obj, btCollisionWorld* world);
 	EXPORT void btSimulationIslandManager_updateActivationState(btSimulationIslandManager* obj, btCollisionWorld* colWorld, btDispatcher* dispatcher);
 	EXPORT void btSimulationIslandManager_delete(btSimulationIslandManager* obj);
+#ifdef __cplusplus
 }
+#endif

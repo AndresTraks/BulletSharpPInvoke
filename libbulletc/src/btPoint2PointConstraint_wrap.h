@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btConstraintSetting* btConstraintSetting_new();
 	EXPORT btScalar btConstraintSetting_getDamping(btConstraintSetting* obj);
 	EXPORT btScalar btConstraintSetting_getImpulseClamp(btConstraintSetting* obj);
@@ -24,4 +25,6 @@ extern "C"
 	EXPORT void btPoint2PointConstraint_setPivotB(btPoint2PointConstraint* obj, const btVector3* pivotB);
 	EXPORT void btPoint2PointConstraint_setUseSolveConstraintObsolete(btPoint2PointConstraint* obj, bool value);
 	EXPORT void btPoint2PointConstraint_updateRHS(btPoint2PointConstraint* obj, btScalar timeStep);
+#ifdef __cplusplus
 }
+#endif

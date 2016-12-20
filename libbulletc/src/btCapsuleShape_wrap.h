@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btCapsuleShape* btCapsuleShape_new(btScalar radius, btScalar height);
 	EXPORT void btCapsuleShape_deSerializeFloat(btCapsuleShape* obj, btCapsuleShapeData* dataBuffer);
 	EXPORT btScalar btCapsuleShape_getHalfHeight(btCapsuleShape* obj);
@@ -11,4 +12,6 @@ extern "C"
 	EXPORT btCapsuleShapeX* btCapsuleShapeX_new(btScalar radius, btScalar height);
 
 	EXPORT btCapsuleShapeZ* btCapsuleShapeZ_new(btScalar radius, btScalar height);
+#ifdef __cplusplus
 }
+#endif

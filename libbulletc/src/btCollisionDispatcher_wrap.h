@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btCollisionDispatcher* btCollisionDispatcher_new(btCollisionConfiguration* collisionConfiguration);
 	EXPORT void btCollisionDispatcher_defaultNearCallback(btBroadphasePair* collisionPair, btCollisionDispatcher* dispatcher, const btDispatcherInfo* dispatchInfo);
 	EXPORT btCollisionConfiguration* btCollisionDispatcher_getCollisionConfiguration(btCollisionDispatcher* obj);
@@ -12,4 +13,6 @@ extern "C"
 	EXPORT void btCollisionDispatcher_setCollisionConfiguration(btCollisionDispatcher* obj, btCollisionConfiguration* config);
 	EXPORT void btCollisionDispatcher_setDispatcherFlags(btCollisionDispatcher* obj, int flags);
 	EXPORT void btCollisionDispatcher_setNearCallback(btCollisionDispatcher* obj, btNearCallback nearCallback);
+#ifdef __cplusplus
 }
+#endif

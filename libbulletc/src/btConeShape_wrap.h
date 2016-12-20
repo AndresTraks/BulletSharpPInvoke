@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btConeShape* btConeShape_new(btScalar radius, btScalar height);
 	EXPORT int btConeShape_getConeUpIndex(btConeShape* obj);
 	EXPORT btScalar btConeShape_getHeight(btConeShape* obj);
@@ -13,4 +14,6 @@ extern "C"
 	EXPORT btConeShapeX* btConeShapeX_new(btScalar radius, btScalar height);
 
 	EXPORT btConeShapeZ* btConeShapeZ_new(btScalar radius, btScalar height);
+#ifdef __cplusplus
 }
+#endif

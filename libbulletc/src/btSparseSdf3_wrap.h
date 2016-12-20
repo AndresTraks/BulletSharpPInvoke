@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btSparseSdf_3* btSparseSdf_new();
 	EXPORT void btSparseSdf3_GarbageCollect(btSparseSdf_3* obj, int lifetime);
 	EXPORT void btSparseSdf3_GarbageCollect2(btSparseSdf_3* obj);
@@ -11,4 +12,6 @@ extern "C"
 	EXPORT int btSparseSdf3_RemoveReferences(btSparseSdf_3* obj, btCollisionShape* pcs);
 	EXPORT void btSparseSdf3_Reset(btSparseSdf_3* obj);
 	EXPORT void btSparseSdf_delete(btSparseSdf_3* obj);
+#ifdef __cplusplus
 }
+#endif

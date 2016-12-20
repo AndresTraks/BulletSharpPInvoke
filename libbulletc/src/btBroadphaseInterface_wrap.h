@@ -30,8 +30,9 @@ public:
 };
 #endif
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btBroadphaseAabbCallbackWrapper* btBroadphaseAabbCallbackWrapper_new(p_btBroadphaseAabbCallback_process processCallback);
 
 	EXPORT bool btBroadphaseAabbCallback_process(btBroadphaseAabbCallback* obj, const btBroadphaseProxy* proxy);
@@ -59,4 +60,6 @@ extern "C"
 	EXPORT void btBroadphaseInterface_resetPool(btBroadphaseInterface* obj, btDispatcher* dispatcher);
 	EXPORT void btBroadphaseInterface_setAabb(btBroadphaseInterface* obj, btBroadphaseProxy* proxy, const btVector3* aabbMin, const btVector3* aabbMax, btDispatcher* dispatcher);
 	EXPORT void btBroadphaseInterface_delete(btBroadphaseInterface* obj);
+#ifdef __cplusplus
 }
+#endif

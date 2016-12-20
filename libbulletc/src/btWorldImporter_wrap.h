@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btWorldImporter* btWorldImporter_new(btDynamicsWorld* world);
 	EXPORT btCollisionShape* btWorldImporter_createBoxShape(btWorldImporter* obj, const btVector3* halfExtents);
 	EXPORT btBvhTriangleMeshShape* btWorldImporter_createBvhTriangleMeshShape(btWorldImporter* obj, btStridingMeshInterface* trimesh, btOptimizedBvh* bvh);
@@ -63,4 +64,6 @@ extern "C"
 	EXPORT void btWorldImporter_setDynamicsWorldInfo(btWorldImporter* obj, const btVector3* gravity, const btContactSolverInfo* solverInfo);
 	EXPORT void btWorldImporter_setVerboseMode(btWorldImporter* obj, int verboseMode);
 	EXPORT void btWorldImporter_delete(btWorldImporter* obj);
+#ifdef __cplusplus
 }
+#endif

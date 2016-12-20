@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT bParse_btBulletFile* bParse_btBulletFile_new();
 	EXPORT bParse_btBulletFile* bParse_btBulletFile_new2(const char* fileName);
 	EXPORT bParse_btBulletFile* bParse_btBulletFile_new3(char* memoryBuffer, int len);
@@ -23,4 +24,6 @@ extern "C"
 	EXPORT int bParse_btBulletFile_write2(bParse_btBulletFile* obj, const char* fileName, bool fixupPointers);
 	EXPORT void bParse_btBulletFile_writeDNA(bParse_btBulletFile* obj, FILE* fp);
 	EXPORT void bParse_btBulletFile_delete(bParse_btBulletFile* obj);
+#ifdef __cplusplus
 }
+#endif

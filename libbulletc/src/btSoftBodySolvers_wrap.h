@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT bool btSoftBodySolver_checkInitialized(btSoftBodySolver* obj);
 	EXPORT void btSoftBodySolver_copyBackToSoftBodies(btSoftBodySolver* obj);
 	EXPORT void btSoftBodySolver_copyBackToSoftBodies2(btSoftBodySolver* obj, bool bMove);
@@ -22,4 +23,6 @@ extern "C"
 
 	//EXPORT void btSoftBodySolverOutput_copySoftBodyToVertexBuffer(btSoftBodySolverOutput* obj, const btSoftBody* softBody, btVertexBufferDescriptor* vertexBuffer);
 	EXPORT void btSoftBodySolverOutput_delete(btSoftBodySolverOutput* obj);
+#ifdef __cplusplus
 }
+#endif

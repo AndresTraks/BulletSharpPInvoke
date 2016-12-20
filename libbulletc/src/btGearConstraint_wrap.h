@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btGearConstraint* btGearConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btVector3* axisInA, const btVector3* axisInB);
 	EXPORT btGearConstraint* btGearConstraint_new2(btRigidBody* rbA, btRigidBody* rbB, const btVector3* axisInA, const btVector3* axisInB, btScalar ratio);
 	EXPORT void btGearConstraint_getAxisA(btGearConstraint* obj, btVector3* value);
@@ -10,4 +11,6 @@ extern "C"
 	EXPORT void btGearConstraint_setAxisA(btGearConstraint* obj, btVector3* axisA);
 	EXPORT void btGearConstraint_setAxisB(btGearConstraint* obj, btVector3* axisB);
 	EXPORT void btGearConstraint_setRatio(btGearConstraint* obj, btScalar ratio);
+#ifdef __cplusplus
 }
+#endif

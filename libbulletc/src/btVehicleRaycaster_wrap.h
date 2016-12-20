@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btVehicleRaycaster_btVehicleRaycasterResult* btVehicleRaycaster_btVehicleRaycasterResult_new();
 	EXPORT btScalar btVehicleRaycaster_btVehicleRaycasterResult_getDistFraction(btVehicleRaycaster_btVehicleRaycasterResult* obj);
 	EXPORT void btVehicleRaycaster_btVehicleRaycasterResult_getHitNormalInWorld(btVehicleRaycaster_btVehicleRaycasterResult* obj, btVector3* value);
@@ -13,4 +14,6 @@ extern "C"
 
 	EXPORT void* btVehicleRaycaster_castRay(btVehicleRaycaster* obj, const btVector3* from, const btVector3* to, btVehicleRaycaster_btVehicleRaycasterResult* result);
 	EXPORT void btVehicleRaycaster_delete(btVehicleRaycaster* obj);
+#ifdef __cplusplus
 }
+#endif

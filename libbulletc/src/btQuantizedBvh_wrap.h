@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btQuantizedBvhNode* btQuantizedBvhNode_new();
 	EXPORT int btQuantizedBvhNode_getEscapeIndex(btQuantizedBvhNode* obj);
 	EXPORT int btQuantizedBvhNode_getEscapeIndexOrTriangleIndex(btQuantizedBvhNode* obj);
@@ -53,4 +54,6 @@ extern "C"
 	EXPORT void btQuantizedBvh_setTraversalMode(btQuantizedBvh* obj, btQuantizedBvh_btTraversalMode traversalMode);
 	EXPORT void btQuantizedBvh_unQuantize(btQuantizedBvh* obj, const unsigned short* vecIn, btVector3* value);
 	EXPORT void btQuantizedBvh_delete(btQuantizedBvh* obj);
+#ifdef __cplusplus
 }
+#endif

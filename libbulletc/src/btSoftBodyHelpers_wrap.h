@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 #ifndef BULLETC_DISABLE_SOFTBODY_HELPERS
 	EXPORT float btSoftBodyHelpers_CalculateUV(int resx, int resy, int ix, int iy, int id);
 	EXPORT btSoftBody* btSoftBodyHelpers_CreateEllipsoid(btSoftBodyWorldInfo* worldInfo, const btVector3* center, const btVector3* radius, int res);
@@ -35,4 +36,6 @@ extern "C"
 #ifndef BULLETC_DISABLE_SOFTBODY_HELPERS
 	EXPORT void btSoftBodyHelpers_ReoptimizeLinkOrder(btSoftBody* psb);
 #endif
+#ifdef __cplusplus
 }
+#endif

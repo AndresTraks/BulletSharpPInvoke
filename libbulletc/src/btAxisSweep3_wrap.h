@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btAxisSweep3* btAxisSweep3_new(const btVector3* worldAabbMin, const btVector3* worldAabbMax);
 	EXPORT btAxisSweep3* btAxisSweep3_new2(const btVector3* worldAabbMin, const btVector3* worldAabbMax, unsigned short maxHandles);
 	EXPORT btAxisSweep3* btAxisSweep3_new3(const btVector3* worldAabbMin, const btVector3* worldAabbMax, unsigned short maxHandles, btOverlappingPairCache* pairCache);
@@ -33,4 +34,6 @@ extern "C"
 	EXPORT bool bt32BitAxisSweep3_testAabbOverlap(bt32BitAxisSweep3* obj, btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1);
 	EXPORT void bt32BitAxisSweep3_unQuantize(bt32BitAxisSweep3* obj, btBroadphaseProxy* proxy, btVector3* aabbMin, btVector3* aabbMax);
 	EXPORT void bt32BitAxisSweep3_updateHandle(bt32BitAxisSweep3* obj, unsigned int handle, const btVector3* aabbMin, const btVector3* aabbMax, btDispatcher* dispatcher);
+#ifdef __cplusplus
 }
+#endif

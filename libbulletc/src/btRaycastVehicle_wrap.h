@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btRaycastVehicle_btVehicleTuning* btRaycastVehicle_btVehicleTuning_new();
 	EXPORT btScalar btRaycastVehicle_btVehicleTuning_getFrictionSlip(btRaycastVehicle_btVehicleTuning* obj);
 	EXPORT btScalar btRaycastVehicle_btVehicleTuning_getMaxSuspensionForce(btRaycastVehicle_btVehicleTuning* obj);
@@ -51,4 +52,6 @@ extern "C"
 	EXPORT void btRaycastVehicle_updateWheelTransformsWS2(btRaycastVehicle* obj, btWheelInfo* wheel, bool interpolatedTransform);
 
 	EXPORT btDefaultVehicleRaycaster* btDefaultVehicleRaycaster_new(btDynamicsWorld* world);
+#ifdef __cplusplus
 }
+#endif

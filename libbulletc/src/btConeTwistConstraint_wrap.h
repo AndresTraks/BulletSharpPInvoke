@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btConeTwistConstraint* btConeTwistConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btTransform* rbAFrame, const btTransform* rbBFrame);
 	EXPORT btConeTwistConstraint* btConeTwistConstraint_new2(btRigidBody* rbA, const btTransform* rbAFrame);
 	EXPORT void btConeTwistConstraint_calcAngleInfo(btConeTwistConstraint* obj);
@@ -48,4 +49,6 @@ extern "C"
 	EXPORT void btConeTwistConstraint_setMotorTarget(btConeTwistConstraint* obj, const btQuaternion* q);
 	EXPORT void btConeTwistConstraint_setMotorTargetInConstraintSpace(btConeTwistConstraint* obj, const btQuaternion* q);
 	EXPORT void btConeTwistConstraint_updateRHS(btConeTwistConstraint* obj, btScalar timeStep);
+#ifdef __cplusplus
 }
+#endif

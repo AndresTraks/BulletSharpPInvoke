@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btGjkPairDetector* btGjkPairDetector_new(const btConvexShape* objectA, const btConvexShape* objectB, btVoronoiSimplexSolver* simplexSolver, btConvexPenetrationDepthSolver* penetrationDepthSolver);
 	EXPORT btGjkPairDetector* btGjkPairDetector_new2(const btConvexShape* objectA, const btConvexShape* objectB, int shapeTypeA, int shapeTypeB, btScalar marginA, btScalar marginB, btVoronoiSimplexSolver* simplexSolver, btConvexPenetrationDepthSolver* penetrationDepthSolver);
 	EXPORT void btGjkPairDetector_getCachedSeparatingAxis(btGjkPairDetector* obj, btVector3* value);
@@ -22,4 +23,6 @@ extern "C"
 	EXPORT void btGjkPairDetector_setMinkowskiA(btGjkPairDetector* obj, const btConvexShape* minkA);
 	EXPORT void btGjkPairDetector_setMinkowskiB(btGjkPairDetector* obj, const btConvexShape* minkB);
 	EXPORT void btGjkPairDetector_setPenetrationDepthSolver(btGjkPairDetector* obj, btConvexPenetrationDepthSolver* penetrationDepthSolver);
+#ifdef __cplusplus
 }
+#endif

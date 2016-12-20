@@ -23,12 +23,15 @@ public:
 };
 #endif
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btActionInterfaceWrapper* btActionInterfaceWrapper_new(p_btActionInterface_debugDraw debugDrawCallback,
 		p_btActionInterface_updateAction updateActionCallback);
 
 	EXPORT void btActionInterface_debugDraw(btActionInterface* obj, btIDebugDraw* debugDrawer);
 	EXPORT void btActionInterface_updateAction(btActionInterface* obj, btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
 	EXPORT void btActionInterface_delete(btActionInterface* obj);
+#ifdef __cplusplus
 }
+#endif

@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT BT_QUANTIZED_BVH_NODE* BT_QUANTIZED_BVH_NODE_new();
 	EXPORT int BT_QUANTIZED_BVH_NODE_getDataIndex(BT_QUANTIZED_BVH_NODE* obj);
 	EXPORT int BT_QUANTIZED_BVH_NODE_getEscapeIndex(BT_QUANTIZED_BVH_NODE* obj);
@@ -60,4 +61,6 @@ extern "C"
 	EXPORT void btGImpactQuantizedBvh_setPrimitiveManager(btGImpactQuantizedBvh* obj, btPrimitiveManagerBase* primitive_manager);
 	EXPORT void btGImpactQuantizedBvh_update(btGImpactQuantizedBvh* obj);
 	EXPORT void btGImpactQuantizedBvh_delete(btGImpactQuantizedBvh* obj);
+#ifdef __cplusplus
 }
+#endif

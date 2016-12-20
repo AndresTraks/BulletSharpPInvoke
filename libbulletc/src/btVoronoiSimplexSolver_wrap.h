@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT bool btUsageBitfield_getUnused1(btUsageBitfield* obj);
 	EXPORT bool btUsageBitfield_getUnused2(btUsageBitfield* obj);
 	EXPORT bool btUsageBitfield_getUnused3(btUsageBitfield* obj);
@@ -77,4 +78,6 @@ extern "C"
 	EXPORT void btVoronoiSimplexSolver_setNumVertices(btVoronoiSimplexSolver* obj, int value);
 	EXPORT bool btVoronoiSimplexSolver_updateClosestVectorAndPoints(btVoronoiSimplexSolver* obj);
 	EXPORT void btVoronoiSimplexSolver_delete(btVoronoiSimplexSolver* obj);
+#ifdef __cplusplus
 }
+#endif

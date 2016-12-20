@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btWheelInfoConstructionInfo* btWheelInfoConstructionInfo_new();
 	EXPORT bool btWheelInfoConstructionInfo_getBIsFrontWheel(btWheelInfoConstructionInfo* obj);
 	EXPORT void btWheelInfoConstructionInfo_getChassisConnectionCS(btWheelInfoConstructionInfo* obj, btVector3* value);
@@ -101,4 +102,6 @@ extern "C"
 	EXPORT void btWheelInfo_setWorldTransform(btWheelInfo* obj, const btTransform* value);
 	EXPORT void btWheelInfo_updateWheel(btWheelInfo* obj, const btRigidBody* chassis, btWheelInfo_RaycastInfo* raycastInfo);
 	EXPORT void btWheelInfo_delete(btWheelInfo* obj);
+#ifdef __cplusplus
 }
+#endif

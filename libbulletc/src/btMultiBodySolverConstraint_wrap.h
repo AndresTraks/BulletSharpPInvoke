@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btMultiBodySolverConstraint* btMultiBodySolverConstraint_new();
 	EXPORT void btMultiBodySolverConstraint_getAngularComponentA(btMultiBodySolverConstraint* obj, btVector3* value);
 	EXPORT void btMultiBodySolverConstraint_getAngularComponentB(btMultiBodySolverConstraint* obj, btVector3* value);
@@ -66,4 +67,6 @@ extern "C"
 	EXPORT void btMultiBodySolverConstraint_setUnusedPadding4(btMultiBodySolverConstraint* obj, btScalar value);
 	EXPORT void btMultiBodySolverConstraint_setUpperLimit(btMultiBodySolverConstraint* obj, btScalar value);
 	EXPORT void btMultiBodySolverConstraint_delete(btMultiBodySolverConstraint* obj);
+#ifdef __cplusplus
 }
+#endif

@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btTriangleMesh* btTriangleMesh_new();
 	EXPORT btTriangleMesh* btTriangleMesh_new2(bool use32bitIndices);
 	EXPORT btTriangleMesh* btTriangleMesh_new3(bool use32bitIndices, bool use4componentVertices);
@@ -15,4 +16,6 @@ extern "C"
 	EXPORT bool btTriangleMesh_getUse4componentVertices(btTriangleMesh* obj);
 	EXPORT btScalar btTriangleMesh_getWeldingThreshold(btTriangleMesh* obj);
 	EXPORT void btTriangleMesh_setWeldingThreshold(btTriangleMesh* obj, btScalar value);
+#ifdef __cplusplus
 }
+#endif

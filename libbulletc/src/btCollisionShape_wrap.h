@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT void btCollisionShape_calculateLocalInertia(btCollisionShape* obj, btScalar mass, btVector3* inertia);
 	EXPORT int btCollisionShape_calculateSerializeBufferSize(btCollisionShape* obj);
 	EXPORT void btCollisionShape_calculateTemporalAabb(btCollisionShape* obj, const btTransform* curTrans, const btVector3* linvel, const btVector3* angvel, btScalar timeStep, btVector3* temporalAabbMin, btVector3* temporalAabbMax);
@@ -31,4 +32,6 @@ extern "C"
 	EXPORT void btCollisionShape_setUserIndex(btCollisionShape* obj, int index);
 	EXPORT void btCollisionShape_setUserPointer(btCollisionShape* obj, void* userPtr);
 	EXPORT void btCollisionShape_delete(btCollisionShape* obj);
+#ifdef __cplusplus
 }
+#endif

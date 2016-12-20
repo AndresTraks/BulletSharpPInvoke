@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btShapeHull* btShapeHull_new(const btConvexShape* shape);
 	EXPORT bool btShapeHull_buildHull(btShapeHull* obj, btScalar margin);
 	EXPORT const unsigned int* btShapeHull_getIndexPointer(btShapeHull* obj);
@@ -10,4 +11,6 @@ extern "C"
 	EXPORT int btShapeHull_numTriangles(btShapeHull* obj);
 	EXPORT int btShapeHull_numVertices(btShapeHull* obj);
 	EXPORT void btShapeHull_delete(btShapeHull* obj);
+#ifdef __cplusplus
 }
+#endif

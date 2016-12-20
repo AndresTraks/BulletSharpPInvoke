@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btManifoldResult* btManifoldResult_new();
 	EXPORT btManifoldResult* btManifoldResult_new2(const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap);
 	EXPORT btScalar btManifoldResult_calculateCombinedContactDamping(const btCollisionObject* body0, const btCollisionObject* body1);
@@ -20,4 +21,6 @@ extern "C"
 	EXPORT void btManifoldResult_setBody1Wrap(btManifoldResult* obj, const btCollisionObjectWrapper* obj1Wrap);
 	EXPORT void btManifoldResult_setClosestPointDistanceThreshold(btManifoldResult* obj, btScalar value);
 	EXPORT void btManifoldResult_setPersistentManifold(btManifoldResult* obj, btPersistentManifold* manifoldPtr);
+#ifdef __cplusplus
 }
+#endif

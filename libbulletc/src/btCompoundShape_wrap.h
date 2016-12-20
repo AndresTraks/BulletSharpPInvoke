@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btScalar btCompoundShapeChild_getChildMargin(btCompoundShapeChild* obj);
 	EXPORT btCollisionShape* btCompoundShapeChild_getChildShape(btCompoundShapeChild* obj);
 	EXPORT int btCompoundShapeChild_getChildShapeType(btCompoundShapeChild* obj);
@@ -31,4 +32,6 @@ extern "C"
 	EXPORT void btCompoundShape_removeChildShapeByIndex(btCompoundShape* obj, int childShapeindex);
 	EXPORT void btCompoundShape_updateChildTransform(btCompoundShape* obj, int childIndex, const btTransform* newChildTransform);
 	EXPORT void btCompoundShape_updateChildTransform2(btCompoundShape* obj, int childIndex, const btTransform* newChildTransform, bool shouldRecalculateLocalAabb);
+#ifdef __cplusplus
 }
+#endif

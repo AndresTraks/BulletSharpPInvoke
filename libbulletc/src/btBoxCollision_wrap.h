@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btAABB* btAABB_new();
 	EXPORT btAABB* btAABB_new2(const btVector3* V1, const btVector3* V2, const btVector3* V3);
 	EXPORT btAABB* btAABB_new3(const btVector3* V1, const btVector3* V2, const btVector3* V3, btScalar margin);
@@ -29,4 +30,6 @@ extern "C"
 	EXPORT void btAABB_setMax(btAABB* obj, const btVector3* value);
 	EXPORT void btAABB_setMin(btAABB* obj, const btVector3* value);
 	EXPORT void btAABB_delete(btAABB* obj);
+#ifdef __cplusplus
 }
+#endif

@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btConvexPointCloudShape* btConvexPointCloudShape_new();
 	EXPORT btConvexPointCloudShape* btConvexPointCloudShape_new2(btVector3* points, int numPoints, const btVector3* localScaling);
 	EXPORT btConvexPointCloudShape* btConvexPointCloudShape_new3(btVector3* points, int numPoints, const btVector3* localScaling, bool computeAabb);
@@ -11,4 +12,6 @@ extern "C"
 	EXPORT void btConvexPointCloudShape_setPoints(btConvexPointCloudShape* obj, btVector3* points, int numPoints);
 	EXPORT void btConvexPointCloudShape_setPoints2(btConvexPointCloudShape* obj, btVector3* points, int numPoints, bool computeAabb);
 	EXPORT void btConvexPointCloudShape_setPoints3(btConvexPointCloudShape* obj, btVector3* points, int numPoints, bool computeAabb, const btVector3* localScaling);
+#ifdef __cplusplus
 }
+#endif

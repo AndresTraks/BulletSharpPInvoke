@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT bool btCharacterControllerInterface_canJump(btCharacterControllerInterface* obj);
 	EXPORT void btCharacterControllerInterface_jump(btCharacterControllerInterface* obj);
 	EXPORT void btCharacterControllerInterface_jump2(btCharacterControllerInterface* obj, const btVector3* dir);
@@ -13,4 +14,6 @@ extern "C"
 	EXPORT void btCharacterControllerInterface_setWalkDirection(btCharacterControllerInterface* obj, const btVector3* walkDirection);
 	EXPORT void btCharacterControllerInterface_setVelocityForTimeInterval(btCharacterControllerInterface* obj, const btVector3* velocity, btScalar timeInterval);
 	EXPORT void btCharacterControllerInterface_warp(btCharacterControllerInterface* obj, const btVector3* origin);
+#ifdef __cplusplus
 }
+#endif

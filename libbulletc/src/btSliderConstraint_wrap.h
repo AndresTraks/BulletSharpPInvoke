@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btSliderConstraint* btSliderConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btTransform* frameInA, const btTransform* frameInB, bool useLinearReferenceFrameA);
 	EXPORT btSliderConstraint* btSliderConstraint_new2(btRigidBody* rbB, const btTransform* frameInB, bool useLinearReferenceFrameA);
 	EXPORT void btSliderConstraint_calculateTransforms(btSliderConstraint* obj, const btTransform* transA, const btTransform* transB);
@@ -82,4 +83,6 @@ extern "C"
 	EXPORT void btSliderConstraint_setUseFrameOffset(btSliderConstraint* obj, bool frameOffsetOnOff);
 	EXPORT void btSliderConstraint_testAngLimits(btSliderConstraint* obj);
 	EXPORT void btSliderConstraint_testLinLimits(btSliderConstraint* obj);
+#ifdef __cplusplus
 }
+#endif

@@ -23,12 +23,15 @@ public:
 };
 #endif
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btMotionStateWrapper* btMotionStateWrapper_new(p_btMotionState_getWorldTransform getWorldTransformCallback,
 		p_btMotionState_setWorldTransform setWorldTransformCallback);
 
 	EXPORT void btMotionState_getWorldTransform(btMotionState* obj, btTransform* worldTrans);
 	EXPORT void btMotionState_setWorldTransform(btMotionState* obj, const btTransform* worldTrans);
 	EXPORT void btMotionState_delete(btMotionState* obj);
+#ifdef __cplusplus
 }
+#endif

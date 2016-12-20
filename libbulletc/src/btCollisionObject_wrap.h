@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btCollisionObject* btCollisionObject_new();
 	EXPORT void btCollisionObject_activate(btCollisionObject* obj);
 	EXPORT void btCollisionObject_activate2(btCollisionObject* obj, bool forceActivation);
@@ -78,4 +79,6 @@ extern "C"
 	EXPORT void btCollisionObject_setUserPointer(btCollisionObject* obj, void* userPointer);
 	EXPORT void btCollisionObject_setWorldTransform(btCollisionObject* obj, const btTransform* worldTrans);
 	EXPORT void btCollisionObject_delete(btCollisionObject* obj);
+#ifdef __cplusplus
 }
+#endif

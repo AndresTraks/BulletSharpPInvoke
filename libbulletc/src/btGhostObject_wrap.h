@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btGhostObject* btGhostObject_new();
 	EXPORT void btGhostObject_addOverlappingObjectInternal(btGhostObject* obj, btBroadphaseProxy* otherProxy);
 	EXPORT void btGhostObject_addOverlappingObjectInternal2(btGhostObject* obj, btBroadphaseProxy* otherProxy, btBroadphaseProxy* thisProxy);
@@ -19,4 +20,6 @@ extern "C"
 	EXPORT btHashedOverlappingPairCache* btPairCachingGhostObject_getOverlappingPairCache(btPairCachingGhostObject* obj);
 
 	EXPORT btGhostPairCallback* btGhostPairCallback_new();
+#ifdef __cplusplus
 }
+#endif

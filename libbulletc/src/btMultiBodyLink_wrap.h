@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btSpatialMotionVector* btMultibodyLink_getAbsFrameLocVelocity(btMultibodyLink* obj);
 	EXPORT btSpatialMotionVector* btMultibodyLink_getAbsFrameTotVelocity(btMultibodyLink* obj);
 	EXPORT void btMultibodyLink_getAppliedConstraintForce(btMultibodyLink* obj, btVector3* value);
@@ -67,4 +68,6 @@ extern "C"
 	EXPORT void btMultibodyLink_setUserPtr(btMultibodyLink* obj, const void* value);
 	EXPORT void btMultibodyLink_updateCacheMultiDof(btMultibodyLink* obj);
 	EXPORT void btMultibodyLink_updateCacheMultiDof2(btMultibodyLink* obj, btScalar* pq);
+#ifdef __cplusplus
 }
+#endif

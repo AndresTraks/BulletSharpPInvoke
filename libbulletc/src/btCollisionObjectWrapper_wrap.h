@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT const btCollisionObject* btCollisionObjectWrapper_getCollisionObject(btCollisionObjectWrapper* obj);
 	EXPORT const btCollisionShape* btCollisionObjectWrapper_getCollisionShape(btCollisionObjectWrapper* obj);
 	EXPORT int btCollisionObjectWrapper_getIndex(btCollisionObjectWrapper* obj);
@@ -13,4 +14,6 @@ extern "C"
 	EXPORT void btCollisionObjectWrapper_setParent(btCollisionObjectWrapper* obj, const btCollisionObjectWrapper* value);
 	EXPORT void btCollisionObjectWrapper_setPartId(btCollisionObjectWrapper* obj, int value);
 	EXPORT void btCollisionObjectWrapper_setShape(btCollisionObjectWrapper* obj, const btCollisionShape* value);
+#ifdef __cplusplus
 }
+#endif

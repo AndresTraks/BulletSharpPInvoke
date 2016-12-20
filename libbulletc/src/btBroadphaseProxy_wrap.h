@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT void btBroadphaseProxy_getAabbMax(btBroadphaseProxy* obj, btVector3* value);
 	EXPORT void btBroadphaseProxy_getAabbMin(btBroadphaseProxy* obj, btVector3* value);
 	EXPORT void* btBroadphaseProxy_getClientObject(btBroadphaseProxy* obj);
@@ -37,4 +38,6 @@ extern "C"
 	EXPORT void btBroadphasePair_setPProxy0(btBroadphasePair* obj, btBroadphaseProxy* value);
 	EXPORT void btBroadphasePair_setPProxy1(btBroadphasePair* obj, btBroadphaseProxy* value);
 	EXPORT void btBroadphasePair_delete(btBroadphasePair* obj);
+#ifdef __cplusplus
 }
+#endif

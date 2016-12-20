@@ -29,6 +29,6 @@ ENDIF(MSVC)
 
 INCLUDE_DIRECTORIES("${${BULLETC_LIB}_SOURCE_DIR}/src")
 
-ADD_EXECUTABLE(bulletctest bulletctest.cpp hacd_data.h)
+ADD_EXECUTABLE(bulletctest bulletctest.c hacd_data.h)
 
 TARGET_LINK_LIBRARIES(bulletctest ${BULLETC_LIB})

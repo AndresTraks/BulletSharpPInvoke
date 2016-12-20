@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btCompoundShapeChild* btCompoundShapeChild_array_at(btCompoundShapeChild* a, int n);
 	EXPORT btSoftBody_Node* btSoftBodyNodePtrArray_at(btSoftBodyNodePtrArray* obj, int n);
 	EXPORT void btSoftBodyNodePtrArray_set(btSoftBodyNodePtrArray* obj, btSoftBody_Node* value, int index);
@@ -14,4 +15,6 @@ extern "C"
 	EXPORT void btAlignedObjectArray_btVector3_set(btAlignedObjectArray_btVector3* obj, int n, const btVector3* value);
 	EXPORT int btAlignedObjectArray_btVector3_size(btAlignedObjectArray_btVector3* obj);
 	EXPORT void btAlignedObjectArray_btVector3_delete(btAlignedObjectArray_btVector3* obj);
+#ifdef __cplusplus
 }
+#endif

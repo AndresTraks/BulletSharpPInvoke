@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btHingeConstraint* btHingeConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btVector3* pivotInA, const btVector3* pivotInB, const btVector3* axisInA, const btVector3* axisInB);
 	EXPORT btHingeConstraint* btHingeConstraint_new2(btRigidBody* rbA, btRigidBody* rbB, const btVector3* pivotInA, const btVector3* pivotInB, const btVector3* axisInA, const btVector3* axisInB, bool useReferenceFrameA);
 	EXPORT btHingeConstraint* btHingeConstraint_new3(btRigidBody* rbA, const btVector3* pivotInA, const btVector3* axisInA);
@@ -63,4 +64,6 @@ extern "C"
 	EXPORT btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new8(btRigidBody* rbA, const btTransform* rbAFrame, bool useReferenceFrameA);
 	EXPORT btScalar btHingeAccumulatedAngleConstraint_getAccumulatedHingeAngle(btHingeAccumulatedAngleConstraint* obj);
 	EXPORT void btHingeAccumulatedAngleConstraint_setAccumulatedHingeAngle(btHingeAccumulatedAngleConstraint* obj, btScalar accAngle);
+#ifdef __cplusplus
 }
+#endif

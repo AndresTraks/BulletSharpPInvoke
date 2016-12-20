@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT void btStridingMeshInterface_calculateAabbBruteForce(btStridingMeshInterface* obj, btVector3* aabbMin, btVector3* aabbMax);
 	EXPORT int btStridingMeshInterface_calculateSerializeBufferSize(btStridingMeshInterface* obj);
 	EXPORT void btStridingMeshInterface_getLockedReadOnlyVertexIndexBase(btStridingMeshInterface* obj, const unsigned char** vertexbase, int* numverts, PHY_ScalarType* type, int* vertexStride, const unsigned char** indexbase, int* indexstride, int* numfaces, PHY_ScalarType* indicestype);
@@ -21,4 +22,6 @@ extern "C"
 	EXPORT void btStridingMeshInterface_unLockReadOnlyVertexBase(btStridingMeshInterface* obj, int subpart);
 	EXPORT void btStridingMeshInterface_unLockVertexBase(btStridingMeshInterface* obj, int subpart);
 	EXPORT void btStridingMeshInterface_delete(btStridingMeshInterface* obj);
+#ifdef __cplusplus
 }
+#endif

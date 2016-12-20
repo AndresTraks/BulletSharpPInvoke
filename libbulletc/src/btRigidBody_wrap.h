@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btRigidBody_btRigidBodyConstructionInfo* btRigidBody_btRigidBodyConstructionInfo_new(btScalar mass, btMotionState* motionState, btCollisionShape* collisionShape);
 	EXPORT btRigidBody_btRigidBodyConstructionInfo* btRigidBody_btRigidBodyConstructionInfo_new2(btScalar mass, btMotionState* motionState, btCollisionShape* collisionShape, const btVector3* localInertia);
 	EXPORT btScalar btRigidBody_btRigidBodyConstructionInfo_getAdditionalAngularDampingFactor(btRigidBody_btRigidBodyConstructionInfo* obj);
@@ -110,4 +111,6 @@ extern "C"
 	EXPORT void btRigidBody_updateDeactivation(btRigidBody* obj, btScalar timeStep);
 	EXPORT void btRigidBody_updateInertiaTensor(btRigidBody* obj);
 	EXPORT bool btRigidBody_wantsSleeping(btRigidBody* obj);
+#ifdef __cplusplus
 }
+#endif

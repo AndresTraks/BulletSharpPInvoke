@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btJointFeedback* btJointFeedback_new();
 	EXPORT void btJointFeedback_getAppliedForceBodyA(btJointFeedback* obj, btVector3* value);
 	EXPORT void btJointFeedback_getAppliedForceBodyB(btJointFeedback* obj, btVector3* value);
@@ -106,4 +107,6 @@ extern "C"
 	EXPORT void btAngularLimit_set4(btAngularLimit* obj, btScalar low, btScalar high, btScalar _softness, btScalar _biasFactor, btScalar _relaxationFactor);
 	EXPORT void btAngularLimit_test(btAngularLimit* obj, btScalar angle);
 	EXPORT void btAngularLimit_delete(btAngularLimit* obj);
+#ifdef __cplusplus
 }
+#endif

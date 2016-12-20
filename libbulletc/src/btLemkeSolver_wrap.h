@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btLemkeSolver* btLemkeSolver_new();
 	EXPORT int btLemkeSolver_getDebugLevel(btLemkeSolver* obj);
 	EXPORT int btLemkeSolver_getMaxLoops(btLemkeSolver* obj);
@@ -11,4 +12,6 @@ extern "C"
 	EXPORT void btLemkeSolver_setMaxLoops(btLemkeSolver* obj, int value);
 	EXPORT void btLemkeSolver_setMaxValue(btLemkeSolver* obj, btScalar value);
 	EXPORT void btLemkeSolver_setUseLoHighBounds(btLemkeSolver* obj, bool value);
+#ifdef __cplusplus
 }
+#endif

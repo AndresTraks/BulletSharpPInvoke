@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btScalar btDispatcherInfo_getAllowedCcdPenetration(btDispatcherInfo* obj);
 	EXPORT btScalar btDispatcherInfo_getConvexConservativeDistanceThreshold(btDispatcherInfo* obj);
 	EXPORT btIDebugDraw* btDispatcherInfo_getDebugDraw(btDispatcherInfo* obj);
@@ -41,4 +42,6 @@ extern "C"
 	EXPORT bool btDispatcher_needsResponse(btDispatcher* obj, const btCollisionObject* body0, const btCollisionObject* body1);
 	EXPORT void btDispatcher_releaseManifold(btDispatcher* obj, btPersistentManifold* manifold);
 	EXPORT void btDispatcher_delete(btDispatcher* obj);
+#ifdef __cplusplus
 }
+#endif

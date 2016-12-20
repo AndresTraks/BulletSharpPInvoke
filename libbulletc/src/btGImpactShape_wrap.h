@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btTetrahedronShapeEx* btTetrahedronShapeEx_new();
 	EXPORT void btTetrahedronShapeEx_setVertices(btTetrahedronShapeEx* obj, const btVector3* v0, const btVector3* v1, const btVector3* v2, const btVector3* v3);
 
@@ -87,4 +88,6 @@ extern "C"
 	EXPORT btStridingMeshInterface* btGImpactMeshShape_getMeshInterface(btGImpactMeshShape* obj);
 	EXPORT btGImpactMeshShapePart* btGImpactMeshShape_getMeshPart(btGImpactMeshShape* obj, int index);
 	EXPORT int btGImpactMeshShape_getMeshPartCount(btGImpactMeshShape* obj);
+#ifdef __cplusplus
 }
+#endif

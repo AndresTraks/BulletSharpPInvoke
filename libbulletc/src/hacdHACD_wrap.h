@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT HACD_HACD* HACD_HACD_new();
 	EXPORT bool HACD_HACD_Compute(HACD_HACD* obj);
 	EXPORT bool HACD_HACD_Compute2(HACD_HACD* obj, bool fullCH);
@@ -45,4 +46,6 @@ extern "C"
 	EXPORT void HACD_HACD_SetTriangles(HACD_HACD* obj, HACD_Vec3_long* triangles);
 	EXPORT void HACD_HACD_SetVolumeWeight(HACD_HACD* obj, double beta);
 	EXPORT void HACD_HACD_delete(HACD_HACD* obj);
+#ifdef __cplusplus
 }
+#endif

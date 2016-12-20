@@ -77,8 +77,9 @@ public:
 };
 #endif
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btCollisionWorld_AllHitsRayResultCallback* btCollisionWorld_AllHitsRayResultCallback_new(const btVector3* rayFromWorld, const btVector3* rayToWorld);
 	EXPORT btAlignedObjectArray_const_btCollisionObjectPtr* btCollisionWorld_AllHitsRayResultCallback_getCollisionObjects(btCollisionWorld_AllHitsRayResultCallback* obj);
 	EXPORT btAlignedObjectArray_btScalar* btCollisionWorld_AllHitsRayResultCallback_getHitFractions(btCollisionWorld_AllHitsRayResultCallback* obj);
@@ -226,4 +227,6 @@ extern "C"
 	EXPORT void btCollisionWorld_updateAabbs(btCollisionWorld* obj);
 	EXPORT void btCollisionWorld_updateSingleAabb(btCollisionWorld* obj, btCollisionObject* colObj);
 	EXPORT void btCollisionWorld_delete(btCollisionWorld* obj);
+#ifdef __cplusplus
 }
+#endif

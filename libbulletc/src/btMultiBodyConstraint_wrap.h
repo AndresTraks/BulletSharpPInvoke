@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT void btMultiBodyConstraint_allocateJacobiansMultiDof(btMultiBodyConstraint* obj);
 	EXPORT void btMultiBodyConstraint_createConstraintRows(btMultiBodyConstraint* obj, btAlignedObjectArray_btMultiBodySolverConstraint* constraintRows, btMultiBodyJacobianData* data, const btContactSolverInfo* infoGlobal);
 	EXPORT void btMultiBodyConstraint_debugDraw(btMultiBodyConstraint* obj, btIDebugDraw* drawer);
@@ -22,4 +23,6 @@ extern "C"
 	EXPORT void btMultiBodyConstraint_setPosition(btMultiBodyConstraint* obj, int row, btScalar pos);
 	EXPORT void btMultiBodyConstraint_updateJacobianSizes(btMultiBodyConstraint* obj);
 	EXPORT void btMultiBodyConstraint_delete(btMultiBodyConstraint* obj);
+#ifdef __cplusplus
 }
+#endif

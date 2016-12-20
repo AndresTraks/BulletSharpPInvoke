@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btMaterialProperties* btMaterialProperties_new();
 	EXPORT const unsigned char* btMaterialProperties_getMaterialBase(btMaterialProperties* obj);
 	EXPORT int btMaterialProperties_getMaterialStride(btMaterialProperties* obj);
@@ -29,4 +30,6 @@ extern "C"
 	EXPORT void btTriangleIndexVertexMaterialArray_getLockedMaterialBase2(btTriangleIndexVertexMaterialArray* obj, unsigned char** materialBase, int* numMaterials, PHY_ScalarType* materialType, int* materialStride, unsigned char** triangleMaterialBase, int* numTriangles, int* triangleMaterialStride, PHY_ScalarType* triangleType, int subpart);
 	EXPORT void btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase(btTriangleIndexVertexMaterialArray* obj, const unsigned char** materialBase, int* numMaterials, PHY_ScalarType* materialType, int* materialStride, const unsigned char** triangleMaterialBase, int* numTriangles, int* triangleMaterialStride, PHY_ScalarType* triangleType);
 	EXPORT void btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase2(btTriangleIndexVertexMaterialArray* obj, const unsigned char** materialBase, int* numMaterials, PHY_ScalarType* materialType, int* materialStride, const unsigned char** triangleMaterialBase, int* numTriangles, int* triangleMaterialStride, PHY_ScalarType* triangleType, int subpart);
+#ifdef __cplusplus
 }
+#endif

@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btPersistentManifold* btPersistentManifold_new();
 	EXPORT btPersistentManifold* btPersistentManifold_new2(const btCollisionObject* body0, const btCollisionObject* body1, int __unnamed2, btScalar contactBreakingThreshold, btScalar contactProcessingThreshold);
 	EXPORT int btPersistentManifold_addManifoldPoint(btPersistentManifold* obj, const btManifoldPoint* newPoint);
@@ -35,4 +36,6 @@ extern "C"
 	EXPORT ContactProcessedCallback getGContactProcessedCallback();
 	EXPORT void setGContactDestroyedCallback(ContactDestroyedCallback callback);
 	EXPORT void setGContactProcessedCallback(ContactProcessedCallback callback);
+#ifdef __cplusplus
 }
+#endif

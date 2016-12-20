@@ -1,9 +1,8 @@
-#include <iostream>
+#include <stdbool.h>
+#include <stdio.h>
 
 #include <bulletc.h>
 #include "hacd_data.h"
-
-using namespace std;
 
 btScalar addSingleResult(btCollisionWorld_LocalConvexResult* rayResult, bool normalInWorldSpace)
 {
@@ -17,12 +16,12 @@ bool needsCollision(btBroadphaseProxy* proxy0)
 
 void test_hacd()
 {
-	cout << "Calculating HACD clusters..." << endl;
+	puts("Calculating HACD clusters...");
 
 	// Truncate to float precision
 	for (int i = 0; i < sizeof(points) / sizeof(points[0]); i++)
 	{
-		points[i] = float(points[i]);
+		points[i] = (float)points[i];
 	}
 
 	HACD_HACD* myHACD = HACD_HACD_new();
@@ -43,7 +42,7 @@ void test_hacd()
 	HACD_HACD_Compute(myHACD);
 	size_t nClusters = HACD_HACD_GetNClusters(myHACD);
 
-	cout << "HACD clusters: " << nClusters << endl;
+	printf("HACD clusters: %d\n", nClusters);
 
 	HACD_HACD_Save(myHACD, "output.wrl", false);
 }
@@ -66,7 +65,7 @@ int main(int argc, char* argv[])
 	bool hit = btCollisionWorld_ConvexResultCallback_hasHit(convexCallback);
 	if (hit)
 	{
-		cout << "Boolean marshalling bug" << endl;
+		puts("Boolean marshalling bug");
 	}
 	btCollisionWorld_ConvexResultCallback_delete(convexCallback);
 
@@ -82,7 +81,7 @@ int main(int argc, char* argv[])
 
 	test_hacd();
 
-	cout << "Done. Press enter to continue.";
-	cin.get();
+	fputs("Done. Press enter to continue.", stdout);
+	getchar();
 	return 0;
 }

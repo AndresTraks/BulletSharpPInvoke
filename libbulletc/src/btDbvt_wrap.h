@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btDbvtAabbMm* btDbvtAabbMm_new();
 	EXPORT void btDbvtAabbMm_Center(btDbvtAabbMm* obj, btVector3* value);
 	EXPORT int btDbvtAabbMm_Classify(btDbvtAabbMm* obj, const btVector3* n, btScalar o, int s);
@@ -131,4 +132,6 @@ extern "C"
 	EXPORT bool btDbvt_update6(btDbvt* obj, btDbvtNode* leaf, btDbvtVolume* volume, const btVector3* velocity, btScalar margin);
 	EXPORT void btDbvt_write(btDbvt* obj, btDbvt_IWriter* iwriter);
 	EXPORT void btDbvt_delete(btDbvt* obj);
+#ifdef __cplusplus
 }
+#endif

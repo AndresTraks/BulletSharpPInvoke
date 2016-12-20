@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btManifoldPoint* btManifoldPoint_new();
 	EXPORT btManifoldPoint* btManifoldPoint_new2(const btVector3* pointA, const btVector3* pointB, const btVector3* normal, btScalar distance);
 	EXPORT btScalar btManifoldPoint_getAppliedImpulse(btManifoldPoint* obj);
@@ -66,4 +67,6 @@ extern "C"
 
 	EXPORT ContactAddedCallback getGContactAddedCallback();
 	EXPORT void setGContactAddedCallback(ContactAddedCallback value);
+#ifdef __cplusplus
 }
+#endif

@@ -42,8 +42,9 @@ public:
 };
 #endif
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btSoftBodyWorldInfo* btSoftBodyWorldInfo_new();
 	EXPORT btScalar btSoftBodyWorldInfo_getAir_density(btSoftBodyWorldInfo* obj);
 	EXPORT btBroadphaseInterface* btSoftBodyWorldInfo_getBroadphase(btSoftBodyWorldInfo* obj);
@@ -646,4 +647,6 @@ extern "C"
 	EXPORT int btSoftBody_getTetraVertexData(btSoftBody* obj, btScalar* vertices);
 	EXPORT int btSoftBody_getTetraVertexNormalData(btSoftBody* obj, btScalar* vertices);
 	EXPORT int btSoftBody_getTetraVertexNormalData2(btSoftBody* obj, btScalar* vertices, btScalar* normals);
+#ifdef __cplusplus
 }
+#endif

@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btKinematicCharacterController* btKinematicCharacterController_new(btPairCachingGhostObject* ghostObject, btConvexShape* convexShape, btScalar stepHeight);
 	EXPORT btKinematicCharacterController* btKinematicCharacterController_new2(btPairCachingGhostObject* ghostObject, btConvexShape* convexShape, btScalar stepHeight, const btVector3* up);
 	EXPORT void btKinematicCharacterController_applyImpulse(btKinematicCharacterController* obj, const btVector3* v);
@@ -30,4 +31,6 @@ extern "C"
 	EXPORT void btKinematicCharacterController_setStepHeight(btKinematicCharacterController* obj, btScalar h);
 	EXPORT void btKinematicCharacterController_setUp(btKinematicCharacterController* obj, const btVector3* up);
 	EXPORT void btKinematicCharacterController_setUseGhostSweepTest(btKinematicCharacterController* obj, bool useGhostObjectSweepTest);
+#ifdef __cplusplus
 }
+#endif

@@ -35,8 +35,9 @@ public:
 };
 #endif
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btTriangleCallbackWrapper* btTriangleCallbackWrapper_new(p_btTriangleCallback_processTriangle processTriangleCallback);
 
 	EXPORT void btTriangleCallback_delete(btTriangleCallback* obj);
@@ -45,4 +46,6 @@ extern "C"
 		p_btInternalTriangleIndexCallback_internalProcessTriangleIndex internalProcessTriangleIndexCallback);
 
 	EXPORT void btInternalTriangleIndexCallback_delete(btInternalTriangleIndexCallback* obj);
+#ifdef __cplusplus
 }
+#endif

@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btGImpactCollisionAlgorithm_CreateFunc* btGImpactCollisionAlgorithm_CreateFunc_new();
 
 	EXPORT btGImpactCollisionAlgorithm* btGImpactCollisionAlgorithm_new(const btCollisionAlgorithmConstructionInfo* ci, const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap);
@@ -19,4 +20,6 @@ extern "C"
 	EXPORT void btGImpactCollisionAlgorithm_setFace1(btGImpactCollisionAlgorithm* obj, int value);
 	EXPORT void btGImpactCollisionAlgorithm_setPart0(btGImpactCollisionAlgorithm* obj, int value);
 	EXPORT void btGImpactCollisionAlgorithm_setPart1(btGImpactCollisionAlgorithm* obj, int value);
+#ifdef __cplusplus
 }
+#endif

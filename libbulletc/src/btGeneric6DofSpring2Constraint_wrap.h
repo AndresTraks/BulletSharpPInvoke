@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btRotationalLimitMotor2* btRotationalLimitMotor2_new();
 	EXPORT btRotationalLimitMotor2* btRotationalLimitMotor2_new2(const btRotationalLimitMotor2* limot);
 	EXPORT btScalar btRotationalLimitMotor2_getBounce(btRotationalLimitMotor2* obj);
@@ -151,4 +152,6 @@ extern "C"
 	EXPORT void btGeneric6DofSpring2Constraint_setStiffness(btGeneric6DofSpring2Constraint* obj, int index, btScalar stiffness);
 	EXPORT void btGeneric6DofSpring2Constraint_setStiffness2(btGeneric6DofSpring2Constraint* obj, int index, btScalar stiffness, bool limitIfNeeded);
 	EXPORT void btGeneric6DofSpring2Constraint_setTargetVelocity(btGeneric6DofSpring2Constraint* obj, int index, btScalar velocity);
+#ifdef __cplusplus
 }
+#endif

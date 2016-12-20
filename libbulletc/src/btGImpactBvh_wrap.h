@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT GIM_PAIR* GIM_PAIR_new();
 	EXPORT GIM_PAIR* GIM_PAIR_new2(const GIM_PAIR* p);
 	EXPORT GIM_PAIR* GIM_PAIR_new3(int index1, int index2);
@@ -85,4 +86,6 @@ extern "C"
 	EXPORT void btGImpactBvh_setPrimitiveManager(btGImpactBvh* obj, btPrimitiveManagerBase* primitive_manager);
 	EXPORT void btGImpactBvh_update(btGImpactBvh* obj);
 	EXPORT void btGImpactBvh_delete(btGImpactBvh* obj);
+#ifdef __cplusplus
 }
+#endif

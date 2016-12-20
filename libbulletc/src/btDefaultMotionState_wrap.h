@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btDefaultMotionState* btDefaultMotionState_new();
 	EXPORT btDefaultMotionState* btDefaultMotionState_new2(const btTransform* startTrans);
 	EXPORT btDefaultMotionState* btDefaultMotionState_new3(const btTransform* startTrans, const btTransform* centerOfMassOffset);
@@ -13,4 +14,6 @@ extern "C"
 	EXPORT void btDefaultMotionState_setGraphicsWorldTrans(btDefaultMotionState* obj, const btTransform* value);
 	EXPORT void btDefaultMotionState_setStartWorldTrans(btDefaultMotionState* obj, const btTransform* value);
 	EXPORT void btDefaultMotionState_setUserPointer(btDefaultMotionState* obj, void* value);
+#ifdef __cplusplus
 }
+#endif

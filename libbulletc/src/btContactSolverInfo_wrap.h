@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btContactSolverInfoData* btContactSolverInfoData_new();
 	EXPORT btScalar btContactSolverInfoData_getDamping(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getErp(btContactSolverInfoData* obj);
@@ -48,4 +49,6 @@ extern "C"
 	EXPORT void btContactSolverInfoData_delete(btContactSolverInfoData* obj);
 
 	EXPORT btContactSolverInfo* btContactSolverInfo_new();
+#ifdef __cplusplus
 }
+#endif

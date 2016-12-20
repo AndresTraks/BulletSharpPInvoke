@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btConvexTriangleCallback* btConvexTriangleCallback_new(btDispatcher* dispatcher, const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap, bool isSwapped);
 	EXPORT void btConvexTriangleCallback_clearCache(btConvexTriangleCallback* obj);
 	EXPORT void btConvexTriangleCallback_clearWrapperData(btConvexTriangleCallback* obj);
@@ -19,4 +20,6 @@ extern "C"
 
 	EXPORT btConvexConcaveCollisionAlgorithm* btConvexConcaveCollisionAlgorithm_new(const btCollisionAlgorithmConstructionInfo* ci, const btCollisionObjectWrapper* body0Wrap, const btCollisionObjectWrapper* body1Wrap, bool isSwapped);
 	EXPORT void btConvexConcaveCollisionAlgorithm_clearCache(btConvexConcaveCollisionAlgorithm* obj);
+#ifdef __cplusplus
 }
+#endif

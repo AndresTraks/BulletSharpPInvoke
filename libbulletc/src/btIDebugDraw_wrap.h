@@ -137,8 +137,9 @@ public:
 };
 #endif
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btIDebugDrawWrapper* btIDebugDrawWrapper_new(void* debugDrawGCHandle,
 		p_btIDebugDraw_drawAabb drawAabbCallback, p_btIDebugDraw_drawArc drawArcCallback,
 		p_btIDebugDraw_drawBox drawBoxCallback,
@@ -152,4 +153,6 @@ extern "C"
 	EXPORT void* btIDebugDrawWrapper_getGCHandle(btIDebugDrawWrapper* obj);
 
 	EXPORT void btIDebugDraw_delete(btIDebugDraw* obj);
+#ifdef __cplusplus
 }
+#endif

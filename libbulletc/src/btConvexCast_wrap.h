@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btConvexCast_CastResult* btConvexCast_CastResult_new();
 	EXPORT void btConvexCast_CastResult_DebugDraw(btConvexCast_CastResult* obj, btScalar fraction);
 	EXPORT void btConvexCast_CastResult_drawCoordSystem(btConvexCast_CastResult* obj, const btTransform* trans);
@@ -24,4 +25,6 @@ extern "C"
 
 	EXPORT bool btConvexCast_calcTimeOfImpact(btConvexCast* obj, const btTransform* fromA, const btTransform* toA, const btTransform* fromB, const btTransform* toB, btConvexCast_CastResult* result);
 	EXPORT void btConvexCast_delete(btConvexCast* obj);
+#ifdef __cplusplus
 }
+#endif

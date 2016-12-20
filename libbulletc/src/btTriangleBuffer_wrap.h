@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btTriangle* btTriangle_new();
 	EXPORT int btTriangle_getPartId(btTriangle* obj);
 	EXPORT int btTriangle_getTriangleIndex(btTriangle* obj);
@@ -19,4 +20,6 @@ extern "C"
 	EXPORT void btTriangleBuffer_clearBuffer(btTriangleBuffer* obj);
 	EXPORT int btTriangleBuffer_getNumTriangles(btTriangleBuffer* obj);
 	EXPORT const btTriangle* btTriangleBuffer_getTriangle(btTriangleBuffer* obj, int index);
+#ifdef __cplusplus
 }
+#endif

@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btRotationalLimitMotor* btRotationalLimitMotor_new();
 	EXPORT btRotationalLimitMotor* btRotationalLimitMotor_new2(const btRotationalLimitMotor* limot);
 	EXPORT btScalar btRotationalLimitMotor_getAccumulatedImpulse(btRotationalLimitMotor* obj);
@@ -117,4 +118,6 @@ extern "C"
 	EXPORT void btGeneric6DofConstraint_setUseSolveConstraintObsolete(btGeneric6DofConstraint* obj, bool value);
 	EXPORT bool btGeneric6DofConstraint_testAngularLimitMotor(btGeneric6DofConstraint* obj, int axis_index);
 	EXPORT void btGeneric6DofConstraint_updateRHS(btGeneric6DofConstraint* obj, btScalar timeStep);
+#ifdef __cplusplus
 }
+#endif

@@ -83,8 +83,9 @@ public:
 };
 #endif
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btChunk* btChunk_new();
 	EXPORT int btChunk_getChunkCode(btChunk* obj);
 	EXPORT int btChunk_getDna_nr(btChunk* obj);
@@ -118,4 +119,6 @@ extern "C"
 	EXPORT int getBulletDNAlen();
 	EXPORT char* getBulletDNAstr64();
 	EXPORT int getBulletDNAlen64();
+#ifdef __cplusplus
 }
+#endif

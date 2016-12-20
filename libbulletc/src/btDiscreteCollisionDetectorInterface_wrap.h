@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btDiscreteCollisionDetectorInterface_ClosestPointInput* btDiscreteCollisionDetectorInterface_ClosestPointInput_new();
 	EXPORT btScalar btDiscreteCollisionDetectorInterface_ClosestPointInput_getMaximumDistanceSquared(btDiscreteCollisionDetectorInterface_ClosestPointInput* obj);
 	EXPORT void btDiscreteCollisionDetectorInterface_ClosestPointInput_getTransformA(btDiscreteCollisionDetectorInterface_ClosestPointInput* obj, btTransform* value);
@@ -26,4 +27,6 @@ extern "C"
 	EXPORT void btStorageResult_setClosestPointInB(btStorageResult* obj, const btVector3* value);
 	EXPORT void btStorageResult_setDistance(btStorageResult* obj, btScalar value);
 	EXPORT void btStorageResult_setNormalOnSurfaceB(btStorageResult* obj, const btVector3* value);
+#ifdef __cplusplus
 }
+#endif

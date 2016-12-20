@@ -1,6 +1,9 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btEmptyShape* btEmptyShape_new();
+#ifdef __cplusplus
 }
+#endif

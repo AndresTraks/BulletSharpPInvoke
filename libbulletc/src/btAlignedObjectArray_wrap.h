@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btBroadphasePair* btAlignedObjectArray_btBroadphasePair_at(btAlignedObjectArray_btBroadphasePair* obj, int n);
 	EXPORT void btAlignedObjectArray_btBroadphasePair_push_back(btAlignedObjectArray_btBroadphasePair* obj, btBroadphasePair* val);
 	EXPORT void btAlignedObjectArray_btBroadphasePair_resizeNoInitialize(btAlignedObjectArray_btBroadphasePair* obj, int newSize);
@@ -70,4 +71,6 @@ extern "C"
 	EXPORT void btAlignedObjectArray_btSoftBody_Tetra_push_back(btAlignedObjectArray_btSoftBody_Tetra* obj, btSoftBody_Tetra* val);
 	EXPORT void btAlignedObjectArray_btSoftBody_Tetra_resizeNoInitialize(btAlignedObjectArray_btSoftBody_Tetra* obj, int newSize);
 	EXPORT int btAlignedObjectArray_btSoftBody_Tetra_size(btAlignedObjectArray_btSoftBody_Tetra* obj);
+#ifdef __cplusplus
 }
+#endif

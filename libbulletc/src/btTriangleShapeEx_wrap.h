@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT GIM_TRIANGLE_CONTACT* GIM_TRIANGLE_CONTACT_new();
 	EXPORT GIM_TRIANGLE_CONTACT* GIM_TRIANGLE_CONTACT_new2(const GIM_TRIANGLE_CONTACT* other);
 	EXPORT void GIM_TRIANGLE_CONTACT_copy_from(GIM_TRIANGLE_CONTACT* obj, const GIM_TRIANGLE_CONTACT* other);
@@ -37,4 +38,6 @@ extern "C"
 	EXPORT void btTriangleShapeEx_applyTransform(btTriangleShapeEx* obj, const btTransform* t);
 	EXPORT void btTriangleShapeEx_buildTriPlane(btTriangleShapeEx* obj, btVector4* plane);
 	EXPORT bool btTriangleShapeEx_overlap_test_conservative(btTriangleShapeEx* obj, const btTriangleShapeEx* other);
+#ifdef __cplusplus
 }
+#endif

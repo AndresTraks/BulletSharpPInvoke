@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btIndexedMesh* btIndexedMesh_new();
 	EXPORT PHY_ScalarType btIndexedMesh_getIndexType(btIndexedMesh* obj);
 	EXPORT int btIndexedMesh_getNumTriangles(btIndexedMesh* obj);
@@ -26,4 +27,6 @@ extern "C"
 	EXPORT void btTriangleIndexVertexArray_addIndexedMesh(btTriangleIndexVertexArray* obj, const btIndexedMesh* mesh);
 	EXPORT void btTriangleIndexVertexArray_addIndexedMesh2(btTriangleIndexVertexArray* obj, const btIndexedMesh* mesh, PHY_ScalarType indexType);
 	EXPORT btAlignedObjectArray_btIndexedMesh* btTriangleIndexVertexArray_getIndexedMeshArray(btTriangleIndexVertexArray* obj);
+#ifdef __cplusplus
 }
+#endif

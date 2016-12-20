@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT bool btOverlapCallback_processOverlap(btOverlapCallback* obj, btBroadphasePair* pair);
 	EXPORT void btOverlapCallback_delete(btOverlapCallback* obj);
 
@@ -30,4 +31,6 @@ extern "C"
 	EXPORT bool btSortedOverlappingPairCache_needsBroadphaseCollision(btSortedOverlappingPairCache* obj, btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1);
 
 	EXPORT btNullPairCache* btNullPairCache_new();
+#ifdef __cplusplus
 }
+#endif

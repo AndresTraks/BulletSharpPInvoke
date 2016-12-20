@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btMultiBody* btMultiBody_new(int n_links, btScalar mass, const btVector3* inertia, bool fixedBase, bool canSleep);
 	EXPORT void btMultiBody_addBaseConstraintForce(btMultiBody* obj, const btVector3* f);
 	EXPORT void btMultiBody_addBaseConstraintTorque(btMultiBody* obj, const btVector3* t);
@@ -129,4 +130,6 @@ extern "C"
 	EXPORT void btMultiBody_worldDirToLocal(btMultiBody* obj, int i, const btVector3* vec, btVector3* value);
 	EXPORT void btMultiBody_worldPosToLocal(btMultiBody* obj, int i, const btVector3* vec, btVector3* value);
 	EXPORT void btMultiBody_delete(btMultiBody* obj);
+#ifdef __cplusplus
 }
+#endif

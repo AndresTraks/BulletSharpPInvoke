@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT const btConvexPolyhedron* btPolyhedralConvexShape_getConvexPolyhedron(btPolyhedralConvexShape* obj);
 	EXPORT void btPolyhedralConvexShape_getEdge(btPolyhedralConvexShape* obj, int i, btVector3* pa, btVector3* pb);
 	EXPORT int btPolyhedralConvexShape_getNumEdges(btPolyhedralConvexShape* obj);
@@ -15,4 +16,6 @@ extern "C"
 
 	EXPORT void btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(btPolyhedralConvexAabbCachingShape* obj, const btTransform* trans, btVector3* aabbMin, btVector3* aabbMax, btScalar margin);
 	EXPORT void btPolyhedralConvexAabbCachingShape_recalcLocalAabb(btPolyhedralConvexAabbCachingShape* obj);
+#ifdef __cplusplus
 }
+#endif

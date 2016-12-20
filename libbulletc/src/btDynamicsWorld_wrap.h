@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT void btDynamicsWorld_addAction(btDynamicsWorld* obj, btActionInterface* action);
 	EXPORT void btDynamicsWorld_addConstraint(btDynamicsWorld* obj, btTypedConstraint* constraint);
 	EXPORT void btDynamicsWorld_addConstraint2(btDynamicsWorld* obj, btTypedConstraint* constraint, bool disableCollisionsBetweenLinkedBodies);
@@ -28,4 +29,6 @@ extern "C"
 	EXPORT int btDynamicsWorld_stepSimulation2(btDynamicsWorld* obj, btScalar timeStep, int maxSubSteps);
 	EXPORT int btDynamicsWorld_stepSimulation3(btDynamicsWorld* obj, btScalar timeStep, int maxSubSteps, btScalar fixedTimeStep);
 	EXPORT void btDynamicsWorld_synchronizeMotionStates(btDynamicsWorld* obj);
+#ifdef __cplusplus
 }
+#endif

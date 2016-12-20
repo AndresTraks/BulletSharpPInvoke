@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btElement* btElement_new();
 	EXPORT int btElement_getId(btElement* obj);
 	EXPORT int btElement_getSz(btElement* obj);
@@ -21,4 +22,6 @@ extern "C"
 	EXPORT void btUnionFind_sortIslands(btUnionFind* obj);
 	EXPORT void btUnionFind_unite(btUnionFind* obj, int p, int q);
 	EXPORT void btUnionFind_delete(btUnionFind* obj);
+#ifdef __cplusplus
 }
+#endif

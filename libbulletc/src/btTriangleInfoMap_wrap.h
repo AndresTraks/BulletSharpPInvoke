@@ -1,7 +1,8 @@
 #include "main.h"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
 	EXPORT btTriangleInfo* btTriangleInfo_new();
 	EXPORT btScalar btTriangleInfo_getEdgeV0V1Angle(btTriangleInfo* obj);
 	EXPORT btScalar btTriangleInfo_getEdgeV1V2Angle(btTriangleInfo* obj);
@@ -30,4 +31,6 @@ extern "C"
 	EXPORT void btTriangleInfoMap_setPlanarEpsilon(btTriangleInfoMap* obj, btScalar value);
 	EXPORT void btTriangleInfoMap_setZeroAreaThreshold(btTriangleInfoMap* obj, btScalar value);
 	EXPORT void btTriangleInfoMap_delete(btTriangleInfoMap* obj);
+#ifdef __cplusplus
 }
+#endif
