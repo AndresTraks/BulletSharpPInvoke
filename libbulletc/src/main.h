@@ -1,8 +1,6 @@
 #pragma once
 
-#ifdef __cplusplus
-#include <cstring> // size_t
-#endif
+#include <stddef.h> // size_t
 
 //#define BULLETC_DISABLE_HACD
 #define BULLETC_DISABLE_IACTION_CLASSES // omits classes inheriting from btActionInterface
