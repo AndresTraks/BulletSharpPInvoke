@@ -4,14 +4,6 @@
 #include "btGearConstraint_wrap.h"
 
 btGearConstraint* btGearConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btVector3* axisInA,
-	const btVector3* axisInB)
-{
-	BTVECTOR3_IN(axisInA);
-	BTVECTOR3_IN(axisInB);
-	return new btGearConstraint(*rbA, *rbB, BTVECTOR3_USE(axisInA), BTVECTOR3_USE(axisInB));
-}
-
-btGearConstraint* btGearConstraint_new2(btRigidBody* rbA, btRigidBody* rbB, const btVector3* axisInA,
 	const btVector3* axisInB, btScalar ratio)
 {
 	BTVECTOR3_IN(axisInA);

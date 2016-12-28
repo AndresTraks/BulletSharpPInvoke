@@ -84,8 +84,7 @@ extern "C" {
 	EXPORT void btGeneric6DofConstraint_calcAnchorPos(btGeneric6DofConstraint* obj);
 	EXPORT void btGeneric6DofConstraint_calculateTransforms(btGeneric6DofConstraint* obj, const btTransform* transA, const btTransform* transB);
 	EXPORT void btGeneric6DofConstraint_calculateTransforms2(btGeneric6DofConstraint* obj);
-	EXPORT int btGeneric6DofConstraint_get_limit_motor_info2(btGeneric6DofConstraint* obj, btRotationalLimitMotor* limot, const btTransform* transA, const btTransform* transB, const btVector3* linVelA, const btVector3* linVelB, const btVector3* angVelA, const btVector3* angVelB, btTypedConstraint_btConstraintInfo2* info, int row, btVector3* ax1, int rotational);
-	EXPORT int btGeneric6DofConstraint_get_limit_motor_info22(btGeneric6DofConstraint* obj, btRotationalLimitMotor* limot, const btTransform* transA, const btTransform* transB, const btVector3* linVelA, const btVector3* linVelB, const btVector3* angVelA, const btVector3* angVelB, btTypedConstraint_btConstraintInfo2* info, int row, btVector3* ax1, int rotational, int rotAllowed);
+	EXPORT int btGeneric6DofConstraint_get_limit_motor_info2(btGeneric6DofConstraint* obj, btRotationalLimitMotor* limot, const btTransform* transA, const btTransform* transB, const btVector3* linVelA, const btVector3* linVelB, const btVector3* angVelA, const btVector3* angVelB, btTypedConstraint_btConstraintInfo2* info, int row, btVector3* ax1, int rotational, int rotAllowed);
 	EXPORT btScalar btGeneric6DofConstraint_getAngle(btGeneric6DofConstraint* obj, int axis_index);
 	EXPORT void btGeneric6DofConstraint_getAngularLowerLimit(btGeneric6DofConstraint* obj, btVector3* angularLower);
 	EXPORT void btGeneric6DofConstraint_getAngularUpperLimit(btGeneric6DofConstraint* obj, btVector3* angularUpper);

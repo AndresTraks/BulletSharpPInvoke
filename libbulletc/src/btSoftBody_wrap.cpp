@@ -2138,20 +2138,7 @@ void btSoftBody_addVelocity2(btSoftBody* obj, const btVector3* velocity, int nod
 	obj->addVelocity(BTVECTOR3_USE(velocity), node);
 }
 
-void btSoftBody_appendAnchor(btSoftBody* obj, int node, btRigidBody* body, const btVector3* localPivot)
-{
-	BTVECTOR3_IN(localPivot);
-	obj->appendAnchor(node, body, BTVECTOR3_USE(localPivot));
-}
-
-void btSoftBody_appendAnchor2(btSoftBody* obj, int node, btRigidBody* body, const btVector3* localPivot,
-	bool disableCollisionBetweenLinkedBodies)
-{
-	BTVECTOR3_IN(localPivot);
-	obj->appendAnchor(node, body, BTVECTOR3_USE(localPivot), disableCollisionBetweenLinkedBodies);
-}
-
-void btSoftBody_appendAnchor3(btSoftBody* obj, int node, btRigidBody* body, const btVector3* localPivot,
+void btSoftBody_appendAnchor(btSoftBody* obj, int node, btRigidBody* body, const btVector3* localPivot,
 	bool disableCollisionBetweenLinkedBodies, btScalar influence)
 {
 	BTVECTOR3_IN(localPivot);
@@ -2159,17 +2146,7 @@ void btSoftBody_appendAnchor3(btSoftBody* obj, int node, btRigidBody* body, cons
 		influence);
 }
 
-void btSoftBody_appendAnchor4(btSoftBody* obj, int node, btRigidBody* body)
-{
-	obj->appendAnchor(node, body);
-}
-
-void btSoftBody_appendAnchor5(btSoftBody* obj, int node, btRigidBody* body, bool disableCollisionBetweenLinkedBodies)
-{
-	obj->appendAnchor(node, body, disableCollisionBetweenLinkedBodies);
-}
-
-void btSoftBody_appendAnchor6(btSoftBody* obj, int node, btRigidBody* body, bool disableCollisionBetweenLinkedBodies,
+void btSoftBody_appendAnchor2(btSoftBody* obj, int node, btRigidBody* body, bool disableCollisionBetweenLinkedBodies,
 	btScalar influence)
 {
 	obj->appendAnchor(node, body, disableCollisionBetweenLinkedBodies, influence);
@@ -2198,27 +2175,12 @@ void btSoftBody_appendAngularJoint4(btSoftBody* obj, const btSoftBody_AJoint_Spe
 	obj->appendAngularJoint(*specs, body0, *body1);
 }
 
-void btSoftBody_appendFace(btSoftBody* obj)
-{
-	obj->appendFace();
-}
-
-void btSoftBody_appendFace2(btSoftBody* obj, int model)
-{
-	obj->appendFace(model);
-}
-
-void btSoftBody_appendFace3(btSoftBody* obj, int model, btSoftBody_Material* mat)
+void btSoftBody_appendFace(btSoftBody* obj, int model, btSoftBody_Material* mat)
 {
 	obj->appendFace(model, mat);
 }
 
-void btSoftBody_appendFace4(btSoftBody* obj, int node0, int node1, int node2)
-{
-	obj->appendFace(node0, node1, node2);
-}
-
-void btSoftBody_appendFace5(btSoftBody* obj, int node0, int node1, int node2, btSoftBody_Material* mat)
+void btSoftBody_appendFace2(btSoftBody* obj, int node0, int node1, int node2, btSoftBody_Material* mat)
 {
 	obj->appendFace(node0, node1, node2, mat);
 }
@@ -2246,49 +2208,18 @@ void btSoftBody_appendLinearJoint4(btSoftBody* obj, const btSoftBody_LJoint_Spec
 	obj->appendLinearJoint(*specs, body0, *body1);
 }
 
-void btSoftBody_appendLink(btSoftBody* obj, int node0, int node1)
-{
-	obj->appendLink(node0, node1);
-}
-
-void btSoftBody_appendLink2(btSoftBody* obj, int node0, int node1, btSoftBody_Material* mat)
-{
-	obj->appendLink(node0, node1, mat);
-}
-
-void btSoftBody_appendLink3(btSoftBody* obj, int node0, int node1, btSoftBody_Material* mat,
+void btSoftBody_appendLink(btSoftBody* obj, int node0, int node1, btSoftBody_Material* mat,
 	bool bcheckexist)
 {
 	obj->appendLink(node0, node1, mat, bcheckexist);
 }
 
-void btSoftBody_appendLink4(btSoftBody* obj)
-{
-	obj->appendLink();
-}
-
-void btSoftBody_appendLink5(btSoftBody* obj, int model)
-{
-	obj->appendLink(model);
-}
-
-void btSoftBody_appendLink6(btSoftBody* obj, int model, btSoftBody_Material* mat)
+void btSoftBody_appendLink2(btSoftBody* obj, int model, btSoftBody_Material* mat)
 {
 	obj->appendLink(model, mat);
 }
 
-void btSoftBody_appendLink7(btSoftBody* obj, btSoftBody_Node* node0, btSoftBody_Node* node1)
-{
-	obj->appendLink(node0, node1);
-}
-
-void btSoftBody_appendLink8(btSoftBody* obj, btSoftBody_Node* node0, btSoftBody_Node* node1,
-	btSoftBody_Material* mat)
-{
-	obj->appendLink(node0, node1, mat);
-}
-
-void btSoftBody_appendLink9(btSoftBody* obj, btSoftBody_Node* node0, btSoftBody_Node* node1,
+void btSoftBody_appendLink3(btSoftBody* obj, btSoftBody_Node* node0, btSoftBody_Node* node1,
 	btSoftBody_Material* mat, bool bcheckexist)
 {
 	obj->appendLink(node0, node1, mat, bcheckexist);
@@ -2333,38 +2264,6 @@ void btSoftBody_appendNote4(btSoftBody* obj, const char* text, const btVector3* 
 }
 
 void btSoftBody_appendNote5(btSoftBody* obj, const char* text, const btVector3* o,
-	const btVector4* c)
-{
-	BTVECTOR3_IN(o);
-	BTVECTOR4_IN(c);
-	obj->appendNote(text, BTVECTOR3_USE(o), BTVECTOR4_USE(c));
-}
-
-void btSoftBody_appendNote6(btSoftBody* obj, const char* text, const btVector3* o,
-	const btVector4* c, btSoftBody_Node* n0)
-{
-	BTVECTOR3_IN(o);
-	BTVECTOR4_IN(c);
-	obj->appendNote(text, BTVECTOR3_USE(o), BTVECTOR4_USE(c), n0);
-}
-
-void btSoftBody_appendNote7(btSoftBody* obj, const char* text, const btVector3* o,
-	const btVector4* c, btSoftBody_Node* n0, btSoftBody_Node* n1)
-{
-	BTVECTOR3_IN(o);
-	BTVECTOR4_IN(c);
-	obj->appendNote(text, BTVECTOR3_USE(o), BTVECTOR4_USE(c), n0, n1);
-}
-
-void btSoftBody_appendNote8(btSoftBody* obj, const char* text, const btVector3* o,
-	const btVector4* c, btSoftBody_Node* n0, btSoftBody_Node* n1, btSoftBody_Node* n2)
-{
-	BTVECTOR3_IN(o);
-	BTVECTOR4_IN(c);
-	obj->appendNote(text, BTVECTOR3_USE(o), BTVECTOR4_USE(c), n0, n1, n2);
-}
-
-void btSoftBody_appendNote9(btSoftBody* obj, const char* text, const btVector3* o,
 	const btVector4* c, btSoftBody_Node* n0, btSoftBody_Node* n1, btSoftBody_Node* n2,
 	btSoftBody_Node* n3)
 {
@@ -2378,12 +2277,7 @@ void btSoftBody_appendTetra(btSoftBody* obj, int model, btSoftBody_Material* mat
 	obj->appendTetra(model, mat);
 }
 
-void btSoftBody_appendTetra2(btSoftBody* obj, int node0, int node1, int node2, int node3)
-{
-	obj->appendTetra(node0, node1, node2, node3);
-}
-
-void btSoftBody_appendTetra3(btSoftBody* obj, int node0, int node1, int node2, int node3,
+void btSoftBody_appendTetra2(btSoftBody* obj, int node0, int node1, int node2, int node3,
 	btSoftBody_Material* mat)
 {
 	obj->appendTetra(node0, node1, node2, node3, mat);
@@ -2529,12 +2423,7 @@ void btSoftBody_evaluateCom(btSoftBody* obj, btVector3* value)
 	BTVECTOR3_SET(value, temp);
 }
 
-int btSoftBody_generateBendingConstraints(btSoftBody* obj, int distance)
-{
-	return obj->generateBendingConstraints(distance);
-}
-
-int btSoftBody_generateBendingConstraints2(btSoftBody* obj, int distance, btSoftBody_Material* mat)
+int btSoftBody_generateBendingConstraints(btSoftBody* obj, int distance, btSoftBody_Material* mat)
 {
 	return obj->generateBendingConstraints(distance, mat);
 }
@@ -2729,12 +2618,7 @@ btSoftBodyWorldInfo* btSoftBody_getWorldInfo(btSoftBody* obj)
 	return obj->getWorldInfo();
 }
 
-void btSoftBody_indicesToPointers(btSoftBody* obj)
-{
-	obj->indicesToPointers();
-}
-
-void btSoftBody_indicesToPointers2(btSoftBody* obj, const int* map)
+void btSoftBody_indicesToPointers(btSoftBody* obj, const int* map)
 {
 	obj->indicesToPointers(map);
 }
@@ -2894,12 +2778,7 @@ void btSoftBody_setTotalDensity(btSoftBody* obj, btScalar density)
 	obj->setTotalDensity(density);
 }
 
-void btSoftBody_setTotalMass(btSoftBody* obj, btScalar mass)
-{
-	obj->setTotalMass(mass);
-}
-
-void btSoftBody_setTotalMass2(btSoftBody* obj, btScalar mass, bool fromfaces)
+void btSoftBody_setTotalMass(btSoftBody* obj, btScalar mass, bool fromfaces)
 {
 	obj->setTotalMass(mass, fromfaces);
 }
@@ -2973,12 +2852,7 @@ btSoftBody* btSoftBody_upcast(btCollisionObject* colObj)
 	return btSoftBody::upcast(colObj);
 }
 
-void btSoftBody_updateArea(btSoftBody* obj)
-{
-	obj->updateArea();
-}
-
-void btSoftBody_updateArea2(btSoftBody* obj, bool averageArea)
+void btSoftBody_updateArea(btSoftBody* obj, bool averageArea)
 {
 	obj->updateArea(averageArea);
 }

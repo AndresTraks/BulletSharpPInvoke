@@ -7,12 +7,7 @@ bool btSoftBodySolver_checkInitialized(btSoftBodySolver* obj)
 	return obj->checkInitialized();
 }
 
-void btSoftBodySolver_copyBackToSoftBodies(btSoftBodySolver* obj)
-{
-	obj->copyBackToSoftBodies();
-}
-
-void btSoftBodySolver_copyBackToSoftBodies2(btSoftBodySolver* obj, bool bMove)
+void btSoftBodySolver_copyBackToSoftBodies(btSoftBodySolver* obj, bool bMove)
 {
 	obj->copyBackToSoftBodies(bMove);
 }
@@ -37,12 +32,7 @@ float btSoftBodySolver_getTimeScale(btSoftBodySolver* obj)
 	return obj->getTimeScale();
 }
 /*
-void btSoftBodySolver_optimize(btSoftBodySolver* obj, btAlignedObjectArray_btSoftBodyPtr* softBodies)
-{
-	obj->optimize(*softBodies);
-}
-
-void btSoftBodySolver_optimize2(btSoftBodySolver* obj, btAlignedObjectArray_btSoftBodyPtr* softBodies,
+void btSoftBodySolver_optimize(btSoftBodySolver* obj, btAlignedObjectArray_btSoftBodyPtr* softBodies,
 	bool forceUpdate)
 {
 	obj->optimize(*softBodies, forceUpdate);

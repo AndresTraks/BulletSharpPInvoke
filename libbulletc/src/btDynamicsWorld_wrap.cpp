@@ -12,12 +12,7 @@ void btDynamicsWorld_addAction(btDynamicsWorld* obj, btActionInterface* action)
 	obj->addAction(action);
 }
 
-void btDynamicsWorld_addConstraint(btDynamicsWorld* obj, btTypedConstraint* constraint)
-{
-	obj->addConstraint(constraint);
-}
-
-void btDynamicsWorld_addConstraint2(btDynamicsWorld* obj, btTypedConstraint* constraint,
+void btDynamicsWorld_addConstraint(btDynamicsWorld* obj, btTypedConstraint* constraint,
 	bool disableCollisionsBetweenLinkedBodies)
 {
 	obj->addConstraint(constraint, disableCollisionsBetweenLinkedBodies);
@@ -101,18 +96,7 @@ void btDynamicsWorld_setGravity(btDynamicsWorld* obj, const btVector3* gravity)
 	obj->setGravity(BTVECTOR3_USE(gravity));
 }
 
-void btDynamicsWorld_setInternalTickCallback(btDynamicsWorld* obj, btInternalTickCallback cb)
-{
-	obj->setInternalTickCallback(cb);
-}
-
-void btDynamicsWorld_setInternalTickCallback2(btDynamicsWorld* obj, btInternalTickCallback cb,
-	void* worldUserInfo)
-{
-	obj->setInternalTickCallback(cb, worldUserInfo);
-}
-
-void btDynamicsWorld_setInternalTickCallback3(btDynamicsWorld* obj, btInternalTickCallback cb,
+void btDynamicsWorld_setInternalTickCallback(btDynamicsWorld* obj, btInternalTickCallback cb,
 	void* worldUserInfo, bool isPreTick)
 {
 	obj->setInternalTickCallback(cb, worldUserInfo, isPreTick);
@@ -123,17 +107,7 @@ void btDynamicsWorld_setWorldUserInfo(btDynamicsWorld* obj, void* worldUserInfo)
 	obj->setWorldUserInfo(worldUserInfo);
 }
 
-int btDynamicsWorld_stepSimulation(btDynamicsWorld* obj, btScalar timeStep)
-{
-	return obj->stepSimulation(timeStep);
-}
-
-int btDynamicsWorld_stepSimulation2(btDynamicsWorld* obj, btScalar timeStep, int maxSubSteps)
-{
-	return obj->stepSimulation(timeStep, maxSubSteps);
-}
-
-int btDynamicsWorld_stepSimulation3(btDynamicsWorld* obj, btScalar timeStep, int maxSubSteps,
+int btDynamicsWorld_stepSimulation(btDynamicsWorld* obj, btScalar timeStep, int maxSubSteps,
 	btScalar fixedTimeStep)
 {
 	return obj->stepSimulation(timeStep, maxSubSteps, fixedTimeStep);

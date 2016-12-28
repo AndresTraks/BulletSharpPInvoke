@@ -289,7 +289,7 @@ void btMultibodyLink_setJointName(btMultibodyLink* obj, const char* value)
 	obj->m_jointName = value;
 }
 
-void btMultibodyLink_setJointType(btMultibodyLink* obj, btMultibodyLink::eFeatherstoneJointType value)
+void btMultibodyLink_setJointType(btMultibodyLink* obj, btMultibodyLink_eFeatherstoneJointType value)
 {
 	obj->m_jointType = value;
 }
@@ -324,12 +324,7 @@ void btMultibodyLink_setUserPtr(btMultibodyLink* obj, const void* value)
 	obj->m_userPtr = value;
 }
 
-void btMultibodyLink_updateCacheMultiDof(btMultibodyLink* obj)
-{
-	obj->updateCacheMultiDof();
-}
-
-void btMultibodyLink_updateCacheMultiDof2(btMultibodyLink* obj, btScalar* pq)
+void btMultibodyLink_updateCacheMultiDof(btMultibodyLink* obj, btScalar* pq)
 {
 	obj->updateCacheMultiDof(pq);
 }

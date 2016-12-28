@@ -14,18 +14,7 @@ btMultiBodyDynamicsWorld* btMultiBodyDynamicsWorld_new(btDispatcher* dispatcher,
 		collisionConfiguration);
 }
 
-void btMultiBodyDynamicsWorld_addMultiBody(btMultiBodyDynamicsWorld* obj, btMultiBody* body)
-{
-	obj->addMultiBody(body);
-}
-
-void btMultiBodyDynamicsWorld_addMultiBody2(btMultiBodyDynamicsWorld* obj, btMultiBody* body,
-	short group)
-{
-	obj->addMultiBody(body, group);
-}
-
-void btMultiBodyDynamicsWorld_addMultiBody3(btMultiBodyDynamicsWorld* obj, btMultiBody* body,
+void btMultiBodyDynamicsWorld_addMultiBody(btMultiBodyDynamicsWorld* obj, btMultiBody* body,
 	short group, short mask)
 {
 	obj->addMultiBody(body, group, mask);

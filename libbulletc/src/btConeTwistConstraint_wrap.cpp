@@ -211,24 +211,6 @@ void btConeTwistConstraint_setLimit(btConeTwistConstraint* obj, int limitIndex, 
 }
 
 void btConeTwistConstraint_setLimit2(btConeTwistConstraint* obj, btScalar _swingSpan1,
-	btScalar _swingSpan2, btScalar _twistSpan)
-{
-	obj->setLimit(_swingSpan1, _swingSpan2, _twistSpan);
-}
-
-void btConeTwistConstraint_setLimit3(btConeTwistConstraint* obj, btScalar _swingSpan1,
-	btScalar _swingSpan2, btScalar _twistSpan, btScalar _softness)
-{
-	obj->setLimit(_swingSpan1, _swingSpan2, _twistSpan, _softness);
-}
-
-void btConeTwistConstraint_setLimit4(btConeTwistConstraint* obj, btScalar _swingSpan1,
-	btScalar _swingSpan2, btScalar _twistSpan, btScalar _softness, btScalar _biasFactor)
-{
-	obj->setLimit(_swingSpan1, _swingSpan2, _twistSpan, _softness, _biasFactor);
-}
-
-void btConeTwistConstraint_setLimit5(btConeTwistConstraint* obj, btScalar _swingSpan1,
 	btScalar _swingSpan2, btScalar _twistSpan, btScalar _softness, btScalar _biasFactor,
 	btScalar _relaxationFactor)
 {

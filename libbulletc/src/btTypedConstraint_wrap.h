@@ -101,10 +101,7 @@ extern "C" {
 	EXPORT btScalar btAngularLimit_getSign(btAngularLimit* obj);
 	EXPORT btScalar btAngularLimit_getSoftness(btAngularLimit* obj);
 	EXPORT bool btAngularLimit_isLimit(btAngularLimit* obj);
-	EXPORT void btAngularLimit_set(btAngularLimit* obj, btScalar low, btScalar high);
-	EXPORT void btAngularLimit_set2(btAngularLimit* obj, btScalar low, btScalar high, btScalar _softness);
-	EXPORT void btAngularLimit_set3(btAngularLimit* obj, btScalar low, btScalar high, btScalar _softness, btScalar _biasFactor);
-	EXPORT void btAngularLimit_set4(btAngularLimit* obj, btScalar low, btScalar high, btScalar _softness, btScalar _biasFactor, btScalar _relaxationFactor);
+	EXPORT void btAngularLimit_set(btAngularLimit* obj, btScalar low, btScalar high, btScalar _softness, btScalar _biasFactor, btScalar _relaxationFactor);
 	EXPORT void btAngularLimit_test(btAngularLimit* obj, btScalar angle);
 	EXPORT void btAngularLimit_delete(btAngularLimit* obj);
 #ifdef __cplusplus

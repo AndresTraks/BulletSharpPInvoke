@@ -4,17 +4,6 @@
 #include "btHingeConstraint_wrap.h"
 
 btHingeConstraint* btHingeConstraint_new(btRigidBody* rbA, btRigidBody* rbB, const btVector3* pivotInA,
-	const btVector3* pivotInB, const btVector3* axisInA, const btVector3* axisInB)
-{
-	BTVECTOR3_IN(pivotInA);
-	BTVECTOR3_IN(pivotInB);
-	BTVECTOR3_IN(axisInA);
-	BTVECTOR3_IN(axisInB);
-	return new btHingeConstraint(*rbA, *rbB, BTVECTOR3_USE(pivotInA), BTVECTOR3_USE(pivotInB),
-		BTVECTOR3_USE(axisInA), BTVECTOR3_USE(axisInB));
-}
-
-btHingeConstraint* btHingeConstraint_new2(btRigidBody* rbA, btRigidBody* rbB, const btVector3* pivotInA,
 	const btVector3* pivotInB, const btVector3* axisInA, const btVector3* axisInB,
 	bool useReferenceFrameA)
 {
@@ -26,15 +15,7 @@ btHingeConstraint* btHingeConstraint_new2(btRigidBody* rbA, btRigidBody* rbB, co
 		BTVECTOR3_USE(axisInA), BTVECTOR3_USE(axisInB), useReferenceFrameA);
 }
 
-btHingeConstraint* btHingeConstraint_new3(btRigidBody* rbA, const btVector3* pivotInA,
-	const btVector3* axisInA)
-{
-	BTVECTOR3_IN(pivotInA);
-	BTVECTOR3_IN(axisInA);
-	return new btHingeConstraint(*rbA, BTVECTOR3_USE(pivotInA), BTVECTOR3_USE(axisInA));
-}
-
-btHingeConstraint* btHingeConstraint_new4(btRigidBody* rbA, const btVector3* pivotInA,
+btHingeConstraint* btHingeConstraint_new2(btRigidBody* rbA, const btVector3* pivotInA,
 	const btVector3* axisInA, bool useReferenceFrameA)
 {
 	BTVECTOR3_IN(pivotInA);
@@ -43,15 +24,7 @@ btHingeConstraint* btHingeConstraint_new4(btRigidBody* rbA, const btVector3* piv
 		useReferenceFrameA);
 }
 
-btHingeConstraint* btHingeConstraint_new5(btRigidBody* rbA, btRigidBody* rbB, const btTransform* rbAFrame,
-	const btTransform* rbBFrame)
-{
-	BTTRANSFORM_IN(rbAFrame);
-	BTTRANSFORM_IN(rbBFrame);
-	return new btHingeConstraint(*rbA, *rbB, BTTRANSFORM_USE(rbAFrame), BTTRANSFORM_USE(rbBFrame));
-}
-
-btHingeConstraint* btHingeConstraint_new6(btRigidBody* rbA, btRigidBody* rbB, const btTransform* rbAFrame,
+btHingeConstraint* btHingeConstraint_new3(btRigidBody* rbA, btRigidBody* rbB, const btTransform* rbAFrame,
 	const btTransform* rbBFrame, bool useReferenceFrameA)
 {
 	BTTRANSFORM_IN(rbAFrame);
@@ -60,13 +33,7 @@ btHingeConstraint* btHingeConstraint_new6(btRigidBody* rbA, btRigidBody* rbB, co
 		useReferenceFrameA);
 }
 
-btHingeConstraint* btHingeConstraint_new7(btRigidBody* rbA, const btTransform* rbAFrame)
-{
-	BTTRANSFORM_IN(rbAFrame);
-	return new btHingeConstraint(*rbA, BTTRANSFORM_USE(rbAFrame));
-}
-
-btHingeConstraint* btHingeConstraint_new8(btRigidBody* rbA, const btTransform* rbAFrame,
+btHingeConstraint* btHingeConstraint_new4(btRigidBody* rbA, const btTransform* rbAFrame,
 	bool useReferenceFrameA)
 {
 	BTTRANSFORM_IN(rbAFrame);
@@ -324,18 +291,6 @@ void btHingeConstraint_updateRHS(btHingeConstraint* obj, btScalar timeStep)
 
 btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new(btRigidBody* rbA,
 	btRigidBody* rbB, const btVector3* pivotInA, const btVector3* pivotInB, const btVector3* axisInA,
-	const btVector3* axisInB)
-{
-	BTVECTOR3_IN(pivotInA);
-	BTVECTOR3_IN(pivotInB);
-	BTVECTOR3_IN(axisInA);
-	BTVECTOR3_IN(axisInB);
-	return new btHingeAccumulatedAngleConstraint(*rbA, *rbB, BTVECTOR3_USE(pivotInA),
-		BTVECTOR3_USE(pivotInB), BTVECTOR3_USE(axisInA), BTVECTOR3_USE(axisInB));
-}
-
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new2(btRigidBody* rbA,
-	btRigidBody* rbB, const btVector3* pivotInA, const btVector3* pivotInB, const btVector3* axisInA,
 	const btVector3* axisInB, bool useReferenceFrameA)
 {
 	BTVECTOR3_IN(pivotInA);
@@ -346,15 +301,7 @@ btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new2(btRigi
 		BTVECTOR3_USE(pivotInB), BTVECTOR3_USE(axisInA), BTVECTOR3_USE(axisInB), useReferenceFrameA);
 }
 
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new3(btRigidBody* rbA,
-	const btVector3* pivotInA, const btVector3* axisInA)
-{
-	BTVECTOR3_IN(pivotInA);
-	BTVECTOR3_IN(axisInA);
-	return new btHingeAccumulatedAngleConstraint(*rbA, BTVECTOR3_USE(pivotInA), BTVECTOR3_USE(axisInA));
-}
-
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new4(btRigidBody* rbA,
+btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new2(btRigidBody* rbA,
 	const btVector3* pivotInA, const btVector3* axisInA, bool useReferenceFrameA)
 {
 	BTVECTOR3_IN(pivotInA);
@@ -363,16 +310,7 @@ btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new4(btRigi
 		useReferenceFrameA);
 }
 
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new5(btRigidBody* rbA,
-	btRigidBody* rbB, const btTransform* rbAFrame, const btTransform* rbBFrame)
-{
-	BTTRANSFORM_IN(rbAFrame);
-	BTTRANSFORM_IN(rbBFrame);
-	return new btHingeAccumulatedAngleConstraint(*rbA, *rbB, BTTRANSFORM_USE(rbAFrame),
-		BTTRANSFORM_USE(rbBFrame));
-}
-
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new6(btRigidBody* rbA,
+btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new3(btRigidBody* rbA,
 	btRigidBody* rbB, const btTransform* rbAFrame, const btTransform* rbBFrame, bool useReferenceFrameA)
 {
 	BTTRANSFORM_IN(rbAFrame);
@@ -381,14 +319,7 @@ btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new6(btRigi
 		BTTRANSFORM_USE(rbBFrame), useReferenceFrameA);
 }
 
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new7(btRigidBody* rbA,
-	const btTransform* rbAFrame)
-{
-	BTTRANSFORM_IN(rbAFrame);
-	return new btHingeAccumulatedAngleConstraint(*rbA, BTTRANSFORM_USE(rbAFrame));
-}
-
-btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new8(btRigidBody* rbA,
+btHingeAccumulatedAngleConstraint* btHingeAccumulatedAngleConstraint_new4(btRigidBody* rbA,
 	const btTransform* rbAFrame, bool useReferenceFrameA)
 {
 	BTTRANSFORM_IN(rbAFrame);

@@ -3,17 +3,7 @@
 #include "conversion.h"
 #include "btPolarDecomposition_wrap.h"
 
-btPolarDecomposition* btPolarDecomposition_new()
-{
-	return new btPolarDecomposition();
-}
-
-btPolarDecomposition* btPolarDecomposition_new2(btScalar tolerance)
-{
-	return new btPolarDecomposition(tolerance);
-}
-
-btPolarDecomposition* btPolarDecomposition_new3(btScalar tolerance, unsigned int maxIterations)
+btPolarDecomposition* btPolarDecomposition_new(btScalar tolerance, unsigned int maxIterations)
 {
 	return new btPolarDecomposition(tolerance, maxIterations);
 }

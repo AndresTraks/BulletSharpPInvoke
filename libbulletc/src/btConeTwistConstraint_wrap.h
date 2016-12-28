@@ -40,10 +40,7 @@ extern "C" {
 	EXPORT void btConeTwistConstraint_setFixThresh(btConeTwistConstraint* obj, btScalar fixThresh);
 	EXPORT void btConeTwistConstraint_setFrames(btConeTwistConstraint* obj, const btTransform* frameA, const btTransform* frameB);
 	EXPORT void btConeTwistConstraint_setLimit(btConeTwistConstraint* obj, int limitIndex, btScalar limitValue);
-	EXPORT void btConeTwistConstraint_setLimit2(btConeTwistConstraint* obj, btScalar _swingSpan1, btScalar _swingSpan2, btScalar _twistSpan);
-	EXPORT void btConeTwistConstraint_setLimit3(btConeTwistConstraint* obj, btScalar _swingSpan1, btScalar _swingSpan2, btScalar _twistSpan, btScalar _softness);
-	EXPORT void btConeTwistConstraint_setLimit4(btConeTwistConstraint* obj, btScalar _swingSpan1, btScalar _swingSpan2, btScalar _twistSpan, btScalar _softness, btScalar _biasFactor);
-	EXPORT void btConeTwistConstraint_setLimit5(btConeTwistConstraint* obj, btScalar _swingSpan1, btScalar _swingSpan2, btScalar _twistSpan, btScalar _softness, btScalar _biasFactor, btScalar _relaxationFactor);
+	EXPORT void btConeTwistConstraint_setLimit2(btConeTwistConstraint* obj, btScalar _swingSpan1, btScalar _swingSpan2, btScalar _twistSpan, btScalar _softness, btScalar _biasFactor, btScalar _relaxationFactor);
 	EXPORT void btConeTwistConstraint_setMaxMotorImpulse(btConeTwistConstraint* obj, btScalar maxMotorImpulse);
 	EXPORT void btConeTwistConstraint_setMaxMotorImpulseNormalized(btConeTwistConstraint* obj, btScalar maxMotorImpulse);
 	EXPORT void btConeTwistConstraint_setMotorTarget(btConeTwistConstraint* obj, const btQuaternion* q);

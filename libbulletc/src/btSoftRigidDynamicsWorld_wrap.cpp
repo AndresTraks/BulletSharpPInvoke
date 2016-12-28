@@ -6,13 +6,6 @@
 #include "btSoftRigidDynamicsWorld_wrap.h"
 
 btSoftRigidDynamicsWorld* btSoftRigidDynamicsWorld_new(btDispatcher* dispatcher,
-	btBroadphaseInterface* pairCache, btConstraintSolver* constraintSolver, btCollisionConfiguration* collisionConfiguration)
-{
-	return new btSoftRigidDynamicsWorld(dispatcher, pairCache, constraintSolver,
-		collisionConfiguration);
-}
-
-btSoftRigidDynamicsWorld* btSoftRigidDynamicsWorld_new2(btDispatcher* dispatcher,
 	btBroadphaseInterface* pairCache, btConstraintSolver* constraintSolver, btCollisionConfiguration* collisionConfiguration,
 	btSoftBodySolver* softBodySolver)
 {

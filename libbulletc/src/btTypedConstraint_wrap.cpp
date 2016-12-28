@@ -497,23 +497,7 @@ bool btAngularLimit_isLimit(btAngularLimit* obj)
 	return obj->isLimit();
 }
 
-void btAngularLimit_set(btAngularLimit* obj, btScalar low, btScalar high)
-{
-	obj->set(low, high);
-}
-
-void btAngularLimit_set2(btAngularLimit* obj, btScalar low, btScalar high, btScalar _softness)
-{
-	obj->set(low, high, _softness);
-}
-
-void btAngularLimit_set3(btAngularLimit* obj, btScalar low, btScalar high, btScalar _softness,
-	btScalar _biasFactor)
-{
-	obj->set(low, high, _softness, _biasFactor);
-}
-
-void btAngularLimit_set4(btAngularLimit* obj, btScalar low, btScalar high, btScalar _softness,
+void btAngularLimit_set(btAngularLimit* obj, btScalar low, btScalar high, btScalar _softness,
 	btScalar _biasFactor, btScalar _relaxationFactor)
 {
 	obj->set(low, high, _softness, _biasFactor, _relaxationFactor);

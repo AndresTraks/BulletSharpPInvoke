@@ -15,17 +15,9 @@ namespace BulletSharp
         /*
 		public bool SolveMLCP(btMatrixX<float> a, btVectorX<float> b, btVectorX<float> x,
 			btVectorX<float> lo, btVectorX<float> hi, AlignedObjectArray<int> limitDependency,
-			int numIterations)
+			int numIterations, bool useSparsity = true)
 		{
 			return btMLCPSolverInterface_solveMLCP(_native, a._native, b._native,
-				x._native, lo._native, hi._native, limitDependency._native, numIterations);
-		}
-
-		public bool SolveMLCP(btMatrixX<float> a, btVectorX<float> b, btVectorX<float> x,
-			btVectorX<float> lo, btVectorX<float> hi, AlignedObjectArray<int> limitDependency,
-			int numIterations, bool useSparsity)
-		{
-			return btMLCPSolverInterface_solveMLCP2(_native, a._native, b._native,
 				x._native, lo._native, hi._native, limitDependency._native, numIterations,
 				useSparsity);
 		}
@@ -52,10 +44,7 @@ namespace BulletSharp
 
 		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		//[return: MarshalAs(UnmanagedType.I1)]
-		//static extern bool btMLCPSolverInterface_solveMLCP(IntPtr obj, IntPtr A, IntPtr b, IntPtr x, IntPtr lo, IntPtr hi, IntPtr limitDependency, int numIterations);
-		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		//[return: MarshalAs(UnmanagedType.I1)]
-		//static extern bool btMLCPSolverInterface_solveMLCP2(IntPtr obj, IntPtr A, IntPtr b, IntPtr x, IntPtr lo, IntPtr hi, IntPtr limitDependency, int numIterations, bool useSparsity);
+		//static extern bool btMLCPSolverInterface_solveMLCP(IntPtr obj, IntPtr A, IntPtr b, IntPtr x, IntPtr lo, IntPtr hi, IntPtr limitDependency, int numIterations, bool useSparsity);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMLCPSolverInterface_delete(IntPtr obj);
 	}

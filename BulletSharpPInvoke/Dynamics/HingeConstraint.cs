@@ -24,7 +24,7 @@ namespace BulletSharp
 
 		public HingeConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 pivotInA,
 			Vector3 pivotInB, Vector3 axisInA, Vector3 axisInB, bool useReferenceFrameA = false)
-			: base(btHingeConstraint_new2(rigidBodyA._native, rigidBodyB._native,
+			: base(btHingeConstraint_new(rigidBodyA._native, rigidBodyB._native,
 				ref pivotInA, ref pivotInB, ref axisInA, ref axisInB, useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -33,7 +33,7 @@ namespace BulletSharp
 
 		public HingeConstraint(RigidBody rigidBodyA, Vector3 pivotInA, Vector3 axisInA,
 			bool useReferenceFrameA = false)
-			: base(btHingeConstraint_new4(rigidBodyA._native, ref pivotInA, ref axisInA,
+			: base(btHingeConstraint_new2(rigidBodyA._native, ref pivotInA, ref axisInA,
 				useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -42,7 +42,7 @@ namespace BulletSharp
 
 		public HingeConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix rigidBodyAFrame,
 			Matrix rigidBodyBFrame, bool useReferenceFrameA = false)
-			: base(btHingeConstraint_new6(rigidBodyA._native, rigidBodyB._native,
+			: base(btHingeConstraint_new3(rigidBodyA._native, rigidBodyB._native,
 				ref rigidBodyAFrame, ref rigidBodyBFrame, useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -50,7 +50,7 @@ namespace BulletSharp
 		}
 
 		public HingeConstraint(RigidBody rigidBodyA, Matrix rigidBodyAFrame, bool useReferenceFrameA = false)
-			: base(btHingeConstraint_new8(rigidBodyA._native, ref rigidBodyAFrame,
+			: base(btHingeConstraint_new4(rigidBodyA._native, ref rigidBodyAFrame,
 				useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -297,21 +297,13 @@ namespace BulletSharp
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB, [In] ref Vector3 axisInA, [In] ref Vector3 axisInB);
+		static extern IntPtr btHingeConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB, [In] ref Vector3 axisInA, [In] ref Vector3 axisInB, bool useReferenceFrameA);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeConstraint_new2(IntPtr rbA, IntPtr rbB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB, [In] ref Vector3 axisInA, [In] ref Vector3 axisInB, bool useReferenceFrameA);
+		static extern IntPtr btHingeConstraint_new2(IntPtr rbA, [In] ref Vector3 pivotInA, [In] ref Vector3 axisInA, bool useReferenceFrameA);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeConstraint_new3(IntPtr rbA, [In] ref Vector3 pivotInA, [In] ref Vector3 axisInA);
+		static extern IntPtr btHingeConstraint_new3(IntPtr rbA, IntPtr rbB, [In] ref Matrix rbAFrame, [In] ref Matrix rbBFrame, bool useReferenceFrameA);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeConstraint_new4(IntPtr rbA, [In] ref Vector3 pivotInA, [In] ref Vector3 axisInA, bool useReferenceFrameA);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeConstraint_new5(IntPtr rbA, IntPtr rbB, [In] ref Matrix rbAFrame, [In] ref Matrix rbBFrame);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeConstraint_new6(IntPtr rbA, IntPtr rbB, [In] ref Matrix rbAFrame, [In] ref Matrix rbBFrame, bool useReferenceFrameA);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeConstraint_new7(IntPtr rbA, [In] ref Matrix rbAFrame);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeConstraint_new8(IntPtr rbA, [In] ref Matrix rbAFrame, bool useReferenceFrameA);
+		static extern IntPtr btHingeConstraint_new4(IntPtr rbA, [In] ref Matrix rbAFrame, bool useReferenceFrameA);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btHingeConstraint_enableAngularMotor(IntPtr obj, bool enableMotor, float targetVelocity, float maxMotorImpulse);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -406,17 +398,8 @@ namespace BulletSharp
 	public class HingeAccumulatedAngleConstraint : HingeConstraint
 	{
 		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
-			Vector3 pivotInA, Vector3 pivotInB, Vector3 axisInA, Vector3 axisInB)
+			Vector3 pivotInA, Vector3 pivotInB, Vector3 axisInA, Vector3 axisInB, bool useReferenceFrameA = false)
 			: base(btHingeAccumulatedAngleConstraint_new(rigidBodyA._native, rigidBodyB._native,
-				ref pivotInA, ref pivotInB, ref axisInA, ref axisInB))
-		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = rigidBodyB;
-		}
-
-		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
-			Vector3 pivotInA, Vector3 pivotInB, Vector3 axisInA, Vector3 axisInB, bool useReferenceFrameA)
-			: base(btHingeAccumulatedAngleConstraint_new2(rigidBodyA._native, rigidBodyB._native,
 				ref pivotInA, ref pivotInB, ref axisInA, ref axisInB, useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -424,17 +407,8 @@ namespace BulletSharp
 		}
 
 		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, Vector3 pivotInA,
-			Vector3 axisInA)
-			: base(btHingeAccumulatedAngleConstraint_new3(rigidBodyA._native, ref pivotInA,
-				ref axisInA))
-		{
-			_rigidBodyA = rigidBodyA;
-            _rigidBodyB = GetFixedBody();
-		}
-
-		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, Vector3 pivotInA,
-			Vector3 axisInA, bool useReferenceFrameA)
-			: base(btHingeAccumulatedAngleConstraint_new4(rigidBodyA._native, ref pivotInA,
+			Vector3 axisInA, bool useReferenceFrameA = false)
+			: base(btHingeAccumulatedAngleConstraint_new2(rigidBodyA._native, ref pivotInA,
 				ref axisInA, useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -442,33 +416,17 @@ namespace BulletSharp
 		}
 
 		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
-			Matrix rigidBodyAFrame, Matrix rigidBodyBFrame)
-			: base(btHingeAccumulatedAngleConstraint_new5(rigidBodyA._native, rigidBodyB._native,
-				ref rigidBodyAFrame, ref rigidBodyBFrame))
-		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = rigidBodyB;
-		}
-
-		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
-			Matrix rigidBodyAFrame, Matrix rigidBodyBFrame, bool useReferenceFrameA)
-			: base(btHingeAccumulatedAngleConstraint_new6(rigidBodyA._native, rigidBodyB._native,
+			Matrix rigidBodyAFrame, Matrix rigidBodyBFrame, bool useReferenceFrameA = false)
+			: base(btHingeAccumulatedAngleConstraint_new3(rigidBodyA._native, rigidBodyB._native,
 				ref rigidBodyAFrame, ref rigidBodyBFrame, useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
 			_rigidBodyB = rigidBodyB;
 		}
 
-		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, Matrix rigidBodyAFrame)
-			: base(btHingeAccumulatedAngleConstraint_new7(rigidBodyA._native, ref rigidBodyAFrame))
-		{
-			_rigidBodyA = rigidBodyA;
-            _rigidBodyB = GetFixedBody();
-		}
-
 		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, Matrix rigidBodyAFrame,
-			bool useReferenceFrameA)
-			: base(btHingeAccumulatedAngleConstraint_new8(rigidBodyA._native, ref rigidBodyAFrame,
+			bool useReferenceFrameA = false)
+			: base(btHingeAccumulatedAngleConstraint_new4(rigidBodyA._native, ref rigidBodyAFrame,
 				useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -482,21 +440,13 @@ namespace BulletSharp
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeAccumulatedAngleConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB, [In] ref Vector3 axisInA, [In] ref Vector3 axisInB);
+		static extern IntPtr btHingeAccumulatedAngleConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB, [In] ref Vector3 axisInA, [In] ref Vector3 axisInB, bool useReferenceFrameA);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeAccumulatedAngleConstraint_new2(IntPtr rbA, IntPtr rbB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB, [In] ref Vector3 axisInA, [In] ref Vector3 axisInB, bool useReferenceFrameA);
+		static extern IntPtr btHingeAccumulatedAngleConstraint_new2(IntPtr rbA, [In] ref Vector3 pivotInA, [In] ref Vector3 axisInA, bool useReferenceFrameA);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeAccumulatedAngleConstraint_new3(IntPtr rbA, [In] ref Vector3 pivotInA, [In] ref Vector3 axisInA);
+		static extern IntPtr btHingeAccumulatedAngleConstraint_new3(IntPtr rbA, IntPtr rbB, [In] ref Matrix rbAFrame, [In] ref Matrix rbBFrame, bool useReferenceFrameA);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeAccumulatedAngleConstraint_new4(IntPtr rbA, [In] ref Vector3 pivotInA, [In] ref Vector3 axisInA, bool useReferenceFrameA);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeAccumulatedAngleConstraint_new5(IntPtr rbA, IntPtr rbB, [In] ref Matrix rbAFrame, [In] ref Matrix rbBFrame);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeAccumulatedAngleConstraint_new6(IntPtr rbA, IntPtr rbB, [In] ref Matrix rbAFrame, [In] ref Matrix rbBFrame, bool useReferenceFrameA);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeAccumulatedAngleConstraint_new7(IntPtr rbA, [In] ref Matrix rbAFrame);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHingeAccumulatedAngleConstraint_new8(IntPtr rbA, [In] ref Matrix rbAFrame, bool useReferenceFrameA);
+		static extern IntPtr btHingeAccumulatedAngleConstraint_new4(IntPtr rbA, [In] ref Matrix rbAFrame, bool useReferenceFrameA);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btHingeAccumulatedAngleConstraint_getAccumulatedHingeAngle(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

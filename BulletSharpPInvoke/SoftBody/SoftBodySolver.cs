@@ -18,24 +18,14 @@ namespace BulletSharp.SoftBody
 			return btSoftBodySolver_checkInitialized(_native);
 		}
 
-		public void CopyBackToSoftBodies()
+		public void CopyBackToSoftBodies(bool bMove = true)
 		{
-			btSoftBodySolver_copyBackToSoftBodies(_native);
-		}
-
-		public void CopyBackToSoftBodies(bool bMove)
-		{
-			btSoftBodySolver_copyBackToSoftBodies2(_native, bMove);
+			btSoftBodySolver_copyBackToSoftBodies(_native, bMove);
 		}
         /*
-		public void Optimize(AlignedObjectArray softBodies)
+		public void Optimize(AlignedObjectArray softBodies, bool forceUpdate = false)
 		{
-			btSoftBodySolver_optimize(_native, softBodies._native);
-		}
-
-		public void Optimize(AlignedObjectArray softBodies, bool forceUpdate)
-		{
-			btSoftBodySolver_optimize2(_native, softBodies._native, forceUpdate);
+			btSoftBodySolver_optimize(_native, softBodies._native, forceUpdate);
 		}
         */
 		public void PredictMotion(float solverdt)
@@ -109,9 +99,7 @@ namespace BulletSharp.SoftBody
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btSoftBodySolver_checkInitialized(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBodySolver_copyBackToSoftBodies(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBodySolver_copyBackToSoftBodies2(IntPtr obj, bool bMove);
+		static extern void btSoftBodySolver_copyBackToSoftBodies(IntPtr obj, bool bMove);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btSoftBodySolver_getNumberOfPositionIterations(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -121,9 +109,7 @@ namespace BulletSharp.SoftBody
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btSoftBodySolver_getTimeScale(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBodySolver_optimize(IntPtr obj, IntPtr softBodies);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBodySolver_optimize2(IntPtr obj, IntPtr softBodies, bool forceUpdate);
+		static extern void btSoftBodySolver_optimize(IntPtr obj, IntPtr softBodies, bool forceUpdate);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btSoftBodySolver_predictMotion(IntPtr obj, float solverdt);
 		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

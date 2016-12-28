@@ -605,18 +605,9 @@ namespace BulletSharp
 
 		public int GetLimitMotorInfo2(RotationalLimitMotor limitMotor, Matrix transA,
 			Matrix transB, Vector3 linVelA, Vector3 linVelB, Vector3 angVelA, Vector3 angVelB,
-			ConstraintInfo2 info, int row, ref Vector3 ax1, int rotational)
+			ConstraintInfo2 info, int row, ref Vector3 ax1, int rotational, int rotAllowed = 0)
 		{
 			return btGeneric6DofConstraint_get_limit_motor_info2(_native, limitMotor._native,
-				ref transA, ref transB, ref linVelA, ref linVelB, ref angVelA, ref angVelB,
-				info._native, row, ref ax1, rotational);
-		}
-
-		public int GetLimitMotorInfo2(RotationalLimitMotor limitMotor, Matrix transA,
-			Matrix transB, Vector3 linVelA, Vector3 linVelB, Vector3 angVelA, Vector3 angVelB,
-			ConstraintInfo2 info, int row, ref Vector3 ax1, int rotational, int rotAllowed)
-		{
-			return btGeneric6DofConstraint_get_limit_motor_info22(_native, limitMotor._native,
 				ref transA, ref transB, ref linVelA, ref linVelB, ref angVelA, ref angVelB,
 				info._native, row, ref ax1, rotational, rotAllowed);
 		}
@@ -829,9 +820,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofConstraint_calculateTransforms2(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern int btGeneric6DofConstraint_get_limit_motor_info2(IntPtr obj, IntPtr limot, [In] ref Matrix transA, [In] ref Matrix transB, [In] ref Vector3 linVelA, [In] ref Vector3 linVelB, [In] ref Vector3 angVelA, [In] ref Vector3 angVelB, IntPtr info, int row, [In] ref Vector3 ax1, int rotational);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern int btGeneric6DofConstraint_get_limit_motor_info22(IntPtr obj, IntPtr limot, [In] ref Matrix transA, [In] ref Matrix transB, [In] ref Vector3 linVelA, [In] ref Vector3 linVelB, [In] ref Vector3 angVelA, [In] ref Vector3 angVelB, IntPtr info, int row, [In] ref Vector3 ax1, int rotational, int rotAllowed);
+		static extern int btGeneric6DofConstraint_get_limit_motor_info2(IntPtr obj, IntPtr limot, [In] ref Matrix transA, [In] ref Matrix transB, [In] ref Vector3 linVelA, [In] ref Vector3 linVelB, [In] ref Vector3 angVelA, [In] ref Vector3 angVelB, IntPtr info, int row, [In] ref Vector3 ax1, int rotational, int rotAllowed);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btGeneric6DofConstraint_getAngle(IntPtr obj, int axis_index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

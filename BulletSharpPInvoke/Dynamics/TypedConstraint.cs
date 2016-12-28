@@ -655,25 +655,10 @@ namespace BulletSharp
 			btAngularLimit_fit(_native, ref angle);
 		}
 
-		public void Set(float low, float high)
+		public void Set(float low, float high, float softness = 0.9f, float biasFactor = 0.3f,
+			float relaxationFactor = 1.0f)
 		{
-			btAngularLimit_set(_native, low, high);
-		}
-
-		public void Set(float low, float high, float softness)
-		{
-			btAngularLimit_set2(_native, low, high, softness);
-		}
-
-		public void Set(float low, float high, float softness, float biasFactor)
-		{
-			btAngularLimit_set3(_native, low, high, softness, biasFactor);
-		}
-
-		public void Set(float low, float high, float softness, float biasFactor,
-			float relaxationFactor)
-		{
-			btAngularLimit_set4(_native, low, high, softness, biasFactor, relaxationFactor);
+			btAngularLimit_set(_native, low, high, softness, biasFactor, relaxationFactor);
 		}
 
 		public void Test(float angle)
@@ -780,13 +765,7 @@ namespace BulletSharp
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btAngularLimit_isLimit(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btAngularLimit_set(IntPtr obj, float low, float high);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btAngularLimit_set2(IntPtr obj, float low, float high, float _softness);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btAngularLimit_set3(IntPtr obj, float low, float high, float _softness, float _biasFactor);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btAngularLimit_set4(IntPtr obj, float low, float high, float _softness, float _biasFactor, float _relaxationFactor);
+		static extern void btAngularLimit_set(IntPtr obj, float low, float high, float _softness, float _biasFactor, float _relaxationFactor);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btAngularLimit_test(IntPtr obj, float angle);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

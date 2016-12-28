@@ -65,16 +65,11 @@ namespace BulletSharp
 			btMultibodyLink_setAxisTop2(_native, dof, ref axis);
 		}
 
-		public void UpdateCacheMultiDof()
+		public void UpdateCacheMultiDof(float[] pq = null)
 		{
-			btMultibodyLink_updateCacheMultiDof(_native);
+			btMultibodyLink_updateCacheMultiDof(_native, pq);
 		}
 /*
-		public void UpdateCacheMultiDof(float pq)
-		{
-			btMultibodyLink_updateCacheMultiDof2(_native, pq._native);
-		}
-
 		public SpatialMotionVector AbsFrameLocVelocity
 		{
 			get { return btMultibodyLink_getAbsFrameLocVelocity(_native); }
@@ -443,8 +438,6 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultibodyLink_setUserPtr(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_updateCacheMultiDof(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btMultibodyLink_updateCacheMultiDof2(IntPtr obj, IntPtr pq);
+		static extern void btMultibodyLink_updateCacheMultiDof(IntPtr obj, float[] pq);
 	}
 }

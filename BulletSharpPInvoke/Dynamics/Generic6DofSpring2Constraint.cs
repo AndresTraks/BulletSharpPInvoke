@@ -667,33 +667,17 @@ namespace BulletSharp
 		}
 
 		public Generic6DofSpring2Constraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
-			Matrix frameInA, Matrix frameInB)
+			Matrix frameInA, Matrix frameInB, RotateOrder rotOrder = RotateOrder.XYZ)
 			: base(btGeneric6DofSpring2Constraint_new(rigidBodyA._native, rigidBodyB._native,
-				ref frameInA, ref frameInB))
-		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = rigidBodyB;
-		}
-
-		public Generic6DofSpring2Constraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
-			Matrix frameInA, Matrix frameInB, RotateOrder rotOrder)
-			: base(btGeneric6DofSpring2Constraint_new2(rigidBodyA._native, rigidBodyB._native,
 				ref frameInA, ref frameInB, rotOrder))
 		{
 			_rigidBodyA = rigidBodyA;
 			_rigidBodyB = rigidBodyB;
 		}
 
-		public Generic6DofSpring2Constraint(RigidBody rigidBodyB, Matrix frameInB)
-			: base(btGeneric6DofSpring2Constraint_new3(rigidBodyB._native, ref frameInB))
-		{
-            _rigidBodyA = GetFixedBody();
-			_rigidBodyB = rigidBodyB;
-		}
-
 		public Generic6DofSpring2Constraint(RigidBody rigidBodyB, Matrix frameInB,
-			RotateOrder rotOrder)
-			: base(btGeneric6DofSpring2Constraint_new4(rigidBodyB._native, ref frameInB,
+			RotateOrder rotOrder = RotateOrder.XYZ)
+			: base(btGeneric6DofSpring2Constraint_new2(rigidBodyB._native, ref frameInB,
 				rotOrder))
 		{
             _rigidBodyA = GetFixedBody();
@@ -798,14 +782,9 @@ namespace BulletSharp
 			btGeneric6DofSpring2Constraint_setBounce(_native, index, bounce);
 		}
 
-		public void SetDamping(int index, float damping)
+		public void SetDamping(int index, float damping, bool limitIfNeeded = true)
 		{
-			btGeneric6DofSpring2Constraint_setDamping(_native, index, damping);
-		}
-
-		public void SetDamping(int index, float damping, bool limitIfNeeded)
-		{
-			btGeneric6DofSpring2Constraint_setDamping2(_native, index, damping, limitIfNeeded);
+			btGeneric6DofSpring2Constraint_setDamping(_native, index, damping, limitIfNeeded);
 		}
 
 		public void SetEquilibriumPoint()
@@ -853,14 +832,9 @@ namespace BulletSharp
 			btGeneric6DofSpring2Constraint_setServoTarget(_native, index, target);
 		}
 
-		public void SetStiffness(int index, float stiffness)
+		public void SetStiffness(int index, float stiffness, bool limitIfNeeded = true)
 		{
-			btGeneric6DofSpring2Constraint_setStiffness(_native, index, stiffness);
-		}
-
-		public void SetStiffness(int index, float stiffness, bool limitIfNeeded)
-		{
-			btGeneric6DofSpring2Constraint_setStiffness2(_native, index, stiffness,
+			btGeneric6DofSpring2Constraint_setStiffness(_native, index, stiffness,
 				limitIfNeeded);
 		}
 
@@ -994,13 +968,9 @@ namespace BulletSharp
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGeneric6DofSpring2Constraint_new(IntPtr rbA, IntPtr rbB, [In] ref Matrix frameInA, [In] ref Matrix frameInB);
+		static extern IntPtr btGeneric6DofSpring2Constraint_new(IntPtr rbA, IntPtr rbB, [In] ref Matrix frameInA, [In] ref Matrix frameInB, RotateOrder rotOrder);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGeneric6DofSpring2Constraint_new2(IntPtr rbA, IntPtr rbB, [In] ref Matrix frameInA, [In] ref Matrix frameInB, RotateOrder rotOrder);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGeneric6DofSpring2Constraint_new3(IntPtr rbB, [In] ref Matrix frameInB);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGeneric6DofSpring2Constraint_new4(IntPtr rbB, [In] ref Matrix frameInB, RotateOrder rotOrder);
+		static extern IntPtr btGeneric6DofSpring2Constraint_new2(IntPtr rbB, [In] ref Matrix frameInB, RotateOrder rotOrder);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btGeneric6DofSpring2Constraint_btGetMatrixElem([In] ref Matrix mat, int index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -1077,9 +1047,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpring2Constraint_setBounce(IntPtr obj, int index, float bounce);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setDamping(IntPtr obj, int index, float damping);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setDamping2(IntPtr obj, int index, float damping, bool limitIfNeeded);
+		static extern void btGeneric6DofSpring2Constraint_setDamping(IntPtr obj, int index, float damping, bool limitIfNeeded);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpring2Constraint_setEquilibriumPoint(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -1105,9 +1073,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpring2Constraint_setServoTarget(IntPtr obj, int index, float target);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setStiffness(IntPtr obj, int index, float stiffness);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setStiffness2(IntPtr obj, int index, float stiffness, bool limitIfNeeded);
+		static extern void btGeneric6DofSpring2Constraint_setStiffness(IntPtr obj, int index, float stiffness, bool limitIfNeeded);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGeneric6DofSpring2Constraint_setTargetVelocity(IntPtr obj, int index, float velocity);
 	}

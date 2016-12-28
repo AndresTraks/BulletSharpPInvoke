@@ -66,8 +66,7 @@ extern "C" {
 	EXPORT void btMultibodyLink_setPosVarCount(btMultibodyLink* obj, int value);
 	EXPORT void btMultibodyLink_setZeroRotParentToThis(btMultibodyLink* obj, const btQuaternion* value);
 	EXPORT void btMultibodyLink_setUserPtr(btMultibodyLink* obj, const void* value);
-	EXPORT void btMultibodyLink_updateCacheMultiDof(btMultibodyLink* obj);
-	EXPORT void btMultibodyLink_updateCacheMultiDof2(btMultibodyLink* obj, btScalar* pq);
+	EXPORT void btMultibodyLink_updateCacheMultiDof(btMultibodyLink* obj, btScalar* pq);
 #ifdef __cplusplus
 }
 #endif

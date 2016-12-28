@@ -19,15 +19,6 @@ btSoftBody* btSoftBodyHelpers_CreateEllipsoid(btSoftBodyWorldInfo* worldInfo, co
 }
 #endif
 btSoftBody* btSoftBodyHelpers_CreateFromConvexHull(btSoftBodyWorldInfo* worldInfo,
-	const btScalar* vertices, int nvertices)
-{
-	btVector3* verticesTemp = Vector3ArrayIn(vertices, nvertices);
-	btSoftBody* ret = btSoftBodyHelpers::CreateFromConvexHull(*worldInfo, verticesTemp, nvertices);
-	delete[] verticesTemp;
-	return ret;
-}
-
-btSoftBody* btSoftBodyHelpers_CreateFromConvexHull2(btSoftBodyWorldInfo* worldInfo,
 	const btScalar* vertices, int nvertices, bool randomizeConstraints)
 {
 	btVector3* verticesTemp = Vector3ArrayIn(vertices, nvertices);
@@ -44,14 +35,7 @@ btSoftBody* btSoftBodyHelpers_CreateFromTetGenData(btSoftBodyWorldInfo* worldInf
 		btetralinks, bfacesfromtetras);
 }
 
-btSoftBody* btSoftBodyHelpers_CreateFromTriMesh(btSoftBodyWorldInfo* worldInfo, const btScalar* vertices,
-	const int* triangles, int ntriangles)
-{
-	return btSoftBodyHelpers::CreateFromTriMesh(*worldInfo, vertices, triangles,
-		ntriangles);
-}
-
-btSoftBody* btSoftBodyHelpers_CreateFromTriMesh2(btSoftBodyWorldInfo* worldInfo,
+btSoftBody* btSoftBodyHelpers_CreateFromTriMesh(btSoftBodyWorldInfo* worldInfo,
 	const btScalar* vertices, const int* triangles, int ntriangles, bool randomizeConstraints)
 {
 	return btSoftBodyHelpers::CreateFromTriMesh(*worldInfo, vertices, triangles,
@@ -71,19 +55,6 @@ btSoftBody* btSoftBodyHelpers_CreatePatch(btSoftBodyWorldInfo* worldInfo, const 
 }
 #endif
 btSoftBody* btSoftBodyHelpers_CreatePatchUV(btSoftBodyWorldInfo* worldInfo, const btVector3* corner00,
-	const btVector3* corner10, const btVector3* corner01, const btVector3* corner11,
-	int resx, int resy, int fixeds, bool gendiags)
-{
-	BTVECTOR3_IN(corner00);
-	BTVECTOR3_IN(corner10);
-	BTVECTOR3_IN(corner01);
-	BTVECTOR3_IN(corner11);
-	return btSoftBodyHelpers::CreatePatchUV(*worldInfo, BTVECTOR3_USE(corner00),
-		BTVECTOR3_USE(corner10), BTVECTOR3_USE(corner01), BTVECTOR3_USE(corner11),
-		resx, resy, fixeds, gendiags);
-}
-
-btSoftBody* btSoftBodyHelpers_CreatePatchUV2(btSoftBodyWorldInfo* worldInfo, const btVector3* corner00,
 	const btVector3* corner10, const btVector3* corner01, const btVector3* corner11,
 	int resx, int resy, int fixeds, bool gendiags, float* tex_coords)
 {
@@ -105,43 +76,18 @@ btSoftBody* btSoftBodyHelpers_CreateRope(btSoftBodyWorldInfo* worldInfo, const b
 		res, fixeds);
 }
 #endif
-void btSoftBodyHelpers_Draw(btSoftBody* psb, btIDebugDraw* idraw)
-{
-	btSoftBodyHelpers::Draw(psb, idraw);
-}
-
-void btSoftBodyHelpers_Draw2(btSoftBody* psb, btIDebugDraw* idraw, int drawflags)
+void btSoftBodyHelpers_Draw(btSoftBody* psb, btIDebugDraw* idraw, int drawflags)
 {
 	btSoftBodyHelpers::Draw(psb, idraw, drawflags);
 }
 
-void btSoftBodyHelpers_DrawClusterTree(btSoftBody* psb, btIDebugDraw* idraw)
-{
-	btSoftBodyHelpers::DrawClusterTree(psb, idraw);
-}
-
-void btSoftBodyHelpers_DrawClusterTree2(btSoftBody* psb, btIDebugDraw* idraw, int mindepth)
-{
-	btSoftBodyHelpers::DrawClusterTree(psb, idraw, mindepth);
-}
-
-void btSoftBodyHelpers_DrawClusterTree3(btSoftBody* psb, btIDebugDraw* idraw, int mindepth,
+void btSoftBodyHelpers_DrawClusterTree(btSoftBody* psb, btIDebugDraw* idraw, int mindepth,
 	int maxdepth)
 {
 	btSoftBodyHelpers::DrawClusterTree(psb, idraw, mindepth, maxdepth);
 }
 
-void btSoftBodyHelpers_DrawFaceTree(btSoftBody* psb, btIDebugDraw* idraw)
-{
-	btSoftBodyHelpers::DrawFaceTree(psb, idraw);
-}
-
-void btSoftBodyHelpers_DrawFaceTree2(btSoftBody* psb, btIDebugDraw* idraw, int mindepth)
-{
-	btSoftBodyHelpers::DrawFaceTree(psb, idraw, mindepth);
-}
-
-void btSoftBodyHelpers_DrawFaceTree3(btSoftBody* psb, btIDebugDraw* idraw, int mindepth,
+void btSoftBodyHelpers_DrawFaceTree(btSoftBody* psb, btIDebugDraw* idraw, int mindepth,
 	int maxdepth)
 {
 	btSoftBodyHelpers::DrawFaceTree(psb, idraw, mindepth, maxdepth);
@@ -158,17 +104,7 @@ void btSoftBodyHelpers_DrawInfos(btSoftBody* psb, btIDebugDraw* idraw, bool mass
 	btSoftBodyHelpers::DrawInfos(psb, idraw, masses, areas, stress);
 }
 
-void btSoftBodyHelpers_DrawNodeTree(btSoftBody* psb, btIDebugDraw* idraw)
-{
-	btSoftBodyHelpers::DrawNodeTree(psb, idraw);
-}
-
-void btSoftBodyHelpers_DrawNodeTree2(btSoftBody* psb, btIDebugDraw* idraw, int mindepth)
-{
-	btSoftBodyHelpers::DrawNodeTree(psb, idraw, mindepth);
-}
-
-void btSoftBodyHelpers_DrawNodeTree3(btSoftBody* psb, btIDebugDraw* idraw, int mindepth,
+void btSoftBodyHelpers_DrawNodeTree(btSoftBody* psb, btIDebugDraw* idraw, int mindepth,
 	int maxdepth)
 {
 	btSoftBodyHelpers::DrawNodeTree(psb, idraw, mindepth, maxdepth);

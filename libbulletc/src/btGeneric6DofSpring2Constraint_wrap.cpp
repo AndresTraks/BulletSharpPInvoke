@@ -486,15 +486,6 @@ void btTranslationalLimitMotor2_delete(btTranslationalLimitMotor2* obj)
 
 
 btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new(btRigidBody* rbA,
-	btRigidBody* rbB, const btTransform* frameInA, const btTransform* frameInB)
-{
-	BTTRANSFORM_IN(frameInA);
-	BTTRANSFORM_IN(frameInB);
-	return new btGeneric6DofSpring2Constraint(*rbA, *rbB, BTTRANSFORM_USE(frameInA),
-		BTTRANSFORM_USE(frameInB));
-}
-
-btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new2(btRigidBody* rbA,
 	btRigidBody* rbB, const btTransform* frameInA, const btTransform* frameInB, RotateOrder rotOrder)
 {
 	BTTRANSFORM_IN(frameInA);
@@ -503,14 +494,7 @@ btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new2(btRigidBody*
 		BTTRANSFORM_USE(frameInB), rotOrder);
 }
 
-btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new3(btRigidBody* rbB,
-	const btTransform* frameInB)
-{
-	BTTRANSFORM_IN(frameInB);
-	return new btGeneric6DofSpring2Constraint(*rbB, BTTRANSFORM_USE(frameInB));
-}
-
-btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new4(btRigidBody* rbB,
+btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new2(btRigidBody* rbB,
 	const btTransform* frameInB, RotateOrder rotOrder)
 {
 	BTTRANSFORM_IN(frameInB);
@@ -766,12 +750,6 @@ void btGeneric6DofSpring2Constraint_setBounce(btGeneric6DofSpring2Constraint* ob
 }
 
 void btGeneric6DofSpring2Constraint_setDamping(btGeneric6DofSpring2Constraint* obj,
-	int index, btScalar damping)
-{
-	obj->setDamping(index, damping);
-}
-
-void btGeneric6DofSpring2Constraint_setDamping2(btGeneric6DofSpring2Constraint* obj,
 	int index, btScalar damping, bool limitIfNeeded)
 {
 	obj->setDamping(index, damping, limitIfNeeded);
@@ -853,12 +831,6 @@ void btGeneric6DofSpring2Constraint_setServoTarget(btGeneric6DofSpring2Constrain
 }
 
 void btGeneric6DofSpring2Constraint_setStiffness(btGeneric6DofSpring2Constraint* obj,
-	int index, btScalar stiffness)
-{
-	obj->setStiffness(index, stiffness);
-}
-
-void btGeneric6DofSpring2Constraint_setStiffness2(btGeneric6DofSpring2Constraint* obj,
 	int index, btScalar stiffness, bool limitIfNeeded)
 {
 	obj->setStiffness(index, stiffness, limitIfNeeded);

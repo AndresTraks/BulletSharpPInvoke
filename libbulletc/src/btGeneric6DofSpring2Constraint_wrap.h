@@ -97,10 +97,8 @@ extern "C" {
 	EXPORT void btTranslationalLimitMotor2_testLimitValue(btTranslationalLimitMotor2* obj, int limitIndex, btScalar test_value);
 	EXPORT void btTranslationalLimitMotor2_delete(btTranslationalLimitMotor2* obj);
 
-	EXPORT btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new(btRigidBody* rbA, btRigidBody* rbB, const btTransform* frameInA, const btTransform* frameInB);
-	EXPORT btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new2(btRigidBody* rbA, btRigidBody* rbB, const btTransform* frameInA, const btTransform* frameInB, RotateOrder rotOrder);
-	EXPORT btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new3(btRigidBody* rbB, const btTransform* frameInB);
-	EXPORT btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new4(btRigidBody* rbB, const btTransform* frameInB, RotateOrder rotOrder);
+	EXPORT btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new(btRigidBody* rbA, btRigidBody* rbB, const btTransform* frameInA, const btTransform* frameInB, RotateOrder rotOrder);
+	EXPORT btGeneric6DofSpring2Constraint* btGeneric6DofSpring2Constraint_new2(btRigidBody* rbB, const btTransform* frameInB, RotateOrder rotOrder);
 	EXPORT btScalar btGeneric6DofSpring2Constraint_btGetMatrixElem(const btMatrix3x3* mat, int index);
 	EXPORT void btGeneric6DofSpring2Constraint_calculateTransforms(btGeneric6DofSpring2Constraint* obj, const btTransform* transA, const btTransform* transB);
 	EXPORT void btGeneric6DofSpring2Constraint_calculateTransforms2(btGeneric6DofSpring2Constraint* obj);
@@ -135,8 +133,7 @@ extern "C" {
 	EXPORT void btGeneric6DofSpring2Constraint_setAngularUpperLimitReversed(btGeneric6DofSpring2Constraint* obj, const btVector3* angularUpper);
 	EXPORT void btGeneric6DofSpring2Constraint_setAxis(btGeneric6DofSpring2Constraint* obj, const btVector3* axis1, const btVector3* axis2);
 	EXPORT void btGeneric6DofSpring2Constraint_setBounce(btGeneric6DofSpring2Constraint* obj, int index, btScalar bounce);
-	EXPORT void btGeneric6DofSpring2Constraint_setDamping(btGeneric6DofSpring2Constraint* obj, int index, btScalar damping);
-	EXPORT void btGeneric6DofSpring2Constraint_setDamping2(btGeneric6DofSpring2Constraint* obj, int index, btScalar damping, bool limitIfNeeded);
+	EXPORT void btGeneric6DofSpring2Constraint_setDamping(btGeneric6DofSpring2Constraint* obj, int index, btScalar damping, bool limitIfNeeded);
 	EXPORT void btGeneric6DofSpring2Constraint_setEquilibriumPoint(btGeneric6DofSpring2Constraint* obj);
 	EXPORT void btGeneric6DofSpring2Constraint_setEquilibriumPoint2(btGeneric6DofSpring2Constraint* obj, int index, btScalar val);
 	EXPORT void btGeneric6DofSpring2Constraint_setEquilibriumPoint3(btGeneric6DofSpring2Constraint* obj, int index);
@@ -149,8 +146,7 @@ extern "C" {
 	EXPORT void btGeneric6DofSpring2Constraint_setRotationOrder(btGeneric6DofSpring2Constraint* obj, RotateOrder order);
 	EXPORT void btGeneric6DofSpring2Constraint_setServo(btGeneric6DofSpring2Constraint* obj, int index, bool onOff);
 	EXPORT void btGeneric6DofSpring2Constraint_setServoTarget(btGeneric6DofSpring2Constraint* obj, int index, btScalar target);
-	EXPORT void btGeneric6DofSpring2Constraint_setStiffness(btGeneric6DofSpring2Constraint* obj, int index, btScalar stiffness);
-	EXPORT void btGeneric6DofSpring2Constraint_setStiffness2(btGeneric6DofSpring2Constraint* obj, int index, btScalar stiffness, bool limitIfNeeded);
+	EXPORT void btGeneric6DofSpring2Constraint_setStiffness(btGeneric6DofSpring2Constraint* obj, int index, btScalar stiffness, bool limitIfNeeded);
 	EXPORT void btGeneric6DofSpring2Constraint_setTargetVelocity(btGeneric6DofSpring2Constraint* obj, int index, btScalar velocity);
 #ifdef __cplusplus
 }

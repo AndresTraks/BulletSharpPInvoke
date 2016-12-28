@@ -430,30 +430,11 @@ void btGeneric6DofConstraint_calculateTransforms2(btGeneric6DofConstraint* obj)
 	obj->calculateTransforms();
 }
 
-int btGeneric6DofConstraint_get_limit_motor_info2(btGeneric6DofConstraint* obj, btRotationalLimitMotor* limot,
-	const btTransform* transA, const btTransform* transB, const btVector3* linVelA,
-	const btVector3* linVelB, const btVector3* angVelA, const btVector3* angVelB, btTypedConstraint_btConstraintInfo2* info,
-	int row, btVector3* ax1, int rotational)
-{
-	BTTRANSFORM_IN(transA);
-	BTTRANSFORM_IN(transB);
-	BTVECTOR3_IN(linVelA);
-	BTVECTOR3_IN(linVelB);
-	BTVECTOR3_IN(angVelA);
-	BTVECTOR3_IN(angVelB);
-	BTVECTOR3_IN(ax1);
-	int ret = obj->get_limit_motor_info2(limot, BTTRANSFORM_USE(transA), BTTRANSFORM_USE(transB),
-		BTVECTOR3_USE(linVelA), BTVECTOR3_USE(linVelB), BTVECTOR3_USE(angVelA), BTVECTOR3_USE(angVelB),
-		info, row, BTVECTOR3_USE(ax1), rotational);
-	BTVECTOR3_DEF_OUT(ax1);
-	return ret;
-}
-
-int btGeneric6DofConstraint_get_limit_motor_info22(btGeneric6DofConstraint* obj,
+int btGeneric6DofConstraint_get_limit_motor_info2(btGeneric6DofConstraint* obj,
 	btRotationalLimitMotor* limot, const btTransform* transA, const btTransform* transB,
 	const btVector3* linVelA, const btVector3* linVelB, const btVector3* angVelA, const btVector3* angVelB,
 	btTypedConstraint_btConstraintInfo2* info, int row, btVector3* ax1, int rotational,
-	int rotAllowed)
+	int rotAllowed = 0)
 {
 	BTTRANSFORM_IN(transA);
 	BTTRANSFORM_IN(transB);
