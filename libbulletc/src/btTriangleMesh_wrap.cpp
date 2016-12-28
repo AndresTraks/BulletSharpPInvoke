@@ -3,17 +3,7 @@
 #include "conversion.h"
 #include "btTriangleMesh_wrap.h"
 
-btTriangleMesh* btTriangleMesh_new()
-{
-	return new btTriangleMesh();
-}
-
-btTriangleMesh* btTriangleMesh_new2(bool use32bitIndices)
-{
-	return new btTriangleMesh(use32bitIndices);
-}
-
-btTriangleMesh* btTriangleMesh_new3(bool use32bitIndices, bool use4componentVertices)
+btTriangleMesh* btTriangleMesh_new(bool use32bitIndices, bool use4componentVertices)
 {
 	return new btTriangleMesh(use32bitIndices, use4componentVertices);
 }
@@ -24,15 +14,6 @@ void btTriangleMesh_addIndex(btTriangleMesh* obj, int index)
 }
 
 void btTriangleMesh_addTriangle(btTriangleMesh* obj, const btVector3* vertex0, const btVector3* vertex1,
-	const btVector3* vertex2)
-{
-	BTVECTOR3_IN(vertex0);
-	BTVECTOR3_IN(vertex1);
-	BTVECTOR3_IN(vertex2);
-	obj->addTriangle(BTVECTOR3_USE(vertex0), BTVECTOR3_USE(vertex1), BTVECTOR3_USE(vertex2));
-}
-
-void btTriangleMesh_addTriangle2(btTriangleMesh* obj, const btVector3* vertex0, const btVector3* vertex1,
 	const btVector3* vertex2, bool removeDuplicateVertices)
 {
 	BTVECTOR3_IN(vertex0);

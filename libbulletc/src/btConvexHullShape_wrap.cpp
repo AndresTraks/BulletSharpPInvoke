@@ -24,13 +24,7 @@ btConvexHullShape* btConvexHullShape_new4(const btScalar* points, int numPoints,
 	return new btConvexHullShape(points, numPoints, stride);
 }
 
-void btConvexHullShape_addPoint(btConvexHullShape* obj, const btVector3* point)
-{
-	BTVECTOR3_IN(point);
-	obj->addPoint(BTVECTOR3_USE(point));
-}
-
-void btConvexHullShape_addPoint2(btConvexHullShape* obj, const btVector3* point,
+void btConvexHullShape_addPoint(btConvexHullShape* obj, const btVector3* point,
 	bool recalculateLocalAabb)
 {
 	BTVECTOR3_IN(point);

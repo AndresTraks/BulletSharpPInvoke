@@ -11,12 +11,7 @@ btCollisionObject* btCollisionObject_new()
 	return new btCollisionObject();
 }
 
-void btCollisionObject_activate(btCollisionObject* obj)
-{
-	obj->activate();
-}
-
-void btCollisionObject_activate2(btCollisionObject* obj, bool forceActivation)
+void btCollisionObject_activate(btCollisionObject* obj, bool forceActivation)
 {
 	obj->activate(forceActivation);
 }
@@ -181,12 +176,7 @@ void btCollisionObject_getWorldTransform(btCollisionObject* obj, btTransform* va
 	BTTRANSFORM_COPY(value, &obj->getWorldTransform());
 }
 
-bool btCollisionObject_hasAnisotropicFriction(btCollisionObject* obj)
-{
-	return obj->hasAnisotropicFriction();
-}
-
-bool btCollisionObject_hasAnisotropicFriction2(btCollisionObject* obj, int frictionMode)
+bool btCollisionObject_hasAnisotropicFriction(btCollisionObject* obj, int frictionMode)
 {
 	return obj->hasAnisotropicFriction(frictionMode);
 }
@@ -252,13 +242,7 @@ void btCollisionObject_setActivationState(btCollisionObject* obj, int newState)
 	obj->setActivationState(newState);
 }
 
-void btCollisionObject_setAnisotropicFriction(btCollisionObject* obj, const btVector3* anisotropicFriction)
-{
-	BTVECTOR3_IN(anisotropicFriction);
-	obj->setAnisotropicFriction(BTVECTOR3_USE(anisotropicFriction));
-}
-
-void btCollisionObject_setAnisotropicFriction2(btCollisionObject* obj, const btVector3* anisotropicFriction,
+void btCollisionObject_setAnisotropicFriction(btCollisionObject* obj, const btVector3* anisotropicFriction,
 	int frictionMode)
 {
 	BTVECTOR3_IN(anisotropicFriction);

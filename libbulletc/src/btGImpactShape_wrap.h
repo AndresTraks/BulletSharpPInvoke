@@ -35,8 +35,7 @@ extern "C" {
 	EXPORT btGImpactCompoundShape* btGImpactCompoundShape_CompoundPrimitiveManager_getCompoundShape(btGImpactCompoundShape_CompoundPrimitiveManager* obj);
 	EXPORT void btGImpactCompoundShape_CompoundPrimitiveManager_setCompoundShape(btGImpactCompoundShape_CompoundPrimitiveManager* obj, btGImpactCompoundShape* value);
 
-	EXPORT btGImpactCompoundShape* btGImpactCompoundShape_new();
-	EXPORT btGImpactCompoundShape* btGImpactCompoundShape_new2(bool children_has_transform);
+	EXPORT btGImpactCompoundShape* btGImpactCompoundShape_new(bool children_has_transform);
 	EXPORT void btGImpactCompoundShape_addChildShape(btGImpactCompoundShape* obj, const btTransform* localTransform, btCollisionShape* shape);
 	EXPORT void btGImpactCompoundShape_addChildShape2(btGImpactCompoundShape* obj, btCollisionShape* shape);
 	EXPORT btGImpactCompoundShape_CompoundPrimitiveManager* btGImpactCompoundShape_getCompoundPrimitiveManager(btGImpactCompoundShape* obj);

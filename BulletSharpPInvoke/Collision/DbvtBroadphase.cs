@@ -47,14 +47,8 @@ namespace BulletSharp
 
 	public class DbvtBroadphase : BroadphaseInterface
 	{
-		public DbvtBroadphase()
-			: base(btDbvtBroadphase_new())
-		{
-            _overlappingPairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
-		}
-
-		public DbvtBroadphase(OverlappingPairCache pairCache)
-            : base(btDbvtBroadphase_new2((pairCache != null) ? pairCache._native : IntPtr.Zero))
+		public DbvtBroadphase(OverlappingPairCache pairCache = null)
+            : base(btDbvtBroadphase_new((pairCache != null) ? pairCache._native : IntPtr.Zero))
 		{
             _overlappingPairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
                 btBroadphaseInterface_getOverlappingPairCache(_native), true);
@@ -225,9 +219,7 @@ namespace BulletSharp
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btDbvtBroadphase_new();
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btDbvtBroadphase_new2(IntPtr paircache);
+		static extern IntPtr btDbvtBroadphase_new(IntPtr paircache);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btDbvtBroadphase_benchmark(IntPtr __unnamed0);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

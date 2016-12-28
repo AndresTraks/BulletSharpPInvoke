@@ -24,12 +24,9 @@ extern "C" {
 
 	EXPORT btTriangleIndexVertexMaterialArray* btTriangleIndexVertexMaterialArray_new();
 	EXPORT btTriangleIndexVertexMaterialArray* btTriangleIndexVertexMaterialArray_new2(int numTriangles, int* triangleIndexBase, int triangleIndexStride, int numVertices, btScalar* vertexBase, int vertexStride, int numMaterials, unsigned char* materialBase, int materialStride, int* triangleMaterialsBase, int materialIndexStride);
-	EXPORT void btTriangleIndexVertexMaterialArray_addMaterialProperties(btTriangleIndexVertexMaterialArray* obj, const btMaterialProperties* mat);
-	EXPORT void btTriangleIndexVertexMaterialArray_addMaterialProperties2(btTriangleIndexVertexMaterialArray* obj, const btMaterialProperties* mat, PHY_ScalarType triangleType);
-	EXPORT void btTriangleIndexVertexMaterialArray_getLockedMaterialBase(btTriangleIndexVertexMaterialArray* obj, unsigned char** materialBase, int* numMaterials, PHY_ScalarType* materialType, int* materialStride, unsigned char** triangleMaterialBase, int* numTriangles, int* triangleMaterialStride, PHY_ScalarType* triangleType);
-	EXPORT void btTriangleIndexVertexMaterialArray_getLockedMaterialBase2(btTriangleIndexVertexMaterialArray* obj, unsigned char** materialBase, int* numMaterials, PHY_ScalarType* materialType, int* materialStride, unsigned char** triangleMaterialBase, int* numTriangles, int* triangleMaterialStride, PHY_ScalarType* triangleType, int subpart);
-	EXPORT void btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase(btTriangleIndexVertexMaterialArray* obj, const unsigned char** materialBase, int* numMaterials, PHY_ScalarType* materialType, int* materialStride, const unsigned char** triangleMaterialBase, int* numTriangles, int* triangleMaterialStride, PHY_ScalarType* triangleType);
-	EXPORT void btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase2(btTriangleIndexVertexMaterialArray* obj, const unsigned char** materialBase, int* numMaterials, PHY_ScalarType* materialType, int* materialStride, const unsigned char** triangleMaterialBase, int* numTriangles, int* triangleMaterialStride, PHY_ScalarType* triangleType, int subpart);
+	EXPORT void btTriangleIndexVertexMaterialArray_addMaterialProperties(btTriangleIndexVertexMaterialArray* obj, const btMaterialProperties* mat, PHY_ScalarType triangleType);
+	EXPORT void btTriangleIndexVertexMaterialArray_getLockedMaterialBase(btTriangleIndexVertexMaterialArray* obj, unsigned char** materialBase, int* numMaterials, PHY_ScalarType* materialType, int* materialStride, unsigned char** triangleMaterialBase, int* numTriangles, int* triangleMaterialStride, PHY_ScalarType* triangleType, int subpart);
+	EXPORT void btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase(btTriangleIndexVertexMaterialArray* obj, const unsigned char** materialBase, int* numMaterials, PHY_ScalarType* materialType, int* materialStride, const unsigned char** triangleMaterialBase, int* numTriangles, int* triangleMaterialStride, PHY_ScalarType* triangleType, int subpart);
 #ifdef __cplusplus
 }
 #endif

@@ -30,12 +30,7 @@ void btDbvtProxy_setStage(btDbvtProxy* obj, int value)
 }
 
 
-btDbvtBroadphase* btDbvtBroadphase_new()
-{
-	return new btDbvtBroadphase();
-}
-
-btDbvtBroadphase* btDbvtBroadphase_new2(btOverlappingPairCache* paircache)
+btDbvtBroadphase* btDbvtBroadphase_new(btOverlappingPairCache* paircache)
 {
 	return new btDbvtBroadphase(paircache);
 }

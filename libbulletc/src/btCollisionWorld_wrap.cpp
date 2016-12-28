@@ -708,14 +708,6 @@ void btCollisionWorld_contactTest(btCollisionWorld* obj, btCollisionObject* colO
 }
 
 void btCollisionWorld_convexSweepTest(btCollisionWorld* obj, const btConvexShape* castShape,
-	const btTransform* from, const btTransform* to, btCollisionWorld_ConvexResultCallback* resultCallback)
-{
-	BTTRANSFORM_IN(from);
-	BTTRANSFORM_IN(to);
-	obj->convexSweepTest(castShape, BTTRANSFORM_USE(from), BTTRANSFORM_USE(to), *resultCallback);
-}
-
-void btCollisionWorld_convexSweepTest2(btCollisionWorld* obj, const btConvexShape* castShape,
 	const btTransform* from, const btTransform* to, btCollisionWorld_ConvexResultCallback* resultCallback,
 	btScalar allowedCcdPenetration)
 {

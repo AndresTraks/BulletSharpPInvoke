@@ -9,8 +9,7 @@ extern "C" {
 	EXPORT void btDbvtProxy_setLeaf(btDbvtProxy* obj, btDbvtNode* value);
 	EXPORT void btDbvtProxy_setStage(btDbvtProxy* obj, int value);
 
-	EXPORT btDbvtBroadphase* btDbvtBroadphase_new();
-	EXPORT btDbvtBroadphase* btDbvtBroadphase_new2(btOverlappingPairCache* paircache);
+	EXPORT btDbvtBroadphase* btDbvtBroadphase_new(btOverlappingPairCache* paircache);
 	EXPORT void btDbvtBroadphase_benchmark(btBroadphaseInterface* __unnamed0);
 	EXPORT void btDbvtBroadphase_collide(btDbvtBroadphase* obj, btDispatcher* dispatcher);
 	EXPORT int btDbvtBroadphase_getCid(btDbvtBroadphase* obj);

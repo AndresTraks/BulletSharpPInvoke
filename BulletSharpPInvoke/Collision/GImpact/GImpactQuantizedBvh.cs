@@ -147,14 +147,9 @@ namespace BulletSharp
 			btQuantizedBvhTree_clearNodes(_native);
 		}
         /*
-		public GImpactQuantizedBvhNode GetNodePointer()
+		public GImpactQuantizedBvhNode GetNodePointer(int index = 0)
 		{
-			return btQuantizedBvhTree_get_node_pointer(_native);
-		}
-
-		public GImpactQuantizedBvhNode GetNodePointer(int index)
-		{
-			return btQuantizedBvhTree_get_node_pointer2(_native, index);
+			return btQuantizedBvhTree_get_node_pointer(_native, index);
 		}
         */
 		public int GetEscapeNodeIndex(int nodeIndex)
@@ -234,9 +229,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btQuantizedBvhTree_clearNodes(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btQuantizedBvhTree_get_node_pointer(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btQuantizedBvhTree_get_node_pointer2(IntPtr obj, int index);
+		static extern IntPtr btQuantizedBvhTree_get_node_pointer(IntPtr obj, int index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btQuantizedBvhTree_getEscapeNodeIndex(IntPtr obj, int nodeindex);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -308,14 +301,9 @@ namespace BulletSharp
 				ref trans2, collisionPairs._native);
 		}
         /*
-		public GImpactQuantizedBvhNode GetNodePointer()
+		public GImpactQuantizedBvhNode GetNodePointer(int index = 0)
 		{
-			return btGImpactQuantizedBvh_get_node_pointer(_native);
-		}
-
-		public GImpactQuantizedBvhNode GetNodePointer(int index)
-		{
-			return btGImpactQuantizedBvh_get_node_pointer2(_native, index);
+			return btGImpactQuantizedBvh_get_node_pointer(_native, index);
 		}
         */
 		public int GetEscapeNodeIndex(int nodeIndex)
@@ -434,9 +422,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGImpactQuantizedBvh_find_collision(IntPtr boxset1, [In] ref Matrix trans1, IntPtr boxset2, [In] ref Matrix trans2, IntPtr collision_pairs);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGImpactQuantizedBvh_get_node_pointer(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGImpactQuantizedBvh_get_node_pointer2(IntPtr obj, int index);
+		static extern IntPtr btGImpactQuantizedBvh_get_node_pointer(IntPtr obj, int index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btGImpactQuantizedBvh_getEscapeNodeIndex(IntPtr obj, int nodeindex);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

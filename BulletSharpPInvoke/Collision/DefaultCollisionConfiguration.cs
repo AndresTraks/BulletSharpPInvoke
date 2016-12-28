@@ -216,39 +216,17 @@ namespace BulletSharp
             return new EmptyAlgorithm.CreateFunc(createFunc);
         }
 
-		public void SetConvexConvexMultipointIterations()
+		public void SetConvexConvexMultipointIterations(int numPerturbationIterations = 3,
+			int minimumPointsPerturbationThreshold = 3)
 		{
-			btDefaultCollisionConfiguration_setConvexConvexMultipointIterations(_native);
-		}
-
-		public void SetConvexConvexMultipointIterations(int numPerturbationIterations)
-		{
-			btDefaultCollisionConfiguration_setConvexConvexMultipointIterations2(
-				_native, numPerturbationIterations);
-		}
-
-		public void SetConvexConvexMultipointIterations(int numPerturbationIterations,
-			int minimumPointsPerturbationThreshold)
-		{
-			btDefaultCollisionConfiguration_setConvexConvexMultipointIterations3(
+			btDefaultCollisionConfiguration_setConvexConvexMultipointIterations(
 				_native, numPerturbationIterations, minimumPointsPerturbationThreshold);
 		}
 
-		public void SetPlaneConvexMultipointIterations()
+		public void SetPlaneConvexMultipointIterations(int numPerturbationIterations = 3,
+			int minimumPointsPerturbationThreshold = 3)
 		{
-			btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations(_native);
-		}
-
-		public void SetPlaneConvexMultipointIterations(int numPerturbationIterations)
-		{
-			btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations2(_native,
-				numPerturbationIterations);
-		}
-
-		public void SetPlaneConvexMultipointIterations(int numPerturbationIterations,
-			int minimumPointsPerturbationThreshold)
-		{
-			btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations3(_native,
+			btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations(_native,
 				numPerturbationIterations, minimumPointsPerturbationThreshold);
 		}
 
@@ -259,16 +237,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		protected static extern IntPtr btCollisionConfiguration_getClosestPointsAlgorithmCreateFunc(IntPtr obj, int proxyType0, int proxyType1);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btDefaultCollisionConfiguration_setConvexConvexMultipointIterations(IntPtr obj);
+		static extern void btDefaultCollisionConfiguration_setConvexConvexMultipointIterations(IntPtr obj, int numPerturbationIterations, int minimumPointsPerturbationThreshold);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btDefaultCollisionConfiguration_setConvexConvexMultipointIterations2(IntPtr obj, int numPerturbationIterations);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btDefaultCollisionConfiguration_setConvexConvexMultipointIterations3(IntPtr obj, int numPerturbationIterations, int minimumPointsPerturbationThreshold);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations2(IntPtr obj, int numPerturbationIterations);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations3(IntPtr obj, int numPerturbationIterations, int minimumPointsPerturbationThreshold);
+		static extern void btDefaultCollisionConfiguration_setPlaneConvexMultipointIterations(IntPtr obj, int numPerturbationIterations, int minimumPointsPerturbationThreshold);
 	}
 }

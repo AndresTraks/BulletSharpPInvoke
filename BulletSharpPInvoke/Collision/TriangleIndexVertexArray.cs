@@ -261,16 +261,10 @@ namespace BulletSharp
 		{
 		}
 
-		public void AddIndexedMesh(IndexedMesh mesh)
+		public void AddIndexedMesh(IndexedMesh mesh, PhyScalarType indexType = PhyScalarType.Integer)
 		{
             _meshes.Add(mesh);
-			btTriangleIndexVertexArray_addIndexedMesh(_native, mesh._native);
-		}
-
-		public void AddIndexedMesh(IndexedMesh mesh, PhyScalarType indexType)
-		{
-            _meshes.Add(mesh);
-			btTriangleIndexVertexArray_addIndexedMesh2(_native, mesh._native, indexType);
+			btTriangleIndexVertexArray_addIndexedMesh(_native, mesh._native, indexType);
 		}
 
 		public AlignedIndexedMeshArray IndexedMeshArray
@@ -304,9 +298,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btTriangleIndexVertexArray_new2(int numTriangles, IntPtr triangleIndexBase, int triangleIndexStride, int numVertices, IntPtr vertexBase, int vertexStride);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btTriangleIndexVertexArray_addIndexedMesh(IntPtr obj, IntPtr mesh);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btTriangleIndexVertexArray_addIndexedMesh2(IntPtr obj, IntPtr mesh, PhyScalarType indexType);
+		static extern void btTriangleIndexVertexArray_addIndexedMesh(IntPtr obj, IntPtr mesh, PhyScalarType indexType);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btTriangleIndexVertexArray_getIndexedMeshArray(IntPtr obj);
 	}

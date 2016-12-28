@@ -105,12 +105,7 @@ btTriangleIndexVertexArray* btTriangleIndexVertexArray_new2(int numTriangles, in
 		numVertices, vertexBase, vertexStride);
 }
 
-void btTriangleIndexVertexArray_addIndexedMesh(btTriangleIndexVertexArray* obj, const btIndexedMesh* mesh)
-{
-	obj->addIndexedMesh(*mesh);
-}
-
-void btTriangleIndexVertexArray_addIndexedMesh2(btTriangleIndexVertexArray* obj,
+void btTriangleIndexVertexArray_addIndexedMesh(btTriangleIndexVertexArray* obj,
 	const btIndexedMesh* mesh, PHY_ScalarType indexType)
 {
 	obj->addIndexedMesh(*mesh, indexType);

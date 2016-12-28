@@ -511,14 +511,9 @@ namespace BulletSharp
 				ref trans2, collisionPairs._native);
 		}
 
-		public GimBvhTreeNode GetNodePointer()
+		public GimBvhTreeNode GetNodePointer(int index = 0)
 		{
-			return new GimBvhTreeNode(btGImpactBvh_get_node_pointer(_native));
-		}
-
-		public GimBvhTreeNode GetNodePointer(int index)
-		{
-			return new GimBvhTreeNode(btGImpactBvh_get_node_pointer2(_native, index));
+			return new GimBvhTreeNode(btGImpactBvh_get_node_pointer(_native, index));
 		}
 
 		public int GetEscapeNodeIndex(int nodeIndex)
@@ -632,9 +627,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGImpactBvh_find_collision(IntPtr boxset1, [In] ref Matrix trans1, IntPtr boxset2, [In] ref Matrix trans2, IntPtr collision_pairs);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGImpactBvh_get_node_pointer(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGImpactBvh_get_node_pointer2(IntPtr obj, int index);
+		static extern IntPtr btGImpactBvh_get_node_pointer(IntPtr obj, int index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btGImpactBvh_getEscapeNodeIndex(IntPtr obj, int nodeindex);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

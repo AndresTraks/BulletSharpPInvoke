@@ -237,13 +237,8 @@ namespace BulletSharp
 		{
 		}
 
-		public GImpactCompoundShape()
-			: base(btGImpactCompoundShape_new())
-		{
-		}
-
-		public GImpactCompoundShape(bool childrenHasTransform)
-			: base(btGImpactCompoundShape_new2(childrenHasTransform))
+		public GImpactCompoundShape(bool childrenHasTransform = true)
+			: base(btGImpactCompoundShape_new(childrenHasTransform))
 		{
 		}
 
@@ -277,9 +272,7 @@ namespace BulletSharp
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGImpactCompoundShape_new();
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGImpactCompoundShape_new2(bool children_has_transform);
+		static extern IntPtr btGImpactCompoundShape_new(bool children_has_transform);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btGImpactCompoundShape_addChildShape(IntPtr obj, [In] ref Matrix localTransform, IntPtr shape);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

@@ -16,12 +16,7 @@ btPersistentManifold* btPersistentManifold_new2(const btCollisionObject* body0, 
 		contactProcessingThreshold);
 }
 
-int btPersistentManifold_addManifoldPoint(btPersistentManifold* obj, const btManifoldPoint* newPoint)
-{
-	return obj->addManifoldPoint(*newPoint);
-}
-
-int btPersistentManifold_addManifoldPoint2(btPersistentManifold* obj, const btManifoldPoint* newPoint,
+int btPersistentManifold_addManifoldPoint(btPersistentManifold* obj, const btManifoldPoint* newPoint,
 	bool isPredictive)
 {
 	return obj->addManifoldPoint(*newPoint, isPredictive);

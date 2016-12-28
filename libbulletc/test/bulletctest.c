@@ -49,7 +49,7 @@ void test_hacd()
 
 int main(int argc, char* argv[])
 {
-	btDbvtBroadphase* broadphase = btDbvtBroadphase_new();
+	btDbvtBroadphase* broadphase = btDbvtBroadphase_new(0);
 	btDefaultCollisionConfiguration* collisionConfiguration = btDefaultCollisionConfiguration_new();
 	btCollisionDispatcher* dispatcher = btCollisionDispatcher_new(collisionConfiguration);
 	btSequentialImpulseConstraintSolver* solver = btSequentialImpulseConstraintSolver_new();

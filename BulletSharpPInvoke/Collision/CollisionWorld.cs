@@ -813,28 +813,15 @@ namespace BulletSharp
 		}
 
         public void ConvexSweepTestRef(ConvexShape castShape, ref Matrix from, ref Matrix to,
-            ConvexResultCallback resultCallback)
+            ConvexResultCallback resultCallback, float allowedCcdPenetration = 0)
         {
-            btCollisionWorld_convexSweepTest(_native, castShape._native, ref from, ref to, resultCallback._native);
+            btCollisionWorld_convexSweepTest(_native, castShape._native, ref from, ref to, resultCallback._native, allowedCcdPenetration);
         }
 
 		public void ConvexSweepTest(ConvexShape castShape, Matrix from, Matrix to,
-			ConvexResultCallback resultCallback)
+			ConvexResultCallback resultCallback, float allowedCcdPenetration = 0)
 		{
 			btCollisionWorld_convexSweepTest(_native, castShape._native, ref from,
-				ref to, resultCallback._native);
-		}
-
-        public void ConvexSweepTestRef(ConvexShape castShape, ref Matrix from, ref Matrix to,
-            ConvexResultCallback resultCallback, float allowedCcdPenetration)
-        {
-            btCollisionWorld_convexSweepTest2(_native, castShape._native, ref from, ref to, resultCallback._native, allowedCcdPenetration);
-        }
-
-		public void ConvexSweepTest(ConvexShape castShape, Matrix from, Matrix to,
-			ConvexResultCallback resultCallback, float allowedCcdPenetration)
-		{
-			btCollisionWorld_convexSweepTest2(_native, castShape._native, ref from,
 				ref to, resultCallback._native, allowedCcdPenetration);
 		}
 
@@ -1117,9 +1104,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionWorld_contactTest(IntPtr obj, IntPtr colObj, IntPtr resultCallback);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCollisionWorld_convexSweepTest(IntPtr obj, IntPtr castShape, [In] ref Matrix from, [In] ref Matrix to, IntPtr resultCallback);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCollisionWorld_convexSweepTest2(IntPtr obj, IntPtr castShape, [In] ref Matrix from, [In] ref Matrix to, IntPtr resultCallback, float allowedCcdPenetration);
+		static extern void btCollisionWorld_convexSweepTest(IntPtr obj, IntPtr castShape, [In] ref Matrix from, [In] ref Matrix to, IntPtr resultCallback, float allowedCcdPenetration);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionWorld_debugDrawObject(IntPtr obj, [In] ref Matrix worldTransform, IntPtr shape, [In] ref Vector3 color);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

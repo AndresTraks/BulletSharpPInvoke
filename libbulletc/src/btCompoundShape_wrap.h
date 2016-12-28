@@ -15,9 +15,7 @@ extern "C" {
 	EXPORT void btCompoundShapeChild_setTransform(btCompoundShapeChild* obj, const btTransform* value);
 	EXPORT void btCompoundShapeChild_delete(btCompoundShapeChild* obj);
 
-	EXPORT btCompoundShape* btCompoundShape_new();
-	EXPORT btCompoundShape* btCompoundShape_new2(bool enableDynamicAabbTree);
-	EXPORT btCompoundShape* btCompoundShape_new3(bool enableDynamicAabbTree, int initialChildCapacity);
+	EXPORT btCompoundShape* btCompoundShape_new(bool enableDynamicAabbTree, int initialChildCapacity);
 	EXPORT void btCompoundShape_addChildShape(btCompoundShape* obj, const btTransform* localTransform, btCollisionShape* shape);
 	EXPORT void btCompoundShape_calculatePrincipalAxisTransform(btCompoundShape* obj, btScalar* masses, btTransform* principal, btVector3* inertia);
 	EXPORT void btCompoundShape_createAabbTreeFromChildren(btCompoundShape* obj);
@@ -30,8 +28,7 @@ extern "C" {
 	EXPORT void btCompoundShape_recalculateLocalAabb(btCompoundShape* obj);
 	EXPORT void btCompoundShape_removeChildShape(btCompoundShape* obj, btCollisionShape* shape);
 	EXPORT void btCompoundShape_removeChildShapeByIndex(btCompoundShape* obj, int childShapeindex);
-	EXPORT void btCompoundShape_updateChildTransform(btCompoundShape* obj, int childIndex, const btTransform* newChildTransform);
-	EXPORT void btCompoundShape_updateChildTransform2(btCompoundShape* obj, int childIndex, const btTransform* newChildTransform, bool shouldRecalculateLocalAabb);
+	EXPORT void btCompoundShape_updateChildTransform(btCompoundShape* obj, int childIndex, const btTransform* newChildTransform, bool shouldRecalculateLocalAabb);
 #ifdef __cplusplus
 }
 #endif

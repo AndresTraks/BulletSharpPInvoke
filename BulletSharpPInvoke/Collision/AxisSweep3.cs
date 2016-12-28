@@ -9,33 +9,14 @@ namespace BulletSharp
 	{
 		private OverlappingPairCallback _overlappingPairUserCallback;
 
-		public AxisSweep3(Vector3 worldAabbMin, Vector3 worldAabbMax)
-			: base(btAxisSweep3_new(ref worldAabbMin, ref worldAabbMax))
-		{
-            _overlappingPairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
-		}
-
-		public AxisSweep3(Vector3 worldAabbMin, Vector3 worldAabbMax, ushort maxHandles)
-			: base(btAxisSweep3_new2(ref worldAabbMin, ref worldAabbMax, maxHandles))
-		{
-            _overlappingPairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
-		}
-
-		public AxisSweep3(Vector3 worldAabbMin, Vector3 worldAabbMax, ushort maxHandles,
-			OverlappingPairCache pairCache)
-			: base(btAxisSweep3_new3(ref worldAabbMin, ref worldAabbMax, maxHandles,
-                (pairCache != null) ? pairCache._native : IntPtr.Zero))
-		{
-            _overlappingPairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
-                btBroadphaseInterface_getOverlappingPairCache(_native), true);
-		}
-
-		public AxisSweep3(Vector3 worldAabbMin, Vector3 worldAabbMax, ushort maxHandles,
-			OverlappingPairCache pairCache, bool disableRaycastAccelerator)
-			: base(btAxisSweep3_new4(ref worldAabbMin, ref worldAabbMax, maxHandles,
+		public AxisSweep3(Vector3 worldAabbMin, Vector3 worldAabbMax, ushort maxHandles = 16384,
+			OverlappingPairCache pairCache = null, bool disableRaycastAccelerator = false)
+			: base(btAxisSweep3_new(ref worldAabbMin, ref worldAabbMax, maxHandles,
                 (pairCache != null) ? pairCache._native : IntPtr.Zero, disableRaycastAccelerator))
 		{
-		}
+            _overlappingPairCache = pairCache ?? new HashedOverlappingPairCache(
+                btBroadphaseInterface_getOverlappingPairCache(_native), true);
+        }
 
 		public ushort AddHandle(Vector3 aabbMin, Vector3 aabbMax, IntPtr pOwner,
 			short collisionFilterGroup, short collisionFilterMask, Dispatcher dispatcher,
@@ -114,13 +95,7 @@ namespace BulletSharp
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btAxisSweep3_new([In] ref Vector3 worldAabbMin, [In] ref Vector3 worldAabbMax);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btAxisSweep3_new2([In] ref Vector3 worldAabbMin, [In] ref Vector3 worldAabbMax, ushort maxHandles);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btAxisSweep3_new3([In] ref Vector3 worldAabbMin, [In] ref Vector3 worldAabbMax, ushort maxHandles, IntPtr pairCache);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btAxisSweep3_new4([In] ref Vector3 worldAabbMin, [In] ref Vector3 worldAabbMax, ushort maxHandles, IntPtr pairCache, bool disableRaycastAccelerator);
+		static extern IntPtr btAxisSweep3_new([In] ref Vector3 worldAabbMin, [In] ref Vector3 worldAabbMax, ushort maxHandles, IntPtr pairCache, bool disableRaycastAccelerator);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern ushort btAxisSweep3_addHandle(IntPtr obj, [In] ref Vector3 aabbMin, [In] ref Vector3 aabbMax, IntPtr pOwner, short collisionFilterGroup, short collisionFilterMask, IntPtr dispatcher, IntPtr multiSapProxy);
         //[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -150,30 +125,9 @@ namespace BulletSharp
 	{
 		private OverlappingPairCallback _overlappingPairUserCallback;
 
-		public AxisSweep3_32Bit(Vector3 worldAabbMin, Vector3 worldAabbMax)
-			: base(bt32BitAxisSweep3_new(ref worldAabbMin, ref worldAabbMax))
-		{
-            _overlappingPairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
-		}
-
-		public AxisSweep3_32Bit(Vector3 worldAabbMin, Vector3 worldAabbMax, uint maxHandles)
-			: base(bt32BitAxisSweep3_new2(ref worldAabbMin, ref worldAabbMax, maxHandles))
-		{
-            _overlappingPairCache = new HashedOverlappingPairCache(btBroadphaseInterface_getOverlappingPairCache(_native), true);
-		}
-
-		public AxisSweep3_32Bit(Vector3 worldAabbMin, Vector3 worldAabbMax, uint maxHandles,
-			OverlappingPairCache pairCache)
-			: base(bt32BitAxisSweep3_new3(ref worldAabbMin, ref worldAabbMax, maxHandles,
-                (pairCache != null) ? pairCache._native : IntPtr.Zero))
-		{
-            _overlappingPairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
-                btBroadphaseInterface_getOverlappingPairCache(_native), true);
-		}
-
-		public AxisSweep3_32Bit(Vector3 worldAabbMin, Vector3 worldAabbMax, uint maxHandles,
-			OverlappingPairCache pairCache, bool disableRaycastAccelerator)
-			: base(bt32BitAxisSweep3_new4(ref worldAabbMin, ref worldAabbMax, maxHandles,
+		public AxisSweep3_32Bit(Vector3 worldAabbMin, Vector3 worldAabbMax, uint maxHandles = 1500000,
+			OverlappingPairCache pairCache = null, bool disableRaycastAccelerator = false)
+			: base(bt32BitAxisSweep3_new(ref worldAabbMin, ref worldAabbMax, maxHandles,
                 (pairCache != null) ? pairCache._native : IntPtr.Zero, disableRaycastAccelerator))
 		{
             _overlappingPairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
@@ -255,13 +209,7 @@ namespace BulletSharp
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr bt32BitAxisSweep3_new([In] ref Vector3 worldAabbMin, [In] ref Vector3 worldAabbMax);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr bt32BitAxisSweep3_new2([In] ref Vector3 worldAabbMin, [In] ref Vector3 worldAabbMax, uint maxHandles);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr bt32BitAxisSweep3_new3([In] ref Vector3 worldAabbMin, [In] ref Vector3 worldAabbMax, uint maxHandles, IntPtr pairCache);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr bt32BitAxisSweep3_new4([In] ref Vector3 worldAabbMin, [In] ref Vector3 worldAabbMax, uint maxHandles, IntPtr pairCache, bool disableRaycastAccelerator);
+		static extern IntPtr bt32BitAxisSweep3_new([In] ref Vector3 worldAabbMin, [In] ref Vector3 worldAabbMax, uint maxHandles, IntPtr pairCache, bool disableRaycastAccelerator);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern uint bt32BitAxisSweep3_addHandle(IntPtr obj, [In] ref Vector3 aabbMin, [In] ref Vector3 aabbMax, IntPtr pOwner, short collisionFilterGroup, short collisionFilterMask, IntPtr dispatcher, IntPtr multiSapProxy);
         //[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

@@ -147,16 +147,10 @@ namespace BulletSharp
 			_native = native;
 		}
 
-		public void GetClosestPoints(ClosestPointInput input, Result output, IDebugDraw debugDraw)
+		public void GetClosestPoints(ClosestPointInput input, Result output, IDebugDraw debugDraw,
+			bool swapResults = false)
 		{
 			btDiscreteCollisionDetectorInterface_getClosestPoints(_native, input._native,
-				output._native, DebugDraw.GetUnmanaged(debugDraw));
-		}
-
-		public void GetClosestPoints(ClosestPointInput input, Result output, IDebugDraw debugDraw,
-			bool swapResults)
-		{
-			btDiscreteCollisionDetectorInterface_getClosestPoints2(_native, input._native,
 				output._native, DebugDraw.GetUnmanaged(debugDraw), swapResults);
 		}
 
@@ -181,9 +175,7 @@ namespace BulletSharp
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btDiscreteCollisionDetectorInterface_getClosestPoints(IntPtr obj, IntPtr input, IntPtr output, IntPtr debugDraw);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btDiscreteCollisionDetectorInterface_getClosestPoints2(IntPtr obj, IntPtr input, IntPtr output, IntPtr debugDraw, bool swapResults);
+		static extern void btDiscreteCollisionDetectorInterface_getClosestPoints(IntPtr obj, IntPtr input, IntPtr output, IntPtr debugDraw, bool swapResults);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btDiscreteCollisionDetectorInterface_delete(IntPtr obj);
 	}

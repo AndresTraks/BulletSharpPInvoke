@@ -49,8 +49,7 @@ extern "C" {
 	EXPORT void btQuantizedBvh_reportRayOverlappingNodex(btQuantizedBvh* obj, btNodeOverlapCallback* nodeCallback, const btVector3* raySource, const btVector3* rayTarget);
 	EXPORT bool btQuantizedBvh_serialize(btQuantizedBvh* obj, void* o_alignedDataBuffer, unsigned int i_dataBufferSize, bool i_swapEndian);
 	EXPORT const char* btQuantizedBvh_serialize2(btQuantizedBvh* obj, void* dataBuffer, btSerializer* serializer);
-	EXPORT void btQuantizedBvh_setQuantizationValues(btQuantizedBvh* obj, const btVector3* bvhAabbMin, const btVector3* bvhAabbMax);
-	EXPORT void btQuantizedBvh_setQuantizationValues2(btQuantizedBvh* obj, const btVector3* bvhAabbMin, const btVector3* bvhAabbMax, btScalar quantizationMargin);
+	EXPORT void btQuantizedBvh_setQuantizationValues(btQuantizedBvh* obj, const btVector3* bvhAabbMin, const btVector3* bvhAabbMax, btScalar quantizationMargin);
 	EXPORT void btQuantizedBvh_setTraversalMode(btQuantizedBvh* obj, btQuantizedBvh_btTraversalMode traversalMode);
 	EXPORT void btQuantizedBvh_unQuantize(btQuantizedBvh* obj, const unsigned short* vecIn, btVector3* value);
 	EXPORT void btQuantizedBvh_delete(btQuantizedBvh* obj);

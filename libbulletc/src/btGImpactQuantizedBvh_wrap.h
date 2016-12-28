@@ -22,8 +22,7 @@ extern "C" {
 	EXPORT btQuantizedBvhTree* btQuantizedBvhTree_new();
 	EXPORT void btQuantizedBvhTree_build_tree(btQuantizedBvhTree* obj, GIM_BVH_DATA_ARRAY* primitive_boxes);
 	EXPORT void btQuantizedBvhTree_clearNodes(btQuantizedBvhTree* obj);
-	EXPORT const BT_QUANTIZED_BVH_NODE* btQuantizedBvhTree_get_node_pointer(btQuantizedBvhTree* obj);
-	EXPORT const BT_QUANTIZED_BVH_NODE* btQuantizedBvhTree_get_node_pointer2(btQuantizedBvhTree* obj, int index);
+	EXPORT const BT_QUANTIZED_BVH_NODE* btQuantizedBvhTree_get_node_pointer(btQuantizedBvhTree* obj, int index);
 	EXPORT int btQuantizedBvhTree_getEscapeNodeIndex(btQuantizedBvhTree* obj, int nodeindex);
 	EXPORT int btQuantizedBvhTree_getLeftNode(btQuantizedBvhTree* obj, int nodeindex);
 	EXPORT void btQuantizedBvhTree_getNodeBound(btQuantizedBvhTree* obj, int nodeindex, btAABB* bound);
@@ -42,8 +41,7 @@ extern "C" {
 	EXPORT bool btGImpactQuantizedBvh_boxQueryTrans(btGImpactQuantizedBvh* obj, const btAABB* box, const btTransform* transform, btAlignedObjectArray_int* collided_results);
 	EXPORT void btGImpactQuantizedBvh_buildSet(btGImpactQuantizedBvh* obj);
 	EXPORT void btGImpactQuantizedBvh_find_collision(const btGImpactQuantizedBvh* boxset1, const btTransform* trans1, const btGImpactQuantizedBvh* boxset2, const btTransform* trans2, btPairSet* collision_pairs);
-	EXPORT const BT_QUANTIZED_BVH_NODE* btGImpactQuantizedBvh_get_node_pointer(btGImpactQuantizedBvh* obj);
-	EXPORT const BT_QUANTIZED_BVH_NODE* btGImpactQuantizedBvh_get_node_pointer2(btGImpactQuantizedBvh* obj, int index);
+	EXPORT const BT_QUANTIZED_BVH_NODE* btGImpactQuantizedBvh_get_node_pointer(btGImpactQuantizedBvh* obj, int index);
 	EXPORT int btGImpactQuantizedBvh_getEscapeNodeIndex(btGImpactQuantizedBvh* obj, int nodeindex);
 	EXPORT btAABB* btGImpactQuantizedBvh_getGlobalBox(btGImpactQuantizedBvh* obj);
 	EXPORT int btGImpactQuantizedBvh_getLeftNode(btGImpactQuantizedBvh* obj, int nodeindex);

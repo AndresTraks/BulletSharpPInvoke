@@ -80,13 +80,6 @@ void btDiscreteCollisionDetectorInterface_Result_delete(btDiscreteCollisionDetec
 
 void btDiscreteCollisionDetectorInterface_getClosestPoints(btDiscreteCollisionDetectorInterface* obj,
 	const btDiscreteCollisionDetectorInterface_ClosestPointInput* input, btDiscreteCollisionDetectorInterface_Result* output,
-	btIDebugDraw* debugDraw)
-{
-	obj->getClosestPoints(*input, *output, debugDraw);
-}
-
-void btDiscreteCollisionDetectorInterface_getClosestPoints2(btDiscreteCollisionDetectorInterface* obj,
-	const btDiscreteCollisionDetectorInterface_ClosestPointInput* input, btDiscreteCollisionDetectorInterface_Result* output,
 	btIDebugDraw* debugDraw, bool swapResults)
 {
 	obj->getClosestPoints(*input, *output, debugDraw, swapResults);

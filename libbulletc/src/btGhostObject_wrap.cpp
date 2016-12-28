@@ -9,27 +9,13 @@ btGhostObject* btGhostObject_new()
 	return new btGhostObject();
 }
 
-void btGhostObject_addOverlappingObjectInternal(btGhostObject* obj, btBroadphaseProxy* otherProxy)
-{
-	obj->addOverlappingObjectInternal(otherProxy);
-}
-
-void btGhostObject_addOverlappingObjectInternal2(btGhostObject* obj, btBroadphaseProxy* otherProxy,
+void btGhostObject_addOverlappingObjectInternal(btGhostObject* obj, btBroadphaseProxy* otherProxy,
 	btBroadphaseProxy* thisProxy)
 {
 	obj->addOverlappingObjectInternal(otherProxy, thisProxy);
 }
 
 void btGhostObject_convexSweepTest(btGhostObject* obj, const btConvexShape* castShape,
-	const btTransform* convexFromWorld, const btTransform* convexToWorld, btCollisionWorld_ConvexResultCallback* resultCallback)
-{
-	BTTRANSFORM_IN(convexFromWorld);
-	BTTRANSFORM_IN(convexToWorld);
-	obj->convexSweepTest(castShape, BTTRANSFORM_USE(convexFromWorld), BTTRANSFORM_USE(convexToWorld),
-		*resultCallback);
-}
-
-void btGhostObject_convexSweepTest2(btGhostObject* obj, const btConvexShape* castShape,
 	const btTransform* convexFromWorld, const btTransform* convexToWorld, btCollisionWorld_ConvexResultCallback* resultCallback,
 	btScalar allowedCcdPenetration)
 {
@@ -63,12 +49,6 @@ void btGhostObject_rayTest(btGhostObject* obj, const btVector3* rayFromWorld, co
 }
 
 void btGhostObject_removeOverlappingObjectInternal(btGhostObject* obj, btBroadphaseProxy* otherProxy,
-	btDispatcher* dispatcher)
-{
-	obj->removeOverlappingObjectInternal(otherProxy, dispatcher);
-}
-
-void btGhostObject_removeOverlappingObjectInternal2(btGhostObject* obj, btBroadphaseProxy* otherProxy,
 	btDispatcher* dispatcher, btBroadphaseProxy* thisProxy)
 {
 	obj->removeOverlappingObjectInternal(otherProxy, dispatcher, thisProxy);

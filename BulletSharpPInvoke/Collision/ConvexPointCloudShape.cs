@@ -14,15 +14,9 @@ namespace BulletSharp
 		{
 		}
 
-        public ConvexPointCloudShape(Vector3Array points, int numPoints, Vector3 localScaling)
-			: base(btConvexPointCloudShape_new2(points._native, numPoints, ref localScaling))
-		{
-            _unscaledPoints = points;
-		}
-
         public ConvexPointCloudShape(Vector3Array points, int numPoints, Vector3 localScaling,
-			bool computeAabb)
-			: base(btConvexPointCloudShape_new3(points._native, numPoints, ref localScaling,
+			bool computeAabb = true)
+			: base(btConvexPointCloudShape_new2(points._native, numPoints, ref localScaling,
 				computeAabb))
 		{
             _unscaledPoints = points;
@@ -40,22 +34,16 @@ namespace BulletSharp
 			return value;
 		}
 
-        public void SetPoints(Vector3Array points, int numPoints)
+        public void SetPoints(Vector3Array points, int numPoints, bool computeAabb = true)
 		{
-			btConvexPointCloudShape_setPoints(_native, points._native, numPoints);
-            _unscaledPoints = points;
-		}
-
-        public void SetPoints(Vector3Array points, int numPoints, bool computeAabb)
-		{
-			btConvexPointCloudShape_setPoints2(_native, points._native, numPoints,
+			btConvexPointCloudShape_setPoints(_native, points._native, numPoints,
 				computeAabb);
             _unscaledPoints = points;
 		}
 
         public void SetPoints(Vector3Array points, int numPoints, bool computeAabb, Vector3 localScaling)
 		{
-			btConvexPointCloudShape_setPoints3(_native, points._native, numPoints,
+			btConvexPointCloudShape_setPoints2(_native, points._native, numPoints,
 				computeAabb, ref localScaling);
             _unscaledPoints = points;
 		}
@@ -88,9 +76,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btConvexPointCloudShape_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btConvexPointCloudShape_new2(IntPtr points, int numPoints, [In] ref Vector3 localScaling);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern IntPtr btConvexPointCloudShape_new3(IntPtr points, int numPoints, [In] ref Vector3 localScaling, bool computeAabb);
+        static extern IntPtr btConvexPointCloudShape_new2(IntPtr points, int numPoints, [In] ref Vector3 localScaling, bool computeAabb);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btConvexPointCloudShape_getNumPoints(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -98,10 +84,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btConvexPointCloudShape_getUnscaledPoints(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btConvexPointCloudShape_setPoints(IntPtr obj, IntPtr points, int numPoints);
+        static extern void btConvexPointCloudShape_setPoints(IntPtr obj, IntPtr points, int numPoints, bool computeAabb);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btConvexPointCloudShape_setPoints2(IntPtr obj, IntPtr points, int numPoints, bool computeAabb);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btConvexPointCloudShape_setPoints3(IntPtr obj, IntPtr points, int numPoints, bool computeAabb, [In] ref Vector3 localScaling);
+        static extern void btConvexPointCloudShape_setPoints2(IntPtr obj, IntPtr points, int numPoints, bool computeAabb, [In] ref Vector3 localScaling);
 	}
 }

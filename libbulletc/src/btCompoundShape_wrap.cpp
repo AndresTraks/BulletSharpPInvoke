@@ -60,17 +60,7 @@ void btCompoundShapeChild_delete(btCompoundShapeChild* obj)
 }
 
 
-btCompoundShape* btCompoundShape_new()
-{
-	return new btCompoundShape();
-}
-
-btCompoundShape* btCompoundShape_new2(bool enableDynamicAabbTree)
-{
-	return new btCompoundShape(enableDynamicAabbTree);
-}
-
-btCompoundShape* btCompoundShape_new3(bool enableDynamicAabbTree, int initialChildCapacity)
+btCompoundShape* btCompoundShape_new(bool enableDynamicAabbTree, int initialChildCapacity)
 {
 	return new btCompoundShape(enableDynamicAabbTree, initialChildCapacity);
 }
@@ -142,13 +132,7 @@ void btCompoundShape_removeChildShapeByIndex(btCompoundShape* obj, int childShap
 	obj->removeChildShapeByIndex(childShapeindex);
 }
 
-void btCompoundShape_updateChildTransform(btCompoundShape* obj, int childIndex, const btTransform* newChildTransform)
-{
-	BTTRANSFORM_IN(newChildTransform);
-	obj->updateChildTransform(childIndex, BTTRANSFORM_USE(newChildTransform));
-}
-
-void btCompoundShape_updateChildTransform2(btCompoundShape* obj, int childIndex,
+void btCompoundShape_updateChildTransform(btCompoundShape* obj, int childIndex,
 	const btTransform* newChildTransform, bool shouldRecalculateLocalAabb)
 {
 	BTTRANSFORM_IN(newChildTransform);

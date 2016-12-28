@@ -21,7 +21,7 @@ namespace BulletSharp
             int numVerts, numFaces;
             PhyScalarType vertsType, indicesType;
             int vertexStride, indexStride;
-            btStridingMeshInterface_getLockedReadOnlyVertexIndexBase2(_native, out vertexBase, out numVerts, out vertsType, out vertexStride, out indexBase, out indexStride, out numFaces, out indicesType, subpart);
+            btStridingMeshInterface_getLockedReadOnlyVertexIndexBase(_native, out vertexBase, out numVerts, out vertsType, out vertexStride, out indexBase, out indexStride, out numFaces, out indicesType, subpart);
 
             int length = numFaces * indexStride;
             return new UnmanagedMemoryStream((byte*)indexBase.ToPointer(), length, length, FileAccess.ReadWrite);
@@ -33,7 +33,7 @@ namespace BulletSharp
             int numVerts, numFaces;
             PhyScalarType vertsType, indicesType;
             int vertexStride, indexStride;
-            btStridingMeshInterface_getLockedReadOnlyVertexIndexBase2(_native, out vertexBase, out numVerts, out vertsType, out vertexStride, out indexBase, out indexStride, out numFaces, out indicesType, subpart);
+            btStridingMeshInterface_getLockedReadOnlyVertexIndexBase(_native, out vertexBase, out numVerts, out vertsType, out vertexStride, out indexBase, out indexStride, out numFaces, out indicesType, subpart);
 
             int length = numVerts * vertexStride;
             return new UnmanagedMemoryStream((byte*)vertexBase.ToPointer(), length, length, FileAccess.ReadWrite);
@@ -52,36 +52,18 @@ namespace BulletSharp
 
 		public void GetLockedReadOnlyVertexIndexBase(out IntPtr vertexBase, out int numVerts,
 			out PhyScalarType type, out int vertexStride, out IntPtr indexbase, out int indexStride,
-			out int numFaces, out PhyScalarType indicesType)
+			out int numFaces, out PhyScalarType indicesType, int subpart = 0)
 		{
 			btStridingMeshInterface_getLockedReadOnlyVertexIndexBase(_native, out vertexBase,
-				out numVerts, out type, out vertexStride, out indexbase, out indexStride,
-				out numFaces, out indicesType);
-		}
-
-		public void GetLockedReadOnlyVertexIndexBase(out IntPtr vertexBase, out int numVerts,
-			out PhyScalarType type, out int vertexStride, out IntPtr indexbase, out int indexStride,
-			out int numFaces, out PhyScalarType indicesType, int subpart)
-		{
-			btStridingMeshInterface_getLockedReadOnlyVertexIndexBase2(_native, out vertexBase,
 				out numVerts, out type, out vertexStride, out indexbase, out indexStride,
 				out numFaces, out indicesType, subpart);
 		}
 
 		public void GetLockedVertexIndexBase(out IntPtr vertexBase, out int numVerts,
 			out PhyScalarType type, out int vertexStride, out IntPtr indexbase, out int indexStride,
-			out int numFaces, out PhyScalarType indicesType)
+			out int numFaces, out PhyScalarType indicesType, int subpart = 0)
 		{
 			btStridingMeshInterface_getLockedVertexIndexBase(_native, out vertexBase,
-				out numVerts, out type, out vertexStride, out indexbase, out indexStride,
-				out numFaces, out indicesType);
-		}
-
-		public void GetLockedVertexIndexBase(out IntPtr vertexBase, out int numVerts,
-			out PhyScalarType type, out int vertexStride, out IntPtr indexbase, out int indexStride,
-			out int numFaces, out PhyScalarType indicesType, int subpart)
-		{
-			btStridingMeshInterface_getLockedVertexIndexBase2(_native, out vertexBase,
 				out numVerts, out type, out vertexStride, out indexbase, out indexStride,
 				out numFaces, out indicesType, subpart);
 		}
@@ -179,13 +161,9 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btStridingMeshInterface_calculateSerializeBufferSize(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btStridingMeshInterface_getLockedReadOnlyVertexIndexBase(IntPtr obj, out IntPtr vertexbase, out int numverts, out PhyScalarType type, out int vertexStride, out IntPtr indexbase, out int indexstride, out int numfaces, out PhyScalarType indicestype);
+        static extern void btStridingMeshInterface_getLockedReadOnlyVertexIndexBase(IntPtr obj, out IntPtr vertexbase, out int numverts, out PhyScalarType type, out int vertexStride, out IntPtr indexbase, out int indexstride, out int numfaces, out PhyScalarType indicestype, int subpart);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btStridingMeshInterface_getLockedReadOnlyVertexIndexBase2(IntPtr obj, out IntPtr vertexbase, out int numverts, out PhyScalarType type, out int vertexStride, out IntPtr indexbase, out int indexstride, out int numfaces, out PhyScalarType indicestype, int subpart);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btStridingMeshInterface_getLockedVertexIndexBase(IntPtr obj, out IntPtr vertexbase, out int numverts, out PhyScalarType type, out int vertexStride, out IntPtr indexbase, out int indexstride, out int numfaces, out PhyScalarType indicestype);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btStridingMeshInterface_getLockedVertexIndexBase2(IntPtr obj, out IntPtr vertexbase, out int numverts, out PhyScalarType type, out int vertexStride, out IntPtr indexbase, out int indexstride, out int numfaces, out PhyScalarType indicestype, int subpart);
+        static extern void btStridingMeshInterface_getLockedVertexIndexBase(IntPtr obj, out IntPtr vertexbase, out int numverts, out PhyScalarType type, out int vertexStride, out IntPtr indexbase, out int indexstride, out int numfaces, out PhyScalarType indicestype, int subpart);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btStridingMeshInterface_getNumSubParts(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

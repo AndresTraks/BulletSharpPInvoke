@@ -4,8 +4,7 @@
 extern "C" {
 #endif
 	EXPORT btCollisionObject* btCollisionObject_new();
-	EXPORT void btCollisionObject_activate(btCollisionObject* obj);
-	EXPORT void btCollisionObject_activate2(btCollisionObject* obj, bool forceActivation);
+	EXPORT void btCollisionObject_activate(btCollisionObject* obj, bool forceActivation);
 	EXPORT int btCollisionObject_calculateSerializeBufferSize(btCollisionObject* obj);
 	EXPORT bool btCollisionObject_checkCollideWith(btCollisionObject* obj, const btCollisionObject* co);
 	EXPORT bool btCollisionObject_checkCollideWithOverride(btCollisionObject* obj, const btCollisionObject* co);
@@ -38,8 +37,7 @@ extern "C" {
 	EXPORT int btCollisionObject_getUserIndex2(btCollisionObject* obj);
 	EXPORT void* btCollisionObject_getUserPointer(btCollisionObject* obj);
 	EXPORT void btCollisionObject_getWorldTransform(btCollisionObject* obj, btTransform* value);
-	EXPORT bool btCollisionObject_hasAnisotropicFriction(btCollisionObject* obj);
-	EXPORT bool btCollisionObject_hasAnisotropicFriction2(btCollisionObject* obj, int frictionMode);
+	EXPORT bool btCollisionObject_hasAnisotropicFriction(btCollisionObject* obj, int frictionMode);
 	EXPORT bool btCollisionObject_hasContactResponse(btCollisionObject* obj);
 	EXPORT void* btCollisionObject_internalGetExtensionPointer(btCollisionObject* obj);
 	EXPORT void btCollisionObject_internalSetExtensionPointer(btCollisionObject* obj, void* pointer);
@@ -52,8 +50,7 @@ extern "C" {
 	EXPORT const char* btCollisionObject_serialize(btCollisionObject* obj, void* dataBuffer, btSerializer* serializer);
 	EXPORT void btCollisionObject_serializeSingleObject(btCollisionObject* obj, btSerializer* serializer);
 	EXPORT void btCollisionObject_setActivationState(btCollisionObject* obj, int newState);
-	EXPORT void btCollisionObject_setAnisotropicFriction(btCollisionObject* obj, const btVector3* anisotropicFriction);
-	EXPORT void btCollisionObject_setAnisotropicFriction2(btCollisionObject* obj, const btVector3* anisotropicFriction, int frictionMode);
+	EXPORT void btCollisionObject_setAnisotropicFriction(btCollisionObject* obj, const btVector3* anisotropicFriction, int frictionMode);
 	EXPORT void btCollisionObject_setBroadphaseHandle(btCollisionObject* obj, btBroadphaseProxy* handle);
 	EXPORT void btCollisionObject_setCcdMotionThreshold(btCollisionObject* obj, btScalar ccdMotionThreshold);
 	EXPORT void btCollisionObject_setCcdSweptSphereRadius(btCollisionObject* obj, btScalar radius);

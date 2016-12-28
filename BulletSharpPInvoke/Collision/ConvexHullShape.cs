@@ -21,12 +21,7 @@ namespace BulletSharp
         {
         }
 
-        public ConvexHullShape(float[] points, int numPoints)
-            : this(points, numPoints, 3 * sizeof(float))
-        {
-        }
-
-		public ConvexHullShape(float[] points, int numPoints, int stride)
+		public ConvexHullShape(float[] points, int numPoints, int stride = 3 * sizeof(float))
 			: base(btConvexHullShape_new4(points, numPoints, stride))
 		{
 		}
@@ -38,7 +33,7 @@ namespace BulletSharp
             foreach (Vector3 v in points)
             {
                 Vector3 viter = v;
-                btConvexHullShape_addPoint(_native, ref viter);
+                AddPointRef(ref viter, false);
                 i++;
                 if (i == numPoints)
                 {
@@ -54,29 +49,19 @@ namespace BulletSharp
 		    foreach (Vector3 v in points)
             {
                 Vector3 viter = v;
-                btConvexHullShape_addPoint(_native, ref viter);
+                AddPointRef(ref viter, false);
             }
 		    RecalcLocalAabb();
 		}
 
-        public void AddPointRef(ref Vector3 point)
+        public void AddPointRef(ref Vector3 point, bool recalculateLocalAabb = true)
         {
-            btConvexHullShape_addPoint(_native, ref point);
+            btConvexHullShape_addPoint(_native, ref point, recalculateLocalAabb);
         }
 
-		public void AddPoint(Vector3 point)
+		public void AddPoint(Vector3 point, bool recalculateLocalAabb = true)
 		{
-			btConvexHullShape_addPoint(_native, ref point);
-		}
-
-        public void AddPointRef(ref Vector3 point, bool recalculateLocalAabb)
-        {
-            btConvexHullShape_addPoint2(_native, ref point, recalculateLocalAabb);
-        }
-
-		public void AddPoint(Vector3 point, bool recalculateLocalAabb)
-		{
-			btConvexHullShape_addPoint2(_native, ref point, recalculateLocalAabb);
+			btConvexHullShape_addPoint(_native, ref point, recalculateLocalAabb);
 		}
 
         public void GetScaledPoint(int i, out Vector3 value)
@@ -136,9 +121,7 @@ namespace BulletSharp
 		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		//static extern IntPtr btConvexHullShape_new4(Vector3[] points, int numPoints, int stride);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexHullShape_addPoint(IntPtr obj, [In] ref Vector3 point);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexHullShape_addPoint2(IntPtr obj, [In] ref Vector3 point, bool recalculateLocalAabb);
+		static extern void btConvexHullShape_addPoint(IntPtr obj, [In] ref Vector3 point, bool recalculateLocalAabb);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btConvexHullShape_getNumPoints(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

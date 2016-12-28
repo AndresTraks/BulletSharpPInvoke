@@ -51,12 +51,7 @@ void btPolyhedralConvexShape_getVertex(btPolyhedralConvexShape* obj, int i, btVe
 	BTVECTOR3_DEF_OUT(vtx);
 }
 
-bool btPolyhedralConvexShape_initializePolyhedralFeatures(btPolyhedralConvexShape* obj)
-{
-	return obj->initializePolyhedralFeatures();
-}
-
-bool btPolyhedralConvexShape_initializePolyhedralFeatures2(btPolyhedralConvexShape* obj,
+bool btPolyhedralConvexShape_initializePolyhedralFeatures(btPolyhedralConvexShape* obj,
 	int shiftVerticesByMargin)
 {
 	return obj->initializePolyhedralFeatures(shiftVerticesByMargin);

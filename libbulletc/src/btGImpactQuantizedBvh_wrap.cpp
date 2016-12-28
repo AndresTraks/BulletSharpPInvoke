@@ -92,12 +92,7 @@ void btQuantizedBvhTree_clearNodes(btQuantizedBvhTree* obj)
 	obj->clearNodes();
 }
 
-const BT_QUANTIZED_BVH_NODE* btQuantizedBvhTree_get_node_pointer(btQuantizedBvhTree* obj)
-{
-	return obj->get_node_pointer();
-}
-
-const BT_QUANTIZED_BVH_NODE* btQuantizedBvhTree_get_node_pointer2(btQuantizedBvhTree* obj,
+const BT_QUANTIZED_BVH_NODE* btQuantizedBvhTree_get_node_pointer(btQuantizedBvhTree* obj,
 	int index)
 {
 	return obj->get_node_pointer(index);
@@ -199,12 +194,7 @@ void btGImpactQuantizedBvh_find_collision(const btGImpactQuantizedBvh* boxset1, 
 		BTTRANSFORM_USE(trans2), *collision_pairs);
 }
 
-const BT_QUANTIZED_BVH_NODE* btGImpactQuantizedBvh_get_node_pointer(btGImpactQuantizedBvh* obj)
-{
-	return obj->get_node_pointer();
-}
-
-const BT_QUANTIZED_BVH_NODE* btGImpactQuantizedBvh_get_node_pointer2(btGImpactQuantizedBvh* obj,
+const BT_QUANTIZED_BVH_NODE* btGImpactQuantizedBvh_get_node_pointer(btGImpactQuantizedBvh* obj,
 	int index)
 {
 	return obj->get_node_pointer(index);

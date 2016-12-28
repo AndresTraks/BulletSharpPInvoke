@@ -14,14 +14,8 @@ namespace BulletSharp
 		{
 		}
 
-		public ConvexTriangleMeshShape(StridingMeshInterface meshInterface)
-			: base(btConvexTriangleMeshShape_new(meshInterface._native))
-		{
-			_meshInterface = meshInterface;
-		}
-
-		public ConvexTriangleMeshShape(StridingMeshInterface meshInterface, bool calcAabb)
-			: base(btConvexTriangleMeshShape_new2(meshInterface._native, calcAabb))
+		public ConvexTriangleMeshShape(StridingMeshInterface meshInterface, bool calcAabb = true)
+			: base(btConvexTriangleMeshShape_new(meshInterface._native, calcAabb))
 		{
 			_meshInterface = meshInterface;
 		}
@@ -39,9 +33,7 @@ namespace BulletSharp
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btConvexTriangleMeshShape_new(IntPtr meshInterface);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btConvexTriangleMeshShape_new2(IntPtr meshInterface, bool calcAabb);
+		static extern IntPtr btConvexTriangleMeshShape_new(IntPtr meshInterface, bool calcAabb);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btConvexTriangleMeshShape_calculatePrincipalAxisTransform(IntPtr obj, ref Matrix principal, out Vector3 inertia, out float volume);
 	}

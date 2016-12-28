@@ -201,8 +201,7 @@ extern "C" {
 	EXPORT void btCollisionWorld_computeOverlappingPairs(btCollisionWorld* obj);
 	EXPORT void btCollisionWorld_contactPairTest(btCollisionWorld* obj, btCollisionObject* colObjA, btCollisionObject* colObjB, btCollisionWorld_ContactResultCallback* resultCallback);
 	EXPORT void btCollisionWorld_contactTest(btCollisionWorld* obj, btCollisionObject* colObj, btCollisionWorld_ContactResultCallback* resultCallback);
-	EXPORT void btCollisionWorld_convexSweepTest(btCollisionWorld* obj, const btConvexShape* castShape, const btTransform* from, const btTransform* to, btCollisionWorld_ConvexResultCallback* resultCallback);
-	EXPORT void btCollisionWorld_convexSweepTest2(btCollisionWorld* obj, const btConvexShape* castShape, const btTransform* from, const btTransform* to, btCollisionWorld_ConvexResultCallback* resultCallback, btScalar allowedCcdPenetration);
+	EXPORT void btCollisionWorld_convexSweepTest(btCollisionWorld* obj, const btConvexShape* castShape, const btTransform* from, const btTransform* to, btCollisionWorld_ConvexResultCallback* resultCallback, btScalar allowedCcdPenetration);
 	EXPORT void btCollisionWorld_debugDrawObject(btCollisionWorld* obj, const btTransform* worldTransform, const btCollisionShape* shape, const btVector3* color);
 	EXPORT void btCollisionWorld_debugDrawWorld(btCollisionWorld* obj);
 	EXPORT btBroadphaseInterface* btCollisionWorld_getBroadphase(btCollisionWorld* obj);

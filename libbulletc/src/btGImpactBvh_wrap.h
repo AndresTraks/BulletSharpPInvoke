@@ -67,8 +67,7 @@ extern "C" {
 	EXPORT bool btGImpactBvh_boxQueryTrans(btGImpactBvh* obj, const btAABB* box, const btTransform* transform, btAlignedObjectArray_int* collided_results);
 	EXPORT void btGImpactBvh_buildSet(btGImpactBvh* obj);
 	EXPORT void btGImpactBvh_find_collision(btGImpactBvh* boxset1, const btTransform* trans1, btGImpactBvh* boxset2, const btTransform* trans2, btPairSet* collision_pairs);
-	EXPORT const GIM_BVH_TREE_NODE* btGImpactBvh_get_node_pointer(btGImpactBvh* obj);
-	EXPORT const GIM_BVH_TREE_NODE* btGImpactBvh_get_node_pointer2(btGImpactBvh* obj, int index);
+	EXPORT const GIM_BVH_TREE_NODE* btGImpactBvh_get_node_pointer(btGImpactBvh* obj, int index);
 	EXPORT int btGImpactBvh_getEscapeNodeIndex(btGImpactBvh* obj, int nodeindex);
 	EXPORT btAABB* btGImpactBvh_getGlobalBox(btGImpactBvh* obj);
 	EXPORT int btGImpactBvh_getLeftNode(btGImpactBvh* obj, int nodeindex);

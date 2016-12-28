@@ -180,12 +180,7 @@ void btGImpactCompoundShape_CompoundPrimitiveManager_setCompoundShape(btGImpactC
 }
 
 
-btGImpactCompoundShape* btGImpactCompoundShape_new()
-{
-	return new btGImpactCompoundShape();
-}
-
-btGImpactCompoundShape* btGImpactCompoundShape_new2(bool children_has_transform)
+btGImpactCompoundShape* btGImpactCompoundShape_new(bool children_has_transform)
 {
 	return new btGImpactCompoundShape(children_has_transform);
 }

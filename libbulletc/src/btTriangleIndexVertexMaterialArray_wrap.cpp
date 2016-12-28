@@ -109,27 +109,12 @@ btTriangleIndexVertexMaterialArray* btTriangleIndexVertexMaterialArray_new2(int 
 }
 
 void btTriangleIndexVertexMaterialArray_addMaterialProperties(btTriangleIndexVertexMaterialArray* obj,
-	const btMaterialProperties* mat)
-{
-	obj->addMaterialProperties(*mat);
-}
-
-void btTriangleIndexVertexMaterialArray_addMaterialProperties2(btTriangleIndexVertexMaterialArray* obj,
 	const btMaterialProperties* mat, PHY_ScalarType triangleType)
 {
 	obj->addMaterialProperties(*mat, triangleType);
 }
 
 void btTriangleIndexVertexMaterialArray_getLockedMaterialBase(btTriangleIndexVertexMaterialArray* obj,
-	unsigned char** materialBase, int* numMaterials, PHY_ScalarType* materialType,
-	int* materialStride, unsigned char** triangleMaterialBase, int* numTriangles, int* triangleMaterialStride,
-	PHY_ScalarType* triangleType)
-{
-	obj->getLockedMaterialBase(materialBase, *numMaterials, *materialType, *materialStride,
-		triangleMaterialBase, *numTriangles, *triangleMaterialStride, *triangleType);
-}
-
-void btTriangleIndexVertexMaterialArray_getLockedMaterialBase2(btTriangleIndexVertexMaterialArray* obj,
 	unsigned char** materialBase, int* numMaterials, PHY_ScalarType* materialType,
 	int* materialStride, unsigned char** triangleMaterialBase, int* numTriangles, int* triangleMaterialStride,
 	PHY_ScalarType* triangleType, int subpart)
@@ -140,16 +125,6 @@ void btTriangleIndexVertexMaterialArray_getLockedMaterialBase2(btTriangleIndexVe
 }
 
 void btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase(btTriangleIndexVertexMaterialArray* obj,
-	const unsigned char** materialBase, int* numMaterials, PHY_ScalarType* materialType,
-	int* materialStride, const unsigned char** triangleMaterialBase, int* numTriangles,
-	int* triangleMaterialStride, PHY_ScalarType* triangleType)
-{
-	obj->getLockedReadOnlyMaterialBase(materialBase, *numMaterials, *materialType,
-		*materialStride, triangleMaterialBase, *numTriangles, *triangleMaterialStride,
-		*triangleType);
-}
-
-void btTriangleIndexVertexMaterialArray_getLockedReadOnlyMaterialBase2(btTriangleIndexVertexMaterialArray* obj,
 	const unsigned char** materialBase, int* numMaterials, PHY_ScalarType* materialType,
 	int* materialStride, const unsigned char** triangleMaterialBase, int* numTriangles,
 	int* triangleMaterialStride, PHY_ScalarType* triangleType, int subpart)

@@ -299,12 +299,7 @@ void btGImpactBvh_find_collision(btGImpactBvh* boxset1, const btTransform* trans
 		*collision_pairs);
 }
 
-const GIM_BVH_TREE_NODE* btGImpactBvh_get_node_pointer(btGImpactBvh* obj)
-{
-	return obj->get_node_pointer();
-}
-
-const GIM_BVH_TREE_NODE* btGImpactBvh_get_node_pointer2(btGImpactBvh* obj, int index)
+const GIM_BVH_TREE_NODE* btGImpactBvh_get_node_pointer(btGImpactBvh* obj, int index)
 {
 	return obj->get_node_pointer(index);
 }

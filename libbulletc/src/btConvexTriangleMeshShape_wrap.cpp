@@ -4,12 +4,7 @@
 #include "conversion.h"
 #include "btConvexTriangleMeshShape_wrap.h"
 
-btConvexTriangleMeshShape* btConvexTriangleMeshShape_new(btStridingMeshInterface* meshInterface)
-{
-	return new btConvexTriangleMeshShape(meshInterface);
-}
-
-btConvexTriangleMeshShape* btConvexTriangleMeshShape_new2(btStridingMeshInterface* meshInterface,
+btConvexTriangleMeshShape* btConvexTriangleMeshShape_new(btStridingMeshInterface* meshInterface,
 	bool calcAabb)
 {
 	return new btConvexTriangleMeshShape(meshInterface, calcAabb);

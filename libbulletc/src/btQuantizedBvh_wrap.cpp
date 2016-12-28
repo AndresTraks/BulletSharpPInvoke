@@ -243,14 +243,6 @@ const char* btQuantizedBvh_serialize2(btQuantizedBvh* obj, void* dataBuffer, btS
 }
 
 void btQuantizedBvh_setQuantizationValues(btQuantizedBvh* obj, const btVector3* bvhAabbMin,
-	const btVector3* bvhAabbMax)
-{
-	BTVECTOR3_IN(bvhAabbMin);
-	BTVECTOR3_IN(bvhAabbMax);
-	obj->setQuantizationValues(BTVECTOR3_USE(bvhAabbMin), BTVECTOR3_USE(bvhAabbMax));
-}
-
-void btQuantizedBvh_setQuantizationValues2(btQuantizedBvh* obj, const btVector3* bvhAabbMin,
 	const btVector3* bvhAabbMax, btScalar quantizationMargin)
 {
 	BTVECTOR3_IN(bvhAabbMin);

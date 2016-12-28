@@ -30,14 +30,9 @@ namespace BulletSharp
 			btPolyhedralConvexShape_getVertex(_native, i, out vtx);
 		}
 
-		public bool InitializePolyhedralFeatures()
+		public bool InitializePolyhedralFeatures(int shiftVerticesByMargin = 0)
 		{
-			return btPolyhedralConvexShape_initializePolyhedralFeatures(_native);
-		}
-
-		public bool InitializePolyhedralFeatures(int shiftVerticesByMargin)
-		{
-			return btPolyhedralConvexShape_initializePolyhedralFeatures2(_native,
+			return btPolyhedralConvexShape_initializePolyhedralFeatures(_native,
 				shiftVerticesByMargin);
 		}
 
@@ -99,10 +94,7 @@ namespace BulletSharp
 		static extern void btPolyhedralConvexShape_getVertex(IntPtr obj, int i, out Vector3 vtx);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
-		static extern bool btPolyhedralConvexShape_initializePolyhedralFeatures(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		[return: MarshalAs(UnmanagedType.I1)]
-		static extern bool btPolyhedralConvexShape_initializePolyhedralFeatures2(IntPtr obj, int shiftVerticesByMargin);
+		static extern bool btPolyhedralConvexShape_initializePolyhedralFeatures(IntPtr obj, int shiftVerticesByMargin);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btPolyhedralConvexShape_isInside(IntPtr obj, [In] ref Vector3 pt, float tolerance);

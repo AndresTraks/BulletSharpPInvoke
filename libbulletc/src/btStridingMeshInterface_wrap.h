@@ -5,10 +5,8 @@ extern "C" {
 #endif
 	EXPORT void btStridingMeshInterface_calculateAabbBruteForce(btStridingMeshInterface* obj, btVector3* aabbMin, btVector3* aabbMax);
 	EXPORT int btStridingMeshInterface_calculateSerializeBufferSize(btStridingMeshInterface* obj);
-	EXPORT void btStridingMeshInterface_getLockedReadOnlyVertexIndexBase(btStridingMeshInterface* obj, const unsigned char** vertexbase, int* numverts, PHY_ScalarType* type, int* vertexStride, const unsigned char** indexbase, int* indexstride, int* numfaces, PHY_ScalarType* indicestype);
-	EXPORT void btStridingMeshInterface_getLockedReadOnlyVertexIndexBase2(btStridingMeshInterface* obj, const unsigned char** vertexbase, int* numverts, PHY_ScalarType* type, int* vertexStride, const unsigned char** indexbase, int* indexstride, int* numfaces, PHY_ScalarType* indicestype, int subpart);
-	EXPORT void btStridingMeshInterface_getLockedVertexIndexBase(btStridingMeshInterface* obj, unsigned char** vertexbase, int* numverts, PHY_ScalarType* type, int* vertexStride, unsigned char** indexbase, int* indexstride, int* numfaces, PHY_ScalarType* indicestype);
-	EXPORT void btStridingMeshInterface_getLockedVertexIndexBase2(btStridingMeshInterface* obj, unsigned char** vertexbase, int* numverts, PHY_ScalarType* type, int* vertexStride, unsigned char** indexbase, int* indexstride, int* numfaces, PHY_ScalarType* indicestype, int subpart);
+	EXPORT void btStridingMeshInterface_getLockedReadOnlyVertexIndexBase(btStridingMeshInterface* obj, const unsigned char** vertexbase, int* numverts, PHY_ScalarType* type, int* vertexStride, const unsigned char** indexbase, int* indexstride, int* numfaces, PHY_ScalarType* indicestype, int subpart);
+	EXPORT void btStridingMeshInterface_getLockedVertexIndexBase(btStridingMeshInterface* obj, unsigned char** vertexbase, int* numverts, PHY_ScalarType* type, int* vertexStride, unsigned char** indexbase, int* indexstride, int* numfaces, PHY_ScalarType* indicestype, int subpart);
 	EXPORT int btStridingMeshInterface_getNumSubParts(btStridingMeshInterface* obj);
 	EXPORT void btStridingMeshInterface_getPremadeAabb(btStridingMeshInterface* obj, btVector3* aabbMin, btVector3* aabbMax);
 	EXPORT void btStridingMeshInterface_getScaling(btStridingMeshInterface* obj, btVector3* value);
