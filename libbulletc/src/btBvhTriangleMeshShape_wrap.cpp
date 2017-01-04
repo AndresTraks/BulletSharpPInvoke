@@ -4,28 +4,13 @@
 #include "btBvhTriangleMeshShape_wrap.h"
 
 btBvhTriangleMeshShape* btBvhTriangleMeshShape_new(btStridingMeshInterface* meshInterface,
-	bool useQuantizedAabbCompression)
-{
-	return new btBvhTriangleMeshShape(meshInterface, useQuantizedAabbCompression);
-}
-
-btBvhTriangleMeshShape* btBvhTriangleMeshShape_new2(btStridingMeshInterface* meshInterface,
 	bool useQuantizedAabbCompression, bool buildBvh)
 {
 	return new btBvhTriangleMeshShape(meshInterface, useQuantizedAabbCompression,
 		buildBvh);
 }
 
-btBvhTriangleMeshShape* btBvhTriangleMeshShape_new3(btStridingMeshInterface* meshInterface,
-	bool useQuantizedAabbCompression, const btVector3* bvhAabbMin, const btVector3* bvhAabbMax)
-{
-	BTVECTOR3_IN(bvhAabbMin);
-	BTVECTOR3_IN(bvhAabbMax);
-	return new btBvhTriangleMeshShape(meshInterface, useQuantizedAabbCompression,
-		BTVECTOR3_USE(bvhAabbMin), BTVECTOR3_USE(bvhAabbMax));
-}
-
-btBvhTriangleMeshShape* btBvhTriangleMeshShape_new4(btStridingMeshInterface* meshInterface,
+btBvhTriangleMeshShape* btBvhTriangleMeshShape_new2(btStridingMeshInterface* meshInterface,
 	bool useQuantizedAabbCompression, const btVector3* bvhAabbMin, const btVector3* bvhAabbMax,
 	bool buildBvh)
 {

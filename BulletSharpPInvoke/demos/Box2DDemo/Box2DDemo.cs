@@ -5,29 +5,37 @@ using System;
 
 namespace Box2DDemo
 {
-    class Box2DDemo : Demo
+    internal static class Program
     {
-        Vector3 eye = new Vector3(0, 15, 20);
-        Vector3 target = new Vector3(10, 10, 0);
-
-        ///create 25 (5x5) dynamic objects
-        const int ArraySizeX = 5, ArraySizeY = 5;
-        public float Depth = 0.04f;
-
-        protected override void OnInitialize()
+        [STAThread]
+        static void Main()
         {
-            Freelook.SetEyeTarget(eye, target);
-
-            Graphics.SetFormText("BulletSharp - Box 2D Demo");
+            DemoRunner.Run<Box2DDemo>();
         }
+    }
 
-        protected override void OnInitializePhysics()
+    internal sealed class Box2DDemo : IDemoConfiguration
+    {
+        public ISimulation CreateSimulation(Demo demo)
         {
-            // collision configuration contains default setup for memory, collision setup
-            CollisionConf = new DefaultCollisionConfiguration();
+            demo.FreeLook.Eye = new Vector3(0, 15, 20);
+            demo.FreeLook.Target = new Vector3(10, 10, 0);
+            demo.Graphics.WindowTitle = "BulletSharp - Box 2D Demo";
+            return new Box2DDemoSimulation();
+        }
+    }
+
+    internal sealed class Box2DDemoSimulation : ISimulation
+    {
+        private const int NumObjectsX = 5, NumObjectsY = 5;
+        private const float Depth = 0.04f;
+
+        public Box2DDemoSimulation()
+        {
+            CollisionConfiguration = new DefaultCollisionConfiguration();
 
             // Use the default collision dispatcher. For parallel processing you can use a diffent dispatcher.
-            Dispatcher = new CollisionDispatcher(CollisionConf);
+            Dispatcher = new CollisionDispatcher(CollisionConfiguration);
 
             var simplex = new VoronoiSimplexSolver();
             var pdSolver = new MinkowskiPenetrationDepthSolver();
@@ -41,21 +49,26 @@ namespace Box2DDemo
 
             Broadphase = new DbvtBroadphase();
 
-            // the default constraint solver.
-            Solver = new SequentialImpulseConstraintSolver();
-
-            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConf);
-            World.Gravity = new Vector3(0, -10, 0);
+            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConfiguration);
 
             CreateGround();
             Create2dBodies();
         }
 
+        public CollisionConfiguration CollisionConfiguration { get; }
+        public CollisionDispatcher Dispatcher { get; }
+        public BroadphaseInterface Broadphase { get; }
+        public DiscreteDynamicsWorld World { get; }
+
+        public void Dispose()
+        {
+            this.StandardCleanup();
+        }
+
         private void CreateGround()
         {
             var groundShape = new BoxShape(150, 7, 150);
-            CollisionShapes.Add(groundShape);
-            var ground = LocalCreateRigidBody(0, Matrix.Identity, groundShape);
+            var ground = PhysicsHelper.CreateStaticBody(Matrix.Identity, groundShape, World);
             ground.UserObject = "Ground";
         }
 
@@ -71,14 +84,6 @@ namespace Box2DDemo
             var childShape2 = new CylinderShapeZ(1, 1, Depth);
             var colShape3 = new Convex2DShape(childShape2);
 
-            CollisionShapes.Add(colShape);
-            CollisionShapes.Add(colShape2);
-            CollisionShapes.Add(colShape3);
-
-            CollisionShapes.Add(childShape0);
-            CollisionShapes.Add(childShape1);
-            CollisionShapes.Add(childShape2);
-
             colShape.Margin = 0.03f;
 
             float mass = 1.0f;
@@ -86,15 +91,15 @@ namespace Box2DDemo
 
             var rbInfo = new RigidBodyConstructionInfo(mass, null, colShape, localInertia);
 
-            Vector3 x = new Vector3(-ArraySizeX, 8, -20);
+            Vector3 x = new Vector3(-NumObjectsX, 8, -20);
             Vector3 y = Vector3.Zero;
             Vector3 deltaX = new Vector3(1, 2, 0);
             Vector3 deltaY = new Vector3(2, 0, 0);
 
-            for (int i = 0; i < ArraySizeY; i++)
+            for (int i = 0; i < NumObjectsY; i++)
             {
                 y = x;
-                for (int j = 0; j < ArraySizeX; j++)
+                for (int j = 0; j < NumObjectsX; j++)
                 {
                     Matrix startTransform = Matrix.Translation(y - new Vector3(-10, 0, 0));
 
@@ -128,18 +133,6 @@ namespace Box2DDemo
             }
 
             rbInfo.Dispose();
-        }
-    }
-
-    static class Program
-    {
-        [STAThread]
-        static void Main()
-        {
-            using (Demo demo = new Box2DDemo())
-            {
-                GraphicsLibraryManager.Run(demo);
-            }
         }
     }
 }

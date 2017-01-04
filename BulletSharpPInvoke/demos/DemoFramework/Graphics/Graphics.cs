@@ -7,7 +7,7 @@ namespace DemoFramework
 {
     public abstract class Graphics : IDisposable
     {
-        public Demo Demo { get; protected set; }
+        public Demo Demo { get; }
         public Form Form { get; protected set; }
 
         public virtual float FarPlane { get; set; }
@@ -25,8 +25,6 @@ namespace DemoFramework
         public virtual bool IsFullScreen { get; set; }
         public virtual bool CullingEnabled { get; set; }
 
-        public string InfoText { get; private set; }
-
         public MeshFactory MeshFactory;
 
         public abstract IDebugDraw GetPhysicsDebugDrawer();
@@ -36,7 +34,6 @@ namespace DemoFramework
             Demo = demo;
             FarPlane = 400.0f;
             FieldOfView = (float)Math.PI / 4;
-            InfoText = "";
         }
 
         public virtual void Initialize()
@@ -56,9 +53,10 @@ namespace DemoFramework
         public abstract void Run();
         public abstract void UpdateView();
 
-        public virtual void SetFormText(string text)
+        public string WindowTitle
         {
-            Form.Text = text;
+            get { return Form.Text; }
+            set { Form.Text = value; }
         }
 
         public virtual void SetInfoText(string text)

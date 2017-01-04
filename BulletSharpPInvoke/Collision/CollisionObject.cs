@@ -366,6 +366,12 @@ namespace BulletSharp
 			set { btCollisionObject_setRollingFriction(_native, value); }
 		}
 
+        public float SpinningFriction
+        {
+            get { return btCollisionObject_getSpinningFriction(_native); }
+            set { btCollisionObject_setSpinningFriction(_native, value); }
+        }
+
         public object UserObject { get; set; }
 
 		public int UserIndex
@@ -503,6 +509,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btCollisionObject_getRollingFriction(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btCollisionObject_getSpinningFriction(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btCollisionObject_getWorldArrayIndex(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btCollisionObject_getUserIndex(IntPtr obj);
@@ -585,6 +593,8 @@ namespace BulletSharp
 		static extern void btCollisionObject_setRestitution(IntPtr obj, float rest);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionObject_setRollingFriction(IntPtr obj, float frict);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btCollisionObject_setSpinningFriction(IntPtr obj, float frict);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionObject_setWorldArrayIndex(IntPtr obj, int id);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

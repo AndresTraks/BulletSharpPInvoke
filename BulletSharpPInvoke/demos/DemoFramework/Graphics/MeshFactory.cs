@@ -63,6 +63,8 @@ namespace DemoFramework
                     return CreateSphere(shape as SphereShape, out indices);
                 case BroadphaseNativeType.StaticPlaneShape:
                     return CreateStaticPlane(shape as StaticPlaneShape, out indices);
+                case BroadphaseNativeType.TerrainShape:
+                    return CreateHeightFieldTerrainShape(shape as HeightfieldTerrainShape, out indices);
                 case BroadphaseNativeType.TriangleMeshShape:
                     indices = null;
                     return CreateTriangleMesh((shape as TriangleMeshShape).MeshInterface);
@@ -796,6 +798,13 @@ namespace DemoFramework
             }
 
             return vertices;
+        }
+
+        private static Vector3[] CreateHeightFieldTerrainShape(HeightfieldTerrainShape heightfieldTerrainShape, out uint[] indices)
+        {
+            // HeightfieldTerrainShape does not expose its data
+            indices = null;
+            return new Vector3[1];
         }
 
         /*

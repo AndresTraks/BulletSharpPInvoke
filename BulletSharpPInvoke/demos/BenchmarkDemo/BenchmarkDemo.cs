@@ -6,71 +6,78 @@ using System;
 
 namespace BenchmarkDemo
 {
-    class BenchmarkDemo : Demo
+    internal static class Program
     {
-        Vector3 eye = new Vector3(60, 40, 20);
-        Vector3 target = new Vector3(0, 5, -4);
-
-        const float defaultContactProcessingThreshold = 0.0f;
-
-        int scene = 1;
-        Action[] _scenes;
-
-        public BenchmarkDemo()
+        [STAThread]
+        static void Main()
         {
-            _scenes = new Action[] {
-                Create3KBoxes, CreateStructures, CreateTaruStack, CreateShapesGravity, CreateTaruGravity
-            };
+            DemoRunner.Run<BenchmarkDemo>();
         }
+    }
 
-        protected override void OnInitialize()
+    internal sealed class BenchmarkDemo : IDemoConfiguration
+    {
+        public ISimulation CreateSimulation(Demo demo)
         {
-            Freelook.SetEyeTarget(eye, target);
-
-            Graphics.SetFormText("BulletSharp - Benchmark Demo");
-            Graphics.SetInfoText("Move using mouse and WASD+shift\n" +
-                "F3 - Toggle debug\n" +
-                //"F11 - Toggle fullscreen\n" +
-                "Space - Shoot box");
+            demo.FreeLook.Eye = new Vector3(60, 40, 20);
+            demo.FreeLook.Target = new Vector3(0, 5, -4);
+            demo.Graphics.WindowTitle = "BulletSharp - Benchmark Demo";
+            return new BenchmarkDemoSimulation();
         }
+    }
 
-        protected override void OnInitializePhysics()
+    internal sealed class BenchmarkDemoSimulation : ISimulation
+    {
+        private const float defaultContactProcessingThreshold = 0.0f;
+
+        private int _scene = 1;
+        private Action[] _scenes;
+
+        public BenchmarkDemoSimulation()
         {
-            // collision configuration contains default setup for memory, collision setup
             using (var cci = new DefaultCollisionConstructionInfo()
             { DefaultMaxPersistentManifoldPoolSize = 32768 })
             {
-                CollisionConf = new DefaultCollisionConfiguration(cci);
+                CollisionConfiguration = new DefaultCollisionConfiguration(cci);
             }
 
-            Dispatcher = new CollisionDispatcher(CollisionConf);
+            Dispatcher = new CollisionDispatcher(CollisionConfiguration);
             Dispatcher.DispatcherFlags = DispatcherFlags.DisableContactPoolDynamicAllocation;
 
-            // the maximum size of the collision world. Make sure objects stay within these boundaries
+            // The maximum size of the collision world. Make sure objects stay within these boundaries
             // Don't make the world AABB size too large, it will harm simulation quality and performance
-            Vector3 worldAabbMin = new Vector3(-1000, -1000, -1000);
-            Vector3 worldAabbMax = new Vector3(1000, 1000, 1000);
+            var worldAabbMin = new Vector3(-1000, -1000, -1000);
+            var worldAabbMax = new Vector3(1000, 1000, 1000);
 
             var pairCache = new HashedOverlappingPairCache();
             Broadphase = new AxisSweep3(worldAabbMin, worldAabbMax, 3500, pairCache);
             //Broadphase = new DbvtBroadphase();
 
-            Solver = new SequentialImpulseConstraintSolver();
-
-            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConf);
-            World.Gravity = new Vector3(0, -10, 0);
+            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConfiguration);
             World.SolverInfo.SolverMode |= SolverModes.EnableFrictionDirectionCaching;
             World.SolverInfo.NumIterations = 5;
 
-            _scenes[scene]();
+            _scenes = new Action[] {
+                Create3KBoxes, CreateStructures, CreateTaruStack, CreateShapesGravity, CreateTaruGravity
+            };
+            _scenes[_scene]();
         }
+
+        public CollisionConfiguration CollisionConfiguration { get; }
+        public CollisionDispatcher Dispatcher { get; }
+        public BroadphaseInterface Broadphase { get; }
+        public DiscreteDynamicsWorld World { get; }
 
         private void CreateGround()
         {
             var groundShape = new BoxShape(250, 50, 250);
-            CollisionShapes.Add(groundShape);
-            var ground = base.LocalCreateRigidBody(0, Matrix.Translation(0, -50, 0), groundShape);
+            var ground = PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -50, 0), groundShape, World);
             ground.UserObject = "Ground";
+        }
+
+        public void Dispose()
+        {
+            this.StandardCleanup();
         }
 
         private void Create3KBoxes()
@@ -93,7 +100,7 @@ namespace BenchmarkDemo
         private void CreateStructures()
         {
             CreateGround();
-            Vector3 boxSize = new Vector3(1);
+            var boxSize = new Vector3(1);
             CreatePyramid(new Vector3(-20, 0, 0), 12, boxSize);
             CreateWall(new Vector3(-2, 0, 0), 12, boxSize);
             CreateWall(new Vector3(4, 0, 0), 12, boxSize);
@@ -124,7 +131,7 @@ namespace BenchmarkDemo
         {
             const float cubeHalfExtent = 1.5f;
             const float cubeWidth = cubeHalfExtent * 2;
-            Vector3 boxSize = new Vector3(cubeHalfExtent);
+            var boxSize = new Vector3(cubeHalfExtent);
             float boxMass = 1.0f;
             float sphereRadius = 1.5f;
             float sphereMass = 1.0f;
@@ -313,34 +320,11 @@ namespace BenchmarkDemo
             }
         }
 
-        public override RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape)
+        private RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape)
         {
-            //rigidbody is dynamic if and only if mass is non zero, otherwise static
-            bool isDynamic = (mass != 0.0f);
-            Vector3 localInertia = isDynamic ? shape.CalculateLocalInertia(mass) : Vector3.Zero;
-
-            using (var rbInfo = new RigidBodyConstructionInfo(mass, null, shape, localInertia))
-            {
-                var body = new RigidBody(rbInfo)
-                {
-                    ContactProcessingThreshold = defaultContactProcessingThreshold,
-                    WorldTransform = startTransform
-                };
-                World.AddRigidBody(body);
-                return body;
-            }
-        }
-    }
-
-    static class Program
-    {
-        [STAThread]
-        static void Main()
-        {
-            using (Demo demo = new BenchmarkDemo())
-            {
-                GraphicsLibraryManager.Run(demo);
-            }
+            RigidBody body = PhysicsHelper.CreateBody(mass, startTransform, shape, World);
+            body.ContactProcessingThreshold = defaultContactProcessingThreshold;
+            return body;
         }
     }
 }

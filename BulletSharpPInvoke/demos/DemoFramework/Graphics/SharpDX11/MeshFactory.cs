@@ -307,7 +307,7 @@ namespace DemoFramework.SharpDX11
             }
 
             // Gather instance data
-            foreach (var colObj in demo.World.CollisionObjectArray)
+            foreach (var colObj in demo.Simulation.World.CollisionObjectArray)
             {
                 var shape = colObj.CollisionShape;
 

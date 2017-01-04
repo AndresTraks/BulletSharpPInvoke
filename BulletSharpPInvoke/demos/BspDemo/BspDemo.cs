@@ -8,31 +8,44 @@ using System.IO;
 
 namespace BspDemo
 {
-    class BspDemo : Demo
+    internal static class Program
     {
-        Vector3 eye = new Vector3(10, 10, 10);
-        Vector3 target = new Vector3(0, 0, 0);
-
-        protected override void OnInitialize()
+        [STAThread]
+        static void Main()
         {
-            Freelook.Up = Vector3.UnitZ;
-            Freelook.SetEyeTarget(eye, target);
-
-            Graphics.SetFormText("BulletSharp - Quake BSP Physics Viewer");
+            DemoRunner.Run<BspDemo>();
         }
+    }
 
-        protected override void OnInitializePhysics()
+    internal sealed class BspDemo : IDemoConfiguration
+    {
+        public ISimulation CreateSimulation(Demo demo)
         {
-            // collision configuration contains default setup for memory, collision setup
-            CollisionConf = new DefaultCollisionConfiguration();
-            Dispatcher = new CollisionDispatcher(CollisionConf);
+            demo.FreeLook.Eye = new Vector3(10, 10, 10);
+            demo.FreeLook.Target = Vector3.Zero;
+            demo.FreeLook.Up = BspDemoSimulation.Up;
+            demo.Graphics.WindowTitle = "BulletSharp - Quake BSP Physics Viewer";
+            return new BspDemoSimulation();
+        }
+    }
+
+    internal sealed class BspDemoSimulation : ISimulation
+    {
+        public BspDemoSimulation()
+        {
+            CollisionConfiguration = new DefaultCollisionConfiguration();
+            Dispatcher = new CollisionDispatcher(CollisionConfiguration);
 
             Broadphase = new DbvtBroadphase();
-            Solver = new SequentialImpulseConstraintSolver();
 
-            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConf);
-            World.Gravity = Freelook.Up * -10.0f;
+            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConfiguration);
+            World.Gravity = Up * -10.0f;
 
+            LoadBspFile();
+        }
+
+        private void LoadBspFile()
+        {
             var bspLoader = new BspLoader();
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length == 1)
@@ -43,46 +56,42 @@ namespace BspDemo
             {
                 bspLoader.LoadBspFile(args[1]);
             }
-            BspConverter bsp2Bullet = new BspToBulletConverter(this);
+
+            var bsp2Bullet = new BspToBulletConverter(World);
             bsp2Bullet.ConvertBsp(bspLoader, 0.1f);
+        }
+
+        public CollisionConfiguration CollisionConfiguration { get; }
+        public CollisionDispatcher Dispatcher { get; }
+        public BroadphaseInterface Broadphase { get; }
+        public DiscreteDynamicsWorld World { get; }
+
+        public static Vector3 Up { get; } = Vector3.UnitZ;
+
+        public void Dispose()
+        {
+            this.StandardCleanup();
         }
     }
 
-    public class BspToBulletConverter : BspConverter
+    internal sealed class BspToBulletConverter : BspConverter
     {
-        private Demo _demo;
+        private DynamicsWorld _world;
 
-        public BspToBulletConverter(Demo demo)
+        public BspToBulletConverter(DynamicsWorld world)
         {
-            _demo = demo;
+            _world = world;
         }
 
-        public override void AddConvexVerticesCollider(List<Vector3> vertices, bool isEntity, Vector3 entityTargetLocation)
+        public override void AddCollider(List<Vector3> vertices)
         {
             if (vertices.Count == 0) return;
 
-            // perhaps we can do something special with entities (isEntity)
-            // like adding a collision triggering (as example)
-
             const float mass = 0.0f;
-            //can use a shift
-            Matrix startTransform = Matrix.Translation(0, 0, -10.0f);
+            Matrix startTransform = Matrix.Translation(0, 0, -10.0f); // shift
             var shape = new ConvexHullShape(vertices);
-            _demo.CollisionShapes.Add(shape);
 
-            _demo.LocalCreateRigidBody(mass, startTransform, shape);
-        }
-    }
-
-    static class Program
-    {
-        [STAThread]
-        static void Main()
-        {
-            using (Demo demo = new BspDemo())
-            {
-                GraphicsLibraryManager.Run(demo);
-            }
+            PhysicsHelper.CreateBody(mass, startTransform, shape, _world);
         }
     }
 }

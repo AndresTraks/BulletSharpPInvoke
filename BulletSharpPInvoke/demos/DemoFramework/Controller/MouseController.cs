@@ -33,11 +33,11 @@ namespace DemoFramework
 
         public bool Update()
         {
-            if ((input.MouseDown & MouseButtons.Left) != MouseButtons.Left)
+            if ((input.MouseDown & MouseButtons.Left) == 0)
                 return false;
 
             // When mouse button is clicked, store cursor position and angles
-            if ((input.MousePressed & MouseButtons.Left) == MouseButtons.Left)
+            if ((input.MousePressed & MouseButtons.Left) != 0)
             {
                 mouseOrigin = input.MousePoint;
 

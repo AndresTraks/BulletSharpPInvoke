@@ -5,107 +5,88 @@ using System;
 
 namespace RollingFrictionDemo
 {
-    class RollingFrictionDemo : Demo
+    internal static class Program
     {
-        Vector3 eye = new Vector3(10, 10, 40);
-        Vector3 target = new Vector3(0, 5, -4);
-
-        // create 125 (5x5x5) dynamic objects
-        const int ArraySizeX = 5, ArraySizeY = 5, ArraySizeZ = 5;
-
-        // scaling of the objects (0.1 = 20 centimeter boxes )
-        const float StartPosX = -5;
-        const float StartPosY = -5;
-        const float StartPosZ = -3;
-
-        protected override void OnInitialize()
+        [STAThread]
+        static void Main()
         {
-            Freelook.SetEyeTarget(eye, target);
-
-            Graphics.SetFormText("BulletSharp - Rolling Friction Demo");
+            DemoRunner.Run<RollingFrictionDemo>();
         }
+    }
 
-        protected override void OnInitializePhysics()
+    internal sealed class RollingFrictionDemo : IDemoConfiguration
+    {
+        public ISimulation CreateSimulation(Demo demo)
         {
-            // collision configuration contains default setup for memory, collision setup
-            CollisionConf = new DefaultCollisionConfiguration();
-            Dispatcher = new CollisionDispatcher(CollisionConf);
+            demo.FreeLook.Eye = new Vector3(10, 10, 40);
+            demo.FreeLook.Target = new Vector3(0, 5, -4);
+            demo.Graphics.WindowTitle = "BulletSharp - Rolling Friction Demo";
+            return new RollingFrictionDemoSimulation();
+        }
+    }
 
+    internal sealed class RollingFrictionDemoSimulation : ISimulation
+    {
+        private const int NumObjectsX = 5, NumObjectsY = 5, NumObjectsZ = 5;
+
+        private Vector3 _startPosition = new Vector3(-7f, 2, 0);
+
+        public RollingFrictionDemoSimulation()
+        {
+            CollisionConfiguration = new DefaultCollisionConfiguration();
+            Dispatcher = new CollisionDispatcher(CollisionConfiguration);
             Broadphase = new DbvtBroadphase();
+            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConfiguration);
 
-            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConf);
-            World.Gravity = new Vector3(0, -10, 0);
-
-            // create the ground
-            CollisionShape groundShape = new BoxShape(20, 50, 10);
-            CollisionShapes.Add(groundShape);
-            CollisionObject ground = LocalCreateRigidBody(0,
-                Matrix.RotationAxis(new Vector3(0, 0, 1), (float)Math.PI * 0.03f) * Matrix.Translation(0, -50, 0),
-                groundShape);
-            ground.Friction = 1;
-            ground.RollingFriction = 1;
-            ground.UserObject = "Ground";
-
-            groundShape = new BoxShape(100, 50, 100);
-            CollisionShapes.Add(groundShape);
-            ground = LocalCreateRigidBody(0, Matrix.Translation(0, -54, 0), groundShape);
-            ground.Friction = 1;
-            ground.RollingFriction = 1;
-            ground.UserObject = "Ground";
+            CreateGround();
 
             // create a few dynamic rigidbodies
             CollisionShape[] colShapes = {
-			    new SphereShape(1),
-			    new CapsuleShape(0.5f,1),
-			    new CapsuleShapeX(0.5f,1),
-			    new CapsuleShapeZ(0.5f,1),
-			    new ConeShape(0.5f,1),
-			    new ConeShapeX(0.5f,1),
-			    new ConeShapeZ(0.5f,1),
-			    new CylinderShape(new Vector3(0.5f,1,0.5f)),
-			    new CylinderShapeX(new Vector3(1,0.5f,0.5f)),
-			    new CylinderShapeZ(new Vector3(0.5f,0.5f,1)),
-		    };
-            foreach (var collisionShape in colShapes)
-            {
-                CollisionShapes.Add(collisionShape);
-            }
+                new SphereShape(1),
+                new CapsuleShape(0.5f, 1),
+                new CapsuleShapeX(0.5f, 1),
+                new CapsuleShapeZ(0.5f, 1),
+                new ConeShape(0.5f, 1),
+                new ConeShapeX(0.5f, 1),
+                new ConeShapeZ(0.5f, 1),
+                new CylinderShape(new Vector3(0.5f, 1, 0.5f)),
+                new CylinderShapeX(new Vector3(1, 0.5f, 0.5f)),
+                new CylinderShapeZ(new Vector3(0.5f, 0.5f, 1)),
+            };
 
             const float mass = 1.0f;
+            var anisotropicRollingFrictionDirection = new Vector3(1, 1, 1);
 
-            CollisionShape colShape = new BoxShape(1);
-            CollisionShapes.Add(colShape);
-            Vector3 localInertia = colShape.CalculateLocalInertia(mass);
-
-            var rbInfo = new RigidBodyConstructionInfo(mass, null, null, localInertia);
-
-            const float startX = StartPosX - ArraySizeX / 2;
-            const float startY = StartPosY;
-            const float startZ = StartPosZ - ArraySizeZ / 2;
+            var rbInfo = new RigidBodyConstructionInfo(mass, null, null);
 
             int shapeIndex = 0;
-            for (int k = 0; k < ArraySizeY; k++)
+            for (int y = 0; y < NumObjectsY; y++)
             {
-                for (int i = 0; i < ArraySizeX; i++)
+                for (int x = 0; x < NumObjectsX; x++)
                 {
-                    for (int j = 0; j < ArraySizeZ; j++)
+                    for (int z = 0; z < NumObjectsZ; z++)
                     {
-                        Matrix startTransform = Matrix.Translation(
-                            2 * i + startX,
-                            2 * k + startY + 20,
-                            2 * j + startZ
-                        );
+                        Vector3 position = _startPosition + 2 * new Vector3(x, y, z);
+                        position += new Vector3(0, 10, 0);
+                        Matrix startTransform = Matrix.Translation(position);
+
                         shapeIndex++;
+                        var shape = colShapes[shapeIndex % colShapes.Length];
 
                         // using motionstate is recommended, it provides interpolation capabilities
                         // and only synchronizes 'active' objects
                         rbInfo.MotionState = new DefaultMotionState(startTransform);
-                        rbInfo.CollisionShape = colShapes[shapeIndex % colShapes.Length];
+                        rbInfo.CollisionShape = shape;
+                        rbInfo.LocalInertia = shape.CalculateLocalInertia(rbInfo.Mass);
 
-                        RigidBody body = new RigidBody(rbInfo);
-                        body.Friction = 1;
-                        body.RollingFriction = 0.3f;
-                        body.SetAnisotropicFriction(colShape.AnisotropicRollingFrictionDirection, AnisotropicFrictionFlags.RollingFriction);
+                        var body = new RigidBody(rbInfo)
+                        {
+                            Friction = 1,
+                            RollingFriction = 0.1f,
+                            SpinningFriction = 0.1f
+                        };
+                        body.SetAnisotropicFriction(shape.AnisotropicRollingFrictionDirection,
+                            AnisotropicFrictionFlags.RollingFriction);
 
                         World.AddRigidBody(body);
                     }
@@ -114,17 +95,32 @@ namespace RollingFrictionDemo
 
             rbInfo.Dispose();
         }
-    }
 
-    static class Program
-    {
-        [STAThread]
-        static void Main()
+        public CollisionConfiguration CollisionConfiguration { get; }
+        public CollisionDispatcher Dispatcher { get; }
+        public BroadphaseInterface Broadphase { get; }
+        public DiscreteDynamicsWorld World { get; }
+
+        public void Dispose()
         {
-            using (Demo demo = new RollingFrictionDemo())
-            {
-                GraphicsLibraryManager.Run(demo);
-            }
+            this.StandardCleanup();
+        }
+
+        private void CreateGround()
+        {
+            var groundShape = new BoxShape(20, 50, 10);
+            CollisionObject ground = PhysicsHelper.CreateStaticBody(
+                Matrix.RotationAxis(new Vector3(0, 0, 1), (float)Math.PI * 0.03f) * Matrix.Translation(0, -50, 0),
+                groundShape, World);
+            ground.Friction = 1;
+            ground.RollingFriction = 1;
+            ground.UserObject = "Ground";
+
+            groundShape = new BoxShape(100, 50, 100);
+            ground = PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -54, 0), groundShape, World);
+            ground.Friction = 1;
+            ground.RollingFriction = 1;
+            ground.UserObject = "Ground";
         }
     }
 }

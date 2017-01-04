@@ -14,10 +14,11 @@ namespace BulletSharp
 
 		public MultiBodyPoint2Point(MultiBody body, int link, RigidBody bodyB, Vector3 pivotInA,
 			Vector3 pivotInB)
-			: base(btMultiBodyPoint2Point_new(body._native, link, bodyB._native,
+			: base(btMultiBodyPoint2Point_new(body._native, link, bodyB != null ? bodyB._native : IntPtr.Zero,
 				ref pivotInA, ref pivotInB))
 		{
-		}
+            _multiBodyA = body;
+        }
 
 		public MultiBodyPoint2Point(MultiBody bodyA, int linkA, MultiBody bodyB,
 			int linkB, Vector3 pivotInA, Vector3 pivotInB)

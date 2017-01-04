@@ -1,80 +1,58 @@
 using BulletSharp;
 using BulletSharp.Math;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DemoFramework.FileLoaders
 {
     public abstract class BspConverter
     {
+        public abstract void AddCollider(List<Vector3> vertices);
+
         public void ConvertBsp(BspLoader bspLoader, float scaling)
         {
-            Vector3 playerStart = GetPlayerPosition(bspLoader);
-            playerStart.Z += 20.0f; //start a bit higher
-            playerStart *= scaling;
-
             foreach (BspLeaf leaf in bspLoader.Leaves)
             {
-                bool isValidBrush = false;
-
-                for (int b = 0; b < leaf.NumLeafBrushes; b++)
+                foreach (int brushId in bspLoader.LeafBrushes
+                    .Skip(leaf.FirstLeafBrush)
+                    .Take(leaf.NumLeafBrushes)
+                    .Where(brushId => IsBrushSolid(bspLoader, brushId)))
                 {
-                    int brushID = bspLoader.LeafBrushes[leaf.FirstLeafBrush + b];
-                    BspBrush brush = bspLoader.Brushes[brushID];
-
-                    if (brush.ShaderNum == -1) continue;
-
-                    ContentFlags flags = bspLoader.IsVbsp
-                        ? (ContentFlags)brush.ShaderNum
-                        : bspLoader.Shaders[brush.ShaderNum].ContentFlags;
-
-                    if ((flags & ContentFlags.Solid) == 0) continue;
-
-                    var planeEquations = new List<Vector4>();
-                    brush.ShaderNum = -1;
-
-                    for (int p = 0; p < brush.NumSides; p++)
-                    {
-                        int sideId = brush.FirstSide + p;
-
-                        BspBrushSide brushside = bspLoader.BrushSides[sideId];
-                        BspPlane plane = bspLoader.Planes[brushside.PlaneNum];
-                        Vector4 planeEquation = new Vector4(plane.Normal, scaling * -plane.Distance);
-                        planeEquations.Add(planeEquation);
-                        isValidBrush = true;
-                    }
-                    if (isValidBrush)
-                    {
-                        List<Vector3> vertices = GeometryUtil.GetVerticesFromPlaneEquations(planeEquations);
-                        const bool isEntity = false;
-                        Vector3 entityTarget = Vector3.Zero;
-                        AddConvexVerticesCollider(vertices, isEntity, entityTarget);
-                    }
+                    bspLoader.Brushes[brushId].ShaderNum = -1;
+                    OutputBrushAsCollider(bspLoader, scaling, brushId);
                 }
             }
-            /*
-            foreach (BspEntity entity in bspLoader.Entities)
-            {
-                if (entity.ClassName == "trigger_push")
-                {
-                }
-            }
-            */
         }
 
-        private Vector3 GetPlayerPosition(BspLoader bspLoader)
+        private bool IsBrushSolid(BspLoader bspLoader, int brushId)
         {
-            BspEntity player;
-            if (bspLoader.Entities.TryGetValue("info_player_start", out player))
-            {
-                return player.Origin;
-            }
-            else if (bspLoader.Entities.TryGetValue("info_player_deathmatch", out player))
-            {
-                return player.Origin;
-            }
-            return new Vector3(0, 0, 100);
+            BspBrush brush = bspLoader.Brushes[brushId];
+            if (brush.ShaderNum == -1) return false;
+
+            ContentFlags flags = bspLoader.IsVbsp
+                ? (ContentFlags)brush.ShaderNum
+                : bspLoader.Shaders[brush.ShaderNum].ContentFlags;
+            return (flags & ContentFlags.Solid) != 0;
         }
 
-        public abstract void AddConvexVerticesCollider(List<Vector3> vertices, bool isEntity, Vector3 entityTargetLocation);
+        private void OutputBrushAsCollider(BspLoader bspLoader, float scaling, int brushId)
+        {
+            BspBrush brush = bspLoader.Brushes[brushId];
+            var sides = bspLoader.BrushSides
+                        .Skip(brush.FirstSide)
+                        .Take(brush.NumSides);
+
+            var planeEquations = sides.Select(side =>
+            {
+                BspPlane plane = bspLoader.Planes[side.PlaneNum];
+                return new Vector4(plane.Normal, scaling * -plane.Distance);
+            }).ToList();
+
+            if (planeEquations.Count != 0)
+            {
+                List<Vector3> vertices = GeometryUtil.GetVerticesFromPlaneEquations(planeEquations);
+                AddCollider(vertices);
+            }
+        }
     }
 }

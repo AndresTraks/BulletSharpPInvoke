@@ -151,6 +151,11 @@ btScalar btCollisionObject_getRollingFriction(btCollisionObject* obj)
 	return obj->getRollingFriction();
 }
 
+btScalar btCollisionObject_getSpinningFriction(btCollisionObject* obj)
+{
+	return obj->getSpinningFriction();
+}
+
 int btCollisionObject_getWorldArrayIndex(btCollisionObject * obj)
 {
 	return obj->getWorldArrayIndex();
@@ -347,6 +352,11 @@ void btCollisionObject_setRestitution(btCollisionObject* obj, btScalar rest)
 void btCollisionObject_setRollingFriction(btCollisionObject* obj, btScalar frict)
 {
 	obj->setRollingFriction(frict);
+}
+
+void btCollisionObject_setSpinningFriction(btCollisionObject* obj, btScalar frict)
+{
+	obj->setSpinningFriction(frict);
 }
 
 void btCollisionObject_setWorldArrayIndex(btCollisionObject * obj, int ix)

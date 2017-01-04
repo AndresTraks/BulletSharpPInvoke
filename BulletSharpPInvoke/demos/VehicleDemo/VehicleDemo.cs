@@ -8,287 +8,350 @@ using DemoFramework;
 
 namespace VehicleDemo
 {
-    class VehicleDemo : Demo
+    internal static class Program
     {
-        Vector3 eye = new Vector3(35, 45, -55);
-        Vector3 target = Vector3.Zero;
+        [STAThread]
+        static void Main()
+        {
+            DemoRunner.Run<VehicleDemo>();
+        }
+    }
 
-        //bool UseTrimeshGround = false;
-        //string heightfieldFile = Path.Combine("data", "heightfield128x128.raw");
-
-        const int rightIndex = 0;
-        const int upIndex = 1;
-        const int forwardIndex = 2;
-        Vector3 wheelDirectionCS0 = new Vector3(0, -1, 0);
-        Vector3 wheelAxleCS = new Vector3(-1, 0, 0);
-
-        const int maxProxies = 32766;
-        const int maxOverlap = 65535;
-
-        // btRaycastVehicle is the interface for the constraint that implements the raycast vehicle
-        // notice that for higher-quality slow-moving vehicles, another approach might be better
-        // implementing explicit hinged-wheel constraints with cylinder collision, rather then raycasts
-        float gEngineForce = 0.0f;
-        float gBreakingForce = 0.0f;
-
-        const float maxEngineForce = 2000.0f;//this should be engine/velocity dependent
+    internal sealed class VehicleDemo : IDemoConfiguration, IUpdateReceiver
+    {
+        const float maxEngineForce = 2000.0f;
         const float maxBreakingForce = 100.0f;
-
-        float gVehicleSteering = 0.0f;
         const float steeringIncrement = 1.0f;
         const float steeringClamp = 0.3f;
-        public const float wheelRadius = 0.7f;
-        public const float wheelWidth = 0.4f;
-        const float wheelFriction = 1000;//BT_LARGE_FLOAT;
-        const float suspensionStiffness = 20.0f;
-        const float suspensionDamping = 2.3f;
-        const float suspensionCompression = 4.4f;
-        const float rollInfluence = 0.1f;//1.0f;
 
-        const float suspensionRestLength = 0.6f;
-        const float CUBE_HALF_EXTENTS = 1;
+        public string WindowTitle => "BulletSharp - Vehicle Demo";
+
+        public ISimulation CreateSimulation(Demo demo)
+        {
+            demo.FreeLook.Eye = new Vector3(35, 45, -55);
+            demo.FreeLook.Target = Vector3.Zero;
+            demo.DemoText =
+                "Drive with arrow keys\n" +
+                "Space - break";
+            demo.Graphics.FarPlane = 600.0f;
+            //demo.DebugDrawMode = DebugDrawModes.DrawAabb;
+            demo.IsDebugDrawEnabled = true;
+            return new VehicleDemoSimulation();
+        }
+
+        public void Update(Demo demo)
+        {
+            var simulation = demo.Simulation as VehicleDemoSimulation;
+
+            var keysDown = demo.Input.KeysDown;
+
+            if (keysDown.Contains(Keys.Left))
+            {
+                simulation.VehicleSteering += demo.FrameDelta * steeringIncrement;
+                if (simulation.VehicleSteering > steeringClamp)
+                    simulation.VehicleSteering = steeringClamp;
+            }
+            else if (simulation.VehicleSteering - float.Epsilon > 0)
+            {
+                simulation.VehicleSteering -= demo.FrameDelta * steeringIncrement;
+            }
+
+            if (keysDown.Contains(Keys.Right))
+            {
+                simulation.VehicleSteering -= demo.FrameDelta * steeringIncrement;
+                if (simulation.VehicleSteering < -steeringClamp)
+                    simulation.VehicleSteering = -steeringClamp;
+            }
+            else if (simulation.VehicleSteering + float.Epsilon < 0)
+            {
+                simulation.VehicleSteering += demo.FrameDelta * steeringIncrement;
+            }
+
+            if (keysDown.Contains(Keys.Up))
+            {
+                simulation.EngineForce = maxEngineForce;
+            }
+
+            if (keysDown.Contains(Keys.Down))
+            {
+                simulation.EngineForce = -maxEngineForce;
+            }
+
+            if (keysDown.Contains(Keys.Space))
+            {
+                simulation.EngineForce = 0;
+                simulation.BreakingForce = maxBreakingForce;
+            }
+
+            if (demo.Input.KeysReleased.Contains(Keys.Space))
+            {
+                simulation.BreakingForce = 0;
+            }
+
+            simulation.OnUpdate();
+        }
+    }
+
+    internal sealed class VehicleDemoSimulation : ISimulation
+    {
+        private const int rightIndex = 0;
+        private const int upIndex = 1;
+        private const int forwardIndex = 2;
+
+        private const int maxProxies = 32766;
+        private const int maxOverlap = 65535;
+
+        private const float wheelRadius = 0.7f;
+        private const float wheelWidth = 0.4f;
+        private const float wheelFriction = 1000; //float.MaxValue
+        private const float suspensionStiffness = 20.0f;
+        private const float suspensionDamping = 2.3f;
+        private const float suspensionCompression = 4.4f;
+        private const float rollInfluence = 0.1f; //1.0f;
+
+        private const float suspensionRestLength = 0.6f;
+        private const float CUBE_HALF_EXTENTS = 1;
+
+        private IntPtr _terrainData;
 
         //public RaycastVehicle vehicle;
         public CustomVehicle vehicle;
 
-        protected override void OnInitialize()
+        public VehicleDemoSimulation()
         {
-            Freelook.SetEyeTarget(eye, target);
-
-            Graphics.SetFormText("BulletSharp - Vehicle Demo");
-            DemoText = "Drive with arrow keys\n" +
-                "Space - break";
-
-            Graphics.FarPlane = 600.0f;
-            //DebugDrawMode = DebugDrawModes.DrawAabb;
-            IsDebugDrawEnabled = true;
-        }
-
-        protected override void OnInitializePhysics()
-        {
-            CollisionShape groundShape = new BoxShape(50, 3, 50);
-            CollisionShapes.Add(groundShape);
-
-            CollisionConf = new DefaultCollisionConfiguration();
-            Dispatcher = new CollisionDispatcher(CollisionConf);
-            Solver = new SequentialImpulseConstraintSolver();
+            CollisionConfiguration = new DefaultCollisionConfiguration();
+            Dispatcher = new CollisionDispatcher(CollisionConfiguration);
 
             Vector3 worldMin = new Vector3(-10000, -10000, -10000);
             Vector3 worldMax = new Vector3(10000, 10000, 10000);
             Broadphase = new AxisSweep3(worldMin, worldMax);
             //Broadphase = new DbvtBroadphase();
 
-            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConf);
+            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConfiguration);
+            World.SetInternalTickCallback(PickingPreTickCallback, this, true);
 
-            int i;
-            Matrix tr;
-            Matrix vehicleTr;
-            //if (UseTrimeshGround)
+            CreateScene();
+        }
+
+        public CollisionConfiguration CollisionConfiguration { get; }
+        public CollisionDispatcher Dispatcher { get; }
+        public BroadphaseInterface Broadphase { get; }
+        public DiscreteDynamicsWorld World { get; }
+
+        // RaycastVehicle is the interface for the constraint that implements the raycast vehicle
+        // notice that for higher-quality slow-moving vehicles, another approach might be better
+        // implementing explicit hinged-wheel constraints with cylinder collision, rather then raycasts
+        public float EngineForce { get; set; } = 0.0f;
+        public float BreakingForce { get; set; } = 0.0f;
+
+        public float VehicleSteering { get; set; } = 0.0f;
+
+        public void OnUpdate()
+        {
+            vehicle.ApplyEngineForce(EngineForce, 2);
+            vehicle.SetBrake(BreakingForce, 2);
+            vehicle.ApplyEngineForce(EngineForce, 3);
+            vehicle.SetBrake(BreakingForce, 3);
+
+            vehicle.SetSteeringValue(VehicleSteering, 0);
+            vehicle.SetSteeringValue(VehicleSteering, 1);
+        }
+
+        public void Dispose()
+        {
+            if (_terrainData != IntPtr.Zero)
             {
-                const float scale = 20.0f;
+                Marshal.FreeHGlobal(_terrainData);
+            }
 
-                //create a triangle-mesh ground
-                const int NumVertsX = 20;
-                const int NumVertsY = 20;
-                const int totalVerts = NumVertsX * NumVertsY;
+            this.StandardCleanup();
+        }
 
-                const int totalTriangles = 2 * (NumVertsX - 1) * (NumVertsY - 1);
+        private void PickingPreTickCallback(DynamicsWorld world, float timeStep)
+        {
+            EngineForce *= (1.0f - timeStep);
 
-                TriangleIndexVertexArray vertexArray = new TriangleIndexVertexArray();
-                IndexedMesh mesh = new IndexedMesh();
-                mesh.Allocate(totalTriangles, totalVerts);
-                mesh.NumTriangles = totalTriangles;
-                mesh.NumVertices = totalVerts;
-                mesh.TriangleIndexStride = 3 * sizeof(int);
-                mesh.VertexStride = Vector3.SizeInBytes;
-                using (var indicesStream = mesh.GetTriangleStream())
-                {
-                    var indices = new BinaryWriter(indicesStream);
-                    for (i = 0; i < NumVertsX - 1; i++)
-                    {
-                        for (int j = 0; j < NumVertsY - 1; j++)
-                        {
-                            indices.Write(j * NumVertsX + i);
-                            indices.Write(j * NumVertsX + i + 1);
-                            indices.Write((j + 1) * NumVertsX + i + 1);
+            vehicle.ApplyEngineForce(EngineForce, 2);
+            vehicle.SetBrake(BreakingForce, 2);
+            vehicle.ApplyEngineForce(EngineForce, 3);
+            vehicle.SetBrake(BreakingForce, 3);
 
-                            indices.Write(j * NumVertsX + i);
-                            indices.Write((j + 1) * NumVertsX + i + 1);
-                            indices.Write((j + 1) * NumVertsX + i);
-                        }
-                    }
-                    indices.Dispose();
-                }
+            vehicle.SetSteeringValue(VehicleSteering, 0);
+            vehicle.SetSteeringValue(VehicleSteering, 1);
+        }
 
-                using (var vertexStream = mesh.GetVertexStream())
-                {
-                    var vertices = new BinaryWriter(vertexStream);
-                    for (i = 0; i < NumVertsX; i++)
-                    {
-                        for (int j = 0; j < NumVertsY; j++)
-                        {
-                            float wl = .2f;
-                            float height = 20.0f * (float)(Math.Sin(i * wl) * Math.Cos(j * wl));
+        private void CreateScene()
+        {
+            CreateTrimeshGround();
+            //CreateHeightfieldTerrainFromFile();
+            //CreateHeightfieldTerrain();
+        }
 
-                            vertices.Write((i - NumVertsX * 0.5f) * scale);
-                            vertices.Write(height);
-                            vertices.Write((j - NumVertsY * 0.5f) * scale);
-                        }
-                    }
-                    vertices.Dispose();
-                }
+        private void CreateTrimeshGround()
+        {
+            const float scale = 20.0f;
 
-                vertexArray.AddIndexedMesh(mesh);
-                groundShape = new BvhTriangleMeshShape(vertexArray, true);
+            //create a triangle-mesh ground
+            const int NumVertsX = 20;
+            const int NumVertsY = 20;
+            const int totalVerts = NumVertsX * NumVertsY;
 
-                tr = Matrix.Identity;
-                vehicleTr = Matrix.Translation(0, -2, 0);
-            }/*
-            else
+            const int totalTriangles = 2 * (NumVertsX - 1) * (NumVertsY - 1);
+
+            var vertexArray = new TriangleIndexVertexArray();
+            var mesh = new IndexedMesh();
+            mesh.Allocate(totalTriangles, totalVerts);
+            mesh.NumTriangles = totalTriangles;
+            mesh.NumVertices = totalVerts;
+            mesh.TriangleIndexStride = 3 * sizeof(int);
+            mesh.VertexStride = Vector3.SizeInBytes;
+            using (var indicesStream = mesh.GetTriangleStream())
             {
-                // Use HeightfieldTerrainShape
-
-                int width = 40, length = 40;
-                //int width = 128, length = 128; // Debugging is too slow for this
-                float maxHeight = 10.0f;
-                float heightScale = maxHeight / 256.0f;
-                Vector3 scale = new Vector3(20.0f, maxHeight, 20.0f);
-
-                //PhyScalarType scalarType = PhyScalarType.PhyUChar;
-                //FileStream file = new FileStream(heightfieldFile, FileMode.Open, FileAccess.Read);
-
-                // Use float data
-                PhyScalarType scalarType = PhyScalarType.PhyFloat;
-                byte[] terr = new byte[width * length * 4];
-                MemoryStream file = new MemoryStream(terr);
-                BinaryWriter writer = new BinaryWriter(file);
-                for (i = 0; i < width; i++)
-                    for (int j = 0; j < length; j++)
-                        writer.Write((float)((maxHeight / 2) + 4 * Math.Sin(j * 0.5f) * Math.Cos(i)));
-                writer.Flush();
-                file.Position = 0;
-
-                HeightfieldTerrainShape heightterrainShape = new HeightfieldTerrainShape(width, length,
-                    file, heightScale, 0, maxHeight, upIndex, scalarType, false);
-                heightterrainShape.SetUseDiamondSubdivision(true);
-
-                groundShape = heightterrainShape;
-                groundShape.LocalScaling = new Vector3(scale.X, 1, scale.Z);
-
-                tr = Matrix.Translation(new Vector3(-scale.X / 2, scale.Y / 2, -scale.Z / 2));
-                vehicleTr = Matrix.Translation(new Vector3(20, 3, -3));
-
-
-                // Create graphics object
-
-                file.Position = 0;
-                BinaryReader reader = new BinaryReader(file);
-
-                int totalTriangles = (width - 1) * (length - 1) * 2;
-                int totalVerts = width * length;
-
-                game.groundMesh = new Mesh(game.Device, totalTriangles, totalVerts,
-                    MeshFlags.SystemMemory | MeshFlags.Use32Bit, VertexFormat.Position | VertexFormat.Normal);
-                SlimDX.DataStream data = game.groundMesh.LockVertexBuffer(LockFlags.None);
-                for (i = 0; i < width; i++)
+                var indices = new BinaryWriter(indicesStream);
+                for (int i = 0; i < NumVertsX - 1; i++)
                 {
-                    for (int j = 0; j < length; j++)
+                    for (int j = 0; j < NumVertsY - 1; j++)
                     {
-                        float height;
-                        if (scalarType == PhyScalarType.PhyFloat)
-                        {
-                            // heightScale isn't applied internally for float data
-                            height = reader.ReadSingle();
-                        }
-                        else if (scalarType == PhyScalarType.PhyUChar)
-                        {
-                            height = file.ReadByte() * heightScale;
-                        }
-                        else
-                        {
-                            height = 0.0f;
-                        }
+                        indices.Write(j * NumVertsX + i);
+                        indices.Write(j * NumVertsX + i + 1);
+                        indices.Write((j + 1) * NumVertsX + i + 1);
 
-                        data.Write((j - length * 0.5f) * scale.X);
-                        data.Write(height);
-                        data.Write((i - width * 0.5f) * scale.Z);
-
-                        // Normals will be calculated later
-                        data.Position += 12;
+                        indices.Write(j * NumVertsX + i);
+                        indices.Write((j + 1) * NumVertsX + i + 1);
+                        indices.Write((j + 1) * NumVertsX + i);
                     }
                 }
-                game.groundMesh.UnlockVertexBuffer();
-                file.Close();
+                indices.Dispose();
+            }
 
-                data = game.groundMesh.LockIndexBuffer(LockFlags.None);
-                for (i = 0; i < width - 1; i++)
+            using (var vertexStream = mesh.GetVertexStream())
+            {
+                var vertices = new BinaryWriter(vertexStream);
+                for (int i = 0; i < NumVertsX; i++)
                 {
-                    for (int j = 0; j < length - 1; j++)
+                    for (int j = 0; j < NumVertsY; j++)
                     {
-                        // Using diamond subdivision
-                        if ((j + i) % 2 == 0)
-                        {
-                            data.Write(j * width + i);
-                            data.Write((j + 1) * width + i + 1);
-                            data.Write(j * width + i + 1);
+                        float wl = .2f;
+                        float height = 20.0f * (float)(Math.Sin(i * wl) * Math.Cos(j * wl));
 
-                            data.Write(j * width + i);
-                            data.Write((j + 1) * width + i);
-                            data.Write((j + 1) * width + i + 1);
-                        }
-                        else
-                        {
-                            data.Write(j * width + i);
-                            data.Write((j + 1) * width + i);
-                            data.Write(j * width + i + 1);
-
-                            data.Write(j * width + i + 1);
-                            data.Write((j + 1) * width + i);
-                            data.Write((j + 1) * width + i + 1);
-                        }
-
-                        / *
-                        // Not using diamond subdivision
-                        data.Write(j * width + i);
-                        data.Write((j + 1) * width + i);
-                        data.Write(j * width + i + 1);
-
-                        data.Write(j * width + i + 1);
-                        data.Write((j + 1) * width + i);
-                        data.Write((j + 1) * width + i + 1);
-                        * /
+                        vertices.Write((i - NumVertsX * 0.5f) * scale);
+                        vertices.Write(height);
+                        vertices.Write((j - NumVertsY * 0.5f) * scale);
                     }
                 }
-                game.groundMesh.UnlockIndexBuffer();
+                vertices.Dispose();
+            }
 
-                game.groundMesh.ComputeNormals();
-            }*/
+            vertexArray.AddIndexedMesh(mesh);
+            var groundShape = new BvhTriangleMeshShape(vertexArray, true);
 
-            CollisionShapes.Add(groundShape);
-
-            RigidBody ground = LocalCreateRigidBody(0, tr, groundShape);
+            RigidBody ground = PhysicsHelper.CreateStaticBody(Matrix.Identity, groundShape, World);
             ground.UserObject = "Ground";
 
-            CreateVehicle(vehicleTr);
+            Matrix vehicleTransform = Matrix.Translation(0, -2, 0);
+            CreateVehicle(vehicleTransform);
+        }
+
+        private void CreateHeightfieldTerrainFromFile()
+        {
+            const float minHeight = 0;
+            const float maxHeight = 10.0f;
+            const float heightScale = maxHeight / 256.0f;
+            const int width = 128, length = 128;
+            const int dataLength = width * length * sizeof(byte);
+            const PhyScalarType scalarType = PhyScalarType.UChar;
+
+            var scale = new Vector3(5.0f, maxHeight, 5.0f);
+
+            string heightfieldFile = Path.Combine("data", "heightfield128x128.raw");
+            _terrainData = Marshal.AllocHGlobal(dataLength);
+
+            using (var stream = new FileStream(heightfieldFile, FileMode.Open, FileAccess.Read))
+            {
+                using (var reader = new BinaryReader(stream))
+                {
+                    while (stream.Position < stream.Length)
+                    {
+                        int offset = (int)stream.Position;
+                        byte height = reader.ReadByte();
+                        Marshal.WriteByte(_terrainData, offset, height);
+                    }
+                }
+            }
+
+            var shape = new HeightfieldTerrainShape(width, length,
+                _terrainData, heightScale, minHeight, maxHeight, upIndex, scalarType, false);
+            shape.SetUseDiamondSubdivision(true);
+            shape.LocalScaling = new Vector3(scale.X, 1, scale.Z);
+
+            Matrix transform = Matrix.Translation(-scale.X / 2, scale.Y / 2, -scale.Z / 2);
+
+            RigidBody ground = PhysicsHelper.CreateStaticBody(transform, shape, World);
+            ground.UserObject = "Ground";
+
+            Matrix vehicleTransform = Matrix.Translation(new Vector3(20, 3, -3));
+            CreateVehicle(vehicleTransform);
+        }
+
+        private void CreateHeightfieldTerrain()
+        {
+            const float minHeight = 0;
+            const float maxHeight = 10.0f;
+            const float heightScale = maxHeight / 256.0f;
+            const int width = 64, length = 64;
+            const int dataLength = width * length * sizeof(float);
+            const PhyScalarType scalarType = PhyScalarType.Float;
+
+            var scale = new Vector3(15.0f, maxHeight, 15.0f);
+
+            _terrainData = Marshal.AllocHGlobal(dataLength);
+            var terrain = new byte[dataLength];
+
+            using (var file = new MemoryStream(terrain))
+            {
+                using (var writer = new BinaryWriter(file))
+                {
+                    for (int i = 0; i < width; i++)
+                    {
+                        for (int j = 0; j < length; j++)
+                        {
+                            writer.Write((float)((maxHeight / 2) + 4 * Math.Sin(j * 0.5f) * Math.Cos(i)));
+                        }
+                    }
+                }
+            }
+
+            Marshal.Copy(terrain, 0, _terrainData, terrain.Length);
+
+            var groundShape = new HeightfieldTerrainShape(width, length,
+                _terrainData, heightScale, minHeight, maxHeight, upIndex, scalarType, false);
+            groundShape.SetUseDiamondSubdivision(true);
+            groundShape.LocalScaling = new Vector3(scale.X, 1, scale.Z);
+
+            Matrix transform = Matrix.Translation(-scale.X / 2, scale.Y / 2, -scale.Z / 2);
+
+            RigidBody ground = PhysicsHelper.CreateStaticBody(transform, groundShape, World);
+            ground.UserObject = "Ground";
+
+            Matrix vehicleTransform = Matrix.Translation(new Vector3(20, 3, -3));
+            CreateVehicle(vehicleTransform);
         }
 
         private void CreateVehicle(Matrix transform)
         {
-            CollisionShape chassisShape = new BoxShape(1.0f, 0.5f, 2.0f);
-            CollisionShapes.Add(chassisShape);
+            var chassisShape = new BoxShape(1.0f, 0.5f, 2.0f);
 
-            CompoundShape compound = new CompoundShape();
-            CollisionShapes.Add(compound);
+            var compound = new CompoundShape();
 
             //localTrans effectively shifts the center of mass with respect to the chassis
             Matrix localTrans = Matrix.Translation(Vector3.UnitY);
             compound.AddChildShape(localTrans, chassisShape);
-            RigidBody carChassis = LocalCreateRigidBody(800, Matrix.Identity, compound);
+            RigidBody carChassis = PhysicsHelper.CreateBody(800, Matrix.Identity, compound, World);
             carChassis.UserObject = "Chassis";
             //carChassis.SetDamping(0.2f, 0.2f);
 
-            VehicleTuning tuning = new VehicleTuning();
-            IVehicleRaycaster vehicleRayCaster = new DefaultVehicleRaycaster(World);
+            var tuning = new VehicleTuning();
+            var vehicleRayCaster = new DefaultVehicleRaycaster(World);
             //vehicle = new RaycastVehicle(tuning, carChassis, vehicleRayCaster);
             vehicle = new CustomVehicle(tuning, carChassis, vehicleRayCaster);
 
@@ -297,23 +360,29 @@ namespace VehicleDemo
 
 
             const float connectionHeight = 1.2f;
-            bool isFrontWheel = true;
 
             // choose coordinate system
             vehicle.SetCoordinateSystem(rightIndex, upIndex, forwardIndex);
 
-            Vector3 connectionPointCS0 = new Vector3(CUBE_HALF_EXTENTS - (0.3f * wheelWidth), connectionHeight, 2 * CUBE_HALF_EXTENTS - wheelRadius);
-            vehicle.AddWheel(connectionPointCS0, wheelDirectionCS0, wheelAxleCS, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
+            Vector3 wheelDirection = Vector3.Zero;
+            Vector3 wheelAxle = Vector3.Zero;
 
-            connectionPointCS0 = new Vector3(-CUBE_HALF_EXTENTS + (0.3f * wheelWidth), connectionHeight, 2 * CUBE_HALF_EXTENTS - wheelRadius);
-            vehicle.AddWheel(connectionPointCS0, wheelDirectionCS0, wheelAxleCS, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
+            wheelDirection[upIndex] = -1;
+            wheelAxle[rightIndex] = -1;
+
+            bool isFrontWheel = true;
+            var connectionPoint = new Vector3(CUBE_HALF_EXTENTS - (0.3f * wheelWidth), connectionHeight, 2 * CUBE_HALF_EXTENTS - wheelRadius);
+            vehicle.AddWheel(connectionPoint, wheelDirection, wheelAxle, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
+
+            connectionPoint = new Vector3(-CUBE_HALF_EXTENTS + (0.3f * wheelWidth), connectionHeight, 2 * CUBE_HALF_EXTENTS - wheelRadius);
+            vehicle.AddWheel(connectionPoint, wheelDirection, wheelAxle, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
 
             isFrontWheel = false;
-            connectionPointCS0 = new Vector3(-CUBE_HALF_EXTENTS + (0.3f * wheelWidth), connectionHeight, -2 * CUBE_HALF_EXTENTS + wheelRadius);
-            vehicle.AddWheel(connectionPointCS0, wheelDirectionCS0, wheelAxleCS, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
+            connectionPoint = new Vector3(-CUBE_HALF_EXTENTS + (0.3f * wheelWidth), connectionHeight, -2 * CUBE_HALF_EXTENTS + wheelRadius);
+            vehicle.AddWheel(connectionPoint, wheelDirection, wheelAxle, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
 
-            connectionPointCS0 = new Vector3(CUBE_HALF_EXTENTS - (0.3f * wheelWidth), connectionHeight, -2 * CUBE_HALF_EXTENTS + wheelRadius);
-            vehicle.AddWheel(connectionPointCS0, wheelDirectionCS0, wheelAxleCS, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
+            connectionPoint = new Vector3(CUBE_HALF_EXTENTS - (0.3f * wheelWidth), connectionHeight, -2 * CUBE_HALF_EXTENTS + wheelRadius);
+            vehicle.AddWheel(connectionPoint, wheelDirection, wheelAxle, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
 
 
             for (int i = 0; i < vehicle.NumWheels; i++)
@@ -327,80 +396,6 @@ namespace VehicleDemo
             }
 
             vehicle.RigidBody.WorldTransform = transform;
-        }
-
-        public override void OnUpdate()
-        {
-            gEngineForce *= (1.0f - FrameDelta);
-
-            vehicle.ApplyEngineForce(gEngineForce, 2);
-            vehicle.SetBrake(gBreakingForce, 2);
-            vehicle.ApplyEngineForce(gEngineForce, 3);
-            vehicle.SetBrake(gBreakingForce, 3);
-
-            vehicle.SetSteeringValue(gVehicleSteering, 0);
-            vehicle.SetSteeringValue(gVehicleSteering, 1);
-
-            base.OnUpdate();
-        }
-
-        public override void OnHandleInput()
-        {
-            if (Input.KeysDown.Contains(Keys.Left))
-            {
-                gVehicleSteering += FrameDelta * steeringIncrement;
-                if (gVehicleSteering > steeringClamp)
-                    gVehicleSteering = steeringClamp;
-            }
-            else if ((gVehicleSteering - float.Epsilon) > 0)
-            {
-                gVehicleSteering -= FrameDelta * steeringIncrement;
-            }
-
-            if (Input.KeysDown.Contains(Keys.Right))
-            {
-                gVehicleSteering -= FrameDelta * steeringIncrement;
-                if (gVehicleSteering < -steeringClamp)
-                    gVehicleSteering = -steeringClamp;
-            }
-            else if ((gVehicleSteering + float.Epsilon) < 0)
-            {
-                gVehicleSteering += FrameDelta * steeringIncrement;
-            }
-
-            if (Input.KeysDown.Contains(Keys.Up))
-            {
-                gEngineForce = maxEngineForce;
-            }
-
-            if (Input.KeysDown.Contains(Keys.Down))
-            {
-                gEngineForce = -maxEngineForce;
-            }
-
-            if (Input.KeysDown.Contains(Keys.Space))
-            {
-                gBreakingForce = maxBreakingForce;
-            }
-
-            if (Input.KeysReleased.Contains(Keys.Space))
-            {
-                gBreakingForce = 0;
-            }
-
-            base.OnHandleInput();
-        }
-    }
-
-    static class Program
-    {
-        [STAThread]
-        static void Main()
-        {
-            using (Demo demo = new VehicleDemo())
-            {
-                GraphicsLibraryManager.Run(demo);
-            }
         }
     }
 }

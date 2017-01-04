@@ -15,14 +15,6 @@ namespace BulletSharp
 		{
 		}
 
-		public HeightfieldTerrainShape(int heightStickWidth, int heightStickLength,
-			IntPtr heightfieldData, float maxHeight, int upAxis, bool useFloatData,
-			bool flipQuadEdges)
-			: base(btHeightfieldTerrainShape_new2(heightStickWidth, heightStickLength,
-				heightfieldData, maxHeight, upAxis, useFloatData, flipQuadEdges))
-		{
-		}
-
 		public void SetUseDiamondSubdivision()
 		{
 			btHeightfieldTerrainShape_setUseDiamondSubdivision(_native);
@@ -42,6 +34,11 @@ namespace BulletSharp
 		{
 			btHeightfieldTerrainShape_setUseZigzagSubdivision2(_native, useZigzagSubdivision);
 		}
+
+        private void Validate()
+        {
+
+        }
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btHeightfieldTerrainShape_new(int heightStickWidth, int heightStickLength, IntPtr heightfieldData, float heightScale, float minHeight, float maxHeight, int upAxis, PhyScalarType heightDataType, bool flipQuadEdges);

@@ -5,94 +5,104 @@ using System;
 
 namespace CollisionInterfaceDemo
 {
-    class CollisionInterfaceDemo : Demo
+    internal static class Program
     {
-        Vector3 eye = new Vector3(6, 4, 1);
-        Vector3 target = new Vector3(0, 3, 0);
-
-        CollisionObject objectA, objectB;
-        DrawingResult renderCallback;
-
-        Vector3 boxMin = new Vector3(-1, -1, -1);
-        Vector3 boxMax = new Vector3(1, 1, 1);
-        Vector3 white = new Vector3(1, 1, 1);
-
-        protected override void OnInitialize()
+        [STAThread]
+        static void Main()
         {
-            Freelook.SetEyeTarget(eye, target);
+            DemoRunner.Run<CollisionInterfaceDemo>();
+        }
+    }
 
-            Graphics.SetFormText("BulletSharp - Collision Interface Demo");
+    internal sealed class CollisionInterfaceDemo : IDemoConfiguration, IUpdateReceiver
+    {
+        private Vector3 _white = new Vector3(1, 1, 1);
 
-            IsDebugDrawEnabled = true;
+        public ISimulation CreateSimulation(Demo demo)
+        {
+            demo.FreeLook.Eye = new Vector3(6, 4, 1);
+            demo.FreeLook.Target = new Vector3(0, 3, 0);
+            demo.IsDebugDrawEnabled = true;
+            demo.Graphics.WindowTitle = "BulletSharp - Collision Interface Demo";
+            return new CollisionInterfaceDemoSimulation();
         }
 
-        protected override void OnInitializePhysics()
+        public void Update(Demo demo)
         {
-            // collision configuration contains default setup for memory, collision setup
-            CollisionConf = new DefaultCollisionConfiguration();
-            Dispatcher = new CollisionDispatcher(CollisionConf);
+            var simulation = demo.Simulation as CollisionInterfaceDemoSimulation;
+            CollisionObject movingObject = simulation.MovingObject;
+
+            Matrix transform = movingObject.WorldTransform;
+            Vector3 position = transform.Origin;
+            transform.Origin = Vector3.Zero;
+            transform *= Matrix.RotationYawPitchRoll(0.1f * demo.FrameDelta, 0.05f * demo.FrameDelta, 0);
+            transform.Origin = position;
+            movingObject.WorldTransform = transform;
+
+            if (demo.IsDebugDrawEnabled)
+            {
+                simulation.World.DebugDrawObjectRef(ref transform, movingObject.CollisionShape, ref _white);
+                simulation.World.ContactTest(movingObject, simulation.RenderCallback);
+            }
+        }
+    }
+
+   internal sealed class CollisionInterfaceDemoSimulation : ISimulation
+    {
+        private readonly CollisionShape _staticShape;
+        private readonly CollisionObject _staticObject;
+
+        public CollisionInterfaceDemoSimulation()
+        {
+            CollisionConfiguration = new DefaultCollisionConfiguration();
+            Dispatcher = new CollisionDispatcher(CollisionConfiguration);
 
             Broadphase = new AxisSweep3(
                 new Vector3(-1000, -1000, -1000),
                 new Vector3(1000, 1000, 1000));
 
-            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConf);
-            World.Gravity = new Vector3(0, -10, 0);
+            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConfiguration);
 
-            renderCallback = new DrawingResult(World);
+            RenderCallback = new DrawingResult(World);
 
-            var boxA = new BoxShape(1.0f) { Margin = 0 };
-            var boxB = new BoxShape(0.5f) { Margin = 0 };
-            CollisionShapes.Add(boxA);
-            CollisionShapes.Add(boxB);
-
-            Quaternion rotA = new Quaternion(0.739f, -0.204f, 0.587f, 0.257f);
-            rotA.Normalize();
-
-            objectA = new CollisionObject
+            var movingBox = new BoxShape(1.0f) { Margin = 0 };
+            var rotation = Quaternion.RotationYawPitchRoll((float)Math.PI * 0.6f, (float)Math.PI * 0.2f, 0);
+            MovingObject = new CollisionObject
             {
-                CollisionShape = boxA,
-                WorldTransform = Matrix.RotationQuaternion(rotA) * Matrix.Translation(0, 3, 0)
+                CollisionShape = movingBox,
+                WorldTransform = Matrix.RotationQuaternion(rotation) * Matrix.Translation(0, 3, 0)
             };
-            objectB = new CollisionObject
+
+            _staticShape = new BoxShape(0.5f) { Margin = 0 };
+            _staticObject = new CollisionObject
             {
-                CollisionShape = boxB,
+                CollisionShape = _staticShape,
                 WorldTransform = Matrix.Translation(0, 4.248f, 0)
             };
-
-            //World.AddCollisionObject(objectA);
-            World.AddCollisionObject(objectB);
+            World.AddCollisionObject(_staticObject);
         }
 
-        public override void OnUpdate()
+        public CollisionConfiguration CollisionConfiguration { get; }
+        public CollisionDispatcher Dispatcher { get; }
+        public BroadphaseInterface Broadphase { get; }
+        public DiscreteDynamicsWorld World { get; }
+
+        public CollisionObject MovingObject { get; }
+        public DrawingResult RenderCallback { get; }
+
+        public void Dispose()
         {
-            base.OnUpdate();
+            RenderCallback.Dispose();
+            _staticObject.Dispose();
+            _staticShape.Dispose();
 
-            Matrix transform = objectA.WorldTransform;
-            Vector3 position = transform.Origin;
-            transform.Origin = Vector3.Zero;
-            transform *= Matrix.RotationYawPitchRoll(0.1f * FrameDelta, 0.05f * FrameDelta, 0);
-            transform.Origin = position;
-            objectA.WorldTransform = transform;
-
-            if (IsDebugDrawEnabled)
-            {
-                World.DebugDrawer.DrawBox(ref boxMin, ref boxMax, ref transform, ref white);
-                World.ContactTest(objectA, renderCallback);
-            }
-        }
-
-        public override void ExitPhysics()
-        {
-            renderCallback.Dispose();
-
-            base.ExitPhysics();
+            this.StandardCleanup();
         }
     }
 
     class DrawingResult : ContactResultCallback
     {
-        private Vector3 _blue = new Vector3(0, 0, 1);
+        private Vector3 _red = new Vector3(1, 0, 0);
         private DynamicsWorld _world;
 
         public DrawingResult(DynamicsWorld world)
@@ -106,20 +116,8 @@ namespace CollisionInterfaceDemo
         {
             Vector3 ptA = cp.PositionWorldOnA;
             Vector3 ptB = cp.PositionWorldOnB;
-            _world.DebugDrawer.DrawLine(ref ptA, ref ptB, ref _blue);
+            _world.DebugDrawer.DrawLine(ref ptA, ref ptB, ref _red);
             return 0;
         }
     };
-
-    static class Program
-    {
-        [STAThread]
-        static void Main()
-        {
-            using (Demo demo = new CollisionInterfaceDemo())
-            {
-                GraphicsLibraryManager.Run(demo);
-            }
-        }
-    }
 }

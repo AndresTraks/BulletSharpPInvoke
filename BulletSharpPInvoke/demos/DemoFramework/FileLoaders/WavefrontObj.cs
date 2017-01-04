@@ -6,7 +6,7 @@ using System.IO;
 
 namespace DemoFramework.FileLoaders
 {
-    public class WavefrontObj
+    public sealed class WavefrontObj
     {
         private readonly char[] _faceSplitSchars = { '/' };
         private readonly char[] _lineSplitChars = { ' ' };

@@ -51,7 +51,7 @@ namespace DemoFramework.SlimDX
             set
             {
                 base.FarPlane = value;
-                if (Context9 != null && Demo.Freelook != null)
+                if (Context9 != null && Demo.FreeLook != null)
                 {
                     UpdateView();
                 }
@@ -257,7 +257,7 @@ namespace DemoFramework.SlimDX
                 Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.LightGray, 1.0f, 0);
                 Device.BeginScene();
 
-                foreach (CollisionObject colObj in Demo.World.CollisionObjectArray)
+                foreach (CollisionObject colObj in Demo.Simulation.World.CollisionObjectArray)
                 {
                     if (colObj is SoftBody)
                     {
@@ -281,8 +281,8 @@ namespace DemoFramework.SlimDX
                 }
 
                 if (Demo.IsDebugDrawEnabled)
-                    (Demo.World.DebugDrawer as PhysicsDebugDraw).DrawDebugWorld(Demo.World);
-                Info.OnRender(Demo.FramesPerSecond);
+                    (Demo.Simulation.World.DebugDrawer as PhysicsDebugDraw).DrawDebugWorld((DynamicsWorld)Demo.Simulation.World);
+                Info.OnRender((float)Demo.FramesPerSecond);
 
                 Device.EndScene();
                 Device.Present();
@@ -303,7 +303,7 @@ namespace DemoFramework.SlimDX
 
         public override void UpdateView()
         {
-            FreeLook freelook = Demo.Freelook;
+            FreeLook freelook = Demo.FreeLook;
             Device.SetTransform(TransformState.View, Matrix.LookAtLH(MathHelper.Convert(freelook.Eye), MathHelper.Convert(freelook.Target), MathHelper.Convert(freelook.Up)));
         }
 
@@ -316,7 +316,6 @@ namespace DemoFramework.SlimDX
 
             MessagePump.Run(Form, () =>
             {
-                Demo.OnHandleInput();
                 Demo.OnUpdate();
 
                 if (isFormClosed)

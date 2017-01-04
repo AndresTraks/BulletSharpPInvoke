@@ -3102,7 +3102,7 @@ namespace BulletSharp.SoftBody
 		static extern void btSoftBody_SolverState_setVelmrg(IntPtr obj, float value);
 	}
 
-	public class SRayCast
+	public class SoftBodyRayCast
 	{
         public SoftBody Body { get; set; }
         public FeatureType Feature { get; set; }
@@ -3236,8 +3236,8 @@ namespace BulletSharp.SoftBody
             _collisionShape = new SoftBodyCollisionShape(btCollisionObject_getCollisionShape(_native));
 		}
 
-		public SoftBody(SoftBodyWorldInfo worldInfo, int nodeCount, Vector3[] x, float[] m)
-			: base(btSoftBody_new(worldInfo._native, nodeCount, x, m))
+		public SoftBody(SoftBodyWorldInfo worldInfo, int nodeCount, Vector3[] positions, float[] masses)
+			: base(btSoftBody_new(worldInfo._native, nodeCount, positions, masses))
 		{
             _collisionShape = new SoftBodyCollisionShape(btCollisionObject_getCollisionShape(_native));
 			_worldInfo = worldInfo;
@@ -3650,7 +3650,7 @@ namespace BulletSharp.SoftBody
 			btSoftBody_randomizeConstraints(_native);
 		}
 
-        public bool RayTestRef(ref Vector3 rayFrom, ref Vector3 rayTo, SRayCast results)
+        public bool RayTestRef(ref Vector3 rayFrom, ref Vector3 rayTo, SoftBodyRayCast results)
         {
             IntPtr rayCast = btSoftBody_sRayCast_new();
             bool ret = btSoftBody_rayTest(_native, ref rayFrom, ref rayTo, rayCast);
@@ -3662,7 +3662,7 @@ namespace BulletSharp.SoftBody
             return ret;
         }
 
-		public bool RayTest(Vector3 rayFrom, Vector3 rayTo, SRayCast results)
+		public bool RayTest(Vector3 rayFrom, Vector3 rayTo, SoftBodyRayCast results)
 		{
             IntPtr rayCast = btSoftBody_sRayCast_new();
             bool ret = btSoftBody_rayTest(_native, ref rayFrom, ref rayTo, rayCast);

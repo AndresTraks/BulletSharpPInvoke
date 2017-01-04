@@ -6,56 +6,53 @@ using System.IO;
 
 namespace BulletXmlImportDemo
 {
-    class BulletXmlImportDemo : Demo
+    internal static class Program
     {
-        Vector3 eye = new Vector3(30, 20, 10);
-        Vector3 target = new Vector3(0, 5, -4);
-
-        BulletXmlWorldImporter importer;
-
-        protected override void OnInitialize()
+        [STAThread]
+        static void Main()
         {
-            Freelook.SetEyeTarget(eye, target);
-
-            Graphics.SetFormText("BulletSharp - XML Import Demo");
+            DemoRunner.Run<BulletXmlImportDemo>();
         }
+    }
 
-        protected override void OnInitializePhysics()
+    internal sealed class BulletXmlImportDemo : IDemoConfiguration
+    {
+        public ISimulation CreateSimulation(Demo demo)
         {
-            // collision configuration contains default setup for memory, collision setup
-            CollisionConf = new DefaultCollisionConfiguration();
-            Dispatcher = new CollisionDispatcher(CollisionConf);
+            demo.FreeLook.Eye = new Vector3(30, 20, 10);
+            demo.FreeLook.Target = new Vector3(0, 5, -4);
+            demo.Graphics.WindowTitle = "BulletSharp - XML Import Demo";
+            return new BulletXmlImportDemoSimulation();
+        }
+    }
 
+    internal sealed class BulletXmlImportDemoSimulation : ISimulation
+    {
+        private readonly BulletXmlWorldImporter _importer;
+
+        public BulletXmlImportDemoSimulation()
+        {
+            CollisionConfiguration = new DefaultCollisionConfiguration();
+            Dispatcher = new CollisionDispatcher(CollisionConfiguration);
             Broadphase = new DbvtBroadphase();
-            Solver = new SequentialImpulseConstraintSolver();
+            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConfiguration);
 
-            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConf);
-            World.Gravity = new Vector3(0, -10, 0);
-
-            importer = new BulletXmlWorldImporter(World);
-            if (!importer.LoadFile(Path.Combine("data", "bullet_basic.xml")))
+            _importer = new BulletXmlWorldImporter(World);
+            if (!_importer.LoadFile(Path.Combine("data", "bullet_basic.xml")))
             {
                 //throw new FileNotFoundException();
             }
         }
 
-        public override void ExitPhysics()
-        {
-            importer.DeleteAllData();
+        public CollisionConfiguration CollisionConfiguration { get; }
+        public CollisionDispatcher Dispatcher { get; }
+        public BroadphaseInterface Broadphase { get; }
+        public DiscreteDynamicsWorld World { get; }
 
-            base.ExitPhysics();
-        }
-    }
-
-    static class Program
-    {
-        [STAThread]
-        static void Main()
+        public void Dispose()
         {
-            using (Demo demo = new BulletXmlImportDemo())
-            {
-                GraphicsLibraryManager.Run(demo);
-            }
+            _importer.DeleteAllData();
+            this.StandardCleanup();
         }
     }
 }

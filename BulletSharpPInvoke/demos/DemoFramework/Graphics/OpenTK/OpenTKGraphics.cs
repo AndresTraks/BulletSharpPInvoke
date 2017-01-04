@@ -33,7 +33,7 @@ namespace DemoFramework.OpenTK
             set
             {
                 base.FarPlane = value;
-                if (Demo.Freelook != null)
+                if (Demo.FreeLook != null)
                 {
                     UpdateView();
                 }
@@ -205,7 +205,6 @@ namespace DemoFramework.OpenTK
 
         public void Paint()
         {
-            Demo.OnHandleInput();
             Demo.OnUpdate();
 
             Demo.Clock.StartRender();
@@ -223,7 +222,7 @@ namespace DemoFramework.OpenTK
             {
                 GL.Viewport(0, 0, glControl.Width, glControl.Height);
 
-                FreeLook freelook = Demo.Freelook;
+                FreeLook freelook = Demo.FreeLook;
                 lookat = Matrix4.LookAt(MathHelper.Convert(freelook.Eye), MathHelper.Convert(freelook.Target), MathHelper.Convert(freelook.Up));
                 GL.UniformMatrix4(viewMatrixLocation, false, ref lookat);
 
@@ -247,11 +246,8 @@ namespace DemoFramework.OpenTK
                 viewChanged = false;
             }
 
-            if (Demo.World != null)
-            {
-                _meshFactory.InitInstancedRender();
-                _meshFactory.RenderInstanced();
-            }
+            _meshFactory.InitInstancedRender();
+            _meshFactory.RenderInstanced();
 
             GL.UseProgram(0);
             if (Demo.IsDebugDrawEnabled)
@@ -260,7 +256,7 @@ namespace DemoFramework.OpenTK
                 GL.LoadMatrix(ref lookat);
                 GL.MatrixMode(MatrixMode.Projection);
                 GL.LoadMatrix(ref perspective);
-                (Demo.World.DebugDrawer as PhysicsDebugDraw).DrawDebugWorld(Demo.World);
+                (Demo.Simulation.World.DebugDrawer as PhysicsDebugDraw).DrawDebugWorld((BulletSharp.DynamicsWorld)Demo.Simulation.World);
             }
 
             info.OnRender();

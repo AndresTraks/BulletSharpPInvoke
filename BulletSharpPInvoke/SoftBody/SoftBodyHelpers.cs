@@ -225,126 +225,126 @@ namespace BulletSharp.SoftBody
 		}
 
 		public static SoftBody CreatePatch(SoftBodyWorldInfo worldInfo, Vector3 corner00,
-			Vector3 corner10, Vector3 corner01, Vector3 corner11, int resx, int resy,
-			int fixeds, bool gendiags)
+			Vector3 corner10, Vector3 corner01, Vector3 corner11, int resolutionX, int resolutionY,
+			int fixedCorners, bool generateDiagonals)
 		{
             // Create nodes
-            if ((resx < 2) || (resy < 2))
+            if ((resolutionX < 2) || (resolutionY < 2))
                 return null;
 
-            int rx = resx;
-            int ry = resy;
-            int tot = rx * ry;
-            Vector3[] x = new Vector3[tot];
-            float[] m = new float[tot];
+            int rx = resolutionX;
+            int ry = resolutionY;
+            int total = rx * ry;
+            var positions = new Vector3[total];
+            var masses = new float[total];
 
-            for (int iy = 0; iy < ry; iy++)
+            for (int y = 0; y < ry; y++)
             {
-                float ty = iy / (float)(ry - 1);
+                float ty = y / (float)(ry - 1);
                 Vector3 py0, py1;
                 Vector3.Lerp(ref corner00, ref corner01, ty, out py0);
                 Vector3.Lerp(ref corner10, ref corner11, ty, out py1);
                 for (int ix = 0; ix < rx; ix++)
                 {
                     float tx = ix / (float)(rx - 1);
-                    int index = rx * iy + ix;
-                    Vector3.Lerp(ref py0, ref py1, tx, out x[index]);
-                    m[index] = 1;
+                    int index = rx * y + ix;
+                    Vector3.Lerp(ref py0, ref py1, tx, out positions[index]);
+                    masses[index] = 1;
                 }
             }
 
-            var psb = new SoftBody(worldInfo, tot, x, m);
+            var body = new SoftBody(worldInfo, total, positions, masses);
 
-            if ((fixeds & 1) != 0)
-                psb.SetMass(0, 0);
-            if ((fixeds & 2) != 0)
-                psb.SetMass(rx - 1, 0);
-            if ((fixeds & 4) != 0)
-                psb.SetMass(rx * (ry - 1), 0);
-            if ((fixeds & 8) != 0)
-                psb.SetMass(rx * (ry - 1) + rx - 1, 0);
+            if ((fixedCorners & 1) != 0)
+                body.SetMass(0, 0);
+            if ((fixedCorners & 2) != 0)
+                body.SetMass(rx - 1, 0);
+            if ((fixedCorners & 4) != 0)
+                body.SetMass(rx * (ry - 1), 0);
+            if ((fixedCorners & 8) != 0)
+                body.SetMass(rx * (ry - 1) + rx - 1, 0);
 
             // Create links and faces
-            for (int iy = 0; iy < ry; ++iy)
+            for (int y = 0; y < ry; ++y)
             {
-                for (int ix = 0; ix < rx; ++ix)
+                for (int x = 0; x < rx; ++x)
                 {
-                    int ixy = rx * iy + ix;
+                    int ixy = rx * y + x;
                     int ix1y = ixy + 1;
-                    int ixy1 = rx * (iy + 1) + ix;
+                    int ixy1 = rx * (y + 1) + x;
 
-                    bool mdx = (ix + 1) < rx;
-                    bool mdy = (iy + 1) < ry;
+                    bool mdx = (x + 1) < rx;
+                    bool mdy = (y + 1) < ry;
                     if (mdx)
-                        psb.AppendLink(ixy, ix1y);
+                        body.AppendLink(ixy, ix1y);
                     if (mdy)
-                        psb.AppendLink(ixy, ixy1);
+                        body.AppendLink(ixy, ixy1);
                     if (mdx && mdy)
                     {
                         int ix1y1 = ixy1 + 1;
-                        if (((ix + iy) & 1) != 0)
+                        if (((x + y) & 1) != 0)
                         {
-                            psb.AppendFace(ixy, ix1y, ix1y1);
-                            psb.AppendFace(ixy, ix1y1, ixy1);
-                            if (gendiags)
+                            body.AppendFace(ixy, ix1y, ix1y1);
+                            body.AppendFace(ixy, ix1y1, ixy1);
+                            if (generateDiagonals)
                             {
-                                psb.AppendLink(ixy, ix1y1);
+                                body.AppendLink(ixy, ix1y1);
                             }
                         }
                         else
                         {
-                            psb.AppendFace(ixy1, ixy, ix1y);
-                            psb.AppendFace(ixy1, ix1y, ix1y1);
-                            if (gendiags)
+                            body.AppendFace(ixy1, ixy, ix1y);
+                            body.AppendFace(ixy1, ix1y, ix1y1);
+                            if (generateDiagonals)
                             {
-                                psb.AppendLink(ix1y, ixy1);
+                                body.AppendLink(ix1y, ixy1);
                             }
                         }
                     }
                 }
             }
 
-            return psb;
+            return body;
 		}
 
 		public static SoftBody CreatePatchUV(SoftBodyWorldInfo worldInfo, Vector3 corner00,
-			Vector3 corner10, Vector3 corner01, Vector3 corner11, int resx, int resy,
-            int fixeds, bool gendiags, float[] texCoords = null)
+			Vector3 corner10, Vector3 corner01, Vector3 corner11, int resolutionX, int resolutionY,
+            int fixedCorners, bool generateDiagonals, float[] texCoords = null)
 		{
             var body = new SoftBody(btSoftBodyHelpers_CreatePatchUV(worldInfo._native,
-                ref corner00, ref corner10, ref corner01, ref corner11, resx, resy,
-                fixeds, gendiags, texCoords));
+                ref corner00, ref corner10, ref corner01, ref corner11, resolutionX, resolutionY,
+                fixedCorners, generateDiagonals, texCoords));
             body.WorldInfo = worldInfo;
             return body;
 		}
 
 		public static SoftBody CreateRope(SoftBodyWorldInfo worldInfo, Vector3 from,
-			Vector3 to, int res, int fixeds)
+			Vector3 to, int resolution, int fixedTips)
 		{
             // Create nodes
-            int r = res + 2;
-            Vector3[] x = new Vector3[r];
-            float[] m = new float[r];
+            int numLinks = resolution + 2;
+            var positions = new Vector3[numLinks];
+            var masses = new float[numLinks];
 
-            for (int i = 0; i < r; i++)
+            for (int i = 0; i < numLinks; i++)
             {
-                Vector3.Lerp(ref from, ref to, i / (float)(r - 1), out x[i]);
-                m[i] = 1;
+                Vector3.Lerp(ref from, ref to, i / (float)(numLinks - 1), out positions[i]);
+                masses[i] = 1;
             }
 
-            var psb = new SoftBody(worldInfo, r, x, m);
-            if ((fixeds & 1) != 0)
-                psb.SetMass(0, 0);
-            if ((fixeds & 2) != 0)
-                psb.SetMass(r - 1, 0);
+            var body = new SoftBody(worldInfo, numLinks, positions, masses);
+            if ((fixedTips & 1) != 0)
+                body.SetMass(0, 0);
+            if ((fixedTips & 2) != 0)
+                body.SetMass(numLinks - 1, 0);
 
             // Create links
-            for (int i = 1; i < r; i++)
+            for (int i = 1; i < numLinks; i++)
             {
-                psb.AppendLink(i - 1, i);
+                body.AppendLink(i - 1, i);
             }
 
-            return psb;
+            return body;
 		}
 
 		public static void Draw(SoftBody psb, IDebugDraw iDraw, DrawFlags drawFlags = DrawFlags.Std)

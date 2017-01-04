@@ -1,9 +1,4 @@
-﻿#define TEST_GIMPACT_TORUS
-//#define BULLET_TRIANGLE_COLLISION
-#define BULLET_GIMPACT
-//#define BULLET_GIMPACT_CONVEX_DECOMPOSITION
-
-using BulletSharp;
+﻿using BulletSharp;
 using BulletSharp.Math;
 using DemoFramework;
 using DemoFramework.Meshes;
@@ -12,277 +7,180 @@ using System.Windows.Forms;
 
 namespace GImpactTestDemo
 {
-    class GImpactTestDemo : Demo
-    {
-        Vector3 eye = new Vector3(0, 10, 50);
-        Vector3 target = new Vector3(0, 10, -4);
-
-        CollisionShape trimeshShape;
-        CollisionShape trimeshShape2;
-
-        TriangleIndexVertexArray indexVertexArrays;
-        TriangleIndexVertexArray indexVertexArrays2;
-
-        Vector3 kinTorusTran;
-        Quaternion kinTorusRot;
-        RigidBody kinematicTorus;
-
-        const float ShootBoxInitialSpeed = 40.0f;
-
-        protected override void OnInitialize()
-        {
-            Freelook.SetEyeTarget(eye, target);
-
-            Graphics.SetFormText("BulletSharp - GImpact Test Demo");
-            DemoText = ". - Shoot Bunny";
-
-            Graphics.FarPlane = 400.0f;
-        }
-
-        protected override void OnInitializePhysics()
-        {
-            // collision configuration contains default setup for memory, collision setup
-            CollisionConf = new DefaultCollisionConfiguration();
-            Dispatcher = new CollisionDispatcher(CollisionConf);
-
-            //Broadphase = new SimpleBroadphase();
-            Broadphase = new AxisSweep3_32Bit(new Vector3(-10000, -10000, -10000), new Vector3(10000, 10000, 10000), 1024);
-
-            Solver = new SequentialImpulseConstraintSolver();
-
-            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConf);
-            World.Gravity = new Vector3(0, -10, 0);
-
-
-            // create trimesh model and shape
-            InitGImpactCollision();
-
-            // Create Scene
-            float mass = 0.0f;
-
-            CollisionShape staticboxShape1 = new BoxShape(200, 1, 200);//floor
-            CollisionShapes.Add(staticboxShape1);
-            LocalCreateRigidBody(mass, Matrix.Translation(0, -10, 0), staticboxShape1);
-
-            CollisionShape staticboxShape2 = new BoxShape(1, 50, 200);//left wall
-            CollisionShapes.Add(staticboxShape2);
-            LocalCreateRigidBody(mass, Matrix.Translation(-200, 15, 0), staticboxShape2);
-
-            CollisionShape staticboxShape3 = new BoxShape(1, 50, 200);//right wall
-            CollisionShapes.Add(staticboxShape3);
-            LocalCreateRigidBody(mass, Matrix.Translation(200, 15, 0), staticboxShape3);
-
-            CollisionShape staticboxShape4 = new BoxShape(200, 50, 1);//front wall
-            CollisionShapes.Add(staticboxShape4);
-            LocalCreateRigidBody(mass, Matrix.Translation(0, 15, 200), staticboxShape4);
-
-            CollisionShape staticboxShape5 = new BoxShape(200, 50, 1);//back wall
-            CollisionShapes.Add(staticboxShape5);
-            LocalCreateRigidBody(mass, Matrix.Translation(0, 15, -200), staticboxShape5);
-
-
-            //static plane
-
-            Vector3 normal = new Vector3(-0.5f, 0.5f, 0.0f);
-            normal.Normalize();
-            CollisionShape staticplaneShape6 = new StaticPlaneShape(normal, 0.5f);// A plane
-            CollisionShapes.Add(staticplaneShape6);
-            RigidBody staticBody2 = LocalCreateRigidBody(mass, Matrix.Translation(0, -9, 0), staticplaneShape6);
-
-
-            //another static plane
-
-            normal = new Vector3(0.5f, 0.7f, 0.0f);
-            //normal.Normalize();
-            CollisionShape staticplaneShape7 = new StaticPlaneShape(normal, 0.0f);// A plane
-            CollisionShapes.Add(staticplaneShape7);
-            staticBody2 = LocalCreateRigidBody(mass, Matrix.Translation(0, -10, 0), staticplaneShape7);
-
-
-            // Create Static Torus
-            float height = 28;
-            const float step = 2.5f;
-            const float massT = 1.0f;
-
-            Matrix startTransform =
-                Matrix.RotationQuaternion(Quaternion.RotationYawPitchRoll((float)Math.PI * 0.5f, 0, (float)Math.PI * 0.5f)) *
-                Matrix.Translation(0, height, -5);
-
-#if BULLET_GIMPACT
-            kinematicTorus = LocalCreateRigidBody(0, startTransform, trimeshShape);
-#else
-                //kinematicTorus = LocalCreateRigidBody(0, startTransform, CreateTorusShape());
-#endif
-
-            //kinematicTorus.CollisionFlags = kinematicTorus.CollisionFlags | CollisionFlags.StaticObject;
-            //kinematicTorus.ActivationState = ActivationState.IslandSleeping;
-
-            kinematicTorus.CollisionFlags = kinematicTorus.CollisionFlags | CollisionFlags.KinematicObject;
-            kinematicTorus.ActivationState = ActivationState.DisableDeactivation;
-
-            // Kinematic
-            kinTorusTran = new Vector3(-0.1f, 0, 0);
-            kinTorusRot = Quaternion.RotationYawPitchRoll(0, (float)Math.PI * 0.01f, 0);
-
-
-#if TEST_GIMPACT_TORUS
-
-#if BULLET_GIMPACT
-            // Create dynamic Torus
-            for (int i = 0; i < 6; i++)
-            {
-                height -= step;
-                startTransform =
-                    Matrix.RotationQuaternion(Quaternion.RotationYawPitchRoll(0, 0, (float)Math.PI * 0.5f)) *
-                    Matrix.Translation(0, height, -5);
-                RigidBody bodyA = LocalCreateRigidBody(massT, startTransform, trimeshShape);
-
-                height -= step;
-                startTransform =
-                    Matrix.RotationQuaternion(Quaternion.RotationYawPitchRoll((float)Math.PI * 0.5f, 0, (float)Math.PI * 0.5f)) *
-                    Matrix.Translation(0, height, -5);
-                RigidBody bodyB = LocalCreateRigidBody(massT, startTransform, trimeshShape);
-            }
-#else
-            /*
-            // Create dynamic Torus
-            for (int i = 0; i < 6; i++)
-            {
-                height -= step;
-                startTransform.setOrigin(btVector3(0, height, -5));
-                startTransform.setRotation(btQuaternion(0, 0, 3.14159265 * 0.5));
-
-                btRigidBody* bodyA = localCreateRigidBody(massT, startTransform, createTorusShape());
-
-                height -= step;
-                startTransform.setOrigin(btVector3(0, height, -5));
-                startTransform.setRotation(btQuaternion(3.14159265 * 0.5, 0, 3.14159265 * 0.5));
-                btRigidBody* bodyB = localCreateRigidBody(massT, startTransform, createTorusShape());
-            }
-            */
-#endif
-#endif
-
-            // Create Dynamic Boxes
-            for (int i = 0; i < 8; i++)
-            {
-                CollisionShape boxShape = new BoxShape(new Vector3(1, 1, 1));
-                CollisionShapes.Add(boxShape);
-                LocalCreateRigidBody(1, Matrix.Translation(2 * i - 5, 2, -3), boxShape);
-            }
-        }
-
-        void InitGImpactCollision()
-        {
-            // Create Torus Shape
-
-            indexVertexArrays = new TriangleIndexVertexArray(Torus.Indices, Torus.Vertices);
-
-#if BULLET_GIMPACT
-#if BULLET_GIMPACT_CONVEX_DECOMPOSITION
-            //GImpactConvexDecompositionShape trimesh =
-            //    new GImpactConvexDecompositionShape(indexVertexArrays, new Vector3(1), 0.01f);
-	        //trimesh.Margin = 0.07f;
-	        //trimesh.UpdateBound();
-#else
-            GImpactMeshShape trimesh = new GImpactMeshShape(indexVertexArrays);
-            trimesh.LocalScaling = new Vector3(1);
-#if BULLET_TRIANGLE_COLLISION
-            trimesh.Margin = 0.07f; //?????
-#else
-            trimesh.Margin = 0;
-#endif
-            trimesh.UpdateBound();
-#endif
-            trimeshShape = trimesh;
-#else
-            //trimeshShape = new GImpactMeshData(indexVertexArrays);
-#endif
-            CollisionShapes.Add(trimeshShape);
-
-
-            // Create Bunny Shape
-            indexVertexArrays2 = new TriangleIndexVertexArray(Bunny.Indices, Bunny.Vertices);
-
-#if BULLET_GIMPACT
-#if BULLET_GIMPACT_CONVEX_DECOMPOSITION
-            //GImpactConvexDecompositionShape trimesh2 =
-            //    new GImpactConvexDecompositionShape(indexVertexArrays, new Vector3(1), 0.01f);
-	        //trimesh.Margin = 0.07f;
-	        //trimesh.UpdateBound();
-            //trimeshShape = trimesh2;
-#else
-            GImpactMeshShape trimesh2 = new GImpactMeshShape(indexVertexArrays2);
-            trimesh2.LocalScaling = new Vector3(1);
-#if BULLET_TRIANGLE_COLLISION
-            trimesh2.Margin = 0.07f; //?????
-#else
-            trimesh2.Margin = 0;
-#endif
-            trimesh2.UpdateBound();
-            trimeshShape2 = trimesh2;
-#endif
-#else
-            //trimeshShape2 = new GImpactMeshData(indexVertexArrays2);
-#endif
-            CollisionShapes.Add(trimeshShape2);
-
-            //register GIMPACT algorithm
-#if BULLET_GIMPACT
-            GImpactCollisionAlgorithm.RegisterAlgorithm(Dispatcher);
-#else
-            //ConcaveConcaveCollisionAlgorithm.RegisterAlgorithm(Dispatcher);
-#endif
-        }
-
-        public void ShootTrimesh(Vector3 camPos, Vector3 destination)
-        {
-            if (World != null)
-            {
-                const float mass = 4.0f;
-                Matrix startTransform = Matrix.Translation(camPos);
-#if BULLET_GIMPACT
-                RigidBody body = LocalCreateRigidBody(mass, startTransform, trimeshShape2);
-#else
-		        RigidBody body = LocalCreateRigidBody(mass, startTransform, CreateBunnyShape());
-#endif
-                Vector3 linVel = new Vector3(destination[0] - camPos[0], destination[1] - camPos[1], destination[2] - camPos[2]);
-                linVel.Normalize();
-                linVel *= ShootBoxInitialSpeed * 0.25f;
-
-                body.WorldTransform = startTransform;
-                body.LinearVelocity = linVel;
-                body.AngularVelocity = new Vector3(0, 0, 0);
-            }
-        }
-
-        public override void OnHandleInput()
-        {
-            if (Input.KeysPressed.Contains(Keys.OemPeriod))
-            {
-                ShootTrimesh(Freelook.Eye, Freelook.Target);
-            }
-
-            base.OnHandleInput();
-        }
-
-        public override void ExitPhysics()
-        {
-            base.ExitPhysics();
-
-            indexVertexArrays.Dispose();
-            indexVertexArrays2.Dispose();
-        }
-    }
-
-    static class Program
+    internal static class Program
     {
         [STAThread]
         static void Main()
         {
-            using (Demo demo = new GImpactTestDemo())
+            DemoRunner.Run<GImpactTestDemo>();
+        }
+    }
+
+    internal sealed class GImpactTestDemo : IDemoConfiguration, IUpdateReceiver
+    {
+        public ISimulation CreateSimulation(Demo demo)
+        {
+            demo.FreeLook.Eye = new Vector3(0, 10, 50);
+            demo.FreeLook.Target = new Vector3(0, 10, -4);
+            demo.DemoText = ". - Shoot Bunny";
+            demo.Graphics.FarPlane = 400.0f;
+            demo.Graphics.WindowTitle = "BulletSharp - GImpact Demo";
+            return new GImpactTestDemoSimulation();
+        }
+
+        public void Update(Demo demo)
+        {
+            if (demo.Input.KeysPressed.Contains(Keys.OemPeriod))
             {
-                GraphicsLibraryManager.Run(demo);
+                var simulation = demo.Simulation as GImpactTestDemoSimulation;
+                simulation.ShootTrimesh(demo.FreeLook.Eye, demo.FreeLook.Target);
+            }
+        }
+    }
+
+    internal sealed class GImpactTestDemoSimulation : ISimulation
+    {
+        private const float ShootBoxInitialSpeed = 10.0f;
+
+        private GImpactMeshShape _torusShape;
+        private GImpactMeshShape _bunnyShape;
+
+        private TriangleIndexVertexArray _torusShapeData;
+        private TriangleIndexVertexArray _bunnyShapeData;
+
+        public GImpactTestDemoSimulation()
+        {
+            CollisionConfiguration = new DefaultCollisionConfiguration();
+            Dispatcher = new CollisionDispatcher(CollisionConfiguration);
+
+            //Broadphase = new SimpleBroadphase();
+            Broadphase = new AxisSweep3_32Bit(new Vector3(-10000, -10000, -10000), new Vector3(10000, 10000, 10000), 1024);
+
+            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConfiguration);
+
+            GImpactCollisionAlgorithm.RegisterAlgorithm(Dispatcher);
+
+            _torusShapeData = new TriangleIndexVertexArray(Torus.Indices, Torus.Vertices);
+            _torusShape = CreateGImpactShape(_torusShapeData);
+
+            _bunnyShapeData = new TriangleIndexVertexArray(Bunny.Indices, Bunny.Vertices);
+            _bunnyShape = CreateGImpactShape(_bunnyShapeData);
+
+            CreateStaticScene();
+            CreateTorusChain();
+            CreateBoxes();
+        }
+
+        public CollisionConfiguration CollisionConfiguration { get; }
+        public CollisionDispatcher Dispatcher { get; }
+        public BroadphaseInterface Broadphase { get; }
+        public DiscreteDynamicsWorld World { get; }
+
+        public void ShootTrimesh(Vector3 cameraPosition, Vector3 destination)
+        {
+            const float mass = 4.0f;
+            Matrix startTransform = Matrix.Translation(cameraPosition);
+            RigidBody body = PhysicsHelper.CreateBody(mass, startTransform, _bunnyShape, World);
+
+            Vector3 linearVelocity = destination - cameraPosition;
+            linearVelocity.Normalize();
+            linearVelocity *= ShootBoxInitialSpeed;
+            body.LinearVelocity = linearVelocity;
+
+            body.AngularVelocity = Vector3.Zero;
+        }
+
+        public void Dispose()
+        {
+            _torusShapeData.Dispose();
+            _bunnyShapeData.Dispose();
+
+            this.StandardCleanup();
+        }
+
+        private GImpactMeshShape CreateGImpactShape(TriangleIndexVertexArray shapeData)
+        {
+            var shape = new GImpactMeshShape(shapeData);
+            shape.Margin = 0;
+            shape.UpdateBound();
+            return shape;
+        }
+
+        private GImpactMeshShape CreateGImpactConvexDecompositionShape(TriangleIndexVertexArray shapeData)
+        {
+            //GImpactConvexDecompositionShape shape =
+            //    new GImpactConvexDecompositionShape(indexVertexArrays, new Vector3(1), 0.01f);
+            //shape.Margin = 0.07f;
+            //shape.UpdateBound();
+            //return shape;
+            throw new NotImplementedException();
+        }
+
+        private void CreateStaticScene()
+        {
+            var boxShape1 = new BoxShape(200, 1, 200); //floor
+            PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -10, 0), boxShape1, World);
+
+            var boxShape2 = new BoxShape(1, 50, 200); //left wall
+            PhysicsHelper.CreateStaticBody(Matrix.Translation(-200, 15, 0), boxShape2, World);
+
+            var boxShape3 = new BoxShape(1, 50, 200); //right wall
+            PhysicsHelper.CreateStaticBody(Matrix.Translation(200, 15, 0), boxShape3, World);
+
+            var boxShape4 = new BoxShape(200, 50, 1); //front wall
+            PhysicsHelper.CreateStaticBody(Matrix.Translation(0, 15, 200), boxShape4, World);
+
+            var boxShape5 = new BoxShape(200, 50, 1); //back wall
+            PhysicsHelper.CreateStaticBody(Matrix.Translation(0, 15, -200), boxShape5, World);
+
+
+            Vector3 normal = new Vector3(-0.5f, 0.5f, 0.0f);
+            normal.Normalize();
+            var planeShape1 = new StaticPlaneShape(normal, 0.5f);
+            PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -9, 0), planeShape1, World);
+
+            normal = new Vector3(0.5f, 0.7f, 0.0f);
+            normal.Normalize();
+            var planeShape2 = new StaticPlaneShape(normal, 0.0f);
+            PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -10, 0), planeShape2, World);
+        }
+
+        private void CreateTorusChain()
+        {
+            const float step = 2.5f;
+            const float mass = 1.0f;
+            const float quarterTurn = (float)Math.PI * 0.5f;
+
+            float angle = quarterTurn;
+            float height = 28;
+
+            Matrix startTransform =
+                Matrix.RotationYawPitchRoll(angle, 0, quarterTurn) *
+                Matrix.Translation(0, height, -5);
+            var kinematicTorus = PhysicsHelper.CreateStaticBody(startTransform, _torusShape, World);
+            //kinematicTorus.CollisionFlags |= CollisionFlags.StaticObject;
+            //kinematicTorus.ActivationState = ActivationState.IslandSleeping;
+            kinematicTorus.CollisionFlags |= CollisionFlags.KinematicObject;
+            kinematicTorus.ActivationState = ActivationState.DisableDeactivation;
+
+            for (int i = 0; i < 12; i++)
+            {
+                angle += quarterTurn;
+                height -= step;
+                startTransform =
+                    Matrix.RotationYawPitchRoll(angle, 0, quarterTurn) *
+                    Matrix.Translation(0, height, -5);
+                PhysicsHelper.CreateBody(mass, startTransform, _torusShape, World);
+            }
+        }
+
+        private void CreateBoxes()
+        {
+            var boxShape = new BoxShape(1);
+
+            for (int i = 0; i < 8; i++)
+            {
+                PhysicsHelper.CreateBody(1, Matrix.Translation(2 * i - 5, 2, -3), boxShape, World);
             }
         }
     }

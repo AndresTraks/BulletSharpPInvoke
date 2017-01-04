@@ -32,6 +32,7 @@ extern "C" {
 	EXPORT int btCollisionObject_getIslandTag(btCollisionObject* obj);
 	EXPORT btScalar btCollisionObject_getRestitution(btCollisionObject* obj);
 	EXPORT btScalar btCollisionObject_getRollingFriction(btCollisionObject* obj);
+	EXPORT btScalar btCollisionObject_getSpinningFriction(btCollisionObject* obj);
 	EXPORT int btCollisionObject_getWorldArrayIndex(btCollisionObject* obj);
 	EXPORT int btCollisionObject_getUserIndex(btCollisionObject* obj);
 	EXPORT int btCollisionObject_getUserIndex2(btCollisionObject* obj);
@@ -70,6 +71,7 @@ extern "C" {
 	EXPORT void btCollisionObject_setIslandTag(btCollisionObject* obj, int tag);
 	EXPORT void btCollisionObject_setRestitution(btCollisionObject* obj, btScalar rest);
 	EXPORT void btCollisionObject_setRollingFriction(btCollisionObject* obj, btScalar frict);
+	EXPORT void btCollisionObject_setSpinningFriction(btCollisionObject* obj, btScalar frict);
 	EXPORT void btCollisionObject_setWorldArrayIndex(btCollisionObject* obj, int ix);
 	EXPORT void btCollisionObject_setUserIndex(btCollisionObject* obj, int index);
 	EXPORT void btCollisionObject_setUserIndex2(btCollisionObject* obj, int index);

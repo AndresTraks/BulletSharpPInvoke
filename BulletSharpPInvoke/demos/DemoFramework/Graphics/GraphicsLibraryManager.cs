@@ -8,9 +8,7 @@ namespace DemoFramework
 {
     public class GraphicsLibraryManager
     {
-        static LibrarySelection librarySelection;
-
-        const string SettingsFilename = "settings.xml";
+        private const string SettingsFilename = "settings.xml";
 
         public static string GraphicsLibraryName { get; set; }
 
@@ -114,23 +112,8 @@ namespace DemoFramework
             return root;
         }
 
-        public static void Run(Demo demo)
+        private static void LoadSettings()
         {
-            Application.EnableVisualStyles();
-
-            // Check if BulletSharp exists
-            try
-            {
-                Assembly.Load("BulletSharp");
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString(), "BulletSharp Error!");
-                return;
-            }
-
-
-            // Load settings
             XmlElement root = GetSettingsDocumentRoot();
 
             XmlNodeList l = root.GetElementsByTagName("graphicsframework");
@@ -147,6 +130,11 @@ namespace DemoFramework
                     return;
                 }
             }
+        }
+
+        public static void Run(Demo demo)
+        {
+            LoadSettings();
 
             demo.Run();
             while (ExitWithReload)
@@ -162,10 +150,10 @@ namespace DemoFramework
 
         public static bool SelectLibrary()
         {
-            librarySelection = new LibrarySelection();
-            librarySelection.ShowDialog();
-            librarySelection.Dispose();
-            librarySelection = null;
+            using (var librarySelection = new LibrarySelection())
+            {
+                librarySelection.ShowDialog();
+            }
             return GraphicsLibraryName != null;
         }
 

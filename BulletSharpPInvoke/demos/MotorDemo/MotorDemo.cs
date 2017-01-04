@@ -6,283 +6,270 @@ using System.Collections.Generic;
 
 namespace MotorDemo
 {
-    class MotorDemo : Demo
+    internal static class Program
     {
-        Vector3 eye = new Vector3(8, 4, 8);
-        Vector3 target = new Vector3(0, 0, 0);
-
-        List<TestRig> rigs = new List<TestRig>();
-        float m_Time;
-        float fCyclePeriod;
-        float fMuscleStrength;
-
-        const int NumLegs = 6;
-        const int BodyPartCount = 2 * NumLegs + 1;
-        const int JointCount = BodyPartCount - 1;
-
-        class TestRig
+        [STAThread]
+        static void Main()
         {
-	        DynamicsWorld ownerWorld;
-	        CollisionShape[] shapes = new CollisionShape[BodyPartCount];
-	        RigidBody[] bodies = new RigidBody[BodyPartCount];
-	        TypedConstraint[] joints = new TypedConstraint[JointCount];
-
-	        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape)
-            {
-                //rigidbody is dynamic if and only if mass is non zero, otherwise static
-                bool isDynamic = (mass != 0.0f);
-
-                Vector3 localInertia = Vector3.Zero;
-                if (isDynamic)
-                    shape.CalculateLocalInertia(mass, out localInertia);
-
-                //using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
-                DefaultMotionState myMotionState = new DefaultMotionState(startTransform);
-                RigidBody body;
-                using (var rbInfo = new RigidBodyConstructionInfo(mass, myMotionState, shape, localInertia))
-                {
-                    body = new RigidBody(rbInfo);
-                }
-
-                ownerWorld.AddRigidBody(body);
-
-                return body;
-            }
-
-            public TestRig(DynamicsWorld ownerWorld, Vector3 positionOffset, bool bFixed)
-            {
-                this.ownerWorld = ownerWorld;
-                Vector3 vUp = new Vector3(0, 1, 0);
-
-                //
-                // Setup geometry
-                //
-                const float fBodySize = 0.25f;
-                const float fLegLength = 0.45f;
-                const float fForeLegLength = 0.75f;
-                const float PI_2 = (float)(0.5f * Math.PI);
-                const float PI_4 = (float)(0.25f * Math.PI);
-                const float PI_8 = (float)(0.125f * Math.PI);
-                shapes[0] = new CapsuleShape(fBodySize, 0.10f);
-                int i;
-                for (i = 0; i < NumLegs; i++)
-                {
-                    shapes[1 + 2 * i] = new CapsuleShape(0.10f, fLegLength);
-                    shapes[2 + 2 * i] = new CapsuleShape(0.08f, fForeLegLength);
-                }
-
-                //
-                // Setup rigid bodies
-                //
-                const float fHeight = 0.5f;
-                Matrix offset = Matrix.Translation(positionOffset);
-
-                // root
-                Vector3 vRoot = new Vector3(0, fHeight, 0);
-                Matrix transform = Matrix.Translation(vRoot);
-                if (bFixed)
-                {
-                    bodies[0] = LocalCreateRigidBody(0, transform * offset, shapes[0]);
-                }
-                else
-                {
-                    bodies[0] = LocalCreateRigidBody(1, transform * offset, shapes[0]);
-                }
-                // legs
-                for (i = 0; i < NumLegs; i++)
-                {
-                    float fAngle = (float)(2 * Math.PI * i / NumLegs);
-                    float fSin = (float)Math.Sin(fAngle);
-                    float fCos = (float)Math.Cos(fAngle);
-
-                    Vector3 vBoneOrigin = new Vector3(fCos * (fBodySize + 0.5f * fLegLength), fHeight, fSin * (fBodySize + 0.5f * fLegLength));
-
-                    // thigh
-                    Vector3 vToBone = (vBoneOrigin - vRoot);
-                    vToBone.Normalize();
-                    Vector3 vAxis = Vector3.Cross(vToBone, vUp);
-                    transform = Matrix.RotationQuaternion(Quaternion.RotationAxis(vAxis, PI_2)) * Matrix.Translation(vBoneOrigin);
-                    bodies[1 + 2 * i] = LocalCreateRigidBody(1, transform * offset, shapes[1 + 2 * i]);
-
-                    // shin
-                    transform = Matrix.Translation(fCos * (fBodySize + fLegLength), fHeight - 0.5f * fForeLegLength, fSin * (fBodySize + fLegLength));
-                    bodies[2 + 2 * i] = LocalCreateRigidBody(1, transform * offset, shapes[2 + 2 * i]);
-                }
-
-                // Setup some damping on the bodies
-                for (i = 0; i < BodyPartCount; ++i)
-                {
-                    bodies[i].SetDamping(0.05f, 0.85f);
-                    bodies[i].DeactivationTime = 0.8f;
-                    //bodies[i].SetSleepingThresholds(1.6f, 2.5f);
-                    bodies[i].SetSleepingThresholds(0.5f, 0.5f);
-                }
-
-                //
-                // Setup the constraints
-                //
-                HingeConstraint hingeC;
-                //ConeTwistConstraint coneC;
-
-                Matrix localA, localB, localC;
-
-                for (i = 0; i < NumLegs; i++)
-                {
-                    float fAngle = (float)(2 * Math.PI * i / NumLegs);
-                    float fSin = (float)Math.Sin(fAngle);
-                    float fCos = (float)Math.Cos(fAngle);
-
-                    // hip joints
-                    localA = Matrix.RotationYawPitchRoll(-fAngle, 0, 0) * Matrix.Translation(fCos * fBodySize, 0, fSin * fBodySize); // OK
-                    localB = localA * bodies[0].WorldTransform * Matrix.Invert(bodies[1 + 2 * i].WorldTransform);
-                    hingeC = new HingeConstraint(bodies[0], bodies[1 + 2 * i], localA, localB);
-                    hingeC.SetLimit(-0.75f * PI_4, PI_8);
-                    //hingeC.SetLimit(-0.1f, 0.1f);
-                    joints[2 * i] = hingeC;
-                    ownerWorld.AddConstraint(joints[2 * i], true);
-
-                    // knee joints
-                    localA = Matrix.RotationYawPitchRoll(-fAngle, 0, 0) * Matrix.Translation(fCos * (fBodySize + fLegLength), 0, fSin * (fBodySize + fLegLength));
-                    localB = localA * bodies[0].WorldTransform * Matrix.Invert(bodies[1 + 2 * i].WorldTransform);
-                    localC = localA * bodies[0].WorldTransform * Matrix.Invert(bodies[2 + 2 * i].WorldTransform);
-                    hingeC = new HingeConstraint(bodies[1 + 2 * i], bodies[2 + 2 * i], localB, localC);
-                    //hingeC.SetLimit(-0.01f, 0.01f);
-                    hingeC.SetLimit(-PI_8, 0.2f);
-                    joints[1 + 2 * i] = hingeC;
-                    ownerWorld.AddConstraint(joints[1 + 2 * i], true);
-                }
-            }
-
-            public void Dispose()
-            {
-                int i;
-
-                // Remove all constraints
-                for (i = 0; i < JointCount; ++i)
-                {
-                    ownerWorld.RemoveConstraint(joints[i]);
-                    joints[i].Dispose();
-                    joints[i] = null;
-                }
-
-                // Remove all bodies and shapes
-                for (i = 0; i < BodyPartCount; ++i)
-                {
-                    ownerWorld.RemoveRigidBody(bodies[i]);
-                    bodies[i].MotionState.Dispose();
-                    bodies[i].Dispose();
-                    bodies[i] = null;
-                    shapes[i].Dispose();
-                    shapes[i] = null;
-                }
-            }
-
-            public TypedConstraint[] GetJoints()
-            {
-                return joints;
-            }
-        };
-
-        void MotorPreTickCallback(DynamicsWorld world, float timeStep)
-        {
-            SetMotorTargets(timeStep);
+            DemoRunner.Run<MotorDemo>();
         }
+    }
 
-        protected override void OnInitialize()
+    internal sealed class MotorDemo : IDemoConfiguration
+    {
+        public ISimulation CreateSimulation(Demo demo)
         {
-            Freelook.SetEyeTarget(eye, target);
-
-            Graphics.SetFormText("BulletSharp - Motor Demo");
-
-            DebugDrawMode = DebugDrawModes.DrawConstraintLimits | DebugDrawModes.DrawConstraints | DebugDrawModes.DrawWireframe;
+            demo.FreeLook.Eye = new Vector3(8, 4, 8);
+            demo.FreeLook.Target = Vector3.Zero;
+            demo.DebugDrawMode = DebugDrawModes.DrawConstraintLimits | DebugDrawModes.DrawConstraints | DebugDrawModes.DrawWireframe;
+            demo.Graphics.WindowTitle = "BulletSharp - Motor Demo";
+            return new MotorDemoSimulation();
         }
+    }
 
-        protected override void OnInitializePhysics()
+    internal sealed class MotorDemoSimulation : ISimulation
+    {
+        private List<TestRig> _rigs = new List<TestRig>();
+        private float _time = 0;
+        private float _cyclePeriod = 2000.0f;
+        private float _muscleStrength = 0.5f;
+
+        private const int NumLegs = 6;
+
+        public MotorDemoSimulation()
         {
-            // collision configuration contains default setup for memory, collision setup
-            CollisionConf = new DefaultCollisionConfiguration();
-            Dispatcher = new CollisionDispatcher(CollisionConf);
+            CollisionConfiguration = new DefaultCollisionConfiguration();
+            Dispatcher = new CollisionDispatcher(CollisionConfiguration);
 
-            Vector3 worldAabbMin = new Vector3(-10000, -10000, -10000);
-            Vector3 worldAabbMax = new Vector3(10000, 10000, 10000);
+            var worldAabbMin = new Vector3(-10000, -10000, -10000);
+            var worldAabbMax = new Vector3(10000, 10000, 10000);
             Broadphase = new AxisSweep3(worldAabbMin, worldAabbMax);
 
-            Solver = new SequentialImpulseConstraintSolver();
-
-            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConf);
-            World.Gravity = new Vector3(0, -10, 0);
+            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConfiguration);
             World.SetInternalTickCallback(MotorPreTickCallback, this, true);
 
-            // create the ground
-            CollisionShape groundShape = new BoxShape(200, 10, 200);
-            CollisionShapes.Add(groundShape);
-            CollisionObject ground = LocalCreateRigidBody(0, Matrix.Translation(0, -10, 0), groundShape);
-            ground.UserObject = "Ground";
-
-            fCyclePeriod = 2000.0f;
-            fMuscleStrength = 0.5f;
-            m_Time = 0;
+            CreateGround();
 
             SpawnTestRig(new Vector3(1, 0.5f, 0), false);
             SpawnTestRig(new Vector3(-2, 0.5f, 0), true);
         }
 
-        private void SpawnTestRig(Vector3 startOffset, bool isFixed)
+        public CollisionConfiguration CollisionConfiguration { get; }
+        public CollisionDispatcher Dispatcher { get; }
+        public BroadphaseInterface Broadphase { get; }
+        public DiscreteDynamicsWorld World { get; }
+
+        public void Dispose()
         {
-            TestRig rig = new TestRig(World, startOffset, isFixed);
-            rigs.Add(rig);
+            foreach (var testRig in _rigs)
+            {
+                testRig.Dispose();
+            }
+            _rigs.Clear();
         }
 
-
-        void SetMotorTargets(float deltaTime)
+        private void CreateGround()
         {
-            float ms = deltaTime * 1000000.0f;
-            float minFPS = 1000000.0f / 60.0f;
-            if (ms > minFPS)
-                ms = minFPS;
+            var groundShape = new BoxShape(200, 10, 200);
+            CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -10, 0), groundShape, World);
+            ground.UserObject = "Ground";
+        }
 
-            m_Time += ms;
+        private void MotorPreTickCallback(DynamicsWorld world, float timeStep)
+        {
+            SetMotorTargets(timeStep);
+        }
 
-            //
+        private void SpawnTestRig(Vector3 startOffset, bool isFixed)
+        {
+            var rig = new TestRig(World, NumLegs, startOffset, isFixed);
+            _rigs.Add(rig);
+        }
+
+        private void SetMotorTargets(float deltaTime)
+        {
+            float deltaTimeMs = deltaTime * 1000000.0f;
+            float minFps = 1000000.0f / 60.0f;
+            if (deltaTimeMs > minFps)
+                deltaTimeMs = minFps;
+
+            _time += deltaTimeMs;
+
             // set per-frame sinusoidal position targets using angular motor (hacky?)
-            //
-            foreach (var rig in rigs)
+            foreach (var rig in _rigs)
             {
-                for (int i = 0; i < 2 * NumLegs; i++)
+                foreach (var leg in rig.Legs)
                 {
-                    HingeConstraint hingeC = rig.GetJoints()[i] as HingeConstraint;
-                    float fCurAngle = hingeC.HingeAngle;
-
-                    float fTargetPercent = ((int)(m_Time / 1000.0f) % (int)fCyclePeriod) / fCyclePeriod;
-                    float fTargetAngle = (float)(0.5 * (1 + Math.Sin(2.0f * Math.PI * fTargetPercent)));
-                    float fTargetLimitAngle = hingeC.LowerLimit + fTargetAngle * (hingeC.UpperLimit - hingeC.LowerLimit);
-                    float fAngleError = fTargetLimitAngle - fCurAngle;
-                    float fDesiredAngularVel = 1000000.0f * fAngleError / ms;
-                    hingeC.EnableAngularMotor(true, fDesiredAngularVel, fMuscleStrength);
+                    SetJointMotorTarget(leg.Hip, deltaTimeMs);
+                    SetJointMotorTarget(leg.Knee, deltaTimeMs);
                 }
             }
         }
 
-        public override void ExitPhysics()
+        private void SetJointMotorTarget(HingeConstraint joint, float deltaTimeMs)
         {
-            foreach (var testRig in rigs)
-            {
-                testRig.Dispose();
-            }
-            rigs.Clear();
-            base.ExitPhysics();
+            float currentAngle = joint.HingeAngle;
+
+            float targetPercent = ((int)(_time / 1000.0f) % (int)_cyclePeriod) / _cyclePeriod;
+            float targetAngle = (float)(0.5 * (1 + Math.Sin(2.0f * Math.PI * targetPercent)));
+            float targetLimitAngle = joint.LowerLimit + targetAngle * (joint.UpperLimit - joint.LowerLimit);
+            float angleError = targetLimitAngle - currentAngle;
+            float desiredAngularVel = 1000000.0f * angleError / deltaTimeMs;
+            joint.EnableAngularMotor(true, desiredAngularVel, _muscleStrength);
         }
     }
 
-    static class Program
+    internal sealed class TestRig
     {
-        [STAThread]
-        static void Main()
+        private const float BodyRadius = 0.25f;
+        private const float ThighLength = 0.45f;
+        private const float ShinLength = 0.75f;
+
+        private const float PI_2 = (float)(0.5f * Math.PI);
+        private const float PI_4 = (float)(0.25f * Math.PI);
+        private const float PI_8 = (float)(0.125f * Math.PI);
+
+        private readonly DynamicsWorld _world;
+
+        private readonly CollisionShape _bodyShape;
+        private readonly CollisionShape _thighShape;
+        private readonly CollisionShape _shinShape;
+
+        private RigidBody _bodyObject;
+
+        public TestRig(DynamicsWorld ownerWorld, int numLegs, Vector3 position, bool isFixed)
         {
-            using (Demo demo = new MotorDemo())
+            _world = ownerWorld;
+
+            Legs = new Leg[numLegs];
+            for (int i = 0; i < numLegs; i++)
             {
-                GraphicsLibraryManager.Run(demo);
+                Legs[i] = new Leg();
+            }
+
+            _bodyShape = new CapsuleShape(BodyRadius, 0.10f);
+            _thighShape = new CapsuleShape(0.1f, ThighLength);
+            _shinShape = new CapsuleShape(0.08f, ShinLength);
+
+            SetupRigidBodies(position, isFixed);
+            SetupConstraints();
+        }
+
+        public Leg[] Legs { get; }
+
+        public void Dispose()
+        {
+            foreach (var leg in Legs)
+            {
+                _world.RemoveConstraint(leg.Hip);
+                leg.Hip.Dispose();
+                _world.RemoveConstraint(leg.Knee);
+                leg.Knee.Dispose();
+            }
+
+            DisposeRigidBody(_bodyObject);
+            foreach (var leg in Legs)
+            {
+                DisposeRigidBody(leg.Thigh);
+                DisposeRigidBody(leg.Shin);
+            }
+
+            _bodyShape.Dispose();
+            _thighShape.Dispose();
+            _shinShape.Dispose();
+        }
+
+        private void DisposeRigidBody(RigidBody body)
+        {
+            _world.RemoveRigidBody(body);
+            if (body.MotionState != null)
+            {
+                body.MotionState.Dispose();
+            }
+            body.Dispose();
+        }
+
+        private void SetupRigidBodies(Vector3 position, bool isFixed)
+        {
+            const float heightFromGround = 0.5f;
+            Matrix offset = Matrix.Translation(position);
+
+            // body
+            Vector3 rootPosition = new Vector3(0, heightFromGround, 0);
+            Matrix transform = Matrix.Translation(rootPosition);
+            float mass = isFixed ? 0 : 1;
+            _bodyObject = PhysicsHelper.CreateBody(mass, transform * offset, _bodyShape, _world);
+
+            // legs
+            for (int i = 0; i < Legs.Length; i++)
+            {
+                Leg leg = Legs[i];
+
+                float fAngle = (float)(2 * Math.PI * i / Legs.Length);
+                float fSin = (float)Math.Sin(fAngle);
+                float fCos = (float)Math.Cos(fAngle);
+
+                Vector3 boneOrigin = new Vector3(fCos * (BodyRadius + 0.5f * ThighLength), heightFromGround, fSin * (BodyRadius + 0.5f * ThighLength));
+
+                Vector3 vToBone = boneOrigin - rootPosition;
+                vToBone.Normalize();
+                Vector3 vUp = Vector3.UnitY;
+                Vector3 vAxis = Vector3.Cross(vToBone, vUp);
+                
+                transform = Matrix.RotationAxis(vAxis, PI_2) * Matrix.Translation(boneOrigin);
+                leg.Thigh = PhysicsHelper.CreateBody(1, transform * offset, _thighShape, _world);
+
+                transform = Matrix.Translation(fCos * (BodyRadius + ThighLength), heightFromGround - 0.5f * ShinLength, fSin * (BodyRadius + ThighLength));
+                leg.Shin = PhysicsHelper.CreateBody(1, transform * offset, _shinShape, _world);
+
+                SetBodyDamping(leg.Thigh);
+                SetBodyDamping(leg.Shin);
             }
         }
+
+        private void SetBodyDamping(RigidBody body)
+        {
+            body.SetDamping(0.05f, 0.85f);
+            body.DeactivationTime = 0.8f;
+            //body.SetSleepingThresholds(1.6f, 2.5f);
+            body.SetSleepingThresholds(0.5f, 0.5f);
+        }
+
+        private void SetupConstraints()
+        {
+            Matrix localA, localB, localC;
+
+            for (int i = 0; i < Legs.Length; i++)
+            {
+                Leg leg = Legs[i];
+
+                float legAngle = (float)(2 * Math.PI * i / Legs.Length);
+                float fSin = (float)Math.Sin(legAngle);
+                float fCos = (float)Math.Cos(legAngle);
+
+                localA = Matrix.RotationYawPitchRoll(-legAngle, 0, 0) * Matrix.Translation(fCos * BodyRadius, 0, fSin * BodyRadius);
+                localB = localA * _bodyObject.WorldTransform * Matrix.Invert(leg.Thigh.WorldTransform);
+                leg.Hip = new HingeConstraint(_bodyObject, leg.Thigh, localA, localB);
+                leg.Hip.SetLimit(-0.75f * PI_4, PI_8);
+                //leg.Hip.SetLimit(-0.1f, 0.1f);
+                _world.AddConstraint(leg.Hip, true);
+
+                localA = Matrix.RotationYawPitchRoll(-legAngle, 0, 0) * Matrix.Translation(fCos * (BodyRadius + ThighLength), 0, fSin * (BodyRadius + ThighLength));
+                localB = localA * _bodyObject.WorldTransform * Matrix.Invert(leg.Thigh.WorldTransform);
+                localC = localA * _bodyObject.WorldTransform * Matrix.Invert(leg.Shin.WorldTransform);
+                leg.Knee = new HingeConstraint(leg.Thigh, leg.Shin, localB, localC);
+                //leg.Knee.SetLimit(-0.01f, 0.01f);
+                leg.Knee.SetLimit(-PI_8, 0.2f);
+                _world.AddConstraint(leg.Knee, true);
+            }
+        }
+    };
+
+    public sealed class Leg
+    {
+        public RigidBody Thigh { get; set; }
+        public RigidBody Shin { get; set; }
+        public HingeConstraint Hip { get; set; }
+        public HingeConstraint Knee { get; set; }
     }
 }

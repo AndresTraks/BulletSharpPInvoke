@@ -2,64 +2,51 @@
 using BulletSharp.Math;
 using DemoFramework;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
 namespace SerializeDemo
 {
-    class CustomBulletWorldImporter : BulletWorldImporter
+    internal static class Program
     {
-        public CustomBulletWorldImporter(DynamicsWorld world)
-            : base(world)
+        [STAThread]
+        static void Main()
         {
-        }
-
-        public override RigidBody CreateRigidBody(bool isDynamic, float mass, ref Matrix startTransform, CollisionShape shape, string bodyName)
-        {
-            RigidBody body = base.CreateRigidBody(isDynamic, mass, ref startTransform, shape, bodyName);
-
-            if (bodyName != null && bodyName.Equals("GroundName"))
-                body.UserObject = "Ground";
-
-            if (shape.ShapeType == BroadphaseNativeType.StaticPlaneShape)
-                body.UserObject = "Ground";
-
-            return body;
+            DemoRunner.Run<SerializeDemo>();
         }
     }
 
-    class SerializeDemo : Demo
+    internal sealed class SerializeDemo : IDemoConfiguration
     {
-        Vector3 eye = new Vector3(30, 20, 10);
-        Vector3 target = new Vector3(0, 5, 0);
+        public ISimulation CreateSimulation(Demo demo)
+        {
+            demo.FreeLook.Eye = new Vector3(30, 20, 10);
+            demo.FreeLook.Target = new Vector3(0, 5, 0);
+            demo.Graphics.WindowTitle = "BulletSharp - Serialize Demo";
+            return new SerializeDemoSimulation();
+        }
+    }
 
-        ///create 125 (5x5x5) dynamic objects
-        int ArraySizeX = 5, ArraySizeY = 5, ArraySizeZ = 5;
+    internal sealed class SerializeDemoSimulation : ISimulation
+    {
+        const int NumObjectsX = 5, NumObjectsY = 5, NumObjectsZ = 5;
 
         ///scaling of the objects (0.1 = 20 centimeter boxes )
         float StartPosX = -5;
         float StartPosY = -5;
         float StartPosZ = -3;
 
-        BulletWorldImporter fileLoader;
+        private BulletWorldImporter _fileLoader;
 
-        protected override void OnInitialize()
+        private List<CollisionShape> _collisionShapes = new List<CollisionShape>();
+
+        public SerializeDemoSimulation()
         {
-            Freelook.SetEyeTarget(eye, target);
-
-            Graphics.SetFormText("BulletSharp - Serialize Demo");
-        }
-
-        protected override void OnInitializePhysics()
-        {
-            // collision configuration contains default setup for memory, collision setup
-            CollisionConf = new DefaultCollisionConfiguration();
-            Dispatcher = new CollisionDispatcher(CollisionConf);
-
+            CollisionConfiguration = new DefaultCollisionConfiguration();
+            Dispatcher = new CollisionDispatcher(CollisionConfiguration);
             Broadphase = new DbvtBroadphase();
-
-            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConf);
-            World.Gravity = new Vector3(0, -10, 0);
+            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConfiguration);
 
             GImpactCollisionAlgorithm.RegisterAlgorithm(Dispatcher);
 
@@ -74,44 +61,44 @@ namespace SerializeDemo
                 bulletFile = args[1];
             }
 
-            fileLoader = new CustomBulletWorldImporter(World);
-            if (!fileLoader.LoadFile(bulletFile))
+            _fileLoader = new CustomBulletWorldImporter(World);
+            if (!_fileLoader.LoadFile(bulletFile))
             {
-                CollisionShape groundShape = new BoxShape(50);
-                CollisionShapes.Add(groundShape);
-                RigidBody ground = LocalCreateRigidBody(0, Matrix.Translation(0, -50, 0), groundShape);
+                var groundShape = new BoxShape(50);
+                _collisionShapes.Add(groundShape);
+                RigidBody ground = PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -50, 0), groundShape, World);
                 ground.UserObject = "Ground";
 
                 // create a few dynamic rigidbodies
                 float mass = 1.0f;
 
-                Vector3[] positions = new Vector3[2] { new Vector3(0.1f, 0.2f, 0.3f), new Vector3(0.4f, 0.5f, 0.6f) };
+                Vector3[] positions = new[] { new Vector3(0.1f, 0.2f, 0.3f), new Vector3(0.4f, 0.5f, 0.6f) };
                 float[] radi = new float[2] { 0.3f, 0.4f };
 
-                CollisionShape colShape = new MultiSphereShape(positions, radi);
+                var colShape = new MultiSphereShape(positions, radi);
 
-                //CollisionShape colShape = new CapsuleShapeZ(1, 1);
-                //CollisionShape colShape = new CylinderShapeZ(1, 1, 1);
-                //CollisionShape colShape = new BoxShape(1);
-                //CollisionShape colShape = new SphereShape(1);
-                CollisionShapes.Add(colShape);
+                //var colShape = new CapsuleShapeZ(1, 1);
+                //var colShape = new CylinderShapeZ(1, 1, 1);
+                //var colShape = new BoxShape(1);
+                //var colShape = new SphereShape(1);
+                _collisionShapes.Add(colShape);
 
                 Vector3 localInertia = colShape.CalculateLocalInertia(mass);
 
-                float startX = StartPosX - ArraySizeX / 2;
+                float startX = StartPosX - NumObjectsX / 2;
                 float startY = StartPosY;
-                float startZ = StartPosZ - ArraySizeZ / 2;
+                float startZ = StartPosZ - NumObjectsZ / 2;
 
-                for (int k = 0; k < ArraySizeY; k++)
+                for (int y = 0; y < NumObjectsY; y++)
                 {
-                    for (int i = 0; i < ArraySizeX; i++)
+                    for (int x = 0; x < NumObjectsX; x++)
                     {
-                        for (int j = 0; j < ArraySizeZ; j++)
+                        for (int z = 0; z < NumObjectsZ; z++)
                         {
                             Matrix startTransform = Matrix.Translation(
-                                2 * i + startX,
-                                2 * k + startY,
-                                2 * j + startZ
+                                2 * x + startX,
+                                2 * y + startY,
+                                2 * z + startZ
                             );
 
                             // using motionstate is recommended, it provides interpolation capabilities
@@ -134,10 +121,10 @@ namespace SerializeDemo
                 {
                     serializer.RegisterNameForObject(ground, "GroundName");
 
-                    for (int i = 0; i < CollisionShapes.Count; i++)
-                        serializer.RegisterNameForObject(CollisionShapes[i], "name" + i.ToString());
+                    for (int i = 0; i < _collisionShapes.Count; i++)
+                        serializer.RegisterNameForObject(_collisionShapes[i], "name" + i.ToString());
 
-                    Point2PointConstraint p2p = new Point2PointConstraint((RigidBody) World.CollisionObjectArray[2],
+                    var p2p = new Point2PointConstraint((RigidBody) World.CollisionObjectArray[2],
                         new Vector3(0, 1, 0));
                     World.AddConstraint(p2p);
                     serializer.RegisterNameForObject(p2p, "constraintje");
@@ -154,22 +141,37 @@ namespace SerializeDemo
             }
         }
 
-        public override void ExitPhysics()
+        public CollisionConfiguration CollisionConfiguration { get; }
+        public CollisionDispatcher Dispatcher { get; }
+        public BroadphaseInterface Broadphase { get; }
+        public DiscreteDynamicsWorld World { get; }
+
+        public void Dispose()
         {
-            fileLoader.DeleteAllData();
-            base.ExitPhysics();
+            _fileLoader.DeleteAllData();
+
+            this.StandardCleanup();
         }
     }
 
-    static class Program
+    internal sealed class CustomBulletWorldImporter : BulletWorldImporter
     {
-        [STAThread]
-        static void Main()
+        public CustomBulletWorldImporter(DynamicsWorld world)
+            : base(world)
         {
-            using (Demo demo = new SerializeDemo())
-            {
-                GraphicsLibraryManager.Run(demo);
-            }
+        }
+
+        public override RigidBody CreateRigidBody(bool isDynamic, float mass, ref Matrix startTransform, CollisionShape shape, string bodyName)
+        {
+            RigidBody body = base.CreateRigidBody(isDynamic, mass, ref startTransform, shape, bodyName);
+
+            if (bodyName != null && bodyName.Equals("GroundName"))
+                body.UserObject = "Ground";
+
+            if (shape.ShapeType == BroadphaseNativeType.StaticPlaneShape)
+                body.UserObject = "Ground";
+
+            return body;
         }
     }
 }

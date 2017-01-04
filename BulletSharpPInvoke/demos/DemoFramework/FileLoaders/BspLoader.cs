@@ -166,7 +166,7 @@ namespace DemoFramework.FileLoaders
         public BspLeaf[] Leaves { get; set; }
         public int[] LeafBrushes { get; set; }
         public BspPlane[] Planes { get; set; }
-        public List<BspShader> Shaders { get; set; }
+        public BspShader[] Shaders { get; set; }
         public bool IsVbsp { get; private set; }
 
         public bool LoadBspFile(string filename)
@@ -206,7 +206,7 @@ namespace DemoFramework.FileLoaders
                 IsVbsp = true;
             }
 
-            BspLump[] lumps = new BspLump[nHeaderLumps];
+            var lumps = new BspLump[nHeaderLumps];
             for (int i = 0; i < lumps.Length; i++)
             {
                 lumps[i].Offset = reader.ReadInt32();
@@ -417,19 +417,19 @@ namespace DemoFramework.FileLoaders
             if (!IsVbsp)
             {
                 // read shaders
-                Shaders = new List<BspShader>();
                 buffer.Position = lumps[(int)IBspLumpType.Shaders].Offset;
                 length = lumps[(int)IBspLumpType.Shaders].Length / (64 + 2 * sizeof(int));
 
+                Shaders = new BspShader[length];
                 byte[] shaderBytes = new byte[64];
                 for (int i = 0; i < length; i++)
                 {
-                    BspShader shader = new BspShader();
+                    var shader = new BspShader();
                     reader.Read(shaderBytes, 0, 64);
                     shader.Shader = Encoding.ASCII.GetString(shaderBytes, 0, Array.IndexOf(shaderBytes, (byte)0));
                     shader.SurfaceFlags = reader.ReadInt32();
                     shader.ContentFlags = (ContentFlags)reader.ReadInt32();
-                    Shaders.Add(shader);
+                    Shaders[i] = shader;
                 }
             }
 

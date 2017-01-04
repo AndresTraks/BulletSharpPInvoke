@@ -1,23 +1,22 @@
 ﻿#define ROLLING_INFLUENCE_FIX
 
+using BulletSharp;
+using BulletSharp.Math;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using BulletSharp;
-using BulletSharp.Math;
 
 namespace VehicleDemo
 {
     // This class is equivalent to RaycastVehicle, but is used to test the IAction interface
     public class CustomVehicle : IAction
     {
-        List<WheelInfo> wheelInfo = new List<WheelInfo>();
+        private List<WheelInfo> _wheelInfo = new List<WheelInfo>();
 
-        Vector3[] forwardWS = new Vector3[0];
-        Vector3[] axle = new Vector3[0];
-        float[] forwardImpulse = new float[0];
-        float[] sideImpulse = new float[0];
+        private Vector3[] _forwardWS = new Vector3[0];
+        private Vector3[] _axle = new Vector3[0];
+        private float[] _forwardImpulse = new float[0];
+        private float[] _sideImpulse = new float[0];
 
         public Matrix ChassisWorldTransform
         {
@@ -35,7 +34,7 @@ namespace VehicleDemo
 
         public int NumWheels
         {
-            get { return wheelInfo.Count; }
+            get { return _wheelInfo.Count; }
         }
 
         int indexRightAxis = 0;
@@ -86,7 +85,7 @@ namespace VehicleDemo
         public Matrix GetWheelTransformWS(int wheelIndex)
         {
             Debug.Assert(wheelIndex < NumWheels);
-            return wheelInfo[wheelIndex].WorldTransform;
+            return _wheelInfo[wheelIndex].WorldTransform;
         }
 
         static CustomVehicle()
@@ -106,23 +105,24 @@ namespace VehicleDemo
 
         public WheelInfo AddWheel(Vector3 connectionPointCS, Vector3 wheelDirectionCS0, Vector3 wheelAxleCS, float suspensionRestLength, float wheelRadius, VehicleTuning tuning, bool isFrontWheel)
         {
-            WheelInfoConstructionInfo ci = new WheelInfoConstructionInfo();
+            var ci = new WheelInfoConstructionInfo
+            {
+                ChassisConnectionCS = connectionPointCS,
+                WheelDirectionCS = wheelDirectionCS0,
+                WheelAxleCS = wheelAxleCS,
+                SuspensionRestLength = suspensionRestLength,
+                WheelRadius = wheelRadius,
+                SuspensionStiffness = tuning.SuspensionStiffness,
+                WheelsDampingCompression = tuning.SuspensionCompression,
+                WheelsDampingRelaxation = tuning.SuspensionDamping,
+                FrictionSlip = tuning.FrictionSlip,
+                IsFrontWheel = isFrontWheel,
+                MaxSuspensionTravelCm = tuning.MaxSuspensionTravelCm,
+                MaxSuspensionForce = tuning.MaxSuspensionForce,
+            };
 
-            ci.ChassisConnectionCS = connectionPointCS;
-            ci.WheelDirectionCS = wheelDirectionCS0;
-            ci.WheelAxleCS = wheelAxleCS;
-            ci.SuspensionRestLength = suspensionRestLength;
-            ci.WheelRadius = wheelRadius;
-            ci.SuspensionStiffness = tuning.SuspensionStiffness;
-            ci.WheelsDampingCompression = tuning.SuspensionCompression;
-            ci.WheelsDampingRelaxation = tuning.SuspensionDamping;
-            ci.FrictionSlip = tuning.FrictionSlip;
-            ci.IsFrontWheel = isFrontWheel;
-            ci.MaxSuspensionTravelCm = tuning.MaxSuspensionTravelCm;
-            ci.MaxSuspensionForce = tuning.MaxSuspensionForce;
-
-            WheelInfo wheel = new WheelInfo(ci);
-            wheelInfo.Add(wheel);
+            var wheel = new WheelInfo(ci);
+            _wheelInfo.Add(wheel);
 
             UpdateWheelTransformsWS(wheel, false);
             UpdateWheelTransform(NumWheels - 1, false);
@@ -203,7 +203,7 @@ namespace VehicleDemo
         {
             Debug.Assert((index >= 0) && (index < NumWheels));
 
-            return wheelInfo[index];
+            return _wheelInfo[index];
         }
 
         private float RayCast(WheelInfo wheel)
@@ -356,51 +356,51 @@ namespace VehicleDemo
             if (numWheel == 0)
                 return;
 
-            Array.Resize<Vector3>(ref forwardWS, numWheel);
-            Array.Resize<Vector3>(ref axle, numWheel);
-            Array.Resize<float>(ref forwardImpulse, numWheel);
-            Array.Resize<float>(ref sideImpulse, numWheel);
+            Array.Resize(ref _forwardWS, numWheel);
+            Array.Resize(ref _axle, numWheel);
+            Array.Resize(ref _forwardImpulse, numWheel);
+            Array.Resize(ref _sideImpulse, numWheel);
 
             int numWheelsOnGround = 0;
 
             //collapse all those loops into one!
             for (int i = 0; i < NumWheels; i++)
             {
-                RigidBody groundObject = wheelInfo[i].RaycastInfo.GroundObject as RigidBody;
+                RigidBody groundObject = _wheelInfo[i].RaycastInfo.GroundObject as RigidBody;
                 if (groundObject != null)
                     numWheelsOnGround++;
-                sideImpulse[i] = 0;
-                forwardImpulse[i] = 0;
+                _sideImpulse[i] = 0;
+                _forwardImpulse[i] = 0;
             }
 
             for (int i = 0; i < NumWheels; i++)
             {
-                WheelInfo wheel = wheelInfo[i];
+                WheelInfo wheel = _wheelInfo[i];
 
                 RigidBody groundObject = wheel.RaycastInfo.GroundObject as RigidBody;
                 if (groundObject != null)
                 {
                     Matrix wheelTrans = GetWheelTransformWS(i);
 
-                    axle[i] = new Vector3(
+                    _axle[i] = new Vector3(
                         wheelTrans[0, indexRightAxis],
                         wheelTrans[1, indexRightAxis],
                         wheelTrans[2, indexRightAxis]);
 
                     Vector3 surfNormalWS = wheel.RaycastInfo.ContactNormalWS;
                     float proj;
-                    Vector3.Dot(ref axle[i], ref surfNormalWS, out proj);
-                    axle[i] -= surfNormalWS * proj;
-                    axle[i].Normalize();
+                    Vector3.Dot(ref _axle[i], ref surfNormalWS, out proj);
+                    _axle[i] -= surfNormalWS * proj;
+                    _axle[i].Normalize();
 
-                    Vector3.Cross(ref surfNormalWS, ref axle[i], out forwardWS[i]);
-                    forwardWS[i].Normalize();
+                    Vector3.Cross(ref surfNormalWS, ref _axle[i], out _forwardWS[i]);
+                    _forwardWS[i].Normalize();
 
                     ResolveSingleBilateral(chassisBody, wheel.RaycastInfo.ContactPointWS,
                               groundObject, wheel.RaycastInfo.ContactPointWS,
-                              0, axle[i], ref sideImpulse[i], timeStep);
+                              0, _axle[i], ref _sideImpulse[i], timeStep);
 
-                    sideImpulse[i] *= sideFrictionStiffness2;
+                    _sideImpulse[i] *= sideFrictionStiffness2;
                 }
             }
 
@@ -411,7 +411,7 @@ namespace VehicleDemo
 
             for (int i = 0; i < NumWheels; i++)
             {
-                WheelInfo wheel = wheelInfo[i];
+                WheelInfo wheel = _wheelInfo[i];
                 RigidBody groundObject = wheel.RaycastInfo.GroundObject as RigidBody;
 
                 float rollingFriction = 0.0f;
@@ -426,18 +426,18 @@ namespace VehicleDemo
                     {
                         float defaultRollingFrictionImpulse = 0.0f;
                         float maxImpulse = (wheel.Brake != 0) ? wheel.Brake : defaultRollingFrictionImpulse;
-                        rollingFriction = CalcRollingFriction(chassisBody, groundObject, wheel.RaycastInfo.ContactPointWS, forwardWS[i], maxImpulse);
+                        rollingFriction = CalcRollingFriction(chassisBody, groundObject, wheel.RaycastInfo.ContactPointWS, _forwardWS[i], maxImpulse);
                     }
                 }
 
                 //switch between active rolling (throttle), braking and non-active rolling friction (no throttle/break)
 
-                forwardImpulse[i] = 0;
-                wheelInfo[i].SkidInfo = 1.0f;
+                _forwardImpulse[i] = 0;
+                _wheelInfo[i].SkidInfo = 1.0f;
 
                 if (groundObject != null)
                 {
-                    wheelInfo[i].SkidInfo = 1.0f;
+                    _wheelInfo[i].SkidInfo = 1.0f;
 
                     float maximp = wheel.WheelsSuspensionForce * timeStep * wheel.FrictionSlip;
                     float maximpSide = maximp;
@@ -445,10 +445,10 @@ namespace VehicleDemo
                     float maximpSquared = maximp * maximpSide;
 
 
-                    forwardImpulse[i] = rollingFriction;//wheel.EngineForce* timeStep;
+                    _forwardImpulse[i] = rollingFriction;//wheel.EngineForce* timeStep;
 
-                    float x = forwardImpulse[i] * fwdFactor;
-                    float y = sideImpulse[i] * sideFactor;
+                    float x = _forwardImpulse[i] * fwdFactor;
+                    float y = _sideImpulse[i] * sideFactor;
 
                     float impulseSquared = (x * x + y * y);
 
@@ -458,7 +458,7 @@ namespace VehicleDemo
 
                         float factor = maximp / (float)System.Math.Sqrt(impulseSquared);
 
-                        wheelInfo[i].SkidInfo *= factor;
+                        _wheelInfo[i].SkidInfo *= factor;
                     }
                 }
             }
@@ -467,12 +467,12 @@ namespace VehicleDemo
             {
                 for (int wheel = 0; wheel < NumWheels; wheel++)
                 {
-                    if (sideImpulse[wheel] != 0)
+                    if (_sideImpulse[wheel] != 0)
                     {
-                        if (wheelInfo[wheel].SkidInfo < 1.0f)
+                        if (_wheelInfo[wheel].SkidInfo < 1.0f)
                         {
-                            forwardImpulse[wheel] *= wheelInfo[wheel].SkidInfo;
-                            sideImpulse[wheel] *= wheelInfo[wheel].SkidInfo;
+                            _forwardImpulse[wheel] *= _wheelInfo[wheel].SkidInfo;
+                            _sideImpulse[wheel] *= _wheelInfo[wheel].SkidInfo;
                         }
                     }
                 }
@@ -481,16 +481,16 @@ namespace VehicleDemo
             // apply the impulses
             for (int i = 0; i < NumWheels; i++)
             {
-                WheelInfo wheel = wheelInfo[i];
+                WheelInfo wheel = _wheelInfo[i];
 
                 Vector3 rel_pos = wheel.RaycastInfo.ContactPointWS -
                         chassisBody.CenterOfMassPosition;
 
-                if (forwardImpulse[i] != 0)
+                if (_forwardImpulse[i] != 0)
                 {
-                    chassisBody.ApplyImpulse(forwardWS[i] * forwardImpulse[i], rel_pos);
+                    chassisBody.ApplyImpulse(_forwardWS[i] * _forwardImpulse[i], rel_pos);
                 }
-                if (sideImpulse[i] != 0)
+                if (_sideImpulse[i] != 0)
                 {
                     RigidBody groundObject = wheel.RaycastInfo.GroundObject as RigidBody;
 
@@ -498,7 +498,7 @@ namespace VehicleDemo
                         groundObject.CenterOfMassPosition;
 
 
-                    Vector3 sideImp = axle[i] * sideImpulse[i];
+                    Vector3 sideImp = _axle[i] * _sideImpulse[i];
 
 #if ROLLING_INFLUENCE_FIX // fix. It only worked if car's up was along Y - VT.
                     //Vector4 vChassisWorldUp = RigidBody.CenterOfMassTransform.get_Columns(indexUpAxis);
@@ -526,7 +526,7 @@ namespace VehicleDemo
 
             for (int w_it = 0; w_it < NumWheels; w_it++)
             {
-                WheelInfo wheel_info = wheelInfo[w_it];
+                WheelInfo wheel_info = _wheelInfo[w_it];
 
                 if (wheel_info.RaycastInfo.IsInContact)
                 {
@@ -595,18 +595,18 @@ namespace VehicleDemo
             }
 
             // Simulate suspension
-            for (int i = 0; i < wheelInfo.Count; i++)
+            for (int i = 0; i < _wheelInfo.Count; i++)
             {
-                float depth = RayCast(wheelInfo[i]);
+                float depth = RayCast(_wheelInfo[i]);
             }
 
 
             UpdateSuspension(step);
 
-            for (int i = 0; i < wheelInfo.Count; i++)
+            for (int i = 0; i < _wheelInfo.Count; i++)
             {
                 //apply suspension force
-                WheelInfo wheel = wheelInfo[i];
+                WheelInfo wheel = _wheelInfo[i];
 
                 float suspensionForce = wheel.WheelsSuspensionForce;
 
@@ -623,9 +623,9 @@ namespace VehicleDemo
 
             UpdateFriction(step);
 
-            for (int i = 0; i < wheelInfo.Count; i++)
+            for (int i = 0; i < _wheelInfo.Count; i++)
             {
-                WheelInfo wheel = wheelInfo[i];
+                WheelInfo wheel = _wheelInfo[i];
                 Vector3 relpos = wheel.RaycastInfo.HardPointWS - RigidBody.CenterOfMassPosition;
                 Vector3 vel = RigidBody.GetVelocityInLocalPoint(relpos);
 
@@ -658,7 +658,7 @@ namespace VehicleDemo
 
         public void UpdateWheelTransform(int wheelIndex, bool interpolatedTransform)
         {
-            WheelInfo wheel = wheelInfo[wheelIndex];
+            WheelInfo wheel = _wheelInfo[wheelIndex];
             UpdateWheelTransformsWS(wheel, interpolatedTransform);
             Vector3 up = -wheel.RaycastInfo.WheelDirectionWS;
             Vector3 right = wheel.RaycastInfo.WheelAxleWS;

@@ -1,66 +1,148 @@
-﻿using BulletSharp.Math;
+﻿using BulletSharp;
+using BulletSharp.Math;
+using DemoFramework;
 using System;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-using BulletSharp;
-using DemoFramework;
 
 namespace ConcaveConvexCastDemo
 {
-    class ConcaveConvexCastDemo : Demo
+    internal static class Program
     {
-        Vector3 eye = new Vector3(0, 15, 60);
-        Vector3 target = new Vector3(-5, 5, 0);
-
-        const DebugDrawModes debugMode = DebugDrawModes.None;
-
-        const float TriangleSize = 8.0f;
-        const int NumVertsX = 30;
-        const int NumVertsY = 30;
-        const float WaveHeight = 5.0f;
-        static float groundOffset = 0.0f;
-        bool animatedMesh = true;
-        const int NumDynamicBoxesX = 30;
-        const int NumDynamicBoxesY = 30;
-
-        Vector3 worldMin = new Vector3(-1000, -1000, -1000);
-        Vector3 worldMax = new Vector3(1000, 1000, 1000);
-
-        TriangleIndexVertexArray indexVertexArrays;
-        BvhTriangleMeshShape groundShape;
-        ConvexcastBatch convexcastBatch;
-        RigidBody staticBody;
-        ClosestConvexResultCallback callback;
-
-        protected override void OnInitialize()
+        [STAThread]
+        static void Main()
         {
-            Freelook.SetEyeTarget(eye, target);
+            DemoRunner.Run<ConcaveConvexCastDemo>();
+        }
+    }
 
-            Graphics.SetFormText("BulletSharp - Concave Convexcast Demo");
+    internal sealed class ConcaveConvexCastDemo : IDemoConfiguration, IUpdateReceiver
+    {
+        private float _groundOffset = 0;
 
-            IsDebugDrawEnabled = true;
-            DebugDrawMode = debugMode;
+        public ISimulation CreateSimulation(Demo demo)
+        {
+            _groundOffset = 0;
+            demo.FreeLook.Eye = new Vector3(0, 15, 60);
+            demo.FreeLook.Target = new Vector3(-5, 5, 0);
+            demo.IsDebugDrawEnabled = true;
+            demo.DebugDrawMode = DebugDrawModes.None;
+            demo.DemoText = "G - Toggle animation";
+            demo.Graphics.WindowTitle = "BulletSharp - Concave Convexcast Demo";
+            return new ConcaveConvexCastDemoSimulation();
         }
 
-        protected override void OnInitializePhysics()
+        public void Update(Demo demo)
         {
-            // collision configuration contains default setup for memory, collision setup
-            CollisionConf = new DefaultCollisionConfiguration();
-            Dispatcher = new CollisionDispatcher(CollisionConf);
+            var simulation = demo.Simulation as ConcaveConvexCastDemoSimulation;
+            if (demo.Input.KeysPressed.Contains(Keys.G))
+            {
+                simulation.IsGroundAnimated = !simulation.IsGroundAnimated;
+            }
 
-            Broadphase = new AxisSweep3(worldMin, worldMax);
-            Solver = new SequentialImpulseConstraintSolver();
+            if (simulation.IsGroundAnimated)
+            {
+                _groundOffset += demo.FrameDelta;
+                simulation.SetGroundAnimationOffset(_groundOffset);
 
-            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConf);
+                demo.Graphics.MeshFactory.RemoveShape(simulation.GroundShape);
+            }
+
+            if (demo.IsDebugDrawEnabled)
+            {
+                simulation.Convexcast(demo.FrameDelta);
+            }
+        }
+    }
+
+    internal sealed class ConcaveConvexCastDemoSimulation : ISimulation
+    {
+        private const float TriangleSize = 8.0f;
+        private const int NumVertsX = 30;
+        private const int NumVertsY = 30;
+        private const float WaveHeight = 3.0f;
+        private const int NumDynamicBoxesX = 30;
+        private const int NumDynamicBoxesY = 30;
+
+        private bool _animatedMesh = true;
+
+        private Vector3 _worldMin = new Vector3(-1000, -1000, -1000);
+        private Vector3 _worldMax = new Vector3(1000, 1000, 1000);
+
+        private TriangleIndexVertexArray _indexVertexArrays;
+        private ConvexcastBatch _convexcastBatch;
+        private RigidBody _groundObject;
+        private ClosestConvexResultCallback _callback;
+
+        public ConcaveConvexCastDemoSimulation()
+        {
+            CollisionConfiguration = new DefaultCollisionConfiguration();
+            Dispatcher = new CollisionDispatcher(CollisionConfiguration);
+
+            Broadphase = new AxisSweep3(_worldMin, _worldMax);
+
+            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConfiguration);
             World.SolverInfo.SplitImpulse = 1;
-            World.Gravity = new Vector3(0, -10, 0);
 
-            convexcastBatch = new ConvexcastBatch(40.0f, 0.0f, -10.0f, 80.0f);
-            callback = new ClosestConvexResultCallback();
+            _convexcastBatch = new ConvexcastBatch(40.0f, 0.0f, -10.0f, 80.0f);
+            _callback = new ClosestConvexResultCallback();
 
             CreateGround();
             CreateBoxes();
+        }
+
+        public CollisionConfiguration CollisionConfiguration { get; }
+        public CollisionDispatcher Dispatcher { get; }
+        public BroadphaseInterface Broadphase { get; }
+        public DiscreteDynamicsWorld World { get; }
+
+        public BvhTriangleMeshShape GroundShape { get; private set; }
+
+        public bool IsGroundAnimated
+        {
+            get { return _animatedMesh; }
+            set
+            {
+                _animatedMesh = value;
+                if (value)
+                {
+                    _groundObject.CollisionFlags |= CollisionFlags.KinematicObject;
+                    _groundObject.ActivationState = ActivationState.DisableDeactivation;
+                }
+                else
+                {
+                    _groundObject.CollisionFlags &= ~CollisionFlags.KinematicObject;
+                    _groundObject.ActivationState = ActivationState.ActiveTag;
+                }
+            }
+        }
+
+        public void SetGroundAnimationOffset(float offset)
+        {
+            SetVertexPositions(WaveHeight, offset);
+
+            GroundShape.RefitTreeRef(ref _worldMin, ref _worldMax);
+
+            // Clear all contact points involving mesh proxy.
+            // Note: this is a slow/unoptimized operation.
+            Broadphase.OverlappingPairCache.CleanProxyFromPairs(_groundObject.BroadphaseHandle, Dispatcher);
+        }
+
+        public void Convexcast(float frameDelta)
+        {
+            _convexcastBatch.Move(frameDelta);
+            _convexcastBatch.Cast(World, _callback, frameDelta);
+            _convexcastBatch.Draw(World.DebugDrawer);
+        }
+
+        public void Dispose()
+        {
+            _callback.Dispose();
+            _indexVertexArrays.IndexedMeshArray[0].Dispose();
+            _indexVertexArrays.Dispose();
+
+            this.StandardCleanup();
         }
 
         private void CreateGround()
@@ -93,63 +175,38 @@ namespace ConcaveConvexCastDemo
                 }
             }
 
-            indexVertexArrays = new TriangleIndexVertexArray();
-            indexVertexArrays.AddIndexedMesh(mesh);
+            _indexVertexArrays = new TriangleIndexVertexArray();
+            _indexVertexArrays.AddIndexedMesh(mesh);
 
             SetVertexPositions(WaveHeight, 0.0f);
 
             const bool useQuantizedAabbCompression = true;
-            groundShape = new BvhTriangleMeshShape(indexVertexArrays, useQuantizedAabbCompression);
-            CollisionShapes.Add(groundShape);
+            GroundShape = new BvhTriangleMeshShape(_indexVertexArrays, useQuantizedAabbCompression);
 
-            staticBody = LocalCreateRigidBody(0.0f, Matrix.Identity, groundShape);
-            staticBody.CollisionFlags |= CollisionFlags.StaticObject;
-            staticBody.UserObject = "Ground";
+            _groundObject = PhysicsHelper.CreateStaticBody(Matrix.Identity, GroundShape, World);
+            _groundObject.CollisionFlags |= CollisionFlags.StaticObject;
+            _groundObject.UserObject = "Ground";
         }
 
         private void CreateBoxes()
         {
-            var colShape = new BoxShape(1);
-            //var colShape = new CapsuleShape(0.5f, 2.0f);//boxShape = new SphereShape(1.0f);
-            CollisionShapes.Add(colShape);
+            var shape = new BoxShape(1);
+            //var shape = new CapsuleShape(0.5f, 2.0f);
+            //var shape = new SphereShape(1.0f);
 
             for (int j = 0; j < NumDynamicBoxesX; j++)
             {
                 for (int i = 0; i < NumDynamicBoxesY; i++)
                 {
                     Matrix startTransform = Matrix.Translation(5 * (i - NumDynamicBoxesX / 2), 10, 5 * (j - NumDynamicBoxesY / 2));
-                    LocalCreateRigidBody(1.0f, startTransform, colShape);
+                    PhysicsHelper.CreateBody(1.0f, startTransform, shape, World);
                 }
             }
         }
 
-        public override void OnUpdate()
+        private void SetVertexPositions(float waveHeight, float offset)
         {
-            if (animatedMesh)
-            {
-                groundOffset += FrameDelta;
-                SetVertexPositions(WaveHeight, groundOffset);
-                Graphics.MeshFactory.RemoveShape(groundShape);
-
-                groundShape.RefitTreeRef(ref worldMin, ref worldMax);
-
-                //clear all contact points involving mesh proxy. Note: this is a slow/unoptimized operation.
-                Broadphase.OverlappingPairCache.CleanProxyFromPairs(staticBody.BroadphaseHandle, Dispatcher);
-            }
-
-            convexcastBatch.Move(FrameDelta);
-            convexcastBatch.Cast(World, callback, FrameDelta);
-            if (IsDebugDrawEnabled)
-            {
-                convexcastBatch.Draw(World.DebugDrawer);
-            }
-
-            base.OnUpdate();
-        }
-
-        void SetVertexPositions(float waveheight, float offset)
-        {
-            var vertexStream = indexVertexArrays.GetVertexStream();
+            var vertexStream = _indexVertexArrays.GetVertexStream();
             using (var vertexWriter = new BinaryWriter(vertexStream))
             {
                 for (int i = 0; i < NumVertsX; i++)
@@ -157,65 +214,43 @@ namespace ConcaveConvexCastDemo
                     for (int j = 0; j < NumVertsY; j++)
                     {
                         vertexWriter.Write((i - NumVertsX * 0.5f) * TriangleSize);
-                        vertexWriter.Write(waveheight * (float)Math.Sin(i + offset) * (float)Math.Cos(j + offset));
+                        vertexWriter.Write(waveHeight * (float)Math.Sin(i + offset) * (float)Math.Cos(j + offset));
                         vertexWriter.Write((j - NumVertsY * 0.5f) * TriangleSize);
                     }
                 }
             }
         }
-
-        public override void OnHandleInput()
-        {
-            if (Input.KeysPressed.Contains(Keys.G))
-            {
-                animatedMesh = !animatedMesh;
-                if (animatedMesh)
-                {
-                    staticBody.CollisionFlags |= CollisionFlags.KinematicObject;
-                    staticBody.ActivationState = ActivationState.DisableDeactivation;
-                }
-                else
-                {
-                    staticBody.CollisionFlags &= ~CollisionFlags.KinematicObject;
-                    staticBody.ActivationState = ActivationState.ActiveTag;
-                }
-            }
-            base.OnHandleInput();
-        }
-
-        public override void ExitPhysics()
-        {
-            callback.Dispose();
-
-            base.ExitPhysics();
-        }
     }
 
     // Scrolls back and forth over terrain
-    class ConvexcastBatch
+    internal sealed class ConvexcastBatch
     {
-        const int NumRays = 100;
-        Ray[] _rays = new Ray[NumRays];
+        private const int NumRays = 100;
+        private Ray[] _rays = new Ray[NumRays];
 
-        int _frameCount;
-        float _time;
-        float _timeMin = float.MaxValue;
-        float _timeMax;
-        float _timeTotal;
-        int _sampleCount;
+        private int _frameCount;
+        private float _time;
+        private float _timeMin = float.MaxValue;
+        private float _timeMax;
+        private float _timeTotal;
+        private int _sampleCount;
 
-        float _dx = 10;
-        float _minX = -40;
-        float _maxX = 20;
-        float _sign = 1;
+        private float _dx = 10;
+        private float _minX = -40;
+        private float _maxX = 20;
+        private float _sign = 1;
 
-        Vector3 _boxBoundMin, _boxBoundMax;
-        BoxShape _boxShape;
+        private Vector3 _boxBoundMin, _boxBoundMax;
+        private BoxShape _boxShape;
 
-        const float NormalScale = 10.0f; // easier to see if this is big
+        private const float NormalScale = 10.0f; // easier to see if this is big
 
-        Matrix _fromRotation = Matrix.Identity; //Matrix.RotationX(0.7f);
-        Matrix _toRotation = Matrix.RotationX(0.7f);
+        private Matrix _fromRotation = Matrix.Identity; //Matrix.RotationX(0.7f);
+        private Matrix _toRotation = Matrix.RotationX(0.7f);
+
+        private static Vector3 _green = new Vector3(0.0f, 1.0f, 0.0f);
+        private static Vector3 _white = new Vector3(1.0f, 1.0f, 1.0f);
+        private static Vector3 _cyan = new Vector3(0.0f, 1.0f, 1.0f);
 
         public ConvexcastBatch(float rayLength, float z, float minY, float maxY)
         {
@@ -300,21 +335,6 @@ namespace ConcaveConvexCastDemo
             }
         }
 
-        private void PrintStats()
-        {
-            float timeMean = _timeTotal / _sampleCount;
-            Console.WriteLine("{0} rays in {1} s, min {2}, max {3}, mean {4}",
-                    NumRays * _frameCount,
-                    _time.ToString("0.000", CultureInfo.InvariantCulture),
-                    _timeMin.ToString("0.000", CultureInfo.InvariantCulture),
-                    _timeMax.ToString("0.000", CultureInfo.InvariantCulture),
-                    timeMean.ToString("0.000", CultureInfo.InvariantCulture));
-        }
-
-        static Vector3 _green = new Vector3(0.0f, 1.0f, 0.0f);
-        static Vector3 _white = new Vector3(1.0f, 1.0f, 1.0f);
-        static Vector3 _cyan = new Vector3(0.0f, 1.0f, 1.0f);
-
         public void Draw(IDebugDraw drawer)
         {
             foreach (var ray in _rays)
@@ -333,9 +353,20 @@ namespace ConcaveConvexCastDemo
                 drawer.DrawBox(ref _boxBoundMin, ref _boxBoundMax, ref transform, ref _cyan);
             }
         }
+
+        private void PrintStats()
+        {
+            float timeMean = _timeTotal / _sampleCount;
+            Console.WriteLine("{0} rays in {1} s, min {2}, max {3}, mean {4}",
+                    NumRays * _frameCount,
+                    _time.ToString("0.000", CultureInfo.InvariantCulture),
+                    _timeMin.ToString("0.000", CultureInfo.InvariantCulture),
+                    _timeMax.ToString("0.000", CultureInfo.InvariantCulture),
+                    timeMean.ToString("0.000", CultureInfo.InvariantCulture));
+        }
     }
 
-    class Ray
+    internal sealed class Ray
     {
         public Vector3 Source;
         public Vector3 Destination;
@@ -348,18 +379,6 @@ namespace ConcaveConvexCastDemo
         {
             Source.X += move;
             Destination.X += move;
-        }
-    }
-
-    static class Program
-    {
-        [STAThread]
-        static void Main()
-        {
-            using (Demo demo = new ConcaveConvexCastDemo())
-            {
-                GraphicsLibraryManager.Run(demo);
-            }
         }
     }
 }

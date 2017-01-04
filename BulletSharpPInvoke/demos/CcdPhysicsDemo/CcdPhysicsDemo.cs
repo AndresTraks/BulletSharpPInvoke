@@ -6,85 +6,134 @@ using System.Windows.Forms;
 
 namespace CcdPhysicsDemo
 {
-    class CcdPhysicsDemo : Demo
+    internal static class Program
     {
-        bool ccdMode = true;
-
-        Vector3 eye = new Vector3(0, 20, 80);
-        Vector3 target = Vector3.Zero;
-
-        const float CubeHalfExtents = 1.0f;
-        const float ExtraHeight = 1.0f;
-
-        void ToggleCcdMode()
+        [STAThread]
+        static void Main()
         {
-            ccdMode = !ccdMode;
+            DemoRunner.Run<CcdPhysicsDemo>();
+        }
+    }
 
-            if (ccdMode)
+    internal sealed class CcdPhysicsDemo : IDemoConfiguration, IUpdateReceiver
+    {
+        private bool _ccdEnabled = true;
+
+        public ISimulation CreateSimulation(Demo demo)
+        {
+            demo.FreeLook.Eye = new Vector3(0, 20, 80);
+            demo.FreeLook.Target = Vector3.Zero;
+            demo.Graphics.WindowTitle = "BulletSharp - Continous Collision Detection Demo";
+            SetDemoText(demo);
+            return new CcdPhysicsDemoSimulation(_ccdEnabled);
+        }
+
+        public void Update(Demo demo)
+        {
+            var keys = demo.Input.KeysPressed;
+            if (keys.Contains(Keys.P))
             {
-                DemoText = "CCD enabled (P to disable)";
+                _ccdEnabled = !_ccdEnabled;
+                SetDemoText(demo);
+                demo.ResetScene();
+            }
+            else if (keys.Contains(Keys.Space))
+            {
+                var ccdDemo = demo.Simulation as CcdPhysicsDemoSimulation;
+                Vector3 destination = demo.GetRayTo(demo.Input.MousePoint, demo.FreeLook.Eye, demo.FreeLook.Target, demo.Graphics.FieldOfView);
+                ccdDemo.ShootBox(demo.FreeLook.Eye, destination);
+                keys.Remove(Keys.Space);
+            }
+        }
+
+        private void SetDemoText(Demo demo)
+        {
+            if (_ccdEnabled)
+            {
+                demo.DemoText = "CCD enabled (P to disable)";
             }
             else
             {
-                DemoText = "CCD enabled (P to enable)";
+                demo.DemoText = "CCD enabled (P to enable)";
             }
-
-            ClientResetScene();
         }
+    }
 
-        protected override void OnInitialize()
+    internal sealed class CcdPhysicsDemoSimulation : ISimulation
+    {
+        private const float CubeHalfExtents = 1.0f;
+        private const float ExtraHeight = 1.0f;
+        private const float ShootBoxInitialSpeed = 4000;
+
+        private readonly bool _ccdEnabled;
+        private BoxShape _shootBoxShape = new BoxShape(1);
+
+        public CcdPhysicsDemoSimulation(bool ccdEnabled)
         {
-            Freelook.SetEyeTarget(eye, target);
+            _ccdEnabled = ccdEnabled;
 
-            Graphics.SetFormText("BulletSharp - CCD Demo");
-            DemoText = "CCD enabled (P to disable)";
-        }
+            CollisionConfiguration = new DefaultCollisionConfiguration();
 
-        public override void OnHandleInput()
-        {
-            if (Input.KeysPressed.Contains(Keys.P))
-            {
-                ToggleCcdMode();
-            }
-
-            base.OnHandleInput();
-        }
-
-        protected override void OnInitializePhysics()
-        {
-            shootBoxInitialSpeed = 4000;
-
-            // collision configuration contains default setup for memory, collision setup
-            CollisionConf = new DefaultCollisionConfiguration();
-
-            Dispatcher = new CollisionDispatcher(CollisionConf);
+            Dispatcher = new CollisionDispatcher(CollisionConfiguration);
             //Dispatcher.RegisterCollisionCreateFunc(BroadphaseNativeType.BoxShape, BroadphaseNativeType.BoxShape,
             //    CollisionConf.GetCollisionAlgorithmCreateFunc(BroadphaseNativeType.ConvexShape, BroadphaseNativeType.ConvexShape));
 
             Broadphase = new DbvtBroadphase();
 
-            // the default constraint solver
-            Solver = new SequentialImpulseConstraintSolver();
-
-            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, Solver, CollisionConf);
+            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConfiguration);
             World.SolverInfo.SolverMode |= SolverModes.Use2FrictionDirections | SolverModes.RandomizeOrder;
             //World.SolverInfo.SplitImpulse = 0;
             World.SolverInfo.NumIterations = 20;
 
-            World.DispatchInfo.UseContinuous = ccdMode;
-
-            World.Gravity = new Vector3(0, -10, 0);
+            World.DispatchInfo.UseContinuous = _ccdEnabled;
 
             CreateGround();
             CreateBoxStack();
         }
 
+        public CollisionConfiguration CollisionConfiguration { get; }
+        public CollisionDispatcher Dispatcher { get; }
+        public BroadphaseInterface Broadphase { get; }
+        public DiscreteDynamicsWorld World { get; }
+
+        public void ShootBox(Vector3 camPos, Vector3 destination)
+        {
+            const float mass = 1.0f;
+
+            if (_shootBoxShape == null)
+            {
+                _shootBoxShape = new BoxShape(1.0f);
+                _shootBoxShape.InitializePolyhedralFeatures();
+            }
+
+            RigidBody body = PhysicsHelper.CreateBody(mass, Matrix.Translation(camPos), _shootBoxShape, World);
+            body.LinearFactor = new Vector3(1, 1, 1);
+            //body.Restitution = 1;
+
+            Vector3 linVel = destination - camPos;
+            linVel.Normalize();
+            body.LinearVelocity = linVel * ShootBoxInitialSpeed;
+            body.AngularVelocity = Vector3.Zero;
+            body.ContactProcessingThreshold = 1e30f;
+
+            // when using CCD mode, disable regular CCD
+            if (_ccdEnabled)
+            {
+                body.CcdMotionThreshold = 0.0001f;
+                body.CcdSweptSphereRadius = 0.4f;
+            }
+        }
+
+        public void Dispose()
+        {
+            this.StandardCleanup();
+        }
+
         private void CreateGround()
         {
-            BoxShape ground = new BoxShape(200, 1, 200);
+            var ground = new BoxShape(200, 1, 200);
             ground.InitializePolyhedralFeatures();
-            CollisionShapes.Add(ground);
-            RigidBody body = LocalCreateRigidBody(0, Matrix.Identity, ground);
+            RigidBody body = PhysicsHelper.CreateStaticBody(Matrix.Identity, ground, World);
             body.Friction = 0.5f;
             //body.RollingFriction = 0.3f;
             body.UserObject = "Ground";
@@ -94,7 +143,6 @@ namespace CcdPhysicsDemo
         {
             //var shape = new CylinderShape(CubeHalfExtents, CubeHalfExtents, CubeHalfExtents);
             var shape = new BoxShape(CubeHalfExtents);
-            CollisionShapes.Add(shape);
 
             const int numObjects = 120;
             for (int i = 0; i < numObjects; i++)
@@ -114,56 +162,16 @@ namespace CcdPhysicsDemo
                 Matrix trans = Matrix.Translation(col * 2 * CubeHalfExtents + (row2 % 2) * CubeHalfExtents,
                     row * 2 * CubeHalfExtents + CubeHalfExtents + ExtraHeight, 0);
 
-                RigidBody body = LocalCreateRigidBody(1, trans, shape);
+                RigidBody body = PhysicsHelper.CreateBody(1, trans, shape, World);
                 body.SetAnisotropicFriction(shape.AnisotropicRollingFrictionDirection, AnisotropicFrictionFlags.RollingFriction);
                 body.Friction = 0.5f;
                 //body.RollingFriction = 0.3f;
 
-                if (ccdMode)
+                if (_ccdEnabled)
                 {
                     body.CcdMotionThreshold = 1e-7f;
                     body.CcdSweptSphereRadius = 0.9f * CubeHalfExtents;
                 }
-            }
-        }
-
-        public override void ShootBox(Vector3 camPos, Vector3 destination)
-        {
-            const float mass = 1.0f;
-
-            if (shootBoxShape == null)
-            {
-                shootBoxShape = new BoxShape(1.0f);
-                shootBoxShape.InitializePolyhedralFeatures();
-            }
-
-            RigidBody body = LocalCreateRigidBody(mass, Matrix.Translation(camPos), shootBoxShape);
-            body.LinearFactor = new Vector3(1, 1, 1);
-            //body.Restitution = 1;
-
-            Vector3 linVel = destination - camPos;
-            linVel.Normalize();
-            body.LinearVelocity = linVel * shootBoxInitialSpeed;
-            body.AngularVelocity = Vector3.Zero;
-            body.ContactProcessingThreshold = 1e30f;
-
-            // when using ccdMode, disable regular CCD
-            if (ccdMode)
-            {
-                body.CcdMotionThreshold = 0.0001f;
-                body.CcdSweptSphereRadius = 0.4f;
-            }
-        }
-    }
-
-    static class Program
-    {
-        [STAThread]
-        static void Main()
-        {
-            using (Demo demo = new CcdPhysicsDemo())
-            {
-                GraphicsLibraryManager.Run(demo);
             }
         }
     }

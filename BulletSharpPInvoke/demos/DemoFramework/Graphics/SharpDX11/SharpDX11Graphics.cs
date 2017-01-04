@@ -639,7 +639,7 @@ namespace DemoFramework.SharpDX11
 
         void SetSceneConstants()
         {
-            FreeLook freelook = Demo.Freelook;
+            FreeLook freelook = Demo.FreeLook;
             Vector3 up = MathHelper.Convert(freelook.Up);
             Vector3 eye = MathHelper.Convert(freelook.Eye);
             Vector4 eyePosition = new Vector4(eye, 1);
@@ -695,16 +695,15 @@ namespace DemoFramework.SharpDX11
 
         public override void Run()
         {
-            RenderLoop.Run(Form, () =>
+            RenderLoop.Run(Form, (RenderLoop.RenderCallback)(() =>
             {
-                Demo.OnHandleInput();
                 Demo.OnUpdate();
                 if (Form.WindowState == FormWindowState.Minimized)
                     return;
                 Demo.Clock.StartRender();
                 Render();
                 Demo.Clock.StopRender();
-            });
+            }));
         }
 
         protected virtual void OnInitialize()
@@ -763,7 +762,7 @@ namespace DemoFramework.SharpDX11
             if (Demo.IsDebugDrawEnabled)
             {
                 debugDrawPass.Apply(_immediateContext);
-                (Demo.World.DebugDrawer as PhysicsDebugDraw).DrawDebugWorld(Demo.World);
+                (Demo.Simulation.World.DebugDrawer as PhysicsDebugDraw).DrawDebugWorld((DynamicsWorld)Demo.Simulation.World);
             }
 
             // Light accumulation
@@ -797,7 +796,7 @@ namespace DemoFramework.SharpDX11
             {
                 float radius = light.Radius;
                 float bias = radius * 2;
-                if ((light.Position - MathHelper.Convert(Demo.Freelook.Eye)).LengthSquared() >= (radius * radius) + bias)
+                if ((light.Position - MathHelper.Convert(Demo.FreeLook.Eye)).LengthSquared() >= (radius * radius) + bias)
                 {
                     RenderLight(light);
                 }
@@ -809,7 +808,7 @@ namespace DemoFramework.SharpDX11
             foreach (var light in lights)
             {
                 float bias = light.Radius * 2;
-                if ((light.Position - MathHelper.Convert(Demo.Freelook.Eye)).LengthSquared() < (light.Radius * light.Radius) + bias)
+                if ((light.Position - MathHelper.Convert(Demo.FreeLook.Eye)).LengthSquared() < (light.Radius * light.Radius) + bias)
                 {
                     RenderLight(light);
                 }

@@ -1,95 +1,94 @@
-﻿using System;
-using BulletSharp;
+﻿using BulletSharp;
 using BulletSharp.Math;
 using DemoFramework;
+using System;
 
 namespace BasicDemo
 {
-    class BasicDemo : Demo
+    internal static class Program
     {
-        Vector3 eye = new Vector3(30, 20, 15);
-        Vector3 target = new Vector3(0, 3, 0);
-
-        // create 125 (5x5x5) dynamic objects
-        const int ArraySizeX = 5, ArraySizeY = 5, ArraySizeZ = 5;
-        Vector3 startPosition = new Vector3(0, 2, 0);
-
-        protected override void OnInitialize()
+        [STAThread]
+        static void Main()
         {
-            Freelook.SetEyeTarget(eye, target);
-
-            Graphics.SetFormText("BulletSharp - Basic Demo");
+            DemoRunner.Run<BasicDemo>();
         }
+    }
 
-        protected override void OnInitializePhysics()
+    internal sealed class BasicDemo : IDemoConfiguration
+    {
+        public ISimulation CreateSimulation(Demo demo)
         {
-            // collision configuration contains default setup for memory, collision setup
-            CollisionConf = new DefaultCollisionConfiguration();
-            Dispatcher = new CollisionDispatcher(CollisionConf);
+            demo.FreeLook.Eye = new Vector3(30, 20, 15);
+            demo.FreeLook.Target = new Vector3(0, 3, 0);
+            demo.Graphics.WindowTitle = "BulletSharp - Basic Demo";
+            return new BasicDemoSimulation();
+        }
+    }
 
+    internal sealed class BasicDemoSimulation : ISimulation
+    {
+        private const int NumBoxesX = 5, NumBoxesY = 5, NumBoxesZ = 5;
+        private Vector3 _startPosition = new Vector3(0, 2, 0);
+
+        public BasicDemoSimulation()
+        {
+            CollisionConfiguration = new DefaultCollisionConfiguration();
+            Dispatcher = new CollisionDispatcher(CollisionConfiguration);
             Broadphase = new DbvtBroadphase();
-
-            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConf);
-            World.Gravity = new Vector3(0, -10, 0);
+            World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConfiguration);
 
             CreateGround();
             CreateBoxes();
         }
 
+        public CollisionConfiguration CollisionConfiguration { get; }
+        public CollisionDispatcher Dispatcher { get; }
+        public BroadphaseInterface Broadphase { get; }
+        public DiscreteDynamicsWorld World { get; }
+
+        public void Dispose()
+        {
+            this.StandardCleanup();
+        }
+
         private void CreateGround()
         {
             var groundShape = new BoxShape(50, 1, 50);
-            //groundShape.InitializePolyhedralFeatures();
             //var groundShape = new StaticPlaneShape(Vector3.UnitY, 1);
 
-            CollisionShapes.Add(groundShape);
-            CollisionObject ground = LocalCreateRigidBody(0, Matrix.Identity, groundShape);
+            CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix.Identity, groundShape, World);
             ground.UserObject = "Ground";
         }
 
         private void CreateBoxes()
         {
             const float mass = 1.0f;
-            var colShape = new BoxShape(1);
-            CollisionShapes.Add(colShape);
-            Vector3 localInertia = colShape.CalculateLocalInertia(mass);
+            var shape = new BoxShape(1);
+            Vector3 localInertia = shape.CalculateLocalInertia(mass);
+            var bodyInfo = new RigidBodyConstructionInfo(mass, null, shape, localInertia);
 
-            var rbInfo = new RigidBodyConstructionInfo(mass, null, colShape, localInertia);
-
-            for (int y = 0; y < ArraySizeY; y++)
+            for (int y = 0; y < NumBoxesY; y++)
             {
-                for (int x = 0; x < ArraySizeX; x++)
+                for (int x = 0; x < NumBoxesX; x++)
                 {
-                    for (int z = 0; z < ArraySizeZ; z++)
+                    for (int z = 0; z < NumBoxesZ; z++)
                     {
-                        Vector3 position = startPosition + 2 * new Vector3(x, y, z);
+                        Vector3 position = _startPosition + 2 * new Vector3(x, y, z);
 
                         // make it drop from a height
                         position += new Vector3(0, 10, 0);
 
                         // using MotionState is recommended, it provides interpolation capabilities
                         // and only synchronizes 'active' objects
-                        rbInfo.MotionState = new DefaultMotionState(Matrix.Translation(position));
-                        var body = new RigidBody(rbInfo);
+                        bodyInfo.MotionState = new DefaultMotionState(Matrix.Translation(position));
+                        var body = new RigidBody(bodyInfo);
 
                         World.AddRigidBody(body);
                     }
                 }
             }
 
-            rbInfo.Dispose();
-        }
-    }
-
-    static class Program
-    {
-        [STAThread]
-        static void Main()
-        {
-            using (Demo demo = new BasicDemo())
-            {
-                GraphicsLibraryManager.Run(demo);
-            }
+            bodyInfo.Dispose();
         }
     }
 }

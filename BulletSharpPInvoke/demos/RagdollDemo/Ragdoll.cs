@@ -1,10 +1,11 @@
-﻿using System;
-using BulletSharp;
+﻿using BulletSharp;
 using BulletSharp.Math;
+using DemoFramework;
+using System;
 
 namespace RagdollDemo
 {
-    enum BodyPart
+    internal enum BodyPart
     {
         Pelvis, Spine, Head,
         LeftUpperLeg, LeftLowerLeg,
@@ -14,7 +15,7 @@ namespace RagdollDemo
         Count
     };
 
-    enum Joint
+    internal enum Joint
     {
         PelvisSpine, SpineHead,
         LeftHip, LeftKnee,
@@ -24,201 +25,218 @@ namespace RagdollDemo
         Count
     };
 
-    class Ragdoll
+    internal sealed class Ragdoll : IDisposable
     {
-        const float ConstraintDebugSize = 0.2f;
-        const float PI_2 = (float)Math.PI / 2;
-        const float PI_4 = (float)Math.PI / 4;
+        private const float ConstraintDebugSize = 0.2f;
+        private const float PI_2 = (float)Math.PI / 2;
+        private const float PI_4 = (float)Math.PI / 4;
 
-        DynamicsWorld ownerWorld;
-        CollisionShape[] shapes = new CollisionShape[(int)BodyPart.Count];
-        RigidBody[] bodies = new RigidBody[(int)BodyPart.Count];
-        TypedConstraint[] joints = new TypedConstraint[(int)Joint.Count];
+        private DynamicsWorld _world;
+        private CollisionShape[] _shapes = new CollisionShape[(int)BodyPart.Count];
+        private RigidBody[] _bodies = new RigidBody[(int)BodyPart.Count];
+        private TypedConstraint[] _joints = new TypedConstraint[(int)Joint.Count];
 
         public Ragdoll(DynamicsWorld ownerWorld, Vector3 positionOffset)
         {
-            this.ownerWorld = ownerWorld;
+            _world = ownerWorld;
 
-            // Setup the geometry
-            shapes[(int)BodyPart.Pelvis] = new CapsuleShape(0.15f, 0.20f);
-            shapes[(int)BodyPart.Spine] = new CapsuleShape(0.15f, 0.28f);
-            shapes[(int)BodyPart.Head] = new CapsuleShape(0.10f, 0.05f);
-            shapes[(int)BodyPart.LeftUpperLeg] = new CapsuleShape(0.07f, 0.45f);
-            shapes[(int)BodyPart.LeftLowerLeg] = new CapsuleShape(0.05f, 0.37f);
-            shapes[(int)BodyPart.RightUpperLeg] = new CapsuleShape(0.07f, 0.45f);
-            shapes[(int)BodyPart.RightLowerLeg] = new CapsuleShape(0.05f, 0.37f);
-            shapes[(int)BodyPart.LeftUpperArm] = new CapsuleShape(0.05f, 0.33f);
-            shapes[(int)BodyPart.LeftLowerArm] = new CapsuleShape(0.04f, 0.25f);
-            shapes[(int)BodyPart.RightUpperArm] = new CapsuleShape(0.05f, 0.33f);
-            shapes[(int)BodyPart.RightLowerArm] = new CapsuleShape(0.04f, 0.25f);
+            SetupShapes();
+            SetupBodies(positionOffset);
+            SetupConstraints();
+        }
 
+        public void Dispose()
+        {
+            foreach (var joint in _joints)
+            {
+                _world.RemoveConstraint(joint);
+                joint.Dispose();
+            }
+
+            foreach (var body in _bodies)
+            {
+                _world.RemoveRigidBody(body);
+                body.Dispose();
+            }
+
+            foreach (var shape in _shapes)
+            {
+                shape.Dispose();
+            }
+        }
+
+        private void SetupShapes()
+        {
+            _shapes[(int)BodyPart.Pelvis] = new CapsuleShape(0.15f, 0.20f);
+            _shapes[(int)BodyPart.Spine] = new CapsuleShape(0.15f, 0.28f);
+            _shapes[(int)BodyPart.Head] = new CapsuleShape(0.10f, 0.05f);
+            _shapes[(int)BodyPart.LeftUpperLeg] = new CapsuleShape(0.07f, 0.45f);
+            _shapes[(int)BodyPart.LeftLowerLeg] = new CapsuleShape(0.05f, 0.37f);
+            _shapes[(int)BodyPart.RightUpperLeg] = new CapsuleShape(0.07f, 0.45f);
+            _shapes[(int)BodyPart.RightLowerLeg] = new CapsuleShape(0.05f, 0.37f);
+            _shapes[(int)BodyPart.LeftUpperArm] = new CapsuleShape(0.05f, 0.33f);
+            _shapes[(int)BodyPart.LeftLowerArm] = new CapsuleShape(0.04f, 0.25f);
+            _shapes[(int)BodyPart.RightUpperArm] = new CapsuleShape(0.05f, 0.33f);
+            _shapes[(int)BodyPart.RightLowerArm] = new CapsuleShape(0.04f, 0.25f);
+        }
+
+        private void SetupBodies(Vector3 positionOffset)
+        {
             Matrix offset = Matrix.Translation(positionOffset);
             Matrix transform;
             transform = offset * Matrix.Translation(0, 1, 0);
-            bodies[(int)BodyPart.Pelvis] = LocalCreateRigidBody(1, transform, shapes[(int)BodyPart.Pelvis]);
+            _bodies[(int)BodyPart.Pelvis] = CreateBody(1, transform, _shapes[(int)BodyPart.Pelvis]);
 
             transform = offset * Matrix.Translation(0, 1.2f, 0);
-            bodies[(int)BodyPart.Spine] = LocalCreateRigidBody(1, transform, shapes[(int)BodyPart.Spine]);
+            _bodies[(int)BodyPart.Spine] = CreateBody(1, transform, _shapes[(int)BodyPart.Spine]);
 
             transform = offset * Matrix.Translation(0, 1.6f, 0);
-            bodies[(int)BodyPart.Head] = LocalCreateRigidBody(1, transform, shapes[(int)BodyPart.Head]);
+            _bodies[(int)BodyPart.Head] = CreateBody(1, transform, _shapes[(int)BodyPart.Head]);
 
             transform = offset * Matrix.Translation(-0.18f, 0.6f, 0);
-            bodies[(int)BodyPart.LeftUpperLeg] = LocalCreateRigidBody(1, transform, shapes[(int)BodyPart.LeftUpperLeg]);
+            _bodies[(int)BodyPart.LeftUpperLeg] = CreateBody(1, transform, _shapes[(int)BodyPart.LeftUpperLeg]);
 
             transform = offset * Matrix.Translation(-0.18f, 0.2f, 0);
-            bodies[(int)BodyPart.LeftLowerLeg] = LocalCreateRigidBody(1, transform, shapes[(int)BodyPart.LeftLowerLeg]);
+            _bodies[(int)BodyPart.LeftLowerLeg] = CreateBody(1, transform, _shapes[(int)BodyPart.LeftLowerLeg]);
 
             transform = offset * Matrix.Translation(0.18f, 0.65f, 0);
-            bodies[(int)BodyPart.RightUpperLeg] = LocalCreateRigidBody(1, transform, shapes[(int)BodyPart.RightUpperLeg]);
+            _bodies[(int)BodyPart.RightUpperLeg] = CreateBody(1, transform, _shapes[(int)BodyPart.RightUpperLeg]);
 
             transform = offset * Matrix.Translation(0.18f, 0.2f, 0);
-            bodies[(int)BodyPart.RightLowerLeg] = LocalCreateRigidBody(1, transform, shapes[(int)BodyPart.RightLowerLeg]);
+            _bodies[(int)BodyPart.RightLowerLeg] = CreateBody(1, transform, _shapes[(int)BodyPart.RightLowerLeg]);
 
             transform = Matrix.RotationZ(PI_2) * offset * Matrix.Translation(-0.35f, 1.45f, 0);
-            bodies[(int)BodyPart.LeftUpperArm] = LocalCreateRigidBody(1, transform, shapes[(int)BodyPart.LeftUpperArm]);
+            _bodies[(int)BodyPart.LeftUpperArm] = CreateBody(1, transform, _shapes[(int)BodyPart.LeftUpperArm]);
 
             transform = Matrix.RotationZ(PI_2) * offset * Matrix.Translation(-0.7f, 1.45f, 0);
-            bodies[(int)BodyPart.LeftLowerArm] = LocalCreateRigidBody(1, transform, shapes[(int)BodyPart.LeftLowerArm]);
+            _bodies[(int)BodyPart.LeftLowerArm] = CreateBody(1, transform, _shapes[(int)BodyPart.LeftLowerArm]);
 
             transform = Matrix.RotationZ(-PI_2) * offset * Matrix.Translation(0.35f, 1.45f, 0);
-            bodies[(int)BodyPart.RightUpperArm] = LocalCreateRigidBody(1, transform, shapes[(int)BodyPart.RightUpperArm]);
+            _bodies[(int)BodyPart.RightUpperArm] = CreateBody(1, transform, _shapes[(int)BodyPart.RightUpperArm]);
 
             transform = Matrix.RotationZ(-PI_2) * offset * Matrix.Translation(0.7f, 1.45f, 0);
-            bodies[(int)BodyPart.RightLowerArm] = LocalCreateRigidBody(1, transform, shapes[(int)BodyPart.RightLowerArm]);
+            _bodies[(int)BodyPart.RightLowerArm] = CreateBody(1, transform, _shapes[(int)BodyPart.RightLowerArm]);
 
-            // Setup some damping on the m_bodies
-            foreach (RigidBody body in bodies)
+            // Some damping on the bodies
+            foreach (RigidBody body in _bodies)
             {
                 body.SetDamping(0.05f, 0.85f);
                 body.DeactivationTime = 0.8f;
                 body.SetSleepingThresholds(1.6f, 2.5f);
             }
+        }
 
-            // Now setup the constraints
-            HingeConstraint hingeC;
-            ConeTwistConstraint coneC;
+        private void SetupConstraints()
+        {
+            HingeConstraint hinge;
+            ConeTwistConstraint cone;
 
             Matrix localA, localB;
 
             localA = Matrix.RotationYawPitchRoll(PI_2, 0, 0) * Matrix.Translation(0, 0.15f, 0);
             localB = Matrix.RotationYawPitchRoll(PI_2, 0, 0) * Matrix.Translation(0, -0.15f, 0);
-            hingeC = new HingeConstraint(bodies[(int)BodyPart.Pelvis], bodies[(int)BodyPart.Spine], localA, localB);
-            hingeC.SetLimit(-PI_4, PI_2);
-            joints[(int)Joint.PelvisSpine] = hingeC;
-            hingeC.DebugDrawSize = ConstraintDebugSize;
+            hinge = new HingeConstraint(_bodies[(int)BodyPart.Pelvis], _bodies[(int)BodyPart.Spine], localA, localB);
+            hinge.SetLimit(-PI_4, PI_2);
+            _joints[(int)Joint.PelvisSpine] = hinge;
+            hinge.DebugDrawSize = ConstraintDebugSize;
 
-            ownerWorld.AddConstraint(joints[(int)Joint.PelvisSpine], true);
+            _world.AddConstraint(_joints[(int)Joint.PelvisSpine], true);
 
 
             localA = Matrix.RotationYawPitchRoll(0, 0, PI_2) * Matrix.Translation(0, 0.30f, 0);
             localB = Matrix.RotationYawPitchRoll(0, 0, PI_2) * Matrix.Translation(0, -0.14f, 0);
-            coneC = new ConeTwistConstraint(bodies[(int)BodyPart.Spine], bodies[(int)BodyPart.Head], localA, localB);
-            coneC.SetLimit(PI_4, PI_4, PI_2);
-            joints[(int)Joint.SpineHead] = coneC;
-            coneC.DebugDrawSize = ConstraintDebugSize;
+            cone = new ConeTwistConstraint(_bodies[(int)BodyPart.Spine], _bodies[(int)BodyPart.Head], localA, localB);
+            cone.SetLimit(PI_4, PI_4, PI_2);
+            _joints[(int)Joint.SpineHead] = cone;
+            cone.DebugDrawSize = ConstraintDebugSize;
 
-            ownerWorld.AddConstraint(joints[(int)Joint.SpineHead], true);
+            _world.AddConstraint(_joints[(int)Joint.SpineHead], true);
 
 
             localA = Matrix.RotationYawPitchRoll(0, 0, -PI_4 * 5) * Matrix.Translation(-0.18f, -0.18f, 0);
             localB = Matrix.RotationYawPitchRoll(0, 0, -PI_4 * 5) * Matrix.Translation(0, 0.225f, 0);
-            coneC = new ConeTwistConstraint(bodies[(int)BodyPart.Pelvis], bodies[(int)BodyPart.LeftUpperLeg], localA, localB);
-            coneC.SetLimit(PI_4, PI_4, 0);
-            joints[(int)Joint.LeftHip] = coneC;
-            coneC.DebugDrawSize = ConstraintDebugSize;
+            cone = new ConeTwistConstraint(_bodies[(int)BodyPart.Pelvis], _bodies[(int)BodyPart.LeftUpperLeg], localA, localB);
+            cone.SetLimit(PI_4, PI_4, 0);
+            _joints[(int)Joint.LeftHip] = cone;
+            cone.DebugDrawSize = ConstraintDebugSize;
 
-            ownerWorld.AddConstraint(joints[(int)Joint.LeftHip], true);
+            _world.AddConstraint(_joints[(int)Joint.LeftHip], true);
 
 
             localA = Matrix.RotationYawPitchRoll(PI_2, 0, 0) * Matrix.Translation(0, -0.225f, 0);
             localB = Matrix.RotationYawPitchRoll(PI_2, 0, 0) * Matrix.Translation(0, 0.185f, 0);
-            hingeC = new HingeConstraint(bodies[(int)BodyPart.LeftUpperLeg], bodies[(int)BodyPart.LeftLowerLeg], localA, localB);
-            hingeC.SetLimit(0, PI_2);
-            joints[(int)Joint.LeftKnee] = hingeC;
-            hingeC.DebugDrawSize = ConstraintDebugSize;
+            hinge = new HingeConstraint(_bodies[(int)BodyPart.LeftUpperLeg], _bodies[(int)BodyPart.LeftLowerLeg], localA, localB);
+            hinge.SetLimit(0, PI_2);
+            _joints[(int)Joint.LeftKnee] = hinge;
+            hinge.DebugDrawSize = ConstraintDebugSize;
 
-            ownerWorld.AddConstraint(joints[(int)Joint.LeftKnee], true);
+            _world.AddConstraint(_joints[(int)Joint.LeftKnee], true);
 
 
             localA = Matrix.RotationYawPitchRoll(0, 0, PI_4) * Matrix.Translation(0.18f, -0.10f, 0);
             localB = Matrix.RotationYawPitchRoll(0, 0, PI_4) * Matrix.Translation(0, 0.225f, 0);
-            coneC = new ConeTwistConstraint(bodies[(int)BodyPart.Pelvis], bodies[(int)BodyPart.RightUpperLeg], localA, localB);
-            coneC.SetLimit(PI_4, PI_4, 0);
-            joints[(int)Joint.RightHip] = coneC;
-            coneC.DebugDrawSize = ConstraintDebugSize;
+            cone = new ConeTwistConstraint(_bodies[(int)BodyPart.Pelvis], _bodies[(int)BodyPart.RightUpperLeg], localA, localB);
+            cone.SetLimit(PI_4, PI_4, 0);
+            _joints[(int)Joint.RightHip] = cone;
+            cone.DebugDrawSize = ConstraintDebugSize;
 
-            ownerWorld.AddConstraint(joints[(int)Joint.RightHip], true);
+            _world.AddConstraint(_joints[(int)Joint.RightHip], true);
 
 
             localA = Matrix.RotationYawPitchRoll(PI_2, 0, 0) * Matrix.Translation(0, -0.225f, 0);
             localB = Matrix.RotationYawPitchRoll(PI_2, 0, 0) * Matrix.Translation(0, 0.185f, 0);
-            hingeC = new HingeConstraint(bodies[(int)BodyPart.RightUpperLeg], bodies[(int)BodyPart.RightLowerLeg], localA, localB);
-            hingeC.SetLimit(0, PI_2);
-            joints[(int)Joint.RightKnee] = hingeC;
-            hingeC.DebugDrawSize = ConstraintDebugSize;
+            hinge = new HingeConstraint(_bodies[(int)BodyPart.RightUpperLeg], _bodies[(int)BodyPart.RightLowerLeg], localA, localB);
+            hinge.SetLimit(0, PI_2);
+            _joints[(int)Joint.RightKnee] = hinge;
+            hinge.DebugDrawSize = ConstraintDebugSize;
 
-            ownerWorld.AddConstraint(joints[(int)Joint.RightKnee], true);
+            _world.AddConstraint(_joints[(int)Joint.RightKnee], true);
 
 
             localA = Matrix.RotationYawPitchRoll(0, 0, (float)Math.PI) * Matrix.Translation(-0.2f, 0.15f, 0);
             localB = Matrix.RotationYawPitchRoll(0, 0, PI_2) * Matrix.Translation(0, -0.18f, 0);
-            coneC = new ConeTwistConstraint(bodies[(int)BodyPart.Spine], bodies[(int)BodyPart.LeftUpperArm], localA, localB);
-            coneC.SetLimit(PI_2, PI_2, 0);
-            joints[(int)Joint.LeftShoulder] = coneC;
-            coneC.DebugDrawSize = ConstraintDebugSize;
+            cone = new ConeTwistConstraint(_bodies[(int)BodyPart.Spine], _bodies[(int)BodyPart.LeftUpperArm], localA, localB);
+            cone.SetLimit(PI_2, PI_2, 0);
+            _joints[(int)Joint.LeftShoulder] = cone;
+            cone.DebugDrawSize = ConstraintDebugSize;
 
-            ownerWorld.AddConstraint(joints[(int)Joint.LeftShoulder], true);
+            _world.AddConstraint(_joints[(int)Joint.LeftShoulder], true);
 
 
             localA = Matrix.RotationYawPitchRoll(PI_2, 0, 0) * Matrix.Translation(0, 0.18f, 0);
             localB = Matrix.RotationYawPitchRoll(PI_2, 0, 0) * Matrix.Translation(0, -0.14f, 0);
-            hingeC = new HingeConstraint(bodies[(int)BodyPart.LeftUpperArm], bodies[(int)BodyPart.LeftLowerArm], localA, localB);
-            hingeC.SetLimit(0, PI_2);
-            joints[(int)Joint.LeftElbow] = hingeC;
-            hingeC.DebugDrawSize = ConstraintDebugSize;
+            hinge = new HingeConstraint(_bodies[(int)BodyPart.LeftUpperArm], _bodies[(int)BodyPart.LeftLowerArm], localA, localB);
+            hinge.SetLimit(0, PI_2);
+            _joints[(int)Joint.LeftElbow] = hinge;
+            hinge.DebugDrawSize = ConstraintDebugSize;
 
-            ownerWorld.AddConstraint(joints[(int)Joint.LeftElbow], true);
+            _world.AddConstraint(_joints[(int)Joint.LeftElbow], true);
 
 
             localA = Matrix.RotationYawPitchRoll(0, 0, 0) * Matrix.Translation(0.2f, 0.15f, 0);
             localB = Matrix.RotationYawPitchRoll(0, 0, PI_2) * Matrix.Translation(0, -0.18f, 0);
-            coneC = new ConeTwistConstraint(bodies[(int)BodyPart.Spine], bodies[(int)BodyPart.RightUpperArm], localA, localB);
-            coneC.SetLimit(PI_2, PI_2, 0);
-            joints[(int)Joint.RightShoulder] = coneC;
-            coneC.DebugDrawSize = ConstraintDebugSize;
+            cone = new ConeTwistConstraint(_bodies[(int)BodyPart.Spine], _bodies[(int)BodyPart.RightUpperArm], localA, localB);
+            cone.SetLimit(PI_2, PI_2, 0);
+            _joints[(int)Joint.RightShoulder] = cone;
+            cone.DebugDrawSize = ConstraintDebugSize;
 
-            ownerWorld.AddConstraint(joints[(int)Joint.RightShoulder], true);
+            _world.AddConstraint(_joints[(int)Joint.RightShoulder], true);
 
 
             localA = Matrix.RotationYawPitchRoll(PI_2, 0, 0) * Matrix.Translation(0, 0.18f, 0);
             localB = Matrix.RotationYawPitchRoll(PI_2, 0, 0) * Matrix.Translation(0, -0.14f, 0);
-            hingeC = new HingeConstraint(bodies[(int)BodyPart.RightUpperArm], bodies[(int)BodyPart.RightLowerArm], localA, localB);
-            //hingeC.SetLimit(-PI_2, 0);
-            hingeC.SetLimit(0, PI_2);
-            joints[(int)Joint.RightElbow] = hingeC;
-            hingeC.DebugDrawSize = ConstraintDebugSize;
+            hinge = new HingeConstraint(_bodies[(int)BodyPart.RightUpperArm], _bodies[(int)BodyPart.RightLowerArm], localA, localB);
+            //hinge.SetLimit(-PI_2, 0);
+            hinge.SetLimit(0, PI_2);
+            _joints[(int)Joint.RightElbow] = hinge;
+            hinge.DebugDrawSize = ConstraintDebugSize;
 
-            ownerWorld.AddConstraint(joints[(int)Joint.RightElbow], true);
+            _world.AddConstraint(_joints[(int)Joint.RightElbow], true);
         }
 
-        RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape)
+        private RigidBody CreateBody(float mass, Matrix startTransform, CollisionShape shape)
         {
-            bool isDynamic = (mass != 0.0f);
-
-            Vector3 localInertia = Vector3.Zero;
-            if (isDynamic)
-                shape.CalculateLocalInertia(mass, out localInertia);
-
-            DefaultMotionState myMotionState = new DefaultMotionState(startTransform);
-
-            RigidBodyConstructionInfo rbInfo = new RigidBodyConstructionInfo(mass, myMotionState, shape, localInertia);
-            RigidBody body = new RigidBody(rbInfo);
-            rbInfo.Dispose();
-
-            ownerWorld.AddRigidBody(body);
-
-            return body;
+            return PhysicsHelper.CreateBody(mass, startTransform, shape, _world);
         }
     }
 }

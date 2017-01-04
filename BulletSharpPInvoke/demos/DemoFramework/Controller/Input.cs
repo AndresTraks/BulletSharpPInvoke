@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace DemoFramework
 {
-    public class Input
+    public sealed class Input
     {
         List<Keys> _keysPressed;
         List<Keys> _keysReleased;
