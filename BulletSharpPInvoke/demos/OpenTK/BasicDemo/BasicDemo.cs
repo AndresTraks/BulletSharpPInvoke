@@ -1,4 +1,3 @@
-using SiliconStudio.Core.Mathematics;
 ﻿using System.Drawing;
 using BulletSharp;
 using OpenTK;

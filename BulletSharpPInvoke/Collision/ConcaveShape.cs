@@ -7,12 +7,12 @@ namespace BulletSharp
 {
 	public enum PhyScalarType
 	{
-		Float,
+		Single,
 		Double,
-		Integer,
-		Short,
+		Int32,
+		Int16,
 		FixedPoint88,
-		UChar
+		Byte
 	}
 
 	public abstract class ConcaveShape : CollisionShape

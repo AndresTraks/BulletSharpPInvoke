@@ -259,7 +259,7 @@ namespace VehicleDemo
             const float heightScale = maxHeight / 256.0f;
             const int width = 128, length = 128;
             const int dataLength = width * length * sizeof(byte);
-            const PhyScalarType scalarType = PhyScalarType.UChar;
+            const PhyScalarType scalarType = PhyScalarType.Byte;
 
             var scale = new Vector3(5.0f, maxHeight, 5.0f);
 
@@ -300,7 +300,7 @@ namespace VehicleDemo
             const float heightScale = maxHeight / 256.0f;
             const int width = 64, length = 64;
             const int dataLength = width * length * sizeof(float);
-            const PhyScalarType scalarType = PhyScalarType.Float;
+            const PhyScalarType scalarType = PhyScalarType.Single;
 
             var scale = new Vector3(15.0f, maxHeight, 15.0f);
 

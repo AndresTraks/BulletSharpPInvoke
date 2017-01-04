@@ -38,17 +38,17 @@ namespace BulletSharp
             switch (triangleIndexStride)
             {
                 case sizeof(byte) * 3:
-                    IndexType = PhyScalarType.UChar;
+                    IndexType = PhyScalarType.Byte;
                     break;
                 case sizeof(short) * 3:
-                    IndexType = PhyScalarType.Short;
+                    IndexType = PhyScalarType.Int16;
                     break;
                 case sizeof(int) * 3:
                 default:
-                    IndexType = PhyScalarType.Integer;
+                    IndexType = PhyScalarType.Int32;
                     break;
             }
-            VertexType = PhyScalarType.Float;
+            VertexType = PhyScalarType.Single;
 
             NumTriangles = numTriangles;
             TriangleIndexBase = Marshal.AllocHGlobal(numTriangles * triangleIndexStride);
@@ -261,7 +261,7 @@ namespace BulletSharp
 		{
 		}
 
-		public void AddIndexedMesh(IndexedMesh mesh, PhyScalarType indexType = PhyScalarType.Integer)
+		public void AddIndexedMesh(IndexedMesh mesh, PhyScalarType indexType = PhyScalarType.Int32)
 		{
             _meshes.Add(mesh);
 			btTriangleIndexVertexArray_addIndexedMesh(_native, mesh._native, indexType);

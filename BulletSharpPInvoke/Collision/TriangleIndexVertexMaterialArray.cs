@@ -142,7 +142,7 @@ namespace BulletSharp
 		{
 		}
 
-		public void AddMaterialProperties(MaterialProperties mat, PhyScalarType triangleType = PhyScalarType.Integer)
+		public void AddMaterialProperties(MaterialProperties mat, PhyScalarType triangleType = PhyScalarType.Int32)
 		{
 			btTriangleIndexVertexMaterialArray_addMaterialProperties(_native, mat._native,
 				triangleType);
