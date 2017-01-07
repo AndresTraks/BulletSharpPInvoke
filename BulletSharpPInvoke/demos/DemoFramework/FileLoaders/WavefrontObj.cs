@@ -12,6 +12,7 @@ namespace DemoFramework.FileLoaders
         private readonly char[] _lineSplitChars = { ' ' };
 
         private List<Vector3> _vertices = new List<Vector3>();
+        private Dictionary<Vector3, int> _vertexMap = new Dictionary<Vector3, int>();
 
         private WavefrontObj(string filename)
         {
@@ -58,6 +59,11 @@ namespace DemoFramework.FileLoaders
                     break;
                 case "f":
                     int numVertices = parts.Length - 1;
+                    if (numVertices < 3 || numVertices > 4)
+                    {
+                        break;
+                    }
+
                     int[] face = new int[numVertices];
 
                     face[0] = GetVertex(parts[1].Split(_faceSplitSchars, StringSplitOptions.RemoveEmptyEntries));
@@ -98,18 +104,16 @@ namespace DemoFramework.FileLoaders
             }
             Vector3 position = _vertices[vertexIndex - 1];
 
-            // Search for a duplicate
-            for (int i = 0; i < Vertices.Count; i++)
+            int existingIndex;
+            if (_vertexMap.TryGetValue(position, out existingIndex))
             {
-                if (Vertices[i].Equals(position))
-                {
-                    Indices.Add(i);
-                    return i;
-                }
+                Indices.Add(existingIndex);
+                return existingIndex;
             }
 
             int newIndex = Vertices.Count;
             Vertices.Add(position);
+            _vertexMap.Add(position, newIndex);
             Indices.Add(newIndex);
             return newIndex;
         }

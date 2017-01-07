@@ -60,6 +60,8 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileLoaders\UrdfLoader.cs" />
+    <Compile Include="FileLoaders\UrdfToBullet.cs" />
     <Compile Include="IUpdateReceiver.cs" />
     <Compile Include="Simulation\BoxShooter.cs" />
     <Compile Include="Clock.cs" />

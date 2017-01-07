@@ -165,6 +165,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PendulumDemo", "PendulumDem
 		{67DF42D4-C318-4E52-9017-43A2EFD7790B} = {67DF42D4-C318-4E52-9017-43A2EFD7790B}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrdfDemo", "UrdfDemo\UrdfDemo.csproj", "{70DB3AEB-5DAC-4B77-9860-6280AF8800B8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{540E0C60-3FBD-4166-933D-D80284D1CA0E} = {540E0C60-3FBD-4166-933D-D80284D1CA0E}
+		{3CD13788-CD50-451F-8267-AF7578403621} = {3CD13788-CD50-451F-8267-AF7578403621}
+		{67DF42D4-C318-4E52-9017-43A2EFD7790B} = {67DF42D4-C318-4E52-9017-43A2EFD7790B}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -273,6 +280,10 @@ Global
 		{56363BE1-F548-45A7-9DC1-7DCF7B5A97CF}.Debug|x86.Build.0 = Debug|x86
 		{56363BE1-F548-45A7-9DC1-7DCF7B5A97CF}.Release|x86.ActiveCfg = Release|x86
 		{56363BE1-F548-45A7-9DC1-7DCF7B5A97CF}.Release|x86.Build.0 = Release|x86
+		{70DB3AEB-5DAC-4B77-9860-6280AF8800B8}.Debug|x86.ActiveCfg = Debug|x86
+		{70DB3AEB-5DAC-4B77-9860-6280AF8800B8}.Debug|x86.Build.0 = Debug|x86
+		{70DB3AEB-5DAC-4B77-9860-6280AF8800B8}.Release|x86.ActiveCfg = Release|x86
+		{70DB3AEB-5DAC-4B77-9860-6280AF8800B8}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
