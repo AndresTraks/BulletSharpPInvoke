@@ -472,7 +472,7 @@ namespace BulletSharp.SoftBody
 
             foreach (Link link in linkBuffer.Values)
             {
-                btSoftBody_Element_delete(link._native);
+                btSoftBody_Link_delete(link._native);
             }
 		}
 
@@ -496,6 +496,6 @@ namespace BulletSharp.SoftBody
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         static extern IntPtr btSoftBody_Link_new2(IntPtr obj);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btSoftBody_Element_delete(IntPtr obj);
+        static extern void btSoftBody_Link_delete(IntPtr obj);
 	}
 }

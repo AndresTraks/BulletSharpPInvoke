@@ -318,6 +318,7 @@ extern "C" {
 	EXPORT void btSoftBody_Link_setC2(btSoftBody_Link* obj, btScalar value);
 	EXPORT void btSoftBody_Link_setC3(btSoftBody_Link* obj, const btVector3* value);
 	EXPORT void btSoftBody_Link_setRl(btSoftBody_Link* obj, btScalar value);
+	EXPORT void btSoftBody_Link_delete(btSoftBody_Link* obj);
 
 	EXPORT btSoftBody_LJoint_Specs* btSoftBody_LJoint_Specs_new();
 	EXPORT void btSoftBody_LJoint_Specs_getPosition(btSoftBody_LJoint_Specs* obj, btVector3* value);

@@ -1286,14 +1286,14 @@ void btSoftBody_Joint_delete(btSoftBody_Joint* obj)
 }
 
 
-btSoftBody::Link* btSoftBody_Link_new()
+btSoftBody_Link* btSoftBody_Link_new()
 {
-	return new btSoftBody::Link();
+	return ALIGNED_NEW(btSoftBody::Link)();
 }
 
-btSoftBody::Link* btSoftBody_Link_new2(btSoftBody::Link* obj)
+btSoftBody_Link* btSoftBody_Link_new2(btSoftBody_Link* obj)
 {
-	return new btSoftBody::Link(*obj);
+	return ALIGNED_NEW(btSoftBody::Link)(*obj);
 }
 
 int btSoftBody_Link_getBbending(btSoftBody_Link* obj)
@@ -1359,6 +1359,11 @@ void btSoftBody_Link_setC3(btSoftBody_Link* obj, const btVector3* value)
 void btSoftBody_Link_setRl(btSoftBody_Link* obj, btScalar value)
 {
 	obj->m_rl = value;
+}
+
+void btSoftBody_Link_delete(btSoftBody_Link* obj)
+{
+	ALIGNED_FREE(obj);
 }
 
 
