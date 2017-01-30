@@ -14,13 +14,13 @@ btAxisSweep3* btAxisSweep3_new(const btVector3* worldAabbMin, const btVector3* w
 }
 
 unsigned short btAxisSweep3_addHandle(btAxisSweep3* obj, const btVector3* aabbMin,
-	const btVector3* aabbMax, void* pOwner, short collisionFilterGroup, short collisionFilterMask,
-	btDispatcher* dispatcher, void* multiSapProxy)
+	const btVector3* aabbMax, void* pOwner, int collisionFilterGroup, int collisionFilterMask,
+	btDispatcher* dispatcher)
 {
 	BTVECTOR3_IN(aabbMin);
 	BTVECTOR3_IN(aabbMax);
 	return obj->addHandle(BTVECTOR3_USE(aabbMin), BTVECTOR3_USE(aabbMax), pOwner,
-		collisionFilterGroup, collisionFilterMask, dispatcher, multiSapProxy);
+		collisionFilterGroup, collisionFilterMask, dispatcher);
 }
 
 btAxisSweep3Internal_unsigned_short_Handle* btAxisSweep3_getHandle(btAxisSweep3* obj,
@@ -95,13 +95,13 @@ bt32BitAxisSweep3* bt32BitAxisSweep3_new(const btVector3* worldAabbMin, const bt
 }
 
 unsigned int bt32BitAxisSweep3_addHandle(bt32BitAxisSweep3* obj, const btVector3* aabbMin,
-	const btVector3* aabbMax, void* pOwner, short collisionFilterGroup, short collisionFilterMask,
-	btDispatcher* dispatcher, void* multiSapProxy)
+	const btVector3* aabbMax, void* pOwner, int collisionFilterGroup, int collisionFilterMask,
+	btDispatcher* dispatcher)
 {
 	BTVECTOR3_IN(aabbMin);
 	BTVECTOR3_IN(aabbMax);
 	return obj->addHandle(BTVECTOR3_USE(aabbMin), BTVECTOR3_USE(aabbMax), pOwner,
-		collisionFilterGroup, collisionFilterMask, dispatcher, multiSapProxy);
+		collisionFilterGroup, collisionFilterMask, dispatcher);
 }
 
 btAxisSweep3Internal_unsigned_int_Handle* bt32BitAxisSweep3_getHandle(bt32BitAxisSweep3* obj,

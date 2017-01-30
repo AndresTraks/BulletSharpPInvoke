@@ -462,7 +462,7 @@ namespace DemoFramework.SharpDX11
 
             _width = 1024;
             _height = 768;
-            _nearPlane = 1.0f;
+            _nearPlane = 0.1f;
 
             try
             {

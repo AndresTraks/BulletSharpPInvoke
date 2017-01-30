@@ -48,7 +48,7 @@ extern "C" {
 
 	EXPORT void btBroadphaseInterface_aabbTest(btBroadphaseInterface* obj, const btVector3* aabbMin, const btVector3* aabbMax, btBroadphaseAabbCallback* callback);
 	EXPORT void btBroadphaseInterface_calculateOverlappingPairs(btBroadphaseInterface* obj, btDispatcher* dispatcher);
-	EXPORT btBroadphaseProxy* btBroadphaseInterface_createProxy(btBroadphaseInterface* obj, const btVector3* aabbMin, const btVector3* aabbMax, int shapeType, void* userPtr, short collisionFilterGroup, short collisionFilterMask, btDispatcher* dispatcher, void* multiSapProxy);
+	EXPORT btBroadphaseProxy* btBroadphaseInterface_createProxy(btBroadphaseInterface* obj, const btVector3* aabbMin, const btVector3* aabbMax, int shapeType, void* userPtr, int collisionFilterGroup, int collisionFilterMask, btDispatcher* dispatcher);
 	EXPORT void btBroadphaseInterface_destroyProxy(btBroadphaseInterface* obj, btBroadphaseProxy* proxy, btDispatcher* dispatcher);
 	EXPORT void btBroadphaseInterface_getAabb(btBroadphaseInterface* obj, btBroadphaseProxy* proxy, btVector3* aabbMin, btVector3* aabbMax);
 	EXPORT void btBroadphaseInterface_getBroadphaseAabb(btBroadphaseInterface* obj, btVector3* aabbMin, btVector3* aabbMax);

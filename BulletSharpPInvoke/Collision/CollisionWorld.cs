@@ -166,13 +166,13 @@ namespace BulletSharp
 			set { btCollisionWorld_ContactResultCallback_setClosestDistanceThreshold(_native, value); }
 		}
 
-		public short CollisionFilterGroup
+		public int CollisionFilterGroup
 		{
 			get { return btCollisionWorld_ContactResultCallback_getCollisionFilterGroup(_native); }
 			set { btCollisionWorld_ContactResultCallback_setCollisionFilterGroup(_native, value); }
 		}
 
-		public short CollisionFilterMask
+		public int CollisionFilterMask
 		{
 			get { return btCollisionWorld_ContactResultCallback_getCollisionFilterMask(_native); }
 			set { btCollisionWorld_ContactResultCallback_setCollisionFilterMask(_native, value); }
@@ -201,15 +201,15 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btCollisionWorld_ContactResultCallback_getClosestDistanceThreshold(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern short btCollisionWorld_ContactResultCallback_getCollisionFilterGroup(IntPtr obj);
+		static extern int btCollisionWorld_ContactResultCallback_getCollisionFilterGroup(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern short btCollisionWorld_ContactResultCallback_getCollisionFilterMask(IntPtr obj);
+		static extern int btCollisionWorld_ContactResultCallback_getCollisionFilterMask(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionWorld_ContactResultCallback_setClosestDistanceThreshold(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCollisionWorld_ContactResultCallback_setCollisionFilterGroup(IntPtr obj, short value);
+		static extern void btCollisionWorld_ContactResultCallback_setCollisionFilterGroup(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCollisionWorld_ContactResultCallback_setCollisionFilterMask(IntPtr obj, short value);
+		static extern void btCollisionWorld_ContactResultCallback_setCollisionFilterMask(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionWorld_ContactResultCallback_delete(IntPtr obj);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -265,13 +265,13 @@ namespace BulletSharp
 			set { btCollisionWorld_ConvexResultCallback_setClosestHitFraction(_native, value); }
 		}
 
-		public short CollisionFilterGroup
+		public int CollisionFilterGroup
 		{
 			get { return btCollisionWorld_ConvexResultCallback_getCollisionFilterGroup(_native); }
 			set { btCollisionWorld_ConvexResultCallback_setCollisionFilterGroup(_native, value); }
 		}
 
-		public short CollisionFilterMask
+		public int CollisionFilterMask
 		{
 			get { return btCollisionWorld_ConvexResultCallback_getCollisionFilterMask(_native); }
 			set { btCollisionWorld_ConvexResultCallback_setCollisionFilterMask(_native, value); }
@@ -305,18 +305,18 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btCollisionWorld_ConvexResultCallback_getClosestHitFraction(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern short btCollisionWorld_ConvexResultCallback_getCollisionFilterGroup(IntPtr obj);
+		static extern int btCollisionWorld_ConvexResultCallback_getCollisionFilterGroup(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern short btCollisionWorld_ConvexResultCallback_getCollisionFilterMask(IntPtr obj);
+		static extern int btCollisionWorld_ConvexResultCallback_getCollisionFilterMask(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btCollisionWorld_ConvexResultCallback_hasHit(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionWorld_ConvexResultCallback_setClosestHitFraction(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCollisionWorld_ConvexResultCallback_setCollisionFilterGroup(IntPtr obj, short value);
+		static extern void btCollisionWorld_ConvexResultCallback_setCollisionFilterGroup(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCollisionWorld_ConvexResultCallback_setCollisionFilterMask(IntPtr obj, short value);
+		static extern void btCollisionWorld_ConvexResultCallback_setCollisionFilterMask(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionWorld_ConvexResultCallback_delete(IntPtr obj);
 
@@ -666,13 +666,13 @@ namespace BulletSharp
 			set { btCollisionWorld_RayResultCallback_setClosestHitFraction(_native, value); }
 		}
 
-		public short CollisionFilterGroup
+		public int CollisionFilterGroup
 		{
 			get { return btCollisionWorld_RayResultCallback_getCollisionFilterGroup(_native); }
 			set { btCollisionWorld_RayResultCallback_setCollisionFilterGroup(_native, value); }
 		}
 
-		public short CollisionFilterMask
+		public int CollisionFilterMask
 		{
 			get { return btCollisionWorld_RayResultCallback_getCollisionFilterMask(_native); }
 			set { btCollisionWorld_RayResultCallback_setCollisionFilterMask(_native, value); }
@@ -718,9 +718,9 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btCollisionWorld_RayResultCallback_getClosestHitFraction(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern short btCollisionWorld_RayResultCallback_getCollisionFilterGroup(IntPtr obj);
+		static extern int btCollisionWorld_RayResultCallback_getCollisionFilterGroup(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern short btCollisionWorld_RayResultCallback_getCollisionFilterMask(IntPtr obj);
+		static extern int btCollisionWorld_RayResultCallback_getCollisionFilterMask(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btCollisionWorld_RayResultCallback_getCollisionObject(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -731,9 +731,9 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionWorld_RayResultCallback_setClosestHitFraction(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCollisionWorld_RayResultCallback_setCollisionFilterGroup(IntPtr obj, short value);
+		static extern void btCollisionWorld_RayResultCallback_setCollisionFilterGroup(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btCollisionWorld_RayResultCallback_setCollisionFilterMask(IntPtr obj, short value);
+		static extern void btCollisionWorld_RayResultCallback_setCollisionFilterMask(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btCollisionWorld_RayResultCallback_setCollisionObject(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -786,11 +786,11 @@ namespace BulletSharp
         public void AddCollisionObject(CollisionObject collisionObject, CollisionFilterGroups collisionFilterGroup,
             CollisionFilterGroups collisionFilterMask)
         {
-            _collisionObjectArray.Add(collisionObject, (short)collisionFilterGroup, (short)collisionFilterMask);
+            _collisionObjectArray.Add(collisionObject, (int)collisionFilterGroup, (int)collisionFilterMask);
         }
 
-		public void AddCollisionObject(CollisionObject collisionObject, short collisionFilterGroup,
-			short collisionFilterMask)
+		public void AddCollisionObject(CollisionObject collisionObject, int collisionFilterGroup,
+			int collisionFilterMask)
 		{
             _collisionObjectArray.Add(collisionObject, collisionFilterGroup, collisionFilterMask);
 		}

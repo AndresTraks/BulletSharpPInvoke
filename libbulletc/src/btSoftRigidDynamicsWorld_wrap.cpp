@@ -19,13 +19,13 @@ void btSoftRigidDynamicsWorld_addSoftBody(btSoftRigidDynamicsWorld* obj, btSoftB
 }
 
 void btSoftRigidDynamicsWorld_addSoftBody2(btSoftRigidDynamicsWorld* obj, btSoftBody* body,
-	short collisionFilterGroup)
+	int collisionFilterGroup)
 {
 	obj->addSoftBody(body, collisionFilterGroup);
 }
 
 void btSoftRigidDynamicsWorld_addSoftBody3(btSoftRigidDynamicsWorld* obj, btSoftBody* body,
-	short collisionFilterGroup, short collisionFilterMask)
+	int collisionFilterGroup, int collisionFilterMask)
 {
 	obj->addSoftBody(body, collisionFilterGroup, collisionFilterMask);
 }

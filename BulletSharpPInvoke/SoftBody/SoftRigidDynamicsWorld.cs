@@ -45,10 +45,10 @@ namespace BulletSharp.SoftBody
         public void AddSoftBody(SoftBody body, CollisionFilterGroups collisionFilterGroup, CollisionFilterGroups collisionFilterMask)
 		{
             body.SoftBodySolver = _softBodySolver;
-            _collisionObjectArray.Add(body, (short)collisionFilterGroup, (short)collisionFilterMask);
+            _collisionObjectArray.Add(body, (int)collisionFilterGroup, (int)collisionFilterMask);
 		}
 
-        public void AddSoftBody(SoftBody body, short collisionFilterGroup, short collisionFilterMask)
+        public void AddSoftBody(SoftBody body, int collisionFilterGroup, int collisionFilterMask)
         {
             body.SoftBodySolver = _softBodySolver;
             _collisionObjectArray.Add(body, collisionFilterGroup, collisionFilterMask);

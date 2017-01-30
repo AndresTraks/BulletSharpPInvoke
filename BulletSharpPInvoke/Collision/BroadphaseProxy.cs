@@ -174,22 +174,16 @@ namespace BulletSharp
             }
 		}
 
-		public short CollisionFilterGroup
+		public int CollisionFilterGroup
 		{
 			get { return btBroadphaseProxy_getCollisionFilterGroup(_native); }
 			set { btBroadphaseProxy_setCollisionFilterGroup(_native, value); }
 		}
 
-		public short CollisionFilterMask
+		public int CollisionFilterMask
 		{
 			get { return btBroadphaseProxy_getCollisionFilterMask(_native); }
 			set { btBroadphaseProxy_setCollisionFilterMask(_native, value); }
-		}
-
-		public IntPtr MultiSapParentProxy
-		{
-			get { return btBroadphaseProxy_getMultiSapParentProxy(_native); }
-			set { btBroadphaseProxy_setMultiSapParentProxy(_native, value); }
 		}
 
 		public int Uid
@@ -210,11 +204,9 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btBroadphaseProxy_getClientObject(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern short btBroadphaseProxy_getCollisionFilterGroup(IntPtr obj);
+		static extern int btBroadphaseProxy_getCollisionFilterGroup(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern short btBroadphaseProxy_getCollisionFilterMask(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btBroadphaseProxy_getMultiSapParentProxy(IntPtr obj);
+		static extern int btBroadphaseProxy_getCollisionFilterMask(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btBroadphaseProxy_getUid(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -250,11 +242,9 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btBroadphaseProxy_setClientObject(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btBroadphaseProxy_setCollisionFilterGroup(IntPtr obj, short value);
+		static extern void btBroadphaseProxy_setCollisionFilterGroup(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btBroadphaseProxy_setCollisionFilterMask(IntPtr obj, short value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btBroadphaseProxy_setMultiSapParentProxy(IntPtr obj, IntPtr value);
+		static extern void btBroadphaseProxy_setCollisionFilterMask(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btBroadphaseProxy_setUniqueId(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

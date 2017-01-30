@@ -15,7 +15,7 @@ btMultiBodyDynamicsWorld* btMultiBodyDynamicsWorld_new(btDispatcher* dispatcher,
 }
 
 void btMultiBodyDynamicsWorld_addMultiBody(btMultiBodyDynamicsWorld* obj, btMultiBody* body,
-	short group, short mask)
+	int group, int mask)
 {
 	obj->addMultiBody(body, group, mask);
 }

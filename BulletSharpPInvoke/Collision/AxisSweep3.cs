@@ -19,27 +19,27 @@ namespace BulletSharp
         }
 
 		public ushort AddHandle(Vector3 aabbMin, Vector3 aabbMax, IntPtr pOwner,
-			short collisionFilterGroup, short collisionFilterMask, Dispatcher dispatcher,
+			int collisionFilterGroup, int collisionFilterMask, Dispatcher dispatcher,
 			IntPtr multiSapProxy)
 		{
 			return btAxisSweep3_addHandle(_native, ref aabbMin, ref aabbMax, pOwner,
-				collisionFilterGroup, collisionFilterMask, dispatcher._native, multiSapProxy);
+				collisionFilterGroup, collisionFilterMask, dispatcher._native);
 		}
 
         public ushort AddHandleRef(ref Vector3 aabbMin, ref Vector3 aabbMax, IntPtr pOwner,
-            short collisionFilterGroup, short collisionFilterMask,
+            int collisionFilterGroup, int collisionFilterMask,
             Dispatcher dispatcher, IntPtr multiSapProxy)
         {
             return btAxisSweep3_addHandle(_native, ref aabbMin, ref aabbMax, pOwner,
-                collisionFilterGroup, collisionFilterMask, dispatcher._native, multiSapProxy);
+                collisionFilterGroup, collisionFilterMask, dispatcher._native);
         }
 
         public override BroadphaseProxy CreateProxy(ref Vector3 aabbMin,
-            ref Vector3 aabbMax, int shapeType, IntPtr userPtr, short collisionFilterGroup,
-            short collisionFilterMask, Dispatcher dispatcher, IntPtr multiSapProxy)
+            ref Vector3 aabbMax, int shapeType, IntPtr userPtr, int collisionFilterGroup,
+            int collisionFilterMask, Dispatcher dispatcher)
         {
             //throw new NotImplementedException();
-            return new BroadphaseProxy(btBroadphaseInterface_createProxy(_native, ref aabbMin, ref aabbMax, shapeType, userPtr, collisionFilterGroup, collisionFilterMask, dispatcher._native, multiSapProxy));
+            return new BroadphaseProxy(btBroadphaseInterface_createProxy(_native, ref aabbMin, ref aabbMax, shapeType, userPtr, collisionFilterGroup, collisionFilterMask, dispatcher._native));
         }
         /*
 		public Handle GetHandle(ushort index)
@@ -97,7 +97,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btAxisSweep3_new([In] ref Vector3 worldAabbMin, [In] ref Vector3 worldAabbMax, ushort maxHandles, IntPtr pairCache, bool disableRaycastAccelerator);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern ushort btAxisSweep3_addHandle(IntPtr obj, [In] ref Vector3 aabbMin, [In] ref Vector3 aabbMax, IntPtr pOwner, short collisionFilterGroup, short collisionFilterMask, IntPtr dispatcher, IntPtr multiSapProxy);
+		static extern ushort btAxisSweep3_addHandle(IntPtr obj, [In] ref Vector3 aabbMin, [In] ref Vector3 aabbMax, IntPtr pOwner, int collisionFilterGroup, int collisionFilterMask, IntPtr dispatcher);
         //[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         //static extern IntPtr btAxisSweep3_getHandle(IntPtr obj, ushort index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -134,27 +134,25 @@ namespace BulletSharp
                 btBroadphaseInterface_getOverlappingPairCache(_native), true);
 		}
 
-		public uint AddHandle(Vector3 aabbMin, Vector3 aabbMax, IntPtr pOwner, short collisionFilterGroup,
-			short collisionFilterMask, Dispatcher dispatcher, IntPtr multiSapProxy)
+		public uint AddHandle(Vector3 aabbMin, Vector3 aabbMax, IntPtr pOwner, int collisionFilterGroup,
+			int collisionFilterMask, Dispatcher dispatcher, IntPtr multiSapProxy)
 		{
 			return bt32BitAxisSweep3_addHandle(_native, ref aabbMin, ref aabbMax,
-				pOwner, collisionFilterGroup, collisionFilterMask, dispatcher._native,
-				multiSapProxy);
+				pOwner, collisionFilterGroup, collisionFilterMask, dispatcher._native);
 		}
 
         public uint AddHandleRef(ref Vector3 aabbMin, ref Vector3 aabbMax, IntPtr pOwner,
-            short collisionFilterGroup, short collisionFilterMask,
+            int collisionFilterGroup, int collisionFilterMask,
             Dispatcher dispatcher, IntPtr multiSapProxy)
         {
             return bt32BitAxisSweep3_addHandle(_native, ref aabbMin, ref aabbMax,
-                pOwner, collisionFilterGroup, collisionFilterMask, dispatcher._native,
-                multiSapProxy);
+                pOwner, collisionFilterGroup, collisionFilterMask, dispatcher._native);
         }
 
-        public override BroadphaseProxy CreateProxy(ref Vector3 aabbMin, ref Vector3 aabbMax, int shapeType, IntPtr userPtr, short collisionFilterGroup, short collisionFilterMask, Dispatcher dispatcher, IntPtr multiSapProxy)
+        public override BroadphaseProxy CreateProxy(ref Vector3 aabbMin, ref Vector3 aabbMax, int shapeType, IntPtr userPtr, int collisionFilterGroup, int collisionFilterMask, Dispatcher dispatcher)
         {
             //throw new NotImplementedException();
-            return new BroadphaseProxy(btBroadphaseInterface_createProxy(_native, ref aabbMin, ref aabbMax, shapeType, userPtr, collisionFilterGroup, collisionFilterMask, dispatcher._native, multiSapProxy));
+            return new BroadphaseProxy(btBroadphaseInterface_createProxy(_native, ref aabbMin, ref aabbMax, shapeType, userPtr, collisionFilterGroup, collisionFilterMask, dispatcher._native));
         }
         /*
 		public Handle GetHandle(uint index)
@@ -211,7 +209,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr bt32BitAxisSweep3_new([In] ref Vector3 worldAabbMin, [In] ref Vector3 worldAabbMax, uint maxHandles, IntPtr pairCache, bool disableRaycastAccelerator);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern uint bt32BitAxisSweep3_addHandle(IntPtr obj, [In] ref Vector3 aabbMin, [In] ref Vector3 aabbMax, IntPtr pOwner, short collisionFilterGroup, short collisionFilterMask, IntPtr dispatcher, IntPtr multiSapProxy);
+		static extern uint bt32BitAxisSweep3_addHandle(IntPtr obj, [In] ref Vector3 aabbMin, [In] ref Vector3 aabbMax, IntPtr pOwner, int collisionFilterGroup, int collisionFilterMask, IntPtr dispatcher);
         //[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
         //static extern IntPtr bt32BitAxisSweep3_getHandle(IntPtr obj, uint index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]

@@ -595,20 +595,20 @@ namespace DemoFramework
             return CreateSphere(shape.Radius, out indices);
         }
 
-        static Vector3[] CreateSphere(float radius, out uint[] indices)
+        private static Vector3[] CreateSphere(float radius, out uint[] indices)
         {
             int slices = (int)(radius * 10.0f);
             int stacks = (int)(radius * 10.0f);
-            slices = (slices > 16) ? 16 : (slices < 3) ? 3 : slices;
-            stacks = (stacks > 16) ? 16 : (stacks < 2) ? 2 : stacks;
+            slices = MinMax(slices, 6, 16);
+            stacks = MinMax(stacks, 6, 16);
 
-            float hAngleStep = (float)Math.PI * 2 / slices;
-            float vAngleStep = (float)Math.PI / stacks;
+            float horAngleStep = (float)Math.PI * 2 / slices;
+            float vertAngleStep = (float)Math.PI / stacks;
 
             int vertexCount = 2 + slices * (stacks - 1);
             int indexCount = 6 * slices * (stacks - 1);
 
-            Vector3[] vertices = new Vector3[vertexCount * 2];
+            var vertices = new Vector3[vertexCount * 2];
             indices = new uint[indexCount];
 
             int i = 0, v = 0;
@@ -622,29 +622,28 @@ namespace DemoFramework
             vertices[v++] = Vector3.UnitY;
 
             // Stacks
-            int j, k;
-            float angle = 0;
             float vAngle = -(float)Math.PI / 2;
-            Vector3 vTemp;
-            for (j = 0; j < stacks - 1; j++)
+            for (int j = 0; j < stacks - 1; j++)
             {
-                vAngle += vAngleStep;
+                vAngle += vertAngleStep;
 
-                for (k = 0; k < slices; k++)
+                for (int k = 0; k < slices; k++)
                 {
-                    angle += hAngleStep;
+                    float angle = k * horAngleStep;
 
-                    vTemp = new Vector3((float)Math.Cos(vAngle) * (float)Math.Sin(angle), (float)Math.Sin(vAngle), (float)Math.Cos(vAngle) * (float)Math.Cos(angle));
-                    vertices[v++] = vTemp * radius;
-                    vertices[v++] = Vector3.Normalize(vTemp);
+                    var vertex = new Vector3(
+                        (float)Math.Cos(vAngle) * (float)Math.Sin(angle),
+                        (float)Math.Sin(vAngle),
+                        (float)Math.Cos(vAngle) * (float)Math.Cos(angle));
+                    vertices[v++] = vertex * radius;
+                    vertices[v++] = Vector3.Normalize(vertex);
                 }
             }
-
 
             // Indices
             // Top cap
             ushort index = 2;
-            for (k = 0; k < slices; k++)
+            for (int k = 0; k < slices; k++)
             {
                 indices[i++] = index++;
                 indices[i++] = 0;
@@ -655,9 +654,9 @@ namespace DemoFramework
             // Stacks
             //for (j = 0; j < 1; j++)
             int sliceDiff = slices * 3;
-            for (j = 0; j < stacks - 2; j++)
+            for (int j = 0; j < stacks - 2; j++)
             {
-                for (k = 0; k < slices; k++)
+                for (int k = 0; k < slices; k++)
                 {
                     indices[i] = indices[i - sliceDiff + 2];
                     indices[i + 1] = index++;
@@ -665,7 +664,7 @@ namespace DemoFramework
                     i += 3;
                 }
 
-                for (k = 0; k < slices; k++)
+                for (int k = 0; k < slices; k++)
                 {
                     indices[i] = indices[i - sliceDiff + 1];
                     indices[i + 1] = indices[i - sliceDiff];
@@ -677,7 +676,7 @@ namespace DemoFramework
 
             // Bottom cap
             index--;
-            for (k = 0; k < slices; k++)
+            for (int k = 0; k < slices; k++)
             {
                 indices[i++] = index--;
                 indices[i++] = 1;
@@ -686,6 +685,11 @@ namespace DemoFramework
             indices[i - 1] = indices[i - sliceDiff];
 
             return vertices;
+        }
+
+        private static int MinMax(int value, int min, int max)
+        {
+            return Math.Min(Math.Max(value, min), max);
         }
 
         static void PlaneSpace1(Vector3 n, out Vector3 p, out Vector3 q)

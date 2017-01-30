@@ -94,13 +94,12 @@ void btBroadphaseInterface_calculateOverlappingPairs(btBroadphaseInterface* obj,
 
 btBroadphaseProxy* btBroadphaseInterface_createProxy(btBroadphaseInterface* obj,
 	const btVector3* aabbMin, const btVector3* aabbMax, int shapeType, void* userPtr,
-	short collisionFilterGroup, short collisionFilterMask, btDispatcher* dispatcher,
-	void* multiSapProxy)
+	int collisionFilterGroup, int collisionFilterMask, btDispatcher* dispatcher)
 {
 	BTVECTOR3_IN(aabbMin);
 	BTVECTOR3_IN(aabbMax);
 	return obj->createProxy(BTVECTOR3_USE(aabbMin), BTVECTOR3_USE(aabbMax), shapeType,
-		userPtr, collisionFilterGroup, collisionFilterMask, dispatcher, multiSapProxy);
+		userPtr, collisionFilterGroup, collisionFilterMask, dispatcher);
 }
 
 void btBroadphaseInterface_destroyProxy(btBroadphaseInterface* obj, btBroadphaseProxy* proxy,

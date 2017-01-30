@@ -23,8 +23,8 @@ void btDynamicsWorld_addRigidBody(btDynamicsWorld* obj, btRigidBody* body)
 	obj->addRigidBody(body);
 }
 
-void btDynamicsWorld_addRigidBody2(btDynamicsWorld* obj, btRigidBody* body, short group,
-	short mask)
+void btDynamicsWorld_addRigidBody2(btDynamicsWorld* obj, btRigidBody* body, int group,
+	int mask)
 {
 	obj->addRigidBody(body, group, mask);
 }

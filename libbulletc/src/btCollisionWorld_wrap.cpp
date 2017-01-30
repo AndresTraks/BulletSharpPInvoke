@@ -297,12 +297,12 @@ btScalar btCollisionWorld_ContactResultCallback_getClosestDistanceThreshold(btCo
 	return obj->m_closestDistanceThreshold;
 }
 
-short btCollisionWorld_ContactResultCallback_getCollisionFilterGroup(btCollisionWorld_ContactResultCallback* obj)
+int btCollisionWorld_ContactResultCallback_getCollisionFilterGroup(btCollisionWorld_ContactResultCallback* obj)
 {
 	return obj->m_collisionFilterGroup;
 }
 
-short btCollisionWorld_ContactResultCallback_getCollisionFilterMask(btCollisionWorld_ContactResultCallback* obj)
+int btCollisionWorld_ContactResultCallback_getCollisionFilterMask(btCollisionWorld_ContactResultCallback* obj)
 {
 	return obj->m_collisionFilterMask;
 }
@@ -320,13 +320,13 @@ void btCollisionWorld_ContactResultCallback_setClosestDistanceThreshold(btCollis
 }
 
 void btCollisionWorld_ContactResultCallback_setCollisionFilterGroup(btCollisionWorld_ContactResultCallback* obj,
-	short value)
+	int value)
 {
 	obj->m_collisionFilterGroup = value;
 }
 
 void btCollisionWorld_ContactResultCallback_setCollisionFilterMask(btCollisionWorld_ContactResultCallback* obj,
-	short value)
+	int value)
 {
 	obj->m_collisionFilterMask = value;
 }
@@ -362,12 +362,12 @@ btScalar btCollisionWorld_ConvexResultCallback_getClosestHitFraction(btCollision
 	return obj->m_closestHitFraction;
 }
 
-short btCollisionWorld_ConvexResultCallback_getCollisionFilterGroup(btCollisionWorld_ConvexResultCallback* obj)
+int btCollisionWorld_ConvexResultCallback_getCollisionFilterGroup(btCollisionWorld_ConvexResultCallback* obj)
 {
 	return obj->m_collisionFilterGroup;
 }
 
-short btCollisionWorld_ConvexResultCallback_getCollisionFilterMask(btCollisionWorld_ConvexResultCallback* obj)
+int btCollisionWorld_ConvexResultCallback_getCollisionFilterMask(btCollisionWorld_ConvexResultCallback* obj)
 {
 	return obj->m_collisionFilterMask;
 }
@@ -390,13 +390,13 @@ void btCollisionWorld_ConvexResultCallback_setClosestHitFraction(btCollisionWorl
 }
 
 void btCollisionWorld_ConvexResultCallback_setCollisionFilterGroup(btCollisionWorld_ConvexResultCallback* obj,
-	short value)
+	int value)
 {
 	obj->m_collisionFilterGroup = value;
 }
 
 void btCollisionWorld_ConvexResultCallback_setCollisionFilterMask(btCollisionWorld_ConvexResultCallback* obj,
-	short value)
+	int value)
 {
 	obj->m_collisionFilterMask = value;
 }
@@ -600,12 +600,12 @@ btScalar btCollisionWorld_RayResultCallback_getClosestHitFraction(btCollisionWor
 	return obj->m_closestHitFraction;
 }
 
-short btCollisionWorld_RayResultCallback_getCollisionFilterGroup(btCollisionWorld_RayResultCallback* obj)
+int btCollisionWorld_RayResultCallback_getCollisionFilterGroup(btCollisionWorld_RayResultCallback* obj)
 {
 	return obj->m_collisionFilterGroup;
 }
 
-short btCollisionWorld_RayResultCallback_getCollisionFilterMask(btCollisionWorld_RayResultCallback* obj)
+int btCollisionWorld_RayResultCallback_getCollisionFilterMask(btCollisionWorld_RayResultCallback* obj)
 {
 	return obj->m_collisionFilterMask;
 }
@@ -638,13 +638,13 @@ void btCollisionWorld_RayResultCallback_setClosestHitFraction(btCollisionWorld_R
 }
 
 void btCollisionWorld_RayResultCallback_setCollisionFilterGroup(btCollisionWorld_RayResultCallback* obj,
-	short value)
+	int value)
 {
 	obj->m_collisionFilterGroup = value;
 }
 
 void btCollisionWorld_RayResultCallback_setCollisionFilterMask(btCollisionWorld_RayResultCallback* obj,
-	short value)
+	int value)
 {
 	obj->m_collisionFilterMask = value;
 }
@@ -679,13 +679,13 @@ void btCollisionWorld_addCollisionObject(btCollisionWorld* obj, btCollisionObjec
 }
 
 void btCollisionWorld_addCollisionObject2(btCollisionWorld* obj, btCollisionObject* collisionObject,
-	short collisionFilterGroup)
+	int collisionFilterGroup)
 {
 	obj->addCollisionObject(collisionObject, collisionFilterGroup);
 }
 
 void btCollisionWorld_addCollisionObject3(btCollisionWorld* obj, btCollisionObject* collisionObject,
-	short collisionFilterGroup, short collisionFilterMask)
+	int collisionFilterGroup, int collisionFilterMask)
 {
 	obj->addCollisionObject(collisionObject, collisionFilterGroup, collisionFilterMask);
 }

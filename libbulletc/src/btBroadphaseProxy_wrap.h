@@ -6,9 +6,8 @@ extern "C" {
 	EXPORT void btBroadphaseProxy_getAabbMax(btBroadphaseProxy* obj, btVector3* value);
 	EXPORT void btBroadphaseProxy_getAabbMin(btBroadphaseProxy* obj, btVector3* value);
 	EXPORT void* btBroadphaseProxy_getClientObject(btBroadphaseProxy* obj);
-	EXPORT short btBroadphaseProxy_getCollisionFilterGroup(btBroadphaseProxy* obj);
-	EXPORT short btBroadphaseProxy_getCollisionFilterMask(btBroadphaseProxy* obj);
-	EXPORT void* btBroadphaseProxy_getMultiSapParentProxy(btBroadphaseProxy* obj);
+	EXPORT int btBroadphaseProxy_getCollisionFilterGroup(btBroadphaseProxy* obj);
+	EXPORT int btBroadphaseProxy_getCollisionFilterMask(btBroadphaseProxy* obj);
 	EXPORT int btBroadphaseProxy_getUid(btBroadphaseProxy* obj);
 	EXPORT int btBroadphaseProxy_getUniqueId(btBroadphaseProxy* obj);
 	EXPORT bool btBroadphaseProxy_isCompound(int proxyType);
@@ -22,9 +21,8 @@ extern "C" {
 	EXPORT void btBroadphaseProxy_setAabbMax(btBroadphaseProxy* obj, const btVector3* value);
 	EXPORT void btBroadphaseProxy_setAabbMin(btBroadphaseProxy* obj, const btVector3* value);
 	EXPORT void btBroadphaseProxy_setClientObject(btBroadphaseProxy* obj, void* value);
-	EXPORT void btBroadphaseProxy_setCollisionFilterGroup(btBroadphaseProxy* obj, short value);
-	EXPORT void btBroadphaseProxy_setCollisionFilterMask(btBroadphaseProxy* obj, short value);
-	EXPORT void btBroadphaseProxy_setMultiSapParentProxy(btBroadphaseProxy* obj, void* value);
+	EXPORT void btBroadphaseProxy_setCollisionFilterGroup(btBroadphaseProxy* obj, int value);
+	EXPORT void btBroadphaseProxy_setCollisionFilterMask(btBroadphaseProxy* obj, int value);
 	EXPORT void btBroadphaseProxy_setUniqueId(btBroadphaseProxy* obj, int value);
 	EXPORT void btBroadphaseProxy_delete(btBroadphaseProxy* obj);
 

@@ -19,19 +19,14 @@ void* btBroadphaseProxy_getClientObject(btBroadphaseProxy* obj)
 	return obj->m_clientObject;
 }
 
-short btBroadphaseProxy_getCollisionFilterGroup(btBroadphaseProxy* obj)
+int btBroadphaseProxy_getCollisionFilterGroup(btBroadphaseProxy* obj)
 {
 	return obj->m_collisionFilterGroup;
 }
 
-short btBroadphaseProxy_getCollisionFilterMask(btBroadphaseProxy* obj)
+int btBroadphaseProxy_getCollisionFilterMask(btBroadphaseProxy* obj)
 {
 	return obj->m_collisionFilterMask;
-}
-
-void* btBroadphaseProxy_getMultiSapParentProxy(btBroadphaseProxy* obj)
-{
-	return obj->m_multiSapParentProxy;
 }
 
 int btBroadphaseProxy_getUid(btBroadphaseProxy* obj)
@@ -99,19 +94,14 @@ void btBroadphaseProxy_setClientObject(btBroadphaseProxy* obj, void* value)
 	obj->m_clientObject = value;
 }
 
-void btBroadphaseProxy_setCollisionFilterGroup(btBroadphaseProxy* obj, short value)
+void btBroadphaseProxy_setCollisionFilterGroup(btBroadphaseProxy* obj, int value)
 {
 	obj->m_collisionFilterGroup = value;
 }
 
-void btBroadphaseProxy_setCollisionFilterMask(btBroadphaseProxy* obj, short value)
+void btBroadphaseProxy_setCollisionFilterMask(btBroadphaseProxy* obj, int value)
 {
 	obj->m_collisionFilterMask = value;
-}
-
-void btBroadphaseProxy_setMultiSapParentProxy(btBroadphaseProxy* obj, void* value)
-{
-	obj->m_multiSapParentProxy = value;
 }
 
 void btBroadphaseProxy_setUniqueId(btBroadphaseProxy* obj, int value)

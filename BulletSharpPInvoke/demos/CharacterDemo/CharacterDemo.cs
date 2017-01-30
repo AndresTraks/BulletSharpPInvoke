@@ -119,8 +119,9 @@ namespace CharacterDemo
 
             CreateCharacter();
 
+            var path = Path.Combine("data", "BspDemo.bsp");
             var bspLoader = new BspLoader();
-            bspLoader.LoadBspFile(Path.Combine("data", "BspDemo.bsp"));
+            bspLoader.LoadBspFile(path);
             var bsp2Bullet = new BspToBulletConverter(World);
             bsp2Bullet.ConvertBsp(bspLoader, 0.1f);
 

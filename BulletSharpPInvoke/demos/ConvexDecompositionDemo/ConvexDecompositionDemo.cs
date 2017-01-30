@@ -67,7 +67,8 @@ namespace ConvexDecompositionDemo
             ManifoldPoint.ContactAdded += MyContactCallback;
             //CompoundCollisionAlgorithm.CompoundChildShapePairCallback = MyCompoundChildShapeCallback;
 
-            var wavefrontModel = WavefrontObj.Load("data/file.obj");
+            string path = Path.Combine("data", "file.obj");
+            var wavefrontModel = WavefrontObj.Load(path);
             if (wavefrontModel.Indices.Count == 0)
             {
                 return;

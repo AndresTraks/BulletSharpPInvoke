@@ -590,7 +590,7 @@ namespace BulletSharp
 
 		public unsafe void WriteHeader(IntPtr buffer)
 		{
-            byte[] header = Encoding.ASCII.GetBytes("BULLETf_v285");
+            byte[] header = Encoding.ASCII.GetBytes("BULLETf_v286");
             if (IntPtr.Size == 8)
             {
                 header[7] = (byte)'-';
