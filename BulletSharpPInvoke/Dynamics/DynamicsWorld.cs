@@ -22,9 +22,11 @@ namespace BulletSharp
         [UnmanagedFunctionPointer(CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         delegate void InternalTickCallbackUnmanaged(IntPtr world, float timeStep);
 
-        InternalTickCallback _callback;
-        InternalTickCallbackUnmanaged _callbackUnmanaged;
-		protected ConstraintSolver _constraintSolver;
+        private InternalTickCallback _preTickCallback;
+        private InternalTickCallback _postTickCallback;
+        private InternalTickCallbackUnmanaged _preTickCallbackUnmanaged;
+        private InternalTickCallbackUnmanaged _postTickCallbackUnmanaged;
+        protected ConstraintSolver _constraintSolver;
         ContactSolverInfo _solverInfo;
 
         Dictionary<IAction, ActionInterfaceWrapper> _actions;
@@ -152,34 +154,72 @@ namespace BulletSharp
             btDynamicsWorld_setGravity(_native, ref gravity);
         }
 
-        private void InternalTickCallbackNative(IntPtr world, float timeStep)
+        private void InternalPreTickCallbackNative(IntPtr world, float timeStep)
         {
-            _callback(this, timeStep);
+            _preTickCallback(this, timeStep);
         }
 
-        public void SetInternalTickCallback(InternalTickCallback cb, Object worldUserInfo = null,
+        private void InternalPostTickCallbackNative(IntPtr world, float timeStep)
+        {
+            _postTickCallback(this, timeStep);
+        }
+
+        public void SetInternalTickCallback(InternalTickCallback callback, Object worldUserInfo = null,
             bool isPreTick = false)
         {
-            if (_callback != cb)
+            if (isPreTick)
             {
-                _callback = cb;
-                if (cb != null)
+                SetInternalPreTickCallback(callback);
+            }
+            else
+            {
+                SetInternalPostTickCallback(callback);
+            }
+            WorldUserInfo = worldUserInfo;
+        }
+
+        private void SetInternalPreTickCallback(InternalTickCallback callback)
+        {
+            if (_preTickCallback != callback)
+            {
+                _preTickCallback = callback;
+                if (callback != null)
                 {
-                    if (_callbackUnmanaged == null)
+                    if (_preTickCallbackUnmanaged == null)
                     {
-                        _callbackUnmanaged = new InternalTickCallbackUnmanaged(InternalTickCallbackNative);
+                        _preTickCallbackUnmanaged = new InternalTickCallbackUnmanaged(InternalPreTickCallbackNative);
                     }
                     btDynamicsWorld_setInternalTickCallback(_native,
-                        Marshal.GetFunctionPointerForDelegate(_callbackUnmanaged), IntPtr.Zero, isPreTick);
+                        Marshal.GetFunctionPointerForDelegate(_preTickCallbackUnmanaged), IntPtr.Zero, true);
                 }
                 else
                 {
-                    _callbackUnmanaged = null;
-                    btDynamicsWorld_setInternalTickCallback(_native, IntPtr.Zero, IntPtr.Zero, isPreTick);
+                    _preTickCallbackUnmanaged = null;
+                    btDynamicsWorld_setInternalTickCallback(_native, IntPtr.Zero, IntPtr.Zero, true);
                 }
             }
+        }
 
-            WorldUserInfo = worldUserInfo;
+        private void SetInternalPostTickCallback(InternalTickCallback callback)
+        {
+            if (_postTickCallback != callback)
+            {
+                _postTickCallback = callback;
+                if (callback != null)
+                {
+                    if (_postTickCallbackUnmanaged == null)
+                    {
+                        _postTickCallbackUnmanaged = new InternalTickCallbackUnmanaged(InternalPostTickCallbackNative);
+                    }
+                    btDynamicsWorld_setInternalTickCallback(_native,
+                        Marshal.GetFunctionPointerForDelegate(_postTickCallbackUnmanaged), IntPtr.Zero, false);
+                }
+                else
+                {
+                    _postTickCallbackUnmanaged = null;
+                    btDynamicsWorld_setInternalTickCallback(_native, IntPtr.Zero, IntPtr.Zero, false);
+                }
+            }
         }
 
 		public int StepSimulation(float timeStep, int maxSubSteps = 1, float fixedTimeStep = 1.0f / 60.0f)
