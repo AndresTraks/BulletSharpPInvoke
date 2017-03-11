@@ -1,5 +1,23 @@
 #include "main.h"
 
+#ifndef BT_OVERLAPPING_PAIR_CACHE_H
+#define p_btOverlapFilterCallback_needBroadphaseCollision void*
+#define btOverlapFilterCallbackWrapper void
+#else
+typedef bool(*p_btOverlapFilterCallback_needBroadphaseCollision)(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1);
+
+class btOverlapFilterCallbackWrapper : public btOverlapFilterCallback
+{
+private:
+	p_btOverlapFilterCallback_needBroadphaseCollision _needBroadphaseCollision;
+
+public:
+	btOverlapFilterCallbackWrapper(p_btOverlapFilterCallback_needBroadphaseCollision needBroadphaseCollision);
+
+	virtual bool needBroadphaseCollision(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1) const;
+};
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -20,6 +38,8 @@ extern "C" {
 	EXPORT void btOverlappingPairCache_setInternalGhostPairCallback(btOverlappingPairCache* obj, btOverlappingPairCallback* ghostPairCallback);
 	EXPORT void btOverlappingPairCache_setOverlapFilterCallback(btOverlappingPairCache* obj, btOverlapFilterCallback* callback);
 	EXPORT void btOverlappingPairCache_sortOverlappingPairs(btOverlappingPairCache* obj, btDispatcher* dispatcher);
+
+	EXPORT btOverlapFilterCallbackWrapper* btOverlapFilterCallbackWrapper_new(p_btOverlapFilterCallback_needBroadphaseCollision needBroadphaseCollision);
 
 	EXPORT btHashedOverlappingPairCache* btHashedOverlappingPairCache_new();
 	EXPORT int btHashedOverlappingPairCache_GetCount(btHashedOverlappingPairCache* obj);

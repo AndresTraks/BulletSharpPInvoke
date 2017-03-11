@@ -40,20 +40,31 @@ namespace BulletSharp
 		static extern void btOverlapCallback_delete(IntPtr obj);
 	}
 
-	public class OverlapFilterCallback : IDisposable // abstract
+	public abstract class OverlapFilterCallback : IDisposable
 	{
+        [UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+        private delegate bool NeedBroadphaseCollisionUnmanagedDelegate(IntPtr proxy0, IntPtr proxy1);
+
 		internal IntPtr _native;
+        private NeedBroadphaseCollisionUnmanagedDelegate _needBroadphaseCollision;
 
 		internal OverlapFilterCallback(IntPtr native)
 		{
 			_native = native;
 		}
 
-		public bool NeedBroadphaseCollision(BroadphaseProxy proxy0, BroadphaseProxy proxy1)
-		{
-			return btOverlapFilterCallback_needBroadphaseCollision(_native, proxy0._native,
-				proxy1._native);
-		}
+        public OverlapFilterCallback()
+        {
+            _needBroadphaseCollision = NeedBroadphaseCollisionUnmanaged;
+            _native = btOverlapFilterCallbackWrapper_new(Marshal.GetFunctionPointerForDelegate(_needBroadphaseCollision));
+        }
+
+        private bool NeedBroadphaseCollisionUnmanaged(IntPtr proxy0, IntPtr proxy1)
+        {
+            return NeedBroadphaseCollision(BroadphaseProxy.GetManaged(proxy0), BroadphaseProxy.GetManaged(proxy1));
+        }
+
+        public abstract bool NeedBroadphaseCollision(BroadphaseProxy proxy0, BroadphaseProxy proxy1);
 
 		public void Dispose()
 		{
@@ -80,12 +91,15 @@ namespace BulletSharp
 		static extern bool btOverlapFilterCallback_needBroadphaseCollision(IntPtr obj, IntPtr proxy0, IntPtr proxy1);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btOverlapFilterCallback_delete(IntPtr obj);
-	}
+
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern IntPtr btOverlapFilterCallbackWrapper_new(IntPtr needBroadphaseCollision);
+    }
 
 	public abstract class OverlappingPairCache : OverlappingPairCallback
 	{
-        OverlappingPairCallback _ghostPairCallback;
-        AlignedBroadphasePairArray _overlappingPairArray;
+        private OverlappingPairCallback _ghostPairCallback;
+        private AlignedBroadphasePairArray _overlappingPairArray;
 
 		internal OverlappingPairCache(IntPtr native, bool preventDelete)
 			: base(native, preventDelete)
@@ -179,6 +193,8 @@ namespace BulletSharp
 
 	public class HashedOverlappingPairCache : OverlappingPairCache
 	{
+        private OverlapFilterCallback _overlapFilterCallback;
+
 		internal HashedOverlappingPairCache(IntPtr native, bool preventDelete)
 			: base(native, preventDelete)
 		{
@@ -222,7 +238,12 @@ namespace BulletSharp
 
 		public OverlapFilterCallback OverlapFilterCallback
 		{
-			get { return new OverlapFilterCallback(btHashedOverlappingPairCache_getOverlapFilterCallback(_native)); }
+			get { return _overlapFilterCallback; }
+            set
+            {
+                _overlapFilterCallback = value;
+                SetOverlapFilterCallback(value);
+            }
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -230,14 +251,14 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btHashedOverlappingPairCache_GetCount(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHashedOverlappingPairCache_getOverlapFilterCallback(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		[return: MarshalAs(UnmanagedType.I1)]
 		static extern bool btHashedOverlappingPairCache_needsBroadphaseCollision(IntPtr obj, IntPtr proxy0, IntPtr proxy1);
 	}
 
 	public class SortedOverlappingPairCache : OverlappingPairCache
 	{
+        private OverlapFilterCallback _overlapFilterCallback;
+
 		public SortedOverlappingPairCache()
 			: base(btSortedOverlappingPairCache_new(), false)
 		{
@@ -269,10 +290,15 @@ namespace BulletSharp
                 proxy0._native, dispatcher._native);
         }
 
-		public OverlapFilterCallback OverlapFilterCallback
-		{
-            get { return new OverlapFilterCallback(btSortedOverlappingPairCache_getOverlapFilterCallback(_native)); }
-		}
+        public OverlapFilterCallback OverlapFilterCallback
+        {
+            get { return _overlapFilterCallback; }
+            set
+            {
+                _overlapFilterCallback = value;
+                SetOverlapFilterCallback(value);
+            }
+        }
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btSortedOverlappingPairCache_new();

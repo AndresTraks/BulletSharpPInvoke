@@ -89,6 +89,12 @@ void btOverlappingPairCache_sortOverlappingPairs(btOverlappingPairCache* obj, bt
 }
 
 
+btOverlapFilterCallbackWrapper * btOverlapFilterCallbackWrapper_new(p_btOverlapFilterCallback_needBroadphaseCollision needBroadphaseCollision)
+{
+	return new btOverlapFilterCallbackWrapper(needBroadphaseCollision);
+}
+
+
 btHashedOverlappingPairCache* btHashedOverlappingPairCache_new()
 {
 	return new btHashedOverlappingPairCache();
@@ -131,4 +137,15 @@ bool btSortedOverlappingPairCache_needsBroadphaseCollision(btSortedOverlappingPa
 btNullPairCache* btNullPairCache_new()
 {
 	return new btNullPairCache();
+}
+
+
+btOverlapFilterCallbackWrapper::btOverlapFilterCallbackWrapper(p_btOverlapFilterCallback_needBroadphaseCollision needBroadphaseCollision)
+{
+	_needBroadphaseCollision = needBroadphaseCollision;
+}
+
+bool btOverlapFilterCallbackWrapper::needBroadphaseCollision(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1) const
+{
+	return _needBroadphaseCollision(proxy0, proxy1);
 }
