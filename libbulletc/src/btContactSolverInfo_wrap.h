@@ -8,6 +8,8 @@ extern "C" {
 	EXPORT btScalar btContactSolverInfoData_getErp(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getErp2(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getFriction(btContactSolverInfoData* obj);
+	EXPORT btScalar btContactSolverInfoData_getFrictionCfm(btContactSolverInfoData* obj);
+	EXPORT btScalar btContactSolverInfoData_getFrictionErp(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getGlobalCfm(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getLinearSlop(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getMaxErrorReduction(btContactSolverInfoData* obj);
@@ -29,6 +31,8 @@ extern "C" {
 	EXPORT void btContactSolverInfoData_setErp(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setErp2(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setFriction(btContactSolverInfoData* obj, btScalar value);
+	EXPORT void btContactSolverInfoData_setFrictionCfm(btContactSolverInfoData* obj, btScalar value);
+	EXPORT void btContactSolverInfoData_setFrictionErp(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setGlobalCfm(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setLinearSlop(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setMaxErrorReduction(btContactSolverInfoData* obj, btScalar value);

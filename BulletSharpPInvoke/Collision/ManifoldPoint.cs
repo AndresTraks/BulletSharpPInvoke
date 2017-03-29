@@ -12,7 +12,8 @@ namespace BulletSharp
 		LateralFrictionInitialized = 1,
 		HasContactCfm = 2,
 		HasContactErp = 4,
-		ContactStiffnessDamping = 8
+		ContactStiffnessDamping = 8,
+		FrictionAnchor = 16
 	}
 
     public delegate void ContactAddedEventHandler(ManifoldPoint cp, CollisionObjectWrapper colObj0Wrap, int partId0, int index0, CollisionObjectWrapper colObj1Wrap, int partId1, int index1);

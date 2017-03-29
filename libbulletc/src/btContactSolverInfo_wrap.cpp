@@ -27,6 +27,16 @@ btScalar btContactSolverInfoData_getFriction(btContactSolverInfoData* obj)
 	return obj->m_friction;
 }
 
+btScalar btContactSolverInfoData_getFrictionCfm(btContactSolverInfoData* obj)
+{
+	return obj->m_frictionCFM;
+}
+
+btScalar btContactSolverInfoData_getFrictionErp(btContactSolverInfoData* obj)
+{
+	return obj->m_frictionERP;
+}
+
 btScalar btContactSolverInfoData_getGlobalCfm(btContactSolverInfoData* obj)
 {
 	return obj->m_globalCfm;
@@ -130,6 +140,16 @@ void btContactSolverInfoData_setErp2(btContactSolverInfoData* obj, btScalar valu
 void btContactSolverInfoData_setFriction(btContactSolverInfoData* obj, btScalar value)
 {
 	obj->m_friction = value;
+}
+
+void btContactSolverInfoData_setFrictionCfm(btContactSolverInfoData* obj, btScalar value)
+{
+	obj->m_frictionCFM = value;
+}
+
+void btContactSolverInfoData_setFrictionErp(btContactSolverInfoData* obj, btScalar value)
+{
+	obj->m_frictionERP = value;
 }
 
 void btContactSolverInfoData_setGlobalCfm(btContactSolverInfoData* obj, btScalar value)

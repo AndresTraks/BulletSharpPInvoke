@@ -60,6 +60,18 @@ namespace BulletSharp
 			set { btContactSolverInfoData_setFriction(_native, value); }
 		}
 
+		public float FrictionCfm
+		{
+			get { return btContactSolverInfoData_getFrictionCfm(_native); }
+			set { btContactSolverInfoData_setFrictionCfm(_native, value); }
+		}
+
+		public float FrictionErp
+		{
+			get { return btContactSolverInfoData_getFrictionErp(_native); }
+			set { btContactSolverInfoData_setFrictionErp(_native, value); }
+		}
+
 		public float GlobalCfm
 		{
 			get { return btContactSolverInfoData_getGlobalCfm(_native); }
@@ -196,6 +208,10 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btContactSolverInfoData_getFriction(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btContactSolverInfoData_getFrictionCfm(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern float btContactSolverInfoData_getFrictionErp(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btContactSolverInfoData_getGlobalCfm(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btContactSolverInfoData_getLinearSlop(IntPtr obj);
@@ -237,6 +253,10 @@ namespace BulletSharp
 		static extern void btContactSolverInfoData_setErp2(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btContactSolverInfoData_setFriction(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btContactSolverInfoData_setFrictionCfm(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		static extern void btContactSolverInfoData_setFrictionErp(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btContactSolverInfoData_setGlobalCfm(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
