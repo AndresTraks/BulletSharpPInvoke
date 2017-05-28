@@ -271,7 +271,7 @@ namespace BulletSharp
 
 		public float MotorTargetVelocity
 		{
-			get { return btHingeConstraint_getMotorTargetVelosity(_native); }
+			get { return btHingeConstraint_getMotorTargetVelocity(_native); }
 		}
 
 		public int SolveLimit
@@ -349,7 +349,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btHingeConstraint_getMaxMotorImpulse(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern float btHingeConstraint_getMotorTargetVelosity(IntPtr obj);
+		static extern float btHingeConstraint_getMotorTargetVelocity(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern int btHingeConstraint_getSolveLimit(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
