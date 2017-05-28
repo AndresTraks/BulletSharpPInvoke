@@ -36,7 +36,8 @@ namespace BulletSharp
 		DisableSpuCollisionProcessing = 64,
 		HasContactStiffnessDamping = 128,
 		HasCustomDebugRenderingColor = 256,
-		HasFrictionAnchor = 512
+		HasFrictionAnchor = 512,
+		HasCollisionSoundTrigger = 1024
 	}
 
 	[Flags]

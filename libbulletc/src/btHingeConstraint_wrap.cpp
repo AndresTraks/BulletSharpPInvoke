@@ -170,9 +170,9 @@ btScalar btHingeConstraint_getMaxMotorImpulse(btHingeConstraint* obj)
 	return obj->getMaxMotorImpulse();
 }
 
-btScalar btHingeConstraint_getMotorTargetVelosity(btHingeConstraint* obj)
+btScalar btHingeConstraint_getMotorTargetVelocity(btHingeConstraint* obj)
 {
-	return obj->getMotorTargetVelosity();
+	return obj->getMotorTargetVelocity();
 }
 
 int btHingeConstraint_getSolveLimit(btHingeConstraint* obj)

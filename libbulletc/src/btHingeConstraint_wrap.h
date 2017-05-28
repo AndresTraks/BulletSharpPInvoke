@@ -28,7 +28,7 @@ extern "C" {
 	EXPORT btScalar btHingeConstraint_getLimitSoftness(btHingeConstraint* obj);
 	EXPORT btScalar btHingeConstraint_getLowerLimit(btHingeConstraint* obj);
 	EXPORT btScalar btHingeConstraint_getMaxMotorImpulse(btHingeConstraint* obj);
-	EXPORT btScalar btHingeConstraint_getMotorTargetVelosity(btHingeConstraint* obj);
+	EXPORT btScalar btHingeConstraint_getMotorTargetVelocity(btHingeConstraint* obj);
 	EXPORT int btHingeConstraint_getSolveLimit(btHingeConstraint* obj);
 	EXPORT btScalar btHingeConstraint_getUpperLimit(btHingeConstraint* obj);
 	EXPORT bool btHingeConstraint_getUseFrameOffset(btHingeConstraint* obj);
