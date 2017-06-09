@@ -325,7 +325,7 @@ namespace BulletSharp
 
 		public void GetNodeBound(int nodeIndex, Aabb bound)
 		{
-			btBvhTree_getNodeBound(_native, nodeIndex, bound._native);
+			btBvhTree_getNodeBound(_native, nodeIndex, bound.Native);
 		}
 
 		public int GetNodeData(int nodeIndex)
@@ -345,7 +345,7 @@ namespace BulletSharp
 
 		public void SetNodeBound(int nodeIndex, Aabb bound)
 		{
-			btBvhTree_setNodeBound(_native, nodeIndex, bound._native);
+			btBvhTree_setNodeBound(_native, nodeIndex, bound.Native);
 		}
 
 		public int NodeCount
@@ -415,7 +415,7 @@ namespace BulletSharp
 
 		public void GetPrimitiveBox(int primIndex, Aabb primbox)
 		{
-			btPrimitiveManagerBase_get_primitive_box(_native, primIndex, primbox._native);
+			btPrimitiveManagerBase_get_primitive_box(_native, primIndex, primbox.Native);
 		}
         /*
 		public void GetPrimitiveTriangle(int primIndex, PrimitiveTriangle triangle)
@@ -528,7 +528,7 @@ namespace BulletSharp
 
 		public void GetNodeBound(int nodeIndex, Aabb bound)
 		{
-			btGImpactBvh_getNodeBound(_native, nodeIndex, bound._native);
+			btGImpactBvh_getNodeBound(_native, nodeIndex, bound.Native);
 		}
 
 		public int GetNodeData(int nodeIndex)
@@ -558,7 +558,7 @@ namespace BulletSharp
         */
 		public void SetNodeBound(int nodeIndex, Aabb bound)
 		{
-			btGImpactBvh_setNodeBound(_native, nodeIndex, bound._native);
+			btGImpactBvh_setNodeBound(_native, nodeIndex, bound.Native);
 		}
 
 		public void Update()

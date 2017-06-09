@@ -164,7 +164,7 @@ namespace BulletSharp
 
 		public void GetNodeBound(int nodeIndex, Aabb bound)
 		{
-			btQuantizedBvhTree_getNodeBound(_native, nodeIndex, bound._native);
+			btQuantizedBvhTree_getNodeBound(_native, nodeIndex, bound.Native);
 		}
 
 		public int GetNodeData(int nodeIndex)
@@ -189,7 +189,7 @@ namespace BulletSharp
 
 		public void SetNodeBound(int nodeIndex, Aabb bound)
 		{
-			btQuantizedBvhTree_setNodeBound(_native, nodeIndex, bound._native);
+			btQuantizedBvhTree_setNodeBound(_native, nodeIndex, bound.Native);
 		}
 
         public bool TestQuantizedBoxOverlap(int nodeIndex, ushort[] quantizedMin, ushort[] quantizedMax)
@@ -318,7 +318,7 @@ namespace BulletSharp
 
 		public void GetNodeBound(int nodeIndex, Aabb bound)
 		{
-			btGImpactQuantizedBvh_getNodeBound(_native, nodeIndex, bound._native);
+			btGImpactQuantizedBvh_getNodeBound(_native, nodeIndex, bound.Native);
 		}
 
 		public int GetNodeData(int nodeIndex)
@@ -349,7 +349,7 @@ namespace BulletSharp
         */
 		public void SetNodeBound(int nodeIndex, Aabb bound)
 		{
-			btGImpactQuantizedBvh_setNodeBound(_native, nodeIndex, bound._native);
+			btGImpactQuantizedBvh_setNodeBound(_native, nodeIndex, bound.Native);
 		}
 
 		public void Update()

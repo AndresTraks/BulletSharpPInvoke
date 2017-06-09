@@ -231,6 +231,7 @@
     <Compile Include="SoftBody\SoftRigidDynamicsWorld.cs" />
     <Compile Include="SoftBody\SoftSoftCollisionAlgorithm.cs" />
     <Compile Include="SoftBody\SparseSdf.cs" />
+    <Compile Include="UnsafeNativeMethods.cs" />
     <Compile Include="Utilities.cs">
       <SubType>Code</SubType>
     </Compile>

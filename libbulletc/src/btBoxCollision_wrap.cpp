@@ -3,6 +3,74 @@
 #include "conversion.h"
 #include "btBoxCollision_wrap.h"
 
+BT_BOX_BOX_TRANSFORM_CACHE* BT_BOX_BOX_TRANSFORM_CACHE_new()
+{
+	return new BT_BOX_BOX_TRANSFORM_CACHE();
+}
+
+void BT_BOX_BOX_TRANSFORM_CACHE_calc_absolute_matrix(BT_BOX_BOX_TRANSFORM_CACHE* obj)
+{
+	obj->calc_absolute_matrix();
+}
+
+void BT_BOX_BOX_TRANSFORM_CACHE_calc_from_full_invert(BT_BOX_BOX_TRANSFORM_CACHE* obj, const btTransform* trans0, const btTransform* trans1)
+{
+	BTTRANSFORM_IN(trans0);
+	BTTRANSFORM_IN(trans1);
+	obj->calc_from_full_invert(BTTRANSFORM_USE(trans0), BTTRANSFORM_USE(trans1));
+}
+
+void BT_BOX_BOX_TRANSFORM_CACHE_calc_from_homogenic(BT_BOX_BOX_TRANSFORM_CACHE* obj, const btTransform* trans0, const btTransform* trans1)
+{
+	BTTRANSFORM_IN(trans0);
+	BTTRANSFORM_IN(trans1);
+	obj->calc_from_homogenic(BTTRANSFORM_USE(trans0), BTTRANSFORM_USE(trans1));
+}
+
+void BT_BOX_BOX_TRANSFORM_CACHE_getAR(BT_BOX_BOX_TRANSFORM_CACHE* obj, btMatrix3x3* value)
+{
+	BTMATRIX3X3_OUT(value, obj->m_AR);
+}
+
+void BT_BOX_BOX_TRANSFORM_CACHE_getR1to0(BT_BOX_BOX_TRANSFORM_CACHE* obj, btMatrix3x3* value)
+{
+	BTMATRIX3X3_OUT(value, obj->m_R1to0);
+}
+
+void BT_BOX_BOX_TRANSFORM_CACHE_getT1to0(BT_BOX_BOX_TRANSFORM_CACHE* obj, btVector3* value)
+{
+	BTVECTOR3_SET(value, obj->m_T1to0);
+}
+
+void BT_BOX_BOX_TRANSFORM_CACHE_setAR(BT_BOX_BOX_TRANSFORM_CACHE* obj, const btMatrix3x3* value)
+{
+	BTMATRIX3X3_SET(&obj->m_AR, (btScalar*)value);
+}
+
+void BT_BOX_BOX_TRANSFORM_CACHE_setR1to0(BT_BOX_BOX_TRANSFORM_CACHE* obj, const btMatrix3x3* value)
+{
+	BTMATRIX3X3_SET(&obj->m_R1to0, (btScalar*)value);
+}
+
+void BT_BOX_BOX_TRANSFORM_CACHE_setT1to0(BT_BOX_BOX_TRANSFORM_CACHE* obj, const btVector3* value)
+{
+	BTVECTOR3_COPY(&obj->m_T1to0, value);
+}
+
+void BT_BOX_BOX_TRANSFORM_CACHE_transform(BT_BOX_BOX_TRANSFORM_CACHE* obj, const btVector3* point, btVector3* value)
+{
+	BTVECTOR3_DEF(value);
+	BTVECTOR3_IN(point);
+	*value = obj->transform(BTVECTOR3_USE(point));
+	BTVECTOR3_DEF_OUT(value);
+}
+
+void BT_BOX_BOX_TRANSFORM_CACHE_delete(BT_BOX_BOX_TRANSFORM_CACHE* obj)
+{
+	delete obj;
+}
+
+
 btAABB* btAABB_new()
 {
 	return new btAABB();
