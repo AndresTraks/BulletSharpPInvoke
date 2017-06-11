@@ -108,10 +108,10 @@ namespace BulletSharp
 		internal IntPtr Native;
 		private bool _preventDelete;
 
-		internal Aabb(IntPtr native, bool preventDelete)
+		internal Aabb(IntPtr native)
 		{
 			Native = native;
-			_preventDelete = preventDelete;
+			_preventDelete = true;
 		}
 
 		public Aabb()

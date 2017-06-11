@@ -66,6 +66,8 @@ namespace ConcaveConvexCastDemo
         private const int NumDynamicBoxesY = 30;
 
         private bool _animatedMesh = true;
+        private Stream _vertexStream;
+        private BinaryWriter _vertexWriter;
 
         private Vector3 _worldMin = new Vector3(-1000, -1000, -1000);
         private Vector3 _worldMax = new Vector3(1000, 1000, 1000);
@@ -141,6 +143,11 @@ namespace ConcaveConvexCastDemo
             _callback.Dispose();
             _indexVertexArrays.IndexedMeshArray[0].Dispose();
             _indexVertexArrays.Dispose();
+            if (_vertexWriter != null)
+            {
+                _vertexWriter.Dispose();
+                _vertexWriter = null;
+            }
 
             this.StandardCleanup();
         }
@@ -206,17 +213,19 @@ namespace ConcaveConvexCastDemo
 
         private void SetVertexPositions(float waveHeight, float offset)
         {
-            var vertexStream = _indexVertexArrays.GetVertexStream();
-            using (var vertexWriter = new BinaryWriter(vertexStream))
+            if (_vertexWriter == null)
             {
-                for (int i = 0; i < NumVertsX; i++)
+                _vertexStream = _indexVertexArrays.GetVertexStream();
+                _vertexWriter = new BinaryWriter(_vertexStream);
+            }
+            _vertexStream.Position = 0;
+            for (int i = 0; i < NumVertsX; i++)
+            {
+                for (int j = 0; j < NumVertsY; j++)
                 {
-                    for (int j = 0; j < NumVertsY; j++)
-                    {
-                        vertexWriter.Write((i - NumVertsX * 0.5f) * TriangleSize);
-                        vertexWriter.Write(waveHeight * (float)Math.Sin(i + offset) * (float)Math.Cos(j + offset));
-                        vertexWriter.Write((j - NumVertsY * 0.5f) * TriangleSize);
-                    }
+                    _vertexWriter.Write((i - NumVertsX * 0.5f) * TriangleSize);
+                    _vertexWriter.Write(waveHeight * (float)Math.Sin(i + offset) * (float)Math.Cos(j + offset));
+                    _vertexWriter.Write((j - NumVertsY * 0.5f) * TriangleSize);
                 }
             }
         }

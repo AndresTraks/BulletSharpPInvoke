@@ -2,45 +2,46 @@ using BulletSharp.Math;
 
 namespace BulletSharp
 {
-    class MyCallback : TriangleRaycastCallback
-    {
-        int _ignorePart;
-        int _ignoreTriangleIndex;
+	internal class MyCallback : TriangleRaycastCallback
+	{
+		private readonly int _ignorePart;
+		private readonly int _ignoreTriangleIndex;
 
-        public MyCallback(ref Vector3 from, ref Vector3 to, int ignorePart, int ignoreTriangleIndex)
-		    : base(ref from, ref to)
+		public MyCallback(ref Vector3 from, ref Vector3 to, int ignorePart, int ignoreTriangleIndex)
+			: base(ref from, ref to)
 		{
-            _ignorePart = ignorePart;
-            _ignoreTriangleIndex = ignoreTriangleIndex;
+			_ignorePart = ignorePart;
+			_ignoreTriangleIndex = ignoreTriangleIndex;
 		}
 
-        public override float ReportHit(ref Vector3 hitNormalLocal, float hitFraction, int partId, int triangleIndex)
-        {
-            if (partId != _ignorePart || triangleIndex != _ignoreTriangleIndex)
-            {
-                if (hitFraction < HitFraction)
-                    return hitFraction;
-            }
+		public override float ReportHit(ref Vector3 hitNormalLocal, float hitFraction, int partId, int triangleIndex)
+		{
+			if (partId != _ignorePart || triangleIndex != _ignoreTriangleIndex)
+			{
+				if (hitFraction < HitFraction)
+					return hitFraction;
+			}
 
-            return HitFraction;
-        }
-    }
+			return HitFraction;
+		}
+	}
 
-    class MyInternalTriangleIndexCallback : InternalTriangleIndexCallback
-    {
-        private CompoundShape _colShape;
-        private float _depth;
-        private GImpactMeshShape _meshShape;
+	internal class MyInternalTriangleIndexCallback : InternalTriangleIndexCallback
+	{
+		private readonly CompoundShape _collisionShape;
+		private readonly float _depth;
+		private readonly GImpactMeshShape _meshShape;
+		//private readonly static Vector3 _redColor = new Vector3(1, 0, 0);
 
-        public MyInternalTriangleIndexCallback(CompoundShape colShape, GImpactMeshShape meshShape, float depth)
-        {
-            _colShape = colShape;
-            _depth = depth;
-            _meshShape = meshShape;
-        }
+		public MyInternalTriangleIndexCallback(CompoundShape collisionShape, GImpactMeshShape meshShape, float depth)
+		{
+			_collisionShape = collisionShape;
+			_depth = depth;
+			_meshShape = meshShape;
+		}
 
-        public override void InternalProcessTriangleIndex(ref Vector3 vertex0, ref Vector3 vertex1, ref Vector3 vertex2, int partId, int triangleIndex)
-        {
+		public override void InternalProcessTriangleIndex(ref Vector3 vertex0, ref Vector3 vertex1, ref Vector3 vertex2, int partId, int triangleIndex)
+		{
 			Vector3 scale = _meshShape.LocalScaling;
 			Vector3 v0 = vertex0 * scale;
 			Vector3 v1 = vertex1 * scale;
@@ -59,31 +60,28 @@ namespace BulletSharp
 				{
 					rayTo = Vector3.Lerp(cb.From, cb.To, cb.HitFraction);
 					//rayTo = cb.From;
-					//gDebugDraw.drawLine(tr(centroid), tr(centroid + normal), btVector3(1, 0, 0));
+					//Vector3 to = centroid + normal;
+					//debugDraw.DrawLine(ref centroid, ref to, ref _redColor);
 				}
 			}
 
-			BuSimplex1To4 tet = new BuSimplex1To4(v0, v1, v2, rayTo);
-			_colShape.AddChildShape(Matrix.Identity, tet);
-        }
-    }
-
-	public sealed class CompoundFromGImpact
-	{
-        private CompoundFromGImpact()
-		{
+			var triangle = new BuSimplex1To4(v0, v1, v2, rayTo);
+			_collisionShape.AddChildShape(Matrix.Identity, triangle);
 		}
+	}
 
-        public static CompoundShape Create(GImpactMeshShape gImpactMesh, float depth)
-        {
-            CompoundShape colShape = new CompoundShape();
-            using (var cb = new MyInternalTriangleIndexCallback(colShape, gImpactMesh, depth))
-            {
-                Vector3 aabbMin, aabbMax;
-                gImpactMesh.GetAabb(Matrix.Identity, out aabbMin, out aabbMax);
-                gImpactMesh.MeshInterface.InternalProcessAllTriangles(cb, aabbMin, aabbMax);
-            }
-            return colShape;
-        }
+	public static class CompoundFromGImpact
+	{
+		public static CompoundShape Create(GImpactMeshShape impactMesh, float depth)
+		{
+			var shape = new CompoundShape();
+			using (var callback = new MyInternalTriangleIndexCallback(shape, impactMesh, depth))
+			{
+				Vector3 aabbMin, aabbMax;
+				impactMesh.GetAabb(Matrix.Identity, out aabbMin, out aabbMax);
+				impactMesh.MeshInterface.InternalProcessAllTriangles(callback, aabbMin, aabbMax);
+			}
+			return shape;
+		}
 	}
 }

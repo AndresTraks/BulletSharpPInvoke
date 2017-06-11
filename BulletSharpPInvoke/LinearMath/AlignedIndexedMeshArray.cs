@@ -112,7 +112,7 @@ namespace BulletSharp
 
         public void Add(IndexedMesh item)
         {
-            btAlignedObjectArray_btIndexedMesh_push_back(_native, item._native);
+            btAlignedObjectArray_btIndexedMesh_push_back(_native, item.Native);
         }
 
         public void Clear()

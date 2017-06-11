@@ -5,13 +5,14 @@ using NUnit.Framework;
 namespace BulletSharpTest
 {
     [TestFixture]
+    [Category("Serialization")]
     class SerializationTest
     {
-        DefaultCollisionConfiguration _conf;
-        CollisionDispatcher _dispatcher;
-        DbvtBroadphase _broadphase;
-        SequentialImpulseConstraintSolver _solver;
-        DiscreteDynamicsWorld _world;
+        private DefaultCollisionConfiguration _conf;
+        private CollisionDispatcher _dispatcher;
+        private DbvtBroadphase _broadphase;
+        private SequentialImpulseConstraintSolver _solver;
+        private DiscreteDynamicsWorld _world;
 
         [Test]
         public void SerializeTest()
@@ -77,15 +78,14 @@ namespace BulletSharpTest
             Assert.True(fileLoader.LoadFile("data\\spider.bullet"));
             fileLoader.DeleteAllData();
             Assert.AreEqual(0, objects.Count);
-
+            /*
             Assert.True(fileLoader.LoadFile("data\\testFile.bullet"));
             fileLoader.DeleteAllData();
             Assert.AreEqual(0, objects.Count);
-            /*
+            */
             Assert.True(fileLoader.LoadFile("data\\testFileFracture.bullet"));
             fileLoader.DeleteAllData();
             Assert.AreEqual(0, objects.Count);
-            */
         }
 
         [OneTimeSetUp]
