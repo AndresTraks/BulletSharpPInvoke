@@ -172,6 +172,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrdfDemo", "UrdfDemo\UrdfDe
 		{67DF42D4-C318-4E52-9017-43A2EFD7790B} = {67DF42D4-C318-4E52-9017-43A2EFD7790B}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiThreadedDemo", "MultiThreadedDemo\MultiThreadedDemo.csproj", "{A50E0E6A-BE1E-455E-908F-6C856D2979F6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{540E0C60-3FBD-4166-933D-D80284D1CA0E} = {540E0C60-3FBD-4166-933D-D80284D1CA0E}
+		{3CD13788-CD50-451F-8267-AF7578403621} = {3CD13788-CD50-451F-8267-AF7578403621}
+		{67DF42D4-C318-4E52-9017-43A2EFD7790B} = {67DF42D4-C318-4E52-9017-43A2EFD7790B}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -284,6 +291,10 @@ Global
 		{70DB3AEB-5DAC-4B77-9860-6280AF8800B8}.Debug|x86.Build.0 = Debug|x86
 		{70DB3AEB-5DAC-4B77-9860-6280AF8800B8}.Release|x86.ActiveCfg = Release|x86
 		{70DB3AEB-5DAC-4B77-9860-6280AF8800B8}.Release|x86.Build.0 = Release|x86
+		{A50E0E6A-BE1E-455E-908F-6C856D2979F6}.Debug|x86.ActiveCfg = Debug|x86
+		{A50E0E6A-BE1E-455E-908F-6C856D2979F6}.Debug|x86.Build.0 = Debug|x86
+		{A50E0E6A-BE1E-455E-908F-6C856D2979F6}.Release|x86.ActiveCfg = Release|x86
+		{A50E0E6A-BE1E-455E-908F-6C856D2979F6}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -115,6 +115,8 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btCollisionCreateFunc_wrap.h
     src/btCollisionDispatcher_wrap.cpp
     src/btCollisionDispatcher_wrap.h
+    src/btCollisionDispatcherMt_wrap.cpp
+    src/btCollisionDispatcherMt_wrap.h
     src/btCollisionObject_wrap.cpp
     src/btCollisionObject_wrap.h
     src/btCollisionObjectWrapper_wrap.cpp

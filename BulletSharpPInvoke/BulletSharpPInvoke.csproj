@@ -44,6 +44,7 @@
     <Compile Include="Collision\BoxBoxDetector.cs" />
     <Compile Include="Collision\CollisionConfiguration.cs" />
     <Compile Include="Collision\CollisionCreateFunc.cs" />
+    <Compile Include="Collision\CollisionDispatcherMultithreaded.cs" />
     <Compile Include="Collision\CollisionDispatcher.cs" />
     <Compile Include="Collision\CollisionObject.cs" />
     <Compile Include="Collision\CompoundCollisionAlgorithm.cs" />

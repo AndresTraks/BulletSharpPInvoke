@@ -5,8 +5,19 @@
 
 #include "btDiscreteDynamicsWorldMt_wrap.h"
 
+btConstraintSolverPoolMt* btConstraintSolverPoolMt_new(int numSolvers)
+{
+	return ALIGNED_NEW(btConstraintSolverPoolMt)(numSolvers);
+}
+
+btConstraintSolverPoolMt* btConstraintSolverPoolMt_new2(btConstraintSolver** solvers, int numSolvers)
+{
+	return ALIGNED_NEW(btConstraintSolverPoolMt)(solvers, numSolvers);
+}
+
+
 btDiscreteDynamicsWorldMt* btDiscreteDynamicsWorldMt_new(btDispatcher* dispatcher, btBroadphaseInterface* pairCache,
-	btConstraintSolver* constraintSolver, btCollisionConfiguration* collisionConfiguration)
+	btConstraintSolverPoolMt* constraintSolver, btCollisionConfiguration* collisionConfiguration)
 {
 	return new btDiscreteDynamicsWorldMt(dispatcher, pairCache, constraintSolver, collisionConfiguration);
 }

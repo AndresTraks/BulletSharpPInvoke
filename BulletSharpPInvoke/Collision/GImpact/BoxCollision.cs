@@ -103,7 +103,7 @@ namespace BulletSharp
 		}
 	}
 
-	public class Aabb : IDisposable
+	public sealed class Aabb : IDisposable
 	{
 		internal IntPtr Native;
 		private bool _preventDelete;
@@ -286,7 +286,7 @@ namespace BulletSharp
 			GC.SuppressFinalize(this);
 		}
 
-		protected virtual void Dispose(bool disposing)
+		private void Dispose(bool disposing)
 		{
 			if (Native != IntPtr.Zero)
 			{

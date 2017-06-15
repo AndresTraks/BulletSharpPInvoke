@@ -140,6 +140,10 @@
 #define btNearCallback void*
 #endif
 
+#ifndef BT_COLLISION_DISPATCHER_MT_H
+#define btCollisionDispatcherMt void
+#endif
+
 #ifndef BT_COLLISION_OBJECT_H
 #define btAlignedObjectArray_btCollisionObjectPtr void
 #define btAlignedObjectArray_const_btCollisionObjectPtr void
@@ -343,6 +347,7 @@
 #endif
 
 #ifndef BT_DISCRETE_DYNAMICS_WORLD_MT_H
+#define btConstraintSolverPoolMt void
 #define btDiscreteDynamicsWorldMt void
 #endif
 

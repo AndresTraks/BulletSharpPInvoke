@@ -153,6 +153,17 @@ namespace BulletSharp
 		public static extern void btBvhTree_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btCollisionDispatcherMt_new(IntPtr collisionConfiguration, int grainSize);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btConstraintSolverPoolMt_new(int numSolvers);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btConstraintSolverPoolMt_new2(IntPtr solvers, int numSolvers);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btDiscreteDynamicsWorldMt_new(IntPtr dispatcher, IntPtr pairCache, IntPtr constraintSolver, IntPtr collisionConfiguration);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btGImpactBvh_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btGImpactBvh_new2(IntPtr primitive_manager);
