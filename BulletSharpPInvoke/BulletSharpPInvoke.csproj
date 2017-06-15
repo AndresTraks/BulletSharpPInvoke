@@ -200,6 +200,7 @@
     <Compile Include="LinearMath\PolarDecomposition.cs" />
     <Compile Include="LinearMath\PoolAllocator.cs" />
     <Compile Include="LinearMath\Serializer.cs" />
+    <Compile Include="LinearMath\Threads.cs" />
     <Compile Include="LinearMath\TransformUtil.cs" />
     <Compile Include="MathUtil.cs">
       <SubType>Code</SubType>

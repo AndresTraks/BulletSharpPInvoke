@@ -470,6 +470,17 @@ namespace BulletSharp
 		public static extern void btQuantizedBvhTree_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btThreads_btGetOpenMPTaskScheduler();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btThreads_btGetPPLTaskScheduler();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btThreads_btGetSequentialTaskScheduler();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btThreads_btGetTBBTaskScheduler();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btThreads_btSetTaskScheduler(IntPtr taskScheduler);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr GIM_BVH_DATA_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr GIM_BVH_DATA_getBound(IntPtr obj);

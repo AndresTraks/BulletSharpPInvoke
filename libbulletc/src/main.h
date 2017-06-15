@@ -964,6 +964,10 @@
 #define btThreadSupportInterface void
 #endif
 
+#ifndef BT_THREADS_H
+#define btITaskScheduler void
+#endif
+
 #ifndef BT_TRANSFORM_H
 #define btTransform void
 #endif

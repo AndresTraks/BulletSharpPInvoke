@@ -20,8 +20,9 @@ namespace BasicDemo
         {
             demo.FreeLook.Eye = new Vector3(30, 20, 15);
             demo.FreeLook.Target = new Vector3(0, 3, 0);
-            demo.Graphics.WindowTitle = "BulletSharp - Multi-threaded Demo";
-            return new MultiThreadedDemoSimulation();
+            var simulation = new MultiThreadedDemoSimulation();
+            demo.Graphics.WindowTitle = $"BulletSharp - Multi-threaded Demo ({Threads.TaskScheduler.GetType().Name})";
+            return simulation;
         }
     }
 
@@ -34,12 +35,13 @@ namespace BasicDemo
 
         public MultiThreadedDemoSimulation()
         {
+            SetTaskScheduler();
+
             using (var collisionConfigurationInfo = new DefaultCollisionConstructionInfo
             {
                 DefaultMaxPersistentManifoldPoolSize = 80000,
                 DefaultMaxCollisionAlgorithmPoolSize = 80000
-            }
-            )
+            })
             {
                 CollisionConfiguration = new DefaultCollisionConfiguration(collisionConfigurationInfo);
             };
@@ -61,6 +63,24 @@ namespace BasicDemo
         public void Dispose()
         {
             this.StandardCleanup();
+        }
+
+        private void SetTaskScheduler()
+        {
+            TaskScheduler scheduler = Threads.GetOpenMPTaskScheduler();
+            if (scheduler == null)
+            {
+                scheduler = Threads.GetTbbTaskScheduler();
+            }
+            if (scheduler == null)
+            {
+                scheduler = Threads.GetPplTaskScheduler();
+            }
+            if (scheduler == null)
+            {
+                scheduler = Threads.GetSequentialTaskScheduler();
+            }
+            Threads.TaskScheduler = scheduler;
         }
 
         private void CreateGround()

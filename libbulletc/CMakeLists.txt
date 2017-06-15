@@ -353,6 +353,8 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btStridingMeshInterface_wrap.h
     src/btTetrahedronShape_wrap.cpp
     src/btTetrahedronShape_wrap.h
+    src/btThreads_wrap.cpp
+    src/btThreads_wrap.h
     src/btTransformUtil_wrap.cpp
     src/btTransformUtil_wrap.h
     src/btTriangleBuffer_wrap.cpp
