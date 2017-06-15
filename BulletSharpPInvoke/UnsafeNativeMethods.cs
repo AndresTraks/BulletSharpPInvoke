@@ -416,6 +416,15 @@ namespace BulletSharp
 		public static extern void btIndexedMesh_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btITaskScheduler_getMaxNumThreads(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btITaskScheduler_getName(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btITaskScheduler_getNumThreads(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btITaskScheduler_setNumThreads(IntPtr obj, int numThreads);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btPairSet_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btPairSet_push_pair(IntPtr obj, int index1, int index2);

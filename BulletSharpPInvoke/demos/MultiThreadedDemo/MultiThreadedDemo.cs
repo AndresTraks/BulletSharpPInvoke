@@ -18,17 +18,18 @@ namespace BasicDemo
     {
         public ISimulation CreateSimulation(Demo demo)
         {
-            demo.FreeLook.Eye = new Vector3(30, 20, 15);
-            demo.FreeLook.Target = new Vector3(0, 3, 0);
+            demo.FreeLook.Eye = new Vector3(80, 50, -30);
+            demo.FreeLook.Target = new Vector3(0, 20, 0);
             var simulation = new MultiThreadedDemoSimulation();
-            demo.Graphics.WindowTitle = $"BulletSharp - Multi-threaded Demo ({Threads.TaskScheduler.GetType().Name})";
+            var scheduler = Threads.TaskScheduler;
+            demo.Graphics.WindowTitle = $"BulletSharp - Multi-threaded Demo ({scheduler.Name}, {scheduler.NumThreads}/{scheduler.MaxNumThreads} threads)";
             return simulation;
         }
     }
 
     internal sealed class MultiThreadedDemoSimulation : ISimulation
     {
-        private const int NumBoxesX = 5, NumBoxesY = 50, NumBoxesZ = 50;
+        private const int NumBoxesX = 5, NumBoxesY = 50, NumBoxesZ = 20;
         private Vector3 _startPosition = new Vector3(0, 2, 0);
         private const int MaxThreadCount = 64;
         private ConstraintSolverPoolMultiThreaded _constraintSolver;
@@ -80,12 +81,13 @@ namespace BasicDemo
             {
                 scheduler = Threads.GetSequentialTaskScheduler();
             }
+            scheduler.NumThreads = scheduler.MaxNumThreads;
             Threads.TaskScheduler = scheduler;
         }
 
         private void CreateGround()
         {
-            var groundShape = new BoxShape(50, 1, 50);
+            var groundShape = new BoxShape(100, 1, 100);
             //var groundShape = new StaticPlaneShape(Vector3.UnitY, 1);
 
             CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix.Identity, groundShape, World);

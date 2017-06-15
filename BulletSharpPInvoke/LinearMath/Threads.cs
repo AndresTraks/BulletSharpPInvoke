@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace BulletSharp
 {
@@ -9,6 +10,22 @@ namespace BulletSharp
 		internal TaskScheduler(IntPtr native)
 		{
 			Native = native;
+		}
+
+		public int MaxNumThreads
+		{
+			get { return UnsafeNativeMethods.btITaskScheduler_getMaxNumThreads(Native); }
+		}
+
+		public string Name
+		{
+			get { return Marshal.PtrToStringAnsi(UnsafeNativeMethods.btITaskScheduler_getName(Native)); }
+		}
+
+		public int NumThreads
+		{
+			get { return UnsafeNativeMethods.btITaskScheduler_getNumThreads(Native); }
+			set { UnsafeNativeMethods.btITaskScheduler_setNumThreads(Native, value); }
 		}
 	}
 
@@ -93,8 +110,8 @@ namespace BulletSharp
 		{
 			if (_taskSchedulerSequential == null)
 			{
-                _taskSchedulerSequential = new TaskSchedulerSequential(UnsafeNativeMethods.btThreads_btGetSequentialTaskScheduler());
-            }
+				_taskSchedulerSequential = new TaskSchedulerSequential(UnsafeNativeMethods.btThreads_btGetSequentialTaskScheduler());
+			}
 			return _taskSchedulerSequential;
 		}
 
