@@ -2,6 +2,9 @@
 using BulletSharp.Math;
 using DemoFramework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace BasicDemo
 {
@@ -14,29 +17,49 @@ namespace BasicDemo
         }
     }
 
-    internal sealed class MultiThreadedDemo : IDemoConfiguration
+    internal sealed class MultiThreadedDemo : IDemoConfiguration, IUpdateReceiver
     {
         public ISimulation CreateSimulation(Demo demo)
         {
-            demo.FreeLook.Eye = new Vector3(80, 50, -30);
-            demo.FreeLook.Target = new Vector3(0, 20, 0);
+            demo.FreeLook.Eye = new Vector3(80, 50, -30) * MultiThreadedDemoSimulation.Scale;
+            demo.FreeLook.Target = new Vector3(0, 20, 0) * MultiThreadedDemoSimulation.Scale;
             var simulation = new MultiThreadedDemoSimulation();
             var scheduler = Threads.TaskScheduler;
-            demo.Graphics.WindowTitle = $"BulletSharp - Multi-threaded Demo ({scheduler.Name}, {scheduler.NumThreads}/{scheduler.MaxNumThreads} threads)";
+            demo.Graphics.WindowTitle = "BulletSharp - Multi-threaded Demo";
+            SetDemoText(demo);
             return simulation;
+        }
+
+        public void Update(Demo demo)
+        {
+            if (demo.Input.KeysPressed.Contains(Keys.T))
+            {
+                ((MultiThreadedDemoSimulation)demo.Simulation).NextTaskScheduler();
+                SetDemoText(demo);
+            }
+        }
+
+        private void SetDemoText(Demo demo)
+        {
+            var scheduler = Threads.TaskScheduler;
+            demo.DemoText = $"T - Scheduler: {scheduler.Name}\n{scheduler.NumThreads}/{scheduler.MaxNumThreads} threads";
         }
     }
 
     internal sealed class MultiThreadedDemoSimulation : ISimulation
     {
+        public const float Scale = 0.5f;
         private const int NumBoxesX = 5, NumBoxesY = 50, NumBoxesZ = 20;
         private Vector3 _startPosition = new Vector3(0, 2, 0);
         private const int MaxThreadCount = 64;
         private ConstraintSolverPoolMultiThreaded _constraintSolver;
+        private List<TaskScheduler> _schedulers = new List<TaskScheduler>();
+        private int _currentScheduler = 0;
 
         public MultiThreadedDemoSimulation()
         {
-            SetTaskScheduler();
+            CreateSchedulers();
+            NextTaskScheduler();
 
             using (var collisionConfigurationInfo = new DefaultCollisionConstructionInfo
             {
@@ -66,29 +89,38 @@ namespace BasicDemo
             this.StandardCleanup();
         }
 
-        private void SetTaskScheduler()
+        public void NextTaskScheduler()
         {
-            TaskScheduler scheduler = Threads.GetOpenMPTaskScheduler();
-            if (scheduler == null)
+            _currentScheduler++;
+            if (_currentScheduler >= _schedulers.Count)
             {
-                scheduler = Threads.GetTbbTaskScheduler();
+                _currentScheduler = 0;
             }
-            if (scheduler == null)
-            {
-                scheduler = Threads.GetPplTaskScheduler();
-            }
-            if (scheduler == null)
-            {
-                scheduler = Threads.GetSequentialTaskScheduler();
-            }
+            TaskScheduler scheduler = _schedulers[_currentScheduler];
             scheduler.NumThreads = scheduler.MaxNumThreads;
             Threads.TaskScheduler = scheduler;
         }
 
+        private void CreateSchedulers()
+        {
+            AddScheduler(Threads.GetSequentialTaskScheduler());
+            AddScheduler(Threads.GetOpenMPTaskScheduler());
+            AddScheduler(Threads.GetTbbTaskScheduler());
+            AddScheduler(Threads.GetPplTaskScheduler());
+        }
+
+        private void AddScheduler(TaskScheduler scheduler)
+        {
+            if (scheduler != null)
+            {
+                _schedulers.Add(scheduler);
+            }
+        }
+
         private void CreateGround()
         {
-            var groundShape = new BoxShape(100, 1, 100);
-            //var groundShape = new StaticPlaneShape(Vector3.UnitY, 1);
+            var groundShape = new BoxShape(Scale * new Vector3(100, 1, 100));
+            //var groundShape = new StaticPlaneShape(Vector3.UnitY, Scale);
 
             CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix.Identity, groundShape, World);
             ground.UserObject = "Ground";
@@ -97,7 +129,7 @@ namespace BasicDemo
         private void CreateBoxes()
         {
             const float mass = 1.0f;
-            var shape = new BoxShape(1);
+            var shape = new BoxShape(Scale);
             Vector3 localInertia = shape.CalculateLocalInertia(mass);
             var bodyInfo = new RigidBodyConstructionInfo(mass, null, shape, localInertia);
 
@@ -107,10 +139,10 @@ namespace BasicDemo
                 {
                     for (int z = 0; z < NumBoxesZ; z++)
                     {
-                        Vector3 position = _startPosition + 2 * new Vector3(x, y, z);
+                        Vector3 position = _startPosition + Scale * 2 * new Vector3(x, y, z);
 
                         // make it drop from a height
-                        position += new Vector3(0, 10, 0);
+                        position += new Vector3(0, Scale * 10, 0);
 
                         // using MotionState is recommended, it provides interpolation capabilities
                         // and only synchronizes 'active' objects
