@@ -27,6 +27,7 @@ namespace ConvexDecompositionDemo
             demo.FreeLook.Eye = new Vector3(35, 10, 35);
             demo.FreeLook.Target = new Vector3(0, 5, 0);
             demo.Graphics.WindowTitle = "BulletSharp - Hierarchical Approximate Convex Decomposition Demo";
+            SetDemoText(demo);
             return new ConvexDecompositionDemoSimulation(_enableSat);
         }
 
@@ -36,14 +37,18 @@ namespace ConvexDecompositionDemo
             {
                 _enableSat = !_enableSat;
                 demo.ResetScene();
-                if (_enableSat)
-                {
-                    Console.WriteLine("SAT enabled");
-                }
-                else
-                {
-                    Console.WriteLine("SAT disabled");
-                }
+            }
+        }
+
+        private void SetDemoText(Demo demo)
+        {
+            if (_enableSat)
+            {
+                demo.DemoText = "SAT enabled";
+            }
+            else
+            {
+                demo.DemoText = "SAT disabled";
             }
         }
     }

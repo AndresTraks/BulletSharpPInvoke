@@ -21,7 +21,7 @@ namespace CcdPhysicsDemo
 
         public ISimulation CreateSimulation(Demo demo)
         {
-            demo.FreeLook.Eye = new Vector3(0, 20, 80);
+            demo.FreeLook.Eye = new Vector3(0, 10, 40);
             demo.FreeLook.Target = Vector3.Zero;
             demo.Graphics.WindowTitle = "BulletSharp - Continous Collision Detection Demo";
             SetDemoText(demo);
@@ -61,9 +61,9 @@ namespace CcdPhysicsDemo
 
     internal sealed class CcdPhysicsDemoSimulation : ISimulation
     {
-        private const float CubeHalfExtents = 1.0f;
-        private const float ExtraHeight = 1.0f;
-        private const float ShootBoxInitialSpeed = 4000;
+        private const float CubeHalfExtents = 0.5f;
+        private const float ExtraHeight = 0.5f;
+        private const float ShootBoxInitialSpeed = 2000;
 
         private readonly bool _ccdEnabled;
         private BoxShape _shootBoxShape = new BoxShape(1);
@@ -102,12 +102,12 @@ namespace CcdPhysicsDemo
 
             if (_shootBoxShape == null)
             {
-                _shootBoxShape = new BoxShape(1.0f);
+                _shootBoxShape = new BoxShape(0.5f);
                 _shootBoxShape.InitializePolyhedralFeatures();
             }
 
             RigidBody body = PhysicsHelper.CreateBody(mass, Matrix.Translation(camPos), _shootBoxShape, World);
-            body.LinearFactor = new Vector3(1, 1, 1);
+            body.LinearFactor = new Vector3(0.5f);
             //body.Restitution = 1;
 
             Vector3 linVel = destination - camPos;
@@ -119,8 +119,8 @@ namespace CcdPhysicsDemo
             // when using CCD mode, disable regular CCD
             if (_ccdEnabled)
             {
-                body.CcdMotionThreshold = 0.0001f;
-                body.CcdSweptSphereRadius = 0.4f;
+                body.CcdMotionThreshold = 0.00005f;
+                body.CcdSweptSphereRadius = 0.2f;
             }
         }
 
@@ -131,7 +131,7 @@ namespace CcdPhysicsDemo
 
         private void CreateGround()
         {
-            var ground = new BoxShape(200, 1, 200);
+            var ground = new BoxShape(100, 0.5f, 100);
             ground.InitializePolyhedralFeatures();
             RigidBody body = PhysicsHelper.CreateStaticBody(Matrix.Identity, ground, World);
             body.Friction = 0.5f;
