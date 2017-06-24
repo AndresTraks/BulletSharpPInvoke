@@ -20,8 +20,8 @@ namespace BasicDemo
     {
         public ISimulation CreateSimulation(Demo demo)
         {
-            demo.FreeLook.Eye = new Vector3(80, 50, -30) * MultiThreadedDemoSimulation.Scale;
-            demo.FreeLook.Target = new Vector3(0, 20, 0) * MultiThreadedDemoSimulation.Scale;
+            demo.FreeLook.Eye = new Vector3(-100, 100, -100) * MultiThreadedDemoSimulation.Scale;
+            demo.FreeLook.Target = new Vector3(0, 50, -30) * MultiThreadedDemoSimulation.Scale;
             var simulation = new MultiThreadedDemoSimulation();
             var scheduler = Threads.TaskScheduler;
             demo.Graphics.WindowTitle = "BulletSharp - Multi-threaded Demo";
@@ -48,8 +48,11 @@ namespace BasicDemo
     internal sealed class MultiThreadedDemoSimulation : ISimulation
     {
         public const float Scale = 0.5f;
-        private const int NumBoxesX = 5, NumBoxesY = 50, NumBoxesZ = 20;
-        private Vector3 _startPosition = new Vector3(0, 2, 0);
+        private const int NumBoxesX = 7, NumBoxesY = 7, NumBoxesZ = 7;
+        private const int NumStacksX = 5, NumStacksZ = 5;
+        private const float StackSpacingX = 50 * Scale;
+        private const float StackSpacingZ = 50 * Scale;
+        private Vector3 _startPosition = new Vector3(0, 20, -40);
         private const int MaxThreadCount = 64;
         private ConstraintSolverPoolMultiThreaded _constraintSolver;
         private List<TaskScheduler> _schedulers = new List<TaskScheduler>();
@@ -118,10 +121,11 @@ namespace BasicDemo
 
         private void CreateGround()
         {
-            var groundShape = new BoxShape(Scale * new Vector3(100, 1, 100));
+            var groundShape = new BoxShape(Scale * new Vector3(400, 1, 400));
             //var groundShape = new StaticPlaneShape(Vector3.UnitY, Scale);
 
             CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix.Identity, groundShape, World);
+            ground.Friction = 1;
             ground.UserObject = "Ground";
         }
 
@@ -130,21 +134,30 @@ namespace BasicDemo
             const float mass = 1.0f;
             var shape = new BoxShape(Scale);
             Vector3 localInertia = shape.CalculateLocalInertia(mass);
-            var bodyInfo = new RigidBodyConstructionInfo(mass, null, shape, localInertia);
 
+            using (var bodyInfo = new RigidBodyConstructionInfo(mass, null, shape, localInertia))
+            {
+                for (int x = 0; x < NumStacksX; x++)
+                {
+                    for (int z = 0; z < NumStacksZ; z++)
+                    {
+                        Vector3 offset = _startPosition + new Vector3(x * StackSpacingX, 0, z * StackSpacingZ);
+                        CreateStack(offset, bodyInfo);
+                    }
+                }
+            }
+        }
+
+        private void CreateStack(Vector3 offset, RigidBodyConstructionInfo bodyInfo)
+        {
             for (int y = 0; y < NumBoxesY; y++)
             {
                 for (int x = 0; x < NumBoxesX; x++)
                 {
                     for (int z = 0; z < NumBoxesZ; z++)
                     {
-                        Vector3 position = _startPosition + Scale * 2 * new Vector3(x, y, z);
+                        Vector3 position = offset + Scale * 2 * new Vector3(x, y, z);
 
-                        // make it drop from a height
-                        position += new Vector3(0, Scale * 10, 0);
-
-                        // using MotionState is recommended, it provides interpolation capabilities
-                        // and only synchronizes 'active' objects
                         bodyInfo.MotionState = new DefaultMotionState(Matrix.Translation(position));
                         var body = new RigidBody(bodyInfo);
 
@@ -152,8 +165,6 @@ namespace BasicDemo
                     }
                 }
             }
-
-            bodyInfo.Dispose();
         }
     }
 }
