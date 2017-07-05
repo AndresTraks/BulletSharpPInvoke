@@ -253,6 +253,37 @@ namespace BulletSharp
 		public static extern void btGImpactCollisionAlgorithm_setPart1(IntPtr obj, int value);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGImpactCompoundShape_new(bool children_has_transform);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactCompoundShape_addChildShape(IntPtr obj, [In] ref Matrix localTransform, IntPtr shape);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactCompoundShape_addChildShape2(IntPtr obj, IntPtr shape);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGImpactCompoundShape_getCompoundPrimitiveManager(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGImpactMeshShape_new(IntPtr meshInterface);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGImpactMeshShape_getMeshInterface(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGImpactMeshShape_getMeshPart(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btGImpactMeshShape_getMeshPartCount(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGImpactMeshShapePart_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGImpactMeshShapePart_new2(IntPtr meshInterface, int part);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btGImpactMeshShapePart_getPart(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGImpactMeshShapePart_getTrimeshPrimitiveManager(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactMeshShapePart_getVertex(IntPtr obj, int vertex_index, out Vector3 vertex);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btGImpactMeshShapePart_getVertexCount(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btGImpactMeshShapePart_TrimeshPrimitiveManager_new(IntPtr meshInterface, int part);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btGImpactMeshShapePart_TrimeshPrimitiveManager_new2(IntPtr manager);
@@ -379,6 +410,51 @@ namespace BulletSharp
 		public static extern void btGImpactQuantizedBvh_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btGImpactShapeInterface_childrenHasTransform(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGImpactShapeInterface_getBoxSet(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactShapeInterface_getBulletTetrahedron(IntPtr obj, int prim_index, IntPtr tetrahedron);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactShapeInterface_getBulletTriangle(IntPtr obj, int prim_index, IntPtr triangle);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactShapeInterface_getChildAabb(IntPtr obj, int child_index, [In] ref Matrix t, out Vector3 aabbMin, out Vector3 aabbMax);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactShapeInterface_getChildTransform(IntPtr obj, int index, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGImpactShapeInterface_getLocalBox(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btGImpactShapeInterface_getNumChildShapes(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGImpactShapeInterface_getPrimitiveManager(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactShapeInterface_getPrimitiveTriangle(IntPtr obj, int index, IntPtr triangle);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btGImpactShapeInterface_hasBoxSet(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactShapeInterface_lockChildShapes(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btGImpactShapeInterface_needsRetrieveTetrahedrons(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btGImpactShapeInterface_needsRetrieveTriangles(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactShapeInterface_postUpdate(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactShapeInterface_processAllTrianglesRay(IntPtr obj, IntPtr __unnamed0, [In] ref Vector3 __unnamed1, [In] ref Vector3 __unnamed2);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactShapeInterface_rayTest(IntPtr obj, [In] ref Vector3 rayFrom, [In] ref Vector3 rayTo, IntPtr resultCallback);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactShapeInterface_setChildTransform(IntPtr obj, int index, [In] ref Matrix transform);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactShapeInterface_unlockChildShapes(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGImpactShapeInterface_updateBound(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btIndexedMesh_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern PhyScalarType btIndexedMesh_getIndexType(IntPtr obj);
@@ -446,6 +522,39 @@ namespace BulletSharp
 		public static extern void btPrimitiveManagerBase_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btPrimitiveTriangle_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPrimitiveTriangle_applyTransform(IntPtr obj, [In] ref Matrix t);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPrimitiveTriangle_buildTriPlane(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btPrimitiveTriangle_clip_triangle(IntPtr obj, IntPtr other, [Out] out Vector3 clipped_points);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btPrimitiveTriangle_find_triangle_collision_clip_method(IntPtr obj, IntPtr other, IntPtr contacts);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPrimitiveTriangle_get_edge_plane(IntPtr obj, int edge_index, [Out] out Vector4 plane);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btPrimitiveTriangle_getDummy(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btPrimitiveTriangle_getMargin(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPrimitiveTriangle_getPlane(IntPtr obj, [Out] out Vector4 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btPrimitiveTriangle_getVertices(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btPrimitiveTriangle_overlap_test_conservative(IntPtr obj, IntPtr other);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPrimitiveTriangle_setDummy(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPrimitiveTriangle_setMargin(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPrimitiveTriangle_setPlane(IntPtr obj, [In] ref Vector4 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPrimitiveTriangle_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btQuantizedBvhTree_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btQuantizedBvhTree_build_tree(IntPtr obj, IntPtr primitive_boxes);
@@ -479,6 +588,11 @@ namespace BulletSharp
 		public static extern void btQuantizedBvhTree_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTetrahedronShapeEx_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTetrahedronShapeEx_setVertices(IntPtr obj, [In] ref Vector3 v0, [In] ref Vector3 v1, [In] ref Vector3 v2, [In] ref Vector3 v3);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btThreads_btGetOpenMPTaskScheduler();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btThreads_btGetPPLTaskScheduler();
@@ -488,6 +602,20 @@ namespace BulletSharp
 		public static extern IntPtr btThreads_btGetTBBTaskScheduler();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btThreads_btSetTaskScheduler(IntPtr taskScheduler);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTriangleShapeEx_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTriangleShapeEx_new2([In] ref Vector3 p0, [In] ref Vector3 p1, [In] ref Vector3 p2);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTriangleShapeEx_new3(IntPtr other);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTriangleShapeEx_applyTransform(IntPtr obj, [In] ref Matrix t);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTriangleShapeEx_buildTriPlane(IntPtr obj, [Out] out Vector4 plane);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btTriangleShapeEx_overlap_test_conservative(IntPtr obj, IntPtr other);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr GIM_BVH_DATA_new();
@@ -547,5 +675,30 @@ namespace BulletSharp
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr GIM_QUANTIZED_BVH_NODE_ARRAY_new();
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr GIM_TRIANGLE_CONTACT_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr GIM_TRIANGLE_CONTACT_new2(IntPtr other);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void GIM_TRIANGLE_CONTACT_copy_from(IntPtr obj, IntPtr other);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float GIM_TRIANGLE_CONTACT_getPenetration_depth(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int GIM_TRIANGLE_CONTACT_getPoint_count(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr GIM_TRIANGLE_CONTACT_getPoints(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void GIM_TRIANGLE_CONTACT_getSeparating_normal(IntPtr obj, [Out] out Vector4 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void GIM_TRIANGLE_CONTACT_merge_points(IntPtr obj, [In] ref Vector4 plane, float margin, [In] ref Vector3 points, int point_count);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void GIM_TRIANGLE_CONTACT_setPenetration_depth(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void GIM_TRIANGLE_CONTACT_setPoint_count(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void GIM_TRIANGLE_CONTACT_setSeparating_normal(IntPtr obj, [In] ref Vector4 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void GIM_TRIANGLE_CONTACT_delete(IntPtr obj);
 	}
 }

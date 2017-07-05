@@ -24,35 +24,32 @@ namespace BulletSharp
 
 		public int DataIndex
 		{
-			get { return UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_getDataIndex(_native); }
-			set { UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_setDataIndex(_native, value); }
+			get => UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_getDataIndex(_native);
+			set => UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_setDataIndex(_native, value);
 		}
 
 		public int EscapeIndex
 		{
-			get { return UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_getEscapeIndex(_native); }
-			set { UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_setEscapeIndex(_native, value); }
+			get => UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_getEscapeIndex(_native);
+			set => UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_setEscapeIndex(_native, value);
 		}
 
 		public int EscapeIndexOrDataIndex
 		{
-			get { return UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_getEscapeIndexOrDataIndex(_native); }
-			set { UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_setEscapeIndexOrDataIndex(_native, value); }
+			get => UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_getEscapeIndexOrDataIndex(_native);
+			set => UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_setEscapeIndexOrDataIndex(_native, value);
 		}
 
-		public bool IsLeafNode
-		{
-			get { return UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_isLeafNode(_native); }
-		}
+		public bool IsLeafNode => UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_isLeafNode(_native);
 		/*
 		public UShortArray QuantizedAabbMax
 		{
-			get { return UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_getQuantizedAabbMax(_native); }
+			get => UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_getQuantizedAabbMax(_native);
 		}
 
 		public UShortArray QuantizedAabbMin
 		{
-			get { return UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_getQuantizedAabbMin(_native); }
+			get => UnsafeNativeMethods.BT_QUANTIZED_BVH_NODE_getQuantizedAabbMin(_native);
 		}
 		*/
 		public void Dispose()
@@ -166,10 +163,7 @@ namespace BulletSharp
 			return UnsafeNativeMethods.btQuantizedBvhTree_testQuantizedBoxOverlapp(_native, nodeIndex, quantizedMin, quantizedMax);
 		}
 
-		public int NodeCount
-		{
-			get { return UnsafeNativeMethods.btQuantizedBvhTree_getNodeCount(_native); }
-		}
+		public int NodeCount => UnsafeNativeMethods.btQuantizedBvhTree_getNodeCount(_native);
 
 		public void Dispose()
 		{
@@ -293,29 +287,17 @@ namespace BulletSharp
 			UnsafeNativeMethods.btGImpactQuantizedBvh_update(_native);
 		}
 
-		public Aabb GlobalBox
-		{
-			get { return new Aabb(UnsafeNativeMethods.btGImpactQuantizedBvh_getGlobalBox(_native)); }
-		}
+		public Aabb GlobalBox => new Aabb(UnsafeNativeMethods.btGImpactQuantizedBvh_getGlobalBox(_native));
 
-		public bool HasHierarchy
-		{
-			get { return UnsafeNativeMethods.btGImpactQuantizedBvh_hasHierarchy(_native); }
-		}
+		public bool HasHierarchy => UnsafeNativeMethods.btGImpactQuantizedBvh_hasHierarchy(_native);
 
-		public bool IsTrimesh
-		{
-			get { return UnsafeNativeMethods.btGImpactQuantizedBvh_isTrimesh(_native); }
-		}
+		public bool IsTrimesh => UnsafeNativeMethods.btGImpactQuantizedBvh_isTrimesh(_native);
 
-		public int NodeCount
-		{
-			get { return UnsafeNativeMethods.btGImpactQuantizedBvh_getNodeCount(_native); }
-		}
+		public int NodeCount => UnsafeNativeMethods.btGImpactQuantizedBvh_getNodeCount(_native);
 
 		public PrimitiveManagerBase PrimitiveManager
 		{
-			get { return _primitiveManager; }
+			get => _primitiveManager;
 			set
 			{
 				UnsafeNativeMethods.btGImpactQuantizedBvh_setPrimitiveManager(_native, value.Native);

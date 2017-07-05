@@ -24,14 +24,14 @@ namespace BulletSharp
 
 		public int Index1
 		{
-			get { return UnsafeNativeMethods.GIM_PAIR_getIndex1(Native); }
-			set { UnsafeNativeMethods.GIM_PAIR_setIndex1(Native, value); }
+			get => UnsafeNativeMethods.GIM_PAIR_getIndex1(Native);
+			set => UnsafeNativeMethods.GIM_PAIR_setIndex1(Native, value);
 		}
 
 		public int Index2
 		{
-			get { return UnsafeNativeMethods.GIM_PAIR_getIndex2(Native); }
-			set { UnsafeNativeMethods.GIM_PAIR_setIndex2(Native, value); }
+			get => UnsafeNativeMethods.GIM_PAIR_getIndex2(Native);
+			set => UnsafeNativeMethods.GIM_PAIR_setIndex2(Native, value);
 		}
 
 		public void Dispose()
@@ -113,14 +113,14 @@ namespace BulletSharp
 
 		public Aabb Bound
 		{
-			get { return new Aabb(UnsafeNativeMethods.GIM_BVH_DATA_getBound(Native)); }
-			set { UnsafeNativeMethods.GIM_BVH_DATA_setBound(Native, value.Native); }
+			get => new Aabb(UnsafeNativeMethods.GIM_BVH_DATA_getBound(Native));
+			set => UnsafeNativeMethods.GIM_BVH_DATA_setBound(Native, value.Native);
 		}
 
 		public int Data
 		{
-			get { return UnsafeNativeMethods.GIM_BVH_DATA_getData(Native); }
-			set { UnsafeNativeMethods.GIM_BVH_DATA_setData(Native, value); }
+			get => UnsafeNativeMethods.GIM_BVH_DATA_getData(Native);
+			set => UnsafeNativeMethods.GIM_BVH_DATA_setData(Native, value);
 		}
 
 		public void Dispose()
@@ -163,27 +163,23 @@ namespace BulletSharp
 
 		public Aabb Bound
 		{
-			get { return new Aabb(UnsafeNativeMethods.GIM_BVH_TREE_NODE_getBound(Native)); }
-			set { UnsafeNativeMethods.GIM_BVH_TREE_NODE_setBound(Native, value.Native); }
+			get => new Aabb(UnsafeNativeMethods.GIM_BVH_TREE_NODE_getBound(Native));
+			set => UnsafeNativeMethods.GIM_BVH_TREE_NODE_setBound(Native, value.Native);
 		}
 
 		public int DataIndex
 		{
-			get { return UnsafeNativeMethods.GIM_BVH_TREE_NODE_getDataIndex(Native); }
-			set { UnsafeNativeMethods.GIM_BVH_TREE_NODE_setDataIndex(Native, value); }
+			get => UnsafeNativeMethods.GIM_BVH_TREE_NODE_getDataIndex(Native);
+			set => UnsafeNativeMethods.GIM_BVH_TREE_NODE_setDataIndex(Native, value);
 		}
 
 		public int EscapeIndex
 		{
-			get { return UnsafeNativeMethods.GIM_BVH_TREE_NODE_getEscapeIndex(Native); }
-			set { UnsafeNativeMethods.GIM_BVH_TREE_NODE_setEscapeIndex(Native, value); }
+			get => UnsafeNativeMethods.GIM_BVH_TREE_NODE_getEscapeIndex(Native);
+			set => UnsafeNativeMethods.GIM_BVH_TREE_NODE_setEscapeIndex(Native, value);
 		}
 
-		public bool IsLeafNode
-		{
-			get { return UnsafeNativeMethods.GIM_BVH_TREE_NODE_isLeafNode(Native); }
-		}
-
+		public bool IsLeafNode => UnsafeNativeMethods.GIM_BVH_TREE_NODE_isLeafNode(Native);
 		public void Dispose()
 		{
 			Dispose(true);
@@ -306,10 +302,7 @@ namespace BulletSharp
 			UnsafeNativeMethods.btBvhTree_setNodeBound(_native, nodeIndex, bound.Native);
 		}
 
-		public int NodeCount
-		{
-			get { return UnsafeNativeMethods.btBvhTree_getNodeCount(_native); }
-		}
+		public int NodeCount => UnsafeNativeMethods.btBvhTree_getNodeCount(_native);
 
 		public void Dispose()
 		{
@@ -351,15 +344,9 @@ namespace BulletSharp
 			UnsafeNativeMethods.btPrimitiveManagerBase_get_primitive_triangle(Native, primitiveIndex, triangle.Native);
 		}
 
-		public bool IsTrimesh
-		{
-			get { return UnsafeNativeMethods.btPrimitiveManagerBase_is_trimesh(Native); }
-		}
+		public bool IsTrimesh => UnsafeNativeMethods.btPrimitiveManagerBase_is_trimesh(Native);
 
-		public int PrimitiveCount
-		{
-			get { return UnsafeNativeMethods.btPrimitiveManagerBase_get_primitive_count(Native); }
-		}
+		public int PrimitiveCount => UnsafeNativeMethods.btPrimitiveManagerBase_get_primitive_count(Native);
 
 		public void Dispose()
 		{
@@ -482,30 +469,18 @@ namespace BulletSharp
 			UnsafeNativeMethods.btGImpactBvh_update(_native);
 		}
 
-		public Aabb GlobalBox
-		{
-			get { return new Aabb(UnsafeNativeMethods.btGImpactBvh_getGlobalBox(_native)); }
-		}
+		public Aabb GlobalBox => new Aabb(UnsafeNativeMethods.btGImpactBvh_getGlobalBox(_native));
 
-		public bool HasHierarchy
-		{
-			get { return UnsafeNativeMethods.btGImpactBvh_hasHierarchy(_native); }
-		}
+		public bool HasHierarchy => UnsafeNativeMethods.btGImpactBvh_hasHierarchy(_native);
 
-		public bool IsTrimesh
-		{
-			get { return UnsafeNativeMethods.btGImpactBvh_isTrimesh(_native); }
-		}
+		public bool IsTrimesh => UnsafeNativeMethods.btGImpactBvh_isTrimesh(_native);
 
-		public int NodeCount
-		{
-			get { return UnsafeNativeMethods.btGImpactBvh_getNodeCount(_native); }
-		}
+		public int NodeCount => UnsafeNativeMethods.btGImpactBvh_getNodeCount(_native);
 
 		public PrimitiveManagerBase PrimitiveManager
 		{
-			get { return new PrimitiveManagerBase(UnsafeNativeMethods.btGImpactBvh_getPrimitiveManager(_native)); }
-			set { UnsafeNativeMethods.btGImpactBvh_setPrimitiveManager(_native, value.Native); }
+			get => new PrimitiveManagerBase(UnsafeNativeMethods.btGImpactBvh_getPrimitiveManager(_native));
+			set => UnsafeNativeMethods.btGImpactBvh_setPrimitiveManager(_native, value.Native);
 		}
 
 		public void Dispose()
