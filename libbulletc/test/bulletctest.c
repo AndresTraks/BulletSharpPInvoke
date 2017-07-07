@@ -14,6 +14,11 @@ bool needsCollision(btBroadphaseProxy* proxy0)
 	return true;
 }
 
+bool hacdCallback(const char* message, double progress, double globalConcavity, size_t numVertices)
+{
+	return false;
+}
+
 void test_hacd()
 {
 	puts("Calculating HACD clusters...");
@@ -39,10 +44,12 @@ void test_hacd()
 	HACD_HACD_SetAddNeighboursDistPoints(myHACD, false);
 	HACD_HACD_SetAddFacesPoints(myHACD, false);
 
+	HACD_HACD_SetCallBack(myHACD, hacdCallback);
+
 	HACD_HACD_Compute(myHACD);
 	size_t nClusters = HACD_HACD_GetNClusters(myHACD);
 
-	printf("HACD clusters: %d\n", nClusters);
+	printf("HACD clusters: %d\n", (int)nClusters);
 
 	HACD_HACD_Save(myHACD, "output.wrl", false);
 }

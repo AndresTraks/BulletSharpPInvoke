@@ -1,5 +1,6 @@
 using BulletSharp.Math;
 using System;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
@@ -14,47 +15,47 @@ namespace BulletSharp
 
 		public GimTriangleContact()
 		{
-			Native = UnsafeNativeMethods.GIM_TRIANGLE_CONTACT_new();
+			Native = GIM_TRIANGLE_CONTACT_new();
 		}
 
 		public GimTriangleContact(GimTriangleContact other)
 		{
-			Native = UnsafeNativeMethods.GIM_TRIANGLE_CONTACT_new2(other.Native);
+			Native = GIM_TRIANGLE_CONTACT_new2(other.Native);
 		}
 
 		public void CopyFrom(GimTriangleContact other)
 		{
-			UnsafeNativeMethods.GIM_TRIANGLE_CONTACT_copy_from(Native, other.Native);
+			GIM_TRIANGLE_CONTACT_copy_from(Native, other.Native);
 		}
 		/*
 		public void MergePoints(Vector4 plane, float margin, Vector3 points, int pointCount)
 		{
-			UnsafeNativeMethods.GIM_TRIANGLE_CONTACT_merge_points(_native, ref plane, margin, ref points, pointCount);
+			GIM_TRIANGLE_CONTACT_merge_points(_native, ref plane, margin, ref points, pointCount);
 		}
 		*/
 		public float PenetrationDepth
 		{
-			get => UnsafeNativeMethods.GIM_TRIANGLE_CONTACT_getPenetration_depth(Native);
-			set => UnsafeNativeMethods.GIM_TRIANGLE_CONTACT_setPenetration_depth(Native, value);
+			get => GIM_TRIANGLE_CONTACT_getPenetration_depth(Native);
+			set => GIM_TRIANGLE_CONTACT_setPenetration_depth(Native, value);
 		}
 
 		public int PointCount
 		{
-			get => UnsafeNativeMethods.GIM_TRIANGLE_CONTACT_getPoint_count(Native);
-			set => UnsafeNativeMethods.GIM_TRIANGLE_CONTACT_setPoint_count(Native, value);
+			get => GIM_TRIANGLE_CONTACT_getPoint_count(Native);
+			set => GIM_TRIANGLE_CONTACT_setPoint_count(Native, value);
 		}
 
-		public Vector3Array Points => new Vector3Array(UnsafeNativeMethods.GIM_TRIANGLE_CONTACT_getPoints(Native), 16);
+		public Vector3Array Points => new Vector3Array(GIM_TRIANGLE_CONTACT_getPoints(Native), 16);
 
 		public Vector4 SeparatingNormal
 		{
 			get
 			{
 				Vector4 value;
-				UnsafeNativeMethods.GIM_TRIANGLE_CONTACT_getSeparating_normal(Native, out value);
+				GIM_TRIANGLE_CONTACT_getSeparating_normal(Native, out value);
 				return value;
 			}
-			set => UnsafeNativeMethods.GIM_TRIANGLE_CONTACT_setSeparating_normal(Native, ref value);
+			set => GIM_TRIANGLE_CONTACT_setSeparating_normal(Native, ref value);
 		}
 
 		public void Dispose()
@@ -67,7 +68,7 @@ namespace BulletSharp
 		{
 			if (Native != IntPtr.Zero)
 			{
-				UnsafeNativeMethods.GIM_TRIANGLE_CONTACT_delete(Native);
+				GIM_TRIANGLE_CONTACT_delete(Native);
 				Native = IntPtr.Zero;
 			}
 		}
@@ -89,49 +90,49 @@ namespace BulletSharp
 
 		public PrimitiveTriangle()
 		{
-			Native = UnsafeNativeMethods.btPrimitiveTriangle_new();
+			Native = btPrimitiveTriangle_new();
 		}
 
 		public void ApplyTransform(Matrix t)
 		{
-			UnsafeNativeMethods.btPrimitiveTriangle_applyTransform(Native, ref t);
+			btPrimitiveTriangle_applyTransform(Native, ref t);
 		}
 
 		public void BuildTriPlane()
 		{
-			UnsafeNativeMethods.btPrimitiveTriangle_buildTriPlane(Native);
+			btPrimitiveTriangle_buildTriPlane(Native);
 		}
 		/*
 		public int ClipTriangle(PrimitiveTriangle other, Vector3 clippedPoints)
 		{
-			return UnsafeNativeMethods.btPrimitiveTriangle_clip_triangle(Native, other.Native, ref clippedPoints);
+			return btPrimitiveTriangle_clip_triangle(Native, other.Native, ref clippedPoints);
 		}
 		*/
 		public bool FindTriangleCollisionClipMethod(PrimitiveTriangle other, GimTriangleContact contacts)
 		{
-			return UnsafeNativeMethods.btPrimitiveTriangle_find_triangle_collision_clip_method(Native, other.Native, contacts.Native);
+			return btPrimitiveTriangle_find_triangle_collision_clip_method(Native, other.Native, contacts.Native);
 		}
 
 		public void GetEdgePlane(int edgeIndex, out Vector4 plane)
 		{
-			UnsafeNativeMethods.btPrimitiveTriangle_get_edge_plane(Native, edgeIndex, out plane);
+			btPrimitiveTriangle_get_edge_plane(Native, edgeIndex, out plane);
 		}
 
 		public bool OverlapTestConservative(PrimitiveTriangle other)
 		{
-			return UnsafeNativeMethods.btPrimitiveTriangle_overlap_test_conservative(Native, other.Native);
+			return btPrimitiveTriangle_overlap_test_conservative(Native, other.Native);
 		}
 
 		public float Dummy
 		{
-			get => UnsafeNativeMethods.btPrimitiveTriangle_getDummy(Native);
-			set => UnsafeNativeMethods.btPrimitiveTriangle_setDummy(Native, value);
+			get => btPrimitiveTriangle_getDummy(Native);
+			set => btPrimitiveTriangle_setDummy(Native, value);
 		}
 
 		public float Margin
 		{
-			get => UnsafeNativeMethods.btPrimitiveTriangle_getMargin(Native);
-			set => UnsafeNativeMethods.btPrimitiveTriangle_setMargin(Native, value);
+			get => btPrimitiveTriangle_getMargin(Native);
+			set => btPrimitiveTriangle_setMargin(Native, value);
 		}
 
 		public Vector4 Plane
@@ -139,13 +140,13 @@ namespace BulletSharp
 			get
 			{
 				Vector4 value;
-				UnsafeNativeMethods.btPrimitiveTriangle_getPlane(Native, out value);
+				btPrimitiveTriangle_getPlane(Native, out value);
 				return value;
 			}
-			set => UnsafeNativeMethods.btPrimitiveTriangle_setPlane(Native, ref value);
+			set => btPrimitiveTriangle_setPlane(Native, ref value);
 		}
 
-		public Vector3Array Vertices => new Vector3Array(UnsafeNativeMethods.btPrimitiveTriangle_getVertices(Native), 3);
+		public Vector3Array Vertices => new Vector3Array(btPrimitiveTriangle_getVertices(Native), 3);
 
 		public void Dispose()
 		{
@@ -157,7 +158,7 @@ namespace BulletSharp
 		{
 			if (Native != IntPtr.Zero)
 			{
-				UnsafeNativeMethods.btPrimitiveTriangle_delete(Native);
+				btPrimitiveTriangle_delete(Native);
 				Native = IntPtr.Zero;
 			}
 		}
@@ -171,33 +172,33 @@ namespace BulletSharp
 	public class TriangleShapeEx : TriangleShape
 	{
 		public TriangleShapeEx()
-			: base(UnsafeNativeMethods.btTriangleShapeEx_new())
+			: base(btTriangleShapeEx_new())
 		{
 		}
 
 		public TriangleShapeEx(Vector3 p0, Vector3 p1, Vector3 p2)
-			: base(UnsafeNativeMethods.btTriangleShapeEx_new2(ref p0, ref p1, ref p2))
+			: base(btTriangleShapeEx_new2(ref p0, ref p1, ref p2))
 		{
 		}
 
 		public TriangleShapeEx(TriangleShapeEx other)
-			: base(UnsafeNativeMethods.btTriangleShapeEx_new3(other._native))
+			: base(btTriangleShapeEx_new3(other._native))
 		{
 		}
 
 		public void ApplyTransform(Matrix transform)
 		{
-			UnsafeNativeMethods.btTriangleShapeEx_applyTransform(_native, ref transform);
+			btTriangleShapeEx_applyTransform(_native, ref transform);
 		}
 
 		public void BuildTriPlane(out Vector4 plane)
 		{
-			UnsafeNativeMethods.btTriangleShapeEx_buildTriPlane(_native, out plane);
+			btTriangleShapeEx_buildTriPlane(_native, out plane);
 		}
 
 		public bool OverlapTestConservative(TriangleShapeEx other)
 		{
-			return UnsafeNativeMethods.btTriangleShapeEx_overlap_test_conservative(_native, other._native);
+			return btTriangleShapeEx_overlap_test_conservative(_native, other._native);
 		}
 	}
 }

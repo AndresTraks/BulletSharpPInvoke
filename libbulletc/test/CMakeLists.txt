@@ -27,7 +27,7 @@ IF(MSVC)
     ENDIF()
 ENDIF(MSVC)
 
-INCLUDE_DIRECTORIES("${${BULLETC_LIB}_SOURCE_DIR}/src")
+INCLUDE_DIRECTORIES("${libbulletc_SOURCE_DIR}/src")
 
 ADD_EXECUTABLE(bulletctest bulletctest.c hacd_data.h)
 
