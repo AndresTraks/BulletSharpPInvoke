@@ -4,7 +4,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using BulletSharp;
 using BulletSharp.Math;
-//using BulletSharp.SoftBody;
 
 namespace DemoFramework
 {
@@ -80,9 +79,9 @@ namespace DemoFramework
         {
             if (indices.Length > 65535)
             {
-                return null;
+                throw new ArgumentOutOfRangeException(nameof(indices));
             }
-            ushort[] ib = new ushort[indices.Length];
+            var ib = new ushort[indices.Length];
             for (int i = 0; i < ib.Length; i++)
             {
                 ib[i] = (ushort)indices[i];
@@ -101,18 +100,18 @@ namespace DemoFramework
             {
                 for (int i = 1; i != -3; i -= 2)
                 {
-                    normal = GetVectorByAxis(0, i, 0, j);
-                    vertices[v++] = GetVectorByAxis(i, i, i, j) * size;
+                    normal = RotateYAxisUp(0, i, 0, j);
+                    vertices[v++] = RotateYAxisUp(i, i, i, j) * size;
                     vertices[v++] = normal;
-                    vertices[v++] = GetVectorByAxis(1, i, -1, j) * size;
+                    vertices[v++] = RotateYAxisUp(1, i, -1, j) * size;
                     vertices[v++] = normal;
-                    vertices[v++] = GetVectorByAxis(-1, i, 1, j) * size;
+                    vertices[v++] = RotateYAxisUp(-1, i, 1, j) * size;
                     vertices[v++] = normal;
-                    vertices[v++] = GetVectorByAxis(-i, i, -i, j) * size;
+                    vertices[v++] = RotateYAxisUp(-i, i, -i, j) * size;
                     vertices[v++] = normal;
-                    vertices[v++] = GetVectorByAxis(-1, i, 1, j) * size;
+                    vertices[v++] = RotateYAxisUp(-1, i, 1, j) * size;
                     vertices[v++] = normal;
-                    vertices[v++] = GetVectorByAxis(1, i, -1, j) * size;
+                    vertices[v++] = RotateYAxisUp(1, i, -1, j) * size;
                     vertices[v++] = normal;
                 }
             }
@@ -140,75 +139,78 @@ namespace DemoFramework
             float radius = shape.Radius;
             float cylinderHalfHeight = shape.HalfHeight;
 
-            int slices = (int)(radius * 10.0f);
-            int stacks = (int)(radius * 10.0f);
-            slices = (slices > 16) ? 16 : (slices < 3) ? 3 : slices;
-            stacks = (stacks > 16) ? 16 : (stacks < 3) ? 3 : stacks;
-
-            float hAngleStep = (float)Math.PI * 2 / slices;
-            float vAngleStep = (float)Math.PI / stacks;
+            int slices = (int)(radius * 5.0f);
+            int stacks = (int)(radius * 5.0f);
+            slices = 2 * MinMax(slices, 3, 16);
+            stacks = 2 * MinMax(stacks, 2, 16) + 1;
 
             int vertexCount = 2 + slices * (stacks - 1);
             int indexCount = 6 * slices * (stacks - 1);
 
-            Vector3[] vertices = new Vector3[vertexCount * 2];
+            var vertices = new Vector3[vertexCount * 2];
             indices = new uint[indexCount];
-
-            int i = 0, v = 0;
 
 
             // Vertices
             // Top and bottom
-            vertices[v++] = GetVectorByAxis(0, -cylinderHalfHeight - radius, 0, up);
-            vertices[v++] = GetVectorByAxis(-Vector3.UnitY, up);
-            vertices[v++] = GetVectorByAxis(0, cylinderHalfHeight + radius, 0, up);
-            vertices[v++] = GetVectorByAxis(Vector3.UnitY, up);
+            const int topVertexIndex = 0;
+            const int bottomVertexIndex = 1;
+            float apex = cylinderHalfHeight + radius;
+
+            vertices[0] = RotateYAxisUp(0, -apex, 0, up);
+            vertices[1] = RotateYAxisUp(-Vector3.UnitY, up);
+            vertices[2] = RotateYAxisUp(0, apex, 0, up);
+            vertices[3] = RotateYAxisUp(Vector3.UnitY, up);
 
             // Stacks
-            int j, k;
-            float angle = 0;
+            int v = 4;
+            float hAngle = 0;
             float vAngle = -(float)Math.PI / 2;
-            Vector3 vTemp;
-            Vector3 cylinderOffset = GetVectorByAxis(0, -cylinderHalfHeight, 0, up);
-            for (j = 0; j < stacks - 1; j++)
+            float hAngleStep = (float)Math.PI * 2 / slices;
+            float vAngleStep = (float)Math.PI / stacks;
+            Vector3 cylinderOffset = RotateYAxisUp(0, -cylinderHalfHeight, 0, up);
+            for (int j = 0; j < stacks - 1; j++)
             {
                 float prevAngle = vAngle;
                 vAngle += vAngleStep;
 
-                if (vAngle > 0 && prevAngle < 0)
+                if (vAngle > 0 && prevAngle <= 0)
                 {
-                    cylinderOffset = GetVectorByAxis(0, cylinderHalfHeight, 0, up);
+                    cylinderOffset = -cylinderOffset;
                 }
 
-                for (k = 0; k < slices; k++)
+                for (int k = 0; k < slices; k++)
                 {
-                    angle += hAngleStep;
+                    hAngle += hAngleStep;
 
-                    vTemp = GetVectorByAxis((float)Math.Cos(vAngle) * (float)Math.Sin(angle),
+                    Vector3 sphereVertex = RotateYAxisUp(
+                        (float)Math.Cos(vAngle) * (float)Math.Sin(hAngle),
                         (float)Math.Sin(vAngle),
-                        (float)Math.Cos(vAngle) * (float)Math.Cos(angle), up);
-                    vertices[v++] = vTemp * radius + cylinderOffset;
-                    vertices[v++] = Vector3.Normalize(vTemp);
+                        (float)Math.Cos(vAngle) * (float)Math.Cos(hAngle),
+                        up);
+                    vertices[v++] = sphereVertex * radius + cylinderOffset;
+                    vertices[v++] = Vector3.Normalize(sphereVertex);
                 }
             }
 
 
             // Indices
             // Top cap
+            int i = 0;
             uint index = 2;
-            for (k = 0; k < slices; k++)
+            for (int k = 0; k < slices; k++)
             {
                 indices[i++] = index++;
-                indices[i++] = 0;
+                indices[i++] = topVertexIndex;
                 indices[i++] = index;
             }
             indices[i - 1] = 2;
 
             // Stacks
             int sliceDiff = slices * 3;
-            for (j = 0; j < stacks - 2; j++)
+            for (int j = 0; j < stacks - 2; j++)
             {
-                for (k = 0; k < slices; k++)
+                for (int k = 0; k < slices; k++)
                 {
                     indices[i] = indices[i - sliceDiff + 2];
                     indices[i + 1] = index++;
@@ -216,7 +218,7 @@ namespace DemoFramework
                     i += 3;
                 }
 
-                for (k = 0; k < slices; k++)
+                for (int k = 0; k < slices; k++)
                 {
                     indices[i] = indices[i - sliceDiff + 1];
                     indices[i + 1] = indices[i - sliceDiff];
@@ -228,10 +230,10 @@ namespace DemoFramework
 
             // Bottom cap
             index--;
-            for (k = 0; k < slices; k++)
+            for (int k = 0; k < slices; k++)
             {
                 indices[i++] = index--;
-                indices[i++] = 1;
+                indices[i++] = bottomVertexIndex;
                 indices[i++] = index;
             }
             indices[i - 1] = indices[i - sliceDiff];
@@ -239,9 +241,9 @@ namespace DemoFramework
             return vertices;
         }
 
-        public static Vector3 GetVectorByAxis(Vector3 vector, int axis)
+        private static Vector3 RotateYAxisUp(Vector3 vector, int upAxis)
         {
-            switch (axis)
+            switch (upAxis)
             {
                 case 0:
                     return new Vector3(vector.Y, vector.Z, vector.X);
@@ -252,9 +254,9 @@ namespace DemoFramework
             }
         }
 
-        public static Vector3 GetVectorByAxis(float x, float y, float z, int axis)
+        private static Vector3 RotateYAxisUp(float x, float y, float z, int upAxis)
         {
-            switch (axis)
+            switch (upAxis)
             {
                 case 0:
                     return new Vector3(y, z, x);
@@ -277,7 +279,7 @@ namespace DemoFramework
             const int vertexCount = 2 + 6 * numSteps;
             const int indexCount = (4 * numSteps + 2) * 3;
 
-            Vector3[] vertices = new Vector3[vertexCount * 2];
+            var vertices = new Vector3[vertexCount * 2];
             indices = new uint[indexCount];
 
             int i = 0, v = 0;
@@ -285,14 +287,14 @@ namespace DemoFramework
             uint baseIndex;
             Vector3 normal;
 
-            // Draw the base
-            normal = GetVectorByAxis(-Vector3.UnitY, up);
+            // Base
+            normal = RotateYAxisUp(-Vector3.UnitY, up);
 
             baseIndex = index;
-            vertices[v++] = GetVectorByAxis(0, -halfHeight, 0, up);
+            vertices[v++] = RotateYAxisUp(0, -halfHeight, 0, up);
             vertices[v++] = normal;
 
-            vertices[v++] = GetVectorByAxis(0, -halfHeight, radius, up);
+            vertices[v++] = RotateYAxisUp(0, -halfHeight, radius, up);
             vertices[v++] = normal;
             index += 2;
 
@@ -301,7 +303,7 @@ namespace DemoFramework
                 float x = radius * (float)Math.Sin(j * angleStep);
                 float z = radius * (float)Math.Cos(j * angleStep);
 
-                vertices[v++] = GetVectorByAxis(x, -halfHeight, z, up);
+                vertices[v++] = RotateYAxisUp(x, -halfHeight, z, up);
                 vertices[v++] = normal;
 
                 indices[i++] = baseIndex;
@@ -314,14 +316,15 @@ namespace DemoFramework
             indices[i++] = index - 1;
 
 
-            normal = GetVectorByAxis(0, 0, radius, up);
+            // Side
+            normal = RotateYAxisUp(0, 0, radius, up);
             normal.Normalize();
 
             baseIndex = index;
-            vertices[v++] = GetVectorByAxis(0, halfHeight, 0, up);
+            vertices[v++] = RotateYAxisUp(0, halfHeight, 0, up);
             vertices[v++] = normal;
 
-            vertices[v++] = GetVectorByAxis(0, -halfHeight, radius, up);
+            vertices[v++] = RotateYAxisUp(0, -halfHeight, radius, up);
             vertices[v++] = normal;
             index += 2;
 
@@ -330,13 +333,13 @@ namespace DemoFramework
                 float x = radius * (float)Math.Sin(j * angleStep);
                 float z = radius * (float)Math.Cos(j * angleStep);
 
-                normal = GetVectorByAxis(x, 0, z, up);
+                normal = RotateYAxisUp(x, 0, z, up);
                 normal.Normalize();
 
-                vertices[v++] = GetVectorByAxis(0, halfHeight, 0, up);
+                vertices[v++] = RotateYAxisUp(0, halfHeight, 0, up);
                 vertices[v++] = normal;
 
-                vertices[v++] = GetVectorByAxis(x, -halfHeight, z, up);
+                vertices[v++] = RotateYAxisUp(x, -halfHeight, z, up);
                 vertices[v++] = normal;
 
                 indices[i++] = index - 2;
@@ -369,7 +372,7 @@ namespace DemoFramework
             const int vertexCount = 2 + 6 * numSteps;
             const int indexCount = (4 * numSteps + 2) * 3;
 
-            Vector3[] vertices = new Vector3[vertexCount * 2];
+            var vertices = new Vector3[vertexCount * 2];
             indices = new uint[indexCount];
 
             int i = 0, v = 0;
@@ -380,13 +383,13 @@ namespace DemoFramework
             // Draw two sides
             for (int side = 1; side != -3; side -= 2)
             {
-                normal = GetVectorByAxis(side * Vector3.UnitY, up);
+                normal = RotateYAxisUp(side * Vector3.UnitY, up);
 
                 baseIndex = index;
-                vertices[v++] = GetVectorByAxis(0, side * halfHeight, 0, up);
+                vertices[v++] = RotateYAxisUp(0, side * halfHeight, 0, up);
                 vertices[v++] = normal;
 
-                vertices[v++] = GetVectorByAxis(0, side * halfHeight, radius, up);
+                vertices[v++] = RotateYAxisUp(0, side * halfHeight, radius, up);
                 vertices[v++] = normal;
                 index += 2;
 
@@ -395,7 +398,7 @@ namespace DemoFramework
                     float x = radius * (float)Math.Sin(j * angleStep);
                     float z = radius * (float)Math.Cos(j * angleStep);
 
-                    vertices[v++] = GetVectorByAxis(x, side * halfHeight, z, up);
+                    vertices[v++] = RotateYAxisUp(x, side * halfHeight, z, up);
                     vertices[v++] = normal;
 
                     indices[i++] = baseIndex;
@@ -425,14 +428,14 @@ namespace DemoFramework
             }
 
 
-            normal = GetVectorByAxis(0, 0, radius, up);
+            normal = RotateYAxisUp(0, 0, radius, up);
             normal.Normalize();
 
             baseIndex = index;
-            vertices[v++] = GetVectorByAxis(0, halfHeight, radius, up);
+            vertices[v++] = RotateYAxisUp(0, halfHeight, radius, up);
             vertices[v++] = normal;
 
-            vertices[v++] = GetVectorByAxis(0, -halfHeight, radius, up);
+            vertices[v++] = RotateYAxisUp(0, -halfHeight, radius, up);
             vertices[v++] = normal;
             index += 2;
 
@@ -441,13 +444,13 @@ namespace DemoFramework
                 float x = radius * (float)Math.Sin(j * angleStep);
                 float z = radius * (float)Math.Cos(j * angleStep);
 
-                normal = GetVectorByAxis(x, 0, z, up);
+                normal = RotateYAxisUp(x, 0, z, up);
                 normal.Normalize();
 
-                vertices[v++] = GetVectorByAxis(x, halfHeight, z, up);
+                vertices[v++] = RotateYAxisUp(x, halfHeight, z, up);
                 vertices[v++] = normal;
 
-                vertices[v++] = GetVectorByAxis(x, -halfHeight, z, up);
+                vertices[v++] = RotateYAxisUp(x, -halfHeight, z, up);
                 vertices[v++] = normal;
 
                 indices[i++] = index - 2;
@@ -470,17 +473,17 @@ namespace DemoFramework
 
         public static Vector3[] CreateConvexHull(ConvexHullShape shape)
         {
-            ShapeHull hull = new ShapeHull(shape);
+            var hull = new ShapeHull(shape);
             hull.BuildHull(shape.Margin);
 
             int vertexCount = hull.NumIndices;
             UIntArray indices = hull.Indices;
             Vector3Array points = hull.Vertices;
 
-            Vector3[] vertices = new Vector3[vertexCount * 2];
+            var vertices = new Vector3[vertexCount * 2];
 
-            int v = 0, i;
-            for (i = 0; i < vertexCount; i += 3)
+            int v = 0;
+            for (int i = 0; i < vertexCount; i += 3)
             {
                 Vector3 v0 = points[(int)indices[i]];
                 Vector3 v1 = points[(int)indices[i + 1]];
@@ -504,22 +507,21 @@ namespace DemoFramework
 
         public static Vector3[] CreateMultiSphere(MultiSphereShape shape, out uint[] indices)
         {
-            List<Vector3[]> allVertices = new List<Vector3[]>();
-            List<uint[]> allIndices = new List<uint[]>();
+            var allVertices = new List<Vector3[]>();
+            var allIndices = new List<uint[]>();
             int vertexCount = 0;
             int indexCount = 0;
 
-            int i;
-            for (i = 0; i < shape.SphereCount; i++)
+            for (int i = 0; i < shape.SphereCount; i++)
             {
                 uint[] sphereIndices;
                 Vector3[] sphereVertices = CreateSphere(shape.GetSphereRadius(i), out sphereIndices);
 
                 // Adjust sphere position
                 Vector3 position = shape.GetSpherePosition(i);
-                for (int j = 0; j < sphereVertices.Length / 2; j++)
+                for (int j = 0; j < sphereVertices.Length; j += 2)
                 {
-                    sphereVertices[j * 2] += position;
+                    sphereVertices[j] += position;
                 }
 
                 // Adjust indices
@@ -602,20 +604,19 @@ namespace DemoFramework
             slices = MinMax(slices, 6, 16);
             stacks = MinMax(stacks, 6, 16);
 
-            float horAngleStep = (float)Math.PI * 2 / slices;
-            float vertAngleStep = (float)Math.PI / stacks;
-
             int vertexCount = 2 + slices * (stacks - 1);
             int indexCount = 6 * slices * (stacks - 1);
 
             var vertices = new Vector3[vertexCount * 2];
             indices = new uint[indexCount];
 
-            int i = 0, v = 0;
-
 
             // Vertices
             // Top and bottom
+            int v = 0;
+            const int topVertexIndex = 0;
+            const int bottomVertexIndex = 1;
+
             vertices[v++] = new Vector3(0, -radius, 0);
             vertices[v++] = -Vector3.UnitY;
             vertices[v++] = new Vector3(0, radius, 0);
@@ -623,6 +624,8 @@ namespace DemoFramework
 
             // Stacks
             float vAngle = -(float)Math.PI / 2;
+            float horAngleStep = (float)Math.PI * 2 / slices;
+            float vertAngleStep = (float)Math.PI / stacks;
             for (int j = 0; j < stacks - 1; j++)
             {
                 vAngle += vertAngleStep;
@@ -642,17 +645,17 @@ namespace DemoFramework
 
             // Indices
             // Top cap
+            int i = 0;
             ushort index = 2;
             for (int k = 0; k < slices; k++)
             {
                 indices[i++] = index++;
-                indices[i++] = 0;
+                indices[i++] = topVertexIndex;
                 indices[i++] = index;
             }
             indices[i - 1] = 2;
 
             // Stacks
-            //for (j = 0; j < 1; j++)
             int sliceDiff = slices * 3;
             for (int j = 0; j < stacks - 2; j++)
             {
@@ -679,7 +682,7 @@ namespace DemoFramework
             for (int k = 0; k < slices; k++)
             {
                 indices[i++] = index--;
-                indices[i++] = 1;
+                indices[i++] = bottomVertexIndex;
                 indices[i++] = index;
             }
             indices[i - 1] = indices[i - sliceDiff];
@@ -692,7 +695,7 @@ namespace DemoFramework
             return Math.Min(Math.Max(value, min), max);
         }
 
-        static void PlaneSpace1(Vector3 n, out Vector3 p, out Vector3 q)
+        private static void PlaneSpace1(Vector3 n, out Vector3 p, out Vector3 q)
         {
             if (Math.Abs(n[2]) > (Math.Sqrt(2) / 2))
             {
@@ -736,7 +739,7 @@ namespace DemoFramework
             };
         }
 
-        static Vector3[] CreateTriangleMesh(StridingMeshInterface meshInterface)
+        private static Vector3[] CreateTriangleMesh(StridingMeshInterface meshInterface)
         {
             // StridingMeshInterface can only be TriangleIndexVertexArray
             var meshes = (meshInterface as TriangleIndexVertexArray).IndexedMeshArray;
@@ -921,52 +924,6 @@ namespace DemoFramework
                 {
                     throw new NotImplementedException();
                 }
-            }
-        }
-        */
-        /*
-        public void RenderSoftBodyTextured(SoftBody softBody)
-        {
-            if (!(softBody.UserObject is Array))
-                return;
-
-            object[] userObjArr = softBody.UserObject as object[];
-            FloatArray vertexBuffer = userObjArr[0] as FloatArray;
-            IntArray indexBuffer = userObjArr[1] as IntArray;
-
-            int vertexCount = (vertexBuffer.Count / 8);
-
-            if (vertexCount > 0)
-            {
-                int faceCount = indexBuffer.Count / 2;
-
-                bool index32 = vertexCount > 65536;
-
-                Mesh mesh = new Mesh(device, faceCount, vertexCount,
-                    MeshFlags.SystemMemory | (index32 ? MeshFlags.Use32Bit : 0),
-                    VertexFormat.Position | VertexFormat.Normal | VertexFormat.Texture1);
-
-                SlimDX.DataStream indices = mesh.LockIndexBuffer(LockFlags.Discard);
-                if (index32)
-                {
-                    foreach (int i in indexBuffer)
-                        indices.Write(i);
-                }
-                else
-                {
-                    foreach (int i in indexBuffer)
-                        indices.Write((ushort)i);
-                }
-                mesh.UnlockIndexBuffer();
-
-                SlimDX.DataStream verts = mesh.LockVertexBuffer(LockFlags.Discard);
-                foreach (float f in vertexBuffer)
-                    verts.Write(f);
-                mesh.UnlockVertexBuffer();
-
-                mesh.ComputeNormals();
-                mesh.DrawSubset(0);
-                mesh.Dispose();
             }
         }
         */
