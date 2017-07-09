@@ -1,6 +1,5 @@
 using System;
-using System.Runtime.InteropServices;
-using System.Security;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
@@ -18,14 +17,12 @@ namespace BulletSharp
 			{
 			}
 
-            public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
-            {
-                return new SoftBodyConcaveCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
-                    _native, __unnamed0._native, body0Wrap._native, body1Wrap._native));
-            }
-
-			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern IntPtr btSoftBodyConcaveCollisionAlgorithm_CreateFunc_new();
+			public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0,
+				CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
+			{
+				return new SoftBodyConcaveCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
+					Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native));
+			}
 		}
 
 		public class SwappedCreateFunc : CollisionAlgorithmCreateFunc
@@ -40,14 +37,12 @@ namespace BulletSharp
 			{
 			}
 
-            public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
-            {
-                return new SoftBodyConcaveCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
-                    _native, __unnamed0._native, body0Wrap._native, body1Wrap._native));
-            }
-
-			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern IntPtr btSoftBodyConcaveCollisionAlgorithm_SwappedCreateFunc_new();
+			public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0,
+				CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
+			{
+				return new SoftBodyConcaveCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
+					Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native));
+			}
 		}
 
 		internal SoftBodyConcaveCollisionAlgorithm(IntPtr native)
@@ -57,19 +52,14 @@ namespace BulletSharp
 
 		public SoftBodyConcaveCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci,
 			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped)
-			: base(btSoftBodyConcaveCollisionAlgorithm_new(ci._native, body0Wrap._native,
-				body1Wrap._native, isSwapped))
+			: base(btSoftBodyConcaveCollisionAlgorithm_new(ci.Native, body0Wrap.Native,
+				body1Wrap.Native, isSwapped))
 		{
 		}
 
 		public void ClearCache()
 		{
-			btSoftBodyConcaveCollisionAlgorithm_clearCache(_native);
+			btSoftBodyConcaveCollisionAlgorithm_clearCache(Native);
 		}
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSoftBodyConcaveCollisionAlgorithm_new(IntPtr ci, IntPtr body0Wrap, IntPtr body1Wrap, bool isSwapped);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftBodyConcaveCollisionAlgorithm_clearCache(IntPtr obj);
 	}
 }

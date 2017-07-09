@@ -1,6 +1,5 @@
 using System;
-using System.Runtime.InteropServices;
-using System.Security;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
@@ -18,14 +17,12 @@ namespace BulletSharp
 			{
 			}
 
-            public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
+            public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0,
+                CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
             {
                 return new CompoundCompoundCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
-                    _native, __unnamed0._native, body0Wrap._native, body1Wrap._native));
+                    Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native));
             }
-
-			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern IntPtr btCompoundCompoundCollisionAlgorithm_CreateFunc_new();
 		}
 
 		public new class SwappedCreateFunc : CollisionAlgorithmCreateFunc
@@ -43,11 +40,8 @@ namespace BulletSharp
             public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
             {
                 return new CompoundCompoundCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
-                    _native, __unnamed0._native, body0Wrap._native, body1Wrap._native));
+                    Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native));
             }
-
-			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern IntPtr btCompoundCompoundCollisionAlgorithm_SwappedCreateFunc_new();
 		}
 
 		internal CompoundCompoundCollisionAlgorithm(IntPtr native)
@@ -57,12 +51,9 @@ namespace BulletSharp
 
 		public CompoundCompoundCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci,
 			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped)
-			: base(btCompoundCompoundCollisionAlgorithm_new(ci._native, body0Wrap._native,
-				body1Wrap._native, isSwapped))
+			: base(btCompoundCompoundCollisionAlgorithm_new(ci.Native, body0Wrap.Native,
+				body1Wrap.Native, isSwapped))
 		{
 		}
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btCompoundCompoundCollisionAlgorithm_new(IntPtr ci, IntPtr body0Wrap, IntPtr body1Wrap, bool isSwapped);
 	}
 }

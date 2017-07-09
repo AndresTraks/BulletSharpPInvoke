@@ -518,7 +518,7 @@ namespace BulletSharp
             IntPtr ptr;
             if (obj is CollisionObject)
             {
-                ptr = (obj as CollisionObject)._native;
+                ptr = (obj as CollisionObject).Native;
             }
             else if (obj is CollisionShape)
             {

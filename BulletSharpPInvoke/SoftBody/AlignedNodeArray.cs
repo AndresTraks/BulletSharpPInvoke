@@ -82,7 +82,7 @@ namespace BulletSharp.SoftBody
 
         public int IndexOf(Node item)
         {
-            return btAlignedObjectArray_btSoftBody_Node_index_of(_native, item._native);
+            return btAlignedObjectArray_btSoftBody_Node_index_of(_native, item.Native);
         }
 
         public void Insert(int index, Node item)
@@ -113,7 +113,7 @@ namespace BulletSharp.SoftBody
 
         public void Add(Node item)
         {
-            btAlignedObjectArray_btSoftBody_Node_push_back(_native, item._native);
+            btAlignedObjectArray_btSoftBody_Node_push_back(_native, item.Native);
         }
 
         public void Clear()

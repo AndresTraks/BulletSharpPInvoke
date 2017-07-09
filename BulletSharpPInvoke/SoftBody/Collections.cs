@@ -73,7 +73,7 @@ namespace BulletSharp.SoftBody
             }
             set
             {
-                btSoftBodyNodePtrArray_set(_native, value._native, index);
+                btSoftBodyNodePtrArray_set(_native, value.Native, index);
             }
         }
 

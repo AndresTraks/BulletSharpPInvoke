@@ -1,6 +1,5 @@
 using System;
-using System.Runtime.InteropServices;
-using System.Security;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
@@ -18,14 +17,12 @@ namespace BulletSharp
 			{
 			}
 
-            public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
-            {
-                return new Box2DBox2DCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
-                    _native, __unnamed0._native, body0Wrap._native, body1Wrap._native));
-            }
-
-			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern IntPtr btBox2dBox2dCollisionAlgorithm_CreateFunc_new();
+			public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0,
+				CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
+			{
+				return new Box2DBox2DCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
+					Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native));
+			}
 		}
 
 		internal Box2DBox2DCollisionAlgorithm(IntPtr native)
@@ -34,20 +31,15 @@ namespace BulletSharp
 		}
 
 		public Box2DBox2DCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci)
-			: base(btBox2dBox2dCollisionAlgorithm_new(ci._native))
+			: base(btBox2dBox2dCollisionAlgorithm_new(ci.Native))
 		{
 		}
 
 		public Box2DBox2DCollisionAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci,
 			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
-			: base(btBox2dBox2dCollisionAlgorithm_new2(mf._native, ci._native, body0Wrap._native,
-				body1Wrap._native))
+			: base(btBox2dBox2dCollisionAlgorithm_new2(mf._native, ci.Native, body0Wrap.Native,
+				body1Wrap.Native))
 		{
 		}
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btBox2dBox2dCollisionAlgorithm_new(IntPtr ci);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btBox2dBox2dCollisionAlgorithm_new2(IntPtr mf, IntPtr ci, IntPtr body0Wrap, IntPtr body1Wrap);
 	}
 }

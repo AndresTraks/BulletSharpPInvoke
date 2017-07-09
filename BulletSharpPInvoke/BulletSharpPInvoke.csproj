@@ -216,6 +216,7 @@
     <Compile Include="SoftBody\AlignedAnchorArray.cs" />
     <Compile Include="SoftBody\AlignedJointArray.cs" />
     <Compile Include="SoftBody\AlignedMaterialArray.cs" />
+    <Compile Include="SoftBody\AlignedNoteArray.cs" />
     <Compile Include="SoftBody\AlignedNodeArray.cs" />
     <Compile Include="SoftBody\AlignedClusterArray.cs" />
     <Compile Include="SoftBody\AlignedSoftBodyArray.cs" />

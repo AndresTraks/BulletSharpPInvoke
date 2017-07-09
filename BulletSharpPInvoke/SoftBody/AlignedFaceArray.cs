@@ -113,7 +113,7 @@ namespace BulletSharp.SoftBody
 
         public void Add(Face item)
         {
-            btAlignedObjectArray_btSoftBody_Face_push_back(_native, item._native);
+            btAlignedObjectArray_btSoftBody_Face_push_back(_native, item.Native);
         }
 
         public void Clear()

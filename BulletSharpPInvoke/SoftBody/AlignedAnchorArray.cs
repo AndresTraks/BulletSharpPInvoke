@@ -113,7 +113,7 @@ namespace BulletSharp.SoftBody
 
         public void Add(Anchor item)
         {
-            btAlignedObjectArray_btSoftBody_Anchor_push_back(_native, item._native);
+            btAlignedObjectArray_btSoftBody_Anchor_push_back(_native, item.Native);
         }
 
         public void Clear()

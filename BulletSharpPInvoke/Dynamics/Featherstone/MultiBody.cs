@@ -408,7 +408,7 @@ namespace BulletSharp
 		public MultiBodyLinkCollider BaseCollider
 		{
             get { return CollisionObject.GetManaged(btMultiBody_getBaseCollider(_native)) as MultiBodyLinkCollider; }
-			set { btMultiBody_setBaseCollider(_native, value._native); }
+			set { btMultiBody_setBaseCollider(_native, value.Native); }
 		}
 
 		public Vector3 BaseForce

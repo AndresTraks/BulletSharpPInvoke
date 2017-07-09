@@ -65,18 +65,18 @@ namespace BulletSharp
 		public void BuildAndProcessIslands(Dispatcher dispatcher, CollisionWorld collisionWorld,
 			IslandCallback callback)
 		{
-			btSimulationIslandManager_buildAndProcessIslands(_native, dispatcher._native,
+			btSimulationIslandManager_buildAndProcessIslands(_native, dispatcher.Native,
 				collisionWorld._native, callback._native);
 		}
 
 		public void BuildIslands(Dispatcher dispatcher, CollisionWorld colWorld)
 		{
-			btSimulationIslandManager_buildIslands(_native, dispatcher._native, colWorld._native);
+			btSimulationIslandManager_buildIslands(_native, dispatcher.Native, colWorld._native);
 		}
 
 		public void FindUnions(Dispatcher dispatcher, CollisionWorld colWorld)
 		{
-			btSimulationIslandManager_findUnions(_native, dispatcher._native, colWorld._native);
+			btSimulationIslandManager_findUnions(_native, dispatcher.Native, colWorld._native);
 		}
 
 		public void InitUnionFind(int n)
@@ -92,7 +92,7 @@ namespace BulletSharp
 		public void UpdateActivationState(CollisionWorld colWorld, Dispatcher dispatcher)
 		{
 			btSimulationIslandManager_updateActivationState(_native, colWorld._native,
-				dispatcher._native);
+				dispatcher.Native);
 		}
 
 		public bool SplitIslands

@@ -21,7 +21,7 @@ namespace BulletSharp
 				CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
 			{
 				return new GImpactCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
-					_native, __unnamed0._native, body0Wrap._native, body1Wrap._native));
+					Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native));
 			}
 		}
 
@@ -32,71 +32,71 @@ namespace BulletSharp
 
 		public GImpactCollisionAlgorithm(CollisionAlgorithmConstructionInfo constructionInfo, CollisionObjectWrapper body0Wrap,
 			CollisionObjectWrapper body1Wrap)
-			: base(btGImpactCollisionAlgorithm_new(constructionInfo._native, body0Wrap._native,
-				body1Wrap._native))
+			: base(btGImpactCollisionAlgorithm_new(constructionInfo.Native, body0Wrap.Native,
+				body1Wrap.Native))
 		{
 		}
 
 		public void GImpactVsCompoundShape(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap,
 			GImpactShapeInterface shape0, CompoundShape shape1, bool swapped)
 		{
-			btGImpactCollisionAlgorithm_gimpact_vs_compoundshape(_native, body0Wrap._native,
-				body1Wrap._native, shape0._native, shape1._native, swapped);
+			btGImpactCollisionAlgorithm_gimpact_vs_compoundshape(Native, body0Wrap.Native,
+				body1Wrap.Native, shape0._native, shape1._native, swapped);
 		}
 
 		public void GImpactVsConcave(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap,
 			GImpactShapeInterface shape0, ConcaveShape shape1, bool swapped)
 		{
-			btGImpactCollisionAlgorithm_gimpact_vs_concave(_native, body0Wrap._native,
-				body1Wrap._native, shape0._native, shape1._native, swapped);
+			btGImpactCollisionAlgorithm_gimpact_vs_concave(Native, body0Wrap.Native,
+				body1Wrap.Native, shape0._native, shape1._native, swapped);
 		}
 
 		public void GImpactVsGImpact(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap,
 			GImpactShapeInterface shape0, GImpactShapeInterface shape1)
 		{
-			btGImpactCollisionAlgorithm_gimpact_vs_gimpact(_native, body0Wrap._native,
-				body1Wrap._native, shape0._native, shape1._native);
+			btGImpactCollisionAlgorithm_gimpact_vs_gimpact(Native, body0Wrap.Native,
+				body1Wrap.Native, shape0._native, shape1._native);
 		}
 
 		public void GImpactVsShape(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap,
 			GImpactShapeInterface shape0, CollisionShape shape1, bool swapped)
 		{
-			btGImpactCollisionAlgorithm_gimpact_vs_shape(_native, body0Wrap._native,
-				body1Wrap._native, shape0._native, shape1._native, swapped);
+			btGImpactCollisionAlgorithm_gimpact_vs_shape(Native, body0Wrap.Native,
+				body1Wrap.Native, shape0._native, shape1._native, swapped);
 		}
 
 		public ManifoldResult InternalGetResultOut()
 		{
-			return new ManifoldResult(btGImpactCollisionAlgorithm_internalGetResultOut(_native));
+			return new ManifoldResult(btGImpactCollisionAlgorithm_internalGetResultOut(Native));
 		}
 
 		public static void RegisterAlgorithm(CollisionDispatcher dispatcher)
 		{
-			btGImpactCollisionAlgorithm_registerAlgorithm(dispatcher._native);
+			btGImpactCollisionAlgorithm_registerAlgorithm(dispatcher.Native);
 		}
 
 		public int Face0
 		{
-			get => btGImpactCollisionAlgorithm_getFace0(_native);
-			set => btGImpactCollisionAlgorithm_setFace0(_native, value);
+			get => btGImpactCollisionAlgorithm_getFace0(Native);
+			set => btGImpactCollisionAlgorithm_setFace0(Native, value);
 		}
 
 		public int Face1
 		{
-			get => btGImpactCollisionAlgorithm_getFace1(_native);
-			set => btGImpactCollisionAlgorithm_setFace1(_native, value);
+			get => btGImpactCollisionAlgorithm_getFace1(Native);
+			set => btGImpactCollisionAlgorithm_setFace1(Native, value);
 		}
 
 		public int Part0
 		{
-			get => btGImpactCollisionAlgorithm_getPart0(_native);
-			set => btGImpactCollisionAlgorithm_setPart0(_native, value);
+			get => btGImpactCollisionAlgorithm_getPart0(Native);
+			set => btGImpactCollisionAlgorithm_setPart0(Native, value);
 		}
 
 		public int Part1
 		{
-			get => btGImpactCollisionAlgorithm_getPart1(_native);
-			set => btGImpactCollisionAlgorithm_setPart1(_native, value);
+			get => btGImpactCollisionAlgorithm_getPart1(Native);
+			set => btGImpactCollisionAlgorithm_setPart1(Native, value);
 		}
 	}
 }

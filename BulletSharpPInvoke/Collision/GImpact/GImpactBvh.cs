@@ -205,106 +205,106 @@ namespace BulletSharp
 
 	public class GimBvhDataArray
 	{
-		internal IntPtr _native;
+		internal IntPtr Native;
 
 		internal GimBvhDataArray(IntPtr native)
 		{
-			_native = native;
+			Native = native;
 		}
 		/*
 		public GimBvhDataArray()
 		{
-			_native = GIM_BVH_DATA_ARRAY_new();
+			Native = GIM_BVH_DATA_ARRAY_new();
 		}
 		*/
 	}
 
 	public class GimBvhTreeNodeArray
 	{
-		internal IntPtr _native;
+		internal IntPtr Native;
 
 		internal GimBvhTreeNodeArray(IntPtr native)
 		{
-			_native = native;
+			Native = native;
 		}
 		/*
 		public GimBvhTreeNodeArray()
 		{
-			_native = GIM_BVH_TREE_NODE_ARRAY_new();
+			Native = GIM_BVH_TREE_NODE_ARRAY_new();
 		}
 		*/
 	}
 
 	public class BvhTree : IDisposable
 	{
-		internal IntPtr _native;
+		internal IntPtr Native;
 
 		internal BvhTree(IntPtr native)
 		{
-			_native = native;
+			Native = native;
 		}
 
 		public BvhTree()
 		{
-			_native = btBvhTree_new();
+			Native = btBvhTree_new();
 		}
 
 		public void BuildTree(GimBvhDataArray primitiveBoxes)
 		{
-			btBvhTree_build_tree(_native, primitiveBoxes._native);
+			btBvhTree_build_tree(Native, primitiveBoxes.Native);
 		}
 
 		public void ClearNodes()
 		{
-			btBvhTree_clearNodes(_native);
+			btBvhTree_clearNodes(Native);
 		}
 
 		public GimBvhTreeNode GetNodePointer()
 		{
-			return new GimBvhTreeNode(btBvhTree_get_node_pointer(_native));
+			return new GimBvhTreeNode(btBvhTree_get_node_pointer(Native));
 		}
 
 		public GimBvhTreeNode GetNodePointer(int index)
 		{
-			return new GimBvhTreeNode(btBvhTree_get_node_pointer2(_native, index));
+			return new GimBvhTreeNode(btBvhTree_get_node_pointer2(Native, index));
 		}
 
 		public int GetEscapeNodeIndex(int nodeIndex)
 		{
-			return btBvhTree_getEscapeNodeIndex(_native, nodeIndex);
+			return btBvhTree_getEscapeNodeIndex(Native, nodeIndex);
 		}
 
 		public int GetLeftNode(int nodeIndex)
 		{
-			return btBvhTree_getLeftNode(_native, nodeIndex);
+			return btBvhTree_getLeftNode(Native, nodeIndex);
 		}
 
 		public void GetNodeBound(int nodeIndex, Aabb bound)
 		{
-			btBvhTree_getNodeBound(_native, nodeIndex, bound.Native);
+			btBvhTree_getNodeBound(Native, nodeIndex, bound.Native);
 		}
 
 		public int GetNodeData(int nodeIndex)
 		{
-			return btBvhTree_getNodeData(_native, nodeIndex);
+			return btBvhTree_getNodeData(Native, nodeIndex);
 		}
 
 		public int GetRightNode(int nodeIndex)
 		{
-			return btBvhTree_getRightNode(_native, nodeIndex);
+			return btBvhTree_getRightNode(Native, nodeIndex);
 		}
 
 		public bool IsLeafNode(int nodeIndex)
 		{
-			return btBvhTree_isLeafNode(_native, nodeIndex);
+			return btBvhTree_isLeafNode(Native, nodeIndex);
 		}
 
 		public void SetNodeBound(int nodeIndex, Aabb bound)
 		{
-			btBvhTree_setNodeBound(_native, nodeIndex, bound.Native);
+			btBvhTree_setNodeBound(Native, nodeIndex, bound.Native);
 		}
 
-		public int NodeCount => btBvhTree_getNodeCount(_native);
+		public int NodeCount => btBvhTree_getNodeCount(Native);
 
 		public void Dispose()
 		{
@@ -314,10 +314,10 @@ namespace BulletSharp
 
 		protected virtual void Dispose(bool disposing)
 		{
-			if (_native != IntPtr.Zero)
+			if (Native != IntPtr.Zero)
 			{
-				btBvhTree_delete(_native);
-				_native = IntPtr.Zero;
+				btBvhTree_delete(Native);
+				Native = IntPtr.Zero;
 			}
 		}
 
@@ -373,116 +373,116 @@ namespace BulletSharp
 
 	public class GImpactBvh : IDisposable
 	{
-		internal IntPtr _native;
+		internal IntPtr Native;
 
 		private PrimitiveManagerBase _primitiveManager;
 
 		internal GImpactBvh(IntPtr native)
 		{
-			_native = native;
+			Native = native;
 		}
 
 		public GImpactBvh()
 		{
-			_native = btGImpactBvh_new();
+			Native = btGImpactBvh_new();
 		}
 
 		public GImpactBvh(PrimitiveManagerBase primitiveManager)
 		{
-			_native = btGImpactBvh_new2(primitiveManager.Native);
+			Native = btGImpactBvh_new2(primitiveManager.Native);
 			_primitiveManager = primitiveManager;
 		}
 		/*
 		public bool BoxQuery(Aabb box, AlignedIntArray collidedResults)
 		{
-			return btGImpactBvh_boxQuery(_native, box._native, collidedResults._native);
+			return btGImpactBvh_boxQuery(Native, box.Native, collidedResults.Native);
 		}
 
 		public bool BoxQueryTrans(Aabb box, Matrix transform, AlignedIntArray collidedResults)
 		{
-			return btGImpactBvh_boxQueryTrans(_native, box._native, ref transform,
-				collidedResults._native);
+			return btGImpactBvh_boxQueryTrans(Native, box.Native, ref transform,
+				collidedResults.Native);
 		}
 		*/
 		public void BuildSet()
 		{
-			btGImpactBvh_buildSet(_native);
+			btGImpactBvh_buildSet(Native);
 		}
 
 		public static void FindCollision(GImpactBvh boxSet1, ref Matrix transform1, GImpactBvh boxSet2,
 			ref Matrix transform2, PairSet collisionPairs)
 		{
-			btGImpactBvh_find_collision(boxSet1._native, ref transform1, boxSet2._native,
+			btGImpactBvh_find_collision(boxSet1.Native, ref transform1, boxSet2.Native,
 				ref transform2, collisionPairs.Native);
 		}
 
 		public GimBvhTreeNode GetNodePointer(int index = 0)
 		{
-			return new GimBvhTreeNode(btGImpactBvh_get_node_pointer(_native, index));
+			return new GimBvhTreeNode(btGImpactBvh_get_node_pointer(Native, index));
 		}
 
 		public int GetEscapeNodeIndex(int nodeIndex)
 		{
-			return btGImpactBvh_getEscapeNodeIndex(_native, nodeIndex);
+			return btGImpactBvh_getEscapeNodeIndex(Native, nodeIndex);
 		}
 
 		public int GetLeftNode(int nodeIndex)
 		{
-			return btGImpactBvh_getLeftNode(_native, nodeIndex);
+			return btGImpactBvh_getLeftNode(Native, nodeIndex);
 		}
 
 		public void GetNodeBound(int nodeIndex, Aabb bound)
 		{
-			btGImpactBvh_getNodeBound(_native, nodeIndex, bound.Native);
+			btGImpactBvh_getNodeBound(Native, nodeIndex, bound.Native);
 		}
 
 		public int GetNodeData(int nodeIndex)
 		{
-			return btGImpactBvh_getNodeData(_native, nodeIndex);
+			return btGImpactBvh_getNodeData(Native, nodeIndex);
 		}
 
 		public void GetNodeTriangle(int nodeIndex, PrimitiveTriangle triangle)
 		{
-			btGImpactBvh_getNodeTriangle(_native, nodeIndex, triangle.Native);
+			btGImpactBvh_getNodeTriangle(Native, nodeIndex, triangle.Native);
 		}
 
 		public int GetRightNode(int nodeIndex)
 		{
-			return btGImpactBvh_getRightNode(_native, nodeIndex);
+			return btGImpactBvh_getRightNode(Native, nodeIndex);
 		}
 
 		public bool IsLeafNode(int nodeIndex)
 		{
-			return btGImpactBvh_isLeafNode(_native, nodeIndex);
+			return btGImpactBvh_isLeafNode(Native, nodeIndex);
 		}
 		/*
 		public bool RayQuery(Vector3 rayDir, Vector3 rayOrigin, AlignedIntArray collidedResults)
 		{
-			return btGImpactBvh_rayQuery(_native, ref rayDir, ref rayOrigin, collidedResults._native);
+			return btGImpactBvh_rayQuery(Native, ref rayDir, ref rayOrigin, collidedResults.Native);
 		}
 		*/
 		public void SetNodeBound(int nodeIndex, Aabb bound)
 		{
-			btGImpactBvh_setNodeBound(_native, nodeIndex, bound.Native);
+			btGImpactBvh_setNodeBound(Native, nodeIndex, bound.Native);
 		}
 
 		public void Update()
 		{
-			btGImpactBvh_update(_native);
+			btGImpactBvh_update(Native);
 		}
 
-		public Aabb GlobalBox => new Aabb(btGImpactBvh_getGlobalBox(_native));
+		public Aabb GlobalBox => new Aabb(btGImpactBvh_getGlobalBox(Native));
 
-		public bool HasHierarchy => btGImpactBvh_hasHierarchy(_native);
+		public bool HasHierarchy => btGImpactBvh_hasHierarchy(Native);
 
-		public bool IsTrimesh => btGImpactBvh_isTrimesh(_native);
+		public bool IsTrimesh => btGImpactBvh_isTrimesh(Native);
 
-		public int NodeCount => btGImpactBvh_getNodeCount(_native);
+		public int NodeCount => btGImpactBvh_getNodeCount(Native);
 
 		public PrimitiveManagerBase PrimitiveManager
 		{
-			get => new PrimitiveManagerBase(btGImpactBvh_getPrimitiveManager(_native));
-			set => btGImpactBvh_setPrimitiveManager(_native, value.Native);
+			get => new PrimitiveManagerBase(btGImpactBvh_getPrimitiveManager(Native));
+			set => btGImpactBvh_setPrimitiveManager(Native, value.Native);
 		}
 
 		public void Dispose()
@@ -493,10 +493,10 @@ namespace BulletSharp
 
 		protected virtual void Dispose(bool disposing)
 		{
-			if (_native != IntPtr.Zero)
+			if (Native != IntPtr.Zero)
 			{
-				btGImpactBvh_delete(_native);
-				_native = IntPtr.Zero;
+				btGImpactBvh_delete(Native);
+				Native = IntPtr.Zero;
 			}
 		}
 

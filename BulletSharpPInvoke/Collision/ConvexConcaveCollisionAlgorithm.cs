@@ -1,6 +1,5 @@
 using System;
-using System.Runtime.InteropServices;
-using System.Security;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {/*
@@ -13,8 +12,8 @@ namespace BulletSharp
 
 		public ConvexTriangleCallback(Dispatcher dispatcher, CollisionObjectWrapper body0Wrap,
 			CollisionObjectWrapper body1Wrap, bool isSwapped)
-			: base(btConvexTriangleCallback_new(dispatcher._native, body0Wrap._native,
-				body1Wrap._native, isSwapped))
+			: base(btConvexTriangleCallback_new(dispatcher._native, body0Wrap.Native,
+				body1Wrap.Native, isSwapped))
 		{
 		}
 
@@ -33,7 +32,7 @@ namespace BulletSharp
 			ManifoldResult resultOut)
 		{
 			btConvexTriangleCallback_setTimeStepAndCounters(_native, collisionMarginTriangle,
-				dispatchInfo._native, convexBodyWrap._native, triBodyWrap._native,
+				dispatchInfo._native, convexBodyWrap.Native, triBodyWrap.Native,
 				resultOut._native);
 		}
 
@@ -59,14 +58,14 @@ namespace BulletSharp
 
 		public PersistentManifold ManifoldPtr
 		{
-			get { return btConvexTriangleCallback_getManifoldPtr(_native); }
-			set { btConvexTriangleCallback_setManifoldPtr(_native, value._native); }
+			get => btConvexTriangleCallback_getManifoldPtr(_native);
+			set => btConvexTriangleCallback_setManifoldPtr(_native, value._native);
 		}
 
 		public int TriangleCount
 		{
-			get { return btConvexTriangleCallback_getTriangleCount(_native); }
-			set { btConvexTriangleCallback_setTriangleCount(_native, value); }
+			get => btConvexTriangleCallback_getTriangleCount(_native);
+			set => btConvexTriangleCallback_setTriangleCount(_native, value);
 		}
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -105,14 +104,12 @@ namespace BulletSharp
 			{
 			}
 
-            public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
-            {
-                return new ConvexConcaveCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
-                    _native, __unnamed0._native, body0Wrap._native, body1Wrap._native));
-            }
-
-			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern IntPtr btConvexConcaveCollisionAlgorithm_CreateFunc_new();
+			public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0,
+				CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
+			{
+				return new ConvexConcaveCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
+					Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native));
+			}
 		}
 
 		public class SwappedCreateFunc : CollisionAlgorithmCreateFunc
@@ -127,14 +124,12 @@ namespace BulletSharp
 			{
 			}
 
-            public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0, CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
-            {
-                return new ConvexConcaveCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
-                    _native, __unnamed0._native, body0Wrap._native, body1Wrap._native));
-            }
-
-			[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-			static extern IntPtr btConvexConcaveCollisionAlgorithm_SwappedCreateFunc_new();
+			public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0,
+				CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
+			{
+				return new ConvexConcaveCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
+					Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native));
+			}
 		}
 
 		internal ConvexConcaveCollisionAlgorithm(IntPtr native)
@@ -144,19 +139,14 @@ namespace BulletSharp
 
 		public ConvexConcaveCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci,
 			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped)
-			: base(btConvexConcaveCollisionAlgorithm_new(ci._native, body0Wrap._native,
-				body1Wrap._native, isSwapped))
+			: base(btConvexConcaveCollisionAlgorithm_new(ci.Native, body0Wrap.Native,
+				body1Wrap.Native, isSwapped))
 		{
 		}
 
 		public void ClearCache()
 		{
-			btConvexConcaveCollisionAlgorithm_clearCache(_native);
+			btConvexConcaveCollisionAlgorithm_clearCache(Native);
 		}
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btConvexConcaveCollisionAlgorithm_new(IntPtr ci, IntPtr body0Wrap, IntPtr body1Wrap, bool isSwapped);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexConcaveCollisionAlgorithm_clearCache(IntPtr obj);
 	}
 }

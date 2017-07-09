@@ -281,6 +281,17 @@ int btAlignedObjectArray_btSoftBody_Node_size(btAlignedObjectArray_btSoftBody_No
 }
 
 
+btSoftBody::Note* btAlignedObjectArray_btSoftBody_Note_at(btAlignedObjectArray_btSoftBody_Note* obj, int n)
+{
+	return &obj->at(n);
+}
+
+int btAlignedObjectArray_btSoftBody_Note_size(btAlignedObjectArray_btSoftBody_Note* obj)
+{
+	return obj->size();
+}
+
+
 btSoftBody::Tetra* btAlignedObjectArray_btSoftBody_Tetra_at(btAlignedObjectArray_btSoftBody_Tetra* obj, int n)
 {
 	return &obj->at(n);

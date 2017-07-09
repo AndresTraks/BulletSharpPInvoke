@@ -6,22 +6,22 @@ using System.Diagnostics;
 
 namespace BulletSharp.SoftBody
 {
-    public class AlignedMaterialArrayDebugView
+    public class AlignedNoteArrayDebugView
     {
-        private AlignedMaterialArray _array;
+        private AlignedNoteArray _array;
 
-        public AlignedMaterialArrayDebugView(AlignedMaterialArray array)
+        public AlignedNoteArrayDebugView(AlignedNoteArray array)
         {
             _array = array;
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public Material[] Items
+        public Note[] Items
         {
             get
             {
                 int count = _array.Count;
-                Material[] array = new Material[count];
+                Note[] array = new Note[count];
                 for (int i = 0; i < count; i++)
                 {
                     array[i] = _array[i];
@@ -31,20 +31,20 @@ namespace BulletSharp.SoftBody
         }
     }
 
-    public class AlignedMaterialArrayEnumerator : IEnumerator<Material>
+    public class AlignedNoteArrayEnumerator : IEnumerator<Note>
     {
         int _i;
         int _count;
-        AlignedMaterialArray _array;
+        AlignedNoteArray _array;
 
-        public AlignedMaterialArrayEnumerator(AlignedMaterialArray array)
+        public AlignedNoteArrayEnumerator(AlignedNoteArray array)
         {
             _array = array;
             _count = array.Count;
             _i = -1;
         }
 
-        public Material Current
+        public Note Current
         {
             get { return _array[_i]; }
         }
@@ -70,22 +70,22 @@ namespace BulletSharp.SoftBody
         }
     }
 
-    [Serializable, DebuggerTypeProxy(typeof(AlignedMaterialArrayDebugView)), DebuggerDisplay("Count = {Count}")]
-    public class AlignedMaterialArray : IList<Material>
+    [Serializable, DebuggerTypeProxy(typeof(AlignedNoteArrayDebugView)), DebuggerDisplay("Count = {Count}")]
+    public class AlignedNoteArray : IList<Note>
     {
         private IntPtr _native;
 
-        internal AlignedMaterialArray(IntPtr native, bool preventDelete = false)
+        internal AlignedNoteArray(IntPtr native)
         {
             _native = native;
         }
 
-        public int IndexOf(Material item)
+        public int IndexOf(Note item)
         {
-            throw new NotImplementedException();
+            return btAlignedObjectArray_btSoftBody_Note_index_of(_native, item.Native);
         }
 
-        public void Insert(int index, Material item)
+        public void Insert(int index, Note item)
         {
             throw new NotImplementedException();
         }
@@ -95,7 +95,7 @@ namespace BulletSharp.SoftBody
             throw new NotImplementedException();
         }
 
-        public Material this[int index]
+        public Note this[int index]
         {
             get
             {
@@ -103,7 +103,7 @@ namespace BulletSharp.SoftBody
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
-                return new Material(btAlignedObjectArray_btSoftBody_MaterialPtr_at(_native, index));
+                return new Note(btAlignedObjectArray_btSoftBody_Note_at(_native, index));
             }
             set
             {
@@ -111,29 +111,29 @@ namespace BulletSharp.SoftBody
             }
         }
 
-        public void Add(Material item)
+        public void Add(Note item)
         {
-            btAlignedObjectArray_btSoftBody_MaterialPtr_push_back(_native, item.Native);
+            btAlignedObjectArray_btSoftBody_Note_push_back(_native, item.Native);
         }
 
         public void Clear()
         {
-            btAlignedObjectArray_btSoftBody_MaterialPtr_resizeNoInitialize(_native, 0);
+            btAlignedObjectArray_btSoftBody_Note_resizeNoInitialize(_native, 0);
         }
 
-        public bool Contains(Material item)
+        public bool Contains(Note item)
         {
             throw new NotImplementedException();
         }
 
-        public void CopyTo(Material[] array, int arrayIndex)
+        public void CopyTo(Note[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
 
         public int Count
         {
-            get { return btAlignedObjectArray_btSoftBody_MaterialPtr_size(_native); }
+            get { return btAlignedObjectArray_btSoftBody_Note_size(_native); }
         }
 
         public bool IsReadOnly
@@ -141,28 +141,30 @@ namespace BulletSharp.SoftBody
             get { return false; }
         }
 
-        public bool Remove(Material item)
+        public bool Remove(Note item)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerator<Material> GetEnumerator()
+        public IEnumerator<Note> GetEnumerator()
         {
-            return new AlignedMaterialArrayEnumerator(this);
+            return new AlignedNoteArrayEnumerator(this);
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return new AlignedMaterialArrayEnumerator(this);
+            return new AlignedNoteArrayEnumerator(this);
         }
 
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern IntPtr btAlignedObjectArray_btSoftBody_MaterialPtr_at(IntPtr obj, int n);
+        static extern IntPtr btAlignedObjectArray_btSoftBody_Note_at(IntPtr obj, int n);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedObjectArray_btSoftBody_MaterialPtr_push_back(IntPtr obj, IntPtr val);
+        static extern int btAlignedObjectArray_btSoftBody_Note_index_of(IntPtr obj, IntPtr val);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern void btAlignedObjectArray_btSoftBody_MaterialPtr_resizeNoInitialize(IntPtr obj, int newSize);
+        static extern void btAlignedObjectArray_btSoftBody_Note_push_back(IntPtr obj, IntPtr val);
         [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern int btAlignedObjectArray_btSoftBody_MaterialPtr_size(IntPtr obj);
+        static extern void btAlignedObjectArray_btSoftBody_Note_resizeNoInitialize(IntPtr obj, int newSize);
+        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+        static extern int btAlignedObjectArray_btSoftBody_Note_size(IntPtr obj);
     }
 }

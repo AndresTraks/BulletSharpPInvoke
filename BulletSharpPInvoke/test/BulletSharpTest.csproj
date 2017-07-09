@@ -66,6 +66,7 @@
     <Compile Include="OverlapFilterCallbackTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SoftBodyTests.cs" />
     <Compile Include="SerializationTest.cs" />
   </ItemGroup>
   <ItemGroup>

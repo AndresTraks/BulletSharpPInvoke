@@ -14,7 +14,7 @@ namespace BulletSharp
 
 		public MultiBodyFixedConstraint(MultiBody body, int link, RigidBody bodyB,
 			Vector3 pivotInA, Vector3 pivotInB, Matrix frameInA, Matrix frameInB)
-			: base(btMultiBodyFixedConstraint_new(body._native, link, bodyB._native,
+			: base(btMultiBodyFixedConstraint_new(body._native, link, bodyB.Native,
 				ref pivotInA, ref pivotInB, ref frameInA, ref frameInB))
 		{
 		}

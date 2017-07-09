@@ -113,7 +113,7 @@ namespace BulletSharp.SoftBody
 
         public void Add(Tetra item)
         {
-            btAlignedObjectArray_btSoftBody_Tetra_push_back(_native, item._native);
+            btAlignedObjectArray_btSoftBody_Tetra_push_back(_native, item.Native);
         }
 
         public void Clear()

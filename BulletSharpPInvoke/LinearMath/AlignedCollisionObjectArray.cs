@@ -136,22 +136,22 @@ namespace BulletSharp
                     {
                         return;
                     }
-                    btDynamicsWorld_addRigidBody(_collisionWorld._native, item._native);
+                    btDynamicsWorld_addRigidBody(_collisionWorld._native, item.Native);
                 }
                 else if (item is BulletSharp.SoftBody.SoftBody)
                 {
-                    btSoftRigidDynamicsWorld_addSoftBody(_collisionWorld._native, item._native);
+                    btSoftRigidDynamicsWorld_addSoftBody(_collisionWorld._native, item.Native);
                 }
                 else
                 {
-                    btCollisionWorld_addCollisionObject(_collisionWorld._native, item._native);
+                    btCollisionWorld_addCollisionObject(_collisionWorld._native, item.Native);
                 }
                 SetBodyBroadphaseHandle(item, _collisionWorld.Broadphase);
                 _backingList.Add(item);
             }
             else
             {
-                btAlignedObjectArray_btCollisionObjectPtr_push_back(_native, item._native);
+                btAlignedObjectArray_btCollisionObjectPtr_push_back(_native, item.Native);
             }
         }
 
@@ -163,15 +163,15 @@ namespace BulletSharp
                 {
                     return;
                 }
-                btDynamicsWorld_addRigidBody2(_collisionWorld._native, item._native, group, mask);
+                btDynamicsWorld_addRigidBody2(_collisionWorld._native, item.Native, group, mask);
             }
             else if (item is SoftBody.SoftBody)
             {
-                btSoftRigidDynamicsWorld_addSoftBody3(_collisionWorld._native, item._native, group, mask);
+                btSoftRigidDynamicsWorld_addSoftBody3(_collisionWorld._native, item.Native, group, mask);
             }
             else
             {
-                btCollisionWorld_addCollisionObject3(_collisionWorld._native, item._native, group, mask);
+                btCollisionWorld_addCollisionObject3(_collisionWorld._native, item.Native, group, mask);
             }
             SetBodyBroadphaseHandle(item, _collisionWorld.Broadphase);
             _backingList.Add(item);
@@ -223,7 +223,7 @@ namespace BulletSharp
 
         public bool Remove(CollisionObject item)
         {
-            IntPtr itemPtr = item._native;
+            IntPtr itemPtr = item.Native;
 
             if (_backingList == null)
             {
@@ -234,7 +234,7 @@ namespace BulletSharp
             int count = _backingList.Count;
             for (int i = 0; i < count; i++)
             {
-                if (_backingList[i]._native == itemPtr)
+                if (_backingList[i].Native == itemPtr)
                 {
                     if (item is BulletSharp.SoftBody.SoftBody)
                     {
@@ -265,7 +265,7 @@ namespace BulletSharp
 
         private void SetBodyBroadphaseHandle(CollisionObject item, BroadphaseInterface broadphase)
         {
-            IntPtr broadphaseHandle = btCollisionObject_getBroadphaseHandle(item._native);
+            IntPtr broadphaseHandle = btCollisionObject_getBroadphaseHandle(item.Native);
             if (broadphase is DbvtBroadphase)
             {
                 item.BroadphaseHandle = new DbvtProxy(broadphaseHandle);

@@ -30,7 +30,7 @@ namespace BulletSharp
 		/*
 		public void MergePoints(Vector4 plane, float margin, Vector3 points, int pointCount)
 		{
-			GIM_TRIANGLE_CONTACT_merge_points(_native, ref plane, margin, ref points, pointCount);
+			GIM_TRIANGLE_CONTACT_merge_points(Native, ref plane, margin, ref points, pointCount);
 		}
 		*/
 		public float PenetrationDepth

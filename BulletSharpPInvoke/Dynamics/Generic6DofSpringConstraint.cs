@@ -9,7 +9,7 @@ namespace BulletSharp
 	{
 		public Generic6DofSpringConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
 			Matrix frameInA, Matrix frameInB, bool useLinearReferenceFrameA)
-			: base(btGeneric6DofSpringConstraint_new(rigidBodyA._native, rigidBodyB._native,
+			: base(btGeneric6DofSpringConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
 				ref frameInA, ref frameInB, useLinearReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -18,7 +18,7 @@ namespace BulletSharp
 
 		public Generic6DofSpringConstraint(RigidBody rigidBodyB, Matrix frameInB,
 			bool useLinearReferenceFrameB)
-			: base(btGeneric6DofSpringConstraint_new2(rigidBodyB._native, ref frameInB,
+			: base(btGeneric6DofSpringConstraint_new2(rigidBodyB.Native, ref frameInB,
 				useLinearReferenceFrameB))
 		{
             _rigidBodyA = GetFixedBody();

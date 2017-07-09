@@ -24,9 +24,9 @@ namespace BulletSharp.SoftBody
                 _ownsSolver = true;
             }
 
-            _native = btSoftRigidDynamicsWorld_new(dispatcher._native, pairCache._native,
+            _native = btSoftRigidDynamicsWorld_new(dispatcher.Native, pairCache.Native,
                 (constraintSolver != null) ? constraintSolver._native : IntPtr.Zero,
-                collisionConfiguration._native, _softBodySolver._native);
+                collisionConfiguration.Native, _softBodySolver._native);
 
             _collisionObjectArray = new AlignedCollisionObjectArray(btCollisionWorld_getCollisionObjectArray(_native), this);
 

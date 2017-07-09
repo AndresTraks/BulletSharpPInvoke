@@ -14,7 +14,7 @@ namespace BulletSharp
 
 		public MultiBodySliderConstraint(MultiBody body, int link, RigidBody bodyB,
 			Vector3 pivotInA, Vector3 pivotInB, Matrix frameInA, Matrix frameInB, Vector3 jointAxis)
-			: base(btMultiBodySliderConstraint_new(body._native, link, bodyB._native,
+			: base(btMultiBodySliderConstraint_new(body._native, link, bodyB.Native,
 				ref pivotInA, ref pivotInB, ref frameInA, ref frameInB, ref jointAxis))
 		{
 		}

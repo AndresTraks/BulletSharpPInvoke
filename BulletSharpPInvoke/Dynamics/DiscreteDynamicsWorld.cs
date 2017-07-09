@@ -16,8 +16,8 @@ namespace BulletSharp
 
 		public DiscreteDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
 			ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration)
-			: this(btDiscreteDynamicsWorld_new(dispatcher != null ? dispatcher._native : IntPtr.Zero, pairCache != null ? pairCache._native : IntPtr.Zero,
-				constraintSolver != null ? constraintSolver._native : IntPtr.Zero, collisionConfiguration != null ? collisionConfiguration._native : IntPtr.Zero),
+			: this(btDiscreteDynamicsWorld_new(dispatcher != null ? dispatcher.Native : IntPtr.Zero, pairCache != null ? pairCache.Native : IntPtr.Zero,
+				constraintSolver != null ? constraintSolver._native : IntPtr.Zero, collisionConfiguration != null ? collisionConfiguration.Native : IntPtr.Zero),
                   dispatcher, pairCache)
 		{
 			_constraintSolver = constraintSolver;
@@ -85,7 +85,7 @@ namespace BulletSharp
                     int len = colObj.CalculateSerializeBufferSize();
                     Chunk chunk = serializer.Allocate((uint)len, 1);
                     string structType = colObj.Serialize(chunk.OldPtr, serializer);
-                    serializer.FinalizeChunk(chunk, structType, DnaID.RigidBody, colObj._native);
+                    serializer.FinalizeChunk(chunk, structType, DnaID.RigidBody, colObj.Native);
                 }
             }
 
@@ -115,7 +115,7 @@ namespace BulletSharp
 
 		public void SynchronizeSingleMotionState(RigidBody body)
 		{
-			btDiscreteDynamicsWorld_synchronizeSingleMotionState(_native, body._native);
+			btDiscreteDynamicsWorld_synchronizeSingleMotionState(_native, body.Native);
 		}
 
 		public void UpdateVehicles(float timeStep)

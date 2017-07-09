@@ -38,12 +38,7 @@ const btOverlappingPairCallback* btAxisSweep3_getOverlappingPairUserCallback(btA
 {
 	return obj->getOverlappingPairUserCallback();
 }
-/*
-void btAxisSweep3_processAllOverlappingPairs(btAxisSweep3* obj, btOverlapCallback* callback)
-{
-	obj->processAllOverlappingPairs(callback);
-}
-*/
+
 void btAxisSweep3_quantize(btAxisSweep3* obj, unsigned short* out, const btVector3* point,
 	int isMax)
 {
@@ -120,12 +115,7 @@ const btOverlappingPairCallback* bt32BitAxisSweep3_getOverlappingPairUserCallbac
 {
 	return obj->getOverlappingPairUserCallback();
 }
-/*
-void bt32BitAxisSweep3_processAllOverlappingPairs(bt32BitAxisSweep3* obj, btOverlapCallback* callback)
-{
-	obj->processAllOverlappingPairs(callback);
-}
-*/
+
 void bt32BitAxisSweep3_quantize(bt32BitAxisSweep3* obj, unsigned int* out, const btVector3* point,
 	int isMax)
 {

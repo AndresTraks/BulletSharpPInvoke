@@ -9,7 +9,7 @@ namespace BulletSharp
 	{
 		public Hinge2Constraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 anchor,
 			Vector3 axis1, Vector3 axis2)
-			: base(btHinge2Constraint_new(rigidBodyA._native, rigidBodyB._native,
+			: base(btHinge2Constraint_new(rigidBodyA.Native, rigidBodyB.Native,
 				ref anchor, ref axis1, ref axis2))
 		{
 			_rigidBodyA = rigidBodyA;

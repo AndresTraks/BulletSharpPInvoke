@@ -9,7 +9,7 @@ namespace BulletSharp
 	{
 		public GearConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 axisInA,
 			Vector3 axisInB, float ratio = 1.0f)
-			: base(btGearConstraint_new(rigidBodyA._native, rigidBodyB._native,
+			: base(btGearConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
 				ref axisInA, ref axisInB, ratio))
 		{
 			_rigidBodyA = rigidBodyA;

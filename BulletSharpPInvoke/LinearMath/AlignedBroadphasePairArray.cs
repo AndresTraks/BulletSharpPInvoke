@@ -112,7 +112,7 @@ namespace BulletSharp
 
         public void Add(BroadphasePair item)
         {
-            btAlignedObjectArray_btBroadphasePair_push_back(_native, item._native);
+            btAlignedObjectArray_btBroadphasePair_push_back(_native, item.Native);
         }
 
         public void Clear()

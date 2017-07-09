@@ -95,7 +95,7 @@ namespace BulletSharp
 		public PersistentManifold(CollisionObject body0, CollisionObject body1, int __unnamed2,
 			float contactBreakingThreshold, float contactProcessingThreshold)
 		{
-            _native = btPersistentManifold_new2(body0._native, body1._native, __unnamed2,
+            _native = btPersistentManifold_new2(body0.Native, body1.Native, __unnamed2,
                 contactBreakingThreshold, contactProcessingThreshold);
 		}
 
@@ -147,7 +147,7 @@ namespace BulletSharp
 
 		public void SetBodies(CollisionObject body0, CollisionObject body1)
 		{
-			btPersistentManifold_setBodies(_native, body0._native, body1._native);
+			btPersistentManifold_setBodies(_native, body0.Native, body1.Native);
 		}
 
 		public bool ValidContactDistance(ManifoldPoint pt)

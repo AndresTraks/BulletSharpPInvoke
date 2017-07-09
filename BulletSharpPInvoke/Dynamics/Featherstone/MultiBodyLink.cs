@@ -173,7 +173,7 @@ namespace BulletSharp
 		public MultiBodyLinkCollider Collider
 		{
             get { return CollisionObject.GetManaged(btMultibodyLink_getCollider(_native)) as MultiBodyLinkCollider; }
-			set { btMultibodyLink_setCollider(_native, value._native); }
+			set { btMultibodyLink_setCollider(_native, value.Native); }
 		}
 
 		public int DofCount

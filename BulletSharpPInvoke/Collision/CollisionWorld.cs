@@ -157,7 +157,7 @@ namespace BulletSharp
 
         public virtual bool NeedsCollision(BroadphaseProxy proxy0)
 		{
-            return btCollisionWorld_ContactResultCallbackWrapper_needsCollision(_native, proxy0._native);
+            return btCollisionWorld_ContactResultCallbackWrapper_needsCollision(_native, proxy0.Native);
 		}
 
 		public float ClosestDistanceThreshold
@@ -256,7 +256,7 @@ namespace BulletSharp
         public virtual bool NeedsCollision(BroadphaseProxy proxy0)
 		{
             return btCollisionWorld_ConvexResultCallbackWrapper_needsCollision(_native,
-				proxy0._native);
+				proxy0.Native);
 		}
 
 		public float ClosestHitFraction
@@ -346,7 +346,7 @@ namespace BulletSharp
 		public LocalConvexResult(CollisionObject hitCollisionObject, LocalShapeInfo localShapeInfo,
 			Vector3 hitNormalLocal, Vector3 hitPointLocal, float hitFraction)
 		{
-			_native = btCollisionWorld_LocalConvexResult_new(hitCollisionObject._native,
+			_native = btCollisionWorld_LocalConvexResult_new(hitCollisionObject.Native,
 				localShapeInfo._native, ref hitNormalLocal, ref hitPointLocal,
 				hitFraction);
 			_hitCollisionObject = hitCollisionObject;
@@ -358,7 +358,7 @@ namespace BulletSharp
 			get { return _hitCollisionObject; }
 			set
 			{
-				btCollisionWorld_LocalConvexResult_setHitCollisionObject(_native, value._native);
+				btCollisionWorld_LocalConvexResult_setHitCollisionObject(_native, value.Native);
 				_hitCollisionObject = value;
 			}
 		}
@@ -469,7 +469,7 @@ namespace BulletSharp
 		public LocalRayResult(CollisionObject collisionObject, LocalShapeInfo localShapeInfo,
 			Vector3 hitNormalLocal, float hitFraction)
 		{
-			_native = btCollisionWorld_LocalRayResult_new(collisionObject._native,
+			_native = btCollisionWorld_LocalRayResult_new(collisionObject.Native,
 				localShapeInfo._native, ref hitNormalLocal, hitFraction);
 			_collisionObject = collisionObject;
 			_localShapeInfo = localShapeInfo;
@@ -480,7 +480,7 @@ namespace BulletSharp
 			get { return _collisionObject; }
 			set
 			{
-				btCollisionWorld_LocalRayResult_setCollisionObject(_native, value._native);
+				btCollisionWorld_LocalRayResult_setCollisionObject(_native, value.Native);
 				_collisionObject = value;
 			}
 		}
@@ -657,7 +657,7 @@ namespace BulletSharp
 
 		public virtual bool NeedsCollision(BroadphaseProxy proxy0)
 		{
-			return btCollisionWorld_RayResultCallbackWrapper_needsCollision(_native, proxy0._native);
+			return btCollisionWorld_RayResultCallbackWrapper_needsCollision(_native, proxy0.Native);
 		}
 
 		public float ClosestHitFraction
@@ -681,7 +681,7 @@ namespace BulletSharp
 		public CollisionObject CollisionObject
 		{
 			get { return CollisionObject.GetManaged(btCollisionWorld_RayResultCallback_getCollisionObject(_native)); }
-			set { btCollisionWorld_RayResultCallback_setCollisionObject(_native, (value != null) ? value._native : IntPtr.Zero); }
+			set { btCollisionWorld_RayResultCallback_setCollisionObject(_native, (value != null) ? value.Native : IntPtr.Zero); }
 		}
 
 		public uint Flags
@@ -773,8 +773,8 @@ namespace BulletSharp
 
 		public CollisionWorld(Dispatcher dispatcher, BroadphaseInterface broadphasePairCache,
 			CollisionConfiguration collisionConfiguration)
-            : this(btCollisionWorld_new(dispatcher._native, broadphasePairCache._native,
-                collisionConfiguration._native), dispatcher, broadphasePairCache)
+            : this(btCollisionWorld_new(dispatcher.Native, broadphasePairCache.Native,
+                collisionConfiguration.Native), dispatcher, broadphasePairCache)
 		{
 		}
 
@@ -803,13 +803,13 @@ namespace BulletSharp
 		public void ContactPairTest(CollisionObject colObjA, CollisionObject colObjB,
 			ContactResultCallback resultCallback)
 		{
-			btCollisionWorld_contactPairTest(_native, colObjA._native, colObjB._native,
+			btCollisionWorld_contactPairTest(_native, colObjA.Native, colObjB.Native,
 				resultCallback._native);
 		}
 
 		public void ContactTest(CollisionObject colObj, ContactResultCallback resultCallback)
 		{
-			btCollisionWorld_contactTest(_native, colObj._native, resultCallback._native);
+			btCollisionWorld_contactTest(_native, colObj.Native, resultCallback._native);
 		}
 
         public void ConvexSweepTestRef(ConvexShape castShape, ref Matrix from, ref Matrix to,
@@ -847,7 +847,7 @@ namespace BulletSharp
             ref Matrix colObjWorldTransform, ConvexResultCallback resultCallback, float allowedPenetration)
         {
             btCollisionWorld_objectQuerySingle(castShape._native, ref rayFromTrans,
-                ref rayToTrans, collisionObject._native, collisionShape._native, ref colObjWorldTransform,
+                ref rayToTrans, collisionObject.Native, collisionShape._native, ref colObjWorldTransform,
                 resultCallback._native, allowedPenetration);
         }
 
@@ -856,7 +856,7 @@ namespace BulletSharp
 			Matrix colObjWorldTransform, ConvexResultCallback resultCallback, float allowedPenetration)
 		{
 			btCollisionWorld_objectQuerySingle(castShape._native, ref rayFromTrans,
-				ref rayToTrans, collisionObject._native, collisionShape._native, ref colObjWorldTransform,
+				ref rayToTrans, collisionObject.Native, collisionShape._native, ref colObjWorldTransform,
 				resultCallback._native, allowedPenetration);
 		}
 
@@ -865,7 +865,7 @@ namespace BulletSharp
             float allowedPenetration)
         {
             btCollisionWorld_objectQuerySingleInternal(castShape._native, ref convexFromTrans,
-                ref convexToTrans, colObjWrap._native, resultCallback._native, allowedPenetration);
+                ref convexToTrans, colObjWrap.Native, resultCallback._native, allowedPenetration);
         }
 
 		public static void ObjectQuerySingleInternal(ConvexShape castShape, Matrix convexFromTrans,
@@ -873,7 +873,7 @@ namespace BulletSharp
 			float allowedPenetration)
 		{
 			btCollisionWorld_objectQuerySingleInternal(castShape._native, ref convexFromTrans,
-				ref convexToTrans, colObjWrap._native, resultCallback._native, allowedPenetration);
+				ref convexToTrans, colObjWrap.Native, resultCallback._native, allowedPenetration);
 		}
 
 		public void PerformDiscreteCollisionDetection()
@@ -895,14 +895,14 @@ namespace BulletSharp
             CollisionObject collisionObject, CollisionShape collisionShape, ref Matrix colObjWorldTransform,
             RayResultCallback resultCallback)
         {
-            btCollisionWorld_rayTestSingle(ref rayFromTrans, ref rayToTrans, collisionObject._native, collisionShape._native, ref colObjWorldTransform, resultCallback._native);
+            btCollisionWorld_rayTestSingle(ref rayFromTrans, ref rayToTrans, collisionObject.Native, collisionShape._native, ref colObjWorldTransform, resultCallback._native);
         }
 
 		public static void RayTestSingle(Matrix rayFromTrans, Matrix rayToTrans,
 			CollisionObject collisionObject, CollisionShape collisionShape, Matrix colObjWorldTransform,
 			RayResultCallback resultCallback)
 		{
-			btCollisionWorld_rayTestSingle(ref rayFromTrans, ref rayToTrans, collisionObject._native,
+			btCollisionWorld_rayTestSingle(ref rayFromTrans, ref rayToTrans, collisionObject.Native,
 				collisionShape._native, ref colObjWorldTransform, resultCallback._native);
 		}
 
@@ -910,14 +910,14 @@ namespace BulletSharp
             CollisionObjectWrapper collisionObjectWrap, RayResultCallback resultCallback)
         {
             btCollisionWorld_rayTestSingleInternal(ref rayFromTrans, ref rayToTrans,
-                collisionObjectWrap._native, resultCallback._native);
+                collisionObjectWrap.Native, resultCallback._native);
         }
 
 		public static void RayTestSingleInternal(Matrix rayFromTrans, Matrix rayToTrans,
 			CollisionObjectWrapper collisionObjectWrap, RayResultCallback resultCallback)
 		{
 			btCollisionWorld_rayTestSingleInternal(ref rayFromTrans, ref rayToTrans,
-				collisionObjectWrap._native, resultCallback._native);
+				collisionObjectWrap.Native, resultCallback._native);
 		}
 
 		public void RemoveCollisionObject(CollisionObject collisionObject)
@@ -964,7 +964,7 @@ namespace BulletSharp
 
 		public void UpdateSingleAabb(CollisionObject colObj)
 		{
-			btCollisionWorld_updateSingleAabb(_native, colObj._native);
+			btCollisionWorld_updateSingleAabb(_native, colObj.Native);
 		}
 
 		public BroadphaseInterface Broadphase
@@ -979,7 +979,7 @@ namespace BulletSharp
                 // _native can be zero from a constructor argument
                 if (_native != IntPtr.Zero)
                 {
-                    btCollisionWorld_setBroadphase(_native, value._native);
+                    btCollisionWorld_setBroadphase(_native, value.Native);
                 }
 				_broadphase = value;
                 value._worldRefs.Add(this);

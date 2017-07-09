@@ -44,14 +44,14 @@ namespace BulletSharp
             RigidBody body0, RigidBody body1)
         {
             return btRotationalLimitMotor_solveAngularLimits(_native, timeStep, ref axis,
-                jacDiagABInv, body0._native, body1._native);
+                jacDiagABInv, body0.Native, body1.Native);
         }
 
 		public float SolveAngularLimits(float timeStep, Vector3 axis, float jacDiagABInv,
 			RigidBody body0, RigidBody body1)
 		{
 			return btRotationalLimitMotor_solveAngularLimits(_native, timeStep, ref axis,
-				jacDiagABInv, body0._native, body1._native);
+				jacDiagABInv, body0.Native, body1.Native);
 		}
 
 		public int TestLimitValue(float testValue)
@@ -302,7 +302,7 @@ namespace BulletSharp
             ref Vector3 anchorPos)
         {
             return btTranslationalLimitMotor_solveLinearAxis(_native, timeStep, jacDiagABInv,
-                body1._native, ref pointInA, body2._native, ref pointInB, limitIndex,
+                body1.Native, ref pointInA, body2.Native, ref pointInB, limitIndex,
                 ref axisNormalOnA, ref anchorPos);
         }
 
@@ -311,7 +311,7 @@ namespace BulletSharp
 			Vector3 anchorPos)
 		{
 			return btTranslationalLimitMotor_solveLinearAxis(_native, timeStep, jacDiagABInv,
-				body1._native, ref pointInA, body2._native, ref pointInB, limitIndex,
+				body1.Native, ref pointInA, body2.Native, ref pointInB, limitIndex,
 				ref axisNormalOnA, ref anchorPos);
 		}
 
@@ -568,7 +568,7 @@ namespace BulletSharp
 
 		public Generic6DofConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
 			Matrix frameInA, Matrix frameInB, bool useLinearReferenceFrameA)
-			: base(btGeneric6DofConstraint_new(rigidBodyA._native, rigidBodyB._native,
+			: base(btGeneric6DofConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
 				ref frameInA, ref frameInB, useLinearReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -576,7 +576,7 @@ namespace BulletSharp
 		}
 
 		public Generic6DofConstraint(RigidBody rigidBodyB, Matrix frameInB, bool useLinearReferenceFrameB)
-			: base(btGeneric6DofConstraint_new2(rigidBodyB._native, ref frameInB,
+			: base(btGeneric6DofConstraint_new2(rigidBodyB.Native, ref frameInB,
 				useLinearReferenceFrameB))
 		{
             _rigidBodyA = GetFixedBody();

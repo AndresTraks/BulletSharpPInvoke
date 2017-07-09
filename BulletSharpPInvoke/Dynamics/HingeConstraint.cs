@@ -24,7 +24,7 @@ namespace BulletSharp
 
 		public HingeConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 pivotInA,
 			Vector3 pivotInB, Vector3 axisInA, Vector3 axisInB, bool useReferenceFrameA = false)
-			: base(btHingeConstraint_new(rigidBodyA._native, rigidBodyB._native,
+			: base(btHingeConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
 				ref pivotInA, ref pivotInB, ref axisInA, ref axisInB, useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -33,7 +33,7 @@ namespace BulletSharp
 
 		public HingeConstraint(RigidBody rigidBodyA, Vector3 pivotInA, Vector3 axisInA,
 			bool useReferenceFrameA = false)
-			: base(btHingeConstraint_new2(rigidBodyA._native, ref pivotInA, ref axisInA,
+			: base(btHingeConstraint_new2(rigidBodyA.Native, ref pivotInA, ref axisInA,
 				useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -42,7 +42,7 @@ namespace BulletSharp
 
 		public HingeConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix rigidBodyAFrame,
 			Matrix rigidBodyBFrame, bool useReferenceFrameA = false)
-			: base(btHingeConstraint_new3(rigidBodyA._native, rigidBodyB._native,
+			: base(btHingeConstraint_new3(rigidBodyA.Native, rigidBodyB.Native,
 				ref rigidBodyAFrame, ref rigidBodyBFrame, useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -50,7 +50,7 @@ namespace BulletSharp
 		}
 
 		public HingeConstraint(RigidBody rigidBodyA, Matrix rigidBodyAFrame, bool useReferenceFrameA = false)
-			: base(btHingeConstraint_new4(rigidBodyA._native, ref rigidBodyAFrame,
+			: base(btHingeConstraint_new4(rigidBodyA.Native, ref rigidBodyAFrame,
 				useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -399,7 +399,7 @@ namespace BulletSharp
 	{
 		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
 			Vector3 pivotInA, Vector3 pivotInB, Vector3 axisInA, Vector3 axisInB, bool useReferenceFrameA = false)
-			: base(btHingeAccumulatedAngleConstraint_new(rigidBodyA._native, rigidBodyB._native,
+			: base(btHingeAccumulatedAngleConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
 				ref pivotInA, ref pivotInB, ref axisInA, ref axisInB, useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -408,7 +408,7 @@ namespace BulletSharp
 
 		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, Vector3 pivotInA,
 			Vector3 axisInA, bool useReferenceFrameA = false)
-			: base(btHingeAccumulatedAngleConstraint_new2(rigidBodyA._native, ref pivotInA,
+			: base(btHingeAccumulatedAngleConstraint_new2(rigidBodyA.Native, ref pivotInA,
 				ref axisInA, useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -417,7 +417,7 @@ namespace BulletSharp
 
 		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
 			Matrix rigidBodyAFrame, Matrix rigidBodyBFrame, bool useReferenceFrameA = false)
-			: base(btHingeAccumulatedAngleConstraint_new3(rigidBodyA._native, rigidBodyB._native,
+			: base(btHingeAccumulatedAngleConstraint_new3(rigidBodyA.Native, rigidBodyB.Native,
 				ref rigidBodyAFrame, ref rigidBodyBFrame, useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;
@@ -426,7 +426,7 @@ namespace BulletSharp
 
 		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, Matrix rigidBodyAFrame,
 			bool useReferenceFrameA = false)
-			: base(btHingeAccumulatedAngleConstraint_new4(rigidBodyA._native, ref rigidBodyAFrame,
+			: base(btHingeAccumulatedAngleConstraint_new4(rigidBodyA.Native, ref rigidBodyAFrame,
 				useReferenceFrameA))
 		{
 			_rigidBodyA = rigidBodyA;

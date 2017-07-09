@@ -107,13 +107,13 @@ namespace BulletSharp.SoftBody
             }
             set
             {
-                btAlignedObjectArray_btSoftBody_Link_set(_native, value._native, index);
+                btAlignedObjectArray_btSoftBody_Link_set(_native, value.Native, index);
             }
         }
 
         public void Add(Link item)
         {
-            btAlignedObjectArray_btSoftBody_Link_push_back(_native, item._native);
+            btAlignedObjectArray_btSoftBody_Link_push_back(_native, item.Native);
         }
 
         public void Clear()
