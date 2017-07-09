@@ -526,7 +526,7 @@ namespace BulletSharp
             }
             else if (obj is TypedConstraint)
             {
-                ptr = (obj as TypedConstraint)._native;
+                ptr = (obj as TypedConstraint).Native;
             }
             else
             {

@@ -23,7 +23,7 @@ namespace BulletSharp
 		internal List<TypedConstraint> _constraintRefs;
 
 		public RigidBody(RigidBodyConstructionInfo constructionInfo)
-			: base(btRigidBody_new(constructionInfo._native))
+			: base(btRigidBody_new(constructionInfo.Native))
 		{
 			_collisionShape = constructionInfo.CollisionShape;
 			_motionState = constructionInfo.MotionState;
@@ -36,7 +36,7 @@ namespace BulletSharp
 				_constraintRefs = new List<TypedConstraint>();
 			}
 			_constraintRefs.Add(constraint);
-			btRigidBody_addConstraintRef(Native, constraint._native);
+			btRigidBody_addConstraintRef(Native, constraint.Native);
 		}
 
 		public void ApplyCentralForceRef(ref Vector3 force)
@@ -200,7 +200,7 @@ namespace BulletSharp
 			if (_constraintRefs != null)
 			{
 				_constraintRefs.Remove(constraint);
-				btRigidBody_removeConstraintRef(Native, constraint._native);
+				btRigidBody_removeConstraintRef(Native, constraint.Native);
 			}
 		}
 

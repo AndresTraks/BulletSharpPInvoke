@@ -1,51 +1,52 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-    public interface IAction
-    {
-        void DebugDraw(IDebugDraw debugDrawer);
-        void UpdateAction(CollisionWorld collisionWorld, float deltaTimeStep);
-    }
+	public interface IAction
+	{
+		void DebugDraw(IDebugDraw debugDrawer);
+		void UpdateAction(CollisionWorld collisionWorld, float deltaTimeStep);
+	}
 
-    internal class ActionInterfaceWrapper : IDisposable
+	internal class ActionInterfaceWrapper : IDisposable
 	{
 		internal IntPtr _native;
-        IAction _actionInterface;
-        DynamicsWorld _world;
+		private IAction _actionInterface;
+		private DynamicsWorld _world;
 
-        [UnmanagedFunctionPointerAttribute(Native.Conv), SuppressUnmanagedCodeSecurity]
-        delegate void DebugDrawUnmanagedDelegate(IntPtr debugDrawer);
-        [UnmanagedFunctionPointerAttribute(Native.Conv), SuppressUnmanagedCodeSecurity]
-        delegate void UpdateActionUnmanagedDelegate(IntPtr collisionWorld, float deltaTimeStep);
+		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		private delegate void DebugDrawUnmanagedDelegate(IntPtr debugDrawer);
+		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		private delegate void UpdateActionUnmanagedDelegate(IntPtr collisionWorld, float deltaTimeStep);
 
-        DebugDrawUnmanagedDelegate _debugDraw;
-        UpdateActionUnmanagedDelegate _updateAction;
+		private DebugDrawUnmanagedDelegate _debugDraw;
+		private UpdateActionUnmanagedDelegate _updateAction;
 
-        public ActionInterfaceWrapper(IAction actionInterface, DynamicsWorld world)
-        {
-            _actionInterface = actionInterface;
-            _world = world;
+		public ActionInterfaceWrapper(IAction actionInterface, DynamicsWorld world)
+		{
+			_actionInterface = actionInterface;
+			_world = world;
 
-            _debugDraw = new DebugDrawUnmanagedDelegate(DebugDrawUnmanaged);
-            _updateAction = new UpdateActionUnmanagedDelegate(UpdateActionUnmanaged);
+			_debugDraw = new DebugDrawUnmanagedDelegate(DebugDrawUnmanaged);
+			_updateAction = new UpdateActionUnmanagedDelegate(UpdateActionUnmanaged);
 
-            _native = btActionInterfaceWrapper_new(
-                Marshal.GetFunctionPointerForDelegate(_debugDraw),
-                Marshal.GetFunctionPointerForDelegate(_updateAction));
-        }
+			_native = btActionInterfaceWrapper_new(
+				Marshal.GetFunctionPointerForDelegate(_debugDraw),
+				Marshal.GetFunctionPointerForDelegate(_updateAction));
+		}
 
-        private void DebugDrawUnmanaged(IntPtr debugDrawer)
-        {
-            _actionInterface.DebugDraw(DebugDraw.GetManaged(debugDrawer));
-        }
+		private void DebugDrawUnmanaged(IntPtr debugDrawer)
+		{
+			_actionInterface.DebugDraw(DebugDraw.GetManaged(debugDrawer));
+		}
 
-        private void UpdateActionUnmanaged(IntPtr collisionWorld, float deltaTimeStep)
-        {
-            _actionInterface.UpdateAction(_world, deltaTimeStep);
-        }
+		private void UpdateActionUnmanaged(IntPtr collisionWorld, float deltaTimeStep)
+		{
+			_actionInterface.UpdateAction(_world, deltaTimeStep);
+		}
 
 		public void Dispose()
 		{
@@ -66,10 +67,5 @@ namespace BulletSharp
 		{
 			Dispose(false);
 		}
-
-        [DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        static extern IntPtr btActionInterfaceWrapper_new(IntPtr debugDrawCallback, IntPtr updateActionCallback);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btActionInterface_delete(IntPtr obj);
-    }
+	}
 }

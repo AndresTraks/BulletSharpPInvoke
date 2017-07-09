@@ -57,7 +57,7 @@ namespace BulletSharp
 		public void AddConstraint(TypedConstraint constraint, bool disableCollisionsBetweenLinkedBodies = false)
 		{
 			_constraints.Add(constraint);
-			btDynamicsWorld_addConstraint(Native, constraint._native, disableCollisionsBetweenLinkedBodies);
+			btDynamicsWorld_addConstraint(Native, constraint.Native, disableCollisionsBetweenLinkedBodies);
 
 			if (disableCollisionsBetweenLinkedBodies)
 			{
@@ -99,7 +99,7 @@ namespace BulletSharp
 
 		public TypedConstraint GetConstraint(int index)
 		{
-			System.Diagnostics.Debug.Assert(btDynamicsWorld_getConstraint(Native, index) == _constraints[index]._native);
+			System.Diagnostics.Debug.Assert(btDynamicsWorld_getConstraint(Native, index) == _constraints[index].Native);
 			return _constraints[index];
 		}
 
@@ -142,7 +142,7 @@ namespace BulletSharp
 			int lastIndex = _constraints.Count - 1;
 			_constraints[itemIndex] = _constraints[lastIndex];
 			_constraints.RemoveAt(lastIndex);
-			btDynamicsWorld_removeConstraint(Native, constraint._native);
+			btDynamicsWorld_removeConstraint(Native, constraint.Native);
 		}
 
 		public void RemoveRigidBody(RigidBody body)
@@ -247,7 +247,7 @@ namespace BulletSharp
 			set
 			{
 				_constraintSolver = value;
-				btDynamicsWorld_setConstraintSolver(Native, value._native);
+				btDynamicsWorld_setConstraintSolver(Native, value.Native);
 			}
 		}
 

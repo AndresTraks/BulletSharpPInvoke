@@ -16,7 +16,7 @@ namespace BulletSharp
 		public DiscreteDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
 			ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration)
 			: this(btDiscreteDynamicsWorld_new(dispatcher != null ? dispatcher.Native : IntPtr.Zero, pairCache != null ? pairCache.Native : IntPtr.Zero,
-				constraintSolver != null ? constraintSolver._native : IntPtr.Zero, collisionConfiguration != null ? collisionConfiguration.Native : IntPtr.Zero),
+				constraintSolver != null ? constraintSolver.Native : IntPtr.Zero, collisionConfiguration != null ? collisionConfiguration.Native : IntPtr.Zero),
 				  dispatcher, pairCache)
 		{
 			_constraintSolver = constraintSolver;
@@ -29,7 +29,7 @@ namespace BulletSharp
 
 		public void DebugDrawConstraint(TypedConstraint constraint)
 		{
-			btDiscreteDynamicsWorld_debugDrawConstraint(Native, constraint._native);
+			btDiscreteDynamicsWorld_debugDrawConstraint(Native, constraint.Native);
 		}
 
 		private unsafe void SerializeDynamicsWorldInfo(Serializer serializer)
@@ -94,7 +94,7 @@ namespace BulletSharp
 				int len = constraint.CalculateSerializeBufferSize();
 				Chunk chunk = serializer.Allocate((uint)len, 1);
 				string structType = constraint.Serialize(chunk.OldPtr, serializer);
-				serializer.FinalizeChunk(chunk, structType, DnaID.Constraint, constraint._native);
+				serializer.FinalizeChunk(chunk, structType, DnaID.Constraint, constraint.Native);
 			}
 		}
 

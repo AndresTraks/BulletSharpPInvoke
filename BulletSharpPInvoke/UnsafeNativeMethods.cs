@@ -145,6 +145,43 @@ namespace BulletSharp
 		public static extern void btAABB_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btActionInterfaceWrapper_new(IntPtr debugDrawCallback, IntPtr updateActionCallback);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btActionInterface_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btAngularLimit_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btAngularLimit_fit(IntPtr obj, ref float angle);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btAngularLimit_getBiasFactor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btAngularLimit_getCorrection(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btAngularLimit_getError(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btAngularLimit_getHalfRange(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btAngularLimit_getHigh(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btAngularLimit_getLow(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btAngularLimit_getRelaxationFactor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btAngularLimit_getSign(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btAngularLimit_getSoftness(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btAngularLimit_isLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btAngularLimit_set(IntPtr obj, float low, float high, float _softness, float _biasFactor, float _relaxationFactor);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btAngularLimit_test(IntPtr obj, float angle);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btAngularLimit_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btAxisSweep3_new([In] ref Vector3 worldAabbMin, [In] ref Vector3 worldAabbMax, ushort maxHandles, IntPtr pairCache, bool disableRaycastAccelerator);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern ushort btAxisSweep3_addHandle(IntPtr obj, [In] ref Vector3 aabbMin, [In] ref Vector3 aabbMax, IntPtr pOwner, int collisionFilterGroup, int collisionFilterMask, IntPtr dispatcher);
@@ -1025,9 +1062,230 @@ namespace BulletSharp
 		public static extern IntPtr btConeShapeZ_new(float radius, float height);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btConeTwistConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Matrix rbAFrame, [In] ref Matrix rbBFrame);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btConeTwistConstraint_new2(IntPtr rbA, [In] ref Matrix rbAFrame);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_calcAngleInfo(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_calcAngleInfo2(IntPtr obj, [In] ref Matrix transA, [In] ref Matrix transB, [In] ref Matrix invInertiaWorldA, [In] ref Matrix invInertiaWorldB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_enableMotor(IntPtr obj, bool b);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_getAFrame(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btConeTwistConstraint_getAngularOnly(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_getBFrame(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConeTwistConstraint_getBiasFactor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConeTwistConstraint_getDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConeTwistConstraint_getFixThresh(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern ConeTwistFlags btConeTwistConstraint_getFlags(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_getFrameOffsetA(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_getFrameOffsetB(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_getInfo1NonVirtual(IntPtr obj, IntPtr info);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_getInfo2NonVirtual(IntPtr obj, IntPtr info, [In] ref Matrix transA, [In] ref Matrix transB, [In] ref Matrix invInertiaWorldA, [In] ref Matrix invInertiaWorldB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConeTwistConstraint_getLimit(IntPtr obj, int limitIndex);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConeTwistConstraint_getLimitSoftness(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConeTwistConstraint_getMaxMotorImpulse(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_getMotorTarget(IntPtr obj, out Quaternion q);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_GetPointForAngle(IntPtr obj, float fAngleInRadians, float fLength, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConeTwistConstraint_getRelaxationFactor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btConeTwistConstraint_getSolveSwingLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btConeTwistConstraint_getSolveTwistLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConeTwistConstraint_getSwingSpan1(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConeTwistConstraint_getSwingSpan2(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConeTwistConstraint_getTwistAngle(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConeTwistConstraint_getTwistLimitSign(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConeTwistConstraint_getTwistSpan(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btConeTwistConstraint_isMaxMotorImpulseNormalized(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btConeTwistConstraint_isMotorEnabled(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btConeTwistConstraint_isPastSwingLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_setAngularOnly(IntPtr obj, bool angularOnly);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_setDamping(IntPtr obj, float damping);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_setFixThresh(IntPtr obj, float fixThresh);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_setFrames(IntPtr obj, [In] ref Matrix frameA, [In] ref Matrix frameB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_setLimit(IntPtr obj, int limitIndex, float limitValue);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_setLimit2(IntPtr obj, float _swingSpan1, float _swingSpan2, float _twistSpan, float _softness, float _biasFactor, float _relaxationFactor);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_setMaxMotorImpulse(IntPtr obj, float maxMotorImpulse);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_setMaxMotorImpulseNormalized(IntPtr obj, float maxMotorImpulse);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_setMotorTarget(IntPtr obj, [In] ref Quaternion q);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_setMotorTargetInConstraintSpace(IntPtr obj, [In] ref Quaternion q);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConeTwistConstraint_updateRHS(IntPtr obj, float timeStep);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btConstraintSetting_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConstraintSetting_getDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConstraintSetting_getImpulseClamp(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConstraintSetting_getTau(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConstraintSetting_setDamping(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConstraintSetting_setImpulseClamp(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConstraintSetting_setTau(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConstraintSetting_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConstraintSolver_allSolved(IntPtr obj, IntPtr __unnamed0, IntPtr __unnamed1);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern ConstraintSolverType btConstraintSolver_getSolverType(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConstraintSolver_prepareSolve(IntPtr obj, int __unnamed0, int __unnamed1);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConstraintSolver_reset(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btConstraintSolver_solveGroup(IntPtr obj, IntPtr bodies, int numBodies, IntPtr manifold, int numManifolds, IntPtr constraints, int numConstraints, IntPtr info, IntPtr debugDrawer, IntPtr dispatcher);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConstraintSolver_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btConstraintSolverPoolMt_new(int numSolvers);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btConstraintSolverPoolMt_new2(IntPtr solvers, int numSolvers);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btContactSolverInfo_new();
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btContactSolverInfoData_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getErp(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getErp2(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getFriction(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getFrictionCfm(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getFrictionErp(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getGlobalCfm(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getLinearSlop(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getMaxErrorReduction(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getMaxGyroscopicForce(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btContactSolverInfoData_getMinimumSolverBatchSize(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btContactSolverInfoData_getNumIterations(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btContactSolverInfoData_getRestingContactRestitutionThreshold(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getRestitution(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getSingleAxisRollingFrictionThreshold(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern SolverModes btContactSolverInfoData_getSolverMode(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getSor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btContactSolverInfoData_getSplitImpulse(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getSplitImpulsePenetrationThreshold(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getSplitImpulseTurnErp(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getTau(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getTimeStep(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getWarmstartingFactor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setDamping(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setErp(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setErp2(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setFriction(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setFrictionCfm(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setFrictionErp(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setGlobalCfm(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setLinearSlop(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setMaxErrorReduction(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setMaxGyroscopicForce(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setMinimumSolverBatchSize(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setNumIterations(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setRestingContactRestitutionThreshold(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setRestitution(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setSingleAxisRollingFrictionThreshold(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setSolverMode(IntPtr obj, SolverModes value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setSor(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setSplitImpulse(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setSplitImpulsePenetrationThreshold(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setSplitImpulseTurnErp(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setTau(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setTimeStep(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setWarmstartingFactor(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btContinuousConvexCollision_new(IntPtr shapeA, IntPtr shapeB, IntPtr simplexSolver, IntPtr penetrationDepthSolver);
@@ -1291,6 +1549,9 @@ namespace BulletSharp
 		public static extern IntPtr btCylinderShapeZ_new([In] ref Vector3 halfExtents);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btCylinderShapeZ_new2(float halfExtentX, float halfExtentY, float halfExtentZ);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btDantzigSolver_new();
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btDbvtBroadphase_new(IntPtr paircache);
@@ -1875,6 +2136,132 @@ namespace BulletSharp
 		public static extern void btFace_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btFixedConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Matrix frameInA, [In] ref Matrix frameInB);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGearConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Vector3 axisInA, [In] ref Vector3 axisInB, float ratio);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGearConstraint_getAxisA(IntPtr obj, out Vector3 axisA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGearConstraint_getAxisB(IntPtr obj, out Vector3 axisB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btGearConstraint_getRatio(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGearConstraint_setAxisA(IntPtr obj, ref Vector3 axisA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGearConstraint_setAxisB(IntPtr obj, ref Vector3 axisB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGearConstraint_setRatio(IntPtr obj, float ratio);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGeneric6DofConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Matrix frameInA, [In] ref Matrix frameInB, bool useLinearReferenceFrameA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGeneric6DofConstraint_new2(IntPtr rbB, [In] ref Matrix frameInB, bool useLinearReferenceFrameB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_calcAnchorPos(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_calculateTransforms(IntPtr obj, [In] ref Matrix transA, [In] ref Matrix transB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_calculateTransforms2(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btGeneric6DofConstraint_get_limit_motor_info2(IntPtr obj, IntPtr limot, [In] ref Matrix transA, [In] ref Matrix transB, [In] ref Vector3 linVelA, [In] ref Vector3 linVelB, [In] ref Vector3 angVelA, [In] ref Vector3 angVelB, IntPtr info, int row, [In] ref Vector3 ax1, int rotational, int rotAllowed);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btGeneric6DofConstraint_getAngle(IntPtr obj, int axis_index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_getAngularLowerLimit(IntPtr obj, out Vector3 angularLower);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_getAngularUpperLimit(IntPtr obj, out Vector3 angularUpper);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_getAxis(IntPtr obj, int axis_index, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_getCalculatedTransformA(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_getCalculatedTransformB(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern SixDofFlags btGeneric6DofConstraint_getFlags(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_getFrameOffsetA(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_getFrameOffsetB(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_getInfo1NonVirtual(IntPtr obj, IntPtr info);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_getInfo2NonVirtual(IntPtr obj, IntPtr info, [In] ref Matrix transA, [In] ref Matrix transB, [In] ref Vector3 linVelA, [In] ref Vector3 linVelB, [In] ref Vector3 angVelA, [In] ref Vector3 angVelB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_getLinearLowerLimit(IntPtr obj, out Vector3 linearLower);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_getLinearUpperLimit(IntPtr obj, out Vector3 linearUpper);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btGeneric6DofConstraint_getRelativePivotPosition(IntPtr obj, int axis_index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGeneric6DofConstraint_getRotationalLimitMotor(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGeneric6DofConstraint_getTranslationalLimitMotor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btGeneric6DofConstraint_getUseFrameOffset(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btGeneric6DofConstraint_getUseLinearReferenceFrameA(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btGeneric6DofConstraint_getUseSolveConstraintObsolete(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btGeneric6DofConstraint_isLimited(IntPtr obj, int limitIndex);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_setAngularLowerLimit(IntPtr obj, [In] ref Vector3 angularLower);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_setAngularUpperLimit(IntPtr obj, [In] ref Vector3 angularUpper);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_setAxis(IntPtr obj, [In] ref Vector3 axis1, [In] ref Vector3 axis2);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_setFrames(IntPtr obj, [In] ref Matrix frameA, [In] ref Matrix frameB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_setLimit(IntPtr obj, int axis, float lo, float hi);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_setLinearLowerLimit(IntPtr obj, [In] ref Vector3 linearLower);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_setLinearUpperLimit(IntPtr obj, [In] ref Vector3 linearUpper);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_setUseFrameOffset(IntPtr obj, bool frameOffsetOnOff);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_setUseLinearReferenceFrameA(IntPtr obj, bool linearReferenceFrameA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_setUseSolveConstraintObsolete(IntPtr obj, bool value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btGeneric6DofConstraint_testAngularLimitMotor(IntPtr obj, int axis_index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofConstraint_updateRHS(IntPtr obj, float timeStep);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGeneric6DofSpringConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Matrix frameInA, [In] ref Matrix frameInB, bool useLinearReferenceFrameA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btGeneric6DofSpringConstraint_new2(IntPtr rbB, [In] ref Matrix frameInB, bool useLinearReferenceFrameB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofSpringConstraint_enableSpring(IntPtr obj, int index, bool onOff);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btGeneric6DofSpringConstraint_getDamping(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btGeneric6DofSpringConstraint_getEquilibriumPoint(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btGeneric6DofSpringConstraint_getStiffness(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btGeneric6DofSpringConstraint_isSpringEnabled(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofSpringConstraint_setDamping(IntPtr obj, int index, float damping);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofSpringConstraint_setEquilibriumPoint(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofSpringConstraint_setEquilibriumPoint2(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofSpringConstraint_setEquilibriumPoint3(IntPtr obj, int index, float val);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btGeneric6DofSpringConstraint_setStiffness(IntPtr obj, int index, float stiffness);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btGhostObject_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btGhostObject_addOverlappingObjectInternal(IntPtr obj, IntPtr otherProxy, IntPtr thisProxy);
@@ -2256,6 +2643,136 @@ namespace BulletSharp
 		public static extern void btHeightfieldTerrainShape_setUseZigzagSubdivision2(IntPtr obj, bool useZigzagSubdivision);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btHinge2Constraint_new(IntPtr rbA, IntPtr rbB, [In] ref Vector3 anchor, [In] ref Vector3 axis1, [In] ref Vector3 axis2);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHinge2Constraint_getAnchor(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHinge2Constraint_getAnchor2(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btHinge2Constraint_getAngle1(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btHinge2Constraint_getAngle2(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHinge2Constraint_getAxis1(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHinge2Constraint_getAxis2(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHinge2Constraint_setLowerLimit(IntPtr obj, float ang1min);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHinge2Constraint_setUpperLimit(IntPtr obj, float ang1max);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btHingeAccumulatedAngleConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB, [In] ref Vector3 axisInA, [In] ref Vector3 axisInB, bool useReferenceFrameA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btHingeAccumulatedAngleConstraint_new2(IntPtr rbA, [In] ref Vector3 pivotInA, [In] ref Vector3 axisInA, bool useReferenceFrameA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btHingeAccumulatedAngleConstraint_new3(IntPtr rbA, IntPtr rbB, [In] ref Matrix rbAFrame, [In] ref Matrix rbBFrame, bool useReferenceFrameA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btHingeAccumulatedAngleConstraint_new4(IntPtr rbA, [In] ref Matrix rbAFrame, bool useReferenceFrameA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btHingeAccumulatedAngleConstraint_getAccumulatedHingeAngle(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeAccumulatedAngleConstraint_setAccumulatedHingeAngle(IntPtr obj, float accAngle);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btHingeConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB, [In] ref Vector3 axisInA, [In] ref Vector3 axisInB, bool useReferenceFrameA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btHingeConstraint_new2(IntPtr rbA, [In] ref Vector3 pivotInA, [In] ref Vector3 axisInA, bool useReferenceFrameA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btHingeConstraint_new3(IntPtr rbA, IntPtr rbB, [In] ref Matrix rbAFrame, [In] ref Matrix rbBFrame, bool useReferenceFrameA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btHingeConstraint_new4(IntPtr rbA, [In] ref Matrix rbAFrame, bool useReferenceFrameA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_enableAngularMotor(IntPtr obj, bool enableMotor, float targetVelocity, float maxMotorImpulse);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_enableMotor(IntPtr obj, bool enableMotor);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_getAFrame(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btHingeConstraint_getAngularOnly(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_getBFrame(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btHingeConstraint_getEnableAngularMotor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern HingeFlags btHingeConstraint_getFlags(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_getFrameOffsetA(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_getFrameOffsetB(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btHingeConstraint_getHingeAngle(IntPtr obj, [In] ref Matrix transA, [In] ref Matrix transB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btHingeConstraint_getHingeAngle2(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_getInfo1NonVirtual(IntPtr obj, IntPtr info);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_getInfo2Internal(IntPtr obj, IntPtr info, [In] ref Matrix transA, [In] ref Matrix transB, [In] ref Vector3 angVelA, [In] ref Vector3 angVelB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_getInfo2InternalUsingFrameOffset(IntPtr obj, IntPtr info, [In] ref Matrix transA, [In] ref Matrix transB, [In] ref Vector3 angVelA, [In] ref Vector3 angVelB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_getInfo2NonVirtual(IntPtr obj, IntPtr info, [In] ref Matrix transA, [In] ref Matrix transB, [In] ref Vector3 angVelA, [In] ref Vector3 angVelB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btHingeConstraint_getLimitBiasFactor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btHingeConstraint_getLimitRelaxationFactor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btHingeConstraint_getLimitSign(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btHingeConstraint_getLimitSoftness(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btHingeConstraint_getLowerLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btHingeConstraint_getMaxMotorImpulse(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btHingeConstraint_getMotorTargetVelocity(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btHingeConstraint_getSolveLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btHingeConstraint_getUpperLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btHingeConstraint_getUseFrameOffset(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btHingeConstraint_getUseReferenceFrameA(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btHingeConstraint_hasLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_setAngularOnly(IntPtr obj, bool angularOnly);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_setAxis(IntPtr obj, [In] ref Vector3 axisInA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_setFrames(IntPtr obj, [In] ref Matrix frameA, [In] ref Matrix frameB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_setLimit(IntPtr obj, float low, float high);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_setLimit2(IntPtr obj, float low, float high, float _softness);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_setLimit3(IntPtr obj, float low, float high, float _softness, float _biasFactor);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_setLimit4(IntPtr obj, float low, float high, float _softness, float _biasFactor, float _relaxationFactor);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_setMaxMotorImpulse(IntPtr obj, float maxMotorImpulse);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_setMotorTarget(IntPtr obj, float targetAngle, float dt);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_setMotorTarget2(IntPtr obj, [In] ref Quaternion qAinB, float dt);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_setMotorTargetVelocity(IntPtr obj, float motorTargetVelocity);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_setUseFrameOffset(IntPtr obj, bool frameOffsetOnOff);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_setUseReferenceFrameA(IntPtr obj, bool useReferenceFrameA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_testLimit(IntPtr obj, [In] ref Matrix transA, [In] ref Matrix transB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHingeConstraint_updateRHS(IntPtr obj, float timeStep);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btIndexedMesh_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern PhyScalarType btIndexedMesh_getIndexType(IntPtr obj);
@@ -2305,6 +2822,27 @@ namespace BulletSharp
 		public static extern int btITaskScheduler_getNumThreads(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btITaskScheduler_setNumThreads(IntPtr obj, int numThreads);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btJointFeedback_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btJointFeedback_getAppliedForceBodyA(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btJointFeedback_getAppliedForceBodyB(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btJointFeedback_getAppliedTorqueBodyA(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btJointFeedback_getAppliedTorqueBodyB(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btJointFeedback_setAppliedForceBodyA(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btJointFeedback_setAppliedForceBodyB(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btJointFeedback_setAppliedTorqueBodyA(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btJointFeedback_setAppliedTorqueBodyB(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btJointFeedback_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btManifoldPoint_new();
@@ -2518,6 +3056,18 @@ namespace BulletSharp
 		public static extern void btMinkowskiSumShape_setTransformB(IntPtr obj, [In] ref Matrix transB);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMLCPSolverInterface_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMLCPSolver_new(IntPtr solver);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMLCPSolver_getNumFallbacks(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMLCPSolver_setMLCPSolver(IntPtr obj, IntPtr solver);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMLCPSolver_setNumFallbacks(IntPtr obj, int num);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btMultiBodyDynamicsWorld_new(IntPtr dispatcher, IntPtr pairCache, IntPtr constraintSolver, IntPtr collisionConfiguration);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBodyDynamicsWorld_addMultiBody(IntPtr obj, IntPtr body, int group, int mask);
@@ -2568,6 +3118,14 @@ namespace BulletSharp
 		public static extern void btMultiSphereShape_getSpherePosition(IntPtr obj, int index, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btMultiSphereShape_getSphereRadius(IntPtr obj, int index);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btNNCGConstraintSolver_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btNNCGConstraintSolver_getOnlyForNoneContact(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btNNCGConstraintSolver_setOnlyForNoneContact(IntPtr obj, bool value);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btNodeOverlapCallback_processNode(IntPtr obj, int subPart, int triangleIndex);
@@ -2736,6 +3294,34 @@ namespace BulletSharp
 		public static extern bool btPersistentManifold_validContactDistance(IntPtr obj, IntPtr pt);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btPersistentManifold_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btPoint2PointConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btPoint2PointConstraint_new2(IntPtr rbA, [In] ref Vector3 pivotInA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern Point2PointFlags btPoint2PointConstraint_getFlags(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPoint2PointConstraint_getInfo1NonVirtual(IntPtr obj, IntPtr info);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPoint2PointConstraint_getInfo2NonVirtual(IntPtr obj, IntPtr info, [In] ref Matrix body0_trans, [In] ref Matrix body1_trans);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPoint2PointConstraint_getPivotInA(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPoint2PointConstraint_getPivotInB(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btPoint2PointConstraint_getSetting(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btPoint2PointConstraint_getUseSolveConstraintObsolete(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPoint2PointConstraint_setPivotA(IntPtr obj, [In] ref Vector3 pivotA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPoint2PointConstraint_setPivotB(IntPtr obj, [In] ref Vector3 pivotB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPoint2PointConstraint_setUseSolveConstraintObsolete(IntPtr obj, bool value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPoint2PointConstraint_updateRHS(IntPtr obj, float timeStep);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btPointCollector_new();
@@ -2929,6 +3515,78 @@ namespace BulletSharp
 		public static extern void btQuantizedBvhTree_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btRigidBody_btRigidBodyConstructionInfo_new(float mass, IntPtr motionState, IntPtr collisionShape);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btRigidBody_btRigidBodyConstructionInfo_new2(float mass, IntPtr motionState, IntPtr collisionShape, [In] ref Vector3 localInertia);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRigidBody_btRigidBodyConstructionInfo_getAdditionalAngularDampingFactor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRigidBody_btRigidBodyConstructionInfo_getAdditionalAngularDampingThresholdSqr(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btRigidBody_btRigidBodyConstructionInfo_getAdditionalDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRigidBody_btRigidBodyConstructionInfo_getAdditionalDampingFactor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRigidBody_btRigidBodyConstructionInfo_getAdditionalLinearDampingThresholdSqr(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRigidBody_btRigidBodyConstructionInfo_getAngularDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRigidBody_btRigidBodyConstructionInfo_getAngularSleepingThreshold(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRigidBody_btRigidBodyConstructionInfo_getFriction(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRigidBody_btRigidBodyConstructionInfo_getLinearDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRigidBody_btRigidBodyConstructionInfo_getLinearSleepingThreshold(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_getLocalInertia(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRigidBody_btRigidBodyConstructionInfo_getMass(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRigidBody_btRigidBodyConstructionInfo_getRestitution(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRigidBody_btRigidBodyConstructionInfo_getRollingFriction(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_getStartWorldTransform(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setAdditionalAngularDampingFactor(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setAdditionalAngularDampingThresholdSqr(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setAdditionalDamping(IntPtr obj, bool value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setAdditionalDampingFactor(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setAdditionalLinearDampingThresholdSqr(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setAngularDamping(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setAngularSleepingThreshold(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setCollisionShape(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setFriction(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setLinearDamping(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setLinearSleepingThreshold(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setLocalInertia(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setMass(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setMotionState(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setRestitution(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setRollingFriction(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_setStartWorldTransform(IntPtr obj, [In] ref Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_btRigidBodyConstructionInfo_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btRigidBody_new(IntPtr constructionInfo);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btRigidBody_addConstraintRef(IntPtr obj, IntPtr c);
@@ -3068,7 +3726,205 @@ namespace BulletSharp
 		public static extern bool btRigidBody_wantsSleeping(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btRotationalLimitMotor_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btRotationalLimitMotor_new2(IntPtr limot);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_getAccumulatedImpulse(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_getBounce(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btRotationalLimitMotor_getCurrentLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_getCurrentLimitError(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_getCurrentPosition(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_getDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btRotationalLimitMotor_getEnableMotor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_getHiLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_getLimitSoftness(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_getLoLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_getMaxLimitForce(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_getMaxMotorForce(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_getNormalCFM(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_getStopCFM(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_getStopERP(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_getTargetVelocity(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btRotationalLimitMotor_isLimited(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btRotationalLimitMotor_needApplyTorques(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setAccumulatedImpulse(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setBounce(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setCurrentLimit(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setCurrentLimitError(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setCurrentPosition(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setDamping(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setEnableMotor(IntPtr obj, bool value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setHiLimit(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setLimitSoftness(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setLoLimit(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setMaxLimitForce(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setMaxMotorForce(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setNormalCFM(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setStopCFM(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setStopERP(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_setTargetVelocity(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor_solveAngularLimits(IntPtr obj, float timeStep, [In] ref Vector3 axis, float jacDiagABInv, IntPtr body0, IntPtr body1);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btRotationalLimitMotor_testLimitValue(IntPtr obj, float test_value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btRotationalLimitMotor2_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btRotationalLimitMotor2_new2(IntPtr limot);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getBounce(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btRotationalLimitMotor2_getCurrentLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getCurrentLimitError(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getCurrentLimitErrorHi(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getCurrentPosition(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btRotationalLimitMotor2_getEnableMotor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btRotationalLimitMotor2_getEnableSpring(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getEquilibriumPoint(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getHiLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getLoLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getMaxMotorForce(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getMotorCFM(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getMotorERP(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btRotationalLimitMotor2_getServoMotor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getServoTarget(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getSpringDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btRotationalLimitMotor2_getSpringDampingLimited(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getSpringStiffness(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btRotationalLimitMotor2_getSpringStiffnessLimited(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getStopCFM(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getStopERP(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btRotationalLimitMotor2_getTargetVelocity(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btRotationalLimitMotor2_isLimited(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setBounce(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setCurrentLimit(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setCurrentLimitError(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setCurrentLimitErrorHi(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setCurrentPosition(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setEnableMotor(IntPtr obj, bool value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setEnableSpring(IntPtr obj, bool value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setEquilibriumPoint(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setHiLimit(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setLoLimit(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setMaxMotorForce(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setMotorCFM(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setMotorERP(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setServoMotor(IntPtr obj, bool value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setServoTarget(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setSpringDamping(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setSpringDampingLimited(IntPtr obj, bool value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setSpringStiffness(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setSpringStiffnessLimited(IntPtr obj, bool value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setStopCFM(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setStopERP(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_setTargetVelocity(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_testLimitValue(IntPtr obj, float test_value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRotationalLimitMotor2_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btScaledBvhTriangleMeshShape_new(IntPtr childShape, [In] ref Vector3 localScaling);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btSequentialImpulseConstraintSolver_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern ulong btSequentialImpulseConstraintSolver_btRand2(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btSequentialImpulseConstraintSolver_btRandInt2(IntPtr obj, int n);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern ulong btSequentialImpulseConstraintSolver_getRandSeed(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSequentialImpulseConstraintSolver_setRandSeed(IntPtr obj, ulong seed);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btShapeHull_new(IntPtr shape);
@@ -3114,6 +3970,173 @@ namespace BulletSharp
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSimulationIslandManager_IslandCallback_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btSliderConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Matrix frameInA, [In] ref Matrix frameInB, bool useLinearReferenceFrameA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btSliderConstraint_new2(IntPtr rbB, [In] ref Matrix frameInB, bool useLinearReferenceFrameA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_calculateTransforms(IntPtr obj, [In] ref Matrix transA, [In] ref Matrix transB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_getAncorInA(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_getAncorInB(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getAngDepth(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getAngularPos(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_getCalculatedTransformA(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_getCalculatedTransformB(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getDampingDirAng(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getDampingDirLin(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getDampingLimAng(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getDampingLimLin(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getDampingOrthoAng(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getDampingOrthoLin(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern SliderFlags btSliderConstraint_getFlags(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_getFrameOffsetA(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_getFrameOffsetB(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_getInfo1NonVirtual(IntPtr obj, IntPtr info);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_getInfo2NonVirtual(IntPtr obj, IntPtr info, [In] ref Matrix transA, [In] ref Matrix transB, [In] ref Vector3 linVelA, [In] ref Vector3 linVelB, float rbAinvMass, float rbBinvMass);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getLinDepth(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getLinearPos(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getLowerAngLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getLowerLinLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getMaxAngMotorForce(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getMaxLinMotorForce(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btSliderConstraint_getPoweredAngMotor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btSliderConstraint_getPoweredLinMotor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getRestitutionDirAng(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getRestitutionDirLin(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getRestitutionLimAng(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getRestitutionLimLin(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getRestitutionOrthoAng(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getRestitutionOrthoLin(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getSoftnessDirAng(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getSoftnessDirLin(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getSoftnessLimAng(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getSoftnessLimLin(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getSoftnessOrthoAng(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getSoftnessOrthoLin(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btSliderConstraint_getSolveAngLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btSliderConstraint_getSolveLinLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getTargetAngMotorVelocity(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getTargetLinMotorVelocity(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getUpperAngLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSliderConstraint_getUpperLinLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btSliderConstraint_getUseFrameOffset(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btSliderConstraint_getUseLinearReferenceFrameA(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setDampingDirAng(IntPtr obj, float dampingDirAng);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setDampingDirLin(IntPtr obj, float dampingDirLin);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setDampingLimAng(IntPtr obj, float dampingLimAng);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setDampingLimLin(IntPtr obj, float dampingLimLin);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setDampingOrthoAng(IntPtr obj, float dampingOrthoAng);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setDampingOrthoLin(IntPtr obj, float dampingOrthoLin);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setFrames(IntPtr obj, [In] ref Matrix frameA, [In] ref Matrix frameB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setLowerAngLimit(IntPtr obj, float lowerLimit);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setLowerLinLimit(IntPtr obj, float lowerLimit);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setMaxAngMotorForce(IntPtr obj, float maxAngMotorForce);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setMaxLinMotorForce(IntPtr obj, float maxLinMotorForce);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setPoweredAngMotor(IntPtr obj, bool onOff);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setPoweredLinMotor(IntPtr obj, bool onOff);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setRestitutionDirAng(IntPtr obj, float restitutionDirAng);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setRestitutionDirLin(IntPtr obj, float restitutionDirLin);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setRestitutionLimAng(IntPtr obj, float restitutionLimAng);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setRestitutionLimLin(IntPtr obj, float restitutionLimLin);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setRestitutionOrthoAng(IntPtr obj, float restitutionOrthoAng);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setRestitutionOrthoLin(IntPtr obj, float restitutionOrthoLin);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setSoftnessDirAng(IntPtr obj, float softnessDirAng);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setSoftnessDirLin(IntPtr obj, float softnessDirLin);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setSoftnessLimAng(IntPtr obj, float softnessLimAng);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setSoftnessLimLin(IntPtr obj, float softnessLimLin);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setSoftnessOrthoAng(IntPtr obj, float softnessOrthoAng);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setSoftnessOrthoLin(IntPtr obj, float softnessOrthoLin);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setTargetAngMotorVelocity(IntPtr obj, float targetAngMotorVelocity);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setTargetLinMotorVelocity(IntPtr obj, float targetLinMotorVelocity);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setUpperAngLimit(IntPtr obj, float upperLimit);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setUpperLinLimit(IntPtr obj, float upperLimit);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_setUseFrameOffset(IntPtr obj, bool frameOffsetOnOff);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_testAngLimits(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSliderConstraint_testLinLimits(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btSoftBody_new(IntPtr worldInfo, int node_count, [In] Vector3[] x, [In] float[] m);
@@ -4423,6 +5446,167 @@ namespace BulletSharp
 		public static extern void btThreads_btSetTaskScheduler(IntPtr taskScheduler);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTranslationalLimitMotor_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTranslationalLimitMotor_new2(IntPtr other);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_getAccumulatedImpulse(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTranslationalLimitMotor_getCurrentLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_getCurrentLimitError(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_getCurrentLinearDiff(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btTranslationalLimitMotor_getDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTranslationalLimitMotor_getEnableMotor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btTranslationalLimitMotor_getLimitSoftness(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_getLowerLimit(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_getMaxMotorForce(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_getNormalCFM(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btTranslationalLimitMotor_getRestitution(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_getStopCFM(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_getStopERP(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_getTargetVelocity(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_getUpperLimit(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btTranslationalLimitMotor_isLimited(IntPtr obj, int limitIndex);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btTranslationalLimitMotor_needApplyForce(IntPtr obj, int limitIndex);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_setAccumulatedImpulse(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_setCurrentLimitError(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_setCurrentLinearDiff(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_setDamping(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_setLimitSoftness(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_setLowerLimit(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_setMaxMotorForce(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_setNormalCFM(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_setRestitution(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_setStopCFM(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_setStopERP(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_setTargetVelocity(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_setUpperLimit(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btTranslationalLimitMotor_solveLinearAxis(IntPtr obj, float timeStep, float jacDiagABInv, IntPtr body1, [In] ref Vector3 pointInA, IntPtr body2, [In] ref Vector3 pointInB, int limit_index, [In] ref Vector3 axis_normal_on_a, [In] ref Vector3 anchorPos);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btTranslationalLimitMotor_testLimitValue(IntPtr obj, int limitIndex, float test_value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTranslationalLimitMotor2_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTranslationalLimitMotor2_new2(IntPtr other);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getBounce(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTranslationalLimitMotor2_getCurrentLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getCurrentLimitError(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getCurrentLimitErrorHi(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getCurrentLinearDiff(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTranslationalLimitMotor2_getEnableMotor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTranslationalLimitMotor2_getEnableSpring(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getEquilibriumPoint(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getLowerLimit(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getMaxMotorForce(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getMotorCFM(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getMotorERP(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTranslationalLimitMotor2_getServoMotor(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getServoTarget(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getSpringDamping(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTranslationalLimitMotor2_getSpringDampingLimited(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getSpringStiffness(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTranslationalLimitMotor2_getSpringStiffnessLimited(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getStopCFM(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getStopERP(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getTargetVelocity(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_getUpperLimit(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btTranslationalLimitMotor2_isLimited(IntPtr obj, int limitIndex);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setBounce(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setCurrentLimitError(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setCurrentLimitErrorHi(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setCurrentLinearDiff(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setEquilibriumPoint(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setLowerLimit(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setMaxMotorForce(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setMotorCFM(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setMotorERP(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setServoTarget(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setSpringDamping(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setSpringStiffness(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setStopCFM(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setStopERP(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setTargetVelocity(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_setUpperLimit(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_testLimitValue(IntPtr obj, int limitIndex, float test_value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTranslationalLimitMotor2_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btTriangleBuffer_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btTriangleBuffer_clearBuffer(IntPtr obj);
@@ -4599,6 +5783,153 @@ namespace BulletSharp
 		public static extern void btTriangle_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_btConstraintInfo1_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btTypedConstraint_btConstraintInfo1_getNub(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btTypedConstraint_btConstraintInfo1_getNumConstraintRows(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo1_setNub(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo1_setNumConstraintRows(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo1_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_btConstraintInfo2_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_btConstraintInfo2_getCfm(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_btConstraintInfo2_getConstraintError(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btTypedConstraint_btConstraintInfo2_getDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btTypedConstraint_btConstraintInfo2_getErp(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_btConstraintInfo2_getFindex(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btTypedConstraint_btConstraintInfo2_getFps(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_btConstraintInfo2_getJ1angularAxis(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_btConstraintInfo2_getJ1linearAxis(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_btConstraintInfo2_getJ2angularAxis(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_btConstraintInfo2_getJ2linearAxis(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_btConstraintInfo2_getLowerLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btTypedConstraint_btConstraintInfo2_getNumIterations(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btTypedConstraint_btConstraintInfo2_getRowskip(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_btConstraintInfo2_getUpperLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_setCfm(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_setConstraintError(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_setDamping(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_setErp(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_setFindex(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_setFps(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_setJ1angularAxis(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_setJ1linearAxis(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_setJ2angularAxis(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_setJ2linearAxis(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_setLowerLimit(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_setNumIterations(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_setRowskip(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_setUpperLimit(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_btConstraintInfo2_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_buildJacobian(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btTypedConstraint_calculateSerializeBufferSize(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_enableFeedback(IntPtr obj, bool needsFeedback);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btTypedConstraint_getAppliedImpulse(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btTypedConstraint_getBreakingImpulseThreshold(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern TypedConstraintType btTypedConstraint_getConstraintType(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btTypedConstraint_getDbgDrawSize(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_getInfo1(IntPtr obj, IntPtr info);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_getInfo2(IntPtr obj, IntPtr info);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_getJointFeedback(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btTypedConstraint_getOverrideNumSolverIterations(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btTypedConstraint_getParam(IntPtr obj, ConstraintParam num);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btTypedConstraint_getParam2(IntPtr obj, ConstraintParam num, int axis);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btTypedConstraint_getUid(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btTypedConstraint_getUserConstraintId(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_getUserConstraintPtr(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btTypedConstraint_getUserConstraintType(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btTypedConstraint_internalGetAppliedImpulse(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_internalSetAppliedImpulse(IntPtr obj, float appliedImpulse);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btTypedConstraint_isEnabled(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btTypedConstraint_needsFeedback(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_serialize(IntPtr obj, IntPtr dataBuffer, IntPtr serializer);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_setBreakingImpulseThreshold(IntPtr obj, float threshold);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_setDbgDrawSize(IntPtr obj, float dbgDrawSize);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_setEnabled(IntPtr obj, bool enabled);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_setJointFeedback(IntPtr obj, IntPtr jointFeedback);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_setOverrideNumSolverIterations(IntPtr obj, int overideNumIterations);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_setParam(IntPtr obj, ConstraintParam num, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_setParam2(IntPtr obj, ConstraintParam num, float value, int axis);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_setupSolverConstraint(IntPtr obj, IntPtr ca, int solverBodyA, int solverBodyB, float timeStep);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_setUserConstraintId(IntPtr obj, int uid);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_setUserConstraintPtr(IntPtr obj, IntPtr ptr);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_setUserConstraintType(IntPtr obj, int userConstraintType);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_solveConstraintObsolete(IntPtr obj, IntPtr __unnamed0, IntPtr __unnamed1, float __unnamed2);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btTypedConstraint_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btUniformScalingShape_new(IntPtr convexChildShape, float uniformScalingFactor);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btUniformScalingShape_getUniformScalingFactor(IntPtr obj);
@@ -4628,6 +5959,25 @@ namespace BulletSharp
 		public static extern void btUnionFind_unite(IntPtr obj, int p, int q);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btUnionFind_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btUniversalConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Vector3 anchor, [In] ref Vector3 axis1, [In] ref Vector3 axis2);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btUniversalConstraint_getAnchor(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btUniversalConstraint_getAnchor2(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btUniversalConstraint_getAngle1(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btUniversalConstraint_getAngle2(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btUniversalConstraint_getAxis1(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btUniversalConstraint_getAxis2(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btUniversalConstraint_setLowerLimit(IntPtr obj, float ang1min, float ang2min);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btUniversalConstraint_setUpperLimit(IntPtr obj, float ang1max, float ang2max);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		[return: MarshalAs(UnmanagedType.I1)]

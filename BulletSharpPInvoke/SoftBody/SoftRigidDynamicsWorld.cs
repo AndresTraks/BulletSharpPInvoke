@@ -23,7 +23,7 @@ namespace BulletSharp.SoftBody
 			}
 
 			Native = btSoftRigidDynamicsWorld_new(dispatcher.Native, pairCache.Native,
-				(constraintSolver != null) ? constraintSolver._native : IntPtr.Zero,
+				(constraintSolver != null) ? constraintSolver.Native : IntPtr.Zero,
 				collisionConfiguration.Native, _softBodySolver._native);
 
 			CollisionObjectArray = new AlignedCollisionObjectArray(btCollisionWorld_getCollisionObjectArray(Native), this);

@@ -29,11 +29,11 @@ namespace BulletSharp
 				debugDrawer._native, dispatcher._native);
 		}
         */
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern IntPtr btMultiBodyConstraintSolver_new();
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern float btMultiBodyConstraintSolver_solveGroupCacheFriendlyFinish(IntPtr obj, IntPtr bodies, int numBodies, IntPtr infoGlobal);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
+		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		static extern void btMultiBodyConstraintSolver_solveMultiBodyGroup(IntPtr obj, IntPtr bodies, int numBodies, IntPtr manifold, int numManifolds, IntPtr constraints, int numConstraints, IntPtr multiBodyConstraints, int numMultiBodyConstraints, IntPtr info, IntPtr debugDrawer, IntPtr dispatcher);
 	}
 }

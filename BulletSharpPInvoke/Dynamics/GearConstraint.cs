@@ -1,7 +1,6 @@
-using System;
 using System.Runtime.InteropServices;
-using System.Security;
 using BulletSharp.Math;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
@@ -21,10 +20,10 @@ namespace BulletSharp
 			get
 			{
 				Vector3 value;
-				btGearConstraint_getAxisA(_native, out value);
+				btGearConstraint_getAxisA(Native, out value);
 				return value;
 			}
-			set { btGearConstraint_setAxisA(_native, ref value); }
+			set => btGearConstraint_setAxisA(Native, ref value);
 		}
 
 		public Vector3 AxisB
@@ -32,43 +31,28 @@ namespace BulletSharp
 			get
 			{
 				Vector3 value;
-				btGearConstraint_getAxisB(_native, out value);
+				btGearConstraint_getAxisB(Native, out value);
 				return value;
 			}
-			set { btGearConstraint_setAxisB(_native, ref value); }
+			set => btGearConstraint_setAxisB(Native, ref value);
 		}
 
 		public float Ratio
 		{
-			get { return btGearConstraint_getRatio(_native); }
-			set { btGearConstraint_setRatio(_native, value); }
+			get => btGearConstraint_getRatio(Native);
+			set => btGearConstraint_setRatio(Native, value);
 		}
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGearConstraint_new(IntPtr rbA, IntPtr rbB, [In] ref Vector3 axisInA, [In] ref Vector3 axisInB, float ratio);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGearConstraint_getAxisA(IntPtr obj, out Vector3 axisA);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGearConstraint_getAxisB(IntPtr obj, out Vector3 axisB);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern float btGearConstraint_getRatio(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGearConstraint_setAxisA(IntPtr obj, ref Vector3 axisA);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGearConstraint_setAxisB(IntPtr obj, ref Vector3 axisB);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGearConstraint_setRatio(IntPtr obj, float ratio);
 	}
 
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct GearConstraintFloatData
-    {
-        public TypedConstraintFloatData TypedConstraintData;
-        public Vector3FloatData AxisInA;
-        public Vector3FloatData AxisInB;
-        public float Ratio;
-        public int Padding;
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct GearConstraintFloatData
+	{
+		public TypedConstraintFloatData TypedConstraintData;
+		public Vector3FloatData AxisInA;
+		public Vector3FloatData AxisInB;
+		public float Ratio;
+		public int Padding;
 
-        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(GearConstraintFloatData), fieldName).ToInt32(); }
-    }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(GearConstraintFloatData), fieldName).ToInt32(); }
+	}
 }
