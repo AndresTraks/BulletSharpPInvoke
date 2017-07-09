@@ -146,7 +146,7 @@ namespace BulletSharp
 
 		public DbvtNodePtrArray Childs
 		{
-			get { return btDbvtNode_getChilds(_native); }
+			get { return btDbvtNode_getChilds(Native); }
 		}
 		*/
 		public IntPtr Data

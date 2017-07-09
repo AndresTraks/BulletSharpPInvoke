@@ -37,7 +37,7 @@ namespace BulletSharp
 			get => _manifold;
 			set
 			{
-				btCollisionAlgorithmConstructionInfo_setManifold(Native, (value != null) ? value._native : IntPtr.Zero);
+				btCollisionAlgorithmConstructionInfo_setManifold(Native, (value != null) ? value.Native : IntPtr.Zero);
 				_manifold = value;
 			}
 		}

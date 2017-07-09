@@ -892,7 +892,7 @@ namespace BulletSharp
 
 		public GImpactMeshShape CreateGimpactShape(StridingMeshInterface trimesh)
 		{
-            GImpactMeshShape shape = new GImpactMeshShape(trimesh._native);
+            GImpactMeshShape shape = new GImpactMeshShape(trimesh.Native);
             _allocatedCollisionShapes.Add(shape);
             return shape;
 		}

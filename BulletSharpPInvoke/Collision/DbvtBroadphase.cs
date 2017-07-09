@@ -21,7 +21,7 @@ namespace BulletSharp
 			set => btDbvtProxy_setLeaf(Native, (value != null) ? value.Native : IntPtr.Zero);
 		}
 
-		//public DbvtProxyPtrArray Links => btDbvtProxy_getLinks(_native);
+		//public DbvtProxyPtrArray Links => btDbvtProxy_getLinks(Native);
 
 		public int Stage
 		{
@@ -33,7 +33,7 @@ namespace BulletSharp
 	public class DbvtBroadphase : BroadphaseInterface
 	{
 		public DbvtBroadphase(OverlappingPairCache pairCache = null)
-			: base(btDbvtBroadphase_new((pairCache != null) ? pairCache._native : IntPtr.Zero))
+			: base(btDbvtBroadphase_new((pairCache != null) ? pairCache.Native : IntPtr.Zero))
 		{
 			_overlappingPairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
 				btBroadphaseInterface_getOverlappingPairCache(Native), true);
@@ -138,7 +138,7 @@ namespace BulletSharp
 			set
 			{
 				_overlappingPairCache = value;
-				btDbvtBroadphase_setPaircache(Native, value._native);
+				btDbvtBroadphase_setPaircache(Native, value.Native);
 			}
 		}
 
@@ -160,17 +160,17 @@ namespace BulletSharp
 			set => btDbvtBroadphase_setReleasepaircache(Native, value);
 		}
 
-		//public DbvtArray Sets => btDbvtBroadphase_getSets(_native);
+        //public DbvtArray Sets => btDbvtBroadphase_getSets(Native);
 
-		public int StageCurrent
+        public int StageCurrent
 		{
 			get => btDbvtBroadphase_getStageCurrent(Native);
 			set => btDbvtBroadphase_setStageCurrent(Native, value);
 		}
 
-		//public DbvtProxyPtrArray StageRoots => btDbvtBroadphase_getStageRoots(_native);
+        //public DbvtProxyPtrArray StageRoots => btDbvtBroadphase_getStageRoots(Native);
 
-		public uint UpdatesCall
+        public uint UpdatesCall
 		{
 			get => btDbvtBroadphase_getUpdates_call(Native);
 			set => btDbvtBroadphase_setUpdates_call(Native, value);

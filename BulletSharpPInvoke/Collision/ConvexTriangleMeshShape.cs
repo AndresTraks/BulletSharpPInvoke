@@ -14,7 +14,7 @@ namespace BulletSharp
 		}
 
 		public ConvexTriangleMeshShape(StridingMeshInterface meshInterface, bool calcAabb = true)
-			: base(btConvexTriangleMeshShape_new(meshInterface._native, calcAabb))
+			: base(btConvexTriangleMeshShape_new(meshInterface.Native, calcAabb))
 		{
 			_meshInterface = meshInterface;
 		}

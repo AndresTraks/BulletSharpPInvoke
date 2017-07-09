@@ -24,7 +24,7 @@ namespace BulletSharp
 		public void ProcessAllTriangles(TriangleCallback callback, Vector3 aabbMin,
 			Vector3 aabbMax)
 		{
-			btConcaveShape_processAllTriangles(Native, callback._native, ref aabbMin,
+			btConcaveShape_processAllTriangles(Native, callback.Native, ref aabbMin,
 				ref aabbMax);
 		}
 	}

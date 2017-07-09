@@ -46,7 +46,7 @@ namespace BulletSharp
 		public ConvexPlaneCollisionAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci,
 			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped,
 			int numPerturbationIterations, int minimumPointsPerturbationThreshold)
-			: base(btConvexPlaneCollisionAlgorithm_new(mf._native, ci.Native, body0Wrap.Native,
+			: base(btConvexPlaneCollisionAlgorithm_new(mf.Native, ci.Native, body0Wrap.Native,
 				body1Wrap.Native, isSwapped, numPerturbationIterations, minimumPointsPerturbationThreshold))
 		{
 		}

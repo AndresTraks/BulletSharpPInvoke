@@ -81,7 +81,7 @@ namespace BulletSharp
 		public PersistentManifold PersistentManifold
 		{
 			get => new PersistentManifold(btManifoldResult_getPersistentManifold(Native), true);
-			set => btManifoldResult_setPersistentManifold(Native, value._native);
+			set => btManifoldResult_setPersistentManifold(Native, value.Native);
 		}
 	}
 }

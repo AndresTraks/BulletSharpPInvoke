@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Security;
 using BulletSharp.Math;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
@@ -21,7 +21,7 @@ namespace BulletSharp
 
 		public IndexedMesh()
 		{
-			Native = UnsafeNativeMethods.btIndexedMesh_new();
+			Native = btIndexedMesh_new();
 		}
 
 		public void Allocate(int numTriangles, int numVertices, int triangleIndexStride = sizeof(int) * 3, int vertexStride = sizeof(float) * 3)
@@ -77,7 +77,7 @@ namespace BulletSharp
 		public unsafe UnmanagedMemoryStream GetVertexStream()
 		{
 			int length = NumVertices * VertexStride;
-			return new UnmanagedMemoryStream((byte*)UnsafeNativeMethods.btIndexedMesh_getVertexBase(Native).ToPointer(), length, length, FileAccess.ReadWrite);
+			return new UnmanagedMemoryStream((byte*)btIndexedMesh_getVertexBase(Native).ToPointer(), length, length, FileAccess.ReadWrite);
 		}
 
 		public void SetData(ICollection<int> triangles, ICollection<float> vertices)
@@ -122,50 +122,50 @@ namespace BulletSharp
 
 		public PhyScalarType IndexType
 		{
-			get { return UnsafeNativeMethods.btIndexedMesh_getIndexType(Native); }
-			set { UnsafeNativeMethods.btIndexedMesh_setIndexType(Native, value); }
+			get => btIndexedMesh_getIndexType(Native);
+			set => btIndexedMesh_setIndexType(Native, value);
 		}
 
 		public int NumTriangles
 		{
-			get { return UnsafeNativeMethods.btIndexedMesh_getNumTriangles(Native); }
-			set { UnsafeNativeMethods.btIndexedMesh_setNumTriangles(Native, value); }
+			get => btIndexedMesh_getNumTriangles(Native);
+			set => btIndexedMesh_setNumTriangles(Native, value);
 		}
 
 		public int NumVertices
 		{
-			get { return UnsafeNativeMethods.btIndexedMesh_getNumVertices(Native); }
-			set { UnsafeNativeMethods.btIndexedMesh_setNumVertices(Native, value); }
+			get => btIndexedMesh_getNumVertices(Native);
+			set => btIndexedMesh_setNumVertices(Native, value);
 		}
 
 		public IntPtr TriangleIndexBase
 		{
-			get { return UnsafeNativeMethods.btIndexedMesh_getTriangleIndexBase(Native); }
-			set { UnsafeNativeMethods.btIndexedMesh_setTriangleIndexBase(Native, value); }
+			get => btIndexedMesh_getTriangleIndexBase(Native);
+			set => btIndexedMesh_setTriangleIndexBase(Native, value);
 		}
 
 		public int TriangleIndexStride
 		{
-			get { return UnsafeNativeMethods.btIndexedMesh_getTriangleIndexStride(Native); }
-			set { UnsafeNativeMethods.btIndexedMesh_setTriangleIndexStride(Native, value); }
+			get => btIndexedMesh_getTriangleIndexStride(Native);
+			set => btIndexedMesh_setTriangleIndexStride(Native, value);
 		}
 
 		public IntPtr VertexBase
 		{
-			get { return UnsafeNativeMethods.btIndexedMesh_getVertexBase(Native); }
-			set { UnsafeNativeMethods.btIndexedMesh_setVertexBase(Native, value); }
+			get => btIndexedMesh_getVertexBase(Native);
+			set => btIndexedMesh_setVertexBase(Native, value);
 		}
 
 		public int VertexStride
 		{
-			get { return UnsafeNativeMethods.btIndexedMesh_getVertexStride(Native); }
-			set { UnsafeNativeMethods.btIndexedMesh_setVertexStride(Native, value); }
+			get => btIndexedMesh_getVertexStride(Native);
+			set => btIndexedMesh_setVertexStride(Native, value);
 		}
 
 		public PhyScalarType VertexType
 		{
-			get { return UnsafeNativeMethods.btIndexedMesh_getVertexType(Native); }
-			set { UnsafeNativeMethods.btIndexedMesh_setVertexType(Native, value); }
+			get => btIndexedMesh_getVertexType(Native);
+			set => btIndexedMesh_setVertexType(Native, value);
 		}
 
 		public void Dispose()
@@ -181,7 +181,7 @@ namespace BulletSharp
 				Free();
 				if (!_preventDelete)
 				{
-					UnsafeNativeMethods.btIndexedMesh_delete(Native);
+					btIndexedMesh_delete(Native);
 				}
 				Native = IntPtr.Zero;
 			}
@@ -235,7 +235,7 @@ namespace BulletSharp
 		public void AddIndexedMesh(IndexedMesh mesh, PhyScalarType indexType = PhyScalarType.Int32)
 		{
 			_meshes.Add(mesh);
-			btTriangleIndexVertexArray_addIndexedMesh(_native, mesh.Native, indexType);
+			btTriangleIndexVertexArray_addIndexedMesh(Native, mesh.Native, indexType);
 		}
 
 		public AlignedIndexedMeshArray IndexedMeshArray
@@ -245,7 +245,7 @@ namespace BulletSharp
 				// TODO: link _indexedMeshArray to _meshes
 				if (_indexedMeshArray == null)
 				{
-					_indexedMeshArray = new AlignedIndexedMeshArray(btTriangleIndexVertexArray_getIndexedMeshArray(_native));
+					_indexedMeshArray = new AlignedIndexedMeshArray(btTriangleIndexVertexArray_getIndexedMeshArray(Native));
 				}
 				return _indexedMeshArray;
 			}
@@ -263,14 +263,5 @@ namespace BulletSharp
 			}
 			base.Dispose(disposing);
 		}
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btTriangleIndexVertexArray_new();
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btTriangleIndexVertexArray_new2(int numTriangles, IntPtr triangleIndexBase, int triangleIndexStride, int numVertices, IntPtr vertexBase, int vertexStride);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btTriangleIndexVertexArray_addIndexedMesh(IntPtr obj, IntPtr mesh, PhyScalarType indexType);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btTriangleIndexVertexArray_getIndexedMeshArray(IntPtr obj);
 	}
 }

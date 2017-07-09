@@ -12,7 +12,7 @@ namespace BulletSharp
 
 		public ConvexTriangleCallback(Dispatcher dispatcher, CollisionObjectWrapper body0Wrap,
 			CollisionObjectWrapper body1Wrap, bool isSwapped)
-			: base(btConvexTriangleCallback_new(dispatcher._native, body0Wrap.Native,
+			: base(btConvexTriangleCallback_new(dispatcher.Native, body0Wrap.Native,
 				body1Wrap.Native, isSwapped))
 		{
 		}

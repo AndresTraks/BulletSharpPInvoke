@@ -31,7 +31,7 @@ namespace BulletSharp
 
 		public SphereTriangleCollisionAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci,
 			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool swapped)
-			: base(btSphereTriangleCollisionAlgorithm_new(mf._native, ci.Native,
+			: base(btSphereTriangleCollisionAlgorithm_new(mf.Native, ci.Native,
 				body0Wrap.Native, body1Wrap.Native, swapped))
 		{
 		}

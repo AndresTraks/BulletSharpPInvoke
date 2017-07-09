@@ -32,7 +32,7 @@ namespace BulletSharp
 
 		public SphereBoxCollisionAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci,
 			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped)
-			: base(btSphereBoxCollisionAlgorithm_new(mf._native, ci.Native, body0Wrap.Native,
+			: base(btSphereBoxCollisionAlgorithm_new(mf.Native, ci.Native, body0Wrap.Native,
 				body1Wrap.Native, isSwapped))
 		{
 		}

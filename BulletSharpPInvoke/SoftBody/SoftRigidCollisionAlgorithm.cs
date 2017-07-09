@@ -32,7 +32,7 @@ namespace BulletSharp
 
 		public SoftRigidCollisionAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci,
 			CollisionObjectWrapper col0, CollisionObjectWrapper col1Wrap, bool isSwapped)
-			: base(btSoftRigidCollisionAlgorithm_new(mf._native, ci.Native, col0.Native,
+			: base(btSoftRigidCollisionAlgorithm_new(mf.Native, ci.Native, col0.Native,
 				col1Wrap.Native, isSwapped))
 		{
 		}

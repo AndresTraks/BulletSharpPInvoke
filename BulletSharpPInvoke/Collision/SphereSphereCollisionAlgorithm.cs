@@ -31,7 +31,7 @@ namespace BulletSharp
 
 		public SphereSphereCollisionAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci,
 			CollisionObjectWrapper col0Wrap, CollisionObjectWrapper col1Wrap)
-			: base(btSphereSphereCollisionAlgorithm_new(mf._native, ci.Native, col0Wrap.Native,
+			: base(btSphereSphereCollisionAlgorithm_new(mf.Native, ci.Native, col0Wrap.Native,
 				col1Wrap.Native))
 		{
 		}

@@ -17,7 +17,7 @@ namespace BulletSharp
 			ConvexShape convexB, Matrix transA, Matrix transB, out Vector3 v, out Vector3 pa,
 			out Vector3 pb, IDebugDraw debugDraw)
 		{
-			return btConvexPenetrationDepthSolver_calcPenDepth(Native, simplexSolver._native,
+			return btConvexPenetrationDepthSolver_calcPenDepth(Native, simplexSolver.Native,
 				convexA.Native, convexB.Native, ref transA, ref transB, out v, out pa,
 				out pb, DebugDraw.GetUnmanaged(debugDraw));
 		}

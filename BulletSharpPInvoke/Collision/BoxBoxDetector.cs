@@ -19,7 +19,7 @@ namespace BulletSharp
 			get => _box1;
 			set
 			{
-				btBoxBoxDetector_setBox1(_native, value.Native);
+				btBoxBoxDetector_setBox1(Native, value.Native);
 				_box1 = value;
 			}
 		}
@@ -29,7 +29,7 @@ namespace BulletSharp
 			get => _box2;
 			set
 			{
-				btBoxBoxDetector_setBox2(_native, value.Native);
+				btBoxBoxDetector_setBox2(Native, value.Native);
 				_box2 = value;
 			}
 		}

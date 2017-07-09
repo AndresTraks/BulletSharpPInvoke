@@ -113,17 +113,17 @@ namespace BulletSharp
 			}
 		}
 
-		internal IntPtr _native;
+		internal IntPtr Native;
 
 		internal DiscreteCollisionDetectorInterface(IntPtr native)
 		{
-			_native = native;
+			Native = native;
 		}
 
 		public void GetClosestPoints(ClosestPointInput input, Result output, IDebugDraw debugDraw,
 			bool swapResults = false)
 		{
-			btDiscreteCollisionDetectorInterface_getClosestPoints(_native, input.Native,
+			btDiscreteCollisionDetectorInterface_getClosestPoints(Native, input.Native,
 				output.Native, DebugDraw.GetUnmanaged(debugDraw), swapResults);
 		}
 
@@ -135,10 +135,10 @@ namespace BulletSharp
 
 		protected virtual void Dispose(bool disposing)
 		{
-			if (_native != IntPtr.Zero)
+			if (Native != IntPtr.Zero)
 			{
-				btDiscreteCollisionDetectorInterface_delete(_native);
-				_native = IntPtr.Zero;
+				btDiscreteCollisionDetectorInterface_delete(Native);
+				Native = IntPtr.Zero;
 			}
 		}
 

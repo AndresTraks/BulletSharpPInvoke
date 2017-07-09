@@ -76,14 +76,14 @@ namespace BulletSharp
 		public void ProcessAllTrianglesRayRef(TriangleCallback callback, ref Vector3 rayFrom,
 			ref Vector3 rayTo)
 		{
-			btGImpactShapeInterface_processAllTrianglesRay(Native, callback._native,
+			btGImpactShapeInterface_processAllTrianglesRay(Native, callback.Native,
 				ref rayFrom, ref rayTo);
 		}
 
 		public void ProcessAllTrianglesRay(TriangleCallback callback, Vector3 rayFrom,
 			Vector3 rayTo)
 		{
-			btGImpactShapeInterface_processAllTrianglesRay(Native, callback._native,
+			btGImpactShapeInterface_processAllTrianglesRay(Native, callback.Native,
 				ref rayFrom, ref rayTo);
 		}
 
@@ -205,7 +205,7 @@ namespace BulletSharp
 		}
 
 		public TrimeshPrimitiveManager(StridingMeshInterface meshInterface, int part)
-			: base(btGImpactMeshShapePart_TrimeshPrimitiveManager_new(meshInterface._native,
+			: base(btGImpactMeshShapePart_TrimeshPrimitiveManager_new(meshInterface.Native,
 				part))
 		{
 			_meshInterface = meshInterface;
@@ -284,7 +284,7 @@ namespace BulletSharp
 			get => _meshInterface;
 			set
 			{
-				btGImpactMeshShapePart_TrimeshPrimitiveManager_setMeshInterface(Native, value._native);
+				btGImpactMeshShapePart_TrimeshPrimitiveManager_setMeshInterface(Native, value.Native);
 				_meshInterface = value;
 			}
 		}
@@ -354,7 +354,7 @@ namespace BulletSharp
 		}
 
 		public GImpactMeshShapePart(StridingMeshInterface meshInterface, int part)
-			: base(btGImpactMeshShapePart_new2(meshInterface._native, part))
+			: base(btGImpactMeshShapePart_new2(meshInterface.Native, part))
 		{
 		}
 
@@ -401,7 +401,7 @@ namespace BulletSharp
 		}
 
 		public GImpactMeshShape(StridingMeshInterface meshInterface)
-			: base(btGImpactMeshShape_new(meshInterface._native))
+			: base(btGImpactMeshShape_new(meshInterface.Native))
 		{
 			_meshInterface = meshInterface;
 		}

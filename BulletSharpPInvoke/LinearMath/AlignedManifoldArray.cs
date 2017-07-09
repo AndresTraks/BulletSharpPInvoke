@@ -117,7 +117,7 @@ namespace BulletSharp
 
         public void Add(PersistentManifold item)
         {
-            btAlignedObjectArray_btPersistentManifoldPtr_push_back(_native, item._native);
+            btAlignedObjectArray_btPersistentManifoldPtr_push_back(_native, item.Native);
         }
 
         public void Clear()

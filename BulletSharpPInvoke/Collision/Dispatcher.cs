@@ -117,13 +117,13 @@ namespace BulletSharp
 
 		public void ClearManifold(PersistentManifold manifold)
 		{
-			btDispatcher_clearManifold(Native, manifold._native);
+			btDispatcher_clearManifold(Native, manifold.Native);
 		}
 
 		public void DispatchAllCollisionPairs(OverlappingPairCache pairCache, DispatcherInfo dispatchInfo,
 			Dispatcher dispatcher)
 		{
-			btDispatcher_dispatchAllCollisionPairs(Native, pairCache._native, dispatchInfo.Native,
+			btDispatcher_dispatchAllCollisionPairs(Native, pairCache.Native, dispatchInfo.Native,
 				dispatcher.Native);
 		}
 
@@ -131,7 +131,7 @@ namespace BulletSharp
 			CollisionObjectWrapper body1Wrap, PersistentManifold sharedManifold,
 			DispatcherQueryType queryType)
 		{
-			return new CollisionAlgorithm(btDispatcher_findAlgorithm(Native, body0Wrap.Native, body1Wrap.Native, sharedManifold._native, queryType));
+			return new CollisionAlgorithm(btDispatcher_findAlgorithm(Native, body0Wrap.Native, body1Wrap.Native, sharedManifold.Native, queryType));
 		}
 
 		public void FreeCollisionAlgorithm(IntPtr ptr)
@@ -161,7 +161,7 @@ namespace BulletSharp
 
 		public void ReleaseManifold(PersistentManifold manifold)
 		{
-			btDispatcher_releaseManifold(Native, manifold._native);
+			btDispatcher_releaseManifold(Native, manifold.Native);
 		}
 		/*
 		public PersistentManifold InternalManifoldPointer

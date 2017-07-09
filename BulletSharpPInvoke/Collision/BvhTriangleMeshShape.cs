@@ -16,7 +16,7 @@ namespace BulletSharp
 
 		public BvhTriangleMeshShape(StridingMeshInterface meshInterface, bool useQuantizedAabbCompression,
 			bool buildBvh = true)
-			: base(btBvhTriangleMeshShape_new(meshInterface._native, useQuantizedAabbCompression,
+			: base(btBvhTriangleMeshShape_new(meshInterface.Native, useQuantizedAabbCompression,
 				buildBvh))
 		{
 			_meshInterface = meshInterface;
@@ -24,7 +24,7 @@ namespace BulletSharp
 
 		public BvhTriangleMeshShape(StridingMeshInterface meshInterface, bool useQuantizedAabbCompression,
 			Vector3 bvhAabbMin, Vector3 bvhAabbMax, bool buildBvh = true)
-			: base(btBvhTriangleMeshShape_new2(meshInterface._native, useQuantizedAabbCompression,
+			: base(btBvhTriangleMeshShape_new2(meshInterface.Native, useQuantizedAabbCompression,
 				ref bvhAabbMin, ref bvhAabbMax, buildBvh))
 		{
 			_meshInterface = meshInterface;
@@ -49,14 +49,14 @@ namespace BulletSharp
 		public void PerformConvexcast(TriangleCallback callback, Vector3 boxSource,
 			Vector3 boxTarget, Vector3 boxMin, Vector3 boxMax)
 		{
-			btBvhTriangleMeshShape_performConvexcast(Native, callback._native, ref boxSource,
+			btBvhTriangleMeshShape_performConvexcast(Native, callback.Native, ref boxSource,
 				ref boxTarget, ref boxMin, ref boxMax);
 		}
 
 		public void PerformRaycast(TriangleCallback callback, Vector3 raySource,
 			Vector3 rayTarget)
 		{
-			btBvhTriangleMeshShape_performRaycast(Native, callback._native, ref raySource,
+			btBvhTriangleMeshShape_performRaycast(Native, callback.Native, ref raySource,
 				ref rayTarget);
 		}
 
@@ -124,7 +124,7 @@ namespace BulletSharp
 			}
 			set
 			{
-				btBvhTriangleMeshShape_setTriangleInfoMap(Native, (value != null) ? value._native : IntPtr.Zero);
+				btBvhTriangleMeshShape_setTriangleInfoMap(Native, (value != null) ? value.Native : IntPtr.Zero);
 				_triangleInfoMap = value;
 			}
 		}

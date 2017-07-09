@@ -117,20 +117,20 @@ namespace BulletSharp
 
 		public override BroadphasePair AddOverlappingPair(BroadphaseProxy proxy0, BroadphaseProxy proxy1)
 		{
-			return new BroadphasePair(btOverlappingPairCallback_addOverlappingPair(_native, proxy0.Native,
+			return new BroadphasePair(btOverlappingPairCallback_addOverlappingPair(Native, proxy0.Native,
 				proxy1.Native));
 		}
 
 		public override IntPtr RemoveOverlappingPair(BroadphaseProxy proxy0, BroadphaseProxy proxy1, Dispatcher dispatcher)
 		{
-			return btOverlappingPairCallback_removeOverlappingPair(_native, proxy0.Native,
+			return btOverlappingPairCallback_removeOverlappingPair(Native, proxy0.Native,
 				proxy1.Native, dispatcher.Native);
 		}
 
 		public override void RemoveOverlappingPairsContainingProxy(BroadphaseProxy proxy0,
 			Dispatcher dispatcher)
 		{
-			btOverlappingPairCallback_removeOverlappingPairsContainingProxy(_native, proxy0.Native,
+			btOverlappingPairCallback_removeOverlappingPairsContainingProxy(Native, proxy0.Native,
 				dispatcher.Native);
 		}
 	}
