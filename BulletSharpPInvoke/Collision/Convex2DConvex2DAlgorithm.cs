@@ -17,7 +17,7 @@ namespace BulletSharp
 
 			public CreateFunc(VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver pdSolver)
 				: base(btConvex2dConvex2dAlgorithm_CreateFunc_new(simplexSolver._native,
-					pdSolver._native), false)
+					pdSolver.Native), false)
 			{
 				_pdSolver = pdSolver;
 				_simplexSolver = simplexSolver;
@@ -47,7 +47,7 @@ namespace BulletSharp
 				get => _pdSolver;
 				set
 				{
-					btConvex2dConvex2dAlgorithm_CreateFunc_setPdSolver(Native, value._native);
+					btConvex2dConvex2dAlgorithm_CreateFunc_setPdSolver(Native, value.Native);
 					_pdSolver = value;
 				}
 			}
@@ -72,7 +72,7 @@ namespace BulletSharp
 			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, VoronoiSimplexSolver simplexSolver,
 			ConvexPenetrationDepthSolver pdSolver, int numPerturbationIterations, int minimumPointsPerturbationThreshold)
 			: base(btConvex2dConvex2dAlgorithm_new(mf._native, ci.Native, body0Wrap.Native,
-				body1Wrap.Native, simplexSolver._native, pdSolver._native, numPerturbationIterations,
+				body1Wrap.Native, simplexSolver._native, pdSolver.Native, numPerturbationIterations,
 				minimumPointsPerturbationThreshold))
 		{
 		}

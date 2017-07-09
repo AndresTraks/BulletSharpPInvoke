@@ -53,35 +53,35 @@ namespace BulletSharp
 
 		public void RefreshContactPoints()
 		{
-			btManifoldResult_refreshContactPoints(_native);
+			btManifoldResult_refreshContactPoints(Native);
 		}
 
-		public CollisionObject Body0Internal => CollisionObject.GetManaged(btManifoldResult_getBody0Internal(_native));
+		public CollisionObject Body0Internal => CollisionObject.GetManaged(btManifoldResult_getBody0Internal(Native));
 
 		public CollisionObjectWrapper Body0Wrap
 		{
-			get => new CollisionObjectWrapper(btManifoldResult_getBody0Wrap(_native));
-			set => btManifoldResult_setBody0Wrap(_native, value.Native);
+			get => new CollisionObjectWrapper(btManifoldResult_getBody0Wrap(Native));
+			set => btManifoldResult_setBody0Wrap(Native, value.Native);
 		}
 
-		public CollisionObject Body1Internal => CollisionObject.GetManaged(btManifoldResult_getBody1Internal(_native));
+		public CollisionObject Body1Internal => CollisionObject.GetManaged(btManifoldResult_getBody1Internal(Native));
 
 		public CollisionObjectWrapper Body1Wrap
 		{
-			get => new CollisionObjectWrapper(btManifoldResult_getBody1Wrap(_native));
-			set => btManifoldResult_setBody1Wrap(_native, value.Native);
+			get => new CollisionObjectWrapper(btManifoldResult_getBody1Wrap(Native));
+			set => btManifoldResult_setBody1Wrap(Native, value.Native);
 		}
 
 		public float ClosestPointDistanceThreshold
 		{
-			get => btManifoldResult_getClosestPointDistanceThreshold(_native);
-			set => btManifoldResult_setClosestPointDistanceThreshold(_native, value);
+			get => btManifoldResult_getClosestPointDistanceThreshold(Native);
+			set => btManifoldResult_setClosestPointDistanceThreshold(Native, value);
 		}
 
 		public PersistentManifold PersistentManifold
 		{
-			get => new PersistentManifold(btManifoldResult_getPersistentManifold(_native), true);
-			set => btManifoldResult_setPersistentManifold(_native, value._native);
+			get => new PersistentManifold(btManifoldResult_getPersistentManifold(Native), true);
+			set => btManifoldResult_setPersistentManifold(Native, value._native);
 		}
 	}
 }

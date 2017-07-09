@@ -1,7 +1,6 @@
-using System;
-using System.Runtime.InteropServices;
-using System.Security;
 using BulletSharp.Math;
+using System;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
@@ -18,17 +17,17 @@ namespace BulletSharp
 		{
 			_native = btFace_new();
 		}
-        /*
+		/*
 		public AlignedIntArray Indices
 		{
-            get { return new AlignedIntArray(btFace_getIndices(_native)); }
+			get { return new AlignedIntArray(btFace_getIndices(_native)); }
 		}
 
 		public ScalarArray Plane
 		{
-            get { return new ScalarArray(btFace_getPlane(_native)); }
+			get { return new ScalarArray(btFace_getPlane(_native)); }
 		}
-        */
+		*/
 		public void Dispose()
 		{
 			Dispose(true);
@@ -48,24 +47,15 @@ namespace BulletSharp
 		{
 			Dispose(false);
 		}
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btFace_new();
-        //[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        //static extern IntPtr btFace_getIndices(IntPtr obj);
-        //[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        //static extern IntPtr btFace_getPlane(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btFace_delete(IntPtr obj);
 	}
 
 	public class ConvexPolyhedron : IDisposable
 	{
 		internal IntPtr _native;
 
-        //AlignedFaceArray _faces;
-        AlignedVector3Array _uniqueEdges;
-        AlignedVector3Array _vertices;
+		//AlignedFaceArray _faces;
+		AlignedVector3Array _uniqueEdges;
+		AlignedVector3Array _vertices;
 
 		internal ConvexPolyhedron(IntPtr native)
 		{
@@ -82,12 +72,12 @@ namespace BulletSharp
 			btConvexPolyhedron_initialize(_native);
 		}
 
-        public void ProjectRef(ref Matrix trans, ref Vector3 dir, out float minProj, out float maxProj,
-            out Vector3 witnesPtMin, out Vector3 witnesPtMax)
-        {
-            btConvexPolyhedron_project(_native, ref trans, ref dir, out minProj,
-                out maxProj, out witnesPtMin, out witnesPtMax);
-        }
+		public void ProjectRef(ref Matrix trans, ref Vector3 dir, out float minProj, out float maxProj,
+			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
+		{
+			btConvexPolyhedron_project(_native, ref trans, ref dir, out minProj,
+				out maxProj, out witnesPtMin, out witnesPtMax);
+		}
 
 		public void Project(Matrix trans, Vector3 dir, out float minProj, out float maxProj,
 			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
@@ -109,14 +99,14 @@ namespace BulletSharp
 				btConvexPolyhedron_getExtents(_native, out value);
 				return value;
 			}
-			set { btConvexPolyhedron_setExtents(_native, ref value); }
+			set => btConvexPolyhedron_setExtents(_native, ref value);
 		}
-        /*
+		/*
 		public AlignedFaceArray Faces
 		{
 			get { return btConvexPolyhedron_getFaces(_native); }
 		}
-        */
+		*/
 		public Vector3 LocalCenter
 		{
 			get
@@ -125,10 +115,10 @@ namespace BulletSharp
 				btConvexPolyhedron_getLocalCenter(_native, out value);
 				return value;
 			}
-			set { btConvexPolyhedron_setLocalCenter(_native, ref value); }
+			set => btConvexPolyhedron_setLocalCenter(_native, ref value);
 		}
 
-        public Vector3 C
+		public Vector3 C
 		{
 			get
 			{
@@ -136,7 +126,7 @@ namespace BulletSharp
 				btConvexPolyhedron_getMC(_native, out value);
 				return value;
 			}
-			set { btConvexPolyhedron_setMC(_native, ref value); }
+			set => btConvexPolyhedron_setMC(_native, ref value);
 		}
 
 		public Vector3 E
@@ -147,37 +137,37 @@ namespace BulletSharp
 				btConvexPolyhedron_getME(_native, out value);
 				return value;
 			}
-			set { btConvexPolyhedron_setME(_native, ref value); }
+			set => btConvexPolyhedron_setME(_native, ref value);
 		}
 
 		public float Radius
 		{
-			get { return btConvexPolyhedron_getRadius(_native); }
-			set { btConvexPolyhedron_setRadius(_native, value); }
+			get => btConvexPolyhedron_getRadius(_native);
+			set => btConvexPolyhedron_setRadius(_native, value);
 		}
 
 		public AlignedVector3Array UniqueEdges
 		{
-            get
-            {
-                if (_uniqueEdges == null)
-                {
-                    _uniqueEdges = new AlignedVector3Array(btConvexPolyhedron_getUniqueEdges(_native));
-                }
-                return _uniqueEdges;
-            }
+			get
+			{
+				if (_uniqueEdges == null)
+				{
+					_uniqueEdges = new AlignedVector3Array(btConvexPolyhedron_getUniqueEdges(_native));
+				}
+				return _uniqueEdges;
+			}
 		}
 
 		public AlignedVector3Array Vertices
 		{
-            get
-            {
-                if (_vertices == null)
-                {
-                    _vertices = new AlignedVector3Array(btConvexPolyhedron_getVertices(_native));
-                }
-                return _vertices;
-            }
+			get
+			{
+				if (_vertices == null)
+				{
+					_vertices = new AlignedVector3Array(btConvexPolyhedron_getVertices(_native));
+				}
+				return _vertices;
+			}
 		}
 
 		public void Dispose()
@@ -199,43 +189,5 @@ namespace BulletSharp
 		{
 			Dispose(false);
 		}
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btConvexPolyhedron_new();
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_getExtents(IntPtr obj, out Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btConvexPolyhedron_getFaces(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_getLocalCenter(IntPtr obj, out Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_getMC(IntPtr obj, out Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_getME(IntPtr obj, out Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern float btConvexPolyhedron_getRadius(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btConvexPolyhedron_getUniqueEdges(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btConvexPolyhedron_getVertices(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_initialize(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_project(IntPtr obj, [In] ref Matrix trans, [In] ref Vector3 dir, out float minProj, out float maxProj, out Vector3 witnesPtMin, out Vector3 witnesPtMax);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_setExtents(IntPtr obj, [In] ref Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_setLocalCenter(IntPtr obj, [In] ref Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_setMC(IntPtr obj, [In] ref Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_setME(IntPtr obj, [In] ref Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_setRadius(IntPtr obj, float value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		[return: MarshalAs(UnmanagedType.I1)]
-		static extern bool btConvexPolyhedron_testContainment(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexPolyhedron_delete(IntPtr obj);
 	}
 }

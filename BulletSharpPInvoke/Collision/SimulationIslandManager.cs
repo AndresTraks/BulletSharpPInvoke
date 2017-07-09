@@ -66,17 +66,17 @@ namespace BulletSharp
 			IslandCallback callback)
 		{
 			btSimulationIslandManager_buildAndProcessIslands(_native, dispatcher.Native,
-				collisionWorld._native, callback._native);
+				collisionWorld.Native, callback._native);
 		}
 
 		public void BuildIslands(Dispatcher dispatcher, CollisionWorld colWorld)
 		{
-			btSimulationIslandManager_buildIslands(_native, dispatcher.Native, colWorld._native);
+			btSimulationIslandManager_buildIslands(_native, dispatcher.Native, colWorld.Native);
 		}
 
 		public void FindUnions(Dispatcher dispatcher, CollisionWorld colWorld)
 		{
-			btSimulationIslandManager_findUnions(_native, dispatcher.Native, colWorld._native);
+			btSimulationIslandManager_findUnions(_native, dispatcher.Native, colWorld.Native);
 		}
 
 		public void InitUnionFind(int n)
@@ -86,12 +86,12 @@ namespace BulletSharp
 
 		public void StoreIslandActivationState(CollisionWorld world)
 		{
-			btSimulationIslandManager_storeIslandActivationState(_native, world._native);
+			btSimulationIslandManager_storeIslandActivationState(_native, world.Native);
 		}
 
 		public void UpdateActivationState(CollisionWorld colWorld, Dispatcher dispatcher)
 		{
-			btSimulationIslandManager_updateActivationState(_native, colWorld._native,
+			btSimulationIslandManager_updateActivationState(_native, colWorld.Native,
 				dispatcher.Native);
 		}
 

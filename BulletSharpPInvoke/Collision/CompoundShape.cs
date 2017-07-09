@@ -46,7 +46,7 @@ namespace BulletSharp
 				IntPtr ptr = btCompoundShapeChild_getNode(Native);
 				return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
 			}
-			set => btCompoundShapeChild_setNode(Native, (value != null) ? value._native : IntPtr.Zero);
+			set => btCompoundShapeChild_setNode(Native, (value != null) ? value.Native : IntPtr.Zero);
 		}
 
 		public Matrix Transform

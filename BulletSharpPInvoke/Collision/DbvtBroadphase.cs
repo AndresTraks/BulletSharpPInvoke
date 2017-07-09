@@ -18,7 +18,7 @@ namespace BulletSharp
 				IntPtr ptr = btDbvtProxy_getLeaf(Native);
 				return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
 			}
-			set => btDbvtProxy_setLeaf(Native, (value != null) ? value._native : IntPtr.Zero);
+			set => btDbvtProxy_setLeaf(Native, (value != null) ? value.Native : IntPtr.Zero);
 		}
 
 		//public DbvtProxyPtrArray Links => btDbvtProxy_getLinks(_native);

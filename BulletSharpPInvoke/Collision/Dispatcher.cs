@@ -166,12 +166,12 @@ namespace BulletSharp
 		/*
 		public PersistentManifold InternalManifoldPointer
 		{
-			get { return btDispatcher_getInternalManifoldPointer(_native); }
+			get { return btDispatcher_getInternalManifoldPointer(Native); }
 		}
 
 		public PoolAllocator InternalManifoldPool
 		{
-			get { return btDispatcher_getInternalManifoldPool(_native); }
+			get { return btDispatcher_getInternalManifoldPool(Native); }
 		}
 		*/
 		public int NumManifolds => btDispatcher_getNumManifolds(Native);

@@ -55,7 +55,7 @@ namespace BulletSharp
 			CollisionObjectWrapper body1Wrap, DispatcherInfo dispatchInfo, ManifoldResult resultOut)
 		{
 			btConvexPlaneCollisionAlgorithm_collideSingleContact(Native, ref perturbeRot,
-				body0Wrap.Native, body1Wrap.Native, dispatchInfo.Native, resultOut._native);
+				body0Wrap.Native, body1Wrap.Native, dispatchInfo.Native, resultOut.Native);
 		}
 	}
 }

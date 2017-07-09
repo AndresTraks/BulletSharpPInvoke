@@ -78,7 +78,7 @@ namespace BulletSharp
 			DispatcherInfo dispatchInfo, ManifoldResult resultOut)
 		{
 			return btCollisionAlgorithm_calculateTimeOfImpact(Native, body0.Native,
-				body1.Native, dispatchInfo.Native, resultOut._native);
+				body1.Native, dispatchInfo.Native, resultOut.Native);
 		}
 
 		public void GetAllContactManifolds(AlignedManifoldArray manifoldArray)
@@ -90,7 +90,7 @@ namespace BulletSharp
 			DispatcherInfo dispatchInfo, ManifoldResult resultOut)
 		{
 			btCollisionAlgorithm_processCollision(Native, body0Wrap.Native, body1Wrap.Native,
-				dispatchInfo.Native, resultOut._native);
+				dispatchInfo.Native, resultOut.Native);
 		}
 
 		public void Dispose()

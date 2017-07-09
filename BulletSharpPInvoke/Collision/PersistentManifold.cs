@@ -101,7 +101,7 @@ namespace BulletSharp
 
 		public int AddManifoldPoint(ManifoldPoint newPoint, bool isPredictive = false)
 		{
-			return btPersistentManifold_addManifoldPoint(_native, newPoint._native,
+			return btPersistentManifold_addManifoldPoint(_native, newPoint.Native,
 				isPredictive);
 		}
 
@@ -112,12 +112,12 @@ namespace BulletSharp
 
 		public void ClearUserCache(ManifoldPoint pt)
 		{
-			btPersistentManifold_clearUserCache(_native, pt._native);
+			btPersistentManifold_clearUserCache(_native, pt.Native);
 		}
 
 		public int GetCacheEntry(ManifoldPoint newPoint)
 		{
-			return btPersistentManifold_getCacheEntry(_native, newPoint._native);
+			return btPersistentManifold_getCacheEntry(_native, newPoint.Native);
 		}
 
 		public ManifoldPoint GetContactPoint(int index)
@@ -142,7 +142,7 @@ namespace BulletSharp
 
 		public void ReplaceContactPoint(ManifoldPoint newPoint, int insertIndex)
 		{
-			btPersistentManifold_replaceContactPoint(_native, newPoint._native, insertIndex);
+			btPersistentManifold_replaceContactPoint(_native, newPoint.Native, insertIndex);
 		}
 
 		public void SetBodies(CollisionObject body0, CollisionObject body1)
@@ -152,7 +152,7 @@ namespace BulletSharp
 
 		public bool ValidContactDistance(ManifoldPoint pt)
 		{
-			return btPersistentManifold_validContactDistance(_native, pt._native);
+			return btPersistentManifold_validContactDistance(_native, pt.Native);
 		}
 
 		public CollisionObject Body0

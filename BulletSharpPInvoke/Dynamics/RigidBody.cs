@@ -315,17 +315,20 @@ namespace BulletSharp
 
 		public int ContactSolverType
 		{
-			get => btRigidBody_getContactSolverType(Native); set => btRigidBody_setContactSolverType(Native, value);
+			get => btRigidBody_getContactSolverType(Native);
+			set => btRigidBody_setContactSolverType(Native, value);
 		}
 
 		public RigidBodyFlags Flags
 		{
-			get => btRigidBody_getFlags(Native); set => btRigidBody_setFlags(Native, value);
+			get => btRigidBody_getFlags(Native);
+			set => btRigidBody_setFlags(Native, value);
 		}
 
 		public int FrictionSolverType
 		{
-			get => btRigidBody_getFrictionSolverType(Native); set => btRigidBody_setFrictionSolverType(Native, value);
+			get => btRigidBody_getFrictionSolverType(Native);
+			set => btRigidBody_setFrictionSolverType(Native, value);
 		}
 
 		public Vector3 Gravity

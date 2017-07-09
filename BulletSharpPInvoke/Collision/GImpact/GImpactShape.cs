@@ -89,12 +89,12 @@ namespace BulletSharp
 
 		public void RayTestRef(ref Vector3 rayFrom, ref Vector3 rayTo, RayResultCallback resultCallback)
 		{
-			btGImpactShapeInterface_rayTest(Native, ref rayFrom, ref rayTo, resultCallback._native);
+			btGImpactShapeInterface_rayTest(Native, ref rayFrom, ref rayTo, resultCallback.Native);
 		}
 
 		public void RayTest(Vector3 rayFrom, Vector3 rayTo, RayResultCallback resultCallback)
 		{
-			btGImpactShapeInterface_rayTest(Native, ref rayFrom, ref rayTo, resultCallback._native);
+			btGImpactShapeInterface_rayTest(Native, ref rayFrom, ref rayTo, resultCallback.Native);
 		}
 
 		public void SetChildTransform(int index, Matrix transform)

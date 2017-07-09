@@ -7,7 +7,7 @@ namespace BulletSharp
 		public ContinuousConvexCollision(ConvexShape shapeA, ConvexShape shapeB,
 			VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver penetrationDepthSolver)
 			: base(btContinuousConvexCollision_new(shapeA.Native, shapeB.Native,
-				simplexSolver._native, penetrationDepthSolver._native))
+				simplexSolver._native, penetrationDepthSolver.Native))
 		{
 		}
 

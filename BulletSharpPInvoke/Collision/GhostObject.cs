@@ -28,14 +28,14 @@ namespace BulletSharp
 			ref Matrix convexToWorld, ConvexResultCallback resultCallback, float allowedCcdPenetration = 0)
 		{
 			btGhostObject_convexSweepTest(Native, castShape.Native, ref convexFromWorld,
-				ref convexToWorld, resultCallback._native, allowedCcdPenetration);
+				ref convexToWorld, resultCallback.Native, allowedCcdPenetration);
 		}
 
 		public void ConvexSweepTest(ConvexShape castShape, Matrix convexFromWorld,
 			Matrix convexToWorld, ConvexResultCallback resultCallback, float allowedCcdPenetration = 0)
 		{
 			btGhostObject_convexSweepTest(Native, castShape.Native, ref convexFromWorld,
-				ref convexToWorld, resultCallback._native, allowedCcdPenetration);
+				ref convexToWorld, resultCallback.Native, allowedCcdPenetration);
 		}
 
 		public CollisionObject GetOverlappingObject(int index)
@@ -46,12 +46,12 @@ namespace BulletSharp
 
 		public void RayTestRef(ref Vector3 rayFromWorld, ref Vector3 rayToWorld, RayResultCallback resultCallback)
 		{
-			btGhostObject_rayTest(Native, ref rayFromWorld, ref rayToWorld, resultCallback._native);
+			btGhostObject_rayTest(Native, ref rayFromWorld, ref rayToWorld, resultCallback.Native);
 		}
 
 		public void RayTest(Vector3 rayFromWorld, Vector3 rayToWorld, RayResultCallback resultCallback)
 		{
-			btGhostObject_rayTest(Native, ref rayFromWorld, ref rayToWorld, resultCallback._native);
+			btGhostObject_rayTest(Native, ref rayFromWorld, ref rayToWorld, resultCallback.Native);
 		}
 
 		public void RemoveOverlappingObjectInternal(BroadphaseProxy otherProxy, Dispatcher dispatcher,

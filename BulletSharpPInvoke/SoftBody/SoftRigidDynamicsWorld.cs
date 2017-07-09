@@ -1,108 +1,92 @@
 using System;
-using System.Runtime.InteropServices;
-using System.Security;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp.SoftBody
 {
 	public class SoftRigidDynamicsWorld : DiscreteDynamicsWorld
 	{
-        private AlignedSoftBodyArray _softBodyArray;
-        private SoftBodySolver _softBodySolver; // private ref passed to bodies during AddSoftBody
-        private bool _ownsSolver;
-        private SoftBodyWorldInfo _worldInfo;
+		private AlignedSoftBodyArray _softBodyArray;
+		private SoftBodySolver _softBodySolver; // private ref passed to bodies during AddSoftBody
+		private bool _ownsSolver;
 
 		public SoftRigidDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
 			ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration,
 			SoftBodySolver softBodySolver = null)
-            : base(IntPtr.Zero, dispatcher, pairCache)
+			: base(IntPtr.Zero, dispatcher, pairCache)
 		{
-            if (softBodySolver != null) {
-                _softBodySolver = softBodySolver;
-                _ownsSolver = false;
-            } else {
-                _softBodySolver = new DefaultSoftBodySolver();
-                _ownsSolver = true;
-            }
+			if (softBodySolver != null) {
+				_softBodySolver = softBodySolver;
+				_ownsSolver = false;
+			} else {
+				_softBodySolver = new DefaultSoftBodySolver();
+				_ownsSolver = true;
+			}
 
-            _native = btSoftRigidDynamicsWorld_new(dispatcher.Native, pairCache.Native,
-                (constraintSolver != null) ? constraintSolver._native : IntPtr.Zero,
-                collisionConfiguration.Native, _softBodySolver._native);
+			Native = btSoftRigidDynamicsWorld_new(dispatcher.Native, pairCache.Native,
+				(constraintSolver != null) ? constraintSolver._native : IntPtr.Zero,
+				collisionConfiguration.Native, _softBodySolver._native);
 
-            _collisionObjectArray = new AlignedCollisionObjectArray(btCollisionWorld_getCollisionObjectArray(_native), this);
+			CollisionObjectArray = new AlignedCollisionObjectArray(btCollisionWorld_getCollisionObjectArray(Native), this);
 
 			_constraintSolver = constraintSolver;
-            _worldInfo = new SoftBodyWorldInfo(btSoftRigidDynamicsWorld_getWorldInfo(_native), true);
-            _worldInfo.Dispatcher = dispatcher;
-            _worldInfo.Broadphase = pairCache;
+			WorldInfo = new SoftBodyWorldInfo(btSoftRigidDynamicsWorld_getWorldInfo(Native), true);
+			WorldInfo.Dispatcher = dispatcher;
+			WorldInfo.Broadphase = pairCache;
 		}
 
 		public void AddSoftBody(SoftBody body)
 		{
-            body.SoftBodySolver = _softBodySolver;
-            _collisionObjectArray.Add(body);
+			body.SoftBodySolver = _softBodySolver;
+			CollisionObjectArray.Add(body);
 		}
 
-        public void AddSoftBody(SoftBody body, CollisionFilterGroups collisionFilterGroup, CollisionFilterGroups collisionFilterMask)
+		public void AddSoftBody(SoftBody body, CollisionFilterGroups collisionFilterGroup, CollisionFilterGroups collisionFilterMask)
 		{
-            body.SoftBodySolver = _softBodySolver;
-            _collisionObjectArray.Add(body, (int)collisionFilterGroup, (int)collisionFilterMask);
+			body.SoftBodySolver = _softBodySolver;
+			CollisionObjectArray.Add(body, (int)collisionFilterGroup, (int)collisionFilterMask);
 		}
 
-        public void AddSoftBody(SoftBody body, int collisionFilterGroup, int collisionFilterMask)
-        {
-            body.SoftBodySolver = _softBodySolver;
-            _collisionObjectArray.Add(body, collisionFilterGroup, collisionFilterMask);
-        }
+		public void AddSoftBody(SoftBody body, int collisionFilterGroup, int collisionFilterMask)
+		{
+			body.SoftBodySolver = _softBodySolver;
+			CollisionObjectArray.Add(body, collisionFilterGroup, collisionFilterMask);
+		}
 
 		public void RemoveSoftBody(SoftBody body)
 		{
-            _collisionObjectArray.Remove(body);
+			CollisionObjectArray.Remove(body);
 		}
 
 		public int DrawFlags
 		{
-			get { return btSoftRigidDynamicsWorld_getDrawFlags(_native); }
-			set { btSoftRigidDynamicsWorld_setDrawFlags(_native, value); }
+			get => btSoftRigidDynamicsWorld_getDrawFlags(Native);
+			set => btSoftRigidDynamicsWorld_setDrawFlags(Native, value);
 		}
 
 		public AlignedSoftBodyArray SoftBodyArray
 		{
-            get
-            {
-                if (_softBodyArray == null)
-                {
-                    _softBodyArray = new AlignedSoftBodyArray(btSoftRigidDynamicsWorld_getSoftBodyArray(_native));
-                }
-                return _softBodyArray;
-            }
+			get
+			{
+				if (_softBodyArray == null)
+				{
+					_softBodyArray = new AlignedSoftBodyArray(btSoftRigidDynamicsWorld_getSoftBodyArray(Native));
+				}
+				return _softBodyArray;
+			}
 		}
 
-		public SoftBodyWorldInfo WorldInfo
+		public SoftBodyWorldInfo WorldInfo { get; }
+
+		protected override void Dispose(bool disposing)
 		{
-            get { return _worldInfo; }
+			if (disposing)
+			{
+				if (_ownsSolver)
+				{
+					_softBodySolver.Dispose();
+				}
+			}
+			base.Dispose(disposing);
 		}
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_ownsSolver)
-                {
-                    _softBodySolver.Dispose();
-                }
-            }
-            base.Dispose(disposing);
-        }
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSoftRigidDynamicsWorld_new(IntPtr dispatcher, IntPtr pairCache, IntPtr constraintSolver, IntPtr collisionConfiguration, IntPtr softBodySolver);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern int btSoftRigidDynamicsWorld_getDrawFlags(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSoftRigidDynamicsWorld_getSoftBodyArray(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btSoftRigidDynamicsWorld_getWorldInfo(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btSoftRigidDynamicsWorld_setDrawFlags(IntPtr obj, int f);
 	}
 }

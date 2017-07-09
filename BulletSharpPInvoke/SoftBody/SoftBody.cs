@@ -823,14 +823,14 @@ namespace BulletSharp.SoftBody
 			get
 			{
 				IntPtr leafPtr = btSoftBody_Cluster_getLeaf(Native);
-				if (_leaf != null && _leaf._native == leafPtr) return _leaf;
+				if (_leaf != null && _leaf.Native == leafPtr) return _leaf;
 				if (leafPtr == IntPtr.Zero) return null;
 				_leaf = new DbvtNode(leafPtr);
 				return _leaf;
 			}
 			set
 			{
-				btSoftBody_Cluster_setLeaf(Native, (value != null) ? value._native : IntPtr.Zero);
+				btSoftBody_Cluster_setLeaf(Native, (value != null) ? value.Native : IntPtr.Zero);
 				_leaf = value;
 			}
 		}
@@ -1184,14 +1184,14 @@ namespace BulletSharp.SoftBody
 			get
 			{
 				IntPtr leafPtr = btSoftBody_Face_getLeaf(Native);
-				if (_leaf != null && _leaf._native == leafPtr) return _leaf;
+				if (_leaf != null && _leaf.Native == leafPtr) return _leaf;
 				if (leafPtr == IntPtr.Zero) return null;
 				_leaf = new DbvtNode(leafPtr);
 				return _leaf;
 			}
 			set
 			{
-				btSoftBody_Face_setLeaf(Native, (value != null) ? value._native : IntPtr.Zero);
+				btSoftBody_Face_setLeaf(Native, (value != null) ? value.Native : IntPtr.Zero);
 				_leaf = value;
 			}
 		}
@@ -1721,14 +1721,14 @@ namespace BulletSharp.SoftBody
 			get
 			{
 				IntPtr leafPtr = btSoftBody_Node_getLeaf(Native);
-				if (_leaf != null && _leaf._native == leafPtr) return _leaf;
+				if (_leaf != null && _leaf.Native == leafPtr) return _leaf;
 				if (leafPtr == IntPtr.Zero) return null;
 				_leaf = new DbvtNode(leafPtr);
 				return _leaf;
 			}
 			set
 			{
-				btSoftBody_Node_setLeaf(Native, (value != null) ? value._native : IntPtr.Zero);
+				btSoftBody_Node_setLeaf(Native, (value != null) ? value.Native : IntPtr.Zero);
 				_leaf = value;
 			}
 		}
@@ -1955,7 +1955,7 @@ namespace BulletSharp.SoftBody
 			{
 				if (_face == null)
 				{
-					IntPtr facePtr = btSoftBody_RayFromToCaster_getFace(_native);
+					IntPtr facePtr = btSoftBody_RayFromToCaster_getFace(Native);
 					if (facePtr != IntPtr.Zero)
 					{
 						_face = new Face(facePtr);
@@ -1965,15 +1965,15 @@ namespace BulletSharp.SoftBody
 			}
 			set
 			{
-				btSoftBody_RayFromToCaster_setFace(_native, value.Native);
+				btSoftBody_RayFromToCaster_setFace(Native, value.Native);
 				_face = value;
 			}
 		}
 
 		public float Mint
 		{
-			get => btSoftBody_RayFromToCaster_getMint(_native);
-			set => btSoftBody_RayFromToCaster_setMint(_native, value);
+			get => btSoftBody_RayFromToCaster_getMint(Native);
+			set => btSoftBody_RayFromToCaster_setMint(Native, value);
 		}
 
 		public Vector3 RayFrom
@@ -1981,10 +1981,10 @@ namespace BulletSharp.SoftBody
 			get
 			{
 				Vector3 value;
-				btSoftBody_RayFromToCaster_getRayFrom(_native, out value);
+				btSoftBody_RayFromToCaster_getRayFrom(Native, out value);
 				return value;
 			}
-			set => btSoftBody_RayFromToCaster_setRayFrom(_native, ref value);
+			set => btSoftBody_RayFromToCaster_setRayFrom(Native, ref value);
 		}
 
 		public Vector3 RayNormalizedDirection
@@ -1992,10 +1992,10 @@ namespace BulletSharp.SoftBody
 			get
 			{
 				Vector3 value;
-				btSoftBody_RayFromToCaster_getRayNormalizedDirection(_native, out value);
+				btSoftBody_RayFromToCaster_getRayNormalizedDirection(Native, out value);
 				return value;
 			}
-			set => btSoftBody_RayFromToCaster_setRayNormalizedDirection(_native, ref value);
+			set => btSoftBody_RayFromToCaster_setRayNormalizedDirection(Native, ref value);
 		}
 
 		public Vector3 RayTo
@@ -2003,16 +2003,16 @@ namespace BulletSharp.SoftBody
 			get
 			{
 				Vector3 value;
-				btSoftBody_RayFromToCaster_getRayTo(_native, out value);
+				btSoftBody_RayFromToCaster_getRayTo(Native, out value);
 				return value;
 			}
-			set => btSoftBody_RayFromToCaster_setRayTo(_native, ref value);
+			set => btSoftBody_RayFromToCaster_setRayTo(Native, ref value);
 		}
 
 		public int Tests
 		{
-			get => btSoftBody_RayFromToCaster_getTests(_native);
-			set => btSoftBody_RayFromToCaster_setTests(_native, value);
+			get => btSoftBody_RayFromToCaster_getTests(Native);
+			set => btSoftBody_RayFromToCaster_setTests(Native, value);
 		}
 	}
 
@@ -2392,14 +2392,14 @@ namespace BulletSharp.SoftBody
 			get
 			{
 				IntPtr leafPtr = btSoftBody_Tetra_getLeaf(Native);
-				if (_leaf != null && _leaf._native == leafPtr) return _leaf;
+				if (_leaf != null && _leaf.Native == leafPtr) return _leaf;
 				if (leafPtr == IntPtr.Zero) return null;
 				_leaf = new DbvtNode(leafPtr);
 				return _leaf;
 			}
 			set
 			{
-				btSoftBody_Tetra_setLeaf(Native, (value != null) ? value._native : IntPtr.Zero);
+				btSoftBody_Tetra_setLeaf(Native, (value != null) ? value.Native : IntPtr.Zero);
 				_leaf = value;
 			}
 		}
@@ -3403,7 +3403,8 @@ namespace BulletSharp.SoftBody
 		*/
 		public float RestLengthScale
 		{
-			get => btSoftBody_getRestLengthScale(Native); set => btSoftBody_setRestLengthScale(Native, value);
+			get => btSoftBody_getRestLengthScale(Native);
+			set => btSoftBody_setRestLengthScale(Native, value);
 		}
 		/*
 		public tSContactArray Scontacts
@@ -3449,17 +3450,20 @@ namespace BulletSharp.SoftBody
 
 		public float Timeacc
 		{
-			get => btSoftBody_getTimeacc(Native); set => btSoftBody_setTimeacc(Native, value);
+			get => btSoftBody_getTimeacc(Native);
+			set => btSoftBody_setTimeacc(Native, value);
 		}
 
 		public float TotalMass
 		{
-			get => btSoftBody_getTotalMass(Native); set => SetTotalMass(value);
+			get => btSoftBody_getTotalMass(Native);
+			set => SetTotalMass(value);
 		}
 
 		public bool UpdateRuntimeConstants
 		{
-			get => btSoftBody_getBUpdateRtCst(Native); set => btSoftBody_setBUpdateRtCst(Native, value);
+			get => btSoftBody_getBUpdateRtCst(Native);
+			set => btSoftBody_setBUpdateRtCst(Native, value);
 		}
 		/*
 		public AlignedObjectArray UserIndexMapping
