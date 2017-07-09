@@ -27,14 +27,14 @@ namespace BulletSharp
 		public void ConvexSweepTestRef(ConvexShape castShape, ref Matrix convexFromWorld,
 			ref Matrix convexToWorld, ConvexResultCallback resultCallback, float allowedCcdPenetration = 0)
 		{
-			btGhostObject_convexSweepTest(Native, castShape._native, ref convexFromWorld,
+			btGhostObject_convexSweepTest(Native, castShape.Native, ref convexFromWorld,
 				ref convexToWorld, resultCallback._native, allowedCcdPenetration);
 		}
 
 		public void ConvexSweepTest(ConvexShape castShape, Matrix convexFromWorld,
 			Matrix convexToWorld, ConvexResultCallback resultCallback, float allowedCcdPenetration = 0)
 		{
-			btGhostObject_convexSweepTest(Native, castShape._native, ref convexFromWorld,
+			btGhostObject_convexSweepTest(Native, castShape.Native, ref convexFromWorld,
 				ref convexToWorld, resultCallback._native, allowedCcdPenetration);
 		}
 

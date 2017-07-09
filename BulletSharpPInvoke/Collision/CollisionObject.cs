@@ -238,7 +238,7 @@ namespace BulletSharp
 			get => _collisionShape;
 			set
 			{
-				btCollisionObject_setCollisionShape(Native, value._native);
+				btCollisionObject_setCollisionShape(Native, value.Native);
 				_collisionShape = value;
 			}
 		}

@@ -22,7 +22,7 @@ namespace BulletSharp
 		public CollisionShape CollisionShape
 		{
 			get => CollisionShape.GetManaged(btCollisionObjectWrapper_getCollisionShape(Native));
-			set => btCollisionObjectWrapper_setShape(Native, value._native);
+			set => btCollisionObjectWrapper_setShape(Native, value.Native);
 		}
 
 		public int Index

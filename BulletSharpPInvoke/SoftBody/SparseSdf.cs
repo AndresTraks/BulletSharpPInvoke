@@ -25,7 +25,7 @@ namespace BulletSharp.SoftBody
 
         public int RemoveReferences(CollisionShape pcs)
         {
-            return btSparseSdf3_RemoveReferences(_native, (pcs != null) ? pcs._native : IntPtr.Zero);
+            return btSparseSdf3_RemoveReferences(_native, (pcs != null) ? pcs.Native : IntPtr.Zero);
         }
 
         public void Reset()

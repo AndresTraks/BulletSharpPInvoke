@@ -16,7 +16,7 @@ namespace BulletSharp
 			CollisionShape collisionShape)
 		{
 			_native = btRigidBody_btRigidBodyConstructionInfo_new(mass, motionState != null ? motionState._native : IntPtr.Zero,
-				collisionShape != null ? collisionShape._native : IntPtr.Zero);
+				collisionShape != null ? collisionShape.Native : IntPtr.Zero);
 			_collisionShape = collisionShape;
 			_motionState = motionState;
 		}
@@ -25,7 +25,7 @@ namespace BulletSharp
 			CollisionShape collisionShape, Vector3 localInertia)
 		{
 			_native = btRigidBody_btRigidBodyConstructionInfo_new2(mass, motionState != null ? motionState._native : IntPtr.Zero,
-				collisionShape != null ? collisionShape._native : IntPtr.Zero, ref localInertia);
+				collisionShape != null ? collisionShape.Native : IntPtr.Zero, ref localInertia);
 			_collisionShape = collisionShape;
 			_motionState = motionState;
 		}
@@ -77,7 +77,7 @@ namespace BulletSharp
 			get { return _collisionShape; }
 			set
 			{
-				btRigidBody_btRigidBodyConstructionInfo_setCollisionShape(_native, value != null ? value._native : IntPtr.Zero);
+				btRigidBody_btRigidBodyConstructionInfo_setCollisionShape(_native, value != null ? value.Native : IntPtr.Zero);
 				_collisionShape = value;
 			}
 		}

@@ -1,51 +1,50 @@
 using System;
-using System.Runtime.InteropServices;
-using System.Security;
 using BulletSharp.Math;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
 	public class ConvexShape : CollisionShape
 	{
-        internal ConvexShape(IntPtr native, bool preventDelete = false)
+		internal ConvexShape(IntPtr native, bool preventDelete = false)
 			: base(native, preventDelete)
 		{
 		}
-        /*
+		/*
 		public void BatchedUnitVectorGetSupportingVertexWithoutMargin(Vector3 vectors,
 			Vector3 supportVerticesOut, int numVectors)
 		{
-			btConvexShape_batchedUnitVectorGetSupportingVertexWithoutMargin(_native,
-				vectors._native, supportVerticesOut._native, numVectors);
+			btConvexShape_batchedUnitVectorGetSupportingVertexWithoutMargin(Native,
+				vectors.Native, supportVerticesOut.Native, numVectors);
 		}
-        */
+		*/
 
 		public void GetAabbNonVirtual(Matrix t, out Vector3 aabbMin, out Vector3 aabbMax)
 		{
-			btConvexShape_getAabbNonVirtual(_native, ref t, out aabbMin, out aabbMax);
+			btConvexShape_getAabbNonVirtual(Native, ref t, out aabbMin, out aabbMax);
 		}
 
 		public void GetAabbSlow(Matrix t, out Vector3 aabbMin, out Vector3 aabbMax)
 		{
-			btConvexShape_getAabbSlow(_native, ref t, out aabbMin, out aabbMax);
+			btConvexShape_getAabbSlow(Native, ref t, out aabbMin, out aabbMax);
 		}
 
 		public void GetPreferredPenetrationDirection(int index, out Vector3 penetrationVector)
 		{
-			btConvexShape_getPreferredPenetrationDirection(_native, index, out penetrationVector);
+			btConvexShape_getPreferredPenetrationDirection(Native, index, out penetrationVector);
 		}
 
 		public Vector3 LocalGetSupportingVertex(Vector3 vec)
 		{
 			Vector3 value;
-			btConvexShape_localGetSupportingVertex(_native, ref vec, out value);
+			btConvexShape_localGetSupportingVertex(Native, ref vec, out value);
 			return value;
 		}
 
 		public Vector3 LocalGetSupportingVertexWithoutMargin(Vector3 vec)
 		{
 			Vector3 value;
-			btConvexShape_localGetSupportingVertexWithoutMargin(_native, ref vec,
+			btConvexShape_localGetSupportingVertexWithoutMargin(Native, ref vec,
 				out value);
 			return value;
 		}
@@ -53,63 +52,34 @@ namespace BulletSharp
 		public Vector3 LocalGetSupportVertexNonVirtual(Vector3 vec)
 		{
 			Vector3 value;
-			btConvexShape_localGetSupportVertexNonVirtual(_native, ref vec, out value);
+			btConvexShape_localGetSupportVertexNonVirtual(Native, ref vec, out value);
 			return value;
 		}
 
 		public Vector3 LocalGetSupportVertexWithoutMarginNonVirtual(Vector3 vec)
 		{
 			Vector3 value;
-			btConvexShape_localGetSupportVertexWithoutMarginNonVirtual(_native, ref vec,
+			btConvexShape_localGetSupportVertexWithoutMarginNonVirtual(Native, ref vec,
 				out value);
 			return value;
 		}
 
-        public void ProjectRef(ref Matrix trans, ref Vector3 dir, out float minProj, out float maxProj,
-            out Vector3 witnesPtMin, out Vector3 witnesPtMax)
-        {
-            btConvexShape_project(_native, ref trans, ref dir, out minProj, out maxProj,
-                out witnesPtMin, out witnesPtMax);
-        }
+		public void ProjectRef(ref Matrix trans, ref Vector3 dir, out float minProj, out float maxProj,
+			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
+		{
+			btConvexShape_project(Native, ref trans, ref dir, out minProj, out maxProj,
+				out witnesPtMin, out witnesPtMax);
+		}
 
 		public void Project(Matrix trans, Vector3 dir, out float minProj, out float maxProj,
 			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
 		{
-			btConvexShape_project(_native, ref trans, ref dir, out minProj, out maxProj,
+			btConvexShape_project(Native, ref trans, ref dir, out minProj, out maxProj,
 				out witnesPtMin, out witnesPtMax);
 		}
 
-		public float MarginNonVirtual
-		{
-			get { return btConvexShape_getMarginNonVirtual(_native); }
-		}
+		public float MarginNonVirtual => btConvexShape_getMarginNonVirtual(Native);
 
-		public int NumPreferredPenetrationDirections
-		{
-			get { return btConvexShape_getNumPreferredPenetrationDirections(_native); }
-		}
-
-        //[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-        //static extern void btConvexShape_batchedUnitVectorGetSupportingVertexWithoutMargin(IntPtr obj, IntPtr vectors, IntPtr supportVerticesOut, int numVectors);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexShape_getAabbNonVirtual(IntPtr obj, [In] ref Matrix t, out Vector3 aabbMin, out Vector3 aabbMax);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexShape_getAabbSlow(IntPtr obj, [In] ref Matrix t, out Vector3 aabbMin, out Vector3 aabbMax);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern float btConvexShape_getMarginNonVirtual(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern int btConvexShape_getNumPreferredPenetrationDirections(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexShape_getPreferredPenetrationDirection(IntPtr obj, int index, out Vector3 penetrationVector);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexShape_localGetSupportingVertex(IntPtr obj, [In] ref Vector3 vec, out Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexShape_localGetSupportingVertexWithoutMargin(IntPtr obj, [In] ref Vector3 vec, out Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexShape_localGetSupportVertexNonVirtual(IntPtr obj, [In] ref Vector3 vec, out Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexShape_localGetSupportVertexWithoutMarginNonVirtual(IntPtr obj, [In] ref Vector3 vec, out Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexShape_project(IntPtr obj, [In] ref Matrix trans, [In] ref Vector3 dir, out float minProj, out float maxProj, out Vector3 witnesPtMin, out Vector3 witnesPtMax);
+		public int NumPreferredPenetrationDirections => btConvexShape_getNumPreferredPenetrationDirections(Native);
 	}
 }

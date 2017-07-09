@@ -217,7 +217,7 @@ namespace BulletSharp
         public void AddChildShape(ref Matrix localTransform, CollisionShape shape)
         {
             IntPtr childListOld = (_count != 0) ? btCompoundShape_getChildList(_native) : IntPtr.Zero;
-            btCompoundShape_addChildShape(_native, ref localTransform, shape._native);
+            btCompoundShape_addChildShape(_native, ref localTransform, shape.Native);
             IntPtr childList = btCompoundShape_getChildList(_native);
 
             // Adjust the native pointer of existing children if the array was reallocated.
@@ -225,7 +225,7 @@ namespace BulletSharp
             {
                 for (int i = 0; i < _count; i++)
                 {
-                    _backingArray[i]._native = btCompoundShapeChild_array_at(childList, i);
+                    _backingArray[i].Native = btCompoundShapeChild_array_at(childList, i);
                 }
             }
 
@@ -282,10 +282,10 @@ namespace BulletSharp
 
         public void RemoveChildShape(CollisionShape shape)
         {
-            IntPtr shapePtr = shape._native;
+            IntPtr shapePtr = shape.Native;
             for (int i = 0; i < _count; i++)
             {
-                if (_backingArray[i].ChildShape._native == shapePtr)
+                if (_backingArray[i].ChildShape.Native == shapePtr)
                 {
                     RemoveChildShapeByIndex(i);
                 }
@@ -301,7 +301,7 @@ namespace BulletSharp
             if (childShapeIndex != _count)
             {
                 CompoundShapeChild lastItem = _backingArray[_count];
-                lastItem._native = _backingArray[childShapeIndex]._native;
+                lastItem.Native = _backingArray[childShapeIndex].Native;
                 _backingArray[childShapeIndex] = lastItem;
             }
             _backingArray[_count] = null;

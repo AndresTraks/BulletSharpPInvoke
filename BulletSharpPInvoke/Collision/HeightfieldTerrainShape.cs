@@ -1,6 +1,5 @@
 using System;
-using System.Runtime.InteropServices;
-using System.Security;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
@@ -17,40 +16,22 @@ namespace BulletSharp
 
 		public void SetUseDiamondSubdivision()
 		{
-			btHeightfieldTerrainShape_setUseDiamondSubdivision(_native);
+			btHeightfieldTerrainShape_setUseDiamondSubdivision(Native);
 		}
 
 		public void SetUseDiamondSubdivision(bool useDiamondSubdivision)
 		{
-			btHeightfieldTerrainShape_setUseDiamondSubdivision2(_native, useDiamondSubdivision);
+			btHeightfieldTerrainShape_setUseDiamondSubdivision2(Native, useDiamondSubdivision);
 		}
 
 		public void SetUseZigzagSubdivision()
 		{
-			btHeightfieldTerrainShape_setUseZigzagSubdivision(_native);
+			btHeightfieldTerrainShape_setUseZigzagSubdivision(Native);
 		}
 
 		public void SetUseZigzagSubdivision(bool useZigzagSubdivision)
 		{
-			btHeightfieldTerrainShape_setUseZigzagSubdivision2(_native, useZigzagSubdivision);
+			btHeightfieldTerrainShape_setUseZigzagSubdivision2(Native, useZigzagSubdivision);
 		}
-
-        private void Validate()
-        {
-
-        }
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHeightfieldTerrainShape_new(int heightStickWidth, int heightStickLength, IntPtr heightfieldData, float heightScale, float minHeight, float maxHeight, int upAxis, PhyScalarType heightDataType, bool flipQuadEdges);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btHeightfieldTerrainShape_new2(int heightStickWidth, int heightStickLength, IntPtr heightfieldData, float maxHeight, int upAxis, bool useFloatData, bool flipQuadEdges);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btHeightfieldTerrainShape_setUseDiamondSubdivision(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btHeightfieldTerrainShape_setUseDiamondSubdivision2(IntPtr obj, bool useDiamondSubdivision);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btHeightfieldTerrainShape_setUseZigzagSubdivision(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btHeightfieldTerrainShape_setUseZigzagSubdivision2(IntPtr obj, bool useZigzagSubdivision);
 	}
 }

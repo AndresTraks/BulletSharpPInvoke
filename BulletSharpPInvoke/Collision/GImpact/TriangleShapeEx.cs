@@ -182,23 +182,23 @@ namespace BulletSharp
 		}
 
 		public TriangleShapeEx(TriangleShapeEx other)
-			: base(btTriangleShapeEx_new3(other._native))
+			: base(btTriangleShapeEx_new3(other.Native))
 		{
 		}
 
 		public void ApplyTransform(Matrix transform)
 		{
-			btTriangleShapeEx_applyTransform(_native, ref transform);
+			btTriangleShapeEx_applyTransform(Native, ref transform);
 		}
 
 		public void BuildTriPlane(out Vector4 plane)
 		{
-			btTriangleShapeEx_buildTriPlane(_native, out plane);
+			btTriangleShapeEx_buildTriPlane(Native, out plane);
 		}
 
 		public bool OverlapTestConservative(TriangleShapeEx other)
 		{
-			return btTriangleShapeEx_overlap_test_conservative(_native, other._native);
+			return btTriangleShapeEx_overlap_test_conservative(Native, other.Native);
 		}
 	}
 }

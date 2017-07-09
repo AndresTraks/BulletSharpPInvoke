@@ -1,7 +1,5 @@
-using System;
-using System.Runtime.InteropServices;
-using System.Security;
 using BulletSharp.Math;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
@@ -23,18 +21,12 @@ namespace BulletSharp
 		{
 			_meshInterface = meshInterface;
 		}
-        /*
+		/*
 		public BulletMaterial GetMaterialProperties(int partID, int triIndex)
 		{
 			return btMultimaterialTriangleMeshShape_getMaterialProperties(_native,
 				partID, triIndex);
 		}
-        */
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btMultimaterialTriangleMeshShape_new(IntPtr meshInterface, bool useQuantizedAabbCompression, bool buildBvh);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btMultimaterialTriangleMeshShape_new2(IntPtr meshInterface, bool useQuantizedAabbCompression, [In] ref Vector3 bvhAabbMin, [In] ref Vector3 bvhAabbMax, bool buildBvh);
-		//[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		//static extern IntPtr btMultimaterialTriangleMeshShape_getMaterialProperties(IntPtr obj, int partID, int triIndex);
+		*/
 	}
 }

@@ -522,7 +522,7 @@ namespace BulletSharp
             }
             else if (obj is CollisionShape)
             {
-                ptr = (obj as CollisionShape)._native;
+                ptr = (obj as CollisionShape).Native;
             }
             else if (obj is TypedConstraint)
             {

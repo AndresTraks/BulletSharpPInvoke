@@ -22,7 +22,7 @@ namespace BulletSharp
 
 		public void SetVertices(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3)
 		{
-			btTetrahedronShapeEx_setVertices(_native, ref v0, ref v1, ref v2, ref v3);
+			btTetrahedronShapeEx_setVertices(Native, ref v0, ref v1, ref v2, ref v3);
 		}
 	}
 
@@ -35,17 +35,17 @@ namespace BulletSharp
 
 		public void GetBulletTetrahedron(int primitiveIndex, TetrahedronShapeEx tetrahedron)
 		{
-			btGImpactShapeInterface_getBulletTetrahedron(_native, primitiveIndex, tetrahedron._native);
+			btGImpactShapeInterface_getBulletTetrahedron(Native, primitiveIndex, tetrahedron.Native);
 		}
 
 		public void GetBulletTriangle(int primitiveIndex, TriangleShapeEx triangle)
 		{
-			btGImpactShapeInterface_getBulletTriangle(_native, primitiveIndex, triangle._native);
+			btGImpactShapeInterface_getBulletTriangle(Native, primitiveIndex, triangle.Native);
 		}
 
 		public void GetChildAabb(int childIndex, Matrix transform, out Vector3 aabbMin, out Vector3 aabbMax)
 		{
-			btGImpactShapeInterface_getChildAabb(_native, childIndex, ref transform,
+			btGImpactShapeInterface_getChildAabb(Native, childIndex, ref transform,
 				out aabbMin, out aabbMax);
 		}
 
@@ -54,62 +54,62 @@ namespace BulletSharp
 		public Matrix GetChildTransform(int index)
 		{
 			Matrix value;
-			btGImpactShapeInterface_getChildTransform(_native, index, out value);
+			btGImpactShapeInterface_getChildTransform(Native, index, out value);
 			return value;
 		}
 
 		public void GetPrimitiveTriangle(int index, PrimitiveTriangle triangle)
 		{
-			btGImpactShapeInterface_getPrimitiveTriangle(_native, index, triangle.Native);
+			btGImpactShapeInterface_getPrimitiveTriangle(Native, index, triangle.Native);
 		}
 
 		public void LockChildShapes()
 		{
-			btGImpactShapeInterface_lockChildShapes(_native);
+			btGImpactShapeInterface_lockChildShapes(Native);
 		}
 
 		public void PostUpdate()
 		{
-			btGImpactShapeInterface_postUpdate(_native);
+			btGImpactShapeInterface_postUpdate(Native);
 		}
 
 		public void ProcessAllTrianglesRayRef(TriangleCallback callback, ref Vector3 rayFrom,
 			ref Vector3 rayTo)
 		{
-			btGImpactShapeInterface_processAllTrianglesRay(_native, callback._native,
+			btGImpactShapeInterface_processAllTrianglesRay(Native, callback._native,
 				ref rayFrom, ref rayTo);
 		}
 
 		public void ProcessAllTrianglesRay(TriangleCallback callback, Vector3 rayFrom,
 			Vector3 rayTo)
 		{
-			btGImpactShapeInterface_processAllTrianglesRay(_native, callback._native,
+			btGImpactShapeInterface_processAllTrianglesRay(Native, callback._native,
 				ref rayFrom, ref rayTo);
 		}
 
 		public void RayTestRef(ref Vector3 rayFrom, ref Vector3 rayTo, RayResultCallback resultCallback)
 		{
-			btGImpactShapeInterface_rayTest(_native, ref rayFrom, ref rayTo, resultCallback._native);
+			btGImpactShapeInterface_rayTest(Native, ref rayFrom, ref rayTo, resultCallback._native);
 		}
 
 		public void RayTest(Vector3 rayFrom, Vector3 rayTo, RayResultCallback resultCallback)
 		{
-			btGImpactShapeInterface_rayTest(_native, ref rayFrom, ref rayTo, resultCallback._native);
+			btGImpactShapeInterface_rayTest(Native, ref rayFrom, ref rayTo, resultCallback._native);
 		}
 
 		public void SetChildTransform(int index, Matrix transform)
 		{
-			btGImpactShapeInterface_setChildTransform(_native, index, ref transform);
+			btGImpactShapeInterface_setChildTransform(Native, index, ref transform);
 		}
 
 		public void UnlockChildShapes()
 		{
-			btGImpactShapeInterface_unlockChildShapes(_native);
+			btGImpactShapeInterface_unlockChildShapes(Native);
 		}
 
 		public void UpdateBound()
 		{
-			btGImpactShapeInterface_updateBound(_native);
+			btGImpactShapeInterface_updateBound(Native);
 		}
 		/*
 		public GImpactBoxSet BoxSet
@@ -117,19 +117,19 @@ namespace BulletSharp
 			get { return btGImpactShapeInterface_getBoxSet(_native); }
 		}
 		*/
-		public bool ChildrenHasTransform => btGImpactShapeInterface_childrenHasTransform(_native);
+		public bool ChildrenHasTransform => btGImpactShapeInterface_childrenHasTransform(Native);
 
 		public abstract GImpactShapeType GImpactShapeType { get; }
 
-		public bool HasBoxSet => btGImpactShapeInterface_hasBoxSet(_native);
+		public bool HasBoxSet => btGImpactShapeInterface_hasBoxSet(Native);
 
-		public Aabb LocalBox => new Aabb(btGImpactShapeInterface_getLocalBox(_native));
+		public Aabb LocalBox => new Aabb(btGImpactShapeInterface_getLocalBox(Native));
 
-		public bool NeedsRetrieveTetrahedrons => btGImpactShapeInterface_needsRetrieveTetrahedrons(_native);
+		public bool NeedsRetrieveTetrahedrons => btGImpactShapeInterface_needsRetrieveTetrahedrons(Native);
 
-		public bool NeedsRetrieveTriangles => btGImpactShapeInterface_needsRetrieveTriangles(_native);
+		public bool NeedsRetrieveTriangles => btGImpactShapeInterface_needsRetrieveTriangles(Native);
 
-		public int NumChildShapes => btGImpactShapeInterface_getNumChildShapes(_native);
+		public int NumChildShapes => btGImpactShapeInterface_getNumChildShapes(Native);
 
 		public abstract PrimitiveManagerBase PrimitiveManager { get; }
 	}
@@ -163,13 +163,13 @@ namespace BulletSharp
 		public void AddChildShape(Matrix localTransform, CollisionShape shape)
 		{
 			_childShapes.Add(shape);
-			btGImpactCompoundShape_addChildShape(_native, ref localTransform, shape._native);
+			btGImpactCompoundShape_addChildShape(Native, ref localTransform, shape.Native);
 		}
 
 		public void AddChildShape(CollisionShape shape)
 		{
 			_childShapes.Add(shape);
-			btGImpactCompoundShape_addChildShape2(_native, shape._native);
+			btGImpactCompoundShape_addChildShape2(Native, shape.Native);
 		}
 
 		public override CollisionShape GetChildShape(int index)
@@ -186,7 +186,7 @@ namespace BulletSharp
 				if (_compoundPrimitiveManager == null)
 				{
 					_compoundPrimitiveManager = new CompoundPrimitiveManager(
-						btGImpactCompoundShape_getCompoundPrimitiveManager(_native), this);
+						btGImpactCompoundShape_getCompoundPrimitiveManager(Native), this);
 				}
 				return _compoundPrimitiveManager;
 			}
@@ -224,7 +224,7 @@ namespace BulletSharp
 		public void GetBulletTriangle(int primIndex, TriangleShapeEx triangle)
 		{
 			btGImpactMeshShapePart_TrimeshPrimitiveManager_get_bullet_triangle(
-				Native, primIndex, triangle._native);
+				Native, primIndex, triangle.Native);
 		}
 
 		public void GetIndices(int faceIndex, out uint i0, out uint i1, out uint i2b)
@@ -365,7 +365,7 @@ namespace BulletSharp
 
 		public void GetVertex(int vertexIndex, out Vector3 vertex)
 		{
-			btGImpactMeshShapePart_getVertex(_native, vertexIndex, out vertex);
+			btGImpactMeshShapePart_getVertex(Native, vertexIndex, out vertex);
 		}
 
 		public override GImpactShapeType GImpactShapeType => GImpactShapeType.TrimeshShapePart;
@@ -377,17 +377,17 @@ namespace BulletSharp
 				if (_gImpactTrimeshPrimitiveManager == null)
 				{
 					_gImpactTrimeshPrimitiveManager = new TrimeshPrimitiveManager(
-						btGImpactMeshShapePart_getTrimeshPrimitiveManager(_native));
+						btGImpactMeshShapePart_getTrimeshPrimitiveManager(Native));
 				}
 				return _gImpactTrimeshPrimitiveManager;
 			}
 		}
 
-		public int Part => btGImpactMeshShapePart_getPart(_native);
+		public int Part => btGImpactMeshShapePart_getPart(Native);
 
 		public override PrimitiveManagerBase PrimitiveManager => GImpactTrimeshPrimitiveManager;
 
-		public int VertexCount => btGImpactMeshShapePart_getVertexCount(_native);
+		public int VertexCount => btGImpactMeshShapePart_getVertexCount(Native);
 	}
 
 	public class GImpactMeshShape : GImpactShapeInterface
@@ -413,7 +413,7 @@ namespace BulletSharp
 
 		public GImpactMeshShapePart GetMeshPart(int index)
 		{
-			return new GImpactMeshShapePart(btGImpactMeshShape_getMeshPart(_native, index));
+			return new GImpactMeshShapePart(btGImpactMeshShape_getMeshPart(Native, index));
 		}
 
 		public StridingMeshInterface MeshInterface
@@ -422,14 +422,14 @@ namespace BulletSharp
 			{
 				if (_meshInterface == null)
 				{
-					_meshInterface = new StridingMeshInterface(btGImpactMeshShape_getMeshInterface(_native));
+					_meshInterface = new StridingMeshInterface(btGImpactMeshShape_getMeshInterface(Native));
 					_disposeMeshInterface = true;
 				}
 				return _meshInterface;
 			}
 		}
 
-		public int MeshPartCount => btGImpactMeshShape_getMeshPartCount(_native);
+		public int MeshPartCount => btGImpactMeshShape_getMeshPartCount(Native);
 
 		public override PrimitiveManagerBase PrimitiveManager => null;
 
