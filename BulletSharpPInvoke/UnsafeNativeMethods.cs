@@ -3068,6 +3068,51 @@ namespace BulletSharp
 		public static extern void btMLCPSolver_setNumFallbacks(IntPtr obj, int num);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodyConstraintSolver_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBodyConstraintSolver_solveGroupCacheFriendlyFinish(IntPtr obj, IntPtr bodies, int numBodies, IntPtr infoGlobal);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyConstraintSolver_solveMultiBodyGroup(IntPtr obj, IntPtr bodies, int numBodies, IntPtr manifold, int numManifolds, IntPtr constraints, int numConstraints, IntPtr multiBodyConstraints, int numMultiBodyConstraints, IntPtr info, IntPtr debugDrawer, IntPtr dispatcher);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyConstraint_allocateJacobiansMultiDof(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyConstraint_createConstraintRows(IntPtr obj, IntPtr constraintRows, IntPtr data, IntPtr infoGlobal);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyConstraint_debugDraw(IntPtr obj, IntPtr drawer);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyConstraint_finalizeMultiDof(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBodyConstraint_getAppliedImpulse(IntPtr obj, int dof);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodyConstraint_getIslandIdA(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodyConstraint_getIslandIdB(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBodyConstraint_getMaxAppliedImpulse(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodyConstraint_getNumRows(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBodyConstraint_getPosition(IntPtr obj, int row);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyConstraint_internalSetAppliedImpulse(IntPtr obj, int dof, float appliedImpulse);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btMultiBodyConstraint_isUnilateral(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodyConstraint_jacobianA(IntPtr obj, int row);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodyConstraint_jacobianB(IntPtr obj, int row);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyConstraint_setMaxAppliedImpulse(IntPtr obj, float maxImp);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyConstraint_setPosition(IntPtr obj, int row, float pos);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyConstraint_updateJacobianSizes(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyConstraint_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btMultiBodyDynamicsWorld_new(IntPtr dispatcher, IntPtr pairCache, IntPtr constraintSolver, IntPtr collisionConfiguration);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBodyDynamicsWorld_addMultiBody(IntPtr obj, IntPtr body, int group, int mask);
@@ -3091,6 +3136,37 @@ namespace BulletSharp
 		public static extern void btMultiBodyDynamicsWorld_removeMultiBodyConstraint(IntPtr obj, IntPtr constraint);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodyFixedConstraint_new(IntPtr body, int link, IntPtr bodyB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB, [In] ref Matrix frameInA, [In] ref Matrix frameInB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodyFixedConstraint_new2(IntPtr bodyA, int linkA, IntPtr bodyB, int linkB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB, [In] ref Matrix frameInA, [In] ref Matrix frameInB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyFixedConstraint_getFrameInA(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyFixedConstraint_getFrameInB(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyFixedConstraint_getPivotInA(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyFixedConstraint_getPivotInB(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyFixedConstraint_setFrameInA(IntPtr obj, [In] ref Matrix frameInA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyFixedConstraint_setFrameInB(IntPtr obj, [In] ref Matrix frameInB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyFixedConstraint_setPivotInA(IntPtr obj, [In] ref Vector3 pivotInA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyFixedConstraint_setPivotInB(IntPtr obj, [In] ref Vector3 pivotInB);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodyJointLimitConstraint_new(IntPtr body, int link, float lower, float upper);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodyJointMotor_new(IntPtr body, int link, float desiredVelocity, float maxMotorImpulse);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodyJointMotor_new2(IntPtr body, int link, int linkDoF, float desiredVelocity, float maxMotorImpulse);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyJointMotor_setVelocityTarget(IntPtr obj, float velTarget);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btMultiBodyLinkCollider_new(IntPtr multiBody, int link);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern int btMultiBodyLinkCollider_getLink(IntPtr obj);
@@ -3102,6 +3178,546 @@ namespace BulletSharp
 		public static extern void btMultiBodyLinkCollider_setMultiBody(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btMultiBodyLinkCollider_upcast(IntPtr colObj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getAbsFrameLocVelocity(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getAbsFrameTotVelocity(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getAppliedConstraintForce(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getAppliedConstraintTorque(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getAppliedForce(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getAppliedTorque(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultibodyLink_getAxes(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getAxisBottom(IntPtr obj, int dof, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getAxisTop(IntPtr obj, int dof, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getCachedRotParentToThis(IntPtr obj, out Quaternion value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getCachedRVector(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getCachedWorldTransform(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultibodyLink_getCfgOffset(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultibodyLink_getCollider(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultibodyLink_getDofCount(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultibodyLink_getDofOffset(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getDVector(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getEVector(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultibodyLink_getFlags(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getInertiaLocal(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultibodyLink_getJointDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultibodyLink_getJointFeedback(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultibodyLink_getJointFriction(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultibodyLink_getJointName(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultibodyLink_getJointPos(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultibodyLink_getJointTorque(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern FeatherstoneJointType btMultibodyLink_getJointType(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultibodyLink_getLinkName(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultibodyLink_getMass(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultibodyLink_getParent(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultibodyLink_getPosVarCount(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getZeroRotParentToThis(IntPtr obj, out Quaternion value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultibodyLink_getUserPtr(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setAppliedConstraintForce(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setAppliedConstraintTorque(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setAppliedForce(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setAppliedTorque(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setAxisBottom(IntPtr obj, int dof, float x, float y, float z);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setAxisBottom2(IntPtr obj, int dof, [In] ref Vector3 axis);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setAxisTop(IntPtr obj, int dof, float x, float y, float z);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setAxisTop2(IntPtr obj, int dof, [In] ref Vector3 axis);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setCachedRotParentToThis(IntPtr obj, [In] ref Quaternion value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setCachedRVector(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setCachedWorldTransform(IntPtr obj, [In] ref Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setCfgOffset(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setCollider(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setDofCount(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setDofOffset(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setDVector(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setEVector(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setFlags(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setInertiaLocal(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setJointDamping(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setJointFeedback(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setJointFriction(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setJointName(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setJointType(IntPtr obj, FeatherstoneJointType value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setLinkName(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setMass(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setParent(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setPosVarCount(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setZeroRotParentToThis(IntPtr obj, [In] ref Quaternion value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setUserPtr(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_updateCacheMultiDof(IntPtr obj, float[] pq);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodyPoint2Point_new(IntPtr body, int link, IntPtr bodyB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodyPoint2Point_new2(IntPtr bodyA, int linkA, IntPtr bodyB, int linkB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyPoint2Point_getPivotInB(IntPtr obj, out Vector3 pivotInB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyPoint2Point_setPivotInB(IntPtr obj, [In] ref Vector3 pivotInB);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodySliderConstraint_new(IntPtr body, int link, IntPtr bodyB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB, [In] ref Matrix frameInA, [In] ref Matrix frameInB, [In] ref Vector3 jointAxis);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodySliderConstraint_new2(IntPtr bodyA, int linkA, IntPtr bodyB, int linkB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB, [In] ref Matrix frameInA, [In] ref Matrix frameInB, [In] ref Vector3 jointAxis);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySliderConstraint_getFrameInA(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySliderConstraint_getFrameInB(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySliderConstraint_getJointAxis(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySliderConstraint_getPivotInA(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySliderConstraint_getPivotInB(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySliderConstraint_setFrameInA(IntPtr obj, [In] ref Matrix frameInA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySliderConstraint_setFrameInB(IntPtr obj, [In] ref Matrix frameInB);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySliderConstraint_setJointAxis(IntPtr obj, [In] ref Vector3 jointAxis);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySliderConstraint_setPivotInA(IntPtr obj, [In] ref Vector3 pivotInA);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySliderConstraint_setPivotInB(IntPtr obj, [In] ref Vector3 pivotInB);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodySolverConstraint_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_getAngularComponentA(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_getAngularComponentB(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBodySolverConstraint_getAppliedImpulse(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBodySolverConstraint_getAppliedPushImpulse(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBodySolverConstraint_getCfm(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_getContactNormal1(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_getContactNormal2(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodySolverConstraint_getDeltaVelAindex(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodySolverConstraint_getDeltaVelBindex(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBodySolverConstraint_getFriction(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodySolverConstraint_getFrictionIndex(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodySolverConstraint_getJacAindex(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodySolverConstraint_getJacBindex(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBodySolverConstraint_getJacDiagABInv(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodySolverConstraint_getLinkA(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodySolverConstraint_getLinkB(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBodySolverConstraint_getLowerLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodySolverConstraint_getMultiBodyA(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodySolverConstraint_getMultiBodyB(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodySolverConstraint_getOrgConstraint(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodySolverConstraint_getOrgDofIndex(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBodySolverConstraint_getOriginalContactPoint(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodySolverConstraint_getOverrideNumSolverIterations(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_getRelpos1CrossNormal(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_getRelpos2CrossNormal(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBodySolverConstraint_getRhs(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBodySolverConstraint_getRhsPenetration(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodySolverConstraint_getSolverBodyIdA(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodySolverConstraint_getSolverBodyIdB(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBodySolverConstraint_getUnusedPadding4(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBodySolverConstraint_getUpperLimit(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setAngularComponentA(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setAngularComponentB(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setAppliedImpulse(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setAppliedPushImpulse(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setCfm(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setContactNormal1(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setContactNormal2(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setDeltaVelAindex(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setDeltaVelBindex(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setFriction(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setFrictionIndex(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setJacAindex(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setJacBindex(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setJacDiagABInv(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setLinkA(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setLinkB(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setLowerLimit(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setMultiBodyA(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setMultiBodyB(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setOrgConstraint(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setOrgDofIndex(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setOriginalContactPoint(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setOverrideNumSolverIterations(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setRelpos1CrossNormal(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setRelpos2CrossNormal(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setRhs(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setRhsPenetration(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setSolverBodyIdA(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setSolverBodyIdB(IntPtr obj, int value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setUnusedPadding4(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_setUpperLimit(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodySolverConstraint_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBody_new(int n_links, float mass, [In] ref Vector3 inertia, bool fixedBase, bool canSleep);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_addBaseConstraintForce(IntPtr obj, [In] ref Vector3 f);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_addBaseConstraintTorque(IntPtr obj, [In] ref Vector3 t);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_addBaseForce(IntPtr obj, [In] ref Vector3 f);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_addBaseTorque(IntPtr obj, [In] ref Vector3 t);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_addJointTorque(IntPtr obj, int i, float Q);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_addJointTorqueMultiDof(IntPtr obj, int i, float[] Q);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_addJointTorqueMultiDof2(IntPtr obj, int i, int dof, float Q);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_addLinkConstraintForce(IntPtr obj, int i, [In] ref Vector3 f);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_addLinkConstraintTorque(IntPtr obj, int i, [In] ref Vector3 t);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_addLinkForce(IntPtr obj, int i, [In] ref Vector3 f);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_addLinkTorque(IntPtr obj, int i, [In] ref Vector3 t);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_applyDeltaVeeMultiDof(IntPtr obj, float[] delta_vee, float multiplier);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_applyDeltaVeeMultiDof2(IntPtr obj, float[] delta_vee, float multiplier);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_calcAccelerationDeltasMultiDof(IntPtr obj, float[] force, float[] output, IntPtr scratch_r, IntPtr scratch_v);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBody_calculateSerializeBufferSize(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_checkMotionAndSleepIfRequired(IntPtr obj, float timestep);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_clearConstraintForces(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_clearForcesAndTorques(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_clearVelocities(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof(IntPtr obj, float dt, IntPtr scratch_r, IntPtr scratch_v, IntPtr scratch_m, bool isConstraintPass);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_fillConstraintJacobianMultiDof(IntPtr obj, int link, [In] ref Vector3 contact_point, [In] ref Vector3 normal_ang, [In] ref Vector3 normal_lin, float[] jac, IntPtr scratch_r, IntPtr scratch_v, IntPtr scratch_m);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_fillContactJacobianMultiDof(IntPtr obj, int link, [In] ref Vector3 contact_point, [In] ref Vector3 normal, float[] jac, IntPtr scratch_r, IntPtr scratch_v, IntPtr scratch_m);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_finalizeMultiDof(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_forwardKinematics(IntPtr obj, IntPtr scratch_q, IntPtr scratch_m);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBody_getAngularDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getAngularMomentum(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBody_getBaseCollider(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getBaseForce(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getBaseInertia(IntPtr obj, out Vector3 inertia);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBody_getBaseMass(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBody_getBaseName(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getBaseOmega(IntPtr obj, out Vector3 omega);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getBasePos(IntPtr obj, out Vector3 pos);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getBaseTorque(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getBaseVel(IntPtr obj, out Vector3 vel);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getBaseWorldTransform(IntPtr obj, out Matrix tr);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btMultiBody_getCanSleep(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBody_getCompanionId(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBody_getJointPos(IntPtr obj, int i);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBody_getJointPosMultiDof(IntPtr obj, int i);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBody_getJointTorque(IntPtr obj, int i);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBody_getJointTorqueMultiDof(IntPtr obj, int i);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBody_getJointVel(IntPtr obj, int i);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBody_getJointVelMultiDof(IntPtr obj, int i);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBody_getKineticEnergy(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBody_getLinearDamping(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBody_getLink(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getLinkForce(IntPtr obj, int i, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getLinkInertia(IntPtr obj, int i, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBody_getLinkMass(IntPtr obj, int i);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getLinkTorque(IntPtr obj, int i, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBody_getMaxAppliedImpulse(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btMultiBody_getMaxCoordinateVelocity(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBody_getNumDofs(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBody_getNumLinks(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBody_getNumPosVars(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBody_getParent(IntPtr obj, int link_num);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getParentToLocalRot(IntPtr obj, int i, out Quaternion value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getRVector(IntPtr obj, int i, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btMultiBody_getUseGyroTerm(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBody_getUserIndex(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBody_getUserIndex2(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBody_getUserPointer(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBody_getVelocityVector(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getWorldToBaseRot(IntPtr obj, out Quaternion rot);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_goToSleep(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btMultiBody_hasFixedBase(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btMultiBody_hasSelfCollision(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btMultiBody_internalNeedsJointFeedback(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btMultiBody_isAwake(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btMultiBody_isPosUpdated(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btMultiBody_isUsingGlobalVelocities(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btMultiBody_isUsingRK4Integration(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_localDirToWorld(IntPtr obj, int i, [In] ref Vector3 vec, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_localFrameToWorld(IntPtr obj, int i, [In] ref Matrix mat, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_localPosToWorld(IntPtr obj, int i, [In] ref Vector3 vec, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_processDeltaVeeMultiDof2(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultiBody_serialize(IntPtr obj, IntPtr dataBuffer, IntPtr serializer);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setAngularDamping(IntPtr obj, float damp);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setBaseCollider(IntPtr obj, IntPtr collider);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setBaseInertia(IntPtr obj, [In] ref Vector3 inertia);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setBaseMass(IntPtr obj, float mass);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setBaseName(IntPtr obj, IntPtr name);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setBaseOmega(IntPtr obj, [In] ref Vector3 omega);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setBasePos(IntPtr obj, [In] ref Vector3 pos);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setBaseVel(IntPtr obj, [In] ref Vector3 vel);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setBaseWorldTransform(IntPtr obj, [In] ref Matrix tr);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setCanSleep(IntPtr obj, bool canSleep);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setCompanionId(IntPtr obj, int id);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setHasSelfCollision(IntPtr obj, bool hasSelfCollision);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setJointPos(IntPtr obj, int i, float q);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setJointPosMultiDof(IntPtr obj, int i, float[] q);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setJointVel(IntPtr obj, int i, float qdot);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setJointVelMultiDof(IntPtr obj, int i, float[] qdot);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setLinearDamping(IntPtr obj, float damp);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setMaxAppliedImpulse(IntPtr obj, float maxImp);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setMaxCoordinateVelocity(IntPtr obj, float maxVel);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setNumLinks(IntPtr obj, int numLinks);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setPosUpdated(IntPtr obj, bool updated);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setupFixed(IntPtr obj, int linkIndex, float mass, [In] ref Vector3 inertia, int parent, [In] ref Quaternion rotParentToThis, [In] ref Vector3 parentComToThisPivotOffset, [In] ref Vector3 thisPivotToThisComOffset, bool deprecatedDisableParentCollision);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setupPlanar(IntPtr obj, int i, float mass, [In] ref Vector3 inertia, int parent, [In] ref Quaternion rotParentToThis, [In] ref Vector3 rotationAxis, [In] ref Vector3 parentComToThisComOffset, bool disableParentCollision);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setupPrismatic(IntPtr obj, int i, float mass, [In] ref Vector3 inertia, int parent, [In] ref Quaternion rotParentToThis, [In] ref Vector3 jointAxis, [In] ref Vector3 parentComToThisPivotOffset, [In] ref Vector3 thisPivotToThisComOffset, bool disableParentCollision);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setupRevolute(IntPtr obj, int linkIndex, float mass, [In] ref Vector3 inertia, int parentIndex, [In] ref Quaternion rotParentToThis, [In] ref Vector3 jointAxis, [In] ref Vector3 parentComToThisPivotOffset, [In] ref Vector3 thisPivotToThisComOffset, bool disableParentCollision);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setupSpherical(IntPtr obj, int linkIndex, float mass, [In] ref Vector3 inertia, int parent, [In] ref Quaternion rotParentToThis, [In] ref Vector3 parentComToThisPivotOffset, [In] ref Vector3 thisPivotToThisComOffset, bool disableParentCollision);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setUseGyroTerm(IntPtr obj, bool useGyro);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setUserIndex(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setUserIndex2(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setUserPointer(IntPtr obj, IntPtr userPointer);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setWorldToBaseRot(IntPtr obj, [In] ref Quaternion rot);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_stepPositionsMultiDof(IntPtr obj, float dt, float[] pq, float[] pqd);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_stepVelocitiesMultiDof(IntPtr obj, float dt, IntPtr scratch_r, IntPtr scratch_v, IntPtr scratch_m, bool isConstraintPass);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_updateCollisionObjectWorldTransforms(IntPtr obj, IntPtr scratch_q, IntPtr scratch_m);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_useGlobalVelocities(IntPtr obj, bool use);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_useRK4Integration(IntPtr obj, bool use);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_wakeUp(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_worldDirToLocal(IntPtr obj, int i, [In] ref Vector3 vec, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_worldPosToLocal(IntPtr obj, int i, [In] ref Vector3 vec, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btMultimaterialTriangleMeshShape_new(IntPtr meshInterface, bool useQuantizedAabbCompression, bool buildBvh);

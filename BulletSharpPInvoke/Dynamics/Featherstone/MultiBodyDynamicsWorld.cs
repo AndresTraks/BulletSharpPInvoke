@@ -22,14 +22,14 @@ namespace BulletSharp
 		public void AddMultiBody(MultiBody body, int group = (int)CollisionFilterGroups.DefaultFilter,
 			int mask = (int)CollisionFilterGroups.AllFilter)
 		{
-			btMultiBodyDynamicsWorld_addMultiBody(Native, body._native, group,
+			btMultiBodyDynamicsWorld_addMultiBody(Native, body.Native, group,
 				mask);
 			_bodies.Add(body);
 		}
 
 		public void AddMultiBodyConstraint(MultiBodyConstraint constraint)
 		{
-			btMultiBodyDynamicsWorld_addMultiBodyConstraint(Native, constraint._native);
+			btMultiBodyDynamicsWorld_addMultiBodyConstraint(Native, constraint.Native);
 			_constraints.Add(constraint);
 		}
 
@@ -45,7 +45,7 @@ namespace BulletSharp
 
 		public void DebugDrawMultiBodyConstraint(MultiBodyConstraint constraint)
 		{
-			btMultiBodyDynamicsWorld_debugDrawMultiBodyConstraint(Native, constraint._native);
+			btMultiBodyDynamicsWorld_debugDrawMultiBodyConstraint(Native, constraint.Native);
 		}
 
 		public void ForwardKinematics()
@@ -70,13 +70,13 @@ namespace BulletSharp
 
 		public void RemoveMultiBody(MultiBody body)
 		{
-			btMultiBodyDynamicsWorld_removeMultiBody(Native, body._native);
+			btMultiBodyDynamicsWorld_removeMultiBody(Native, body.Native);
 			_bodies.Remove(body);
 		}
 
 		public void RemoveMultiBodyConstraint(MultiBodyConstraint constraint)
 		{
-			btMultiBodyDynamicsWorld_removeMultiBodyConstraint(Native, constraint._native);
+			btMultiBodyDynamicsWorld_removeMultiBodyConstraint(Native, constraint.Native);
 			_constraints.Remove(constraint);
 		}
 

@@ -7,7 +7,7 @@ namespace BulletSharp
 		private MultiBody _multiBody;
 
 		public MultiBodyLinkCollider(MultiBody multiBody, int link)
-			: base(btMultiBodyLinkCollider_new(multiBody._native, link))
+			: base(btMultiBodyLinkCollider_new(multiBody.Native, link))
 		{
 			_multiBody = multiBody;
 		}
@@ -28,7 +28,7 @@ namespace BulletSharp
 			get => _multiBody;
 			set
 			{
-				btMultiBodyLinkCollider_setMultiBody(Native, value._native);
+				btMultiBodyLinkCollider_setMultiBody(Native, value.Native);
 				_multiBody = value;
 			}
 		}
