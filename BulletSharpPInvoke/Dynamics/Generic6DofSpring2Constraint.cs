@@ -19,7 +19,7 @@ namespace BulletSharp
 	public class RotationalLimitMotor2 : IDisposable
 	{
 		internal IntPtr _native;
-		bool _preventDelete;
+		private bool _preventDelete;
 
 		internal RotationalLimitMotor2(IntPtr native, bool preventDelete)
 		{
@@ -463,8 +463,8 @@ namespace BulletSharp
 
 	public class Generic6DofSpring2Constraint : TypedConstraint
 	{
-		RotationalLimitMotor2[] _angularLimits = new RotationalLimitMotor2[3];
-		TranslationalLimitMotor2 _linearLimits;
+		private RotationalLimitMotor2[] _angularLimits = new RotationalLimitMotor2[3];
+		private TranslationalLimitMotor2 _linearLimits;
 
 		internal Generic6DofSpring2Constraint(IntPtr native)
 			: base(native)
@@ -771,116 +771,6 @@ namespace BulletSharp
 				return _linearLimits;
 			}
 		}
-
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGeneric6DofSpring2Constraint_new(IntPtr rbA, IntPtr rbB, [In] ref Matrix frameInA, [In] ref Matrix frameInB, RotateOrder rotOrder);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGeneric6DofSpring2Constraint_new2(IntPtr rbB, [In] ref Matrix frameInB, RotateOrder rotOrder);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern float btGeneric6DofSpring2Constraint_btGetMatrixElem([In] ref Matrix mat, int index);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_calculateTransforms(IntPtr obj, [In] ref Matrix transA, [In] ref Matrix transB);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_calculateTransforms2(IntPtr obj);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_enableMotor(IntPtr obj, int index, bool onOff);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_enableSpring(IntPtr obj, int index, bool onOff);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern float btGeneric6DofSpring2Constraint_getAngle(IntPtr obj, int axis_index);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_getAngularLowerLimit(IntPtr obj, out Vector3 angularLower);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_getAngularLowerLimitReversed(IntPtr obj, out Vector3 angularLower);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_getAngularUpperLimit(IntPtr obj, out Vector3 angularUpper);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_getAngularUpperLimitReversed(IntPtr obj, out Vector3 angularUpper);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_getAxis(IntPtr obj, int axis_index, out Vector3 value);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_getCalculatedTransformA(IntPtr obj, out Matrix value);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_getCalculatedTransformB(IntPtr obj, out Matrix value);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_getFrameOffsetA(IntPtr obj, out Matrix value);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_getFrameOffsetB(IntPtr obj, out Matrix value);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_getLinearLowerLimit(IntPtr obj, out Vector3 linearLower);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_getLinearUpperLimit(IntPtr obj, out Vector3 linearUpper);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern float btGeneric6DofSpring2Constraint_getRelativePivotPosition(IntPtr obj, int axis_index);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGeneric6DofSpring2Constraint_getRotationalLimitMotor(IntPtr obj, int index);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern RotateOrder btGeneric6DofSpring2Constraint_getRotationOrder(IntPtr obj);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btGeneric6DofSpring2Constraint_getTranslationalLimitMotor(IntPtr obj);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		[return: MarshalAs(UnmanagedType.I1)]
-		static extern bool btGeneric6DofSpring2Constraint_isLimited(IntPtr obj, int limitIndex);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		[return: MarshalAs(UnmanagedType.I1)]
-		static extern bool btGeneric6DofSpring2Constraint_matrixToEulerZXY([In] ref Matrix mat, ref Vector3 xyz);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		[return: MarshalAs(UnmanagedType.I1)]
-		static extern bool btGeneric6DofSpring2Constraint_matrixToEulerZYX([In] ref Matrix mat, ref Vector3 xyz);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		[return: MarshalAs(UnmanagedType.I1)]
-		static extern bool btGeneric6DofSpring2Constraint_matrixToEulerXZY([In] ref Matrix mat, ref Vector3 xyz);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		[return: MarshalAs(UnmanagedType.I1)]
-		static extern bool btGeneric6DofSpring2Constraint_matrixToEulerXYZ([In] ref Matrix mat, ref Vector3 xyz);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		[return: MarshalAs(UnmanagedType.I1)]
-		static extern bool btGeneric6DofSpring2Constraint_matrixToEulerYZX([In] ref Matrix mat, ref Vector3 xyz);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		[return: MarshalAs(UnmanagedType.I1)]
-		static extern bool btGeneric6DofSpring2Constraint_matrixToEulerYXZ([In] ref Matrix mat, ref Vector3 xyz);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setAngularLowerLimit(IntPtr obj, [In] ref Vector3 angularLower);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setAngularLowerLimitReversed(IntPtr obj, [In] ref Vector3 angularLower);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setAngularUpperLimit(IntPtr obj, [In] ref Vector3 angularUpper);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setAngularUpperLimitReversed(IntPtr obj, [In] ref Vector3 angularUpper);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setAxis(IntPtr obj, [In] ref Vector3 axis1, [In] ref Vector3 axis2);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setBounce(IntPtr obj, int index, float bounce);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setDamping(IntPtr obj, int index, float damping, bool limitIfNeeded);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setEquilibriumPoint(IntPtr obj);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setEquilibriumPoint2(IntPtr obj, int index, float val);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setEquilibriumPoint3(IntPtr obj, int index);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setFrames(IntPtr obj, [In] ref Matrix frameA, [In] ref Matrix frameB);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setLimit(IntPtr obj, int axis, float lo, float hi);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setLimitReversed(IntPtr obj, int axis, float lo, float hi);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setLinearLowerLimit(IntPtr obj, [In] ref Vector3 linearLower);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setLinearUpperLimit(IntPtr obj, [In] ref Vector3 linearUpper);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setMaxMotorForce(IntPtr obj, int index, float force);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setRotationOrder(IntPtr obj, RotateOrder order);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setServo(IntPtr obj, int index, bool onOff);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setServoTarget(IntPtr obj, int index, float target);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setStiffness(IntPtr obj, int index, float stiffness, bool limitIfNeeded);
-		[DllImport(BulletSharp.Native.Dll, CallingConvention = BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btGeneric6DofSpring2Constraint_setTargetVelocity(IntPtr obj, int index, float velocity);
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
