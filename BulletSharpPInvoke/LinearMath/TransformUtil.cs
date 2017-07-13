@@ -1,7 +1,6 @@
 using System;
-using System.Runtime.InteropServices;
-using System.Security;
 using BulletSharp.Math;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
@@ -41,17 +40,6 @@ namespace BulletSharp
 			btTransformUtil_integrateTransform(ref curTrans, ref linvel, ref angvel,
 				timeStep, out predictedTransform);
 		}
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btTransformUtil_calculateDiffAxisAngle([In] ref Matrix transform0, [In] ref Matrix transform1, out Vector3 axis, out float angle);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btTransformUtil_calculateDiffAxisAngleQuaternion([In] ref Quaternion orn0, [In] ref Quaternion orn1a, out Vector3 axis, out float angle);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btTransformUtil_calculateVelocity([In] ref Matrix transform0, [In] ref Matrix transform1, float timeStep, out Vector3 linVel, out Vector3 angVel);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btTransformUtil_calculateVelocityQuaternion([In] ref Vector3 pos0, [In] ref Vector3 pos1, [In] ref Quaternion orn0, [In] ref Quaternion orn1, float timeStep, out Vector3 linVel, out Vector3 angVel);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btTransformUtil_integrateTransform([In] ref Matrix curTrans, [In] ref Vector3 linvel, [In] ref Vector3 angvel, float timeStep, out Matrix predictedTransform);
 	}
 
 	public class ConvexSeparatingDistanceUtil : IDisposable
@@ -76,10 +64,7 @@ namespace BulletSharp
 				ref transB);
 		}
 
-		public float ConservativeSeparatingDistance
-		{
-			get { return btConvexSeparatingDistanceUtil_getConservativeSeparatingDistance(_native); }
-		}
+		public float ConservativeSeparatingDistance => btConvexSeparatingDistanceUtil_getConservativeSeparatingDistance(_native);
 
 		public void Dispose()
 		{
@@ -100,16 +85,5 @@ namespace BulletSharp
 		{
 			Dispose(false);
 		}
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btConvexSeparatingDistanceUtil_new(float boundingRadiusA, float boundingRadiusB);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern float btConvexSeparatingDistanceUtil_getConservativeSeparatingDistance(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexSeparatingDistanceUtil_initSeparatingDistance(IntPtr obj, [In] ref Vector3 separatingVector, float separatingDistance, [In] ref Matrix transA, [In] ref Matrix transB);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexSeparatingDistanceUtil_updateSeparatingDistance(IntPtr obj, [In] ref Matrix transA, [In] ref Matrix transB);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btConvexSeparatingDistanceUtil_delete(IntPtr obj);
 	}
 }

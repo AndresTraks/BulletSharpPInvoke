@@ -192,7 +192,8 @@ namespace BulletSharp
 
 		public float MaxMotorImpulse
 		{
-			get => btConeTwistConstraint_getMaxMotorImpulse(Native); set => btConeTwistConstraint_setMaxMotorImpulse(Native, value);
+			get => btConeTwistConstraint_getMaxMotorImpulse(Native);
+			set => btConeTwistConstraint_setMaxMotorImpulse(Native, value);
 		}
 
 		public Quaternion MotorTarget

@@ -756,7 +756,8 @@ namespace BulletSharp
 
 		public RotateOrder RotationOrder
 		{
-			get => btGeneric6DofSpring2Constraint_getRotationOrder(Native); set => btGeneric6DofSpring2Constraint_setRotationOrder(Native, value);
+			get => btGeneric6DofSpring2Constraint_getRotationOrder(Native);
+			set => btGeneric6DofSpring2Constraint_setRotationOrder(Native, value);
 		}
 
 		public TranslationalLimitMotor2 TranslationalLimitMotor

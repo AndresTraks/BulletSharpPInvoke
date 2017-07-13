@@ -1,18 +1,12 @@
 using System;
-using System.Runtime.InteropServices;
-using System.Security;
 using BulletSharp.Math;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
 	public class PolarDecomposition : IDisposable
 	{
 		internal IntPtr _native;
-
-		internal PolarDecomposition(IntPtr native)
-		{
-			_native = native;
-		}
 
 		public PolarDecomposition(float tolerance = 0.0001f, int maxIterations = 16)
 		{
@@ -48,14 +42,5 @@ namespace BulletSharp
 		{
 			Dispose(false);
 		}
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btPolarDecomposition_new(float tolerance, uint maxIterations);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern uint btPolarDecomposition_decompose(IntPtr obj, [In] ref Matrix a, out Matrix u, out Matrix h);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern uint btPolarDecomposition_maxIterations(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btPolarDecomposition_delete(IntPtr obj);
 	}
 }

@@ -287,7 +287,8 @@ namespace BulletSharp
 
 		public SubSimplexClosestResult CachedBC
 		{
-			get => new SubSimplexClosestResult(btVoronoiSimplexSolver_getCachedBC(Native)); set => btVoronoiSimplexSolver_setCachedBC(Native, value.Native);
+			get => new SubSimplexClosestResult(btVoronoiSimplexSolver_getCachedBC(Native));
+			set => btVoronoiSimplexSolver_setCachedBC(Native, value.Native);
 		}
 
 		public Vector3 CachedP1
@@ -325,12 +326,14 @@ namespace BulletSharp
 
 		public bool CachedValidClosest
 		{
-			get => btVoronoiSimplexSolver_getCachedValidClosest(Native); set => btVoronoiSimplexSolver_setCachedValidClosest(Native, value);
+			get => btVoronoiSimplexSolver_getCachedValidClosest(Native);
+			set => btVoronoiSimplexSolver_setCachedValidClosest(Native, value);
 		}
 
 		public float EqualVertexThreshold
 		{
-			get => btVoronoiSimplexSolver_getEqualVertexThreshold(Native); set => btVoronoiSimplexSolver_setEqualVertexThreshold(Native, value);
+			get => btVoronoiSimplexSolver_getEqualVertexThreshold(Native);
+			set => btVoronoiSimplexSolver_setEqualVertexThreshold(Native, value);
 		}
 
 		public Vector3 LastW
@@ -346,12 +349,14 @@ namespace BulletSharp
 
 		public bool NeedsUpdate
 		{
-			get => btVoronoiSimplexSolver_getNeedsUpdate(Native); set => btVoronoiSimplexSolver_setNeedsUpdate(Native, value);
+			get => btVoronoiSimplexSolver_getNeedsUpdate(Native);
+			set => btVoronoiSimplexSolver_setNeedsUpdate(Native, value);
 		}
 
 		public int NumVertices
 		{
-			get => btVoronoiSimplexSolver_getNumVertices(Native); set => btVoronoiSimplexSolver_setNumVertices(Native, value);
+			get => btVoronoiSimplexSolver_getNumVertices(Native);
+			set => btVoronoiSimplexSolver_setNumVertices(Native, value);
 		}
 		/*
 		public Vector3[] SimplexPointsP

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
@@ -12,20 +13,14 @@ namespace BulletSharp
 			Native = native;
 		}
 
-		public int MaxNumThreads
-		{
-			get { return UnsafeNativeMethods.btITaskScheduler_getMaxNumThreads(Native); }
-		}
+		public int MaxNumThreads => btITaskScheduler_getMaxNumThreads(Native);
 
-		public string Name
-		{
-			get { return Marshal.PtrToStringAnsi(UnsafeNativeMethods.btITaskScheduler_getName(Native)); }
-		}
+		public string Name => Marshal.PtrToStringAnsi(btITaskScheduler_getName(Native));
 
 		public int NumThreads
 		{
-			get { return UnsafeNativeMethods.btITaskScheduler_getNumThreads(Native); }
-			set { UnsafeNativeMethods.btITaskScheduler_setNumThreads(Native, value); }
+			get => btITaskScheduler_getNumThreads(Native);
+			set => btITaskScheduler_setNumThreads(Native, value);
 		}
 	}
 
@@ -71,11 +66,11 @@ namespace BulletSharp
 
 		public static TaskScheduler TaskScheduler
 		{
-			get { return _taskScheduler; }
+			get => _taskScheduler;
 			set
 			{
 				_taskScheduler = value;
-				UnsafeNativeMethods.btThreads_btSetTaskScheduler(value != null ? value.Native : IntPtr.Zero);
+				btThreads_btSetTaskScheduler(value != null ? value.Native : IntPtr.Zero);
 			}
 		}
 
@@ -83,7 +78,7 @@ namespace BulletSharp
 		{
 			if (_taskSchedulerOpenMP == null)
 			{
-				IntPtr native = UnsafeNativeMethods.btThreads_btGetOpenMPTaskScheduler();
+				IntPtr native = btThreads_btGetOpenMPTaskScheduler();
 				if (native != IntPtr.Zero)
 				{
 					_taskSchedulerOpenMP = new TaskSchedulerOpenMP(native);
@@ -97,7 +92,7 @@ namespace BulletSharp
 		{
 			if (_taskSchedulerPpl == null)
 			{
-				IntPtr native = UnsafeNativeMethods.btThreads_btGetPPLTaskScheduler();
+				IntPtr native = btThreads_btGetPPLTaskScheduler();
 				if (native != IntPtr.Zero)
 				{
 					_taskSchedulerPpl = new TaskSchedulerPpl(native);
@@ -110,7 +105,7 @@ namespace BulletSharp
 		{
 			if (_taskSchedulerSequential == null)
 			{
-				_taskSchedulerSequential = new TaskSchedulerSequential(UnsafeNativeMethods.btThreads_btGetSequentialTaskScheduler());
+				_taskSchedulerSequential = new TaskSchedulerSequential(btThreads_btGetSequentialTaskScheduler());
 			}
 			return _taskSchedulerSequential;
 		}
@@ -119,7 +114,7 @@ namespace BulletSharp
 		{
 			if (_taskSchedulerTbb == null)
 			{
-				IntPtr native = UnsafeNativeMethods.btThreads_btGetTBBTaskScheduler();
+				IntPtr native = btThreads_btGetTBBTaskScheduler();
 				if (native != IntPtr.Zero)
 				{
 					_taskSchedulerTbb = new TaskSchedulerTbb(native);

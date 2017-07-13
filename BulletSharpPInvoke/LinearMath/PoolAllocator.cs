@@ -1,13 +1,12 @@
 using System;
-using System.Runtime.InteropServices;
-using System.Security;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
 	public class PoolAllocator : IDisposable
 	{
 		internal IntPtr _native;
-		bool _preventDelete;
+		private bool _preventDelete;
 
 		internal PoolAllocator(IntPtr native, bool preventDelete)
 		{
@@ -35,30 +34,15 @@ namespace BulletSharp
 			return btPoolAllocator_validPtr(_native, ptr);
 		}
 
-		public int ElementSize
-		{
-			get { return btPoolAllocator_getElementSize(_native); }
-		}
+		public int ElementSize => btPoolAllocator_getElementSize(_native);
 
-		public int FreeCount
-		{
-			get { return btPoolAllocator_getFreeCount(_native); }
-		}
+		public int FreeCount => btPoolAllocator_getFreeCount(_native);
 
-		public int MaxCount
-		{
-			get { return btPoolAllocator_getMaxCount(_native); }
-		}
+		public int MaxCount => btPoolAllocator_getMaxCount(_native);
 
-		public IntPtr PoolAddress
-		{
-			get { return btPoolAllocator_getPoolAddress(_native); }
-		}
+		public IntPtr PoolAddress => btPoolAllocator_getPoolAddress(_native);
 
-		public int UsedCount
-		{
-			get { return btPoolAllocator_getUsedCount(_native); }
-		}
+		public int UsedCount => btPoolAllocator_getUsedCount(_native);
 
 		public void Dispose()
 		{
@@ -82,27 +66,5 @@ namespace BulletSharp
 		{
 			Dispose(false);
 		}
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btPoolAllocator_new(int elemSize, int maxElements);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btPoolAllocator_allocate(IntPtr obj, int size);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btPoolAllocator_freeMemory(IntPtr obj, IntPtr ptr);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern int btPoolAllocator_getElementSize(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern int btPoolAllocator_getFreeCount(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern int btPoolAllocator_getMaxCount(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern IntPtr btPoolAllocator_getPoolAddress(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern int btPoolAllocator_getUsedCount(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		[return: MarshalAs(UnmanagedType.I1)]
-		static extern bool btPoolAllocator_validPtr(IntPtr obj, IntPtr ptr);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv), SuppressUnmanagedCodeSecurity]
-		static extern void btPoolAllocator_delete(IntPtr obj);
 	}
 }

@@ -3415,7 +3415,8 @@ namespace BulletSharp.SoftBody
 		*/
 		public SoftBodySolver SoftBodySolver
 		{
-			get => _softBodySolver; set
+			get => _softBodySolver;
+			set
 			{
 				btSoftBody_setSoftBodySolver(Native, (value != null) ? value._native : IntPtr.Zero);
 				_softBodySolver = value;
@@ -3484,6 +3485,7 @@ namespace BulletSharp.SoftBody
 		}
 
 		public float Volume => btSoftBody_getVolume(Native);
+
 		public SoftBodyWorldInfo WorldInfo
 		{
 			get => _worldInfo; set
