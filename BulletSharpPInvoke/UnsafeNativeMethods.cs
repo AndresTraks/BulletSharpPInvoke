@@ -161,6 +161,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btAlignedObjectArray_btCollisionObjectPtr_at(IntPtr obj, int n);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btAlignedObjectArray_btCollisionObjectPtr_findLinearSearch2(IntPtr obj, IntPtr key);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btAlignedObjectArray_btCollisionObjectPtr_push_back(IntPtr obj, IntPtr val);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btAlignedObjectArray_btCollisionObjectPtr_resizeNoInitialize(IntPtr obj, int newSize);

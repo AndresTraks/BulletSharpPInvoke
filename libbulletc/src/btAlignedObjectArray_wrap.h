@@ -9,6 +9,7 @@ extern "C" {
 	EXPORT int btAlignedObjectArray_btBroadphasePair_size(btAlignedObjectArray_btBroadphasePair* obj);
 
 	EXPORT btCollisionObject* btAlignedObjectArray_btCollisionObjectPtr_at(btAlignedObjectArray_btCollisionObjectPtr* obj, int n);
+	EXPORT int btAlignedObjectArray_btCollisionObjectPtr_findLinearSearch2(btAlignedObjectArray_btCollisionObjectPtr* obj, btCollisionObject* key);
 	EXPORT void btAlignedObjectArray_btCollisionObjectPtr_push_back(btAlignedObjectArray_btCollisionObjectPtr* obj, btCollisionObject* val);
 	EXPORT void btAlignedObjectArray_btCollisionObjectPtr_resizeNoInitialize(btAlignedObjectArray_btCollisionObjectPtr* obj, int newSize);
 	EXPORT int btAlignedObjectArray_btCollisionObjectPtr_size(btAlignedObjectArray_btCollisionObjectPtr* obj);

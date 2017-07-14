@@ -32,6 +32,11 @@ btCollisionObject* btAlignedObjectArray_btCollisionObjectPtr_at(btAlignedObjectA
 	return obj->at(n);
 }
 
+int btAlignedObjectArray_btCollisionObjectPtr_findLinearSearch2(btAlignedObjectArray_btCollisionObjectPtr* obj, btCollisionObject* key)
+{
+	return obj->findLinearSearch2(key);
+}
+
 void btAlignedObjectArray_btCollisionObjectPtr_push_back(btAlignedObjectArray_btCollisionObjectPtr* obj, btCollisionObject* val)
 {
 	obj->push_back(val);

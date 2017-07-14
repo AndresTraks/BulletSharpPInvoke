@@ -85,7 +85,7 @@ namespace BulletSharp
 
 		public int IndexOf(CollisionObject item)
 		{
-			throw new NotImplementedException();
+			return btAlignedObjectArray_btCollisionObjectPtr_findLinearSearch2(_native, item.Native);
 		}
 
 		public void Insert(int index, CollisionObject item)
@@ -180,8 +180,7 @@ namespace BulletSharp
 
 		public bool Contains(CollisionObject item)
 		{
-			//return btAlignedObjectArray_btCollisionObjectPtr_findLinearSearch(_native, item._native) != Count;
-			throw new NotImplementedException();
+			return IndexOf(item) != -1;
 		}
 
 		public void CopyTo(CollisionObject[] array, int arrayIndex)
