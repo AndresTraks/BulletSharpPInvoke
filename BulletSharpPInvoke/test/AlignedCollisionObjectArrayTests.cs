@@ -15,6 +15,7 @@ namespace BulletSharpTest
         private CollisionShape _shape;
         private RigidBody _body1;
         private RigidBody _body2;
+        private RigidBody _body3;
 
         [Test]
         public void AlignedCollisionObjectArrayTest()
@@ -46,8 +47,19 @@ namespace BulletSharpTest
 
             _world.AddRigidBody(_body1);
             _world.AddRigidBody(_body2);
+            _world.AddRigidBody(_body3);
+            worldArray.RemoveAt(0);
+            Assert.False(_body1.IsInWorld);
+            Assert.AreEqual(_body3, worldArray[0]);
+            Assert.AreEqual(_body2, worldArray[1]);
+
+            Assert.AreEqual(-1, worldArray.IndexOf(_body1));
+            Assert.AreEqual(-1, worldArray.IndexOf(null));
+
             worldArray.Clear();
             Assert.AreEqual(0, _world.NumCollisionObjects);
+            Assert.False(_body2.IsInWorld);
+            Assert.False(_body3.IsInWorld);
         }
 
         [OneTimeSetUp]
@@ -64,6 +76,7 @@ namespace BulletSharpTest
             {
                 _body1 = new RigidBody(bodyInfo);
                 _body2 = new RigidBody(bodyInfo);
+                _body3 = new RigidBody(bodyInfo);
             }
         }
 
@@ -79,6 +92,7 @@ namespace BulletSharpTest
             _shape.Dispose();
             _body1.Dispose();
             _body2.Dispose();
+            _body3.Dispose();
         }
     }
 }

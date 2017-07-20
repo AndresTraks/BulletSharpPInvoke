@@ -83,41 +83,6 @@ namespace BulletSharp
 			}
 		}
 
-		public int IndexOf(CollisionObject item)
-		{
-			return btAlignedObjectArray_btCollisionObjectPtr_findLinearSearch2(_native, item.Native);
-		}
-
-		public void Insert(int index, CollisionObject item)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void RemoveAt(int index)
-		{
-			throw new NotImplementedException();
-		}
-
-		public CollisionObject this[int index]
-		{
-			get
-			{
-				if (_backingList != null)
-				{
-					return _backingList[index];
-				}
-				if ((uint)index >= (uint)Count)
-				{
-					throw new ArgumentOutOfRangeException(nameof(index));
-				}
-				return CollisionObject.GetManaged(btAlignedObjectArray_btCollisionObjectPtr_at(_native, index));
-			}
-			set
-			{
-				throw new NotImplementedException();
-			}
-		}
-
 		public void Add(CollisionObject item)
 		{
 			if (_collisionWorld != null)
@@ -171,11 +136,10 @@ namespace BulletSharp
 
 		public void Clear()
 		{
-			if (_backingList != null)
+			for (int i = Count - 1; i >= 0; i--)
 			{
-				_backingList.Clear();
+				RemoveAt(i);
 			}
-			btAlignedObjectArray_btCollisionObjectPtr_resizeNoInitialize(_native, 0);
 		}
 
 		public bool Contains(CollisionObject item)
@@ -202,50 +166,64 @@ namespace BulletSharp
 			}
 		}
 
-		public int Count => btAlignedObjectArray_btCollisionObjectPtr_size(_native);
+		public int IndexOf(CollisionObject item)
+		{
+			if (item == null)
+			{
+				return -1;
+			}
+			return btAlignedObjectArray_btCollisionObjectPtr_findLinearSearch2(_native, item.Native);
+		}
 
-		public bool IsReadOnly => false;
+		public void Insert(int index, CollisionObject item)
+		{
+			throw new NotImplementedException();
+		}
 
 		public bool Remove(CollisionObject item)
 		{
-			IntPtr itemPtr = item.Native;
+			int index = IndexOf(item);
+			if (index == -1)
+			{
+				return false;
+			}
 
+			RemoveAt(index);
+			return true;
+		}
+
+		public void RemoveAt(int index)
+		{
 			if (_backingList == null)
 			{
 				throw new NotImplementedException();
 				//btAlignedObjectArray_btCollisionObjectPtr_remove(itemPtr);
 			}
 
-			int count = _backingList.Count;
-			for (int i = 0; i < count; i++)
-			{
-				if (_backingList[i].Native == itemPtr)
-				{
-					if (item is SoftBody.SoftBody)
-					{
-						btSoftRigidDynamicsWorld_removeSoftBody(_collisionWorld.Native, itemPtr);
-					}
-					else if (item is RigidBody)
-					{
-						btDynamicsWorld_removeRigidBody(_collisionWorld.Native, itemPtr);
-					}
-					else
-					{
-						btCollisionWorld_removeCollisionObject(_collisionWorld.Native, itemPtr);
-					}
-					_backingList[i].BroadphaseHandle = null;
-					count--;
+			CollisionObject item = this[index];
+			IntPtr itemPtr = item.Native;
 
-					// Swap the last item with the item to be removed like Bullet does.
-					if (i != count)
-					{
-						_backingList[i] = _backingList[count];
-					}
-					_backingList.RemoveAt(count);
-					return true;
-				}
+			if (item is SoftBody.SoftBody)
+			{
+				btSoftRigidDynamicsWorld_removeSoftBody(_collisionWorld.Native, itemPtr);
 			}
-			return false;
+			else if (item is RigidBody)
+			{
+				btDynamicsWorld_removeRigidBody(_collisionWorld.Native, itemPtr);
+			}
+			else
+			{
+				btCollisionWorld_removeCollisionObject(_collisionWorld.Native, itemPtr);
+			}
+			item.BroadphaseHandle = null;
+
+			// Swap the last item with the item to be removed like Bullet does.
+			int count = _backingList.Count - 1;
+			if (index != count)
+			{
+				_backingList[index] = _backingList[count];
+			}
+			_backingList.RemoveAt(count);
 		}
 
 		private void SetBodyBroadphaseHandle(CollisionObject item, BroadphaseInterface broadphase)
@@ -295,5 +273,29 @@ namespace BulletSharp
 				return new AlignedCollisionObjectArrayEnumerator(this);
 			}
 		}
+
+		public CollisionObject this[int index]
+		{
+			get
+			{
+				if (_backingList != null)
+				{
+					return _backingList[index];
+				}
+				if ((uint)index >= (uint)Count)
+				{
+					throw new ArgumentOutOfRangeException(nameof(index));
+				}
+				return CollisionObject.GetManaged(btAlignedObjectArray_btCollisionObjectPtr_at(_native, index));
+			}
+			set
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		public int Count => btAlignedObjectArray_btCollisionObjectPtr_size(_native);
+
+		public bool IsReadOnly => false;
 	}
 }
