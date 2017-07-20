@@ -14,10 +14,10 @@ namespace BulletSharp
 		internal IntPtr _native;
 		private bool _preventDelete;
 
-		internal Chunk(IntPtr native, bool preventDelete)
+		internal Chunk(IntPtr native)
 		{
 			_native = native;
-			_preventDelete = preventDelete;
+			_preventDelete = true;
 		}
 
 		public Chunk()
@@ -184,7 +184,7 @@ namespace BulletSharp
 
 		private void FinalizeChunk(IntPtr chunkPtr, string structType, DnaID chunkCode, IntPtr oldPtr)
 		{
-			FinalizeChunk(new Chunk(chunkPtr, true), structType, chunkCode, oldPtr);
+			FinalizeChunk(new Chunk(chunkPtr), structType, chunkCode, oldPtr);
 		}
 
 		private IntPtr GetBufferPointer()
@@ -335,7 +335,7 @@ namespace BulletSharp
 			int length = (int)size * numElements;
 			IntPtr ptr = InternalAlloc(length + ChunkInd.Size);
 			IntPtr data = ptr + ChunkInd.Size;
-			Chunk chunk = new Chunk(ptr, true)
+			var chunk = new Chunk(ptr)
 			{
 				ChunkCode = 0,
 				OldPtr = data,

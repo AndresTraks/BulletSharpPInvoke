@@ -3,18 +3,13 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class Element : IDisposable
+	public class Element
 	{
 		internal IntPtr Native;
 
 		internal Element(IntPtr native)
 		{
 			Native = native;
-		}
-
-		public Element()
-		{
-			Native = btElement_new();
 		}
 
 		public int Id
@@ -28,40 +23,15 @@ namespace BulletSharp
 			get => btElement_getSz(Native);
 			set => btElement_setSz(Native, value);
 		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btElement_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~Element()
-		{
-			Dispose(false);
-		}
 	}
 
-	public class UnionFind : IDisposable
+	public class UnionFind
 	{
 		internal IntPtr Native;
 
 		internal UnionFind(IntPtr native)
 		{
 			Native = native;
-		}
-
-		public UnionFind()
-		{
-			Native = btUnionFind_new();
 		}
 
 		public void Allocate(int n)
@@ -110,25 +80,5 @@ namespace BulletSharp
 		}
 
 		public int NumElements => btUnionFind_getNumElements(Native);
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btUnionFind_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~UnionFind()
-		{
-			Dispose(false);
-		}
 	}
 }

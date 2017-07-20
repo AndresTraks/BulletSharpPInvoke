@@ -8,10 +8,10 @@ namespace BulletSharp
 		internal IntPtr _native;
 		private bool _preventDelete;
 
-		internal PoolAllocator(IntPtr native, bool preventDelete)
+		internal PoolAllocator(IntPtr native)
 		{
 			_native = native;
-			_preventDelete = preventDelete;
+			_preventDelete = true;
 		}
 
 		public PoolAllocator(int elemSize, int maxElements)
