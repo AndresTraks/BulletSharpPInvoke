@@ -251,22 +251,21 @@ namespace DemoFramework.SlimDX
 
             if (faceCount > 0)
             {
-                PositionedNormal[] vectors = new PositionedNormal[faceCount * 6];
+                PositionedNormal[] vectors = new PositionedNormal[faceCount * 3];
                 int v = 0;
 
-                int i;
-                for (i = 0; i < faceCount; i++)
+                for (int i = 0; i < faceCount; i++)
                 {
                     NodePtrArray nodes = faces[i].Nodes;
                     Node n0 = nodes[0];
                     Node n1 = nodes[1];
                     Node n2 = nodes[2];
-                    n0.Position = vectors[v].Position;
-                    n0.Normal = vectors[v].Normal;
-                    n1.Position = vectors[v + 1].Position;
-                    n1.Normal = vectors[v + 1].Normal;
-                    n2.Position = vectors[v + 2].Position;
-                    n2.Normal = vectors[v + 2].Normal;
+                    vectors[v].Position = n0.Position;
+                    vectors[v].Normal = n0.Normal;
+                    vectors[v + 1].Position = n1.Position;
+                    vectors[v + 1].Normal = n1.Normal;
+                    vectors[v + 2].Position = n2.Position;
+                    vectors[v + 2].Normal = n2.Normal;
                     v += 3;
                 }
 
