@@ -4,9 +4,9 @@ namespace DemoFramework
 {
     public class Clock
     {
-        Stopwatch _physicsTimer = new Stopwatch();
-        Stopwatch _renderTimer = new Stopwatch();
-        Stopwatch _frameTimer = new Stopwatch();
+        private Stopwatch _physicsTimer = new Stopwatch();
+        private Stopwatch _renderTimer = new Stopwatch();
+        private Stopwatch _frameTimer = new Stopwatch();
 
         public long FrameCount { get; private set; }
         public long SubStepCount { get; private set; }
@@ -61,8 +61,10 @@ namespace DemoFramework
 
         public void Reset()
         {
-            FrameCount = 0;
+            SubStepCount = 0;
             _physicsTimer.Reset();
+
+            FrameCount = 0;
             _renderTimer.Reset();
         }
     }
