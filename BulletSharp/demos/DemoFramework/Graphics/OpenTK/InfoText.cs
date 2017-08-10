@@ -41,7 +41,7 @@ namespace DemoFramework.OpenTK
             this.glControl = glControl;
         }
 
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled { get; set; } = true;
 
         void InitializeGraphics()
         {
