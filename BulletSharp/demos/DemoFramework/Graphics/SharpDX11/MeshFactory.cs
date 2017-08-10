@@ -313,9 +313,10 @@ namespace DemoFramework.SharpDX11
 
                 if (shape.ShapeType == BroadphaseNativeType.SoftBodyShape)
                 {
-                    if (demo.IsDebugDrawEnabled)
-                        continue;
-                    InitSoftBodyInstance(colObj as SoftBody, shape);
+                    if (!demo.IsDebugDrawEnabled)
+                    {
+                        InitSoftBodyInstance(colObj as SoftBody, shape);
+                    }
                 }
                 else
                 {

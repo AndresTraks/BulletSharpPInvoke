@@ -235,11 +235,13 @@ namespace DemoFramework.SlimDX
 
         private void Render()
         {
+            Demo.Clock.StartRender();
+
             if (deviceLost)
             {
                 // This should only become true if we're using D3D9, so we can assume the
                 // D3D9 context is valid at this point.
-                if (Device.TestCooperativeLevel() == global::SlimDX.Direct3D9.ResultCode.DeviceNotReset)
+                if (Device.TestCooperativeLevel() == ResultCode.DeviceNotReset)
                 {
                     Device.Reset(Context9.PresentParameters);
                     deviceLost = false;
@@ -281,15 +283,15 @@ namespace DemoFramework.SlimDX
                 }
 
                 if (Demo.IsDebugDrawEnabled)
-                    (Demo.Simulation.World.DebugDrawer as PhysicsDebugDraw).DrawDebugWorld((DynamicsWorld)Demo.Simulation.World);
-                Info.OnRender((float)Demo.FramesPerSecond);
+                    (Demo.Simulation.World.DebugDrawer as PhysicsDebugDraw).DrawDebugWorld(Demo.Simulation.World);
+                Info.OnRender(Demo.FramesPerSecond);
 
                 Device.EndScene();
                 Device.Present();
             }
-            catch (global::SlimDX.Direct3D9.Direct3D9Exception e)
+            catch (Direct3D9Exception e)
             {
-                if (e.ResultCode == global::SlimDX.Direct3D9.ResultCode.DeviceLost)
+                if (e.ResultCode == ResultCode.DeviceLost)
                 {
                     OnLostDevice();
                     deviceLost = true;
@@ -299,6 +301,8 @@ namespace DemoFramework.SlimDX
                     throw;
                 }
             }
+
+            Demo.Clock.StopRender();
         }
 
         public override void UpdateView()
@@ -332,10 +336,12 @@ namespace DemoFramework.SlimDX
         {
             Form.ClientSize = new Size(Width, Height);
 
-            DeviceSettings9 settings = new DeviceSettings9();
-            settings.CreationFlags = CreateFlags.HardwareVertexProcessing;
-            settings.Windowed = true;
-            settings.MultisampleType = MultisampleType.FourSamples;
+            DeviceSettings9 settings = new DeviceSettings9
+            {
+                CreationFlags = CreateFlags.HardwareVertexProcessing,
+                Windowed = true,
+                MultisampleType = MultisampleType.FourSamples
+            };
             try
             {
                 InitializeDevice(settings);
@@ -417,10 +423,6 @@ namespace DemoFramework.SlimDX
                 Device.Reset(Context9.PresentParameters);
 
             }
-            //else if( Context10 != null )
-            //{
-            //    Context10.SwapChain.ResizeBuffers( 1, WindowWidth, WindowHeight, Context10.SwapChain.Description.ModeDescription.Format, Context10.SwapChain.Description.Flags );
-            //}
 
             OnResetDevice();
         }

@@ -227,8 +227,8 @@ namespace DemoFramework
             HandleMouseInput();
 
             Clock.StartPhysics();
-            Simulation.World.StepSimulation(FrameDelta);
-            Clock.StopPhysics();
+            int substepsPassed = Simulation.World.StepSimulation(FrameDelta);
+            Clock.StopPhysics(substepsPassed);
 
             if (FreeLook.Update(FrameDelta))
                 Graphics.UpdateView();

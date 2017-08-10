@@ -69,8 +69,6 @@ namespace DemoFramework.OpenTK
 
         static void SetBuffer<T>(T[] vertices, out int bufferId, BufferUsageHint usage = BufferUsageHint.StaticDraw) where T : struct
         {
-            int bufferSize;
-
             // Generate Array Buffer Id
             GL.GenBuffers(1, out bufferId);
             OpenTKGraphics.CheckGLError("GenBuffers");
@@ -84,6 +82,7 @@ namespace DemoFramework.OpenTK
             OpenTKGraphics.CheckGLError("BufferData");
 
             // Validate that the buffer is the correct size
+            int bufferSize;
             GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out bufferSize);
             OpenTKGraphics.CheckGLError("GetBufferParameter");
             if (vertices.Length * Vector3.SizeInBytes != bufferSize)
@@ -132,8 +131,6 @@ namespace DemoFramework.OpenTK
 
         public void SetIndexBuffer(ushort[] indices)
         {
-            int bufferSize;
-
             ElementsType = DrawElementsType.UnsignedShort;
 
             // Generate Array Buffer Id
@@ -146,6 +143,7 @@ namespace DemoFramework.OpenTK
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(ushort)), indices, BufferUsageHint.StaticDraw);
 
             // Validate that the buffer is the correct size
+            int bufferSize;
             GL.GetBufferParameter(BufferTarget.ElementArrayBuffer, BufferParameterName.BufferSize, out bufferSize);
             if (indices.Length * sizeof(ushort) != bufferSize)
                 throw new ApplicationException("Element array not uploaded correctly");
@@ -156,8 +154,6 @@ namespace DemoFramework.OpenTK
 
         public void SetIndexBuffer(byte[] indices)
         {
-            int bufferSize;
-
             ElementsType = DrawElementsType.UnsignedByte;
 
             // Generate Array Buffer Id
@@ -170,6 +166,7 @@ namespace DemoFramework.OpenTK
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)indices.Length, indices, BufferUsageHint.StaticDraw);
 
             // Validate that the buffer is the correct size
+            int bufferSize;
             GL.GetBufferParameter(BufferTarget.ElementArrayBuffer, BufferParameterName.BufferSize, out bufferSize);
             if (indices.Length != bufferSize)
                 throw new ApplicationException("Element array not uploaded correctly");
@@ -334,19 +331,22 @@ namespace DemoFramework.OpenTK
         public void InitInstancedRender()
         {
             // Clear instance data
-            foreach (ShapeData s in shapes.Values)
-                s.Instances.Clear();
+            foreach (ShapeData shapeData in shapes.Values)
+            {
+                shapeData.Instances.Clear();
+            }
 
             // Gather instance data
             foreach (var colObj in _demo.Simulation.World.CollisionObjectArray)
             {
                 var shape = colObj.CollisionShape;
 
-                if (colObj is SoftBody)
+                if (shape.ShapeType == BroadphaseNativeType.SoftBodyShape)
                 {
-                    if (_demo.IsDebugDrawEnabled)
-                        continue;
-                    InitSoftBodyInstance(colObj as SoftBody, shape);
+                    if (!_demo.IsDebugDrawEnabled)
+                    {
+                        InitSoftBodyInstance(colObj as SoftBody, shape);
+                    }
                 }
                 else
                 {
@@ -356,41 +356,41 @@ namespace DemoFramework.OpenTK
                 }
             }
 
-            foreach (KeyValuePair<CollisionShape, ShapeData> sh in shapes)
+            foreach (KeyValuePair<CollisionShape, ShapeData> shape in shapes)
             {
-                ShapeData s = sh.Value;
+                ShapeData shapeData = shape.Value;
 
-                if (s.Instances.Count == 0)
+                if (shapeData.Instances.Count == 0)
                 {
-                    removeList.Add(sh.Key);
+                    removeList.Add(shape.Key);
                 }
 
                 /*
                 // Is the instance buffer the right size?
-                if (s.InstanceDataBuffer.Description.SizeInBytes != s.InstanceDataList.Count * InstanceData.SizeInBytes)
+                if (shapeData.InstanceDataBuffer.Description.SizeInBytes != shapeData.InstanceDataList.Count * InstanceData.SizeInBytes)
                 {
                     // No, recreate it
-                    s.InstanceDataBuffer.Dispose();
+                    shapeData.InstanceDataBuffer.Dispose();
 
-                    if (s.InstanceDataList.Count == 0)
+                    if (shapeData.InstanceDataList.Count == 0)
                     {
-                        if (s.IndexBuffer != null)
-                            s.IndexBuffer.Dispose();
-                        s.VertexBuffer.Dispose();
-                        removeList.Add(sh.Key);
+                        if (shapeData.IndexBuffer != null)
+                            shapeData.IndexBuffer.Dispose();
+                        shapeData.VertexBuffer.Dispose();
+                        removeList.Add(shape.Key);
                         continue;
                     }
 
-                    instanceDataDesc.SizeInBytes = s.InstanceDataList.Count * InstanceData.SizeInBytes;
-                    s.InstanceDataBuffer = new Buffer(device, instanceDataDesc);
-                    s.BufferBindings[1] = new VertexBufferBinding(s.InstanceDataBuffer, InstanceData.SizeInBytes, 0);
+                    instanceDataDesc.SizeInBytes = shapeData.InstanceDataList.Count * InstanceData.SizeInBytes;
+                    shapeData.InstanceDataBuffer = new Buffer(device, instanceDataDesc);
+                    shapeData.BufferBindings[1] = new VertexBufferBinding(shapeData.InstanceDataBuffer, InstanceData.SizeInBytes, 0);
                 }
 
                 // Copy the instance data over to the instance buffer
-                using (var data = s.InstanceDataBuffer.Map(MapMode.WriteDiscard))
+                using (var data = shapeData.InstanceDataBuffer.Map(MapMode.WriteDiscard))
                 {
-                    data.WriteRange(s.InstanceDataList.ToArray());
-                    s.InstanceDataBuffer.Unmap();
+                    data.WriteRange(shapeData.InstanceDataList.ToArray());
+                    shapeData.InstanceDataBuffer.Unmap();
                 }
                 */
             }
@@ -410,49 +410,49 @@ namespace DemoFramework.OpenTK
         {
             GL.EnableVertexAttribArray(vertexPositionLocation);
 
-            foreach (ShapeData s in shapes.Values)
+            foreach (ShapeData shapeData in shapes.Values)
             {
                 // Normal buffer
-                if (s.NormalBufferID != 0)
+                if (shapeData.NormalBufferID != 0)
                 {
                     GL.EnableVertexAttribArray(vertexNormalLocation);
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, s.NormalBufferID);
+                    GL.BindBuffer(BufferTarget.ArrayBuffer, shapeData.NormalBufferID);
                     GL.VertexAttribPointer(vertexNormalLocation, 3, VertexAttribPointerType.Float, false, Vector3.SizeInBytes, IntPtr.Zero);
                 }
 
                 // Vertex buffer
-                GL.BindBuffer(BufferTarget.ArrayBuffer, s.VertexBufferID);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, shapeData.VertexBufferID);
                 GL.VertexAttribPointer(vertexPositionLocation, 3, VertexAttribPointerType.Float, false, Vector3.SizeInBytes, IntPtr.Zero);
 
                 Matrix4 worldMatrix;
 
                 // Index (element) buffer
-                if (s.ElementCount != 0)
+                if (shapeData.ElementCount != 0)
                 {
-                    GL.BindBuffer(BufferTarget.ElementArrayBuffer, s.ElementBufferID);
+                    GL.BindBuffer(BufferTarget.ElementArrayBuffer, shapeData.ElementBufferID);
 
-                    foreach (InstanceData instance in s.Instances)
+                    foreach (InstanceData instance in shapeData.Instances)
                     {
                         worldMatrix = instance.WorldTransform;
                         GL.UniformMatrix4(worldMatrixLocation, false, ref worldMatrix);
                         GL.Uniform4(vertexColorLocation, instance.Color);
-                        GL.DrawElements(s.PrimitiveType, s.ElementCount, s.ElementsType, IntPtr.Zero);
+                        GL.DrawElements(shapeData.PrimitiveType, shapeData.ElementCount, shapeData.ElementsType, IntPtr.Zero);
                     }
 
                     GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
                 }
                 else
                 {
-                    foreach (InstanceData instance in s.Instances)
+                    foreach (InstanceData instance in shapeData.Instances)
                     {
                         worldMatrix = instance.WorldTransform;
                         GL.UniformMatrix4(worldMatrixLocation, false, ref worldMatrix);
                         GL.Uniform4(vertexColorLocation, instance.Color);
-                        GL.DrawArrays(s.PrimitiveType, 0, s.VertexCount);
+                        GL.DrawArrays(shapeData.PrimitiveType, 0, shapeData.VertexCount);
                     }
                 }
 
-                if (s.NormalBufferID != 0)
+                if (shapeData.NormalBufferID != 0)
                 {
                     GL.DisableVertexAttribArray(vertexNormalLocation);
                 }

@@ -726,7 +726,7 @@ namespace DemoFramework.SharpDX11
             }
             RenderOverlay();
 
-            _swapChain.Present(0, PresentFlags.None);
+            _swapChain.Present(1, PresentFlags.None);
         }
 
         private void ClearTargets()

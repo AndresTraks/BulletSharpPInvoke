@@ -9,13 +9,14 @@ namespace DemoFramework
         Stopwatch _frameTimer = new Stopwatch();
 
         public long FrameCount { get; private set; }
+        public long SubStepCount { get; private set; }
 
         public float PhysicsAverage
         {
             get
             {
                 if (FrameCount == 0) return 0;
-                return (((float)_physicsTimer.ElapsedTicks / Stopwatch.Frequency) / FrameCount) * 1000.0f;
+                return (((float)_physicsTimer.ElapsedTicks / Stopwatch.Frequency) / SubStepCount) * 1000.0f;
             }
         }
 
@@ -33,9 +34,10 @@ namespace DemoFramework
             _physicsTimer.Start();
         }
 
-        public void StopPhysics()
+        public void StopPhysics(int substepsPassed)
         {
             _physicsTimer.Stop();
+            SubStepCount += substepsPassed;
         }
 
         public void StartRender()

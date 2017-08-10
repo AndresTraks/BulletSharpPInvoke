@@ -1,48 +1,45 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 using System.Windows.Forms;
-using OpenTK;
-using OpenTK.Graphics;
 
 namespace DemoFramework.OpenTK
 {
     public partial class GLForm : Form
     {
-        GLControl glControl;
-        public GLControl GLControl
-        {
-            get { return glControl; }
-            set { glControl = value; }
-        }
-        OpenTKGraphics graphics;
+        private OpenTKGraphics _graphics;
 
         public GLForm(OpenTKGraphics graphics)
         {
-            this.graphics = graphics;
+            _graphics = graphics;
 
             InitializeComponent();
 
-            //glControl = new GLControl(new GraphicsMode(new ColorFormat(24), 24, 0, 4));
-            glControl = new GLControl();
-            glControl.BackColor = System.Drawing.Color.Black;
-            glControl.Dock = DockStyle.Fill;
-            glControl.TabIndex = 0;
-            glControl.VSync = false;
+            //GLControl = new GLControl(new GraphicsMode(new ColorFormat(24), 24, 0, 4));
+            GLControl = new GLControl
+            {
+                BackColor = System.Drawing.Color.Black,
+                Dock = DockStyle.Fill,
+                TabIndex = 0,
+                VSync = true
+            };
 
-            Controls.Add(glControl);
+            Controls.Add(GLControl);
 
-            glControl.Paint += new PaintEventHandler(glControl_Paint);
-            glControl.Disposed += new EventHandler(glControl_Disposed);
+            GLControl.Paint += new PaintEventHandler(glControl_Paint);
+            GLControl.Disposed += new EventHandler(glControl_Disposed);
 
-            glControl.KeyDown += new KeyEventHandler(glControl_KeyDown);
-            glControl.KeyUp += new KeyEventHandler(glControl_KeyUp);
-            glControl.MouseDown += new MouseEventHandler(glControl_MouseDown);
-            glControl.MouseUp += new MouseEventHandler(glControl_MouseUp);
-            glControl.MouseMove += new MouseEventHandler(glControl_MouseMove);
-            glControl.MouseWheel += new MouseEventHandler(glControl_MouseWheel);
-            glControl.PreviewKeyDown += new PreviewKeyDownEventHandler(glControl_PreviewKeyDown);
+            GLControl.KeyDown += new KeyEventHandler(glControl_KeyDown);
+            GLControl.KeyUp += new KeyEventHandler(glControl_KeyUp);
+            GLControl.MouseDown += new MouseEventHandler(glControl_MouseDown);
+            GLControl.MouseUp += new MouseEventHandler(glControl_MouseUp);
+            GLControl.MouseMove += new MouseEventHandler(glControl_MouseMove);
+            GLControl.MouseWheel += new MouseEventHandler(glControl_MouseWheel);
+            GLControl.PreviewKeyDown += new PreviewKeyDownEventHandler(glControl_PreviewKeyDown);
 
             Resize += new EventHandler(GLForm_Resize);
         }
+
+        public GLControl GLControl { get; }
 
         void glControl_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
@@ -54,7 +51,7 @@ namespace DemoFramework.OpenTK
 
         void GLForm_Resize(object sender, EventArgs e)
         {
-            graphics.UpdateView();
+            _graphics.UpdateView();
         }
 
         void glControl_Disposed(object sender, EventArgs e)
@@ -64,7 +61,7 @@ namespace DemoFramework.OpenTK
 
         void glControl_Paint(object sender, PaintEventArgs e)
         {
-            graphics.Paint();
+            _graphics.Paint();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -72,7 +69,7 @@ namespace DemoFramework.OpenTK
             base.OnLoad(e);
 
             // GLControl loaded, start demo
-            graphics.InitializeDevice();
+            _graphics.InitializeDevice();
 
             Application.Idle += new EventHandler(Application_Idle);
             Focus();
@@ -80,7 +77,7 @@ namespace DemoFramework.OpenTK
 
         void Application_Idle(object sender, EventArgs e)
         {
-            glControl.Invalidate();
+            GLControl.Invalidate();
         }
 
         void glControl_KeyDown(object sender, KeyEventArgs e)

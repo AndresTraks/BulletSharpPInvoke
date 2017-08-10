@@ -9,34 +9,41 @@ namespace DemoFramework.SlimDX
     /// </summary>
     public class DeviceContext9 : IDisposable
     {
-        #region Public Interface
+        private Direct3D _direct3D;
 
         internal DeviceContext9(Form form, DeviceSettings9 settings)
         {
             if (form.Handle == IntPtr.Zero)
                 throw new ArgumentException("Value must be a valid window handle.", "handle");
             if (settings == null)
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
 
-            this.settings = settings;
+            PresentParameters = new PresentParameters
+            {
+                BackBufferFormat = Format.X8R8G8B8,
+                BackBufferCount = 1,
+                BackBufferWidth = form.ClientSize.Width,
+                BackBufferHeight = form.ClientSize.Height,
+                Multisample = settings.MultisampleType,
+                SwapEffect = SwapEffect.Discard,
+                EnableAutoDepthStencil = true,
+                AutoDepthStencilFormat = Format.D24S8,
+                PresentFlags = PresentFlags.DiscardDepthStencil,
+                PresentationInterval = PresentInterval.One,
+                Windowed = settings.Windowed,
+                DeviceWindowHandle = form.Handle
+            };
 
-            PresentParameters = new PresentParameters();
-            PresentParameters.BackBufferFormat = Format.X8R8G8B8;
-            PresentParameters.BackBufferCount = 1;
-            PresentParameters.BackBufferWidth = form.ClientSize.Width;
-            PresentParameters.BackBufferHeight = form.ClientSize.Height;
-            PresentParameters.Multisample = settings.MultisampleType;
-            PresentParameters.SwapEffect = SwapEffect.Discard;
-            PresentParameters.EnableAutoDepthStencil = true;
-            PresentParameters.AutoDepthStencilFormat = Format.D24S8;
-            PresentParameters.PresentFlags = PresentFlags.DiscardDepthStencil;
-            PresentParameters.PresentationInterval = PresentInterval.Immediate;
-            PresentParameters.Windowed = settings.Windowed;
-            PresentParameters.DeviceWindowHandle = form.Handle;
-
-            direct3D = new Direct3D();
-            Device = new Device(direct3D, settings.AdapterOrdinal, DeviceType.Hardware, form.Handle, settings.CreationFlags, PresentParameters);
+            _direct3D = new Direct3D();
+            Device = new Device(_direct3D, settings.AdapterOrdinal, DeviceType.Hardware, form.Handle, settings.CreationFlags, PresentParameters);
         }
+
+        /// <summary>
+        /// Gets the underlying Direct3D9 device.
+        /// </summary>
+        public Device Device { get; }
+
+        public PresentParameters PresentParameters { get; }
 
         /// <summary>
         /// Performs object finalization.
@@ -65,31 +72,8 @@ namespace DemoFramework.SlimDX
             if (disposeManagedResources)
             {
                 Device.Dispose();
-                direct3D.Dispose();
+                _direct3D.Dispose();
             }
         }
-
-        /// <summary>
-        /// Gets the underlying Direct3D9 device.
-        /// </summary>
-        public Device Device
-        {
-            get;
-            private set;
-        }
-
-        public PresentParameters PresentParameters
-        {
-            get;
-            private set;
-        }
-
-        #endregion
-        #region Implementation Detail
-
-        DeviceSettings9 settings;
-        Direct3D direct3D;
-
-        #endregion
     }
 }

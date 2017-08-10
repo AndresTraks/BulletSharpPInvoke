@@ -24,13 +24,6 @@ namespace DemoFramework.OpenTK
         int height = 150;
         GLControl glControl;
 
-        bool _isEnabled = true;
-        public bool IsEnabled
-        {
-            get { return _isEnabled; }
-            set { _isEnabled = value; }
-        }
-
         bool _isDirty;
         string _text = "";
         public string Text
@@ -47,6 +40,8 @@ namespace DemoFramework.OpenTK
         {
             this.glControl = glControl;
         }
+
+        public bool IsEnabled { get; set; }
 
         void InitializeGraphics()
         {
@@ -78,7 +73,7 @@ namespace DemoFramework.OpenTK
 
         public void OnRender()
         {
-            if (!_isEnabled) return;
+            if (!IsEnabled) return;
 
             if (!graphicsInitialized)
                 InitializeGraphics();
