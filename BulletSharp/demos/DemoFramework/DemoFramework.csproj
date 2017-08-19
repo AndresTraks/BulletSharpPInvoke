@@ -63,6 +63,7 @@
     <Compile Include="FileLoaders\UrdfLoader.cs" />
     <Compile Include="FileLoaders\UrdfToBullet.cs" />
     <Compile Include="IUpdateReceiver.cs" />
+    <Compile Include="Simulation\BodyPicker.cs" />
     <Compile Include="Simulation\BoxShooter.cs" />
     <Compile Include="Clock.cs" />
     <Compile Include="Controller\FreeLook.cs" />

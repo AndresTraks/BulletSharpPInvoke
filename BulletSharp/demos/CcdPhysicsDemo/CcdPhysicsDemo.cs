@@ -40,7 +40,7 @@ namespace CcdPhysicsDemo
             else if (keys.Contains(Keys.Space))
             {
                 var ccdDemo = demo.Simulation as CcdPhysicsDemoSimulation;
-                Vector3 destination = demo.GetRayTo(demo.Input.MousePoint, demo.FreeLook.Eye, demo.FreeLook.Target, demo.Graphics.FieldOfView);
+                Vector3 destination = demo.GetCameraRayTo();
                 ccdDemo.ShootBox(demo.FreeLook.Eye, destination);
                 keys.Remove(Keys.Space);
             }

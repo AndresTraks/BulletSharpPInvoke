@@ -173,7 +173,7 @@ namespace FeatherStoneDemo
         {
             const float mass = 1.0f;
 
-            BoxShape shape = new BoxShape(1);
+            var shape = new BoxShape(1);
             Vector3 localInertia = shape.CalculateLocalInertia(mass);
 
             var rbInfo = new RigidBodyConstructionInfo(mass, null, shape, localInertia);
@@ -201,8 +201,8 @@ namespace FeatherStoneDemo
         private void CreateColliders(MultiBody multiBody, Vector3 baseHalfExtents, Vector3 linkHalfExtents)
         {
             // Add a collider for the base
-            Quaternion[] worldToLocal = new Quaternion[multiBody.NumLinks + 1];
-            Vector3[] localOrigin = new Vector3[multiBody.NumLinks + 1];
+            var worldToLocal = new Quaternion[multiBody.NumLinks + 1];
+            var localOrigin = new Vector3[multiBody.NumLinks + 1];
 
             worldToLocal[0] = multiBody.WorldToBaseRot;
             localOrigin[0] = multiBody.BasePosition;
