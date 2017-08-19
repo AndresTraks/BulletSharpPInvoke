@@ -70,7 +70,7 @@ namespace DemoFramework
                 case BroadphaseNativeType.UniformScalingShape:
                     indices = null;
                     return CreateUniformScalingShape(shape as UniformScalingShape, out indices);
-                case BroadphaseNativeType.SCALED_TRIANGLE_MESH_SHAPE_PROXYTYPE:
+                case BroadphaseNativeType.ScaledTriangleMeshShape:
                     indices = null;
                     return CreateScaledBvhTriangleMeshShape(shape as ScaledBvhTriangleMeshShape, out indices);
 
@@ -85,25 +85,20 @@ namespace DemoFramework
         public static Vector3[] CreateScaledBvhTriangleMeshShape(ScaledBvhTriangleMeshShape shape, out uint[] indices)
         {
             Vector3[] vert = CreateShape(shape.ChildShape, out indices);
-
             var scale = shape.LocalScaling;
 
-            return ScaleShape(vert, scale);
-
+            return ScaleShape(vert, ref scale);
         }
 
         public static Vector3[] CreateUniformScalingShape(UniformScalingShape shape, out uint[] indices)
         {
             Vector3[] vert = CreateShape(shape.ChildShape, out indices);
+            var scale = new Vector3(shape.UniformScalingFactor);
 
-            var scale = shape.UniformScalingFactor;
-
-            var mult = new Vector3(scale, scale, scale);
-
-            return ScaleShape(vert, mult);
+            return ScaleShape(vert, ref scale);
         }
 
-        public static Vector3[] ScaleShape(Vector3[] shape, Vector3 scaling)
+        public static Vector3[] ScaleShape(Vector3[] shape, ref Vector3 scaling)
         {
             for (int i = 0; i < shape.Length; i++)
             {

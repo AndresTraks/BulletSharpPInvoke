@@ -231,12 +231,12 @@ namespace VehicleDemo
                 {
                     for (int j = 0; j < NumVertsY; j++)
                     {
-                        float wl = .2f;
-                        float height = 20.0f * (float)(Math.Sin(i * wl) * Math.Cos(j * wl));
+                        const float waveLength = .2f;
+                        float height = (float)(Math.Sin(i * waveLength) * Math.Cos(j * waveLength));
 
-                        vertices.Write((i - NumVertsX * 0.5f) * scale);
+                        vertices.Write(i - NumVertsX * 0.5f);
                         vertices.Write(height);
-                        vertices.Write((j - NumVertsY * 0.5f) * scale);
+                        vertices.Write(j - NumVertsY * 0.5f);
                     }
                 }
                 vertices.Dispose();
@@ -244,8 +244,9 @@ namespace VehicleDemo
 
             vertexArray.AddIndexedMesh(mesh);
             var groundShape = new BvhTriangleMeshShape(vertexArray, true);
+            var groundScaled = new ScaledBvhTriangleMeshShape(groundShape, new Vector3(scale));
 
-            RigidBody ground = PhysicsHelper.CreateStaticBody(Matrix.Identity, groundShape, World);
+            RigidBody ground = PhysicsHelper.CreateStaticBody(Matrix.Identity, groundScaled, World);
             ground.UserObject = "Ground";
 
             Matrix vehicleTransform = Matrix.Translation(0, -2, 0);

@@ -28,7 +28,7 @@ namespace BulletSharp
 		CUSTOM_CONVEX_SHAPE_TYPE,
 		CONCAVE_SHAPES_START_HERE,
 		TriangleMeshShape,
-		SCALED_TRIANGLE_MESH_SHAPE_PROXYTYPE,
+		ScaledTriangleMeshShape,
 		FAST_CONCAVE_MESH_PROXYTYPE,
 		TerrainShape,
 		GImpactShape,

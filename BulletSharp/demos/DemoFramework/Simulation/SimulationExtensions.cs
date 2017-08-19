@@ -1,6 +1,5 @@
 ﻿using BulletSharp;
 using System.Collections.Generic;
-using System;
 
 namespace DemoFramework
 {
@@ -92,6 +91,21 @@ namespace DemoFramework
                 {
                     GetShapeWithChildShapes(childShape.ChildShape, shapes);
                 }
+                return;
+            }
+
+            var scaledTriangleMeshShape = shape as ScaledBvhTriangleMeshShape;
+            if (scaledTriangleMeshShape != null)
+            {
+                GetShapeWithChildShapes(scaledTriangleMeshShape.ChildShape, shapes);
+                return;
+            }
+
+            var uniformScalingShape = shape as UniformScalingShape;
+            if (uniformScalingShape != null)
+            {
+                GetShapeWithChildShapes(uniformScalingShape.ChildShape, shapes);
+                return;
             }
         }
     }
