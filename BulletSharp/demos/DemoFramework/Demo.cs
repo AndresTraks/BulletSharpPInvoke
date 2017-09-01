@@ -302,7 +302,7 @@ namespace DemoFramework
             return GetRayTo(Input.MousePoint, FreeLook.Eye, FreeLook.Target, Graphics.FieldOfView);
         }
 
-        private Vector3 GetRayTo(Point point, Vector3 eye, Vector3 target, float fieldOfView)
+        public Vector3 GetRayTo(Point point, Vector3 eye, Vector3 target, float fieldOfView)
         {
             Vector3 rayForward = target - eye;
             rayForward.Normalize();
