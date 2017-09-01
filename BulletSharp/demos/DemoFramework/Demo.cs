@@ -159,6 +159,11 @@ namespace DemoFramework
         {
             using (Graphics = GraphicsLibraryManager.GetGraphics(this))
             {
+                if (Graphics == null)
+                {
+                    return;
+                }
+
                 Graphics.Initialize();
                 Graphics.CullingEnabled = true;
 
