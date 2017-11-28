@@ -40,8 +40,12 @@ namespace DemoFramework.FileLoaders
     {
         public int Cluster;
         public int Area;
-        public Vector3 Min;
-        public Vector3 Max;
+        public int MinX;
+        public int MinY;
+        public int MinZ;
+        public int MaxX;
+        public int MaxY;
+        public int MaxZ;
         public int FirstLeafFace;
         public int NumLeafFaces;
         public int FirstLeafBrush;
@@ -57,8 +61,10 @@ namespace DemoFramework.FileLoaders
 
     public struct BspPlane
     {
-        public Vector3 Normal;
-        public double Distance;
+        public float NormalX;
+        public float NormalY;
+        public float NormalZ;
+        public float Distance;
     }
 
     [Flags]
@@ -292,9 +298,9 @@ namespace DemoFramework.FileLoaders
                             case "origin":
                                 string[] originStrings = keyValue[1].Split(' ');
                                 bspEntity.Origin = new Vector3(
-                                    double.Parse(originStrings[0], CultureInfo.InvariantCulture),
-                                    double.Parse(originStrings[1], CultureInfo.InvariantCulture),
-                                    double.Parse(originStrings[2], CultureInfo.InvariantCulture));
+                                    float.Parse(originStrings[0], CultureInfo.InvariantCulture),
+                                    float.Parse(originStrings[1], CultureInfo.InvariantCulture),
+                                    float.Parse(originStrings[2], CultureInfo.InvariantCulture));
                                 break;
                             default:
                                 if (!bspEntity.KeyValues.ContainsKey(keyValue[0]))
@@ -332,14 +338,14 @@ namespace DemoFramework.FileLoaders
                     Leaves[i].Area = reader.ReadInt16();
 
                     //Swap Y and Z; invert Z
-                    Leaves[i].Min.X = reader.ReadInt16();
-                    Leaves[i].Min.Z = -reader.ReadInt16();
-                    Leaves[i].Min.Y = reader.ReadInt16();
+                    Leaves[i].MinX = reader.ReadInt16();
+                    Leaves[i].MinZ = -reader.ReadInt16();
+                    Leaves[i].MinY = reader.ReadInt16();
 
                     //Swap Y and Z; invert Z
-                    Leaves[i].Max.X = reader.ReadInt16();
-                    Leaves[i].Max.Z = -reader.ReadInt16();
-                    Leaves[i].Max.Y = reader.ReadInt16();
+                    Leaves[i].MaxX = reader.ReadInt16();
+                    Leaves[i].MaxZ = -reader.ReadInt16();
+                    Leaves[i].MaxY = reader.ReadInt16();
 
                     Leaves[i].FirstLeafFace = reader.ReadUInt16();
                     Leaves[i].NumLeafFaces = reader.ReadUInt16();
@@ -357,14 +363,14 @@ namespace DemoFramework.FileLoaders
                     Leaves[i].Area = reader.ReadInt32();
 
                     //Swap Y and Z; invert Z
-                    Leaves[i].Min.X = reader.ReadInt32();
-                    Leaves[i].Min.Z = -reader.ReadInt32();
-                    Leaves[i].Min.Y = reader.ReadInt32();
+                    Leaves[i].MinX = reader.ReadInt32();
+                    Leaves[i].MinZ = -reader.ReadInt32();
+                    Leaves[i].MinY = reader.ReadInt32();
 
                     //Swap Y and Z; invert Z
-                    Leaves[i].Max.X = reader.ReadInt32();
-                    Leaves[i].Max.Z = -reader.ReadInt32();
-                    Leaves[i].Max.Y = reader.ReadInt32();
+                    Leaves[i].MaxX = reader.ReadInt32();
+                    Leaves[i].MaxZ = -reader.ReadInt32();
+                    Leaves[i].MaxY = reader.ReadInt32();
 
                     Leaves[i].FirstLeafFace = reader.ReadInt32();
                     Leaves[i].NumLeafFaces = reader.ReadInt32();
@@ -403,9 +409,9 @@ namespace DemoFramework.FileLoaders
 
             for (int i = 0; i < length; i++)
             {
-                Planes[i].Normal.X = reader.ReadSingle();
-                Planes[i].Normal.Y = reader.ReadSingle();
-                Planes[i].Normal.Z = reader.ReadSingle();
+                Planes[i].NormalX = reader.ReadSingle();
+                Planes[i].NormalY = reader.ReadSingle();
+                Planes[i].NormalZ = reader.ReadSingle();
                 Planes[i].Distance = reader.ReadSingle();
                 if (IsVbsp)
                 {
