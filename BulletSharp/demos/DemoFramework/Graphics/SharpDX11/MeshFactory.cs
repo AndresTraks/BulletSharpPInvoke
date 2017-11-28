@@ -6,12 +6,12 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Color = System.Drawing.Color;
 using DataStream = SharpDX.DataStream;
 using Device = SharpDX.Direct3D11.Device;
 using Matrix = BulletSharp.Math.Matrix;
-using Vector3 = BulletSharp.Math.Vector3;
 
 namespace DemoFramework.SharpDX11
 {
@@ -32,7 +32,7 @@ namespace DemoFramework.SharpDX11
         public PrimitiveTopology PrimitiveTopology = PrimitiveTopology.TriangleList;
         public VertexBufferBinding[] BufferBindings = new VertexBufferBinding[2];
 
-        public Vector3[] SoftBodyData;
+        public BulletSharp.Math.Vector3[] SoftBodyData;
 
         public void SetVertexBuffer(Device device, Vector3[] vectors)
         {
@@ -221,11 +221,11 @@ namespace DemoFramework.SharpDX11
         ShapeData CreateShape(CollisionShape shape)
         {
             uint[] indices;
-            Vector3[] vertices = CreateShape(shape, out indices);
+            BulletSharp.Math.Vector3[] vertices = CreateShape(shape, out indices);
 
             var shapeData = new ShapeData();
             shapeData.VertexCount = vertices.Length / 2;
-            shapeData.SetVertexBuffer(device, vertices);
+            shapeData.SetVertexBuffer(device, vertices.Select(MathHelper.Convert).ToArray());
 
             if (indices != null)
             {
@@ -395,7 +395,7 @@ namespace DemoFramework.SharpDX11
             // Could just allocate a Vector3 array here at each frame, but reusing shapeData.SoftBodyData is faster.
             // Probably uses more memory though.
             softBody.GetVertexNormalData(ref shapeData.SoftBodyData);
-            shapeData.SetDynamicVertexBuffer(device, shapeData.SoftBodyData);
+            shapeData.SetDynamicVertexBuffer(device, shapeData.SoftBodyData.Select(MathHelper.Convert).ToArray());
 
             if (softBody.Faces.Count == 0 && softBody.Tetras.Count == 0)
             {

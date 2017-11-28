@@ -72,7 +72,7 @@ namespace BulletSharp
 				}
 			}
 
-			serializer.FinalizeChunk(chunk, "btDynamicsWorldFloatData", DnaID.DynamicsWorld, chunk.OldPtr);
+			serializer.FinalizeChunk(chunk, "btDynamicsWorlddoubleData", DnaID.DynamicsWorld, chunk.OldPtr);
 		}
 
 		void SerializeRigidBodies(Serializer serializer)
@@ -117,7 +117,7 @@ namespace BulletSharp
 			btDiscreteDynamicsWorld_synchronizeSingleMotionState(Native, body.Native);
 		}
 
-		public void UpdateVehicles(float timeStep)
+		public void UpdateVehicles(double timeStep)
 		{
 			btDiscreteDynamicsWorld_updateVehicles(Native, timeStep);
 		}

@@ -17,7 +17,7 @@ namespace BulletSharp
 			_childShape = childShape;
 		}
 
-		public float ChildMargin
+		public double ChildMargin
 		{
 			get => btCompoundShapeChild_getChildMargin(Native);
 			set => btCompoundShapeChild_setChildMargin(Native, value);
@@ -81,7 +81,7 @@ namespace BulletSharp
 			_childList.AddChildShape(ref localTransform, shape);
 		}
 
-	   public void CalculatePrincipalAxisTransform(float[] masses, ref Matrix principal,
+	   public void CalculatePrincipalAxisTransform(double[] masses, ref Matrix principal,
 			out Vector3 inertia)
 		{
 			btCompoundShape_calculatePrincipalAxisTransform(Native, masses,
@@ -144,7 +144,7 @@ namespace BulletSharp
 	[StructLayout(LayoutKind.Sequential)]
 	internal struct CompoundShapeFloatData
 	{
-		public CollisionShapeFloatData CollisionShapeData;
+		public CollisionShapeData CollisionShapeData;
 		public IntPtr ChildShapePtr;
 		public int NumChildShapes;
 		public float CollisionMargin;
@@ -161,5 +161,27 @@ namespace BulletSharp
 		public float ChildMargin;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CompoundShapeChildFloatData), fieldName).ToInt32(); }
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct CompoundShapeDoubleData
+	{
+		public CollisionShapeData CollisionShapeData;
+		public IntPtr ChildShapePtr;
+		public int NumChildShapes;
+		public double CollisionMargin;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CompoundShapeDoubleData), fieldName).ToInt32(); }
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct CompoundShapeChildDoubleData
+	{
+		public TransformDoubleData Transform;
+		public IntPtr ChildShape;
+		public int ChildShapeType;
+		public double ChildMargin;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CompoundShapeChildDoubleData), fieldName).ToInt32(); }
 	}
 }

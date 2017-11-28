@@ -10,7 +10,7 @@ namespace BulletSharp
 		{
 		}
 
-		public float Distance
+		public double Distance
 		{
 			get => btPointCollector_getDistance(Native);
 			set => btPointCollector_setDistance(Native, value);

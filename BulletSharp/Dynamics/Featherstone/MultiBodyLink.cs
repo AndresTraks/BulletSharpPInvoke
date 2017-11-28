@@ -44,7 +44,7 @@ namespace BulletSharp
 			return value;
 		}
 
-		public void SetAxisBottom(int dof, float x, float y, float z)
+		public void SetAxisBottom(int dof, double x, double y, double z)
 		{
 			btMultibodyLink_setAxisBottom(Native, dof, x, y, z);
 		}
@@ -54,7 +54,7 @@ namespace BulletSharp
 			btMultibodyLink_setAxisBottom2(Native, dof, ref axis);
 		}
 
-		public void SetAxisTop(int dof, float x, float y, float z)
+		public void SetAxisTop(int dof, double x, double y, double z)
 		{
 			btMultibodyLink_setAxisTop(Native, dof, x, y, z);
 		}
@@ -64,7 +64,7 @@ namespace BulletSharp
 			btMultibodyLink_setAxisTop2(Native, dof, ref axis);
 		}
 
-		public void UpdateCacheMultiDof(float[] pq = null)
+		public void UpdateCacheMultiDof(double[] pq = null)
 		{
 			btMultibodyLink_updateCacheMultiDof(Native, pq);
 		}
@@ -226,7 +226,7 @@ namespace BulletSharp
 			set => btMultibodyLink_setInertiaLocal(Native, ref value);
 		}
 
-		public float JointDamping
+		public double JointDamping
 		{
 			get => btMultibodyLink_getJointDamping(Native);
 			set => btMultibodyLink_setJointDamping(Native, value);
@@ -242,7 +242,7 @@ namespace BulletSharp
 			}
 		}
 		*/
-		public float JointFriction
+		public double JointFriction
 		{
 			get => btMultibodyLink_getJointFriction(Native);
 			set => btMultibodyLink_setJointFriction(Native, value);
@@ -254,12 +254,12 @@ namespace BulletSharp
 			set { btMultibodyLink_setJointName(_native, value._native); }
 		}
 
-		public FloatArray JointPos
+		public doubleArray JointPos
 		{
 			get { return btMultibodyLink_getJointPos(_native); }
 		}
 
-		public FloatArray JointTorque
+		public doubleArray JointTorque
 		{
 			get { return btMultibodyLink_getJointTorque(_native); }
 		}
@@ -276,7 +276,7 @@ namespace BulletSharp
 			set { btMultibodyLink_setLinkName(_native, value._native); }
 		}
 		*/
-		public float Mass
+		public double Mass
 		{
 			get => btMultibodyLink_getMass(Native);
 			set => btMultibodyLink_setMass(Native, value);

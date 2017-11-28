@@ -17,7 +17,7 @@ namespace BulletSharp
 		{
 		}
 
-		public CylinderShape(float halfExtentX, float halfExtentY, float halfExtentZ)
+		public CylinderShape(double halfExtentX, double halfExtentY, double halfExtentZ)
 			: base(btCylinderShape_new2(halfExtentX, halfExtentY, halfExtentZ))
 		{
 		}
@@ -42,7 +42,7 @@ namespace BulletSharp
 			}
 		}
 
-		public float Radius => btCylinderShape_getRadius(Native);
+		public double Radius => btCylinderShape_getRadius(Native);
 
 		public int UpAxis => btCylinderShape_getUpAxis(Native);
 	}
@@ -54,7 +54,7 @@ namespace BulletSharp
 		{
 		}
 
-		public CylinderShapeX(float halfExtentX, float halfExtentY, float halfExtentZ)
+		public CylinderShapeX(double halfExtentX, double halfExtentY, double halfExtentZ)
 			: base(btCylinderShapeX_new2(halfExtentX, halfExtentY, halfExtentZ))
 		{
 		}
@@ -67,19 +67,19 @@ namespace BulletSharp
 		{
 		}
 
-		public CylinderShapeZ(float halfExtentX, float halfExtentY, float halfExtentZ)
+		public CylinderShapeZ(double halfExtentX, double halfExtentY, double halfExtentZ)
 			: base(btCylinderShapeZ_new2(halfExtentX, halfExtentY, halfExtentZ))
 		{
 		}
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct CylinderShapeFloatData
+	internal struct CylinderShapeData
 	{
-		public ConvexInternalShapeFloatData ConvexInternalShapeData;
+		public ConvexInternalShapeData ConvexInternalShapeData;
 		public int UpAxis;
 		public int Padding;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CylinderShapeFloatData), fieldName).ToInt32(); }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CylinderShapeData), fieldName).ToInt32(); }
 	}
 }

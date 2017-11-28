@@ -10,12 +10,12 @@ namespace BulletSharp
 		{
 		}
 
-		public BoxShape(float boxHalfExtent)
+		public BoxShape(double boxHalfExtent)
 			: base(btBoxShape_new2(boxHalfExtent))
 		{
 		}
 
-		public BoxShape(float boxHalfExtentX, float boxHalfExtentY, float boxHalfExtentZ)
+		public BoxShape(double boxHalfExtentX, double boxHalfExtentY, double boxHalfExtentZ)
 			: base(btBoxShape_new3(boxHalfExtentX, boxHalfExtentY, boxHalfExtentZ))
 		{
 		}

@@ -28,7 +28,7 @@ namespace Box2DDemo
     internal sealed class Box2DDemoSimulation : ISimulation
     {
         private const int NumObjectsX = 5, NumObjectsY = 5;
-        private const float Depth = 0.04f;
+        private const double Depth = 0.04f;
 
         public Box2DDemoSimulation()
         {
@@ -75,7 +75,7 @@ namespace Box2DDemo
         private void Create2dBodies()
         {
             // Re-using the same collision is better for memory usage and performance
-            float u = 0.96f;
+            double u = 0.96f;
             Vector3[] points = { new Vector3(0, u, 0), new Vector3(-u, -u, 0), new Vector3(u, -u, 0) };
             var childShape0 = new BoxShape(1, 1, Depth);
             var colShape = new Convex2DShape(childShape0);
@@ -86,7 +86,7 @@ namespace Box2DDemo
 
             colShape.Margin = 0.03f;
 
-            float mass = 1.0f;
+            double mass = 1.0f;
             Vector3 localInertia = colShape.CalculateLocalInertia(mass);
 
             var rbInfo = new RigidBodyConstructionInfo(mass, null, colShape, localInertia);

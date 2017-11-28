@@ -41,32 +41,32 @@ namespace BulletSharp
 			return btRotationalLimitMotor_needApplyTorques(Native);
 		}
 
-		public float SolveAngularLimitsRef(float timeStep, ref Vector3 axis, float jacDiagABInv,
+		public double SolveAngularLimitsRef(double timeStep, ref Vector3 axis, double jacDiagABInv,
 			RigidBody body0, RigidBody body1)
 		{
 			return btRotationalLimitMotor_solveAngularLimits(Native, timeStep, ref axis,
 				jacDiagABInv, body0.Native, body1.Native);
 		}
 
-		public float SolveAngularLimits(float timeStep, Vector3 axis, float jacDiagABInv,
+		public double SolveAngularLimits(double timeStep, Vector3 axis, double jacDiagABInv,
 			RigidBody body0, RigidBody body1)
 		{
 			return btRotationalLimitMotor_solveAngularLimits(Native, timeStep, ref axis,
 				jacDiagABInv, body0.Native, body1.Native);
 		}
 
-		public int TestLimitValue(float testValue)
+		public int TestLimitValue(double testValue)
 		{
 			return btRotationalLimitMotor_testLimitValue(Native, testValue);
 		}
 
-		public float AccumulatedImpulse
+		public double AccumulatedImpulse
 		{
 			get => btRotationalLimitMotor_getAccumulatedImpulse(Native);
 			set => btRotationalLimitMotor_setAccumulatedImpulse(Native, value);
 		}
 
-		public float Bounce
+		public double Bounce
 		{
 			get => btRotationalLimitMotor_getBounce(Native);
 			set => btRotationalLimitMotor_setBounce(Native, value);
@@ -78,19 +78,19 @@ namespace BulletSharp
 			set => btRotationalLimitMotor_setCurrentLimit(Native, value);
 		}
 
-		public float CurrentLimitError
+		public double CurrentLimitError
 		{
 			get => btRotationalLimitMotor_getCurrentLimitError(Native);
 			set => btRotationalLimitMotor_setCurrentLimitError(Native, value);
 		}
 
-		public float CurrentPosition
+		public double CurrentPosition
 		{
 			get => btRotationalLimitMotor_getCurrentPosition(Native);
 			set => btRotationalLimitMotor_setCurrentPosition(Native, value);
 		}
 
-		public float Damping
+		public double Damping
 		{
 			get => btRotationalLimitMotor_getDamping(Native);
 			set => btRotationalLimitMotor_setDamping(Native, value);
@@ -102,56 +102,56 @@ namespace BulletSharp
 			set => btRotationalLimitMotor_setEnableMotor(Native, value);
 		}
 
-		public float HiLimit
+		public double HiLimit
 		{
 			get => btRotationalLimitMotor_getHiLimit(Native);
 			set => btRotationalLimitMotor_setHiLimit(Native, value);
 		}
 
 		public bool IsLimited => btRotationalLimitMotor_isLimited(Native);
-		public float LimitSoftness
+		public double LimitSoftness
 		{
 			get => btRotationalLimitMotor_getLimitSoftness(Native);
 			set => btRotationalLimitMotor_setLimitSoftness(Native, value);
 		}
 
-		public float LoLimit
+		public double LoLimit
 		{
 			get => btRotationalLimitMotor_getLoLimit(Native);
 			set => btRotationalLimitMotor_setLoLimit(Native, value);
 		}
 
-		public float MaxLimitForce
+		public double MaxLimitForce
 		{
 			get => btRotationalLimitMotor_getMaxLimitForce(Native);
 			set => btRotationalLimitMotor_setMaxLimitForce(Native, value);
 		}
 
-		public float MaxMotorForce
+		public double MaxMotorForce
 		{
 			get => btRotationalLimitMotor_getMaxMotorForce(Native);
 			set => btRotationalLimitMotor_setMaxMotorForce(Native, value);
 		}
 
-		public float NormalCfm
+		public double NormalCfm
 		{
 			get => btRotationalLimitMotor_getNormalCFM(Native);
 			set => btRotationalLimitMotor_setNormalCFM(Native, value);
 		}
 
-		public float StopCfm
+		public double StopCfm
 		{
 			get => btRotationalLimitMotor_getStopCFM(Native);
 			set => btRotationalLimitMotor_setStopCFM(Native, value);
 		}
 
-		public float StopErp
+		public double StopErp
 		{
 			get => btRotationalLimitMotor_getStopERP(Native);
 			set => btRotationalLimitMotor_setStopERP(Native, value);
 		}
 
-		public float TargetVelocity
+		public double TargetVelocity
 		{
 			get => btRotationalLimitMotor_getTargetVelocity(Native);
 			set => btRotationalLimitMotor_setTargetVelocity(Native, value);
@@ -212,7 +212,7 @@ namespace BulletSharp
 			return btTranslationalLimitMotor_needApplyForce(Native, limitIndex);
 		}
 
-		public float SolveLinearAxisRef(float timeStep, float jacDiagABInv, RigidBody body1,
+		public double SolveLinearAxisRef(double timeStep, double jacDiagABInv, RigidBody body1,
 			ref Vector3 pointInA, RigidBody body2, ref Vector3 pointInB, int limitIndex, ref Vector3 axisNormalOnA,
 			ref Vector3 anchorPos)
 		{
@@ -221,7 +221,7 @@ namespace BulletSharp
 				ref axisNormalOnA, ref anchorPos);
 		}
 
-		public float SolveLinearAxis(float timeStep, float jacDiagABInv, RigidBody body1,
+		public double SolveLinearAxis(double timeStep, double jacDiagABInv, RigidBody body1,
 			Vector3 pointInA, RigidBody body2, Vector3 pointInB, int limitIndex, Vector3 axisNormalOnA,
 			Vector3 anchorPos)
 		{
@@ -230,7 +230,7 @@ namespace BulletSharp
 				ref axisNormalOnA, ref anchorPos);
 		}
 
-		public int TestLimitValue(int limitIndex, float testValue)
+		public int TestLimitValue(int limitIndex, double testValue)
 		{
 			return btTranslationalLimitMotor_testLimitValue(Native, limitIndex,
 				testValue);
@@ -274,7 +274,7 @@ namespace BulletSharp
 			set => btTranslationalLimitMotor_setCurrentLinearDiff(Native, ref value);
 		}
 
-		public float Damping
+		public double Damping
 		{
 			get => btTranslationalLimitMotor_getDamping(Native);
 			set => btTranslationalLimitMotor_setDamping(Native, value);
@@ -285,7 +285,7 @@ namespace BulletSharp
 			get { return btTranslationalLimitMotor_getEnableMotor(_native); }
 		}
 		*/
-		public float LimitSoftness
+		public double LimitSoftness
 		{
 			get => btTranslationalLimitMotor_getLimitSoftness(Native);
 			set => btTranslationalLimitMotor_setLimitSoftness(Native, value);
@@ -324,7 +324,7 @@ namespace BulletSharp
 			set => btTranslationalLimitMotor_setNormalCFM(Native, ref value);
 		}
 
-		public float Restitution
+		public double Restitution
 		{
 			get => btTranslationalLimitMotor_getRestitution(Native);
 			set => btTranslationalLimitMotor_setRestitution(Native, value);
@@ -454,7 +454,7 @@ namespace BulletSharp
 				info._native, row, ref ax1, rotational, rotAllowed);
 		}
 
-		public float GetAngle(int axisIndex)
+		public double GetAngle(int axisIndex)
 		{
 			return btGeneric6DofConstraint_getAngle(Native, axisIndex);
 		}
@@ -478,7 +478,7 @@ namespace BulletSharp
 				ref transB, ref linVelA, ref linVelB, ref angVelA, ref angVelB);
 		}
 
-		public float GetRelativePivotPosition(int axisIndex)
+		public double GetRelativePivotPosition(int axisIndex)
 		{
 			return btGeneric6DofConstraint_getRelativePivotPosition(Native, axisIndex);
 		}
@@ -517,7 +517,7 @@ namespace BulletSharp
 			btGeneric6DofConstraint_setFrames(Native, ref frameA, ref frameB);
 		}
 
-		public void SetLimit(int axis, float lo, float hi)
+		public void SetLimit(int axis, double lo, double hi)
 		{
 			btGeneric6DofConstraint_setLimit(Native, axis, lo, hi);
 		}
@@ -527,7 +527,7 @@ namespace BulletSharp
 			return btGeneric6DofConstraint_testAngularLimitMotor(Native, axisIndex);
 		}
 
-		public void UpdateRhs(float timeStep)
+		public void UpdateRhs(double timeStep)
 		{
 			btGeneric6DofConstraint_updateRHS(Native, timeStep);
 		}
@@ -649,8 +649,8 @@ namespace BulletSharp
 		}
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
-	internal struct Generic6DofConstraintFloatData
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct Generic6DofConstraintFloatData
 	{
 		public TypedConstraintFloatData TypedConstraintData;
 		public TransformFloatData RigidBodyAFrame;
@@ -663,5 +663,21 @@ namespace BulletSharp
 		public int UseOffsetForConstraintFrame;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofConstraintFloatData), fieldName).ToInt32(); }
+    }
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct Generic6DofConstraintDoubleData
+	{
+		public TypedConstraintDoubleData TypedConstraintData;
+		public TransformDoubleData RigidBodyAFrame;
+		public TransformDoubleData RigidBodyBFrame;
+		public Vector3DoubleData LinearUpperLimit;
+		public Vector3DoubleData LinearLowerLimit;
+		public Vector3DoubleData AngularUpperLimit;
+		public Vector3DoubleData AngularLowerLimit;
+		public int UseLinearReferenceFrameA;
+		public int UseOffsetForConstraintFrame;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofConstraintDoubleData), fieldName).ToInt32(); }
 	}
 }

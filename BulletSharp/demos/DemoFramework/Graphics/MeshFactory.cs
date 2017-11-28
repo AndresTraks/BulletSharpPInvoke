@@ -168,8 +168,8 @@ namespace DemoFramework
         public static Vector3[] CreateCapsule(CapsuleShape shape, out uint[] indices)
         {
             int up = shape.UpAxis;
-            float radius = shape.Radius;
-            float cylinderHalfHeight = shape.HalfHeight;
+            double radius = shape.Radius;
+            double cylinderHalfHeight = shape.HalfHeight;
 
             int slices = (int)(radius * 5.0f);
             int stacks = (int)(radius * 5.0f);
@@ -187,7 +187,7 @@ namespace DemoFramework
             // Top and bottom
             const int topVertexIndex = 0;
             const int bottomVertexIndex = 1;
-            float apex = cylinderHalfHeight + radius;
+            double apex = cylinderHalfHeight + radius;
 
             vertices[0] = RotateYAxisUp(0, -apex, 0, up);
             vertices[1] = RotateYAxisUp(-Vector3.UnitY, up);
@@ -196,14 +196,14 @@ namespace DemoFramework
 
             // Stacks
             int v = 4;
-            float hAngle = 0;
-            float vAngle = -(float)Math.PI / 2;
-            float hAngleStep = (float)Math.PI * 2 / slices;
-            float vAngleStep = (float)Math.PI / stacks;
+            double hAngle = 0;
+            double vAngle = -(double)Math.PI / 2;
+            double hAngleStep = (double)Math.PI * 2 / slices;
+            double vAngleStep = (double)Math.PI / stacks;
             Vector3 cylinderOffset = RotateYAxisUp(0, -cylinderHalfHeight, 0, up);
             for (int j = 0; j < stacks - 1; j++)
             {
-                float prevAngle = vAngle;
+                double prevAngle = vAngle;
                 vAngle += vAngleStep;
 
                 if (vAngle > 0 && prevAngle <= 0)
@@ -216,9 +216,9 @@ namespace DemoFramework
                     hAngle += hAngleStep;
 
                     Vector3 sphereVertex = RotateYAxisUp(
-                        (float)Math.Cos(vAngle) * (float)Math.Sin(hAngle),
-                        (float)Math.Sin(vAngle),
-                        (float)Math.Cos(vAngle) * (float)Math.Cos(hAngle),
+                        (double)Math.Cos(vAngle) * (double)Math.Sin(hAngle),
+                        (double)Math.Sin(vAngle),
+                        (double)Math.Cos(vAngle) * (double)Math.Cos(hAngle),
                         up);
                     vertices[v++] = sphereVertex * radius + cylinderOffset;
                     vertices[v++] = Vector3.Normalize(sphereVertex);
@@ -286,7 +286,7 @@ namespace DemoFramework
             }
         }
 
-        private static Vector3 RotateYAxisUp(float x, float y, float z, int upAxis)
+        private static Vector3 RotateYAxisUp(double x, double y, double z, int upAxis)
         {
             switch (upAxis)
             {
@@ -302,11 +302,11 @@ namespace DemoFramework
         public static Vector3[] CreateCone(ConeShape shape, out uint[] indices)
         {
             int up = shape.ConeUpIndex;
-            float radius = shape.Radius;
-            float halfHeight = shape.Height / 2 + shape.Margin;
+            double radius = shape.Radius;
+            double halfHeight = shape.Height / 2 + shape.Margin;
 
             const int numSteps = 10;
-            const float angleStep = (2 * (float)Math.PI) / numSteps;
+            const double angleStep = (2 * (double)Math.PI) / numSteps;
 
             const int vertexCount = 2 + 6 * numSteps;
             const int indexCount = (4 * numSteps + 2) * 3;
@@ -332,8 +332,8 @@ namespace DemoFramework
 
             for (int j = 1; j < numSteps; j++)
             {
-                float x = radius * (float)Math.Sin(j * angleStep);
-                float z = radius * (float)Math.Cos(j * angleStep);
+                double x = radius * (double)Math.Sin(j * angleStep);
+                double z = radius * (double)Math.Cos(j * angleStep);
 
                 vertices[v++] = RotateYAxisUp(x, -halfHeight, z, up);
                 vertices[v++] = normal;
@@ -362,8 +362,8 @@ namespace DemoFramework
 
             for (int j = 1; j < numSteps + 1; j++)
             {
-                float x = radius * (float)Math.Sin(j * angleStep);
-                float z = radius * (float)Math.Cos(j * angleStep);
+                double x = radius * (double)Math.Sin(j * angleStep);
+                double z = radius * (double)Math.Cos(j * angleStep);
 
                 normal = RotateYAxisUp(x, 0, z, up);
                 normal.Normalize();
@@ -395,11 +395,11 @@ namespace DemoFramework
         public static Vector3[] CreateCylinder(CylinderShape shape, out uint[] indices)
         {
             int up = shape.UpAxis;
-            float radius = shape.Radius;
-            float halfHeight = shape.HalfExtentsWithoutMargin[up] + shape.Margin;
+            double radius = shape.Radius;
+            double halfHeight = shape.HalfExtentsWithoutMargin[up] + shape.Margin;
 
             const int numSteps = 10;
-            const float angleStep = (2 * (float)Math.PI) / numSteps;
+            const double angleStep = (2 * (double)Math.PI) / numSteps;
 
             const int vertexCount = 2 + 6 * numSteps;
             const int indexCount = (4 * numSteps + 2) * 3;
@@ -427,8 +427,8 @@ namespace DemoFramework
 
                 for (int j = 1; j < numSteps; j++)
                 {
-                    float x = radius * (float)Math.Sin(j * angleStep);
-                    float z = radius * (float)Math.Cos(j * angleStep);
+                    double x = radius * (double)Math.Sin(j * angleStep);
+                    double z = radius * (double)Math.Cos(j * angleStep);
 
                     vertices[v++] = RotateYAxisUp(x, side * halfHeight, z, up);
                     vertices[v++] = normal;
@@ -473,8 +473,8 @@ namespace DemoFramework
 
             for (int j = 1; j < numSteps + 1; j++)
             {
-                float x = radius * (float)Math.Sin(j * angleStep);
-                float z = radius * (float)Math.Cos(j * angleStep);
+                double x = radius * (double)Math.Sin(j * angleStep);
+                double z = radius * (double)Math.Cos(j * angleStep);
 
                 normal = RotateYAxisUp(x, 0, z, up);
                 normal.Normalize();
@@ -629,7 +629,7 @@ namespace DemoFramework
             return CreateSphere(shape.Radius, out indices);
         }
 
-        private static Vector3[] CreateSphere(float radius, out uint[] indices)
+        private static Vector3[] CreateSphere(double radius, out uint[] indices)
         {
             int slices = (int)(radius * 10.0f);
             int stacks = (int)(radius * 10.0f);
@@ -655,21 +655,21 @@ namespace DemoFramework
             vertices[v++] = Vector3.UnitY;
 
             // Stacks
-            float vAngle = -(float)Math.PI / 2;
-            float horAngleStep = (float)Math.PI * 2 / slices;
-            float vertAngleStep = (float)Math.PI / stacks;
+            double vAngle = -(double)Math.PI / 2;
+            double horAngleStep = (double)Math.PI * 2 / slices;
+            double vertAngleStep = (double)Math.PI / stacks;
             for (int j = 0; j < stacks - 1; j++)
             {
                 vAngle += vertAngleStep;
 
                 for (int k = 0; k < slices; k++)
                 {
-                    float angle = k * horAngleStep;
+                    double angle = k * horAngleStep;
 
                     var vertex = new Vector3(
-                        (float)Math.Cos(vAngle) * (float)Math.Sin(angle),
-                        (float)Math.Sin(vAngle),
-                        (float)Math.Cos(vAngle) * (float)Math.Cos(angle));
+                        (double)Math.Cos(vAngle) * (double)Math.Sin(angle),
+                        (double)Math.Sin(vAngle),
+                        (double)Math.Cos(vAngle) * (double)Math.Cos(angle));
                     vertices[v++] = vertex * radius;
                     vertices[v++] = Vector3.Normalize(vertex);
                 }
@@ -732,8 +732,8 @@ namespace DemoFramework
             if (Math.Abs(n[2]) > (Math.Sqrt(2) / 2))
             {
                 // choose p in y-z plane
-                float a = n[1] * n[1] + n[2] * n[2];
-                float k = 1.0f / (float)Math.Sqrt(a);
+                double a = n[1] * n[1] + n[2] * n[2];
+                double k = 1.0f / (double)Math.Sqrt(a);
                 p = new Vector3(0, -n[2] * k, n[1] * k);
                 // set q = n x p
                 q = Vector3.Cross(n, p);
@@ -741,8 +741,8 @@ namespace DemoFramework
             else
             {
                 // choose p in x-y plane
-                float a = n[0] * n[0] + n[1] * n[1];
-                float k = 1.0f / (float)Math.Sqrt(a);
+                double a = n[0] * n[0] + n[1] * n[1];
+                double k = 1.0f / (double)Math.Sqrt(a);
                 p = new Vector3(-n[1] * k, n[0] * k, 0);
                 // set q = n x p
                 q = Vector3.Cross(n, p);
@@ -754,7 +754,7 @@ namespace DemoFramework
             Vector3 planeOrigin = shape.PlaneNormal * shape.PlaneConstant;
             Vector3 vec0, vec1;
             PlaneSpace1(shape.PlaneNormal, out vec0, out vec1);
-            const float size = 1000;
+            const double size = 1000;
 
             indices = new uint[] { 0, 2, 1, 0, 1, 3 };
 
@@ -800,9 +800,9 @@ namespace DemoFramework
                 {
                     uint i = indexReader.ReadUInt32();
                     vertexStream.Position = vertexStride * i;
-                    float f1 = vertexReader.ReadSingle();
-                    float f2 = vertexReader.ReadSingle();
-                    float f3 = vertexReader.ReadSingle();
+                    double f1 = vertexReader.ReadSingle();
+                    double f2 = vertexReader.ReadSingle();
+                    double f3 = vertexReader.ReadSingle();
                     Vector3 v0 = new Vector3(f1, f2, f3);
                     i = indexReader.ReadUInt32();
                     vertexStream.Position = vertexStride * i;

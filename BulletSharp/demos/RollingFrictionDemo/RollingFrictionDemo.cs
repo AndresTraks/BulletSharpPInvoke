@@ -54,7 +54,7 @@ namespace RollingFrictionDemo
                 new CylinderShapeZ(new Vector3(0.5f, 0.5f, 1)),
             };
 
-            const float mass = 1.0f;
+            const double mass = 1.0f;
             var anisotropicRollingFrictionDirection = new Vector3(1, 1, 1);
 
             var rbInfo = new RigidBodyConstructionInfo(mass, null, null);
@@ -110,7 +110,7 @@ namespace RollingFrictionDemo
         {
             var groundShape = new BoxShape(20, 50, 10);
             CollisionObject ground = PhysicsHelper.CreateStaticBody(
-                Matrix.RotationAxis(new Vector3(0, 0, 1), (float)Math.PI * 0.03f) * Matrix.Translation(0, -50, 0),
+                Matrix.RotationAxis(new Vector3(0, 0, 1), (double)Math.PI * 0.03f) * Matrix.Translation(0, -50, 0),
                 groundShape, World);
             ground.Friction = 1;
             ground.RollingFriction = 1;

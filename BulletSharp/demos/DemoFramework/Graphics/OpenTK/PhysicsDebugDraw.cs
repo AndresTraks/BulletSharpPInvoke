@@ -26,7 +26,7 @@ namespace DemoFramework.OpenTK
             GL.EnableClientState(ArrayCap.VertexArray);
             GL.EnableClientState(ArrayCap.ColorArray);
 
-            GL.VertexPointer(3, VertexPointerType.Float, 0, positionArray);
+            GL.VertexPointer(3, VertexPointerType.Double, 0, positionArray);
             GL.ColorPointer(3, ColorPointerType.UnsignedByte, sizeof(int), colorArray);
             GL.DrawArrays(BeginMode.Lines, 0, positionArray.Length);
 

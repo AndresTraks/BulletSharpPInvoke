@@ -38,7 +38,7 @@ namespace BulletSharp.Math
         /// <summary>
         /// The size of the <see cref="SlimMath.Vector4"/> type, in bytes.
         /// </summary>
-        public const int SizeInBytes = 4 * sizeof(float);
+        public const int SizeInBytes = 4 * sizeof(double);
 
         /// <summary>
         /// A <see cref="SlimMath.Vector4"/> with all of its components set to zero.
@@ -73,28 +73,28 @@ namespace BulletSharp.Math
         /// <summary>
         /// The X component of the vector.
         /// </summary>
-        public float X;
+        public double X;
 
         /// <summary>
         /// The Y component of the vector.
         /// </summary>
-        public float Y;
+        public double Y;
 
         /// <summary>
         /// The Z component of the vector.
         /// </summary>
-        public float Z;
+        public double Z;
 
         /// <summary>
         /// The W component of the vector.
         /// </summary>
-        public float W;
+        public double W;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SlimMath.Vector4"/> struct.
         /// </summary>
         /// <param name="value">The value that will be assigned to all components.</param>
-        public Vector4(float value)
+        public Vector4(double value)
         {
             X = value;
             Y = value;
@@ -109,7 +109,7 @@ namespace BulletSharp.Math
         /// <param name="y">Initial value for the Y component of the vector.</param>
         /// <param name="z">Initial value for the Z component of the vector.</param>
         /// <param name="w">Initial value for the W component of the vector.</param>
-        public Vector4(float x, float y, float z, float w)
+        public Vector4(double x, double y, double z, double w)
         {
             X = x;
             Y = y;
@@ -122,7 +122,7 @@ namespace BulletSharp.Math
         /// </summary>
         /// <param name="value">A vector containing the values with which to initialize the X, Y, and Z components.</param>
         /// <param name="w">Initial value for the W component of the vector.</param>
-        public Vector4(Vector3 value, float w)
+        public Vector4(Vector3 value, double w)
         {
             X = value.X;
             Y = value.Y;
@@ -136,7 +136,7 @@ namespace BulletSharp.Math
         /// <param name="values">The values to assign to the X, Y, Z, and W components of the vector. This must be an array with four elements.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="values"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="values"/> contains more or less than four elements.</exception>
-        public Vector4(float[] values)
+        public Vector4(double[] values)
         {
             if (values == null)
                 throw new ArgumentNullException("values");
@@ -164,9 +164,9 @@ namespace BulletSharp.Math
         /// <see cref="SlimMath.Vector4.LengthSquared"/> may be preferred when only the relative length is needed
         /// and speed is of the essence.
         /// </remarks>
-        public float Length
+        public double Length
         {
-            get { return (float)System.Math.Sqrt((X * X) + (Y * Y) + (Z * Z) + (W * W)); }
+            get { return (double)System.Math.Sqrt((X * X) + (Y * Y) + (Z * Z) + (W * W)); }
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace BulletSharp.Math
         /// This property may be preferred to <see cref="SlimMath.Vector4.Length"/> when only a relative length is needed
         /// and speed is of the essence.
         /// </remarks>
-        public float LengthSquared
+        public double LengthSquared
         {
             get { return (X * X) + (Y * Y) + (Z * Z) + (W * W); }
         }
@@ -188,7 +188,7 @@ namespace BulletSharp.Math
         /// <param name="index">The index of the component to access. Use 0 for the X component, 1 for the Y component, 2 for the Z component, and 3 for the W component.</param>
         /// <returns>The value of the component at the specified index.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of the range [0, 3].</exception>
-        public float this[int index]
+        public double this[int index]
         {
             get
             {
@@ -221,10 +221,10 @@ namespace BulletSharp.Math
         /// </summary>
         public void Normalize()
         {
-            float length = Length;
+            double length = Length;
             if (length > Utilities.ZeroTolerance)
             {
-                float inverse = 1.0f / length;
+                double inverse = 1.0f / length;
                 X *= inverse;
                 Y *= inverse;
                 Z *= inverse;
@@ -258,9 +258,9 @@ namespace BulletSharp.Math
         /// Creates an array containing the elements of the vector.
         /// </summary>
         /// <returns>A four-element array containing the components of the vector.</returns>
-        public float[] ToArray()
+        public double[] ToArray()
         {
-            return new float[] { X, Y, Z, W };
+            return new double[] { X, Y, Z, W };
         }
 
         #region Transcendentals
@@ -271,10 +271,10 @@ namespace BulletSharp.Math
         /// <param name="result">When the method completes, contains a vector that is the square root of the input vector.</param>
         public static void Sqrt(ref Vector4 value, out Vector4 result)
         {
-            result.X = (float)System.Math.Sqrt(value.X);
-            result.Y = (float)System.Math.Sqrt(value.Y);
-            result.Z = (float)System.Math.Sqrt(value.Z);
-            result.W = (float)System.Math.Sqrt(value.W);
+            result.X = (double)System.Math.Sqrt(value.X);
+            result.Y = (double)System.Math.Sqrt(value.Y);
+            result.Z = (double)System.Math.Sqrt(value.Z);
+            result.W = (double)System.Math.Sqrt(value.W);
         }
 
         /// <summary>
@@ -321,10 +321,10 @@ namespace BulletSharp.Math
         /// <param name="result">When the method completes, contains a vector that is the square root and reciprocal of the input vector.</param>
         public static void ReciprocalSqrt(ref Vector4 value, out Vector4 result)
         {
-            result.X = 1.0f / (float)System.Math.Sqrt(value.X);
-            result.Y = 1.0f / (float)System.Math.Sqrt(value.Y);
-            result.Z = 1.0f / (float)System.Math.Sqrt(value.Z);
-            result.W = 1.0f / (float)System.Math.Sqrt(value.W);
+            result.X = 1.0f / (double)System.Math.Sqrt(value.X);
+            result.Y = 1.0f / (double)System.Math.Sqrt(value.Y);
+            result.Z = 1.0f / (double)System.Math.Sqrt(value.Z);
+            result.W = 1.0f / (double)System.Math.Sqrt(value.W);
         }
 
         /// <summary>
@@ -346,10 +346,10 @@ namespace BulletSharp.Math
         /// <param name="result">When the method completes, contains a vector that has e raised to each of the components in the input vector.</param>
         public static void Exp(ref Vector4 value, out Vector4 result)
         {
-            result.X = (float)System.Math.Exp(value.X);
-            result.Y = (float)System.Math.Exp(value.Y);
-            result.Z = (float)System.Math.Exp(value.Z);
-            result.W = (float)System.Math.Exp(value.W);
+            result.X = (double)System.Math.Exp(value.X);
+            result.Y = (double)System.Math.Exp(value.Y);
+            result.Z = (double)System.Math.Exp(value.Z);
+            result.W = (double)System.Math.Exp(value.W);
         }
 
         /// <summary>
@@ -372,15 +372,15 @@ namespace BulletSharp.Math
         /// <param name="cosResult">When the method completes, contains the cpsome pf each component in the input vector.</param>
         public static void SinCos(ref Vector4 value, out Vector4 sinResult, out Vector4 cosResult)
         {
-            sinResult.X = (float)System.Math.Sin(value.X);
-            sinResult.Y = (float)System.Math.Sin(value.Y);
-            sinResult.Z = (float)System.Math.Sin(value.Z);
-            sinResult.W = (float)System.Math.Sin(value.W);
+            sinResult.X = (double)System.Math.Sin(value.X);
+            sinResult.Y = (double)System.Math.Sin(value.Y);
+            sinResult.Z = (double)System.Math.Sin(value.Z);
+            sinResult.W = (double)System.Math.Sin(value.W);
 
-            cosResult.X = (float)System.Math.Cos(value.X);
-            cosResult.Y = (float)System.Math.Cos(value.Y);
-            cosResult.Z = (float)System.Math.Cos(value.Z);
-            cosResult.W = (float)System.Math.Cos(value.W);
+            cosResult.X = (double)System.Math.Cos(value.X);
+            cosResult.Y = (double)System.Math.Cos(value.Y);
+            cosResult.Z = (double)System.Math.Cos(value.Z);
+            cosResult.W = (double)System.Math.Cos(value.W);
         }
 
         /// <summary>
@@ -390,10 +390,10 @@ namespace BulletSharp.Math
         /// <param name="result">When the method completes, a vector that contains the sine of each component in the input vector.</param>
         public static void Sin(ref Vector4 value, out Vector4 result)
         {
-            result.X = (float)System.Math.Sin(value.X);
-            result.Y = (float)System.Math.Sin(value.Y);
-            result.Z = (float)System.Math.Sin(value.Z);
-            result.W = (float)System.Math.Sin(value.W);
+            result.X = (double)System.Math.Sin(value.X);
+            result.Y = (double)System.Math.Sin(value.Y);
+            result.Z = (double)System.Math.Sin(value.Z);
+            result.W = (double)System.Math.Sin(value.W);
         }
 
         /// <summary>
@@ -415,10 +415,10 @@ namespace BulletSharp.Math
         /// <param name="result">When the method completes, contains a vector that contains the cosine of each component in the input vector.</param>
         public static void Cos(ref Vector4 value, out Vector4 result)
         {
-            result.X = (float)System.Math.Cos(value.X);
-            result.Y = (float)System.Math.Cos(value.Y);
-            result.Z = (float)System.Math.Cos(value.Z);
-            result.W = (float)System.Math.Cos(value.W);
+            result.X = (double)System.Math.Cos(value.X);
+            result.Y = (double)System.Math.Cos(value.Y);
+            result.Z = (double)System.Math.Cos(value.Z);
+            result.W = (double)System.Math.Cos(value.W);
         }
 
         /// <summary>
@@ -440,10 +440,10 @@ namespace BulletSharp.Math
         /// <param name="result">When the method completes, contains a vector that contains the tangent of each component in the input vector.</param>
         public static void Tan(ref Vector4 value, out Vector4 result)
         {
-            result.X = (float)System.Math.Tan(value.X);
-            result.Y = (float)System.Math.Tan(value.Y);
-            result.Z = (float)System.Math.Tan(value.Z);
-            result.W = (float)System.Math.Tan(value.W);
+            result.X = (double)System.Math.Tan(value.X);
+            result.Y = (double)System.Math.Tan(value.Y);
+            result.Z = (double)System.Math.Tan(value.Z);
+            result.W = (double)System.Math.Tan(value.W);
         }
 
         /// <summary>
@@ -509,7 +509,7 @@ namespace BulletSharp.Math
         /// <param name="value">The vector to scale.</param>
         /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Multiply(ref Vector4 value, float scalar, out Vector4 result)
+        public static void Multiply(ref Vector4 value, double scalar, out Vector4 result)
         {
             result = new Vector4(value.X * scalar, value.Y * scalar, value.Z * scalar, value.W * scalar);
         }
@@ -520,7 +520,7 @@ namespace BulletSharp.Math
         /// <param name="value">The vector to scale.</param>
         /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector4 Multiply(Vector4 value, float scalar)
+        public static Vector4 Multiply(Vector4 value, double scalar)
         {
             return new Vector4(value.X * scalar, value.Y * scalar, value.Z * scalar, value.W * scalar);
         }
@@ -553,7 +553,7 @@ namespace BulletSharp.Math
         /// <param name="value">The vector to scale.</param>
         /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Divide(ref Vector4 value, float scalar, out Vector4 result)
+        public static void Divide(ref Vector4 value, double scalar, out Vector4 result)
         {
             result = new Vector4(value.X / scalar, value.Y / scalar, value.Z / scalar, value.W / scalar);
         }
@@ -564,7 +564,7 @@ namespace BulletSharp.Math
         /// <param name="value">The vector to scale.</param>
         /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector4 Divide(Vector4 value, float scalar)
+        public static Vector4 Divide(Vector4 value, double scalar)
         {
             return new Vector4(value.X / scalar, value.Y / scalar, value.Z / scalar, value.W / scalar);
         }
@@ -618,7 +618,7 @@ namespace BulletSharp.Math
         /// <param name="amount1">Barycentric coordinate b2, which expresses the weighting factor toward vertex 2 (specified in <paramref name="value2"/>).</param>
         /// <param name="amount2">Barycentric coordinate b3, which expresses the weighting factor toward vertex 3 (specified in <paramref name="value3"/>).</param>
         /// <param name="result">When the method completes, contains the 4D Cartesian coordinates of the specified point.</param>
-        public static void Barycentric(ref Vector4 value1, ref Vector4 value2, ref Vector4 value3, float amount1, float amount2, out Vector4 result)
+        public static void Barycentric(ref Vector4 value1, ref Vector4 value2, ref Vector4 value3, double amount1, double amount2, out Vector4 result)
         {
             result = new Vector4(
                 (value1.X + (amount1 * (value2.X - value1.X))) + (amount2 * (value3.X - value1.X)),
@@ -636,7 +636,7 @@ namespace BulletSharp.Math
         /// <param name="amount1">Barycentric coordinate b2, which expresses the weighting factor toward vertex 2 (specified in <paramref name="value2"/>).</param>
         /// <param name="amount2">Barycentric coordinate b3, which expresses the weighting factor toward vertex 3 (specified in <paramref name="value3"/>).</param>
         /// <returns>A new <see cref="SlimMath.Vector4"/> containing the 4D Cartesian coordinates of the specified point.</returns>
-        public static Vector4 Barycentric(Vector4 value1, Vector4 value2, Vector4 value3, float amount1, float amount2)
+        public static Vector4 Barycentric(Vector4 value1, Vector4 value2, Vector4 value3, double amount1, double amount2)
         {
             Vector4 result;
             Barycentric(ref value1, ref value2, ref value3, amount1, amount2, out result);
@@ -652,19 +652,19 @@ namespace BulletSharp.Math
         /// <param name="result">When the method completes, contains the clamped value.</param>
         public static void Clamp(ref Vector4 value, ref Vector4 min, ref Vector4 max, out Vector4 result)
         {
-            float x = value.X;
+            double x = value.X;
             x = (x > max.X) ? max.X : x;
             x = (x < min.X) ? min.X : x;
 
-            float y = value.Y;
+            double y = value.Y;
             y = (y > max.Y) ? max.Y : y;
             y = (y < min.Y) ? min.Y : y;
 
-            float z = value.Z;
+            double z = value.Z;
             z = (z > max.Z) ? max.Z : z;
             z = (z < min.Z) ? min.Z : z;
 
-            float w = value.W;
+            double w = value.W;
             w = (w > max.W) ? max.W : w;
             w = (w < min.W) ? min.W : w;
 
@@ -692,17 +692,17 @@ namespace BulletSharp.Math
         /// <param name="value2">The second vector.</param>
         /// <param name="result">When the method completes, contains the distance between the two vectors.</param>
         /// <remarks>
-        /// <see cref="SlimMath.Vector4.DistanceSquared(ref Vector4, ref Vector4, out float)"/> may be preferred when only the relative distance is needed
+        /// <see cref="SlimMath.Vector4.DistanceSquared(ref Vector4, ref Vector4, out double)"/> may be preferred when only the relative distance is needed
         /// and speed is of the essence.
         /// </remarks>
-        public static void Distance(ref Vector4 value1, ref Vector4 value2, out float result)
+        public static void Distance(ref Vector4 value1, ref Vector4 value2, out double result)
         {
-            float x = value1.X - value2.X;
-            float y = value1.Y - value2.Y;
-            float z = value1.Z - value2.Z;
-            float w = value1.W - value2.W;
+            double x = value1.X - value2.X;
+            double y = value1.Y - value2.Y;
+            double z = value1.Z - value2.Z;
+            double w = value1.W - value2.W;
 
-            result = (float)System.Math.Sqrt((x * x) + (y * y) + (z * z) + (w * w));
+            result = (double)System.Math.Sqrt((x * x) + (y * y) + (z * z) + (w * w));
         }
 
         /// <summary>
@@ -715,14 +715,14 @@ namespace BulletSharp.Math
         /// <see cref="SlimMath.Vector4.DistanceSquared(Vector4, Vector4)"/> may be preferred when only the relative distance is needed
         /// and speed is of the essence.
         /// </remarks>
-        public static float Distance(Vector4 value1, Vector4 value2)
+        public static double Distance(Vector4 value1, Vector4 value2)
         {
-            float x = value1.X - value2.X;
-            float y = value1.Y - value2.Y;
-            float z = value1.Z - value2.Z;
-            float w = value1.W - value2.W;
+            double x = value1.X - value2.X;
+            double y = value1.Y - value2.Y;
+            double z = value1.Z - value2.Z;
+            double w = value1.W - value2.W;
 
-            return (float)System.Math.Sqrt((x * x) + (y * y) + (z * z) + (w * w));
+            return (double)System.Math.Sqrt((x * x) + (y * y) + (z * z) + (w * w));
         }
 
         /// <summary>
@@ -738,12 +738,12 @@ namespace BulletSharp.Math
         /// involves two square roots, which are computationally expensive. However, using distance squared 
         /// provides the same information and avoids calculating two square roots.
         /// </remarks>
-        public static void DistanceSquared(ref Vector4 value1, ref Vector4 value2, out float result)
+        public static void DistanceSquared(ref Vector4 value1, ref Vector4 value2, out double result)
         {
-            float x = value1.X - value2.X;
-            float y = value1.Y - value2.Y;
-            float z = value1.Z - value2.Z;
-            float w = value1.W - value2.W;
+            double x = value1.X - value2.X;
+            double y = value1.Y - value2.Y;
+            double z = value1.Z - value2.Z;
+            double w = value1.W - value2.W;
 
             result = (x * x) + (y * y) + (z * z) + (w * w);
         }
@@ -761,12 +761,12 @@ namespace BulletSharp.Math
         /// involves two square roots, which are computationally expensive. However, using distance squared 
         /// provides the same information and avoids calculating two square roots.
         /// </remarks>
-        public static float DistanceSquared(Vector4 value1, Vector4 value2)
+        public static double DistanceSquared(Vector4 value1, Vector4 value2)
         {
-            float x = value1.X - value2.X;
-            float y = value1.Y - value2.Y;
-            float z = value1.Z - value2.Z;
-            float w = value1.W - value2.W;
+            double x = value1.X - value2.X;
+            double y = value1.Y - value2.Y;
+            double z = value1.Z - value2.Z;
+            double w = value1.W - value2.W;
 
             return (x * x) + (y * y) + (z * z) + (w * w);
         }
@@ -777,7 +777,7 @@ namespace BulletSharp.Math
         /// <param name="left">First source vector</param>
         /// <param name="right">Second source vector.</param>
         /// <param name="result">When the method completes, contains the dot product of the two vectors.</param>
-        public static void Dot(ref Vector4 left, ref Vector4 right, out float result)
+        public static void Dot(ref Vector4 left, ref Vector4 right, out double result)
         {
             result = (left.X * right.X) + (left.Y * right.Y) + (left.Z * right.Z) + (left.W * right.W);
         }
@@ -788,7 +788,7 @@ namespace BulletSharp.Math
         /// <param name="left">First source vector.</param>
         /// <param name="right">Second source vector.</param>
         /// <returns>The dot product of the two vectors.</returns>
-        public static float Dot(Vector4 left, Vector4 right)
+        public static double Dot(Vector4 left, Vector4 right)
         {
             return (left.X * right.X) + (left.Y * right.Y) + (left.Z * right.Z) + (left.W * right.W);
         }
@@ -828,7 +828,7 @@ namespace BulletSharp.Math
         /// <code>start + (end - start) * amount</code>
         /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
         /// </remarks>
-        public static void Lerp(ref Vector4 start, ref Vector4 end, float amount, out Vector4 result)
+        public static void Lerp(ref Vector4 start, ref Vector4 end, double amount, out Vector4 result)
         {
             result.X = start.X + ((end.X - start.X) * amount);
             result.Y = start.Y + ((end.Y - start.Y) * amount);
@@ -848,7 +848,7 @@ namespace BulletSharp.Math
         /// <code>start + (end - start) * amount</code>
         /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
         /// </remarks>
-        public static Vector4 Lerp(Vector4 start, Vector4 end, float amount)
+        public static Vector4 Lerp(Vector4 start, Vector4 end, double amount)
         {
             Vector4 result;
             Lerp(ref start, ref end, amount, out result);
@@ -862,7 +862,7 @@ namespace BulletSharp.Math
         /// <param name="end">End vector.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
         /// <param name="result">When the method completes, contains the cubic interpolation of the two vectors.</param>
-        public static void SmoothStep(ref Vector4 start, ref Vector4 end, float amount, out Vector4 result)
+        public static void SmoothStep(ref Vector4 start, ref Vector4 end, double amount, out Vector4 result)
         {
             amount = (amount > 1.0f) ? 1.0f : ((amount < 0.0f) ? 0.0f : amount);
             amount = (amount * amount) * (3.0f - (2.0f * amount));
@@ -880,7 +880,7 @@ namespace BulletSharp.Math
         /// <param name="end">End vector.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
         /// <returns>The cubic interpolation of the two vectors.</returns>
-        public static Vector4 SmoothStep(Vector4 start, Vector4 end, float amount)
+        public static Vector4 SmoothStep(Vector4 start, Vector4 end, double amount)
         {
             Vector4 result;
             SmoothStep(ref start, ref end, amount, out result);
@@ -896,14 +896,14 @@ namespace BulletSharp.Math
         /// <param name="tangent2">Second source tangent vector.</param>
         /// <param name="amount">Weighting factor.</param>
         /// <param name="result">When the method completes, contains the result of the Hermite spline interpolation.</param>
-        public static void Hermite(ref Vector4 value1, ref Vector4 tangent1, ref Vector4 value2, ref Vector4 tangent2, float amount, out Vector4 result)
+        public static void Hermite(ref Vector4 value1, ref Vector4 tangent1, ref Vector4 value2, ref Vector4 tangent2, double amount, out Vector4 result)
         {
-            float squared = amount * amount;
-            float cubed = amount * squared;
-            float part1 = ((2.0f * cubed) - (3.0f * squared)) + 1.0f;
-            float part2 = (-2.0f * cubed) + (3.0f * squared);
-            float part3 = (cubed - (2.0f * squared)) + amount;
-            float part4 = cubed - squared;
+            double squared = amount * amount;
+            double cubed = amount * squared;
+            double part1 = ((2.0f * cubed) - (3.0f * squared)) + 1.0f;
+            double part2 = (-2.0f * cubed) + (3.0f * squared);
+            double part3 = (cubed - (2.0f * squared)) + amount;
+            double part4 = cubed - squared;
 
             result = new Vector4(
                 (((value1.X * part1) + (value2.X * part2)) + (tangent1.X * part3)) + (tangent2.X * part4),
@@ -921,7 +921,7 @@ namespace BulletSharp.Math
         /// <param name="tangent2">Second source tangent vector.</param>
         /// <param name="amount">Weighting factor.</param>
         /// <returns>The result of the Hermite spline interpolation.</returns>
-        public static Vector4 Hermite(Vector4 value1, Vector4 tangent1, Vector4 value2, Vector4 tangent2, float amount)
+        public static Vector4 Hermite(Vector4 value1, Vector4 tangent1, Vector4 value2, Vector4 tangent2, double amount)
         {
             Vector4 result;
             Hermite(ref value1, ref tangent1, ref value2, ref tangent2, amount, out result);
@@ -937,10 +937,10 @@ namespace BulletSharp.Math
         /// <param name="value4">The fourth position in the interpolation.</param>
         /// <param name="amount">Weighting factor.</param>
         /// <param name="result">When the method completes, contains the result of the Catmull-Rom interpolation.</param>
-        public static void CatmullRom(ref Vector4 value1, ref Vector4 value2, ref Vector4 value3, ref Vector4 value4, float amount, out Vector4 result)
+        public static void CatmullRom(ref Vector4 value1, ref Vector4 value2, ref Vector4 value3, ref Vector4 value4, double amount, out Vector4 result)
         {
-            float squared = amount * amount;
-            float cubed = amount * squared;
+            double squared = amount * amount;
+            double cubed = amount * squared;
 
             result.X = 0.5f * ((((2.0f * value2.X) + ((-value1.X + value3.X) * amount)) +
                 (((((2.0f * value1.X) - (5.0f * value2.X)) + (4.0f * value3.X)) - value4.X) * squared)) +
@@ -968,7 +968,7 @@ namespace BulletSharp.Math
         /// <param name="value4">The fourth position in the interpolation.</param>
         /// <param name="amount">Weighting factor.</param>
         /// <returns>A vector that is the result of the Catmull-Rom interpolation.</returns>
-        public static Vector4 CatmullRom(Vector4 value1, Vector4 value2, Vector4 value3, Vector4 value4, float amount)
+        public static Vector4 CatmullRom(Vector4 value1, Vector4 value2, Vector4 value3, Vector4 value4, double amount)
         {
             Vector4 result;
             CatmullRom(ref value1, ref value2, ref value3, ref value4, amount, out result);
@@ -1130,28 +1130,28 @@ namespace BulletSharp.Math
         /// <param name="result">When the method completes, contains the transformed <see cref="SlimMath.Vector4"/>.</param>
         public static void Transform(ref Vector4 vector, ref Quaternion rotation, out Vector4 result)
         {
-            float x = rotation.X + rotation.X;
-            float y = rotation.Y + rotation.Y;
-            float z = rotation.Z + rotation.Z;
-            float wx = rotation.W * x;
-            float wy = rotation.W * y;
-            float wz = rotation.W * z;
-            float xx = rotation.X * x;
-            float xy = rotation.X * y;
-            float xz = rotation.X * z;
-            float yy = rotation.Y * y;
-            float yz = rotation.Y * z;
-            float zz = rotation.Z * z;
+            double x = rotation.X + rotation.X;
+            double y = rotation.Y + rotation.Y;
+            double z = rotation.Z + rotation.Z;
+            double wx = rotation.W * x;
+            double wy = rotation.W * y;
+            double wz = rotation.W * z;
+            double xx = rotation.X * x;
+            double xy = rotation.X * y;
+            double xz = rotation.X * z;
+            double yy = rotation.Y * y;
+            double yz = rotation.Y * z;
+            double zz = rotation.Z * z;
 
-            float num1 = ((1.0f - yy) - zz);
-            float num2 = (xy - wz);
-            float num3 = (xz + wy);
-            float num4 = (xy + wz);
-            float num5 = ((1.0f - xx) - zz);
-            float num6 = (yz - wx);
-            float num7 = (xz - wy);
-            float num8 = (yz + wx);
-            float num9 = ((1.0f - xx) - yy);
+            double num1 = ((1.0f - yy) - zz);
+            double num2 = (xy - wz);
+            double num3 = (xz + wy);
+            double num4 = (xy + wz);
+            double num5 = ((1.0f - xx) - zz);
+            double num6 = (yz - wx);
+            double num7 = (xz - wy);
+            double num8 = (yz + wx);
+            double num9 = ((1.0f - xx) - yy);
 
             result = new Vector4(
                 ((vector.X * num1) + (vector.Y * num2)) + (vector.Z * num3),
@@ -1191,28 +1191,28 @@ namespace BulletSharp.Math
             if (destination.Length < source.Length)
                 throw new ArgumentOutOfRangeException("destination", "The destination array must be of same length or larger length than the source array.");
 
-            float x = rotation.X + rotation.X;
-            float y = rotation.Y + rotation.Y;
-            float z = rotation.Z + rotation.Z;
-            float wx = rotation.W * x;
-            float wy = rotation.W * y;
-            float wz = rotation.W * z;
-            float xx = rotation.X * x;
-            float xy = rotation.X * y;
-            float xz = rotation.X * z;
-            float yy = rotation.Y * y;
-            float yz = rotation.Y * z;
-            float zz = rotation.Z * z;
+            double x = rotation.X + rotation.X;
+            double y = rotation.Y + rotation.Y;
+            double z = rotation.Z + rotation.Z;
+            double wx = rotation.W * x;
+            double wy = rotation.W * y;
+            double wz = rotation.W * z;
+            double xx = rotation.X * x;
+            double xy = rotation.X * y;
+            double xz = rotation.X * z;
+            double yy = rotation.Y * y;
+            double yz = rotation.Y * z;
+            double zz = rotation.Z * z;
 
-            float num1 = ((1.0f - yy) - zz);
-            float num2 = (xy - wz);
-            float num3 = (xz + wy);
-            float num4 = (xy + wz);
-            float num5 = ((1.0f - xx) - zz);
-            float num6 = (yz - wx);
-            float num7 = (xz - wy);
-            float num8 = (yz + wx);
-            float num9 = ((1.0f - xx) - yy);
+            double num1 = ((1.0f - yy) - zz);
+            double num2 = (xy - wz);
+            double num3 = (xz + wy);
+            double num4 = (xy + wz);
+            double num5 = ((1.0f - xx) - zz);
+            double num6 = (yz - wx);
+            double num7 = (xz - wy);
+            double num8 = (yz + wx);
+            double num9 = ((1.0f - xx) - yy);
 
             for (int i = 0; i < source.Length; ++i)
             {
@@ -1324,7 +1324,7 @@ namespace BulletSharp.Math
         /// <param name="value">The vector to scale.</param>
         /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector4 operator *(float scalar, Vector4 value)
+        public static Vector4 operator *(double scalar, Vector4 value)
         {
             return new Vector4(value.X * scalar, value.Y * scalar, value.Z * scalar, value.W * scalar);
         }
@@ -1335,7 +1335,7 @@ namespace BulletSharp.Math
         /// <param name="value">The vector to scale.</param>
         /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector4 operator *(Vector4 value, float scalar)
+        public static Vector4 operator *(Vector4 value, double scalar)
         {
             return new Vector4(value.X * scalar, value.Y * scalar, value.Z * scalar, value.W * scalar);
         }
@@ -1346,7 +1346,7 @@ namespace BulletSharp.Math
         /// <param name="value">The vector to scale.</param>
         /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector4 operator /(Vector4 value, float scalar)
+        public static Vector4 operator /(Vector4 value, double scalar)
         {
             return new Vector4(value.X / scalar, value.Y / scalar, value.Z / scalar, value.W / scalar);
         }
@@ -1470,12 +1470,12 @@ namespace BulletSharp.Math
         /// <returns>
         /// <c>true</c> if the specified <see cref="SlimMath.Vector4"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(Vector4 other, float epsilon)
+        public bool Equals(Vector4 other, double epsilon)
         {
-            return ((float)System.Math.Abs(other.X - X) < epsilon &&
-                (float)System.Math.Abs(other.Y - Y) < epsilon &&
-                (float)System.Math.Abs(other.Z - Z) < epsilon &&
-                (float)System.Math.Abs(other.W - W) < epsilon);
+            return ((double)System.Math.Abs(other.X - X) < epsilon &&
+                (double)System.Math.Abs(other.Y - Y) < epsilon &&
+                (double)System.Math.Abs(other.Z - Z) < epsilon &&
+                (double)System.Math.Abs(other.W - W) < epsilon);
         }
 
         /// <summary>
@@ -1536,7 +1536,7 @@ namespace BulletSharp.Math
         /// <returns>The result of the conversion.</returns>
         public static explicit operator Vector4(System.Windows.Media.Media3D.Point4D value)
         {
-            return new Vector4((float)value.X, (float)value.Y, (float)value.Z, (float)value.W);
+            return new Vector4((double)value.X, (double)value.Y, (double)value.Z, (double)value.W);
         }
 #endif
 

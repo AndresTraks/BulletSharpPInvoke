@@ -30,7 +30,7 @@ namespace FeatherStoneDemo
         private const int NumBoxesX = 5, NumBoxesY = 5, NumBoxesZ = 5;
         private Vector3 _startPosition = new Vector3(-5, 2, -3);
 
-        private const float Friction = 1.0f;
+        private const double Friction = 1.0f;
 
         private MultiBodyConstraintSolver _solver;
 
@@ -46,11 +46,11 @@ namespace FeatherStoneDemo
 
             int numLinks = 5;
             bool spherical = true;
-            bool floatingBase = false;
+            bool doubleingBase = false;
             var basePosition = new Vector3(-0.4f, 3.0f, 0.0f);
             var baseHalfExtents = new Vector3(0.05f, 0.37f, 0.1f);
             var linkHalfExtents = new Vector3(0.05f, 0.37f, 0.1f);
-            var multiBody = CreateFeatherstoneMultiBody(MultiBodyWorld, numLinks, basePosition, baseHalfExtents, linkHalfExtents, spherical, floatingBase);
+            var multiBody = CreateFeatherstoneMultiBody(MultiBodyWorld, numLinks, basePosition, baseHalfExtents, linkHalfExtents, spherical, doubleingBase);
 
             bool damping = true;
             if (damping)
@@ -66,16 +66,16 @@ namespace FeatherStoneDemo
 
             if (numLinks > 0)
             {
-                float q0 = 45.0f * (float)Math.PI / 180.0f;
+                double q0 = 45.0f * (double)Math.PI / 180.0f;
                 if (spherical)
                 {
                     Quaternion quat0 = Quaternion.RotationAxis(Vector3.Normalize(new Vector3(1, 1, 0)), q0);
                     quat0.Normalize();
-                    multiBody.SetJointPosMultiDof(0, new float[] { quat0.X, quat0.Y, quat0.Z, quat0.W });
+                    multiBody.SetJointPosMultiDof(0, new double[] { quat0.X, quat0.Y, quat0.Z, quat0.W });
                 }
                 else
                 {
-                    multiBody.SetJointPosMultiDof(0, new float[] { q0 });
+                    multiBody.SetJointPosMultiDof(0, new double[] { q0 });
                 }
             }
             CreateColliders(multiBody, baseHalfExtents, linkHalfExtents);
@@ -108,9 +108,9 @@ namespace FeatherStoneDemo
         }
 
         private MultiBody CreateFeatherstoneMultiBody(MultiBodyDynamicsWorld world, int numLinks,
-            Vector3 basePosition, Vector3 baseHalfExtents, Vector3 linkHalfExtents, bool spherical, bool floating)
+            Vector3 basePosition, Vector3 baseHalfExtents, Vector3 linkHalfExtents, bool spherical, bool doubleing)
         {
-            float mass = 1;
+            double mass = 1;
             Vector3 inertia = Vector3.Zero;
             if (mass != 0)
             {
@@ -120,7 +120,7 @@ namespace FeatherStoneDemo
                 }
             }
 
-            var multiBody = new MultiBody(numLinks, mass, inertia, !floating, false)
+            var multiBody = new MultiBody(numLinks, mass, inertia, !doubleing, false)
             {
                 HasSelfCollision = false,
                 CanSleep = true,
@@ -129,10 +129,10 @@ namespace FeatherStoneDemo
             };
 
             //multiBody.BaseVelocity = Vector3.Zero;
-            //multiBody.WorldToBaseRot = new Quaternion(0, 0, 1, -0.125f * (float)Math.PI);
+            //multiBody.WorldToBaseRot = new Quaternion(0, 0, 1, -0.125f * (double)Math.PI);
             multiBody.WorldToBaseRot = Quaternion.Identity;
 
-            float linkMass = 1;
+            double linkMass = 1;
             Vector3 linkInertia = Vector3.Zero;
             if (linkMass != 0)
             {
@@ -171,7 +171,7 @@ namespace FeatherStoneDemo
 
         private void CreateBoxes()
         {
-            const float mass = 1.0f;
+            const double mass = 1.0f;
 
             var shape = new BoxShape(1);
             Vector3 localInertia = shape.CalculateLocalInertia(mass);
@@ -243,7 +243,7 @@ namespace FeatherStoneDemo
             }
         }
 
-        private RigidBody CreateRigidBody(float mass, Matrix startTransform, CollisionShape shape)
+        private RigidBody CreateRigidBody(double mass, Matrix startTransform, CollisionShape shape)
         {
             //rigidbody is dynamic if and only if mass is non zero, otherwise static
             bool isDynamic = (mass != 0.0f);

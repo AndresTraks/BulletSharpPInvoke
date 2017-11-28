@@ -94,7 +94,7 @@ namespace BulletSharp
 		}
 
 		public PersistentManifold(CollisionObject body0, CollisionObject body1, int __unnamed2,
-			float contactBreakingThreshold, float contactProcessingThreshold)
+			double contactBreakingThreshold, double contactProcessingThreshold)
 		{
 			Native = btPersistentManifold_new2(body0.Native, body1.Native, __unnamed2,
 				contactBreakingThreshold, contactProcessingThreshold);
@@ -172,13 +172,13 @@ namespace BulletSharp
 			set => btPersistentManifold_setCompanionIdB(Native, value);
 		}
 
-		public float ContactBreakingThreshold
+		public double ContactBreakingThreshold
 		{
 			get => btPersistentManifold_getContactBreakingThreshold(Native);
 			set => btPersistentManifold_setContactBreakingThreshold(Native, value);
 		}
 
-		public float ContactProcessingThreshold
+		public double ContactProcessingThreshold
 		{
 			get => btPersistentManifold_getContactProcessingThreshold(Native);
 			set => btPersistentManifold_setContactProcessingThreshold(Native, value);

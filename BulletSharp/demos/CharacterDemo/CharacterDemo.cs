@@ -43,9 +43,9 @@ namespace CharacterDemo
             upDir.Normalize();
 
             Vector3 walkDirection = Vector3.Zero;
-            const float walkVelocity = 1.1f * 4.0f;
-            float walkSpeed = walkVelocity * demo.FrameDelta * 10;// * 0.0001f;
-            float turnSpeed = demo.FrameDelta * 3;
+            const double walkVelocity = 1.1f * 4.0f;
+            double walkSpeed = walkVelocity * demo.FrameDelta * 10;// * 0.0001f;
+            double turnSpeed = demo.FrameDelta * 3;
             Vector3 position = transform.Origin;
 
             var keysDown = demo.Input.KeysDown;
@@ -152,8 +152,8 @@ namespace CharacterDemo
         {
             Broadphase.OverlappingPairCache.SetInternalGhostPairCallback(new GhostPairCallback());
 
-            const float characterHeight = 1.75f;
-            const float characterWidth = 1.75f;
+            const double characterHeight = 1.75f;
+            const double characterWidth = 1.75f;
             var capsule = new CapsuleShape(characterWidth, characterHeight);
             GhostObject = new PairCachingGhostObject()
             {
@@ -163,7 +163,7 @@ namespace CharacterDemo
             };
             World.AddCollisionObject(GhostObject, CollisionFilterGroups.CharacterFilter, CollisionFilterGroups.StaticFilter | CollisionFilterGroups.DefaultFilter);
 
-            const float stepHeight = 0.35f;
+            const double stepHeight = 0.35f;
             Character = new KinematicCharacterController(GhostObject, capsule, stepHeight);
             World.AddAction(Character);
         }
@@ -185,7 +185,7 @@ namespace CharacterDemo
             var verticesTransformed = vertices.Select(v => new Vector3(0.5f * v.X, 0.375f * v.Z, -0.5f * v.Y));
             var shape = new ConvexHullShape(verticesTransformed);
 
-            const float mass = 0.0f;
+            const double mass = 0.0f;
             Matrix startTransform = Matrix.Translation(0, -10.0f, 0); // shift
             PhysicsHelper.CreateBody(mass, startTransform, shape, _world);
         }

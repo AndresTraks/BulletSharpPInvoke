@@ -74,7 +74,7 @@ namespace BulletSharp
 			_preventDelete = preventDelete;
 		}
 
-		public float CalculateTimeOfImpact(CollisionObject body0, CollisionObject body1,
+		public double CalculateTimeOfImpact(CollisionObject body0, CollisionObject body1,
 			DispatcherInfo dispatchInfo, ManifoldResult resultOut)
 		{
 			return btCollisionAlgorithm_calculateTimeOfImpact(Native, body0.Native,

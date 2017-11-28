@@ -25,13 +25,13 @@ namespace BulletSharp
 			Native = native;
 		}
 
-		public float AllowedCcdPenetration
+		public double AllowedCcdPenetration
 		{
 			get => btDispatcherInfo_getAllowedCcdPenetration(Native);
 			set => btDispatcherInfo_setAllowedCcdPenetration(Native, value);
 		}
 
-		public float ConvexConservativeDistanceThreshold
+		public double ConvexConservativeDistanceThreshold
 		{
 			get => btDispatcherInfo_getConvexConservativeDistanceThreshold(Native);
 			set => btDispatcherInfo_setConvexConservativeDistanceThreshold(Native, value);
@@ -67,13 +67,13 @@ namespace BulletSharp
 			set => btDispatcherInfo_setStepCount(Native, value);
 		}
 
-		public float TimeOfImpact
+		public double TimeOfImpact
 		{
 			get => btDispatcherInfo_getTimeOfImpact(Native);
 			set => btDispatcherInfo_setTimeOfImpact(Native, value);
 		}
 
-		public float TimeStep
+		public double TimeStep
 		{
 			get => btDispatcherInfo_getTimeStep(Native);
 			set => btDispatcherInfo_setTimeStep(Native, value);

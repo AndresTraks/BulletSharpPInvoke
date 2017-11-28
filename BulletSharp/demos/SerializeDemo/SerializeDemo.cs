@@ -33,9 +33,9 @@ namespace SerializeDemo
         const int NumObjectsX = 5, NumObjectsY = 5, NumObjectsZ = 5;
 
         ///scaling of the objects (0.1 = 20 centimeter boxes )
-        float StartPosX = -5;
-        float StartPosY = -5;
-        float StartPosZ = -3;
+        double StartPosX = -5;
+        double StartPosY = -5;
+        double StartPosZ = -3;
 
         private BulletWorldImporter _fileLoader;
 
@@ -70,10 +70,10 @@ namespace SerializeDemo
                 ground.UserObject = "Ground";
 
                 // create a few dynamic rigidbodies
-                float mass = 1.0f;
+                double mass = 1.0f;
 
                 Vector3[] positions = new[] { new Vector3(0.1f, 0.2f, 0.3f), new Vector3(0.4f, 0.5f, 0.6f) };
-                float[] radi = new float[2] { 0.3f, 0.4f };
+                double[] radi = new double[2] { 0.3f, 0.4f };
 
                 var colShape = new MultiSphereShape(positions, radi);
 
@@ -85,9 +85,9 @@ namespace SerializeDemo
 
                 Vector3 localInertia = colShape.CalculateLocalInertia(mass);
 
-                float startX = StartPosX - NumObjectsX / 2;
-                float startY = StartPosY;
-                float startZ = StartPosZ - NumObjectsZ / 2;
+                double startX = StartPosX - NumObjectsX / 2;
+                double startY = StartPosY;
+                double startZ = StartPosZ - NumObjectsZ / 2;
 
                 for (int y = 0; y < NumObjectsY; y++)
                 {
@@ -161,7 +161,7 @@ namespace SerializeDemo
         {
         }
 
-        public override RigidBody CreateRigidBody(bool isDynamic, float mass, ref Matrix startTransform, CollisionShape shape, string bodyName)
+        public override RigidBody CreateRigidBody(bool isDynamic, double mass, ref Matrix startTransform, CollisionShape shape, string bodyName)
         {
             RigidBody body = base.CreateRigidBody(isDynamic, mass, ref startTransform, shape, bodyName);
 

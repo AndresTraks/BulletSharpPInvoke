@@ -56,7 +56,7 @@ namespace BulletSharp
 
 		public bool Use4ComponentVertices => btTriangleMesh_getUse4componentVertices(Native);
 
-		public float WeldingThreshold
+		public double WeldingThreshold
 		{
 			get => btTriangleMesh_getWeldingThreshold(Native);
 			set => btTriangleMesh_setWeldingThreshold(Native, value);

@@ -19,7 +19,7 @@ namespace BulletSharp
 		}
 
 		public GjkPairDetector(ConvexShape objectA, ConvexShape objectB, int shapeTypeA,
-			int shapeTypeB, float marginA, float marginB, VoronoiSimplexSolver simplexSolver,
+			int shapeTypeB, double marginA, double marginB, VoronoiSimplexSolver simplexSolver,
 			ConvexPenetrationDepthSolver penetrationDepthSolver)
 			: base(btGjkPairDetector_new2(objectA.Native, objectB.Native, shapeTypeA,
 				shapeTypeB, marginA, marginB, simplexSolver.Native, (penetrationDepthSolver != null) ? penetrationDepthSolver.Native : IntPtr.Zero))
@@ -64,7 +64,7 @@ namespace BulletSharp
 			set => btGjkPairDetector_setCachedSeparatingAxis(Native, ref value);
 		}
 
-		public float CachedSeparatingDistance => btGjkPairDetector_getCachedSeparatingDistance(Native);
+		public double CachedSeparatingDistance => btGjkPairDetector_getCachedSeparatingDistance(Native);
 
 		public int CatchDegeneracies
 		{

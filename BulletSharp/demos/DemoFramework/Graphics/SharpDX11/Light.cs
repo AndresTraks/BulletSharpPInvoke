@@ -30,8 +30,8 @@ namespace DemoFramework.SharpDX11
             slices = (slices > 16) ? 16 : (slices < 3) ? 3 : slices;
             stacks = (stacks > 16) ? 16 : (stacks < 2) ? 2 : stacks;
 
-            float hAngleStep = (float)Math.PI * 2 / slices;
-            float vAngleStep = (float)Math.PI / stacks;
+            double hAngleStep = Math.PI * 2 / slices;
+            double vAngleStep = Math.PI / stacks;
 
             int vertexCount = 2 + slices * (stacks - 1);
             int indexCount = 6 * slices * (stacks - 1);
@@ -49,8 +49,8 @@ namespace DemoFramework.SharpDX11
 
             // Stacks
             int j, k;
-            float angle = 0;
-            float vAngle = -(float)Math.PI / 2;
+            double angle = 0;
+            double vAngle = -Math.PI / 2;
             Vector3 vTemp;
             for (j = 0; j < stacks - 1; j++)
             {

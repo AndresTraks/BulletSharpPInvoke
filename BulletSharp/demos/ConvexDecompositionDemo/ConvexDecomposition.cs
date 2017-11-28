@@ -52,7 +52,7 @@ namespace ConvexDecompositionDemo
 
         private List<Vector3> ShrinkObjectInwards(ICollection<Vector3> vertices)
         {
-            const float collisionMargin = 0.01f;
+            const double collisionMargin = 0.01f;
 
             List<Vector4> planeEquations = GeometryUtil.GetPlaneEquationsFromVertices(vertices);
             List<Vector4> shiftedPlaneEquations =

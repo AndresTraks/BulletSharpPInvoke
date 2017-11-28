@@ -36,31 +36,31 @@ namespace BulletSharp
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawAabbUnmanagedDelegate([In] ref Vector3 from, [In] ref Vector3 to, [In] ref Vector3 color);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
-		delegate void DrawArcUnmanagedDelegate([In] ref Vector3 center, [In] ref Vector3 normal, [In] ref Vector3 axis, float radiusA, float radiusB,
-			float minAngle, float maxAngle, ref Vector3 color, bool drawSect, float stepDegrees);
+		delegate void DrawArcUnmanagedDelegate([In] ref Vector3 center, [In] ref Vector3 normal, [In] ref Vector3 axis, double radiusA, double radiusB,
+			double minAngle, double maxAngle, ref Vector3 color, bool drawSect, double stepDegrees);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawBoxUnmanagedDelegate([In] ref Vector3 bbMin, [In] ref Vector3 bbMax, [In] ref Matrix trans, [In] ref Vector3 color);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
-		delegate void DrawCapsuleUnmanagedDelegate(float radius, float halfHeight, int upAxis, [In] ref Matrix transform, [In] ref Vector3 color);
+		delegate void DrawCapsuleUnmanagedDelegate(double radius, double halfHeight, int upAxis, [In] ref Matrix transform, [In] ref Vector3 color);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
-		delegate void DrawConeUnmanagedDelegate(float radius, float height, int upAxis, [In] ref Matrix transform, [In] ref Vector3 color);
+		delegate void DrawConeUnmanagedDelegate(double radius, double height, int upAxis, [In] ref Matrix transform, [In] ref Vector3 color);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
-		delegate void DrawContactPointUnmanagedDelegate([In] ref Vector3 pointOnB, [In] ref Vector3 normalOnB, float distance, int lifeTime, [In] ref Vector3 color);
+		delegate void DrawContactPointUnmanagedDelegate([In] ref Vector3 pointOnB, [In] ref Vector3 normalOnB, double distance, int lifeTime, [In] ref Vector3 color);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
-		delegate void DrawCylinderUnmanagedDelegate(float radius, float halfHeight, int upAxis, [In] ref Matrix transform, [In] ref Vector3 color);
+		delegate void DrawCylinderUnmanagedDelegate(double radius, double halfHeight, int upAxis, [In] ref Matrix transform, [In] ref Vector3 color);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawLineUnmanagedDelegate([In] ref Vector3 from, [In] ref Vector3 to, [In] ref Vector3 color);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
-		delegate void DrawPlaneUnmanagedDelegate([In] ref Vector3 planeNormal, float planeConst, [In] ref Matrix transform, [In] ref Vector3 color);
+		delegate void DrawPlaneUnmanagedDelegate([In] ref Vector3 planeNormal, double planeConst, [In] ref Matrix transform, [In] ref Vector3 color);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
-		delegate void DrawSphereUnmanagedDelegate(float radius, [In] ref Matrix transform, [In] ref Vector3 color);
+		delegate void DrawSphereUnmanagedDelegate(double radius, [In] ref Matrix transform, [In] ref Vector3 color);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
-		delegate void DrawSpherePatchUnmanagedDelegate([In] ref Vector3 center, [In] ref Vector3 up, [In] ref Vector3 axis, float radius,
-			float minTh, float maxTh, float minPs, float maxPs, [In] ref Vector3 color, float stepDegrees);
+		delegate void DrawSpherePatchUnmanagedDelegate([In] ref Vector3 center, [In] ref Vector3 up, [In] ref Vector3 axis, double radius,
+			double minTh, double maxTh, double minPs, double maxPs, [In] ref Vector3 color, double stepDegrees);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
-		delegate void DrawTransformUnmanagedDelegate([In] ref Matrix transform, float orthoLen);
+		delegate void DrawTransformUnmanagedDelegate([In] ref Matrix transform, double orthoLen);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
-		delegate void DrawTriangleUnmanagedDelegate([In] ref Vector3 v0, [In] ref Vector3 v1, [In] ref Vector3 v2, [In] ref Vector3 color, float alpha);
+		delegate void DrawTriangleUnmanagedDelegate([In] ref Vector3 v0, [In] ref Vector3 v1, [In] ref Vector3 v2, [In] ref Vector3 color, double alpha);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void SimpleCallback(int x);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
@@ -261,32 +261,32 @@ namespace BulletSharp
 			}
 		}
 
-		public virtual void DrawArc(ref Vector3 center, ref Vector3 normal, ref Vector3 axis, float radiusA, float radiusB, float minAngle, float maxAngle,
+		public virtual void DrawArc(ref Vector3 center, ref Vector3 normal, ref Vector3 axis, double radiusA, double radiusB, double minAngle, double maxAngle,
 			ref Vector3 color, bool drawSect)
 		{
 			DrawArc(ref center, ref normal, ref axis, radiusA, radiusB, minAngle, maxAngle, ref color, drawSect, 10f);
 		}
 
-		public virtual void DrawArc(ref Vector3 center, ref Vector3 normal, ref Vector3 axis, float radiusA, float radiusB, float minAngle, float maxAngle,
-			ref Vector3 color, bool drawSect, float stepDegrees)
+		public virtual void DrawArc(ref Vector3 center, ref Vector3 normal, ref Vector3 axis, double radiusA, double radiusB, double minAngle, double maxAngle,
+			ref Vector3 color, bool drawSect, double stepDegrees)
 		{
 			Vector3 vx = axis;
 			Vector3 vy = Vector3.Cross(normal, axis);
-			float step = stepDegrees * MathUtil.SIMD_RADS_PER_DEG;
+			double step = stepDegrees * MathUtil.SIMD_RADS_PER_DEG;
 			int nSteps = (int)((maxAngle - minAngle) / step);
 			if (nSteps == 0)
 			{
 				nSteps = 1;
 			}
-			Vector3 prev = center + radiusA * vx * (float)System.Math.Cos(minAngle) + radiusB * vy * (float)System.Math.Sin(minAngle);
+			Vector3 prev = center + radiusA * vx * (double)System.Math.Cos(minAngle) + radiusB * vy * (double)System.Math.Sin(minAngle);
 			if (drawSect)
 			{
 				DrawLine(ref center, ref prev, ref color);
 			}
 			for (int i = 1; i <= nSteps; i++)
 			{
-				float angle = minAngle + (maxAngle - minAngle) * i / nSteps;
-				Vector3 next = center + radiusA * vx * (float)System.Math.Cos(angle) + radiusB * vy * (float)System.Math.Sin(angle);
+				double angle = minAngle + (maxAngle - minAngle) * i / nSteps;
+				Vector3 next = center + radiusA * vx * (double)System.Math.Cos(angle) + radiusB * vy * (double)System.Math.Sin(angle);
 				DrawLine(ref prev, ref next, ref color);
 				prev = next;
 			}
@@ -359,7 +359,7 @@ namespace BulletSharp
 			DrawLine(ref p8, ref p5, ref color);
 		}
 
-		public virtual void DrawCapsule(float radius, float halfHeight, int upAxis, ref Matrix transform, ref Vector3 color)
+		public virtual void DrawCapsule(double radius, double halfHeight, int upAxis, ref Matrix transform, ref Vector3 color)
 		{
 			Vector3 capStart = Vector3.Zero;
 			capStart[upAxis] = -halfHeight;
@@ -396,7 +396,7 @@ namespace BulletSharp
 			DrawLine(start + Vector3.TransformCoordinate(capStart, basis), start + Vector3.TransformCoordinate(capEnd, basis), color);
 		}
 
-		public virtual void DrawCone(float radius, float height, int upAxis, ref Matrix transform, ref Vector3 color)
+		public virtual void DrawCone(double radius, double height, int upAxis, ref Matrix transform, ref Vector3 color)
 		{
 			Vector3 start = transform.Origin;
 
@@ -417,13 +417,13 @@ namespace BulletSharp
 			DrawLine(from, to - offset2Radius, color);
 		}
 
-		public virtual void DrawContactPoint(ref Vector3 pointOnB, ref Vector3 normalOnB, float distance, int lifeTime, ref Vector3 color)
+		public virtual void DrawContactPoint(ref Vector3 pointOnB, ref Vector3 normalOnB, double distance, int lifeTime, ref Vector3 color)
 		{
 			Vector3 to = pointOnB + normalOnB * 1; // distance
 			DrawLine(ref pointOnB, ref to, ref color);
 		}
 
-		public virtual void DrawCylinder(float radius, float halfHeight, int upAxis, ref Matrix transform, ref Vector3 color)
+		public virtual void DrawCylinder(double radius, double halfHeight, int upAxis, ref Matrix transform, ref Vector3 color)
 		{
 			Vector3 start = transform.Origin;
 			Matrix basis = transform.Basis;
@@ -435,12 +435,12 @@ namespace BulletSharp
 			DrawLine(start + Vector3.TransformCoordinate(offsetHeight - offsetRadius, basis), start + Vector3.TransformCoordinate(-offsetHeight - offsetRadius, basis), color);
 		}
 
-		public virtual void DrawPlane(ref Vector3 planeNormal, float planeConst, ref Matrix transform, ref Vector3 color)
+		public virtual void DrawPlane(ref Vector3 planeNormal, double planeConst, ref Matrix transform, ref Vector3 color)
 		{
 			Vector3 planeOrigin = planeNormal * planeConst;
 			Vector3 vec0, vec1;
 			PlaneSpace1(ref planeNormal, out vec0, out vec1);
-			const float vecLen = 100f;
+			const double vecLen = 100f;
 			Vector3 pt0 = planeOrigin + vec0 * vecLen;
 			Vector3 pt1 = planeOrigin - vec0 * vecLen;
 			Vector3 pt2 = planeOrigin + vec1 * vecLen;
@@ -453,7 +453,7 @@ namespace BulletSharp
 			DrawLine(ref pt2, ref pt3, ref color);
 		}
 
-		public virtual void DrawSphere(float radius, ref Matrix transform, ref Vector3 color)
+		public virtual void DrawSphere(double radius, ref Matrix transform, ref Vector3 color)
 		{
 			Vector3 start = transform.Origin;
 			Matrix basis = transform.Basis;
@@ -488,20 +488,20 @@ namespace BulletSharp
 			DrawLine(ref zn, ref yn, ref color);
 		}
 
-		public virtual void DrawSphere(ref Vector3 p, float radius, ref Vector3 color)
+		public virtual void DrawSphere(ref Vector3 p, double radius, ref Vector3 color)
 		{
 			Matrix tr = Matrix.Translation(p);
 			DrawSphere(radius, ref tr, ref color);
 		}
 
-		public virtual void DrawSpherePatch(ref Vector3 center, ref Vector3 up, ref Vector3 axis, float radius,
-			float minTh, float maxTh, float minPs, float maxPs, ref Vector3 color)
+		public virtual void DrawSpherePatch(ref Vector3 center, ref Vector3 up, ref Vector3 axis, double radius,
+			double minTh, double maxTh, double minPs, double maxPs, ref Vector3 color)
 		{
 			DrawSpherePatch(ref center, ref up, ref axis, radius, minTh, maxTh, minPs, maxPs, ref color, 10.0f);
 		}
 
-		public virtual void DrawSpherePatch(ref Vector3 center, ref Vector3 up, ref Vector3 axis, float radius,
-			float minTh, float maxTh, float minPs, float maxPs, ref Vector3 color, float stepDegrees)
+		public virtual void DrawSpherePatch(ref Vector3 center, ref Vector3 up, ref Vector3 axis, double radius,
+			double minTh, double maxTh, double minPs, double maxPs, ref Vector3 color, double stepDegrees)
 		{
 			Vector3[] vA;
 			Vector3[] vB;
@@ -509,7 +509,7 @@ namespace BulletSharp
 			Vector3 npole = center + up * radius;
 			Vector3 spole = center - up * radius;
 			Vector3 arcStart = Vector3.Zero;
-			float step = stepDegrees * MathUtil.SIMD_RADS_PER_DEG;
+			double step = stepDegrees * MathUtil.SIMD_RADS_PER_DEG;
 			Vector3 kv = up;
 			Vector3 iv = axis;
 
@@ -534,7 +534,7 @@ namespace BulletSharp
 			}
 			int n_hor = (int)((maxTh - minTh) / step) + 1;
 			if (n_hor < 2) n_hor = 2;
-			float step_h = (maxTh - minTh) / (n_hor - 1);
+			double step_h = (maxTh - minTh) / (n_hor - 1);
 			bool isClosed;
 			if (minPs > maxPs)
 			{
@@ -557,17 +557,17 @@ namespace BulletSharp
 			vB = new Vector3[n_vert];
 			pvA = vA; pvB = vB;
 
-			float step_v = (maxPs - minPs) / (float)(n_vert - 1);
+			double step_v = (maxPs - minPs) / (double)(n_vert - 1);
 			for (int i = 0; i < n_hor; i++)
 			{
-				float th = minTh + i * step_h;
-				float sth = radius * (float)System.Math.Sin(th);
-				float cth = radius * (float)System.Math.Cos(th);
+				double th = minTh + i * step_h;
+				double sth = radius * (double)System.Math.Sin(th);
+				double cth = radius * (double)System.Math.Cos(th);
 				for (int j = 0; j < n_vert; j++)
 				{
-					float psi = minPs + (float)j * step_v;
-					float sps = (float)System.Math.Sin(psi);
-					float cps = (float)System.Math.Cos(psi);
+					double psi = minPs + (double)j * step_v;
+					double sps = (double)System.Math.Sin(psi);
+					double cps = (double)System.Math.Cos(psi);
 					pvB[j] = center + cth * cps * iv + cth * sps * jv + sth * kv;
 					if (i != 0)
 					{
@@ -608,19 +608,19 @@ namespace BulletSharp
 			}
 		}
 
-		public virtual void DrawTriangle(ref Vector3 v0, ref Vector3 v1, ref Vector3 v2, ref Vector3 n0, ref Vector3 n1, ref Vector3 n2, ref Vector3 color, float alpha)
+		public virtual void DrawTriangle(ref Vector3 v0, ref Vector3 v1, ref Vector3 v2, ref Vector3 n0, ref Vector3 n1, ref Vector3 n2, ref Vector3 color, double alpha)
 		{
 			DrawTriangle(ref v0, ref v1, ref v2, ref color, alpha);
 		}
 
-		public virtual void DrawTriangle(ref Vector3 v0, ref Vector3 v1, ref Vector3 v2, ref Vector3 color, float alpha)
+		public virtual void DrawTriangle(ref Vector3 v0, ref Vector3 v1, ref Vector3 v2, ref Vector3 color, double alpha)
 		{
 			DrawLine(ref v0, ref v1, ref color);
 			DrawLine(ref v1, ref v2, ref color);
 			DrawLine(ref v2, ref v0, ref color);
 		}
 
-		public virtual void DrawTransform(ref Matrix transform, float orthoLen)
+		public virtual void DrawTransform(ref Matrix transform, double orthoLen)
 		{
 			Vector3 start = transform.Origin;
 			Matrix basis = transform.Basis;
@@ -654,8 +654,8 @@ namespace BulletSharp
 			if (System.Math.Abs(n.Z) > MathUtil.SIMDSQRT12)
 			{
 				// choose p in y-z plane
-				float a = n.Y * n.Y + n.Z * n.Z;
-				float k = MathUtil.RecipSqrt(a);
+				double a = n.Y * n.Y + n.Z * n.Z;
+				double k = MathUtil.RecipSqrt(a);
 				p = new Vector3(0, -n.Z * k, n.Y * k);
 				// set q = n x p
 				q = new Vector3(a * k, -n.X * p.Z, n.X * p.Y);
@@ -663,8 +663,8 @@ namespace BulletSharp
 			else
 			{
 				// choose p in x-y plane
-				float a = n.X * n.X + n.Y * n.Y;
-				float k = MathUtil.RecipSqrt(a);
+				double a = n.X * n.X + n.Y * n.Y;
+				double k = MathUtil.RecipSqrt(a);
 				p = new Vector3(-n.Y * k, n.X * k, 0);
 				// set q = n x p
 				q = new Vector3(-n.Z * p.Y, n.Z * p.X, a * k);

@@ -73,18 +73,18 @@ namespace BulletSharp
         //            return b;
         //        }
 
-        //        public static float Cofac(ref Matrix m,int r1, int c1, int r2, int c2)
+        //        public static double Cofac(ref Matrix m,int r1, int c1, int r2, int c2)
         //        {
-        //            float a = MatrixComponent(ref m, r1, c1);
-        //            float b = MatrixComponent(ref m, r2, c2);
-        //            float c = MatrixComponent(ref m, r1, c2);
-        //            float d = MatrixComponent(ref m, r2, c1);
+        //            double a = MatrixComponent(ref m, r1, c1);
+        //            double b = MatrixComponent(ref m, r2, c2);
+        //            double c = MatrixComponent(ref m, r1, c2);
+        //            double d = MatrixComponent(ref m, r2, c1);
 
         //            return a * b - c * d;
         //        }
 
 
-        public static float FSel(float a, float b, float c)
+        public static double FSel(double a, double b, double c)
         {
             // dodgy but seems necessary for rounding issues.
             //return a >= -0.00001 ? b : c;
@@ -104,7 +104,7 @@ namespace BulletSharp
         public static int MaxAxis(ref Vector4 a)
         {
             int maxIndex = -1;
-            float maxVal = -BT_LARGE_FLOAT;
+            double maxVal = -BT_LARGE_DOUBLE;
             if (a.X > maxVal)
             {
                 maxIndex = 0;
@@ -139,12 +139,12 @@ namespace BulletSharp
             return new Vector4(System.Math.Abs(vec.X), System.Math.Abs(vec.Y), System.Math.Abs(vec.Z), System.Math.Abs(vec.W));
         }
 
-        //        public static float VectorComponent(Vector3 v, int i)
+        //        public static double VectorComponent(Vector3 v, int i)
         //        {
         //            return VectorComponent(ref v, i);
         //        }
 
-        //        public static float VectorComponent(ref Vector3 v, int i)
+        //        public static double VectorComponent(ref Vector3 v, int i)
         //        {
         //            switch (i)
         //            {
@@ -160,7 +160,7 @@ namespace BulletSharp
         //            }
         //        }
 
-        //        public static void VectorComponent(ref Vector3 v, int i, float f)
+        //        public static void VectorComponent(ref Vector3 v, int i, double f)
         //        {
         //            switch (i)
         //            {
@@ -177,7 +177,7 @@ namespace BulletSharp
         //            Debug.Assert(false);
         //        }
 
-        //        public static void VectorComponentAddAssign(ref Vector3 v, int i, float f)
+        //        public static void VectorComponentAddAssign(ref Vector3 v, int i, double f)
         //        {
         //            switch (i)
         //            {
@@ -194,7 +194,7 @@ namespace BulletSharp
         //            Debug.Assert(false);
         //        }
 
-        //        public static void VectorComponentMinusAssign(ref Vector3 v, int i, float f)
+        //        public static void VectorComponentMinusAssign(ref Vector3 v, int i, double f)
         //        {
         //            switch (i)
         //            {
@@ -211,7 +211,7 @@ namespace BulletSharp
         //            Debug.Assert(false);
         //        }
 
-        //        public static void VectorComponentMultiplyAssign(ref Vector3 v, int i, float f)
+        //        public static void VectorComponentMultiplyAssign(ref Vector3 v, int i, double f)
         //        {
         //            switch (i)
         //            {
@@ -228,7 +228,7 @@ namespace BulletSharp
         //            Debug.Assert(false);
         //        }
 
-        //        public static void VectorComponentDivideAssign(ref Vector3 v, int i, float f)
+        //        public static void VectorComponentDivideAssign(ref Vector3 v, int i, double f)
         //        {
         //            switch (i)
         //            {
@@ -310,7 +310,7 @@ namespace BulletSharp
         //            output = Vector3.Transform(vec, rotation);
         //        }
 
-        //        public static void TransformAabb(Vector3 halfExtents, float margin, Matrix trans, out Vector3 aabbMinOut, out Vector3 aabbMaxOut)
+        //        public static void TransformAabb(Vector3 halfExtents, double margin, Matrix trans, out Vector3 aabbMinOut, out Vector3 aabbMaxOut)
         //        {
         //            //TransformAabb(ref halfExtents,margin,ref trans,out aabbMinOut,out aabbMaxOut);
         //            Vector3 halfExtentsWithMargin = halfExtents + new Vector3(margin);
@@ -320,7 +320,7 @@ namespace BulletSharp
         //            aabbMaxOut = center + extent;
         //        }
 
-        //        public static void TransformAabb(ref Vector3 halfExtents, float margin, ref Matrix trans, out Vector3 aabbMinOut, out Vector3 aabbMaxOut)
+        //        public static void TransformAabb(ref Vector3 halfExtents, double margin, ref Matrix trans, out Vector3 aabbMinOut, out Vector3 aabbMaxOut)
         //        {
         //            Vector3 halfExtentsWithMargin = halfExtents + new Vector3(margin);
         //            Vector3 center, extent;
@@ -329,12 +329,12 @@ namespace BulletSharp
         //            aabbMaxOut = center + extent;
         //        }
 
-        //        public static void TransformAabb(Vector3 localAabbMin, Vector3 localAabbMax, float margin, Matrix trans, out Vector3 aabbMinOut, out Vector3 aabbMaxOut)
+        //        public static void TransformAabb(Vector3 localAabbMin, Vector3 localAabbMax, double margin, Matrix trans, out Vector3 aabbMinOut, out Vector3 aabbMaxOut)
         //        {
         //            TransformAabb(ref localAabbMin, ref localAabbMax, margin, ref trans, out aabbMinOut, out aabbMaxOut);
         //        }
 
-        //        public static void TransformAabb(ref Vector3 localAabbMin, ref Vector3 localAabbMax, float margin, ref Matrix trans, out Vector3 aabbMinOut, out Vector3 aabbMaxOut)
+        //        public static void TransformAabb(ref Vector3 localAabbMin, ref Vector3 localAabbMax, double margin, ref Matrix trans, out Vector3 aabbMinOut, out Vector3 aabbMaxOut)
         //        {
         //            Debug.Assert(localAabbMin.X <= localAabbMax.X);
         //            Debug.Assert(localAabbMin.Y <= localAabbMax.Y);
@@ -427,7 +427,7 @@ namespace BulletSharp
         //            Debug.Assert(false);
         //        }
 
-        public static float Vector3Triple(ref Vector3 a, ref Vector3 b, ref Vector3 c)
+        public static double Vector3Triple(ref Vector3 a, ref Vector3 b, ref Vector3 c)
         {
             return a.X * (b.Y * c.Z - b.Z * c.Y) +
                 a.Y * (b.Z * c.X - b.X * c.Z) +
@@ -437,7 +437,7 @@ namespace BulletSharp
         //        // FIXME - MAN - make sure this is being called how we'd expect , may need to
         //        // swap i,j for row/column differences
 
-        //        public static float MatrixComponent(ref Matrix m, int index)
+        //        public static double MatrixComponent(ref Matrix m, int index)
         //        {
         //            //int i = index % 4;
         //            //int j = index / 4;
@@ -448,7 +448,7 @@ namespace BulletSharp
         //            return MatrixComponent(ref m,i,j);
         //        }
 
-        //        public static float MatrixComponent(ref Matrix m, int row, int column)
+        //        public static double MatrixComponent(ref Matrix m, int row, int column)
         //        {
         //            switch (row)
         //            {
@@ -480,7 +480,7 @@ namespace BulletSharp
         //            return 0;
         //        }
 
-        //        public static void MatrixComponent(ref Matrix m, int row, int column, float val)
+        //        public static void MatrixComponent(ref Matrix m, int row, int column, double val)
         //        {
         //            switch (row)
         //            {
@@ -608,7 +608,7 @@ namespace BulletSharp
 
 
 
-        public static int GetQuantized(float x)
+        public static int GetQuantized(double x)
         {
             if (x < 0.0)
             {
@@ -667,9 +667,9 @@ namespace BulletSharp
                 System.Math.Max(input1.Z, input2.Z));
         }
 
-        public static float RecipSqrt(float a)
+        public static double RecipSqrt(double a)
         {
-            return (float)(1 / System.Math.Sqrt(a));
+            return (double)(1 / System.Math.Sqrt(a));
         }
 
         public static bool CompareFloat(float val1, float val2)
@@ -677,7 +677,7 @@ namespace BulletSharp
             return System.Math.Abs(val1 - val2) <= SIMD_EPSILON;
         }
 
-        public static bool FuzzyZero(float val)
+        public static bool FuzzyZero(double val)
         {
             return System.Math.Abs(val) <= SIMD_EPSILON;
         }
@@ -723,7 +723,7 @@ namespace BulletSharp
         public static Quaternion ShortestArcQuat(ref Vector3 axisInA, ref Vector3 axisInB)
         {
             Vector3 c = Vector3.Cross(axisInA, axisInB);
-            float d;
+            double d;
             Vector3.Dot(ref axisInA, ref axisInB, out d);
 
             if (d < -1.0 + SIMD_EPSILON)
@@ -731,16 +731,16 @@ namespace BulletSharp
                 return new Quaternion(0.0f, 1.0f, 0.0f, 0.0f); // just pick any vector
             }
 
-            float s = (float)System.Math.Sqrt((1.0f + d) * 2.0f);
-            float rs = 1.0f / s;
+            double s = (double)System.Math.Sqrt((1.0f + d) * 2.0f);
+            double rs = 1.0f / s;
 
             return new Quaternion(c.X * rs, c.Y * rs, c.Z * rs, s * 0.5f);
 
         }
 
-        public static float QuatAngle(ref Quaternion quat)
+        public static double QuatAngle(ref Quaternion quat)
         {
-            return 2f * (float)System.Math.Acos(quat.W);
+            return 2f * (double)System.Math.Acos(quat.W);
         }
 
         public static Quaternion QuatFurthest(ref Quaternion input1, ref Quaternion input2)
@@ -780,7 +780,7 @@ namespace BulletSharp
         //       * 
         //       * Note that this matrix is assumed to be symmetric. 
         //       */
-        //        public static void Diagonalize(ref Matrix inMatrix,ref Matrix rot, float threshold, int maxSteps)
+        //        public static void Diagonalize(ref Matrix inMatrix,ref Matrix rot, double threshold, int maxSteps)
         //        {
         //            Debug.Assert(false);
         //            rot = Matrix.Identity;
@@ -790,8 +790,8 @@ namespace BulletSharp
         //                int p = 0;
         //                int q = 1;
         //                int r = 2;
-        //                float max = System.Math.Abs(inMatrix.M12);
-        //                float v = System.Math.Abs(inMatrix.M13);
+        //                double max = System.Math.Abs(inMatrix.M12);
+        //                double v = System.Math.Abs(inMatrix.M13);
         //                if (v > max)
         //                {
         //                   q = 2;
@@ -807,7 +807,7 @@ namespace BulletSharp
         //                   max = v;
         //                }
 
-        //                float t = threshold * (System.Math.Abs(inMatrix.M11) + System.Math.Abs(inMatrix.M22) + System.Math.Abs(inMatrix.M33));
+        //                double t = threshold * (System.Math.Abs(inMatrix.M11) + System.Math.Abs(inMatrix.M22) + System.Math.Abs(inMatrix.M33));
         //                if (max <= t)
         //                {
         //                   if (max <= SIMD_EPSILON * t)
@@ -818,16 +818,16 @@ namespace BulletSharp
         //                }
 
         //                // compute Jacobi rotation J which leads to a zero for element [p][q] 
-        //                float mpq = MathUtil.MatrixComponent(ref inMatrix,p,q);
-        //                float theta = (MathUtil.MatrixComponent(ref inMatrix,q,q)-MathUtil.MatrixComponent(ref inMatrix,p,p)) / (2 * mpq);
-        //                float theta2 = theta * theta;
-        //                float cos;
-        //                float sin;
+        //                double mpq = MathUtil.MatrixComponent(ref inMatrix,p,q);
+        //                double theta = (MathUtil.MatrixComponent(ref inMatrix,q,q)-MathUtil.MatrixComponent(ref inMatrix,p,p)) / (2 * mpq);
+        //                double theta2 = theta * theta;
+        //                double cos;
+        //                double sin;
         //                if (theta2 * theta2 < 10f / SIMD_EPSILON)
         //                {
-        //                   t = (theta >= 0f) ? (float)(1f / (theta + System.Math.Sqrt(1 + theta2)))
-        //                                            : (float)(1f / (theta - System.Math.Sqrt(1 + theta2)));
-        //                   cos = (float)(1f / System.Math.Sqrt(1 + t * t));
+        //                   t = (theta >= 0f) ? (double)(1f / (theta + System.Math.Sqrt(1 + theta2)))
+        //                                            : (double)(1f / (theta - System.Math.Sqrt(1 + theta2)));
+        //                   cos = (double)(1f / System.Math.Sqrt(1 + t * t));
         //                   sin = cos * t;
         //                }
         //                else
@@ -844,8 +844,8 @@ namespace BulletSharp
         //                MathUtil.MatrixComponent(ref inMatrix,p,p,MathUtil.MatrixComponent(ref inMatrix,p,p)-t*mpq);
         //                MathUtil.MatrixComponent(ref inMatrix,q,q,MathUtil.MatrixComponent(ref inMatrix,q,q)+t*mpq);
 
-        //                float  mrp = MathUtil.MatrixComponent(ref inMatrix,r,p);
-        //                float  mrq = MathUtil.MatrixComponent(ref inMatrix,r,q);
+        //                double  mrp = MathUtil.MatrixComponent(ref inMatrix,r,p);
+        //                double  mrq = MathUtil.MatrixComponent(ref inMatrix,r,q);
 
         //                MathUtil.MatrixComponent(ref inMatrix,r,p,cos * mrp - sin * mrq);
         //                MathUtil.MatrixComponent(ref inMatrix,p,r,cos * mrp - sin * mrq);
@@ -856,8 +856,8 @@ namespace BulletSharp
         //                // apply rotation to rot (rot = rot * J)
         //                for (int i = 0; i < 3; i++)
         //                {
-        //                    float  mrp2 = MathUtil.MatrixComponent(ref rot,i,p);
-        //                    float  mrq2 = MathUtil.MatrixComponent(ref rot,i,q);
+        //                    double  mrp2 = MathUtil.MatrixComponent(ref rot,i,p);
+        //                    double  mrq2 = MathUtil.MatrixComponent(ref rot,i,q);
         //                    MathUtil.MatrixComponent(ref rot, i, p, cos * mrp - sin * mrq);
         //                    MathUtil.MatrixComponent(ref rot, i, q, cos * mrp + sin * mrq);
         //                }
@@ -885,7 +885,7 @@ namespace BulletSharp
         [Conditional("DEBUG")]
         public static void SanityCheckVector(ref Vector3 v)
         {
-            if (float.IsNaN(v.X) || float.IsNaN(v.Y) || float.IsNaN(v.Z))
+            if (double.IsNaN(v.X) || double.IsNaN(v.Y) || double.IsNaN(v.Z))
             {
                 Debug.Assert(false);
             }
@@ -931,32 +931,32 @@ namespace BulletSharp
             //	//       -cx*cz*sy+sx*sz  cz*sx+cx*sy*sz  cx*cy
             //
 
-            float matElem0 = MathUtil.GetMatrixElem(ref mat, 0);
-            float matElem1 = MathUtil.GetMatrixElem(ref mat, 1);
-            float matElem2 = MathUtil.GetMatrixElem(ref mat, 2);
-            float matElem3 = MathUtil.GetMatrixElem(ref mat, 3);
-            float matElem4 = MathUtil.GetMatrixElem(ref mat, 4);
-            float matElem5 = MathUtil.GetMatrixElem(ref mat, 5);
-            float matElem6 = MathUtil.GetMatrixElem(ref mat, 6);
-            float matElem7 = MathUtil.GetMatrixElem(ref mat, 7);
-            float matElem8 = MathUtil.GetMatrixElem(ref mat, 8);
+            double matElem0 = MathUtil.GetMatrixElem(ref mat, 0);
+            double matElem1 = MathUtil.GetMatrixElem(ref mat, 1);
+            double matElem2 = MathUtil.GetMatrixElem(ref mat, 2);
+            double matElem3 = MathUtil.GetMatrixElem(ref mat, 3);
+            double matElem4 = MathUtil.GetMatrixElem(ref mat, 4);
+            double matElem5 = MathUtil.GetMatrixElem(ref mat, 5);
+            double matElem6 = MathUtil.GetMatrixElem(ref mat, 6);
+            double matElem7 = MathUtil.GetMatrixElem(ref mat, 7);
+            double matElem8 = MathUtil.GetMatrixElem(ref mat, 8);
 
-            float fi = matElem2;
+            double fi = matElem2;
             if (fi < 1.0f)
             {
                 if (fi > -1.0f)
                 {
                     xyz = new Vector3(
-                        (float)Math.Atan2(-matElem5, matElem8),
-                        (float)Math.Asin(matElem2),
-                        (float)Math.Atan2(-matElem1, matElem0));
+                        (double)Math.Atan2(-matElem5, matElem8),
+                        (double)Math.Asin(matElem2),
+                        (double)Math.Atan2(-matElem1, matElem0));
                     return true;
                 }
                 else
                 {
                     // WARNING.  Not unique.  XA - ZA = -atan2(r10,r11)
                     xyz = new Vector3(
-                        (float)-Math.Atan2(matElem3, matElem4),
+                        (double)-Math.Atan2(matElem3, matElem4),
                         -SIMD_HALF_PI,
                         0f);
                     return false;
@@ -966,7 +966,7 @@ namespace BulletSharp
             {
                 // WARNING.  Not unique.  XAngle + ZAngle = atan2(r10,r11)
                 xyz = new Vector3(
-                    (float)Math.Atan2(matElem3, matElem4),
+                    (double)Math.Atan2(matElem3, matElem4),
                     SIMD_HALF_PI,
                     0.0f);
             }
@@ -989,18 +989,18 @@ namespace BulletSharp
         //        {
         //            Vector3 v = Vector3.Zero;
 
-        //            v.X = (float)Math.Atan2
+        //            v.X = (double)Math.Atan2
         //            (
         //                2 * q.Y * q.W - 2 * q.X * q.Z,
         //                   1 - 2 * Math.Pow(q.Y, 2) - 2 * Math.Pow(q.Z, 2)
         //            );
 
-        //            v.Z = (float)Math.Asin
+        //            v.Z = (double)Math.Asin
         //            (
         //                2 * q.X * q.Y + 2 * q.Z * q.W
         //            );
 
-        //            v.Y = (float)Math.Atan2
+        //            v.Y = (double)Math.Atan2
         //            (
         //                2 * q.X * q.W - 2 * q.Y * q.Z,
         //                1 - 2 * Math.Pow(q.X, 2) - 2 * Math.Pow(q.Z, 2)
@@ -1008,13 +1008,13 @@ namespace BulletSharp
 
         //            if (q.X * q.Y + q.Z * q.W == 0.5)
         //            {
-        //                v.X = (float)(2 * Math.Atan2(q.X, q.W));
+        //                v.X = (double)(2 * Math.Atan2(q.X, q.W));
         //                v.Y = 0;
         //            }
 
         //            else if (q.X * q.Y + q.Z * q.W == -0.5)
         //            {
-        //                v.X = (float)(-2 * Math.Atan2(q.X, q.W));
+        //                v.X = (double)(-2 * Math.Atan2(q.X, q.W));
         //                v.Y = 0;
         //            }
 
@@ -1058,7 +1058,7 @@ namespace BulletSharp
 
 
 
-        public static float NormalizeAngle(float angleInRadians)
+        public static double NormalizeAngle(double angleInRadians)
         {
             // Need to check this mod operator works with floats...
             angleInRadians = angleInRadians % SIMD_2_PI;
@@ -1076,13 +1076,13 @@ namespace BulletSharp
             }
         }
 
-        public static float DegToRadians(float degrees)
+        public static double DegToRadians(double degrees)
         {
             return (degrees / 360.0f) * SIMD_2_PI;
         }
 
         /*
-        public static Matrix SetEulerZYX(float eulerX, float eulerY, float eulerZ)
+        public static Matrix SetEulerZYX(double eulerX, double eulerY, double eulerZ)
         {
             //return Matrix.CreateFromYawPitchRoll(y, x,z);
             // This version tested and compared to c++ version. don't break it.
@@ -1133,7 +1133,7 @@ namespace BulletSharp
         }
 
 
-        public static Vector3 Vector3Lerp(ref Vector3 a, ref Vector3 b, float t)
+        public static Vector3 Vector3Lerp(ref Vector3 a, ref Vector3 b, double t)
         {
             return new Vector3(
                 a.X + (b.X - a.X) * t,
@@ -1142,7 +1142,7 @@ namespace BulletSharp
         }
 
 
-        public static float Vector3Distance2XZ(Vector3 x, Vector3 y)
+        public static double Vector3Distance2XZ(Vector3 x, Vector3 y)
         {
             Vector3 xa = new Vector3(x.X, 0, x.Z);
             Vector3 ya = new Vector3(y.X, 0, y.Z);
@@ -1160,21 +1160,21 @@ namespace BulletSharp
             return result;
         }
 
-        //public const float SIMD_EPSILON = 0.0000001f;
-        public const float SIMD_EPSILON = 1.192092896e-07f;
-        public const float SIMDSQRT12 = 0.7071067811865475244008443621048490f;
+        //public const double SIMD_EPSILON = 0.0000001f;
+        public const double SIMD_EPSILON = 1.192092896e-07f;
+        public const double SIMDSQRT12 = 0.7071067811865475244008443621048490f;
 
-        public const float BT_LARGE_FLOAT = 1e18f;
-        public static Vector3 MAX_VECTOR = new Vector3(BT_LARGE_FLOAT);
-        public static Vector3 MIN_VECTOR = new Vector3(-BT_LARGE_FLOAT);
-        public const float SIMD_2_PI = 6.283185307179586232f;
-        public const float SIMD_PI = SIMD_2_PI * 0.5f;
-        public const float SIMD_HALF_PI = SIMD_PI * 0.5f;
-        public const float SIMD_QUARTER_PI = SIMD_PI * 0.25f;
+        public const double BT_LARGE_DOUBLE = 1e18f;
+        public static Vector3 MAX_VECTOR = new Vector3(BT_LARGE_DOUBLE);
+        public static Vector3 MIN_VECTOR = new Vector3(-BT_LARGE_DOUBLE);
+        public const double SIMD_2_PI = 6.283185307179586232f;
+        public const double SIMD_PI = SIMD_2_PI * 0.5f;
+        public const double SIMD_HALF_PI = SIMD_PI * 0.5f;
+        public const double SIMD_QUARTER_PI = SIMD_PI * 0.25f;
 
-        public const float SIMD_INFINITY = float.MaxValue;
-        public const float SIMD_RADS_PER_DEG = (SIMD_2_PI / 360.0f);
-        public const float SIMD_DEGS_PER_RAD = (360.0f / SIMD_2_PI);
+        public const double SIMD_INFINITY = double.MaxValue;
+        public const double SIMD_RADS_PER_DEG = (SIMD_2_PI / 360.0f);
+        public const double SIMD_DEGS_PER_RAD = (360.0f / SIMD_2_PI);
 
 
     }

@@ -38,19 +38,19 @@ namespace BulletSharp
 			set => btMultiBodySolverConstraint_setAngularComponentB(Native, ref value);
 		}
 
-		public float AppliedImpulse
+		public double AppliedImpulse
 		{
 			get => btMultiBodySolverConstraint_getAppliedImpulse(Native);
 			set => btMultiBodySolverConstraint_setAppliedImpulse(Native, value);
 		}
 
-		public float AppliedPushImpulse
+		public double AppliedPushImpulse
 		{
 			get => btMultiBodySolverConstraint_getAppliedPushImpulse(Native);
 			set => btMultiBodySolverConstraint_setAppliedPushImpulse(Native, value);
 		}
 
-		public float Cfm
+		public double Cfm
 		{
 			get => btMultiBodySolverConstraint_getCfm(Native);
 			set => btMultiBodySolverConstraint_setCfm(Native, value);
@@ -90,7 +90,7 @@ namespace BulletSharp
 			set => btMultiBodySolverConstraint_setDeltaVelBindex(Native, value);
 		}
 
-		public float Friction
+		public double Friction
 		{
 			get => btMultiBodySolverConstraint_getFriction(Native);
 			set => btMultiBodySolverConstraint_setFriction(Native, value);
@@ -114,7 +114,7 @@ namespace BulletSharp
 			set => btMultiBodySolverConstraint_setJacBindex(Native, value);
 		}
 
-		public float JacDiagABInv
+		public double JacDiagABInv
 		{
 			get => btMultiBodySolverConstraint_getJacDiagABInv(Native);
 			set => btMultiBodySolverConstraint_setJacDiagABInv(Native, value);
@@ -132,7 +132,7 @@ namespace BulletSharp
 			set => btMultiBodySolverConstraint_setLinkB(Native, value);
 		}
 
-		public float LowerLimit
+		public double LowerLimit
 		{
 			get => btMultiBodySolverConstraint_getLowerLimit(Native);
 			set => btMultiBodySolverConstraint_setLowerLimit(Native, value);
@@ -218,13 +218,13 @@ namespace BulletSharp
 			set => btMultiBodySolverConstraint_setRelpos2CrossNormal(Native, ref value);
 		}
 
-		public float Rhs
+		public double Rhs
 		{
 			get => btMultiBodySolverConstraint_getRhs(Native);
 			set => btMultiBodySolverConstraint_setRhs(Native, value);
 		}
 
-		public float RhsPenetration
+		public double RhsPenetration
 		{
 			get => btMultiBodySolverConstraint_getRhsPenetration(Native);
 			set => btMultiBodySolverConstraint_setRhsPenetration(Native, value);
@@ -242,13 +242,13 @@ namespace BulletSharp
 			set => btMultiBodySolverConstraint_setSolverBodyIdB(Native, value);
 		}
 
-		public float UnusedPadding4
+		public double UnusedPadding4
 		{
 			get => btMultiBodySolverConstraint_getUnusedPadding4(Native);
 			set => btMultiBodySolverConstraint_setUnusedPadding4(Native, value);
 		}
 
-		public float UpperLimit
+		public double UpperLimit
 		{
 			get => btMultiBodySolverConstraint_getUpperLimit(Native);
 			set => btMultiBodySolverConstraint_setUpperLimit(Native, value);

@@ -33,10 +33,10 @@ namespace BulletSharp
 
             Vector3 triangleNormal = v10.Cross(v20);
 
-            float dist;
+            double dist;
             point0.Dot(ref triangleNormal, out dist);
-            float distA = triangleNormal.Dot(From) - dist;
-            float distB = triangleNormal.Dot(To) - dist;
+            double distA = triangleNormal.Dot(From) - dist;
+            double distB = triangleNormal.Dot(To) - dist;
 
             if (distA * distB >= 0.0f)
             {
@@ -50,8 +50,8 @@ namespace BulletSharp
             }
 
 
-            float proj_length = distA - distB;
-            float distance = (distA) / (proj_length);
+            double proj_length = distA - distB;
+            double distance = (distA) / (proj_length);
             // Now we have the intersection point on the plane, we'll see if it's inside the triangle
             // Add an epsilon as a tolerance for the raycast,
             // in case the ray hits exacly on the edge of the triangle.
@@ -59,7 +59,7 @@ namespace BulletSharp
 
             if (distance < HitFraction)
             {
-                float edgeTolerance = triangleNormal.LengthSquared;
+                double edgeTolerance = triangleNormal.LengthSquared;
                 edgeTolerance *= -0.0001f;
                 Vector3 point = Vector3.Lerp(From, To, distance);
                 {
@@ -67,7 +67,7 @@ namespace BulletSharp
                     Vector3 v1p; v1p = point1 - point;
                     Vector3 cp0; cp0 = v0p.Cross(v1p);
 
-                    float dot;
+                    double dot;
                     cp0.Dot(ref triangleNormal, out dot);
                     if (dot >= edgeTolerance)
                     {
@@ -100,17 +100,17 @@ namespace BulletSharp
             }
         }
 
-        public abstract float ReportHit(ref Vector3 hitNormalLocal, float hitFraction, int partId, int triangleIndex);
+        public abstract double ReportHit(ref Vector3 hitNormalLocal, double hitFraction, int partId, int triangleIndex);
 
         public EFlags Flags { get; set; }
         public Vector3 From { get; set; }
-        public float HitFraction { get; set; }
+        public double HitFraction { get; set; }
         public Vector3 To { get; set; }
 	}
 
 	public abstract class TriangleConvexcastCallback : TriangleCallback
 	{
-        public TriangleConvexcastCallback(ConvexShape convexShape, ref Matrix convexShapeFrom, ref Matrix convexShapeTo, ref Matrix triangleToWorld, float triangleCollisionMargin)
+        public TriangleConvexcastCallback(ConvexShape convexShape, ref Matrix convexShapeFrom, ref Matrix convexShapeTo, ref Matrix triangleToWorld, double triangleCollisionMargin)
         {
             ConvexShape = convexShape;
             ConvexShapeFrom = convexShapeFrom;
@@ -127,14 +127,14 @@ namespace BulletSharp
             throw new NotImplementedException();
         }
 
-        public abstract float ReportHit(ref Vector3 hitNormalLocal, ref Vector3 hitPointLocal, float hitFraction, int partId, int triangleIndex);
+        public abstract double ReportHit(ref Vector3 hitNormalLocal, ref Vector3 hitPointLocal, double hitFraction, int partId, int triangleIndex);
 
-        public float AllowedPenetration { get; set; }
+        public double AllowedPenetration { get; set; }
         public ConvexShape ConvexShape { get; set; }
         public Matrix ConvexShapeFrom { get; set; }
         public Matrix ConvexShapeTo { get; set; }
-        public float HitFraction { get; set; }
-        public float TriangleCollisionMargin { get; set; }
+        public double HitFraction { get; set; }
+        public double TriangleCollisionMargin { get; set; }
         public Matrix TriangleToWorld { get; set; }
 	}
 }

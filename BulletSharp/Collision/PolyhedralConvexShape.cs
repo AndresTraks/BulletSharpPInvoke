@@ -35,12 +35,12 @@ namespace BulletSharp
 				shiftVerticesByMargin);
 		}
 
-		public bool IsInsideRef(ref Vector3 pt, float tolerance)
+		public bool IsInsideRef(ref Vector3 pt, double tolerance)
 		{
 			return btPolyhedralConvexShape_isInside(Native, ref pt, tolerance);
 		}
 
-		public bool IsInside(Vector3 pt, float tolerance)
+		public bool IsInside(Vector3 pt, double tolerance)
 		{
 			return btPolyhedralConvexShape_isInside(Native, ref pt, tolerance);
 		}
@@ -77,14 +77,14 @@ namespace BulletSharp
 		}
 
 		public void GetNonvirtualAabbRef(ref Matrix trans, out Vector3 aabbMin, out Vector3 aabbMax,
-			float margin)
+			double margin)
 		{
 			btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(Native, ref trans,
 				out aabbMin, out aabbMax, margin);
 		}
 
 		public void GetNonvirtualAabb(Matrix trans, out Vector3 aabbMin, out Vector3 aabbMax,
-			float margin)
+			double margin)
 		{
 			btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(Native, ref trans,
 				out aabbMin, out aabbMax, margin);

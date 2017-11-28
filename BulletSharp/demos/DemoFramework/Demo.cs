@@ -35,9 +35,9 @@ namespace DemoFramework
         // Frame counting
         public Clock Clock { get; private set; }
 
-        public float FrameDelta { get; private set; }
-        public float FramesPerSecond { get; private set; }
-        float _frameAccumulator;
+        public double FrameDelta { get; private set; }
+        public double FramesPerSecond { get; private set; }
+        double _frameAccumulator;
 
         // Physics
         private BoxShooter _boxShooter;
@@ -307,11 +307,11 @@ namespace DemoFramework
             return GetRayTo(Input.MousePoint, FreeLook.Eye, FreeLook.Target, Graphics.FieldOfView);
         }
 
-        public Vector3 GetRayTo(Point point, Vector3 eye, Vector3 target, float fieldOfView)
+        public Vector3 GetRayTo(Point point, Vector3 eye, Vector3 target, double fieldOfView)
         {
             Vector3 rayForward = target - eye;
             rayForward.Normalize();
-            const float farPlane = 10000.0f;
+            const double farPlane = 10000.0f;
             rayForward *= farPlane;
 
             Vector3 horizontal = Vector3.Cross(rayForward, FreeLook.Up);
@@ -319,25 +319,25 @@ namespace DemoFramework
             Vector3 vertical = Vector3.Cross(horizontal, rayForward);
             vertical.Normalize();
 
-            float tanFov = (float)Math.Tan(fieldOfView / 2);
+            double tanFov = (double)Math.Tan(fieldOfView / 2);
             horizontal *= 2.0f * farPlane * tanFov;
             vertical *= 2.0f * farPlane * tanFov;
 
             Size clientSize = Graphics.Form.ClientSize;
             if (clientSize.Width > clientSize.Height)
             {
-                float aspect = (float)clientSize.Width / (float)clientSize.Height;
+                double aspect = (double)clientSize.Width / (double)clientSize.Height;
                 horizontal *= aspect;
             }
             else
             {
-                float aspect = (float)clientSize.Height / (float)clientSize.Width;
+                double aspect = (double)clientSize.Height / (double)clientSize.Width;
                 vertical *= aspect;
             }
 
             Vector3 rayToCenter = eye + rayForward;
-            Vector3 dHor = horizontal / (float)clientSize.Width;
-            Vector3 dVert = vertical / (float)clientSize.Height;
+            Vector3 dHor = horizontal / (double)clientSize.Width;
+            Vector3 dVert = vertical / (double)clientSize.Height;
 
             Vector3 rayTo = rayToCenter - 0.5f * horizontal + 0.5f * vertical;
             rayTo += (clientSize.Width - point.X) * dHor;

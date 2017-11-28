@@ -27,7 +27,7 @@ namespace BulletSharp.SoftBody
 			btSoftBodySolver_optimize(_native, softBodies._native, forceUpdate);
 		}
 		*/
-		public void PredictMotion(float solverdt)
+		public void PredictMotion(double solverdt)
 		{
 			btSoftBodySolver_predictMotion(_native, solverdt);
 		}
@@ -42,7 +42,7 @@ namespace BulletSharp.SoftBody
 			btSoftBodySolver_processCollision2(_native, __unnamed0._native, __unnamed1._native);
 		}
 		*/
-		public void SolveConstraints(float solverdt)
+		public void SolveConstraints(double solverdt)
 		{
 			btSoftBodySolver_solveConstraints(_native, solverdt);
 		}
@@ -69,7 +69,7 @@ namespace BulletSharp.SoftBody
 			get { return btSoftBodySolver_getSolverType(_native); }
 		}
 		*/
-		public float TimeScale => btSoftBodySolver_getTimeScale(_native);
+		public double TimeScale => btSoftBodySolver_getTimeScale(_native);
 
 		public void Dispose()
 		{

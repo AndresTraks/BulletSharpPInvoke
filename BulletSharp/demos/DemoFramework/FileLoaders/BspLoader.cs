@@ -58,7 +58,7 @@ namespace DemoFramework.FileLoaders
     public struct BspPlane
     {
         public Vector3 Normal;
-        public float Distance;
+        public double Distance;
     }
 
     [Flags]
@@ -292,9 +292,9 @@ namespace DemoFramework.FileLoaders
                             case "origin":
                                 string[] originStrings = keyValue[1].Split(' ');
                                 bspEntity.Origin = new Vector3(
-                                    float.Parse(originStrings[0], CultureInfo.InvariantCulture),
-                                    float.Parse(originStrings[1], CultureInfo.InvariantCulture),
-                                    float.Parse(originStrings[2], CultureInfo.InvariantCulture));
+                                    double.Parse(originStrings[0], CultureInfo.InvariantCulture),
+                                    double.Parse(originStrings[1], CultureInfo.InvariantCulture),
+                                    double.Parse(originStrings[2], CultureInfo.InvariantCulture));
                                 break;
                             default:
                                 if (!bspEntity.KeyValues.ContainsKey(keyValue[0]))

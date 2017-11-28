@@ -155,25 +155,25 @@ namespace BulletSharp
 				_native = btTypedConstraint_btConstraintInfo2_new();
 			}
 			/*
-			public float Cfm
+			public double Cfm
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getCfm(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setCfm(_native, value._native); }
 			}
 
-			public float ConstraintError
+			public double ConstraintError
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getConstraintError(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setConstraintError(_native, value._native); }
 			}
 			*/
-			public float Damping
+			public double Damping
 			{
 				get => btTypedConstraint_btConstraintInfo2_getDamping(_native);
 				set => btTypedConstraint_btConstraintInfo2_setDamping(_native, value);
 			}
 
-			public float Erp
+			public double Erp
 			{
 				get => btTypedConstraint_btConstraintInfo2_getErp(_native);
 				set => btTypedConstraint_btConstraintInfo2_setErp(_native, value);
@@ -185,37 +185,37 @@ namespace BulletSharp
 				set { btTypedConstraint_btConstraintInfo2_setFindex(_native, value._native); }
 			}
 			*/
-			public float Fps
+			public double Fps
 			{
 				get => btTypedConstraint_btConstraintInfo2_getFps(_native);
 				set => btTypedConstraint_btConstraintInfo2_setFps(_native, value);
 			}
 			/*
-			public float J1angularAxis
+			public double J1angularAxis
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getJ1angularAxis(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setJ1angularAxis(_native, value._native); }
 			}
 
-			public float J1linearAxis
+			public double J1linearAxis
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getJ1linearAxis(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setJ1linearAxis(_native, value._native); }
 			}
 
-			public float J2angularAxis
+			public double J2angularAxis
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getJ2angularAxis(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setJ2angularAxis(_native, value._native); }
 			}
 
-			public float J2linearAxis
+			public double J2linearAxis
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getJ2linearAxis(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setJ2linearAxis(_native, value._native); }
 			}
 
-			public float LowerLimit
+			public double LowerLimit
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getLowerLimit(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setLowerLimit(_native, value._native); }
@@ -233,7 +233,7 @@ namespace BulletSharp
 				set => btTypedConstraint_btConstraintInfo2_setRowskip(_native, value);
 			}
 			/*
-			public float UpperLimit
+			public double UpperLimit
 			{
 				get { return btTypedConstraint_btConstraintInfo2_getUpperLimit(_native); }
 				set { btTypedConstraint_btConstraintInfo2_setUpperLimit(_native, value._native); }
@@ -311,22 +311,22 @@ namespace BulletSharp
 			btTypedConstraint_getInfo2(Native, info._native);
 		}
 
-		public float GetParam(ConstraintParam num)
+		public double GetParam(ConstraintParam num)
 		{
 			return btTypedConstraint_getParam(Native, num);
 		}
 
-		public float GetParam(ConstraintParam num, int axis)
+		public double GetParam(ConstraintParam num, int axis)
 		{
 			return btTypedConstraint_getParam2(Native, num, axis);
 		}
 
-		public float InternalGetAppliedImpulse()
+		public double InternalGetAppliedImpulse()
 		{
 			return btTypedConstraint_internalGetAppliedImpulse(Native);
 		}
 
-		public void InternalSetAppliedImpulse(float appliedImpulse)
+		public void InternalSetAppliedImpulse(double appliedImpulse)
 		{
 			btTypedConstraint_internalSetAppliedImpulse(Native, appliedImpulse);
 		}
@@ -336,33 +336,33 @@ namespace BulletSharp
 			return Marshal.PtrToStringAnsi(btTypedConstraint_serialize(Native, dataBuffer, serializer._native));
 		}
 
-		public void SetParam(ConstraintParam num, float value)
+		public void SetParam(ConstraintParam num, double value)
 		{
 			btTypedConstraint_setParam(Native, num, value);
 		}
 
-		public void SetParam(ConstraintParam num, float value, int axis)
+		public void SetParam(ConstraintParam num, double value, int axis)
 		{
 			btTypedConstraint_setParam2(Native, num, value, axis);
 		}
 		/*
 		public void SetupSolverConstraint(btAlignedObjectArray<btSolverConstraint> ca,
-			int solverBodyA, int solverBodyB, float timeStep)
+			int solverBodyA, int solverBodyB, double timeStep)
 		{
 			btTypedConstraint_setupSolverConstraint(_native, ca._native, solverBodyA,
 				solverBodyB, timeStep);
 		}
 
 		public void SolveConstraintObsolete(SolverBody __unnamed0, SolverBody __unnamed1,
-			float __unnamed2)
+			double __unnamed2)
 		{
 			btTypedConstraint_solveConstraintObsolete(_native, __unnamed0._native,
 				__unnamed1._native, __unnamed2);
 		}
 		*/
-		public float AppliedImpulse => btTypedConstraint_getAppliedImpulse(Native);
+		public double AppliedImpulse => btTypedConstraint_getAppliedImpulse(Native);
 
-		public float BreakingImpulseThreshold
+		public double BreakingImpulseThreshold
 		{
 			get => btTypedConstraint_getBreakingImpulseThreshold(Native);
 			set => btTypedConstraint_setBreakingImpulseThreshold(Native, value);
@@ -370,7 +370,7 @@ namespace BulletSharp
 
 		public TypedConstraintType ConstraintType => btTypedConstraint_getConstraintType(Native);
 
-		public float DebugDrawSize
+		public double DebugDrawSize
 		{
 			get => btTypedConstraint_getDbgDrawSize(Native);
 			set => btTypedConstraint_setDbgDrawSize(Native, value);
@@ -458,41 +458,41 @@ namespace BulletSharp
 			Native = btAngularLimit_new();
 		}
 
-		public void Fit(ref float angle)
+		public void Fit(ref double angle)
 		{
 			btAngularLimit_fit(Native, ref angle);
 		}
 
-		public void Set(float low, float high, float softness = 0.9f, float biasFactor = 0.3f,
-			float relaxationFactor = 1.0f)
+		public void Set(double low, double high, double softness = 0.9f, double biasFactor = 0.3f,
+			double relaxationFactor = 1.0f)
 		{
 			btAngularLimit_set(Native, low, high, softness, biasFactor, relaxationFactor);
 		}
 
-		public void Test(float angle)
+		public void Test(double angle)
 		{
 			btAngularLimit_test(Native, angle);
 		}
 
-		public float BiasFactor => btAngularLimit_getBiasFactor(Native);
+		public double BiasFactor => btAngularLimit_getBiasFactor(Native);
 
-		public float Correction => btAngularLimit_getCorrection(Native);
+		public double Correction => btAngularLimit_getCorrection(Native);
 
-		public float Error => btAngularLimit_getError(Native);
+		public double Error => btAngularLimit_getError(Native);
 
-		public float HalfRange => btAngularLimit_getHalfRange(Native);
+		public double HalfRange => btAngularLimit_getHalfRange(Native);
 
-		public float High => btAngularLimit_getHigh(Native);
+		public double High => btAngularLimit_getHigh(Native);
 
 		public bool IsLimit => btAngularLimit_isLimit(Native);
 
-		public float Low => btAngularLimit_getLow(Native);
+		public double Low => btAngularLimit_getLow(Native);
 
-		public float RelaxationFactor => btAngularLimit_getRelaxationFactor(Native);
+		public double RelaxationFactor => btAngularLimit_getRelaxationFactor(Native);
 
-		public float Sign => btAngularLimit_getSign(Native);
+		public double Sign => btAngularLimit_getSign(Native);
 
-		public float Softness => btAngularLimit_getSoftness(Native);
+		public double Softness => btAngularLimit_getSoftness(Native);
 
 		public void Dispose()
 		{
@@ -518,8 +518,28 @@ namespace BulletSharp
 		}
 	}
 
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct TypedConstraintFloatData
+    {
+        public IntPtr RigidBodyA;
+        public IntPtr RigidBodyB;
+        public IntPtr Name;
+        public int ObjectType;
+        public int UserConstraintType;
+        public int UserConstraintId;
+        public int NeedsFeedback;
+        public float AppliedImpulse;
+        public float DebugDrawSize;
+        public int DisableCollisionsBetweenLinkedBodies;
+        public int OverrideNumSolverIterations;
+        public float BreakingImpulseThreshold;
+        public int IsEnabled;
+
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(TypedConstraintFloatData), fieldName).ToInt32(); }
+    }
+
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct TypedConstraintFloatData
+	internal struct TypedConstraintDoubleData
 	{
 		public IntPtr RigidBodyA;
 		public IntPtr RigidBodyB;
@@ -528,13 +548,13 @@ namespace BulletSharp
 		public int UserConstraintType;
 		public int UserConstraintId;
 		public int NeedsFeedback;
-		public float AppliedImpulse;
-		public float DebugDrawSize;
+		public double AppliedImpulse;
+		public double DebugDrawSize;
 		public int DisableCollisionsBetweenLinkedBodies;
 		public int OverrideNumSolverIterations;
-		public float BreakingImpulseThreshold;
+		public double BreakingImpulseThreshold;
 		public int IsEnabled;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(TypedConstraintFloatData), fieldName).ToInt32(); }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(TypedConstraintDoubleData), fieldName).ToInt32(); }
 	}
 }

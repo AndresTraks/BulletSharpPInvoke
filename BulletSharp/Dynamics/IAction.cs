@@ -8,7 +8,7 @@ namespace BulletSharp
 	public interface IAction
 	{
 		void DebugDraw(IDebugDraw debugDrawer);
-		void UpdateAction(CollisionWorld collisionWorld, float deltaTimeStep);
+		void UpdateAction(CollisionWorld collisionWorld, double deltaTimeStep);
 	}
 
 	internal class ActionInterfaceWrapper : IDisposable
@@ -20,7 +20,7 @@ namespace BulletSharp
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate void DebugDrawUnmanagedDelegate(IntPtr debugDrawer);
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
-		private delegate void UpdateActionUnmanagedDelegate(IntPtr collisionWorld, float deltaTimeStep);
+		private delegate void UpdateActionUnmanagedDelegate(IntPtr collisionWorld, double deltaTimeStep);
 
 		private DebugDrawUnmanagedDelegate _debugDraw;
 		private UpdateActionUnmanagedDelegate _updateAction;
@@ -43,7 +43,7 @@ namespace BulletSharp
 			_actionInterface.DebugDraw(DebugDraw.GetManaged(debugDrawer));
 		}
 
-		private void UpdateActionUnmanaged(IntPtr collisionWorld, float deltaTimeStep)
+		private void UpdateActionUnmanaged(IntPtr collisionWorld, double deltaTimeStep)
 		{
 			_actionInterface.UpdateAction(_world, deltaTimeStep);
 		}

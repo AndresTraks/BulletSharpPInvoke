@@ -68,7 +68,7 @@ namespace BulletSharp
 				Marshal.GetFunctionPointerForDelegate(_process));
 		}
 
-		public float LambdaMax
+		public double LambdaMax
 		{
 			get => btBroadphaseRayCallback_getLambda_max(Native);
 			set => btBroadphaseRayCallback_setLambda_max(Native, value);

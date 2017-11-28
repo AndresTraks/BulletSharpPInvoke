@@ -57,18 +57,18 @@ namespace BulletSharp
 			_rigidBodyB = GetFixedBody();
 		}
 
-		public void EnableAngularMotor(bool enableMotor, float targetVelocity, float maxMotorImpulse)
+		public void EnableAngularMotor(bool enableMotor, double targetVelocity, double maxMotorImpulse)
 		{
 			btHingeConstraint_enableAngularMotor(Native, enableMotor, targetVelocity,
 				maxMotorImpulse);
 		}
 
-		public float GetHingeAngleRef(ref Matrix transA, ref Matrix transB)
+		public double GetHingeAngleRef(ref Matrix transA, ref Matrix transB)
 		{
 			return btHingeConstraint_getHingeAngle(Native, ref transA, ref transB);
 		}
 
-		public float GetHingeAngle(Matrix transA, Matrix transB)
+		public double GetHingeAngle(Matrix transA, Matrix transB)
 		{
 			return btHingeConstraint_getHingeAngle(Native, ref transA, ref transB);
 		}
@@ -119,39 +119,39 @@ namespace BulletSharp
 			btHingeConstraint_setFrames(Native, ref frameA, ref frameB);
 		}
 
-		public void SetLimit(float low, float high)
+		public void SetLimit(double low, double high)
 		{
 			btHingeConstraint_setLimit(Native, low, high);
 		}
 
-		public void SetLimit(float low, float high, float softness)
+		public void SetLimit(double low, double high, double softness)
 		{
 			btHingeConstraint_setLimit2(Native, low, high, softness);
 		}
 
-		public void SetLimit(float low, float high, float softness, float biasFactor)
+		public void SetLimit(double low, double high, double softness, double biasFactor)
 		{
 			btHingeConstraint_setLimit3(Native, low, high, softness, biasFactor);
 		}
 
-		public void SetLimit(float low, float high, float softness, float biasFactor,
-			float relaxationFactor)
+		public void SetLimit(double low, double high, double softness, double biasFactor,
+			double relaxationFactor)
 		{
 			btHingeConstraint_setLimit4(Native, low, high, softness, biasFactor,
 				relaxationFactor);
 		}
 
-		public void SetMotorTarget(float targetAngle, float deltaTime)
+		public void SetMotorTarget(double targetAngle, double deltaTime)
 		{
 			btHingeConstraint_setMotorTarget(Native, targetAngle, deltaTime);
 		}
 
-		public void SetMotorTargetRef(ref Quaternion qAinB, float deltaTime)
+		public void SetMotorTargetRef(ref Quaternion qAinB, double deltaTime)
 		{
 			btHingeConstraint_setMotorTarget2(Native, ref qAinB, deltaTime);
 		}
 
-		public void SetMotorTarget(Quaternion qAinB, float deltaTime)
+		public void SetMotorTarget(Quaternion qAinB, double deltaTime)
 		{
 			btHingeConstraint_setMotorTarget2(Native, ref qAinB, deltaTime);
 		}
@@ -166,7 +166,7 @@ namespace BulletSharp
 			btHingeConstraint_testLimit(Native, ref transA, ref transB);
 		}
 
-		public void UpdateRhs(float timeStep)
+		public void UpdateRhs(double timeStep)
 		{
 			btHingeConstraint_updateRHS(Native, timeStep);
 		}
@@ -227,29 +227,29 @@ namespace BulletSharp
 
 		public bool HasLimit => btHingeConstraint_hasLimit(Native);
 
-		public float HingeAngle => btHingeConstraint_getHingeAngle2(Native);
+		public double HingeAngle => btHingeConstraint_getHingeAngle2(Native);
 
-		public float LimitBiasFactor => btHingeConstraint_getLimitBiasFactor(Native);
+		public double LimitBiasFactor => btHingeConstraint_getLimitBiasFactor(Native);
 
-		public float LimitRelaxationFactor => btHingeConstraint_getLimitRelaxationFactor(Native);
+		public double LimitRelaxationFactor => btHingeConstraint_getLimitRelaxationFactor(Native);
 
-		public float LimitSign => btHingeConstraint_getLimitSign(Native);
+		public double LimitSign => btHingeConstraint_getLimitSign(Native);
 
-		public float LimitSoftness => btHingeConstraint_getLimitSoftness(Native);
+		public double LimitSoftness => btHingeConstraint_getLimitSoftness(Native);
 
-		public float LowerLimit => btHingeConstraint_getLowerLimit(Native);
+		public double LowerLimit => btHingeConstraint_getLowerLimit(Native);
 
-		public float MaxMotorImpulse
+		public double MaxMotorImpulse
 		{
 			get => btHingeConstraint_getMaxMotorImpulse(Native);
 			set => btHingeConstraint_setMaxMotorImpulse(Native, value);
 		}
 
-		public float MotorTargetVelocity => btHingeConstraint_getMotorTargetVelocity(Native);
+		public double MotorTargetVelocity => btHingeConstraint_getMotorTargetVelocity(Native);
 
 		public int SolveLimit => btHingeConstraint_getSolveLimit(Native);
 
-		public float UpperLimit => btHingeConstraint_getUpperLimit(Native);
+		public double UpperLimit => btHingeConstraint_getUpperLimit(Native);
 
 		public bool UseFrameOffset
 		{
@@ -302,17 +302,17 @@ namespace BulletSharp
 			_rigidBodyB = GetFixedBody();
 		}
 
-		public float AccumulatedHingeAngle
+		public double AccumulatedHingeAngle
 		{
 			get => btHingeAccumulatedAngleConstraint_getAccumulatedHingeAngle(Native);
 			set => btHingeAccumulatedAngleConstraint_setAccumulatedHingeAngle(Native, value);
 		}
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
-	internal struct HingeConstraintFloatData
-	{
-		public TypedConstraintFloatData TypedConstraintData;
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct HingeConstraintFloatData
+    {
+        public TypedConstraintFloatData TypedConstraintData;
 		public TransformFloatData RigidBodyAFrame;
 		public TransformFloatData RigidBodyBFrame;
 		public int UseReferenceFrameA;
@@ -327,5 +327,25 @@ namespace BulletSharp
 		public float RelaxationFactor;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(HingeConstraintFloatData), fieldName).ToInt32(); }
+    }
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct HingeConstraintDoubleData
+	{
+		public TypedConstraintDoubleData TypedConstraintData;
+		public TransformDoubleData RigidBodyAFrame;
+		public TransformDoubleData RigidBodyBFrame;
+		public int UseReferenceFrameA;
+		public int AngularOnly;
+		public int EnableAngularMotor;
+		public double MotorTargetVelocity;
+		public double MaxMotorImpulse;
+		public double LowerLimit;
+		public double UpperLimit;
+		public double LimitSoftness;
+		public double BiasFactor;
+		public double RelaxationFactor;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(HingeConstraintDoubleData), fieldName).ToInt32(); }
 	}
 }

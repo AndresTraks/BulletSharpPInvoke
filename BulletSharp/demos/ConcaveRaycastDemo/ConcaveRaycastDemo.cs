@@ -19,7 +19,7 @@ namespace ConcaveRaycastDemo
 
     internal sealed class ConcaveRaycastDemo : IDemoConfiguration, IUpdateReceiver
     {
-        private float _groundOffset = 0;
+        private double _groundOffset = 0;
 
         public ISimulation CreateSimulation(Demo demo)
         {
@@ -58,10 +58,10 @@ namespace ConcaveRaycastDemo
 
     internal sealed class ConcaveRaycastDemoSimulation : ISimulation
     {
-        private const float TriangleSize = 8.0f;
+        private const double TriangleSize = 8.0f;
         private const int NumVertsX = 30;
         private const int NumVertsY = 30;
-        private const float WaveHeight = 3.0f;
+        private const double WaveHeight = 3.0f;
 
         private bool _animatedMesh = false;
 
@@ -115,7 +115,7 @@ namespace ConcaveRaycastDemo
             }
         }
 
-        public void SetGroundAnimationOffset(float offset)
+        public void SetGroundAnimationOffset(double offset)
         {
             SetVertexPositions(WaveHeight, offset);
 
@@ -126,7 +126,7 @@ namespace ConcaveRaycastDemo
             Broadphase.OverlappingPairCache.CleanProxyFromPairs(_groundObject.BroadphaseHandle, Dispatcher);
         }
 
-        public void Raycast(float frameDelta)
+        public void Raycast(double frameDelta)
         {
             _raycastBar.Move(frameDelta);
             _raycastBar.Cast(World, frameDelta);
@@ -197,7 +197,7 @@ namespace ConcaveRaycastDemo
             }
         }
 
-        private void SetVertexPositions(float waveheight, float offset)
+        private void SetVertexPositions(double waveheight, double offset)
         {
             var vertexStream = _indexVertexArrays.GetVertexStream();
             using (var vertexWriter = new BinaryWriter(vertexStream))
@@ -207,7 +207,7 @@ namespace ConcaveRaycastDemo
                     for (int j = 0; j < NumVertsY; j++)
                     {
                         vertexWriter.Write((i - NumVertsX * 0.5f) * TriangleSize);
-                        vertexWriter.Write(waveheight * (float)Math.Sin(i + offset) * (float)Math.Cos(j + offset));
+                        vertexWriter.Write(waveheight * (double)Math.Sin(i + offset) * (double)Math.Cos(j + offset));
                         vertexWriter.Write((j - NumVertsY * 0.5f) * TriangleSize);
                     }
                 }
@@ -222,23 +222,23 @@ namespace ConcaveRaycastDemo
         private Ray[] _rays = new Ray[NumRays];
 
         private int _frameCount;
-        private float _time;
-        private float _timeMin = float.MaxValue;
-        private float _timeMax;
-        private float _timeTotal;
+        private double _time;
+        private double _timeMin = double.MaxValue;
+        private double _timeMax;
+        private double _timeTotal;
         private int _sampleCount;
 
-        private float _dx = 10;
-        private float _minX = -40;
-        private float _maxX = 20;
-        private float _sign = 1;
+        private double _dx = 10;
+        private double _minX = -40;
+        private double _maxX = 20;
+        private double _sign = 1;
 
         private static Vector3 green = new Vector3(0.0f, 1.0f, 0.0f);
         private static Vector3 white = new Vector3(1.0f, 1.0f, 1.0f);
 
-        public RaycastBar(float rayLength, float z, float minY, float maxY)
+        public RaycastBar(double rayLength, double z, double minY, double maxY)
         {
-            const float alpha = 4 * (float)Math.PI / NumRays;
+            const double alpha = 4 * (double)Math.PI / NumRays;
             for (int i = 0; i < NumRays; i++)
             {
                 Matrix transform = Matrix.RotationY(alpha * i);
@@ -256,12 +256,12 @@ namespace ConcaveRaycastDemo
             }
         }
 
-        public void Move(float frameDelta)
+        public void Move(double frameDelta)
         {
             if (frameDelta > 1.0f / 60.0f)
                 frameDelta = 1.0f / 60.0f;
 
-            float move = _sign * _dx * frameDelta;
+            double move = _sign * _dx * frameDelta;
             foreach (var ray in _rays)
             {
                 ray.MoveX(move);
@@ -273,7 +273,7 @@ namespace ConcaveRaycastDemo
                 _sign = -1.0f;
         }
 
-        public void Cast(CollisionWorld cw, float frameDelta)
+        public void Cast(CollisionWorld cw, double frameDelta)
         {
 #if BATCH_RAYCASTER
             if (!batchRaycaster)
@@ -320,7 +320,7 @@ namespace ConcaveRaycastDemo
                 if (_time > _timeMax) _timeMax = _time;
                 _timeTotal += _time;
                 _sampleCount++;
-                float timeMean = _timeTotal / _sampleCount;
+                double timeMean = _timeTotal / _sampleCount;
                 PrintStats();
                 _time = 0;
                 _frameCount = 0;
@@ -341,7 +341,7 @@ namespace ConcaveRaycastDemo
 
         private void PrintStats()
         {
-            float timeMean = _timeTotal / _sampleCount;
+            double timeMean = _timeTotal / _sampleCount;
             Console.WriteLine("{0} rays in {1} s, min {2}, max {3}, mean {4}",
                     NumRays * _frameCount,
                     _time.ToString("0.000", CultureInfo.InvariantCulture),
@@ -358,7 +358,7 @@ namespace ConcaveRaycastDemo
         public Vector3 HitPoint;
         public Vector3 Normal;
 
-        public void MoveX(float move)
+        public void MoveX(double move)
         {
             Source.X += move;
             Destination.X += move;

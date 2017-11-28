@@ -72,14 +72,14 @@ namespace BulletSharp
 			btConvexPolyhedron_initialize(Native);
 		}
 
-		public void ProjectRef(ref Matrix trans, ref Vector3 dir, out float minProj, out float maxProj,
+		public void ProjectRef(ref Matrix trans, ref Vector3 dir, out double minProj, out double maxProj,
 			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
 		{
 			btConvexPolyhedron_project(Native, ref trans, ref dir, out minProj,
 				out maxProj, out witnesPtMin, out witnesPtMax);
 		}
 
-		public void Project(Matrix trans, Vector3 dir, out float minProj, out float maxProj,
+		public void Project(Matrix trans, Vector3 dir, out double minProj, out double maxProj,
 			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
 		{
 			btConvexPolyhedron_project(Native, ref trans, ref dir, out minProj,
@@ -140,7 +140,7 @@ namespace BulletSharp
 			set => btConvexPolyhedron_setME(Native, ref value);
 		}
 
-		public float Radius
+		public double Radius
 		{
 			get => btConvexPolyhedron_getRadius(Native);
 			set => btConvexPolyhedron_setRadius(Native, value);

@@ -2,9 +2,9 @@ ply
 format ascii 1.0
 comment Created by Blender3D 249 - www.blender.org, source file: 
 element vertex 24
-property float x
-property float y
-property float z
+property double x
+property double y
+property double z
 element face 6
 property list uchar uint vertex_indices
 end_header

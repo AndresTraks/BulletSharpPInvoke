@@ -17,7 +17,7 @@ namespace BulletSharp
 			_shape = shape;
 		}
 
-		public bool BuildHull(float margin)
+		public bool BuildHull(double margin)
 		{
 			return btShapeHull_buildHull(Native, margin);
 		}

@@ -273,7 +273,7 @@ namespace BulletSharp
 			set => btGImpactMeshShapePart_TrimeshPrimitiveManager_setLock_count(Native, value);
 		}
 
-		public float Margin
+		public double Margin
 		{
 			get => btGImpactMeshShapePart_TrimeshPrimitiveManager_getMargin(Native);
 			set => btGImpactMeshShapePart_TrimeshPrimitiveManager_setMargin(Native, value);
@@ -449,7 +449,7 @@ namespace BulletSharp
 	[StructLayout(LayoutKind.Sequential)]
 	internal unsafe struct GImpactMeshShapeData
 	{
-		public CollisionShapeFloatData CollisionShapeData;
+		public CollisionShapeData CollisionShapeData;
 		public StridingMeshInterfaceData MeshInterface;
 		public Vector3FloatData LocalScaling;
 		public float CollisionMargin;

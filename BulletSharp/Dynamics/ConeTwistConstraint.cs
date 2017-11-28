@@ -70,12 +70,12 @@ namespace BulletSharp
 				ref transB, ref invInertiaWorldA, ref invInertiaWorldB);
 		}
 
-		public float GetLimit(int limitIndex)
+		public double GetLimit(int limitIndex)
 		{
 			return btConeTwistConstraint_getLimit(Native, limitIndex);
 		}
 
-		public Vector3 GetPointForAngle(float fAngleInRadians, float fLength)
+		public Vector3 GetPointForAngle(double fAngleInRadians, double fLength)
 		{
 			Vector3 value;
 			btConeTwistConstraint_GetPointForAngle(Native, fAngleInRadians, fLength,
@@ -93,19 +93,19 @@ namespace BulletSharp
 			btConeTwistConstraint_setFrames(Native, ref frameA, ref frameB);
 		}
 
-		public void SetLimit(int limitIndex, float limitValue)
+		public void SetLimit(int limitIndex, double limitValue)
 		{
 			btConeTwistConstraint_setLimit(Native, limitIndex, limitValue);
 		}
 
-		public void SetLimit(float swingSpan1, float swingSpan2, float twistSpan,
-			float softness = 1.0f, float biasFactor = 0.3f, float relaxationFactor = 1.0f)
+		public void SetLimit(double swingSpan1, double swingSpan2, double twistSpan,
+			double softness = 1.0f, double biasFactor = 0.3f, double relaxationFactor = 1.0f)
 		{
 			btConeTwistConstraint_setLimit2(Native, swingSpan1, swingSpan2, twistSpan,
 				softness, biasFactor, relaxationFactor);
 		}
 
-		public void SetMaxMotorImpulseNormalized(float maxMotorImpulse)
+		public void SetMaxMotorImpulseNormalized(double maxMotorImpulse)
 		{
 			btConeTwistConstraint_setMaxMotorImpulseNormalized(Native, maxMotorImpulse);
 		}
@@ -115,7 +115,7 @@ namespace BulletSharp
 			btConeTwistConstraint_setMotorTargetInConstraintSpace(Native, ref q);
 		}
 
-		public void UpdateRhs(float timeStep)
+		public void UpdateRhs(double timeStep)
 		{
 			btConeTwistConstraint_updateRHS(Native, timeStep);
 		}
@@ -146,15 +146,15 @@ namespace BulletSharp
 			}
 		}
 
-		public float BiasFactor => btConeTwistConstraint_getBiasFactor(Native);
+		public double BiasFactor => btConeTwistConstraint_getBiasFactor(Native);
 
-		public float Damping
+		public double Damping
 		{
 			get => btConeTwistConstraint_getDamping(Native);
 			set => btConeTwistConstraint_setDamping(Native, value);
 		}
 
-		public float FixThresh
+		public double FixThresh
 		{
 			get => btConeTwistConstraint_getFixThresh(Native);
 			set => btConeTwistConstraint_setFixThresh(Native, value);
@@ -188,9 +188,9 @@ namespace BulletSharp
 
 		public bool IsPastSwingLimit => btConeTwistConstraint_isPastSwingLimit(Native);
 
-		public float LimitSoftness => btConeTwistConstraint_getLimitSoftness(Native);
+		public double LimitSoftness => btConeTwistConstraint_getLimitSoftness(Native);
 
-		public float MaxMotorImpulse
+		public double MaxMotorImpulse
 		{
 			get => btConeTwistConstraint_getMaxMotorImpulse(Native);
 			set => btConeTwistConstraint_setMaxMotorImpulse(Native, value);
@@ -207,14 +207,14 @@ namespace BulletSharp
 			set => btConeTwistConstraint_setMotorTarget(Native, ref value);
 		}
 
-		public float RelaxationFactor => btConeTwistConstraint_getRelaxationFactor(Native);
+		public double RelaxationFactor => btConeTwistConstraint_getRelaxationFactor(Native);
 		public int SolveSwingLimit => btConeTwistConstraint_getSolveSwingLimit(Native);
 		public int SolveTwistLimit => btConeTwistConstraint_getSolveTwistLimit(Native);
-		public float SwingSpan1 => btConeTwistConstraint_getSwingSpan1(Native);
-		public float SwingSpan2 => btConeTwistConstraint_getSwingSpan2(Native);
-		public float TwistAngle => btConeTwistConstraint_getTwistAngle(Native);
-		public float TwistLimitSign => btConeTwistConstraint_getTwistLimitSign(Native);
-		public float TwistSpan => btConeTwistConstraint_getTwistSpan(Native);
+		public double SwingSpan1 => btConeTwistConstraint_getSwingSpan1(Native);
+		public double SwingSpan2 => btConeTwistConstraint_getSwingSpan2(Native);
+		public double TwistAngle => btConeTwistConstraint_getTwistAngle(Native);
+		public double TwistLimitSign => btConeTwistConstraint_getTwistLimitSign(Native);
+		public double TwistSpan => btConeTwistConstraint_getTwistSpan(Native);
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
@@ -232,6 +232,24 @@ namespace BulletSharp
 		public float Damping;
 		public int Pad;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConeTwistConstraintFloatData), fieldName).ToInt32(); }
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConeTwistConstraintFloatData), fieldName).ToInt32(); }
+    }
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct ConeTwistConstraintDoubleData
+	{
+		public TypedConstraintDoubleData TypedConstraintData;
+		public TransformDoubleData RigidBodyAFrame;
+		public TransformDoubleData RigidBodyBFrame;
+		public double SwingSpan1;
+		public double SwingSpan2;
+		public double TwistSpan;
+		public double LimitSoftness;
+		public double BiasFactor;
+		public double RelaxationFactor;
+		public double Damping;
+		public int Pad;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConeTwistConstraintDoubleData), fieldName).ToInt32(); }
 	}
 }

@@ -20,31 +20,31 @@ namespace BulletSharp
 		{
 		}
 
-		public static float CalculateCombinedContactDamping(CollisionObject body0,
+		public static double CalculateCombinedContactDamping(CollisionObject body0,
 			CollisionObject body1)
 		{
 			return btManifoldResult_calculateCombinedContactDamping(body0.Native,
 				body1.Native);
 		}
 
-		public static float CalculateCombinedContactStiffness(CollisionObject body0,
+		public static double CalculateCombinedContactStiffness(CollisionObject body0,
 			CollisionObject body1)
 		{
 			return btManifoldResult_calculateCombinedContactStiffness(body0.Native,
 				body1.Native);
 		}
 
-		public static float CalculateCombinedFriction(CollisionObject body0, CollisionObject body1)
+		public static double CalculateCombinedFriction(CollisionObject body0, CollisionObject body1)
 		{
 			return btManifoldResult_calculateCombinedFriction(body0.Native, body1.Native);
 		}
 
-		public static float CalculateCombinedRestitution(CollisionObject body0, CollisionObject body1)
+		public static double CalculateCombinedRestitution(CollisionObject body0, CollisionObject body1)
 		{
 			return btManifoldResult_calculateCombinedRestitution(body0.Native, body1.Native);
 		}
 
-		public static float CalculateCombinedRollingFriction(CollisionObject body0,
+		public static double CalculateCombinedRollingFriction(CollisionObject body0,
 			CollisionObject body1)
 		{
 			return btManifoldResult_calculateCombinedRollingFriction(body0.Native,
@@ -72,7 +72,7 @@ namespace BulletSharp
 			set => btManifoldResult_setBody1Wrap(Native, value.Native);
 		}
 
-		public float ClosestPointDistanceThreshold
+		public double ClosestPointDistanceThreshold
 		{
 			get => btManifoldResult_getClosestPointDistanceThreshold(Native);
 			set => btManifoldResult_setClosestPointDistanceThreshold(Native, value);

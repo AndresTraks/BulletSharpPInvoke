@@ -40,7 +40,7 @@ namespace BulletSharp.Math
         /// <summary>
         /// The size of the <see cref="SlimMath.Matrix"/> type, in bytes.
         /// </summary>
-        public const int SizeInBytes = 16 * sizeof(float);
+        public const int SizeInBytes = 16 * sizeof(double);
 
         /// <summary>
         /// A <see cref="SlimMath.Matrix"/> with all of its components set to zero.
@@ -55,88 +55,88 @@ namespace BulletSharp.Math
         /// <summary>
         /// Value at row 1 column 1 of the matrix.
         /// </summary>
-        public float M11;
+        public double M11;
 
         /// <summary>
         /// Value at row 1 column 2 of the matrix.
         /// </summary>
-        public float M12;
+        public double M12;
 
         /// <summary>
         /// Value at row 1 column 3 of the matrix.
         /// </summary>
-        public float M13;
+        public double M13;
 
         /// <summary>
         /// Value at row 1 column 4 of the matrix.
         /// </summary>
-        public float M14;
+        public double M14;
 
         /// <summary>
         /// Value at row 2 column 1 of the matrix.
         /// </summary>
-        public float M21;
+        public double M21;
 
         /// <summary>
         /// Value at row 2 column 2 of the matrix.
         /// </summary>
-        public float M22;
+        public double M22;
 
         /// <summary>
         /// Value at row 2 column 3 of the matrix.
         /// </summary>
-        public float M23;
+        public double M23;
 
         /// <summary>
         /// Value at row 2 column 4 of the matrix.
         /// </summary>
-        public float M24;
+        public double M24;
 
         /// <summary>
         /// Value at row 3 column 1 of the matrix.
         /// </summary>
-        public float M31;
+        public double M31;
 
         /// <summary>
         /// Value at row 3 column 2 of the matrix.
         /// </summary>
-        public float M32;
+        public double M32;
 
         /// <summary>
         /// Value at row 3 column 3 of the matrix.
         /// </summary>
-        public float M33;
+        public double M33;
 
         /// <summary>
         /// Value at row 3 column 4 of the matrix.
         /// </summary>
-        public float M34;
+        public double M34;
 
         /// <summary>
         /// Value at row 4 column 1 of the matrix.
         /// </summary>
-        public float M41;
+        public double M41;
 
         /// <summary>
         /// Value at row 4 column 2 of the matrix.
         /// </summary>
-        public float M42;
+        public double M42;
 
         /// <summary>
         /// Value at row 4 column 3 of the matrix.
         /// </summary>
-        public float M43;
+        public double M43;
 
         /// <summary>
         /// Value at row 4 column 4 of the matrix.
         /// </summary>
-        public float M44;
+        public double M44;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SlimMath.Matrix"/> struct.
         /// </summary>
         /// <param name="value">The value that will be assigned to all components.</param>
-        public Matrix(float value)
+        public Matrix(double value)
         {
             M11 = M12 = M13 = M14 =
             M21 = M22 = M23 = M24 =
@@ -163,10 +163,10 @@ namespace BulletSharp.Math
         /// <param name="M42">The value to assign at row 4 column 2 of the matrix.</param>
         /// <param name="M43">The value to assign at row 4 column 3 of the matrix.</param>
         /// <param name="M44">The value to assign at row 4 column 4 of the matrix.</param>
-        public Matrix(float M11, float M12, float M13, float M14,
-            float M21, float M22, float M23, float M24,
-            float M31, float M32, float M33, float M34,
-            float M41, float M42, float M43, float M44)
+        public Matrix(double M11, double M12, double M13, double M14,
+            double M21, double M22, double M23, double M24,
+            double M31, double M32, double M33, double M34,
+            double M41, double M42, double M43, double M44)
         {
             this.M11 = M11; this.M12 = M12; this.M13 = M13; this.M14 = M14;
             this.M21 = M21; this.M22 = M22; this.M23 = M23; this.M24 = M24;
@@ -180,7 +180,7 @@ namespace BulletSharp.Math
         /// <param name="values">The values to assign to the components of the matrix. This must be an array with sixteen elements.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="values"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="values"/> contains more or less than sixteen elements.</exception>
-        public Matrix(float[] values)
+        public Matrix(double[] values)
         {
             if (values == null)
                 throw new ArgumentNullException("values");
@@ -340,16 +340,16 @@ namespace BulletSharp.Math
         /// Calculates the determinant of the matrix.
         /// </summary>
         /// <returns>The determinant of the matrix.</returns>
-        public float Determinant
+        public double Determinant
         {
             get
             {
-                float temp1 = (M33 * M44) - (M34 * M43);
-                float temp2 = (M32 * M44) - (M34 * M42);
-                float temp3 = (M32 * M43) - (M33 * M42);
-                float temp4 = (M31 * M44) - (M34 * M41);
-                float temp5 = (M31 * M43) - (M33 * M41);
-                float temp6 = (M31 * M42) - (M32 * M41);
+                double temp1 = (M33 * M44) - (M34 * M43);
+                double temp2 = (M32 * M44) - (M34 * M42);
+                double temp3 = (M32 * M43) - (M33 * M42);
+                double temp4 = (M31 * M44) - (M34 * M41);
+                double temp5 = (M31 * M43) - (M33 * M41);
+                double temp6 = (M31 * M42) - (M32 * M41);
 
                 return ((((M11 * (((M22 * temp1) - (M23 * temp2)) + (M24 * temp3))) - (M12 * (((M21 * temp1) -
                     (M23 * temp4)) + (M24 * temp5)))) + (M13 * (((M21 * temp2) - (M22 * temp4)) + (M24 * temp6)))) -
@@ -364,7 +364,7 @@ namespace BulletSharp.Math
         /// <param name="index">The zero-based index of the component to access.</param>
         /// <returns>The value of the component at the specified index.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of the range [0, 15].</exception>
-        public float this[int index]
+        public double this[int index]
         {
             get
             {
@@ -424,7 +424,7 @@ namespace BulletSharp.Math
         /// <param name="column">The column of the matrix to access.</param>
         /// <returns>The value of the component at the specified index.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="row"/> or <paramref name="column"/>is out of the range [0, 3].</exception>
-        public float this[int row, int column]
+        public double this[int row, int column]
         {
             get
             {
@@ -594,9 +594,9 @@ namespace BulletSharp.Math
             translation.Z = this.M43;
 
             //Scaling is the length of the rows.
-            scale.X = (float)System.Math.Sqrt((M11 * M11) + (M12 * M12) + (M13 * M13));
-            scale.Y = (float)System.Math.Sqrt((M21 * M21) + (M22 * M22) + (M23 * M23));
-            scale.Z = (float)System.Math.Sqrt((M31 * M31) + (M32 * M32) + (M33 * M33));
+            scale.X = (double)System.Math.Sqrt((M11 * M11) + (M12 * M12) + (M13 * M13));
+            scale.Y = (double)System.Math.Sqrt((M21 * M21) + (M22 * M22) + (M23 * M23));
+            scale.Z = (double)System.Math.Sqrt((M31 * M31) + (M32 * M32) + (M33 * M33));
 
             //If any of the scaling factors are zero, than the rotation matrix can not exist.
             if (System.Math.Abs(scale.X) < Utilities.ZeroTolerance ||
@@ -646,10 +646,10 @@ namespace BulletSharp.Math
             if (firstRow == secondRow)
                 return;
 
-            float temp0 = this[secondRow, 0];
-            float temp1 = this[secondRow, 1];
-            float temp2 = this[secondRow, 2];
-            float temp3 = this[secondRow, 3];
+            double temp0 = this[secondRow, 0];
+            double temp1 = this[secondRow, 1];
+            double temp2 = this[secondRow, 2];
+            double temp3 = this[secondRow, 3];
 
             this[secondRow, 0] = this[firstRow, 0];
             this[secondRow, 1] = this[firstRow, 1];
@@ -681,10 +681,10 @@ namespace BulletSharp.Math
             if (firstColumn == secondColumn)
                 return;
 
-            float temp0 = this[0, secondColumn];
-            float temp1 = this[1, secondColumn];
-            float temp2 = this[2, secondColumn];
-            float temp3 = this[3, secondColumn];
+            double temp0 = this[0, secondColumn];
+            double temp1 = this[1, secondColumn];
+            double temp2 = this[2, secondColumn];
+            double temp3 = this[3, secondColumn];
 
             this[0, secondColumn] = this[0, firstColumn];
             this[1, secondColumn] = this[1, firstColumn];
@@ -701,7 +701,7 @@ namespace BulletSharp.Math
         /// Creates an array containing the elements of the matrix.
         /// </summary>
         /// <returns>A sixteen-element array containing the components of the matrix.</returns>
-        public float[] ToArray()
+        public double[] ToArray()
         {
             return new[] { M11, M12, M13, M14, M21, M22, M23, M24, M31, M32, M33, M34, M41, M42, M43, M44 };
         }
@@ -790,7 +790,7 @@ namespace BulletSharp.Math
         /// <param name="left">The matrix to scale.</param>
         /// <param name="scalar">The amount by which to scale.</param>
         /// <param name="result">When the method completes, contains the scaled matrix.</param>
-        public static void Multiply(ref Matrix left, float scalar, out Matrix result)
+        public static void Multiply(ref Matrix left, double scalar, out Matrix result)
         {
             result.M11 = left.M11 * scalar;
             result.M12 = left.M12 * scalar;
@@ -816,7 +816,7 @@ namespace BulletSharp.Math
         /// <param name="left">The matrix to scale.</param>
         /// <param name="scalar">The amount by which to scale.</param>
         /// <returns>The scaled matrix.</returns>
-        public static Matrix Multiply(Matrix left, float scalar)
+        public static Matrix Multiply(Matrix left, double scalar)
         {
             Matrix result;
             Multiply(ref left, scalar, out result);
@@ -869,9 +869,9 @@ namespace BulletSharp.Math
         /// <param name="left">The matrix to scale.</param>
         /// <param name="scalar">The amount by which to scale.</param>
         /// <param name="result">When the method completes, contains the scaled matrix.</param>
-        public static void Divide(ref Matrix left, float scalar, out Matrix result)
+        public static void Divide(ref Matrix left, double scalar, out Matrix result)
         {
-            float inv = 1.0f / scalar;
+            double inv = 1.0f / scalar;
 
             result.M11 = left.M11 * inv;
             result.M12 = left.M12 * inv;
@@ -897,7 +897,7 @@ namespace BulletSharp.Math
         /// <param name="left">The matrix to scale.</param>
         /// <param name="scalar">The amount by which to scale.</param>
         /// <returns>The scaled matrix.</returns>
-        public static Matrix Divide(Matrix left, float scalar)
+        public static Matrix Divide(Matrix left, double scalar)
         {
             Matrix result;
             Divide(ref left, scalar, out result);
@@ -1052,7 +1052,7 @@ namespace BulletSharp.Math
         /// <code>start + (end - start) * amount</code>
         /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
         /// </remarks>
-        public static void Lerp(ref Matrix start, ref Matrix end, float amount, out Matrix result)
+        public static void Lerp(ref Matrix start, ref Matrix end, double amount, out Matrix result)
         {
             result.M11 = start.M11 + ((end.M11 - start.M11) * amount);
             result.M12 = start.M12 + ((end.M12 - start.M12) * amount);
@@ -1084,7 +1084,7 @@ namespace BulletSharp.Math
         /// <code>start + (end - start) * amount</code>
         /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
         /// </remarks>
-        public static Matrix Lerp(Matrix start, Matrix end, float amount)
+        public static Matrix Lerp(Matrix start, Matrix end, double amount)
         {
             Matrix result;
             Lerp(ref start, ref end, amount, out result);
@@ -1098,7 +1098,7 @@ namespace BulletSharp.Math
         /// <param name="end">End matrix.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
         /// <param name="result">When the method completes, contains the cubic interpolation of the two matrices.</param>
-        public static void SmoothStep(ref Matrix start, ref Matrix end, float amount, out Matrix result)
+        public static void SmoothStep(ref Matrix start, ref Matrix end, double amount, out Matrix result)
         {
             amount = (amount > 1.0f) ? 1.0f : ((amount < 0.0f) ? 0.0f : amount);
             amount = (amount * amount) * (3.0f - (2.0f * amount));
@@ -1128,7 +1128,7 @@ namespace BulletSharp.Math
         /// <param name="end">End matrix.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
         /// <returns>The cubic interpolation of the two matrices.</returns>
-        public static Matrix SmoothStep(Matrix start, Matrix end, float amount)
+        public static Matrix SmoothStep(Matrix start, Matrix end, double amount)
         {
             Matrix result;
             SmoothStep(ref start, ref end, amount, out result);
@@ -1182,19 +1182,19 @@ namespace BulletSharp.Math
         /// <param name="result">When the method completes, contains the inverse of the specified matrix.</param>
         public static void Invert(ref Matrix value, out Matrix result)
         {
-            float b0 = (value.M31 * value.M42) - (value.M32 * value.M41);
-            float b1 = (value.M31 * value.M43) - (value.M33 * value.M41);
-            float b2 = (value.M34 * value.M41) - (value.M31 * value.M44);
-            float b3 = (value.M32 * value.M43) - (value.M33 * value.M42);
-            float b4 = (value.M34 * value.M42) - (value.M32 * value.M44);
-            float b5 = (value.M33 * value.M44) - (value.M34 * value.M43);
+            double b0 = (value.M31 * value.M42) - (value.M32 * value.M41);
+            double b1 = (value.M31 * value.M43) - (value.M33 * value.M41);
+            double b2 = (value.M34 * value.M41) - (value.M31 * value.M44);
+            double b3 = (value.M32 * value.M43) - (value.M33 * value.M42);
+            double b4 = (value.M34 * value.M42) - (value.M32 * value.M44);
+            double b5 = (value.M33 * value.M44) - (value.M34 * value.M43);
 
-            float d11 = value.M22 * b5 + value.M23 * b4 + value.M24 * b3;
-            float d12 = value.M21 * b5 + value.M23 * b2 + value.M24 * b1;
-            float d13 = value.M21 * -b4 + value.M22 * b2 + value.M24 * b0;
-            float d14 = value.M21 * b3 + value.M22 * -b1 + value.M23 * b0;
+            double d11 = value.M22 * b5 + value.M23 * b4 + value.M24 * b3;
+            double d12 = value.M21 * b5 + value.M23 * b2 + value.M24 * b1;
+            double d13 = value.M21 * -b4 + value.M22 * b2 + value.M24 * b0;
+            double d14 = value.M21 * b3 + value.M22 * -b1 + value.M23 * b0;
 
-            float det = value.M11 * d11 - value.M12 * d12 + value.M13 * d13 - value.M14 * d14;
+            double det = value.M11 * d11 - value.M12 * d12 + value.M13 * d13 - value.M14 * d14;
             if (System.Math.Abs(det) <= Utilities.ZeroTolerance)
             {
                 result = Matrix.Zero;
@@ -1203,27 +1203,27 @@ namespace BulletSharp.Math
 
             det = 1f / det;
 
-            float a0 = (value.M11 * value.M22) - (value.M12 * value.M21);
-            float a1 = (value.M11 * value.M23) - (value.M13 * value.M21);
-            float a2 = (value.M14 * value.M21) - (value.M11 * value.M24);
-            float a3 = (value.M12 * value.M23) - (value.M13 * value.M22);
-            float a4 = (value.M14 * value.M22) - (value.M12 * value.M24);
-            float a5 = (value.M13 * value.M24) - (value.M14 * value.M23);
+            double a0 = (value.M11 * value.M22) - (value.M12 * value.M21);
+            double a1 = (value.M11 * value.M23) - (value.M13 * value.M21);
+            double a2 = (value.M14 * value.M21) - (value.M11 * value.M24);
+            double a3 = (value.M12 * value.M23) - (value.M13 * value.M22);
+            double a4 = (value.M14 * value.M22) - (value.M12 * value.M24);
+            double a5 = (value.M13 * value.M24) - (value.M14 * value.M23);
 
-            float d21 = value.M12 * b5 + value.M13 * b4 + value.M14 * b3;
-            float d22 = value.M11 * b5 + value.M13 * b2 + value.M14 * b1;
-            float d23 = value.M11 * -b4 + value.M12 * b2 + value.M14 * b0;
-            float d24 = value.M11 * b3 + value.M12 * -b1 + value.M13 * b0;
+            double d21 = value.M12 * b5 + value.M13 * b4 + value.M14 * b3;
+            double d22 = value.M11 * b5 + value.M13 * b2 + value.M14 * b1;
+            double d23 = value.M11 * -b4 + value.M12 * b2 + value.M14 * b0;
+            double d24 = value.M11 * b3 + value.M12 * -b1 + value.M13 * b0;
 
-            float d31 = value.M42 * a5 + value.M43 * a4 + value.M44 * a3;
-            float d32 = value.M41 * a5 + value.M43 * a2 + value.M44 * a1;
-            float d33 = value.M41 * -a4 + value.M42 * a2 + value.M44 * a0;
-            float d34 = value.M41 * a3 + value.M42 * -a1 + value.M43 * a0;
+            double d31 = value.M42 * a5 + value.M43 * a4 + value.M44 * a3;
+            double d32 = value.M41 * a5 + value.M43 * a2 + value.M44 * a1;
+            double d33 = value.M41 * -a4 + value.M42 * a2 + value.M44 * a0;
+            double d34 = value.M41 * a3 + value.M42 * -a1 + value.M43 * a0;
 
-            float d41 = value.M32 * a5 + value.M33 * a4 + value.M34 * a3;
-            float d42 = value.M31 * a5 + value.M33 * a2 + value.M34 * a1;
-            float d43 = value.M31 * -a4 + value.M32 * a2 + value.M34 * a0;
-            float d44 = value.M31 * a3 + value.M32 * -a1 + value.M33 * a0;
+            double d41 = value.M32 * a5 + value.M33 * a4 + value.M34 * a3;
+            double d42 = value.M31 * a5 + value.M33 * a2 + value.M34 * a1;
+            double d43 = value.M31 * -a4 + value.M32 * a2 + value.M34 * a0;
+            double d44 = value.M31 * a3 + value.M32 * -a1 + value.M33 * a0;
 
             result.M11 = +d11 * det; result.M12 = -d21 * det; result.M13 = +d31 * det; result.M14 = -d41 * det;
             result.M21 = -d12 * det; result.M22 = +d22 * det; result.M23 = -d32 * det; result.M24 = +d42 * det;
@@ -1418,7 +1418,7 @@ namespace BulletSharp.Math
                     result.ExchangeRows(i, r);
                 }
 
-                float multiplier = 1f / result[r, lead];
+                double multiplier = 1f / result[r, lead];
 
                 for (; i < rowcount; ++i)
                 {
@@ -1500,7 +1500,7 @@ namespace BulletSharp.Math
                     result.ExchangeRows(i, r);
                 }
 
-                float multiplier = 1f / result[r, lead];
+                double multiplier = 1f / result[r, lead];
 
                 for (; i < rowcount; ++i)
                 {
@@ -1578,7 +1578,7 @@ namespace BulletSharp.Math
                     result.ExchangeRows(i, r);
                 }
 
-                float multiplier = 1f / result[r, lead];
+                double multiplier = 1f / result[r, lead];
                 result[r, 0] *= multiplier;
                 result[r, 1] *= multiplier;
                 result[r, 2] *= multiplier;
@@ -1633,7 +1633,7 @@ namespace BulletSharp.Math
             //Source: http://rosettacode.org
             //Reference: http://rosettacode.org/wiki/Reduced_row_echelon_form
 
-            float[,] matrix = new float[4, 5];
+            double[,] matrix = new double[4, 5];
 
             matrix[0, 0] = value[0, 0];
             matrix[0, 1] = value[0, 1];
@@ -1686,12 +1686,12 @@ namespace BulletSharp.Math
 
                 for (int j = 0; j < columncount; j++)
                 {
-                    float temp = matrix[r, j];
+                    double temp = matrix[r, j];
                     matrix[r, j] = matrix[i, j];
                     matrix[i, j] = temp;
                 }
 
-                float div = matrix[r, lead];
+                double div = matrix[r, lead];
 
                 for (int j = 0; j < columncount; j++)
                 {
@@ -1702,7 +1702,7 @@ namespace BulletSharp.Math
                 {
                     if (j != r)
                     {
-                        float sub = matrix[j, lead];
+                        double sub = matrix[j, lead];
                         for (int k = 0; k < columncount; k++) matrix[j, k] -= (sub * matrix[r, k]);
                     }
                 }
@@ -1750,11 +1750,11 @@ namespace BulletSharp.Math
             Vector3 final;
             Vector3 difference = objectPosition - cameraPosition;
 
-            float lengthsq = difference.LengthSquared;
+            double lengthsq = difference.LengthSquared;
             if (lengthsq < Utilities.ZeroTolerance)
                 difference = -cameraForwardVector;
             else
-                difference *= (float)(1.0 / System.Math.Sqrt(lengthsq));
+                difference *= (double)(1.0 / System.Math.Sqrt(lengthsq));
 
             Vector3.Cross(ref cameraUpVector, ref difference, out crossed);
             crossed.Normalize();
@@ -1883,10 +1883,10 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <param name="result">When the method completes, contains the created projection matrix.</param>
-        public static void OrthoLH(float width, float height, float znear, float zfar, out Matrix result)
+        public static void OrthoLH(double width, double height, double znear, double zfar, out Matrix result)
         {
-            float halfWidth = width * 0.5f;
-            float halfHeight = height * 0.5f;
+            double halfWidth = width * 0.5f;
+            double halfHeight = height * 0.5f;
 
             OrthoOffCenterLH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
@@ -1899,7 +1899,7 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <returns>The created projection matrix.</returns>
-        public static Matrix OrthoLH(float width, float height, float znear, float zfar)
+        public static Matrix OrthoLH(double width, double height, double znear, double zfar)
         {
             Matrix result;
             OrthoLH(width, height, znear, zfar, out result);
@@ -1914,10 +1914,10 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <param name="result">When the method completes, contains the created projection matrix.</param>
-        public static void OrthoRH(float width, float height, float znear, float zfar, out Matrix result)
+        public static void OrthoRH(double width, double height, double znear, double zfar, out Matrix result)
         {
-            float halfWidth = width * 0.5f;
-            float halfHeight = height * 0.5f;
+            double halfWidth = width * 0.5f;
+            double halfHeight = height * 0.5f;
 
             OrthoOffCenterRH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
@@ -1930,7 +1930,7 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <returns>The created projection matrix.</returns>
-        public static Matrix OrthoRH(float width, float height, float znear, float zfar)
+        public static Matrix OrthoRH(double width, double height, double znear, double zfar)
         {
             Matrix result;
             OrthoRH(width, height, znear, zfar, out result);
@@ -1947,9 +1947,9 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <param name="result">When the method completes, contains the created projection matrix.</param>
-        public static void OrthoOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
+        public static void OrthoOffCenterLH(double left, double right, double bottom, double top, double znear, double zfar, out Matrix result)
         {
-            float zRange = 1.0f / (zfar - znear);
+            double zRange = 1.0f / (zfar - znear);
 
             result = Matrix.Identity;
             result.M11 = 2.0f / (right - left);
@@ -1970,7 +1970,7 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <returns>The created projection matrix.</returns>
-        public static Matrix OrthoOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar)
+        public static Matrix OrthoOffCenterLH(double left, double right, double bottom, double top, double znear, double zfar)
         {
             Matrix result;
             OrthoOffCenterLH(left, right, bottom, top, znear, zfar, out result);
@@ -1987,7 +1987,7 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <param name="result">When the method completes, contains the created projection matrix.</param>
-        public static void OrthoOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
+        public static void OrthoOffCenterRH(double left, double right, double bottom, double top, double znear, double zfar, out Matrix result)
         {
             OrthoOffCenterLH(left, right, bottom, top, znear, zfar, out result);
             result.M33 *= -1.0f;
@@ -2003,7 +2003,7 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <returns>The created projection matrix.</returns>
-        public static Matrix OrthoOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar)
+        public static Matrix OrthoOffCenterRH(double left, double right, double bottom, double top, double znear, double zfar)
         {
             Matrix result;
             OrthoOffCenterRH(left, right, bottom, top, znear, zfar, out result);
@@ -2018,10 +2018,10 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <param name="result">When the method completes, contains the created projection matrix.</param>
-        public static void PerspectiveLH(float width, float height, float znear, float zfar, out Matrix result)
+        public static void PerspectiveLH(double width, double height, double znear, double zfar, out Matrix result)
         {
-            float halfWidth = width * 0.5f;
-            float halfHeight = height * 0.5f;
+            double halfWidth = width * 0.5f;
+            double halfHeight = height * 0.5f;
 
             PerspectiveOffCenterLH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
@@ -2034,7 +2034,7 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <returns>The created projection matrix.</returns>
-        public static Matrix PerspectiveLH(float width, float height, float znear, float zfar)
+        public static Matrix PerspectiveLH(double width, double height, double znear, double zfar)
         {
             Matrix result;
             PerspectiveLH(width, height, znear, zfar, out result);
@@ -2049,10 +2049,10 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <param name="result">When the method completes, contains the created projection matrix.</param>
-        public static void PerspectiveRH(float width, float height, float znear, float zfar, out Matrix result)
+        public static void PerspectiveRH(double width, double height, double znear, double zfar, out Matrix result)
         {
-            float halfWidth = width * 0.5f;
-            float halfHeight = height * 0.5f;
+            double halfWidth = width * 0.5f;
+            double halfHeight = height * 0.5f;
 
             PerspectiveOffCenterRH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
@@ -2065,7 +2065,7 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <returns>The created projection matrix.</returns>
-        public static Matrix PerspectiveRH(float width, float height, float znear, float zfar)
+        public static Matrix PerspectiveRH(double width, double height, double znear, double zfar)
         {
             Matrix result;
             PerspectiveRH(width, height, znear, zfar, out result);
@@ -2080,13 +2080,13 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <param name="result">When the method completes, contains the created projection matrix.</param>
-        public static void PerspectiveFovLH(float fov, float aspect, float znear, float zfar, out Matrix result)
+        public static void PerspectiveFovLH(double fov, double aspect, double znear, double zfar, out Matrix result)
         {
-            float yScale = (float)(1.0 / System.Math.Tan(fov * 0.5f));
-            float xScale = yScale / aspect;
+            double yScale = (double)(1.0 / System.Math.Tan(fov * 0.5f));
+            double xScale = yScale / aspect;
 
-            float halfWidth = znear / xScale;
-            float halfHeight = znear / yScale;
+            double halfWidth = znear / xScale;
+            double halfHeight = znear / yScale;
 
             PerspectiveOffCenterLH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
@@ -2099,7 +2099,7 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <returns>The created projection matrix.</returns>
-        public static Matrix PerspectiveFovLH(float fov, float aspect, float znear, float zfar)
+        public static Matrix PerspectiveFovLH(double fov, double aspect, double znear, double zfar)
         {
             Matrix result;
             PerspectiveFovLH(fov, aspect, znear, zfar, out result);
@@ -2114,13 +2114,13 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <param name="result">When the method completes, contains the created projection matrix.</param>
-        public static void PerspectiveFovRH(float fov, float aspect, float znear, float zfar, out Matrix result)
+        public static void PerspectiveFovRH(double fov, double aspect, double znear, double zfar, out Matrix result)
         {
-            float yScale = (float)(1.0 / System.Math.Tan(fov * 0.5f));
-            float xScale = yScale / aspect;
+            double yScale = (double)(1.0 / System.Math.Tan(fov * 0.5f));
+            double xScale = yScale / aspect;
 
-            float halfWidth = znear / xScale;
-            float halfHeight = znear / yScale;
+            double halfWidth = znear / xScale;
+            double halfHeight = znear / yScale;
 
             PerspectiveOffCenterRH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
@@ -2133,7 +2133,7 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <returns>The created projection matrix.</returns>
-        public static Matrix PerspectiveFovRH(float fov, float aspect, float znear, float zfar)
+        public static Matrix PerspectiveFovRH(double fov, double aspect, double znear, double zfar)
         {
             Matrix result;
             PerspectiveFovRH(fov, aspect, znear, zfar, out result);
@@ -2150,9 +2150,9 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <param name="result">When the method completes, contains the created projection matrix.</param>
-        public static void PerspectiveOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
+        public static void PerspectiveOffCenterLH(double left, double right, double bottom, double top, double znear, double zfar, out Matrix result)
         {
-            float zRange = zfar / (zfar - znear);
+            double zRange = zfar / (zfar - znear);
 
             result = new Matrix();
             result.M11 = 2.0f * znear / (right - left);
@@ -2174,7 +2174,7 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <returns>The created projection matrix.</returns>
-        public static Matrix PerspectiveOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar)
+        public static Matrix PerspectiveOffCenterLH(double left, double right, double bottom, double top, double znear, double zfar)
         {
             Matrix result;
             PerspectiveOffCenterLH(left, right, bottom, top, znear, zfar, out result);
@@ -2191,7 +2191,7 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <param name="result">When the method completes, contains the created projection matrix.</param>
-        public static void PerspectiveOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
+        public static void PerspectiveOffCenterRH(double left, double right, double bottom, double top, double znear, double zfar, out Matrix result)
         {
             PerspectiveOffCenterLH(left, right, bottom, top, znear, zfar, out result);
             result.M31 *= -1.0f;
@@ -2210,7 +2210,7 @@ namespace BulletSharp.Math
         /// <param name="znear">Minimum z-value of the viewing volume.</param>
         /// <param name="zfar">Maximum z-value of the viewing volume.</param>
         /// <returns>The created projection matrix.</returns>
-        public static Matrix PerspectiveOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar)
+        public static Matrix PerspectiveOffCenterRH(double left, double right, double bottom, double top, double znear, double zfar)
         {
             Matrix result;
             PerspectiveOffCenterRH(left, right, bottom, top, znear, zfar, out result);
@@ -2244,7 +2244,7 @@ namespace BulletSharp.Math
         /// </summary>
         /// <param name="scale">The uniform scale that is applied along all axis.</param>
         /// <param name="result">When the method completes, contains the created scaling matrix.</param>
-        public static void Scaling(float scale, out Matrix result)
+        public static void Scaling(double scale, out Matrix result)
         {
             result = Matrix.Identity;
             result.M11 = result.M22 = result.M33 = scale;
@@ -2255,7 +2255,7 @@ namespace BulletSharp.Math
         /// </summary>
         /// <param name="scale">The uniform scale that is applied along all axis.</param>
         /// <returns>The created scaling matrix.</returns>
-        public static Matrix Scaling(float scale)
+        public static Matrix Scaling(double scale)
         {
             Matrix result;
             Scaling(scale, out result);
@@ -2269,7 +2269,7 @@ namespace BulletSharp.Math
         /// <param name="y">Scaling factor that is applied along the y-axis.</param>
         /// <param name="z">Scaling factor that is applied along the z-axis.</param>
         /// <param name="result">When the method completes, contains the created scaling matrix.</param>
-        public static void Scaling(float x, float y, float z, out Matrix result)
+        public static void Scaling(double x, double y, double z, out Matrix result)
         {
             result = Matrix.Identity;
             result.M11 = x;
@@ -2284,7 +2284,7 @@ namespace BulletSharp.Math
         /// <param name="y">Scaling factor that is applied along the y-axis.</param>
         /// <param name="z">Scaling factor that is applied along the z-axis.</param>
         /// <returns>The created scaling matrix.</returns>
-        public static Matrix Scaling(float x, float y, float z)
+        public static Matrix Scaling(double x, double y, double z)
         {
             Matrix result;
             Scaling(x, y, z, out result);
@@ -2296,10 +2296,10 @@ namespace BulletSharp.Math
         /// </summary>
         /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
         /// <param name="result">When the method completes, contains the created rotation matrix.</param>
-        public static void RotationX(float angle, out Matrix result)
+        public static void RotationX(double angle, out Matrix result)
         {
-            float cos = (float)System.Math.Cos(angle);
-            float sin = (float)System.Math.Sin(angle);
+            double cos = (double)System.Math.Cos(angle);
+            double sin = (double)System.Math.Sin(angle);
 
             result = Matrix.Identity;
             result.M22 = cos;
@@ -2313,7 +2313,7 @@ namespace BulletSharp.Math
         /// </summary>
         /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
         /// <returns>The created rotation matrix.</returns>
-        public static Matrix RotationX(float angle)
+        public static Matrix RotationX(double angle)
         {
             Matrix result;
             RotationX(angle, out result);
@@ -2325,10 +2325,10 @@ namespace BulletSharp.Math
         /// </summary>
         /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
         /// <param name="result">When the method completes, contains the created rotation matrix.</param>
-        public static void RotationY(float angle, out Matrix result)
+        public static void RotationY(double angle, out Matrix result)
         {
-            float cos = (float)System.Math.Cos(angle);
-            float sin = (float)System.Math.Sin(angle);
+            double cos = (double)System.Math.Cos(angle);
+            double sin = (double)System.Math.Sin(angle);
 
             result = Matrix.Identity;
             result.M11 = cos;
@@ -2342,7 +2342,7 @@ namespace BulletSharp.Math
         /// </summary>
         /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
         /// <returns>The created rotation matrix.</returns>
-        public static Matrix RotationY(float angle)
+        public static Matrix RotationY(double angle)
         {
             Matrix result;
             RotationY(angle, out result);
@@ -2354,10 +2354,10 @@ namespace BulletSharp.Math
         /// </summary>
         /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
         /// <param name="result">When the method completes, contains the created rotation matrix.</param>
-        public static void RotationZ(float angle, out Matrix result)
+        public static void RotationZ(double angle, out Matrix result)
         {
-            float cos = (float)System.Math.Cos(angle);
-            float sin = (float)System.Math.Sin(angle);
+            double cos = (double)System.Math.Cos(angle);
+            double sin = (double)System.Math.Sin(angle);
 
             result = Matrix.Identity;
             result.M11 = cos;
@@ -2371,7 +2371,7 @@ namespace BulletSharp.Math
         /// </summary>
         /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
         /// <returns>The created rotation matrix.</returns>
-        public static Matrix RotationZ(float angle)
+        public static Matrix RotationZ(double angle)
         {
             Matrix result;
             RotationZ(angle, out result);
@@ -2384,19 +2384,19 @@ namespace BulletSharp.Math
         /// <param name="axis">The axis around which to rotate. This parameter is assumed to be normalized.</param>
         /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
         /// <param name="result">When the method completes, contains the created rotation matrix.</param>
-        public static void RotationAxis(ref Vector3 axis, float angle, out Matrix result)
+        public static void RotationAxis(ref Vector3 axis, double angle, out Matrix result)
         {
-            float x = axis.X;
-            float y = axis.Y;
-            float z = axis.Z;
-            float cos = (float)System.Math.Cos(angle);
-            float sin = (float)System.Math.Sin(angle);
-            float xx = x * x;
-            float yy = y * y;
-            float zz = z * z;
-            float xy = x * y;
-            float xz = x * z;
-            float yz = y * z;
+            double x = axis.X;
+            double y = axis.Y;
+            double z = axis.Z;
+            double cos = (double)System.Math.Cos(angle);
+            double sin = (double)System.Math.Sin(angle);
+            double xx = x * x;
+            double yy = y * y;
+            double zz = z * z;
+            double xy = x * y;
+            double xz = x * z;
+            double yz = y * z;
 
             result = Matrix.Identity;
             result.M11 = xx + (cos * (1.0f - xx));
@@ -2416,7 +2416,7 @@ namespace BulletSharp.Math
         /// <param name="axis">The axis around which to rotate. This parameter is assumed to be normalized.</param>
         /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
         /// <returns>The created rotation matrix.</returns>
-        public static Matrix RotationAxis(Vector3 axis, float angle)
+        public static Matrix RotationAxis(Vector3 axis, double angle)
         {
             Matrix result;
             RotationAxis(ref axis, angle, out result);
@@ -2430,15 +2430,15 @@ namespace BulletSharp.Math
         /// <param name="result">The created rotation matrix.</param>
         public static void RotationQuaternion(ref Quaternion rotation, out Matrix result)
         {
-            float xx = rotation.X * rotation.X;
-            float yy = rotation.Y * rotation.Y;
-            float zz = rotation.Z * rotation.Z;
-            float xy = rotation.X * rotation.Y;
-            float zw = rotation.Z * rotation.W;
-            float zx = rotation.Z * rotation.X;
-            float yw = rotation.Y * rotation.W;
-            float yz = rotation.Y * rotation.Z;
-            float xw = rotation.X * rotation.W;
+            double xx = rotation.X * rotation.X;
+            double yy = rotation.Y * rotation.Y;
+            double zz = rotation.Z * rotation.Z;
+            double xy = rotation.X * rotation.Y;
+            double zw = rotation.Z * rotation.W;
+            double zx = rotation.Z * rotation.X;
+            double yw = rotation.Y * rotation.W;
+            double yz = rotation.Y * rotation.Z;
+            double xw = rotation.X * rotation.W;
 
             result = Matrix.Identity;
             result.M11 = 1.0f - (2.0f * (yy + zz));
@@ -2471,7 +2471,7 @@ namespace BulletSharp.Math
         /// <param name="pitch">Pitch around the x-axis, in radians.</param>
         /// <param name="roll">Roll around the z-axis, in radians.</param>
         /// <param name="result">When the method completes, contains the created rotation matrix.</param>
-        public static void RotationYawPitchRoll(float yaw, float pitch, float roll, out Matrix result)
+        public static void RotationYawPitchRoll(double yaw, double pitch, double roll, out Matrix result)
         {
             Quaternion quaternion = new Quaternion();
             Quaternion.RotationYawPitchRoll(yaw, pitch, roll, out quaternion);
@@ -2485,7 +2485,7 @@ namespace BulletSharp.Math
         /// <param name="pitch">Pitch around the x-axis, in radians.</param>
         /// <param name="roll">Roll around the z-axis, in radians.</param>
         /// <returns>The created rotation matrix.</returns>
-        public static Matrix RotationYawPitchRoll(float yaw, float pitch, float roll)
+        public static Matrix RotationYawPitchRoll(double yaw, double pitch, double roll)
         {
             Matrix result;
             RotationYawPitchRoll(yaw, pitch, roll, out result);
@@ -2521,7 +2521,7 @@ namespace BulletSharp.Math
         /// <param name="y">Y-coordinate offset.</param>
         /// <param name="z">Z-coordinate offset.</param>
         /// <param name="result">When the method completes, contains the created translation matrix.</param>
-        public static void Translation(float x, float y, float z, out Matrix result)
+        public static void Translation(double x, double y, double z, out Matrix result)
         {
             result = Matrix.Identity;
             result.M41 = x;
@@ -2536,7 +2536,7 @@ namespace BulletSharp.Math
         /// <param name="y">Y-coordinate offset.</param>
         /// <param name="z">Z-coordinate offset.</param>
         /// <returns>The created translation matrix.</returns>
-        public static Matrix Translation(float x, float y, float z)
+        public static Matrix Translation(double x, double y, double z)
         {
             Matrix result;
             Translation(x, y, z, out result);
@@ -2550,7 +2550,7 @@ namespace BulletSharp.Math
         /// <param name="rotation">The rotation of the transformation.</param>
         /// <param name="translation">The translation factor of the transformation.</param>
         /// <param name="result">When the method completes, contains the created affine transformation matrix.</param>
-        public static void AffineTransformation(float scaling, ref Quaternion rotation, ref Vector3 translation, out Matrix result)
+        public static void AffineTransformation(double scaling, ref Quaternion rotation, ref Vector3 translation, out Matrix result)
         {
             result = Scaling(scaling) * RotationQuaternion(rotation) * Translation(translation);
         }
@@ -2562,7 +2562,7 @@ namespace BulletSharp.Math
         /// <param name="rotation">The rotation of the transformation.</param>
         /// <param name="translation">The translation factor of the transformation.</param>
         /// <returns>The created affine transformation matrix.</returns>
-        public static Matrix AffineTransformation(float scaling, Quaternion rotation, Vector3 translation)
+        public static Matrix AffineTransformation(double scaling, Quaternion rotation, Vector3 translation)
         {
             Matrix result;
             AffineTransformation(scaling, ref rotation, ref translation, out result);
@@ -2577,7 +2577,7 @@ namespace BulletSharp.Math
         /// <param name="rotation">The rotation of the transformation.</param>
         /// <param name="translation">The translation factor of the transformation.</param>
         /// <param name="result">When the method completes, contains the created affine transformation matrix.</param>
-        public static void AffineTransformation(float scaling, ref Vector3 rotationCenter, ref Quaternion rotation, ref Vector3 translation, out Matrix result)
+        public static void AffineTransformation(double scaling, ref Vector3 rotationCenter, ref Quaternion rotation, ref Vector3 translation, out Matrix result)
         {
             result = Scaling(scaling) * Translation(-rotationCenter) * RotationQuaternion(rotation) *
                 Translation(rotationCenter) * Translation(translation);
@@ -2591,7 +2591,7 @@ namespace BulletSharp.Math
         /// <param name="rotation">The rotation of the transformation.</param>
         /// <param name="translation">The translation factor of the transformation.</param>
         /// <returns>The created affine transformation matrix.</returns>
-        public static Matrix AffineTransformation(float scaling, Vector3 rotationCenter, Quaternion rotation, Vector3 translation)
+        public static Matrix AffineTransformation(double scaling, Vector3 rotationCenter, Quaternion rotation, Vector3 translation)
         {
             Matrix result;
             AffineTransformation(scaling, ref rotationCenter, ref rotation, ref translation, out result);
@@ -2687,7 +2687,7 @@ namespace BulletSharp.Math
         /// <param name="right">The matrix to scale.</param>
         /// <param name="scalar">The amount by which to scale.</param>
         /// <returns>The scaled matrix.</returns>
-        public static Matrix operator *(float scalar, Matrix right)
+        public static Matrix operator *(double scalar, Matrix right)
         {
             Matrix result;
             Multiply(ref right, scalar, out result);
@@ -2700,7 +2700,7 @@ namespace BulletSharp.Math
         /// <param name="left">The matrix to scale.</param>
         /// <param name="scalar">The amount by which to scale.</param>
         /// <returns>The scaled matrix.</returns>
-        public static Matrix operator *(Matrix left, float scalar)
+        public static Matrix operator *(Matrix left, double scalar)
         {
             Matrix result;
             Multiply(ref left, scalar, out result);
@@ -2726,7 +2726,7 @@ namespace BulletSharp.Math
         /// <param name="left">The matrix to scale.</param>
         /// <param name="scalar">The amount by which to scale.</param>
         /// <returns>The scaled matrix.</returns>
-        public static Matrix operator /(Matrix left, float scalar)
+        public static Matrix operator /(Matrix left, double scalar)
         {
             Matrix result;
             Divide(ref left, scalar, out result);
@@ -2887,7 +2887,7 @@ namespace BulletSharp.Math
         /// <returns>
         /// <c>true</c> if the specified <see cref="SlimMath.Matrix"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(Matrix other, float epsilon)
+        public bool Equals(Matrix other, double epsilon)
         {
             return (System.Math.Abs(other.M11 - M11) < epsilon &&
                 System.Math.Abs(other.M12 - M12) < epsilon &&
@@ -2988,10 +2988,10 @@ namespace BulletSharp.Math
         {
             return new Matrix()
             {
-                M11 = (float)value.M11, M12 = (float)value.M12, M13 = (float)value.M13, M14 = (float)value.M14,
-                M21 = (float)value.M21, M22 = (float)value.M22, M23 = (float)value.M23, M24 = (float)value.M24,
-                M31 = (float)value.M31, M32 = (float)value.M32, M33 = (float)value.M33, M34 = (float)value.M34,
-                M41 = (float)value.OffsetX, M42 = (float)value.OffsetY, M43 = (float)value.OffsetZ, M44 = (float)value.M44
+                M11 = (double)value.M11, M12 = (double)value.M12, M13 = (double)value.M13, M14 = (double)value.M14,
+                M21 = (double)value.M21, M22 = (double)value.M22, M23 = (double)value.M23, M24 = (double)value.M24,
+                M31 = (double)value.M31, M32 = (double)value.M32, M33 = (double)value.M33, M34 = (double)value.M34,
+                M41 = (double)value.OffsetX, M42 = (double)value.OffsetY, M43 = (double)value.OffsetZ, M44 = (double)value.M44
             };
         }
 #endif

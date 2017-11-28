@@ -12,17 +12,17 @@ namespace BulletSharp
 		{
 		}
 
-		public void SetSafeMargin(float minDimension, float defaultMarginMultiplier = 0.1f)
+		public void SetSafeMargin(double minDimension, double defaultMarginMultiplier = 0.1f)
 		{
 			btConvexInternalShape_setSafeMargin(Native, minDimension, defaultMarginMultiplier);
 		}
 
-		public void SetSafeMarginRef(ref Vector3 halfExtents, float defaultMarginMultiplier = 0.1f)
+		public void SetSafeMarginRef(ref Vector3 halfExtents, double defaultMarginMultiplier = 0.1f)
 		{
 			btConvexInternalShape_setSafeMargin2(Native, ref halfExtents, defaultMarginMultiplier);
 		}
 
-		public void SetSafeMargin(Vector3 halfExtents, float defaultMarginMultiplier = 0.1f)
+		public void SetSafeMargin(Vector3 halfExtents, double defaultMarginMultiplier = 0.1f)
 		{
 			btConvexInternalShape_setSafeMargin2(Native, ref halfExtents, defaultMarginMultiplier);
 		}
@@ -48,7 +48,7 @@ namespace BulletSharp
 			}
 		}
 
-		public float MarginNV => btConvexInternalShape_getMarginNV(Native);
+		public double MarginNV => btConvexInternalShape_getMarginNV(Native);
 	}
 
 	public abstract class ConvexInternalAabbCachingShape : ConvexInternalShape
@@ -65,14 +65,14 @@ namespace BulletSharp
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct ConvexInternalShapeFloatData
+	internal struct ConvexInternalShapeData
 	{
-		public CollisionShapeFloatData CollisionShapeData;
+		public CollisionShapeData CollisionShapeData;
 		public Vector3FloatData LocalScaling;
 		public Vector3FloatData ImplicitShapeDimensions;
 		public float CollisionMargin;
 		public int Padding;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConvexInternalShapeFloatData), fieldName).ToInt32(); }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConvexInternalShapeData), fieldName).ToInt32(); }
 	}
 }

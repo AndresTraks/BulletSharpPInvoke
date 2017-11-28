@@ -13,7 +13,7 @@ namespace DemoFramework
         private TypedConstraint _rigidBodyPickConstraint;
         private MultiBodyPoint2Point _multiBodyPickConstraint;
         private bool _prevCanSleep;
-        private float _oldPickingDist;
+        private double _oldPickingDist;
 
         public BodyPicker(Demo demo)
         {

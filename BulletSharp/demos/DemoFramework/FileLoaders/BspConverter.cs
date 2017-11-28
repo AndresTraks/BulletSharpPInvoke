@@ -9,7 +9,7 @@ namespace DemoFramework.FileLoaders
     {
         public abstract void AddCollider(List<Vector3> vertices);
 
-        public void ConvertBsp(BspLoader bspLoader, float scaling)
+        public void ConvertBsp(BspLoader bspLoader, double scaling)
         {
             foreach (BspLeaf leaf in bspLoader.Leaves)
             {
@@ -35,7 +35,7 @@ namespace DemoFramework.FileLoaders
             return (flags & ContentFlags.Solid) != 0;
         }
 
-        private void OutputBrushAsCollider(BspLoader bspLoader, float scaling, int brushId)
+        private void OutputBrushAsCollider(BspLoader bspLoader, double scaling, int brushId)
         {
             BspBrush brush = bspLoader.Brushes[brushId];
             var sides = bspLoader.BrushSides

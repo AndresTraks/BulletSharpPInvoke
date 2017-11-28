@@ -273,7 +273,7 @@ namespace BulletSharp
 		}
 
 		public void SetQuantizationValues(Vector3 bvhAabbMin, Vector3 bvhAabbMax,
-			float quantizationMargin = 1.0f)
+			double quantizationMargin = 1.0f)
 		{
 			btQuantizedBvh_setQuantizationValues(_native, ref bvhAabbMin, ref bvhAabbMax,
 				quantizationMargin);
@@ -352,4 +352,23 @@ namespace BulletSharp
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(QuantizedBvhFloatData), fieldName).ToInt32(); }
 	}
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct QuantizedBvhDoubleData
+    {
+        public Vector3DoubleData BvhAabbMin;
+        public Vector3DoubleData BvhAabbMax;
+        public Vector3DoubleData BvhQuantization;
+        public int CurNodeIndex;
+        public int UseQuantization;
+        public int NumContiguousLeafNodes;
+        public int NumQuantizedContiguousNodes;
+        public IntPtr ContiguousNodesPtr;
+        public IntPtr QuantizedContiguousNodesPtr;
+        public IntPtr SubTreeInfoPtr;
+        public int TraversalMode;
+        public int NumSubtreeHeaders;
+
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(QuantizedBvhDoubleData), fieldName).ToInt32(); }
+    }
 }

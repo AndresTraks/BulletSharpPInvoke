@@ -10,7 +10,7 @@ namespace BulletSharp
 		{
 		}
 
-		public ConeShape(float radius, float height)
+		public ConeShape(double radius, double height)
 			: base(btConeShape_new(radius, height))
 		{
 		}
@@ -21,13 +21,13 @@ namespace BulletSharp
 			set => btConeShape_setConeUpIndex(Native, value);
 		}
 
-		public float Height
+		public double Height
 		{
 			get => btConeShape_getHeight(Native);
 			set => btConeShape_setHeight(Native, value);
 		}
 
-		public float Radius
+		public double Radius
 		{
 			get => btConeShape_getRadius(Native);
 			set => btConeShape_setRadius(Native, value);
@@ -36,7 +36,7 @@ namespace BulletSharp
 
 	public class ConeShapeX : ConeShape
 	{
-		public ConeShapeX(float radius, float height)
+		public ConeShapeX(double radius, double height)
 			: base(btConeShapeX_new(radius, height))
 		{
 		}
@@ -44,7 +44,7 @@ namespace BulletSharp
 
 	public class ConeShapeZ : ConeShape
 	{
-		public ConeShapeZ(float radius, float height)
+		public ConeShapeZ(double radius, double height)
 			: base(btConeShapeZ_new(radius, height))
 		{
 		}

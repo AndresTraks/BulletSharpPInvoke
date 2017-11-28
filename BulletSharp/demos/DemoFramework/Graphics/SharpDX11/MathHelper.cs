@@ -7,10 +7,10 @@ namespace DemoFramework.SharpDX11
         public static Matrix Convert(ref BulletSharp.Math.Matrix m)
         {
             return new Matrix(
-                m.M11, m.M12, m.M13, m.M14,
-                m.M21, m.M22, m.M23, m.M24,
-                m.M31, m.M32, m.M33, m.M34,
-                m.M41, m.M42, m.M43, m.M44);
+                (float)m.M11, (float)m.M12, (float)m.M13, (float)m.M14,
+                (float)m.M21, (float)m.M22, (float)m.M23, (float)m.M24,
+                (float)m.M31, (float)m.M32, (float)m.M33, (float)m.M34,
+                (float)m.M41, (float)m.M42, (float)m.M43, (float)m.M44);
         }
 
         public static BulletSharp.Math.Matrix Convert(ref Matrix m)
@@ -25,7 +25,7 @@ namespace DemoFramework.SharpDX11
 
         public static Vector3 Convert(BulletSharp.Math.Vector3 v)
         {
-            return new Vector3(v.X, v.Y, v.Z);
+            return new Vector3((float)v.X, (float)v.Y, (float)v.Z);
         }
     }
 }

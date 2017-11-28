@@ -14,7 +14,7 @@ namespace BulletSharp
 			_ignoreTriangleIndex = ignoreTriangleIndex;
 		}
 
-		public override float ReportHit(ref Vector3 hitNormalLocal, float hitFraction, int partId, int triangleIndex)
+		public override double ReportHit(ref Vector3 hitNormalLocal, double hitFraction, int partId, int triangleIndex)
 		{
 			if (partId != _ignorePart || triangleIndex != _ignoreTriangleIndex)
 			{
@@ -29,11 +29,11 @@ namespace BulletSharp
 	internal class MyInternalTriangleIndexCallback : InternalTriangleIndexCallback
 	{
 		private readonly CompoundShape _collisionShape;
-		private readonly float _depth;
+		private readonly double _depth;
 		private readonly GImpactMeshShape _meshShape;
 		//private readonly static Vector3 _redColor = new Vector3(1, 0, 0);
 
-		public MyInternalTriangleIndexCallback(CompoundShape collisionShape, GImpactMeshShape meshShape, float depth)
+		public MyInternalTriangleIndexCallback(CompoundShape collisionShape, GImpactMeshShape meshShape, double depth)
 		{
 			_collisionShape = collisionShape;
 			_depth = depth;
@@ -72,7 +72,7 @@ namespace BulletSharp
 
 	public static class CompoundFromGImpact
 	{
-		public static CompoundShape Create(GImpactMeshShape impactMesh, float depth)
+		public static CompoundShape Create(GImpactMeshShape impactMesh, double depth)
 		{
 			var shape = new CompoundShape();
 			using (var callback = new MyInternalTriangleIndexCallback(shape, impactMesh, depth))

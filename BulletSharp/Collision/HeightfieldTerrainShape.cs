@@ -6,7 +6,7 @@ namespace BulletSharp
 	public class HeightfieldTerrainShape : ConcaveShape
 	{
 		public HeightfieldTerrainShape(int heightStickWidth, int heightStickLength,
-			IntPtr heightfieldData, float heightScale, float minHeight, float maxHeight,
+			IntPtr heightfieldData, double heightScale, double minHeight, double maxHeight,
 			int upAxis, PhyScalarType heightDataType, bool flipQuadEdges)
 			: base(btHeightfieldTerrainShape_new(heightStickWidth, heightStickLength,
 				heightfieldData, heightScale, minHeight, maxHeight, upAxis, heightDataType,

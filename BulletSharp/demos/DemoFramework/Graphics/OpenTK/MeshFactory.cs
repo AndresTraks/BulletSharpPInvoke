@@ -417,12 +417,12 @@ namespace DemoFramework.OpenTK
                 {
                     GL.EnableVertexAttribArray(vertexNormalLocation);
                     GL.BindBuffer(BufferTarget.ArrayBuffer, shapeData.NormalBufferID);
-                    GL.VertexAttribPointer(vertexNormalLocation, 3, VertexAttribPointerType.Float, false, Vector3.SizeInBytes, IntPtr.Zero);
+                    GL.VertexAttribPointer(vertexNormalLocation, 3, VertexAttribPointerType.Double, false, Vector3.SizeInBytes, IntPtr.Zero);
                 }
 
                 // Vertex buffer
                 GL.BindBuffer(BufferTarget.ArrayBuffer, shapeData.VertexBufferID);
-                GL.VertexAttribPointer(vertexPositionLocation, 3, VertexAttribPointerType.Float, false, Vector3.SizeInBytes, IntPtr.Zero);
+                GL.VertexAttribPointer(vertexPositionLocation, 3, VertexAttribPointerType.Double, false, Vector3.SizeInBytes, IntPtr.Zero);
 
                 Matrix4 worldMatrix;
 

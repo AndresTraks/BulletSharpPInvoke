@@ -18,10 +18,10 @@ namespace BulletSharp
 
 	public abstract class DynamicsWorld : CollisionWorld
 	{
-		public delegate void InternalTickCallback(DynamicsWorld world, float timeStep);
+		public delegate void InternalTickCallback(DynamicsWorld world, double timeStep);
 		
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		delegate void InternalTickCallbackUnmanaged(IntPtr world, float timeStep);
+		delegate void InternalTickCallbackUnmanaged(IntPtr world, double timeStep);
 
 		private InternalTickCallback _preTickCallback;
 		private InternalTickCallback _postTickCallback;
@@ -155,12 +155,12 @@ namespace BulletSharp
 			btDynamicsWorld_setGravity(Native, ref gravity);
 		}
 
-		private void InternalPreTickCallbackNative(IntPtr world, float timeStep)
+		private void InternalPreTickCallbackNative(IntPtr world, double timeStep)
 		{
 			_preTickCallback(this, timeStep);
 		}
 
-		private void InternalPostTickCallbackNative(IntPtr world, float timeStep)
+		private void InternalPostTickCallbackNative(IntPtr world, double timeStep)
 		{
 			_postTickCallback(this, timeStep);
 		}
@@ -223,7 +223,7 @@ namespace BulletSharp
 			}
 		}
 
-		public int StepSimulation(float timeStep, int maxSubSteps = 1, float fixedTimeStep = 1.0f / 60.0f)
+		public int StepSimulation(double timeStep, int maxSubSteps = 1, double fixedTimeStep = 1.0f / 60.0f)
 		{
 			return btDynamicsWorld_stepSimulation(Native, timeStep, maxSubSteps,
 				fixedTimeStep);

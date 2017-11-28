@@ -794,8 +794,8 @@ namespace DemoFramework.SharpDX11
             outputMerger.SetDepthStencilState(outsideLightVolumeDepthState);
             foreach (var light in lights)
             {
-                float radius = light.Radius;
-                float bias = radius * 2;
+                double radius = light.Radius;
+                double bias = radius * 2;
                 if ((light.Position - MathHelper.Convert(Demo.FreeLook.Eye)).LengthSquared() >= (radius * radius) + bias)
                 {
                     RenderLight(light);
@@ -807,7 +807,7 @@ namespace DemoFramework.SharpDX11
             outputMerger.SetDepthStencilState(insideLightVolumeDepthState);
             foreach (var light in lights)
             {
-                float bias = light.Radius * 2;
+                double bias = light.Radius * 2;
                 if ((light.Position - MathHelper.Convert(Demo.FreeLook.Eye)).LengthSquared() < (light.Radius * light.Radius) + bias)
                 {
                     RenderLight(light);

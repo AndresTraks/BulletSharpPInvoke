@@ -27,7 +27,7 @@ namespace BasicDemo
 
     internal sealed class BasicDemoSimulation : ISimulation
     {
-        public const float Scale = 0.5f;
+        public const double Scale = 0.5f;
         private const int NumBoxesX = 5, NumBoxesY = 5, NumBoxesZ = 5;
         private Vector3 _startPosition = new Vector3(0, 2, 0);
 
@@ -63,7 +63,7 @@ namespace BasicDemo
 
         private void CreateBoxes()
         {
-            const float mass = 1.0f;
+            const double mass = 1.0f;
             var shape = new BoxShape(Scale);
             Vector3 localInertia = shape.CalculateLocalInertia(mass);
             var bodyInfo = new RigidBodyConstructionInfo(mass, null, shape, localInertia);

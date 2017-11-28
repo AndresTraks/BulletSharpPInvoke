@@ -30,9 +30,9 @@ namespace MotorDemo
     internal sealed class MotorDemoSimulation : ISimulation
     {
         private List<TestRig> _rigs = new List<TestRig>();
-        private float _time = 0;
-        private float _cyclePeriod = 2000.0f;
-        private float _muscleStrength = 0.5f;
+        private double _time = 0;
+        private double _cyclePeriod = 2000.0f;
+        private double _muscleStrength = 0.5f;
 
         private const int NumLegs = 6;
 
@@ -75,7 +75,7 @@ namespace MotorDemo
             ground.UserObject = "Ground";
         }
 
-        private void MotorPreTickCallback(DynamicsWorld world, float timeStep)
+        private void MotorPreTickCallback(DynamicsWorld world, double timeStep)
         {
             SetMotorTargets(timeStep);
         }
@@ -86,10 +86,10 @@ namespace MotorDemo
             _rigs.Add(rig);
         }
 
-        private void SetMotorTargets(float deltaTime)
+        private void SetMotorTargets(double deltaTime)
         {
-            float deltaTimeMs = deltaTime * 1000000.0f;
-            float minFps = 1000000.0f / 60.0f;
+            double deltaTimeMs = deltaTime * 1000000.0f;
+            double minFps = 1000000.0f / 60.0f;
             if (deltaTimeMs > minFps)
                 deltaTimeMs = minFps;
 
@@ -106,28 +106,28 @@ namespace MotorDemo
             }
         }
 
-        private void SetJointMotorTarget(HingeConstraint joint, float deltaTimeMs)
+        private void SetJointMotorTarget(HingeConstraint joint, double deltaTimeMs)
         {
-            float currentAngle = joint.HingeAngle;
+            double currentAngle = joint.HingeAngle;
 
-            float targetPercent = ((int)(_time / 1000.0f) % (int)_cyclePeriod) / _cyclePeriod;
-            float targetAngle = (float)(0.5 * (1 + Math.Sin(2.0f * Math.PI * targetPercent)));
-            float targetLimitAngle = joint.LowerLimit + targetAngle * (joint.UpperLimit - joint.LowerLimit);
-            float angleError = targetLimitAngle - currentAngle;
-            float desiredAngularVel = 1000000.0f * angleError / deltaTimeMs;
+            double targetPercent = ((int)(_time / 1000.0f) % (int)_cyclePeriod) / _cyclePeriod;
+            double targetAngle = (double)(0.5 * (1 + Math.Sin(2.0f * Math.PI * targetPercent)));
+            double targetLimitAngle = joint.LowerLimit + targetAngle * (joint.UpperLimit - joint.LowerLimit);
+            double angleError = targetLimitAngle - currentAngle;
+            double desiredAngularVel = 1000000.0f * angleError / deltaTimeMs;
             joint.EnableAngularMotor(true, desiredAngularVel, _muscleStrength);
         }
     }
 
     internal sealed class TestRig
     {
-        private const float BodyRadius = 0.25f;
-        private const float ThighLength = 0.45f;
-        private const float ShinLength = 0.75f;
+        private const double BodyRadius = 0.25f;
+        private const double ThighLength = 0.45f;
+        private const double ShinLength = 0.75f;
 
-        private const float PI_2 = (float)(0.5f * Math.PI);
-        private const float PI_4 = (float)(0.25f * Math.PI);
-        private const float PI_8 = (float)(0.125f * Math.PI);
+        private const double PI_2 = (double)(0.5f * Math.PI);
+        private const double PI_4 = (double)(0.25f * Math.PI);
+        private const double PI_8 = (double)(0.125f * Math.PI);
 
         private readonly DynamicsWorld _world;
 
@@ -191,13 +191,13 @@ namespace MotorDemo
 
         private void SetupRigidBodies(Vector3 position, bool isFixed)
         {
-            const float heightFromGround = 0.5f;
+            const double heightFromGround = 0.5f;
             Matrix offset = Matrix.Translation(position);
 
             // body
             Vector3 rootPosition = new Vector3(0, heightFromGround, 0);
             Matrix transform = Matrix.Translation(rootPosition);
-            float mass = isFixed ? 0 : 1;
+            double mass = isFixed ? 0 : 1;
             _bodyObject = PhysicsHelper.CreateBody(mass, transform * offset, _bodyShape, _world);
 
             // legs
@@ -205,9 +205,9 @@ namespace MotorDemo
             {
                 Leg leg = Legs[i];
 
-                float fAngle = (float)(2 * Math.PI * i / Legs.Length);
-                float fSin = (float)Math.Sin(fAngle);
-                float fCos = (float)Math.Cos(fAngle);
+                double fAngle = (double)(2 * Math.PI * i / Legs.Length);
+                double fSin = (double)Math.Sin(fAngle);
+                double fCos = (double)Math.Cos(fAngle);
 
                 Vector3 boneOrigin = new Vector3(fCos * (BodyRadius + 0.5f * ThighLength), heightFromGround, fSin * (BodyRadius + 0.5f * ThighLength));
 
@@ -243,9 +243,9 @@ namespace MotorDemo
             {
                 Leg leg = Legs[i];
 
-                float legAngle = (float)(2 * Math.PI * i / Legs.Length);
-                float fSin = (float)Math.Sin(legAngle);
-                float fCos = (float)Math.Cos(legAngle);
+                double legAngle = (double)(2 * Math.PI * i / Legs.Length);
+                double fSin = (double)Math.Sin(legAngle);
+                double fCos = (double)Math.Cos(legAngle);
 
                 localA = Matrix.RotationYawPitchRoll(-legAngle, 0, 0) * Matrix.Translation(fCos * BodyRadius, 0, fSin * BodyRadius);
                 localB = localA * _bodyObject.WorldTransform * Matrix.Invert(leg.Thigh.WorldTransform);

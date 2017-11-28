@@ -84,7 +84,7 @@ namespace ConvexDecompositionDemo
 
             // Convex hull approximation
             ConvexHullShape convexShape = CreateHullApproximation(_triangleMesh);
-            float mass = 1.0f;
+            double mass = 1.0f;
             PhysicsHelper.CreateBody(mass, Matrix.Translation(0, 2, 14), convexShape, World);
 
             // Non-moving body
@@ -238,7 +238,7 @@ namespace ConvexDecompositionDemo
                 for (int vi = 0; vi < nVertices; vi++)
                 {
                     verticesArray[vi] = new Vector3(
-                        (float)points[vi3], (float)points[vi3 + 1], (float)points[vi3 + 2]);
+                        (double)points[vi3], (double)points[vi3 + 1], (double)points[vi3 + 2]);
                     vi3 += 3;
                 }
 

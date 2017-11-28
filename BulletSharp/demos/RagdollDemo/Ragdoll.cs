@@ -27,9 +27,9 @@ namespace RagdollDemo
 
     internal sealed class Ragdoll : IDisposable
     {
-        private const float ConstraintDebugSize = 0.2f;
-        private const float PI_2 = (float)Math.PI / 2;
-        private const float PI_4 = (float)Math.PI / 4;
+        private const double ConstraintDebugSize = 0.2f;
+        private const double PI_2 = (double)Math.PI / 2;
+        private const double PI_4 = (double)Math.PI / 4;
 
         private DynamicsWorld _world;
         private CollisionShape[] _shapes = new CollisionShape[(int)BodyPart.Count];
@@ -193,7 +193,7 @@ namespace RagdollDemo
             _world.AddConstraint(_joints[(int)Joint.RightKnee], true);
 
 
-            localA = Matrix.RotationYawPitchRoll(0, 0, (float)Math.PI) * Matrix.Translation(-0.2f, 0.15f, 0);
+            localA = Matrix.RotationYawPitchRoll(0, 0, (double)Math.PI) * Matrix.Translation(-0.2f, 0.15f, 0);
             localB = Matrix.RotationYawPitchRoll(0, 0, PI_2) * Matrix.Translation(0, -0.18f, 0);
             cone = new ConeTwistConstraint(_bodies[(int)BodyPart.Spine], _bodies[(int)BodyPart.LeftUpperArm], localA, localB);
             cone.SetLimit(PI_2, PI_2, 0);
@@ -234,7 +234,7 @@ namespace RagdollDemo
             _world.AddConstraint(_joints[(int)Joint.RightElbow], true);
         }
 
-        private RigidBody CreateBody(float mass, Matrix startTransform, CollisionShape shape)
+        private RigidBody CreateBody(double mass, Matrix startTransform, CollisionShape shape)
         {
             return PhysicsHelper.CreateBody(mass, startTransform, shape, _world);
         }

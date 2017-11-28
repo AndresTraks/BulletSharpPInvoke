@@ -61,9 +61,9 @@ namespace CcdPhysicsDemo
 
     internal sealed class CcdPhysicsDemoSimulation : ISimulation
     {
-        private const float CubeHalfExtents = 0.5f;
-        private const float ExtraHeight = 0.5f;
-        private const float ShootBoxInitialSpeed = 2000;
+        private const double CubeHalfExtents = 0.5f;
+        private const double ExtraHeight = 0.5f;
+        private const double ShootBoxInitialSpeed = 2000;
 
         private readonly bool _ccdEnabled;
         private BoxShape _shootBoxShape = new BoxShape(1);
@@ -98,7 +98,7 @@ namespace CcdPhysicsDemo
 
         public void ShootBox(Vector3 camPos, Vector3 destination)
         {
-            const float mass = 1.0f;
+            const double mass = 1.0f;
 
             if (_shootBoxShape == null)
             {

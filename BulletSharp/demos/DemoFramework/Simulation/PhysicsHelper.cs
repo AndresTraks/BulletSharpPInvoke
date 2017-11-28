@@ -5,7 +5,7 @@ namespace DemoFramework
 {
     public static class PhysicsHelper
     {
-        public static RigidBody CreateBody(float mass, Matrix startTransform, CollisionShape shape, DynamicsWorld world)
+        public static RigidBody CreateBody(double mass, Matrix startTransform, CollisionShape shape, DynamicsWorld world)
         {
             // A body with zero mass is considered static
             if (mass == 0)
@@ -35,7 +35,7 @@ namespace DemoFramework
 
         public static RigidBody CreateStaticBody(Matrix startTransform, CollisionShape shape, DynamicsWorld world)
         {
-            const float staticMass = 0;
+            const double staticMass = 0;
 
             RigidBody body;
             using (var rbInfo = new RigidBodyConstructionInfo(staticMass, null, shape)

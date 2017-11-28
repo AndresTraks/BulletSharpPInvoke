@@ -8,7 +8,7 @@ namespace DemoFramework
     public class MouseController
     {
         public Vector3 Vector { get; set; }
-        public float Sensitivity { get; set; }
+        public double Sensitivity { get; set; }
 
         Input input;
         Point mouseOrigin;
@@ -26,9 +26,9 @@ namespace DemoFramework
         public void SetByAngles(double horizontalAngle, double verticalAngle)
         {
             Vector = new Vector3(
-                (float)(Math.Cos(horizontalAngle) * Math.Cos(verticalAngle)),
-                (float)Math.Sin(verticalAngle),
-                (float)(Math.Sin(horizontalAngle) * Math.Cos(verticalAngle)));
+                (double)(Math.Cos(horizontalAngle) * Math.Cos(verticalAngle)),
+                (double)Math.Sin(verticalAngle),
+                (double)(Math.Sin(horizontalAngle) * Math.Cos(verticalAngle)));
         }
 
         public bool Update()

@@ -4,16 +4,16 @@ namespace BulletSharp
 {
 	public class SphereShape : ConvexInternalShape
 	{
-		public SphereShape(float radius)
+		public SphereShape(double radius)
 			: base(btSphereShape_new(radius))
 		{
 		}
 
-		public void SetUnscaledRadius(float radius)
+		public void SetUnscaledRadius(double radius)
 		{
 			btSphereShape_setUnscaledRadius(Native, radius);
 		}
 
-		public float Radius => btSphereShape_getRadius(Native);
+		public double Radius => btSphereShape_getRadius(Native);
 	}
 }

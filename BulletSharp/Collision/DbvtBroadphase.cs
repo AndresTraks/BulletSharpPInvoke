@@ -148,7 +148,7 @@ namespace BulletSharp
 			set => btDbvtBroadphase_setPid(Native, value);
 		}
 
-		public float Prediction
+		public double Prediction
 		{
 			get => btDbvtBroadphase_getPrediction(Native);
 			set => btDbvtBroadphase_setPrediction(Native, value);
@@ -182,13 +182,13 @@ namespace BulletSharp
 			set => btDbvtBroadphase_setUpdates_done(Native, value);
 		}
 
-		public float UpdatesRatio
+		public double UpdatesRatio
 		{
 			get => btDbvtBroadphase_getUpdates_ratio(Native);
 			set => btDbvtBroadphase_setUpdates_ratio(Native, value);
 		}
 
-		public float VelocityPrediction
+		public double VelocityPrediction
 		{
 			get => btDbvtBroadphase_getVelocityPrediction(Native);
 			set => btDbvtBroadphase_setVelocityPrediction(Native, value);

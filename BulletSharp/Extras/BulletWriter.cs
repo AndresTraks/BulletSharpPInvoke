@@ -11,7 +11,7 @@ namespace BulletSharp
         {
         }
 
-        public void Write(float value, int position)
+        public void Write(double value, int position)
         {
             BaseStream.Position = position;
             Write(value);

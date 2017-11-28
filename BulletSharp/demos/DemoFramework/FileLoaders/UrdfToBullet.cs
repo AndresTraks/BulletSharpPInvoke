@@ -28,11 +28,11 @@ namespace DemoFramework.FileLoaders
 
         private void LoadLink(UrdfLink link, string baseDirectory)
         {
-            float mass = 0;
+            double mass = 0;
             UrdfInertial inertial = link.Inertial;
             if (inertial != null)
             {
-                mass = (float)inertial.Mass;
+                mass = (double)inertial.Mass;
             }
 
             UrdfCollision collision = link.Collision;
@@ -50,8 +50,8 @@ namespace DemoFramework.FileLoaders
                         break;
                     case UrdfGeometryType.Cylinder:
                         var cylinder = geometry as UrdfCylinder;
-                        float radius = (float)cylinder.Radius * 0.5f;
-                        float length = (float)cylinder.Length * 0.5f;
+                        double radius = (double)cylinder.Radius * 0.5f;
+                        double length = (double)cylinder.Length * 0.5f;
                         var cylinderShape = new CylinderShape(radius, length, radius);
                         PhysicsHelper.CreateBody(mass, origin, cylinderShape, World);
                         break;
@@ -61,7 +61,7 @@ namespace DemoFramework.FileLoaders
                         break;
                     case UrdfGeometryType.Sphere:
                         var sphere = geometry as UrdfSphere;
-                        var sphereShape = new SphereShape((float)sphere.Radius);
+                        var sphereShape = new SphereShape((double)sphere.Radius);
                         PhysicsHelper.CreateBody(mass, origin, sphereShape, World);
                         break;
                 }
@@ -84,9 +84,9 @@ namespace DemoFramework.FileLoaders
         {
             string[] components = vector.Split(_spaceSeparator, StringSplitOptions.RemoveEmptyEntries);
             return new Vector3(
-                float.Parse(components[0], CultureInfo.InvariantCulture),
-                float.Parse(components[1], CultureInfo.InvariantCulture),
-                float.Parse(components[2], CultureInfo.InvariantCulture));
+                double.Parse(components[0], CultureInfo.InvariantCulture),
+                double.Parse(components[1], CultureInfo.InvariantCulture),
+                double.Parse(components[2], CultureInfo.InvariantCulture));
         }
 
         private void LoadFile(string fileName, string baseDirectory, Matrix transform)

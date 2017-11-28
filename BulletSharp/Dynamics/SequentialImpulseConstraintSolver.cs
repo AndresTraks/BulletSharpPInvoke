@@ -37,7 +37,7 @@ namespace BulletSharp
 				Native, rowSolver.Native);
 		}
 
-		public float SolveGroup(CollisionObject bodies, int numBodies, PersistentManifold manifold,
+		public double SolveGroup(CollisionObject bodies, int numBodies, PersistentManifold manifold,
 			int numManifolds, TypedConstraint constraints, int numConstraints, ContactSolverInfo info,
 			IDebugDraw debugDrawer, Dispatcher dispatcher)
 		{

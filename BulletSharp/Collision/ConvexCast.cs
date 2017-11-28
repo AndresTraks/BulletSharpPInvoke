@@ -20,7 +20,7 @@ namespace BulletSharp
 				Native = btConvexCast_CastResult_new();
 			}
 
-			public void DebugDraw(float fraction)
+			public void DebugDraw(double fraction)
 			{
 				btConvexCast_CastResult_DebugDraw(Native, fraction);
 			}
@@ -35,7 +35,7 @@ namespace BulletSharp
 				btConvexCast_CastResult_reportFailure(Native, errNo, numIterations);
 			}
 
-			public float AllowedPenetration
+			public double AllowedPenetration
 			{
 				get => btConvexCast_CastResult_getAllowedPenetration(Native);
 				set => btConvexCast_CastResult_setAllowedPenetration(Native, value);
@@ -47,7 +47,7 @@ namespace BulletSharp
 				set => btConvexCast_CastResult_setDebugDrawer(Native, BulletSharp.DebugDraw.GetUnmanaged(value));
 			}
 
-			public float Fraction
+			public double Fraction
 			{
 				get => btConvexCast_CastResult_getFraction(Native);
 				set => btConvexCast_CastResult_setFraction(Native, value);

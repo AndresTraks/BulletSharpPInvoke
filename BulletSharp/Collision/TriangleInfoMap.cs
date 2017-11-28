@@ -18,19 +18,19 @@ namespace BulletSharp
 			_native = btTriangleInfo_new();
 		}
 
-		public float EdgeV0V1Angle
+		public double EdgeV0V1Angle
 		{
 			get => btTriangleInfo_getEdgeV0V1Angle(_native);
 			set => btTriangleInfo_setEdgeV0V1Angle(_native, value);
 		}
 
-		public float EdgeV1V2Angle
+		public double EdgeV1V2Angle
 		{
 			get => btTriangleInfo_getEdgeV1V2Angle(_native);
 			set => btTriangleInfo_setEdgeV1V2Angle(_native, value);
 		}
 
-		public float EdgeV2V0Angle
+		public double EdgeV2V0Angle
 		{
 			get => btTriangleInfo_getEdgeV2V0Angle(_native);
 			set => btTriangleInfo_setEdgeV2V0Angle(_native, value);
@@ -94,37 +94,37 @@ namespace BulletSharp
 			return Marshal.PtrToStringAnsi(btTriangleInfoMap_serialize(Native, dataBuffer, serializer._native));
 		}
 
-		public float ConvexEpsilon
+		public double ConvexEpsilon
 		{
 			get => btTriangleInfoMap_getConvexEpsilon(Native);
 			set => btTriangleInfoMap_setConvexEpsilon(Native, value);
 		}
 
-		public float EdgeDistanceThreshold
+		public double EdgeDistanceThreshold
 		{
 			get => btTriangleInfoMap_getEdgeDistanceThreshold(Native);
 			set => btTriangleInfoMap_setEdgeDistanceThreshold(Native, value);
 		}
 
-		public float EqualVertexThreshold
+		public double EqualVertexThreshold
 		{
 			get => btTriangleInfoMap_getEqualVertexThreshold(Native);
 			set => btTriangleInfoMap_setEqualVertexThreshold(Native, value);
 		}
 
-		public float MaxEdgeAngleThreshold
+		public double MaxEdgeAngleThreshold
 		{
 			get => btTriangleInfoMap_getMaxEdgeAngleThreshold(Native);
 			set => btTriangleInfoMap_setMaxEdgeAngleThreshold(Native, value);
 		}
 
-		public float PlanarEpsilon
+		public double PlanarEpsilon
 		{
 			get => btTriangleInfoMap_getPlanarEpsilon(Native);
 			set => btTriangleInfoMap_setPlanarEpsilon(Native, value);
 		}
 
-		public float ZeroAreaThreshold
+		public double ZeroAreaThreshold
 		{
 			get => btTriangleInfoMap_getZeroAreaThreshold(Native);
 			set => btTriangleInfoMap_setZeroAreaThreshold(Native, value);

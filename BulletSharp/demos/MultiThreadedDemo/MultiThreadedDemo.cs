@@ -47,11 +47,11 @@ namespace BasicDemo
 
     internal sealed class MultiThreadedDemoSimulation : ISimulation
     {
-        public const float Scale = 0.5f;
+        public const double Scale = 0.5f;
         private const int NumBoxesX = 7, NumBoxesY = 7, NumBoxesZ = 7;
         private const int NumStacksX = 5, NumStacksZ = 5;
-        private const float StackSpacingX = 50 * Scale;
-        private const float StackSpacingZ = 50 * Scale;
+        private const double StackSpacingX = 50 * Scale;
+        private const double StackSpacingZ = 50 * Scale;
         private Vector3 _startPosition = new Vector3(0, 20, -40);
         private const int MaxThreadCount = 64;
         private ConstraintSolverPoolMultiThreaded _constraintSolver;
@@ -131,7 +131,7 @@ namespace BasicDemo
 
         private void CreateBoxes()
         {
-            const float mass = 1.0f;
+            const double mass = 1.0f;
             var shape = new BoxShape(Scale);
             Vector3 localInertia = shape.CalculateLocalInertia(mass);
 

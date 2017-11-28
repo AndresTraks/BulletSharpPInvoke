@@ -15,7 +15,7 @@ namespace BulletSharp
 				Native = btDiscreteCollisionDetectorInterface_ClosestPointInput_new();
 			}
 
-			public float MaximumDistanceSquared
+			public double MaximumDistanceSquared
 			{
 				get => btDiscreteCollisionDetectorInterface_ClosestPointInput_getMaximumDistanceSquared(Native);
 				set => btDiscreteCollisionDetectorInterface_ClosestPointInput_setMaximumDistanceSquared(Native, value);
@@ -74,7 +74,7 @@ namespace BulletSharp
 			}
 
 			public void AddContactPoint(Vector3 normalOnBInWorld, Vector3 pointInWorld,
-				float depth)
+				double depth)
 			{
 				btDiscreteCollisionDetectorInterface_Result_addContactPoint(Native,
 					ref normalOnBInWorld, ref pointInWorld, depth);
@@ -171,7 +171,7 @@ namespace BulletSharp
 			set => btStorageResult_setClosestPointInB(Native, ref value);
 		}
 
-		public float Distance
+		public double Distance
 		{
 			get => btStorageResult_getDistance(Native);
 			set => btStorageResult_setDistance(Native, value);

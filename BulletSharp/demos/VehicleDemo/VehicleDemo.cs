@@ -19,10 +19,10 @@ namespace VehicleDemo
 
     internal sealed class VehicleDemo : IDemoConfiguration, IUpdateReceiver
     {
-        const float maxEngineForce = 2000.0f;
-        const float maxBreakingForce = 100.0f;
-        const float steeringIncrement = 1.0f;
-        const float steeringClamp = 0.3f;
+        const double maxEngineForce = 2000.0f;
+        const double maxBreakingForce = 100.0f;
+        const double steeringIncrement = 1.0f;
+        const double steeringClamp = 0.3f;
 
         public string WindowTitle => "BulletSharp - Vehicle Demo";
 
@@ -51,7 +51,7 @@ namespace VehicleDemo
                 if (simulation.VehicleSteering > steeringClamp)
                     simulation.VehicleSteering = steeringClamp;
             }
-            else if (simulation.VehicleSteering - float.Epsilon > 0)
+            else if (simulation.VehicleSteering - double.Epsilon > 0)
             {
                 simulation.VehicleSteering -= demo.FrameDelta * steeringIncrement;
             }
@@ -62,7 +62,7 @@ namespace VehicleDemo
                 if (simulation.VehicleSteering < -steeringClamp)
                     simulation.VehicleSteering = -steeringClamp;
             }
-            else if (simulation.VehicleSteering + float.Epsilon < 0)
+            else if (simulation.VehicleSteering + double.Epsilon < 0)
             {
                 simulation.VehicleSteering += demo.FrameDelta * steeringIncrement;
             }
@@ -101,16 +101,16 @@ namespace VehicleDemo
         private const int maxProxies = 32766;
         private const int maxOverlap = 65535;
 
-        private const float wheelRadius = 0.7f;
-        private const float wheelWidth = 0.4f;
-        private const float wheelFriction = 1000; //float.MaxValue
-        private const float suspensionStiffness = 20.0f;
-        private const float suspensionDamping = 2.3f;
-        private const float suspensionCompression = 4.4f;
-        private const float rollInfluence = 0.1f; //1.0f;
+        private const double wheelRadius = 0.7f;
+        private const double wheelWidth = 0.4f;
+        private const double wheelFriction = 1000; //double.MaxValue
+        private const double suspensionStiffness = 20.0f;
+        private const double suspensionDamping = 2.3f;
+        private const double suspensionCompression = 4.4f;
+        private const double rollInfluence = 0.1f; //1.0f;
 
-        private const float suspensionRestLength = 0.6f;
-        private const float CUBE_HALF_EXTENTS = 1;
+        private const double suspensionRestLength = 0.6f;
+        private const double CUBE_HALF_EXTENTS = 1;
 
         private IntPtr _terrainData;
 
@@ -141,10 +141,10 @@ namespace VehicleDemo
         // RaycastVehicle is the interface for the constraint that implements the raycast vehicle
         // notice that for higher-quality slow-moving vehicles, another approach might be better
         // implementing explicit hinged-wheel constraints with cylinder collision, rather then raycasts
-        public float EngineForce { get; set; } = 0.0f;
-        public float BreakingForce { get; set; } = 0.0f;
+        public double EngineForce { get; set; } = 0.0f;
+        public double BreakingForce { get; set; } = 0.0f;
 
-        public float VehicleSteering { get; set; } = 0.0f;
+        public double VehicleSteering { get; set; } = 0.0f;
 
         public void OnUpdate()
         {
@@ -167,7 +167,7 @@ namespace VehicleDemo
             this.StandardCleanup();
         }
 
-        private void PickingPreTickCallback(DynamicsWorld world, float timeStep)
+        private void PickingPreTickCallback(DynamicsWorld world, double timeStep)
         {
             EngineForce *= (1.0f - timeStep);
 
@@ -189,7 +189,7 @@ namespace VehicleDemo
 
         private void CreateTrimeshGround()
         {
-            const float scale = 20.0f;
+            const double scale = 20.0f;
 
             //create a triangle-mesh ground
             const int NumVertsX = 20;
@@ -231,8 +231,8 @@ namespace VehicleDemo
                 {
                     for (int j = 0; j < NumVertsY; j++)
                     {
-                        const float waveLength = .2f;
-                        float height = (float)(Math.Sin(i * waveLength) * Math.Cos(j * waveLength));
+                        const double waveLength = .2f;
+                        double height = (double)(Math.Sin(i * waveLength) * Math.Cos(j * waveLength));
 
                         vertices.Write(i - NumVertsX * 0.5f);
                         vertices.Write(height);
@@ -255,9 +255,9 @@ namespace VehicleDemo
 
         private void CreateHeightfieldTerrainFromFile()
         {
-            const float minHeight = 0;
-            const float maxHeight = 10.0f;
-            const float heightScale = maxHeight / 256.0f;
+            const double minHeight = 0;
+            const double maxHeight = 10.0f;
+            const double heightScale = maxHeight / 256.0f;
             const int width = 128, length = 128;
             const int dataLength = width * length * sizeof(byte);
             const PhyScalarType scalarType = PhyScalarType.Byte;
@@ -296,11 +296,11 @@ namespace VehicleDemo
 
         private void CreateHeightfieldTerrain()
         {
-            const float minHeight = 0;
-            const float maxHeight = 10.0f;
-            const float heightScale = maxHeight / 256.0f;
+            const double minHeight = 0;
+            const double maxHeight = 10.0f;
+            const double heightScale = maxHeight / 256.0f;
             const int width = 64, length = 64;
-            const int dataLength = width * length * sizeof(float);
+            const int dataLength = width * length * sizeof(double);
             const PhyScalarType scalarType = PhyScalarType.Single;
 
             var scale = new Vector3(15.0f, maxHeight, 15.0f);
@@ -316,7 +316,7 @@ namespace VehicleDemo
                     {
                         for (int j = 0; j < length; j++)
                         {
-                            writer.Write((float)((maxHeight / 2) + 4 * Math.Sin(j * 0.5f) * Math.Cos(i)));
+                            writer.Write((double)((maxHeight / 2) + 4 * Math.Sin(j * 0.5f) * Math.Cos(i)));
                         }
                     }
                 }
@@ -360,7 +360,7 @@ namespace VehicleDemo
             World.AddAction(vehicle);
 
 
-            const float connectionHeight = 1.2f;
+            const double connectionHeight = 1.2f;
 
             // choose coordinate system
             vehicle.SetCoordinateSystem(rightIndex, upIndex, forwardIndex);

@@ -12,8 +12,8 @@ namespace BulletSharp
 			Native = native;
 		}
 		/*
-		public bool SolveMLCP(btMatrixX<float> a, btVectorX<float> b, btVectorX<float> x,
-			btVectorX<float> lo, btVectorX<float> hi, AlignedObjectArray<int> limitDependency,
+		public bool SolveMLCP(btMatrixX<double> a, btVectorX<double> b, btVectorX<double> x,
+			btVectorX<double> lo, btVectorX<double> hi, AlignedObjectArray<int> limitDependency,
 			int numIterations, bool useSparsity = true)
 		{
 			return btMLCPSolverInterface_solveMLCP(Native, a.Native, b.Native,

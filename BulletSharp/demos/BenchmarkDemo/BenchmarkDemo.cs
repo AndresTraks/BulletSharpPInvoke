@@ -28,7 +28,7 @@ namespace BenchmarkDemo
 
     internal sealed class BenchmarkDemoSimulation : ISimulation
     {
-        private const float defaultContactProcessingThreshold = 0.0f;
+        private const double defaultContactProcessingThreshold = 0.0f;
 
         private int _scene = 1;
         private Action[] _scenes;
@@ -84,13 +84,13 @@ namespace BenchmarkDemo
         {
             CreateGround();
 
-            const float mass = 2.0f;
+            const double mass = 2.0f;
             const int arrayWidth = 8;
             const int arrayHeight = 47;
-            const float cubeHalfExtent = 1.0f;
-            const float cubeWidth = cubeHalfExtent * 2;
-            const float spacing = cubeHalfExtent;
-            const float offset = cubeWidth + spacing;
+            const double cubeHalfExtent = 1.0f;
+            const double cubeWidth = cubeHalfExtent * 2;
+            const double spacing = cubeHalfExtent;
+            const double offset = cubeWidth + spacing;
             var startPosition = new Vector3(-20, 0, -10);
             var blockShape = new BoxShape(cubeHalfExtent);
 
@@ -112,11 +112,11 @@ namespace BenchmarkDemo
         {
             CreateGround();
 
-            const float mass = 2.0f;
+            const double mass = 2.0f;
             const int arrayWidth = 8;
             const int arrayHeight = 15;
-            const float offset = 5;
-            const float widthSpacingFactor = 1.02f;
+            const double offset = 5;
+            const double widthSpacingFactor = 1.02f;
             var startPosition = new Vector3(-20, 0, -10);
             var convexHullShape = new ConvexHullShape(Taru.Vertices);
 
@@ -129,22 +129,22 @@ namespace BenchmarkDemo
 
         private void CreateShapesGravity()
         {
-            const float cubeHalfExtent = 1.5f;
-            const float cubeWidth = cubeHalfExtent * 2;
+            const double cubeHalfExtent = 1.5f;
+            const double cubeWidth = cubeHalfExtent * 2;
             var boxSize = new Vector3(cubeHalfExtent);
-            float boxMass = 1.0f;
-            float sphereRadius = 1.5f;
-            float sphereMass = 1.0f;
-            float capsuleHalf = 2.0f;
-            float capsuleRadius = 1.0f;
-            float capsuleMass = 1.0f;
+            double boxMass = 1.0f;
+            double sphereRadius = 1.5f;
+            double sphereMass = 1.0f;
+            double capsuleHalf = 2.0f;
+            double capsuleRadius = 1.0f;
+            double capsuleMass = 1.0f;
 
             int stackSize = 10;
             int stackHeight = 10;
 
-            float spacing = 2.0f;
+            double spacing = 2.0f;
             var position = new Vector3(0.0f, 20.0f, 0.0f);
-            float offset = -stackSize * (cubeWidth + spacing) * 0.5f;
+            double offset = -stackSize * (cubeWidth + spacing) * 0.5f;
 
             int numBodies = 0;
 
@@ -168,7 +168,7 @@ namespace BenchmarkDemo
                             case 1:
                             case 2:
                                 {
-                                    float r = 0.5f * (idx + 1);
+                                    double r = 0.5f * (idx + 1);
                                     var boxShape = new BoxShape(boxSize * r);
                                     LocalCreateRigidBody(boxMass * r, trans, boxShape);
                                 }
@@ -178,7 +178,7 @@ namespace BenchmarkDemo
                             case 4:
                             case 5:
                                 {
-                                    float r = 0.5f * (idx - 3 + 1);
+                                    double r = 0.5f * (idx - 3 + 1);
                                     var sphereShape = new SphereShape(sphereRadius * r);
                                     LocalCreateRigidBody(sphereMass * r, trans, sphereShape);
                                 }
@@ -188,7 +188,7 @@ namespace BenchmarkDemo
                             case 7:
                             case 8:
                                 {
-                                    float r = 0.5f * (idx - 6 + 1);
+                                    double r = 0.5f * (idx - 6 + 1);
                                     var capsuleShape = new CapsuleShape(capsuleRadius * r, capsuleHalf * r);
                                     LocalCreateRigidBody(capsuleMass * r, trans, capsuleShape);
                                 }
@@ -208,14 +208,14 @@ namespace BenchmarkDemo
 
         private void CreateTaruGravity()
         {
-            const float mass = 1.0f;
-            const float cubeHalfExtent = 1.5f;
-            const float cubeWidth = cubeHalfExtent * 2;
+            const double mass = 1.0f;
+            const double cubeHalfExtent = 1.5f;
+            const double cubeWidth = cubeHalfExtent * 2;
             const int stackWidth = 10;
             const int stackHeight = 10;
-            const float spacing = 5.0f;
-            const float offset = cubeWidth + spacing;
-            const float widthSpacingFactor = 1.12f;
+            const double spacing = 5.0f;
+            const double offset = cubeWidth + spacing;
+            const double widthSpacingFactor = 1.12f;
             var startPosition = new Vector3(-250, 0, -150);
 
             var convexHullShape = new ConvexHullShape(Taru.Vertices);
@@ -228,8 +228,8 @@ namespace BenchmarkDemo
 
         private void CreatePyramid(Vector3 offsetPosition, int stackSize, Vector3 boxSize)
         {
-            const float mass = 1.0f;
-            const float space = 0.0001f;
+            const double mass = 1.0f;
+            const double space = 0.0001f;
 
             var blockShape = new BoxShape(boxSize);
 
@@ -258,13 +258,13 @@ namespace BenchmarkDemo
         {
             var blockShape = new BoxShape(boxSize);
 
-            const float mass = 1.0f;
+            const double mass = 1.0f;
             var transform = Matrix.Identity;
 
             for (int y = 0; y < stackSize; y++)
             {
-                float offset = 1 - y;
-                float height = ((stackSize - y) * 2 - 1) * boxSize.Y;
+                double offset = 1 - y;
+                double height = ((stackSize - y) * 2 - 1) * boxSize.Y;
                 for (int i = 0; i < y; i++)
                 {
                     transform.Origin = offsetPosition +
@@ -278,12 +278,12 @@ namespace BenchmarkDemo
         {
             var blockShape = new BoxShape(boxSize);
 
-            const float mass = 1.0f;
-            float radius = 1.3f * rotSize * boxSize.X / (float)Math.PI;
+            const double mass = 1.0f;
+            double radius = 1.3f * rotSize * boxSize.X / (double)Math.PI;
 
             // create active boxes
-            float positionY = boxSize.Y;
-            float rotation = 0;
+            double positionY = boxSize.Y;
+            double rotation = 0;
 
             for (int i = 0; i < stackSize; i++)
             {
@@ -294,18 +294,18 @@ namespace BenchmarkDemo
                     trans.Origin += offsetPosition;
                     LocalCreateRigidBody(mass, trans, blockShape);
 
-                    rotation += (2.0f * (float)Math.PI) / rotSize;
+                    rotation += (2.0f * (double)Math.PI) / rotSize;
                 }
 
                 positionY += boxSize.Y * 2.0f;
-                rotation += (float)Math.PI / rotSize;
+                rotation += (double)Math.PI / rotSize;
             }
         }
 
-        private void CreateStack(Vector3 startPosition, int widthX, int height, int widthZ, float offset,
-            float widthSpacingFactor, float mass, CollisionShape shape)
+        private void CreateStack(Vector3 startPosition, int widthX, int height, int widthZ, double offset,
+            double widthSpacingFactor, double mass, CollisionShape shape)
         {
-            float widthSpacing = 1;
+            double widthSpacing = 1;
             for (int y = 0; y < height; y++)
             {
                 for (int z = 0; z < widthZ; z++)
@@ -320,7 +320,7 @@ namespace BenchmarkDemo
             }
         }
 
-        private RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape)
+        private RigidBody LocalCreateRigidBody(double mass, Matrix startTransform, CollisionShape shape)
         {
             RigidBody body = PhysicsHelper.CreateBody(mass, startTransform, shape, World);
             body.ContactProcessingThreshold = defaultContactProcessingThreshold;

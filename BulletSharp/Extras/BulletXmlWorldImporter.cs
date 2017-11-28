@@ -85,7 +85,7 @@ namespace BulletSharp
                     {
                         using (var reader = new BulletReader(stream))
                         {
-                            long namePtr = reader.ReadPtr(CollisionShapeFloatData.Offset("Name"));
+                            long namePtr = reader.ReadPtr(CollisionShapeData.Offset("Name"));
                             if (namePtr != 0)
                             {
                                 byte[] nameData = _pointerLookup[namePtr];
@@ -113,8 +113,8 @@ namespace BulletSharp
 
         private void DeSerializeCollisionShapeData(XmlElement parent, BulletWriter writer)
         {
-            SetIntValue(writer, parent["m_shapeType"], CollisionShapeFloatData.Offset("ShapeType"));
-            writer.Write(0, CollisionShapeFloatData.Offset("Name"));
+            SetIntValue(writer, parent["m_shapeType"], CollisionShapeData.Offset("ShapeType"));
+            writer.Write(0, CollisionShapeData.Offset("Name"));
         }
 
         private void DeSerializeCompoundShapeChildData(XmlElement element)
@@ -179,7 +179,7 @@ namespace BulletSharp
         private void DeSerializeConvexHullShapeData(XmlElement element)
         {
             int ptr = int.Parse(element.GetAttribute("pointer"));
-            byte[] convexHullData = new byte[Marshal.SizeOf(typeof(ConvexHullShapeFloatData))];
+            byte[] convexHullData = new byte[Marshal.SizeOf(typeof(ConvexHullShapeData))];
 
             using (var stream = new MemoryStream(convexHullData))
             {
@@ -192,9 +192,9 @@ namespace BulletSharp
                     }
                     DeSerializeConvexInternalShapeData(node as XmlElement, writer);
 
-                    SetPointerValue(writer, element["m_unscaledPointsFloatPtr"], ConvexHullShapeFloatData.Offset("UnscaledPointsFloatPtr"));
-                    SetPointerValue(writer, element["m_unscaledPointsFloatPtr"], ConvexHullShapeFloatData.Offset("UnscaledPointsFloatPtr"));
-                    SetIntValue(writer, element["m_numUnscaledPoints"], ConvexHullShapeFloatData.Offset("NumUnscaledPoints"));
+                    SetPointerValue(writer, element["m_unscaledPointsFloatPtr"], ConvexHullShapeData.Offset("UnscaledPointsFloatPtr"));
+                    SetPointerValue(writer, element["m_unscaledPointsDoublePtr"], ConvexHullShapeData.Offset("UnscaledPointsDoublePtr"));
+                    SetIntValue(writer, element["m_numUnscaledPoints"], ConvexHullShapeData.Offset("NumUnscaledPoints"));
                 }
             }
 
@@ -205,7 +205,7 @@ namespace BulletSharp
         private void DeSerializeConvexInternalShapeData(XmlElement element)
         {
             int ptr = int.Parse(element.GetAttribute("pointer"));
-            byte[] convexShapeData = new byte[Marshal.SizeOf(typeof(ConvexInternalShapeFloatData))];
+            byte[] convexShapeData = new byte[Marshal.SizeOf(typeof(ConvexInternalShapeData))];
 
             using (var stream = new MemoryStream(convexShapeData))
             {
@@ -228,9 +228,9 @@ namespace BulletSharp
             }
             DeSerializeCollisionShapeData(node as XmlElement, writer);
 
-            SetFloatValue(writer, element["m_collisionMargin"], ConvexInternalShapeFloatData.Offset("CollisionMargin"));
-            SetVector4Value(writer, element["m_localScaling"], ConvexInternalShapeFloatData.Offset("LocalScaling"));
-            SetVector4Value(writer, element["m_implicitShapeDimensions"], ConvexInternalShapeFloatData.Offset("ImplicitShapeDimensions"));
+            SetFloatValue(writer, element["m_collisionMargin"], ConvexInternalShapeData.Offset("CollisionMargin"));
+            SetVector4Value(writer, element["m_localScaling"], ConvexInternalShapeData.Offset("LocalScaling"));
+            SetVector4Value(writer, element["m_implicitShapeDimensions"], ConvexInternalShapeData.Offset("ImplicitShapeDimensions"));
         }
 
         private void DeSerializeDynamicsWorldData(XmlElement element)
@@ -349,7 +349,7 @@ namespace BulletSharp
         private void DeSerializeStaticPlaneShapeData(XmlElement element)
         {
             int ptr = int.Parse(element.GetAttribute("pointer"));
-            byte[] convexShape = new byte[Marshal.SizeOf(typeof(StaticPlaneShapeFloatData))];
+            byte[] convexShape = new byte[Marshal.SizeOf(typeof(StaticPlaneShapeData))];
 
             using (var stream = new MemoryStream(convexShape))
             {
@@ -362,9 +362,9 @@ namespace BulletSharp
                     }
                     DeSerializeCollisionShapeData(node as XmlElement, writer);
 
-                    SetVector4Value(writer, element["m_localScaling"], StaticPlaneShapeFloatData.Offset("LocalScaling"));
-                    SetVector4Value(writer, element["m_planeNormal"], StaticPlaneShapeFloatData.Offset("PlaneNormal"));
-                    SetFloatValue(writer, element["m_planeConstant"], StaticPlaneShapeFloatData.Offset("PlaneConstant"));
+                    SetVector4Value(writer, element["m_localScaling"], StaticPlaneShapeData.Offset("LocalScaling"));
+                    SetVector4Value(writer, element["m_planeNormal"], StaticPlaneShapeData.Offset("PlaneNormal"));
+                    SetFloatValue(writer, element["m_planeConstant"], StaticPlaneShapeData.Offset("PlaneConstant"));
                 }
             }
 

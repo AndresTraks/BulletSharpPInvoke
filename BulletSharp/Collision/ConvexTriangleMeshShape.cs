@@ -20,7 +20,7 @@ namespace BulletSharp
 		}
 
 		public void CalculatePrincipalAxisTransform(Matrix principal, out Vector3 inertia,
-			out float volume)
+			out double volume)
 		{
 			btConvexTriangleMeshShape_calculatePrincipalAxisTransform(Native, ref principal,
 				out inertia, out volume);

@@ -2,7 +2,7 @@ namespace DemoFramework.Meshes
 {
     public static class Taru
     {
-        public static float[] Vertices =
+        public static double[] Vertices =
         {
             1.08664f,-1.99237f,0.0f,
             0.768369f,-1.99237f,-0.768369f,

@@ -91,28 +91,28 @@ namespace BulletSharp
 			btSubSimplexClosestResult_setBarycentricCoordinates(Native);
 		}
 
-		public void SetBarycentricCoordinates(float a)
+		public void SetBarycentricCoordinates(double a)
 		{
 			btSubSimplexClosestResult_setBarycentricCoordinates2(Native, a);
 		}
 
-		public void SetBarycentricCoordinates(float a, float b)
+		public void SetBarycentricCoordinates(double a, double b)
 		{
 			btSubSimplexClosestResult_setBarycentricCoordinates3(Native, a, b);
 		}
 
-		public void SetBarycentricCoordinates(float a, float b, float c)
+		public void SetBarycentricCoordinates(double a, double b, double c)
 		{
 			btSubSimplexClosestResult_setBarycentricCoordinates4(Native, a, b, c);
 		}
 
-		public void SetBarycentricCoordinates(float a, float b, float c, float d)
+		public void SetBarycentricCoordinates(double a, double b, double c, double d)
 		{
 			btSubSimplexClosestResult_setBarycentricCoordinates5(Native, a, b, c,
 				d);
 		}
 		/*
-		public FloatArray BarycentricCoords
+		public doubleArray BarycentricCoords
 		{
 			get { return btSubSimplexClosestResult_getBarycentricCoords(Native); }
 		}
@@ -253,7 +253,7 @@ namespace BulletSharp
 			return btVoronoiSimplexSolver_inSimplex(Native, ref w);
 		}
 
-		public float MaxVertex()
+		public double MaxVertex()
 		{
 			return btVoronoiSimplexSolver_maxVertex(Native);
 		}
@@ -330,7 +330,7 @@ namespace BulletSharp
 			set => btVoronoiSimplexSolver_setCachedValidClosest(Native, value);
 		}
 
-		public float EqualVertexThreshold
+		public double EqualVertexThreshold
 		{
 			get => btVoronoiSimplexSolver_getEqualVertexThreshold(Native);
 			set => btVoronoiSimplexSolver_setEqualVertexThreshold(Native, value);

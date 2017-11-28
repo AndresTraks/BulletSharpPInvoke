@@ -57,7 +57,7 @@ namespace BulletSharp
 		}
 
 		public void GetInfo2NonVirtual(ConstraintInfo2 info, Matrix transA, Matrix transB,
-			Vector3 linVelA, Vector3 linVelB, float rbAinvMass, float rbBinvMass)
+			Vector3 linVelA, Vector3 linVelB, double rbAinvMass, double rbBinvMass)
 		{
 			btSliderConstraint_getInfo2NonVirtual(Native, info._native, ref transA,
 				ref transB, ref linVelA, ref linVelB, rbAinvMass, rbBinvMass);
@@ -103,9 +103,9 @@ namespace BulletSharp
 			}
 		}
 
-		public float AngularDepth => btSliderConstraint_getAngDepth(Native);
+		public double AngularDepth => btSliderConstraint_getAngDepth(Native);
 
-		public float AngularPosition => btSliderConstraint_getAngularPos(Native);
+		public double AngularPosition => btSliderConstraint_getAngularPos(Native);
 
 		public Matrix CalculatedTransformA
 		{
@@ -127,37 +127,37 @@ namespace BulletSharp
 			}
 		}
 
-		public float DampingDirAngular
+		public double DampingDirAngular
 		{
 			get => btSliderConstraint_getDampingDirAng(Native);
 			set => btSliderConstraint_setDampingDirAng(Native, value);
 		}
 
-		public float DampingDirLinear
+		public double DampingDirLinear
 		{
 			get => btSliderConstraint_getDampingDirLin(Native);
 			set => btSliderConstraint_setDampingDirLin(Native, value);
 		}
 
-		public float DampingLimAngular
+		public double DampingLimAngular
 		{
 			get => btSliderConstraint_getDampingLimAng(Native);
 			set => btSliderConstraint_setDampingLimAng(Native, value);
 		}
 
-		public float DampingLimLinear
+		public double DampingLimLinear
 		{
 			get => btSliderConstraint_getDampingLimLin(Native);
 			set => btSliderConstraint_setDampingLimLin(Native, value);
 		}
 
-		public float DampingOrthoAngular
+		public double DampingOrthoAngular
 		{
 			get => btSliderConstraint_getDampingOrthoAng(Native);
 			set => btSliderConstraint_setDampingOrthoAng(Native, value);
 		}
 
-		public float DampingOrthoLinear
+		public double DampingOrthoLinear
 		{
 			get => btSliderConstraint_getDampingOrthoLin(Native);
 			set => btSliderConstraint_setDampingOrthoLin(Native, value);
@@ -184,29 +184,29 @@ namespace BulletSharp
 			}
 		}
 
-		public float LinearDepth => btSliderConstraint_getLinDepth(Native);
+		public double LinearDepth => btSliderConstraint_getLinDepth(Native);
 
-		public float LinearPosition => btSliderConstraint_getLinearPos(Native);
+		public double LinearPosition => btSliderConstraint_getLinearPos(Native);
 
-		public float LowerAngularLimit
+		public double LowerAngularLimit
 		{
 			get => btSliderConstraint_getLowerAngLimit(Native);
 			set => btSliderConstraint_setLowerAngLimit(Native, value);
 		}
 
-		public float LowerLinearLimit
+		public double LowerLinearLimit
 		{
 			get => btSliderConstraint_getLowerLinLimit(Native);
 			set => btSliderConstraint_setLowerLinLimit(Native, value);
 		}
 
-		public float MaxAngMotorForce
+		public double MaxAngMotorForce
 		{
 			get => btSliderConstraint_getMaxAngMotorForce(Native);
 			set => btSliderConstraint_setMaxAngMotorForce(Native, value);
 		}
 
-		public float MaxLinearMotorForce
+		public double MaxLinearMotorForce
 		{
 			get => btSliderConstraint_getMaxLinMotorForce(Native);
 			set => btSliderConstraint_setMaxLinMotorForce(Native, value);
@@ -224,73 +224,73 @@ namespace BulletSharp
 			set => btSliderConstraint_setPoweredLinMotor(Native, value);
 		}
 
-		public float RestitutionDirAngular
+		public double RestitutionDirAngular
 		{
 			get => btSliderConstraint_getRestitutionDirAng(Native);
 			set => btSliderConstraint_setRestitutionDirAng(Native, value);
 		}
 
-		public float RestitutionDirLinear
+		public double RestitutionDirLinear
 		{
 			get => btSliderConstraint_getRestitutionDirLin(Native);
 			set => btSliderConstraint_setRestitutionDirLin(Native, value);
 		}
 
-		public float RestitutionLimAngular
+		public double RestitutionLimAngular
 		{
 			get => btSliderConstraint_getRestitutionLimAng(Native);
 			set => btSliderConstraint_setRestitutionLimAng(Native, value);
 		}
 
-		public float RestitutionLimLinear
+		public double RestitutionLimLinear
 		{
 			get => btSliderConstraint_getRestitutionLimLin(Native);
 			set => btSliderConstraint_setRestitutionLimLin(Native, value);
 		}
 
-		public float RestitutionOrthoAngular
+		public double RestitutionOrthoAngular
 		{
 			get => btSliderConstraint_getRestitutionOrthoAng(Native);
 			set => btSliderConstraint_setRestitutionOrthoAng(Native, value);
 		}
 
-		public float RestitutionOrthoLinear
+		public double RestitutionOrthoLinear
 		{
 			get => btSliderConstraint_getRestitutionOrthoLin(Native);
 			set => btSliderConstraint_setRestitutionOrthoLin(Native, value);
 		}
 
-		public float SoftnessDirAngular
+		public double SoftnessDirAngular
 		{
 			get => btSliderConstraint_getSoftnessDirAng(Native);
 			set => btSliderConstraint_setSoftnessDirAng(Native, value);
 		}
 
-		public float SoftnessDirLinear
+		public double SoftnessDirLinear
 		{
 			get => btSliderConstraint_getSoftnessDirLin(Native);
 			set => btSliderConstraint_setSoftnessDirLin(Native, value);
 		}
 
-		public float SoftnessLimAngular
+		public double SoftnessLimAngular
 		{
 			get => btSliderConstraint_getSoftnessLimAng(Native);
 			set => btSliderConstraint_setSoftnessLimAng(Native, value);
 		}
 
-		public float SoftnessLimLinear
+		public double SoftnessLimLinear
 		{
 			get => btSliderConstraint_getSoftnessLimLin(Native);
 			set => btSliderConstraint_setSoftnessLimLin(Native, value);
 		}
 
-		public float SoftnessOrthoAngular
+		public double SoftnessOrthoAngular
 		{
 			get => btSliderConstraint_getSoftnessOrthoAng(Native);
 			set => btSliderConstraint_setSoftnessOrthoAng(Native, value);
 		}
 
-		public float SoftnessOrthoLinear
+		public double SoftnessOrthoLinear
 		{
 			get => btSliderConstraint_getSoftnessOrthoLin(Native);
 			set => btSliderConstraint_setSoftnessOrthoLin(Native, value);
@@ -300,25 +300,25 @@ namespace BulletSharp
 
 		public bool SolveLinearLimit => btSliderConstraint_getSolveLinLimit(Native);
 
-		public float TargetAngularMotorVelocity
+		public double TargetAngularMotorVelocity
 		{
 			get => btSliderConstraint_getTargetAngMotorVelocity(Native);
 			set => btSliderConstraint_setTargetAngMotorVelocity(Native, value);
 		}
 
-		public float TargetLinearMotorVelocity
+		public double TargetLinearMotorVelocity
 		{
 			get => btSliderConstraint_getTargetLinMotorVelocity(Native);
 			set => btSliderConstraint_setTargetLinMotorVelocity(Native, value);
 		}
 
-		public float UpperAngularLimit
+		public double UpperAngularLimit
 		{
 			get => btSliderConstraint_getUpperAngLimit(Native);
 			set => btSliderConstraint_setUpperAngLimit(Native, value);
 		}
 
-		public float UpperLinearLimit
+		public double UpperLinearLimit
 		{
 			get => btSliderConstraint_getUpperLinLimit(Native);
 			set => btSliderConstraint_setUpperLinLimit(Native, value);
@@ -333,7 +333,7 @@ namespace BulletSharp
 		public bool UseLinearReferenceFrameA => btSliderConstraint_getUseLinearReferenceFrameA(Native);
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential)]
 	internal struct SliderConstraintFloatData
 	{
 		public TypedConstraintFloatData TypedConstraintData;
@@ -344,8 +344,24 @@ namespace BulletSharp
 		public float AngularUpperLimit;
 		public float AngularLowerLimit;
 		public int UseLinearReferenceFrameA;
+        public int UseOffsetForConstraintFrame;
+
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(SliderConstraintFloatData), fieldName).ToInt32(); }
+    }
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct SliderConstraintdoubleData
+	{
+		public TypedConstraintDoubleData TypedConstraintData;
+		public TransformDoubleData RigidBodyAFrame;
+		public TransformDoubleData RigidBodyBFrame;
+		public double LinearUpperLimit;
+		public double LinearLowerLimit;
+		public double AngularUpperLimit;
+		public double AngularLowerLimit;
+		public int UseLinearReferenceFrameA;
 		public int UseOffsetForConstraintFrame;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(SliderConstraintFloatData), fieldName).ToInt32(); }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(SliderConstraintdoubleData), fieldName).ToInt32(); }
 	}
 }

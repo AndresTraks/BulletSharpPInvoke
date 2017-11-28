@@ -64,21 +64,21 @@ namespace BulletSharp
 			return value;
 		}
 
-		public void ProjectRef(ref Matrix trans, ref Vector3 dir, out float minProj, out float maxProj,
+		public void ProjectRef(ref Matrix trans, ref Vector3 dir, out double minProj, out double maxProj,
 			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
 		{
 			btConvexShape_project(Native, ref trans, ref dir, out minProj, out maxProj,
 				out witnesPtMin, out witnesPtMax);
 		}
 
-		public void Project(Matrix trans, Vector3 dir, out float minProj, out float maxProj,
+		public void Project(Matrix trans, Vector3 dir, out double minProj, out double maxProj,
 			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
 		{
 			btConvexShape_project(Native, ref trans, ref dir, out minProj, out maxProj,
 				out witnesPtMin, out witnesPtMax);
 		}
 
-		public float MarginNonVirtual => btConvexShape_getMarginNonVirtual(Native);
+		public double MarginNonVirtual => btConvexShape_getMarginNonVirtual(Native);
 
 		public int NumPreferredPenetrationDirections => btConvexShape_getNumPreferredPenetrationDirections(Native);
 	}

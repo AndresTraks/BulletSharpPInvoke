@@ -9,7 +9,7 @@ namespace BulletSharp
 		{
 		}
 		/*
-		public float SolveGroupCacheFriendlyFinish(CollisionObject bodies, int numBodies,
+		public double SolveGroupCacheFriendlyFinish(CollisionObject bodies, int numBodies,
 			ContactSolverInfo infoGlobal)
 		{
 			return btMultiBodyConstraintSolver_solveGroupCacheFriendlyFinish(Native,

@@ -16,12 +16,12 @@ namespace BulletSharp
 		{
 		}
 
-		public ConvexHullShape(float[] points)
-			: this(points, points.Length / 3, 3 * sizeof(float))
+		public ConvexHullShape(double[] points)
+			: this(points, points.Length / 3, 3 * sizeof(double))
 		{
 		}
 
-		public ConvexHullShape(float[] points, int numPoints, int stride = 3 * sizeof(float))
+		public ConvexHullShape(double[] points, int numPoints, int stride = 3 * sizeof(double))
 			: base(btConvexHullShape_new4(points, numPoints, stride))
 		{
 		}
@@ -109,14 +109,14 @@ namespace BulletSharp
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct ConvexHullShapeFloatData
+	internal struct ConvexHullShapeData
 	{
-		public ConvexInternalShapeFloatData ConvexInternalShapeData;
+		public ConvexInternalShapeData ConvexInternalShapeData;
 		public IntPtr UnscaledPointsFloatPtr;
 		public IntPtr UnscaledPointsDoublePtr;
 		public int NumUnscaledPoints;
 		public int Padding;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConvexHullShapeFloatData), fieldName).ToInt32(); }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConvexHullShapeData), fieldName).ToInt32(); }
 	}
 }

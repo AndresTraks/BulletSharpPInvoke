@@ -63,7 +63,7 @@ namespace BulletSharp
 			return _constraints[constraintIndex];
 		}
 
-		public void IntegrateTransforms(float timeStep)
+		public void IntegrateTransforms(double timeStep)
 		{
 			btMultiBodyDynamicsWorld_integrateTransforms(Native, timeStep);
 		}

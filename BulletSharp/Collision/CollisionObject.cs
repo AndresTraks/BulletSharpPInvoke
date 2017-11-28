@@ -171,7 +171,7 @@ namespace BulletSharp
 				frictionMode);
 		}
 
-		public void SetContactStiffnessAndDamping(float stiffness, float damping)
+		public void SetContactStiffnessAndDamping(double stiffness, double damping)
 		{
 			btCollisionObject_setContactStiffnessAndDamping(Native, stiffness, damping);
 		}
@@ -213,15 +213,15 @@ namespace BulletSharp
 			}
 		}
 
-		public float CcdMotionThreshold
+		public double CcdMotionThreshold
 		{
 			get => btCollisionObject_getCcdMotionThreshold(Native);
 			set => btCollisionObject_setCcdMotionThreshold(Native, value);
 		}
 
-		public float CcdSquareMotionThreshold => btCollisionObject_getCcdSquareMotionThreshold(Native);
+		public double CcdSquareMotionThreshold => btCollisionObject_getCcdSquareMotionThreshold(Native);
 
-		public float CcdSweptSphereRadius
+		public double CcdSweptSphereRadius
 		{
 			get => btCollisionObject_getCcdSweptSphereRadius(Native);
 			set => btCollisionObject_setCcdSweptSphereRadius(Native, value);
@@ -249,23 +249,23 @@ namespace BulletSharp
 			set => btCollisionObject_setCompanionId(Native, value);
 		}
 
-		public float ContactDamping => btCollisionObject_getContactDamping(Native);
+		public double ContactDamping => btCollisionObject_getContactDamping(Native);
 
-		public float ContactProcessingThreshold
+		public double ContactProcessingThreshold
 		{
 			get => btCollisionObject_getContactProcessingThreshold(Native);
 			set => btCollisionObject_setContactProcessingThreshold(Native, value);
 		}
 
-		public float ContactStiffness => btCollisionObject_getContactStiffness(Native);
+		public double ContactStiffness => btCollisionObject_getContactStiffness(Native);
 
-		public float DeactivationTime
+		public double DeactivationTime
 		{
 			get => btCollisionObject_getDeactivationTime(Native);
 			set => btCollisionObject_setDeactivationTime(Native, value);
 		}
 
-		public float Friction
+		public double Friction
 		{
 			get => btCollisionObject_getFriction(Native);
 			set => btCollisionObject_setFriction(Native, value);
@@ -273,7 +273,7 @@ namespace BulletSharp
 
 		public bool HasContactResponse => btCollisionObject_hasContactResponse(Native);
 
-		public float HitFraction
+		public double HitFraction
 		{
 			get => btCollisionObject_getHitFraction(Native);
 			set => btCollisionObject_setHitFraction(Native, value);
@@ -328,19 +328,19 @@ namespace BulletSharp
 
 		public bool IsStaticOrKinematicObject => btCollisionObject_isStaticOrKinematicObject(Native);
 
-		public float Restitution
+		public double Restitution
 		{
 			get => btCollisionObject_getRestitution(Native);
 			set => btCollisionObject_setRestitution(Native, value);
 		}
 
-		public float RollingFriction
+		public double RollingFriction
 		{
 			get => btCollisionObject_getRollingFriction(Native);
 			set => btCollisionObject_setRollingFriction(Native, value);
 		}
 
-		public float SpinningFriction
+		public double SpinningFriction
 		{
 			get => btCollisionObject_getSpinningFriction(Native);
 			set => btCollisionObject_setSpinningFriction(Native, value);

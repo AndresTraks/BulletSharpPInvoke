@@ -55,7 +55,7 @@ namespace DemoFramework
             }
         }
 
-        public bool Update(float frameDelta)
+        public bool Update(double frameDelta)
         {
             if (!_mouseController.Update() && _input.KeysDown.Count == 0)
             {
@@ -69,7 +69,7 @@ namespace DemoFramework
             if (_input.KeysDown.Count != 0)
             {
                 Vector3 relDirection = frameDelta * direction;
-                float flySpeed = _input.KeysDown.Contains(Keys.ShiftKey) ? 15 : 5;
+                double flySpeed = _input.KeysDown.Contains(Keys.ShiftKey) ? 15 : 5;
 
                 if (_input.KeysDown.Contains(Keys.W))
                 {
@@ -103,9 +103,9 @@ namespace DemoFramework
         }
 
         // vertices must be normalized
-        private static float Angle(Vector3 v1, Vector3 v2)
+        private static double Angle(Vector3 v1, Vector3 v2)
         {
-            return (float)Math.Acos(Vector3.Dot(v1, v2));
+            return (double)Math.Acos(Vector3.Dot(v1, v2));
         }
     }
 }

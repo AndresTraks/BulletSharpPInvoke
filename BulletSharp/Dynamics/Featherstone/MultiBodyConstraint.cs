@@ -36,32 +36,32 @@ namespace BulletSharp
 			btMultiBodyConstraint_finalizeMultiDof(Native);
 		}
 
-		public float GetAppliedImpulse(int dof)
+		public double GetAppliedImpulse(int dof)
 		{
 			return btMultiBodyConstraint_getAppliedImpulse(Native, dof);
 		}
 
-		public float GetPosition(int row)
+		public double GetPosition(int row)
 		{
 			return btMultiBodyConstraint_getPosition(Native, row);
 		}
 
-		public void InternalSetAppliedImpulse(int dof, float appliedImpulse)
+		public void InternalSetAppliedImpulse(int dof, double appliedImpulse)
 		{
 			btMultiBodyConstraint_internalSetAppliedImpulse(Native, dof, appliedImpulse);
 		}
 		/*
-		public float JacobianA(int row)
+		public double JacobianA(int row)
 		{
 			return btMultiBodyConstraint_jacobianA(Native, row);
 		}
 
-		public float JacobianB(int row)
+		public double JacobianB(int row)
 		{
 			return btMultiBodyConstraint_jacobianB(Native, row);
 		}
 		*/
-		public void SetPosition(int row, float pos)
+		public void SetPosition(int row, double pos)
 		{
 			btMultiBodyConstraint_setPosition(Native, row, pos);
 		}
@@ -77,7 +77,7 @@ namespace BulletSharp
 
 		public bool IsUnilateral => btMultiBodyConstraint_isUnilateral(Native);
 
-		public float MaxAppliedImpulse
+		public double MaxAppliedImpulse
 		{
 			get => btMultiBodyConstraint_getMaxAppliedImpulse(Native);
 			set => btMultiBodyConstraint_setMaxAppliedImpulse(Native, value);

@@ -29,7 +29,7 @@ namespace ConstraintDemo
 
     internal sealed class ConstraintDemoSimulation : ISimulation
     {
-        private const float CubeHalfExtent = 1.0f;
+        private const double CubeHalfExtent = 1.0f;
         private BoxShape _cubeShape;
 
         public ConstraintDemoSimulation()
@@ -78,10 +78,10 @@ namespace ConstraintDemo
 
         private void CreateGears()
         {
-            const float theta = (float)Math.PI / 4.0f;
-            float radiusA = 2 - (float)Math.Tan(theta);
-            float radiusB = 1 / (float)Math.Cos(theta);
-            float ratio = radiusB / radiusA;
+            const double theta = (double)Math.PI / 4.0f;
+            double radiusA = 2 - (double)Math.Tan(theta);
+            double radiusB = 1 / (double)Math.Cos(theta);
+            double ratio = radiusB / radiusA;
 
             Matrix transform = Matrix.Translation(-8, 1, -8);
             RigidBody gearA = CreateGear(radiusA, transform);
@@ -105,9 +105,9 @@ namespace ConstraintDemo
             World.AddConstraint(gear, true);
         }
 
-        private RigidBody CreateGear(float radius, Matrix transform)
+        private RigidBody CreateGear(double radius, Matrix transform)
         {
-            const float mass = 6.28f;
+            const double mass = 6.28f;
 
             var shape = new CompoundShape();
             var axle = new CylinderShape(0.2f, 0.25f, 0.2f);
@@ -122,7 +122,7 @@ namespace ConstraintDemo
 
         private void CreateHingedBoxes()
         {
-            const float mass = 1.0f;
+            const double mass = 1.0f;
 
             RigidBody body0 = PhysicsHelper.CreateBody(mass, Matrix.Translation(0, 24, 0), _cubeShape, World);
             RigidBody body1 = PhysicsHelper.CreateBody(mass, Matrix.Translation(2 * CubeHalfExtent, 24, 0), _cubeShape, World);
@@ -147,7 +147,7 @@ namespace ConstraintDemo
         // Hinge connected to the world, with motor
         private void CreateMotorHinge()
         {
-            const float mass = 1.0f;
+            const double mass = 1.0f;
             RigidBody body = PhysicsHelper.CreateBody(mass, Matrix.Translation(0, 20, 0), _cubeShape, World);
 
             Vector3 pivotInA = new Vector3(CubeHalfExtent, -CubeHalfExtent, -CubeHalfExtent);
@@ -156,10 +156,10 @@ namespace ConstraintDemo
             var hinge = new HingeConstraint(body, pivotInA, axisInA);
 
             //use zero targetVelocity and a small maxMotorImpulse to simulate joint friction
-            //const float targetVelocity = 0;
-            //const float maxMotorImpulse = 0.01f;
-            const float targetVelocity = 1.0f;
-            const float maxMotorImpulse = 1.0f;
+            //const double targetVelocity = 0;
+            //const double maxMotorImpulse = 0.01f;
+            const double targetVelocity = 1.0f;
+            const double maxMotorImpulse = 1.0f;
             hinge.EnableAngularMotor(true, targetVelocity, maxMotorImpulse);
             hinge.DebugDrawSize = 5;
             World.AddConstraint(hinge);
@@ -174,8 +174,8 @@ namespace ConstraintDemo
             Vector3 axisInA = new Vector3(0, 0, 1);
 
             var hinge = new HingeConstraint(body, pivotInA, axisInA);
-            const float targetVelocity = -1.0f;
-            const float maxMotorImpulse = 1.65f;
+            const double targetVelocity = -1.0f;
+            const double maxMotorImpulse = 1.65f;
             hinge.EnableAngularMotor(true, targetVelocity, maxMotorImpulse);
             hinge.DebugDrawSize = 5;
             World.AddConstraint(hinge);
@@ -183,7 +183,7 @@ namespace ConstraintDemo
 
         private void CreateSlider()
         {
-            const float mass = 1.0f;
+            const double mass = 1.0f;
 
             RigidBody bodyA = PhysicsHelper.CreateBody(mass, Matrix.Translation(-20, 0, 15), _cubeShape, World);
             bodyA.ActivationState = ActivationState.DisableDeactivation;
@@ -200,8 +200,8 @@ namespace ConstraintDemo
                 UpperLinearLimit = -5.0f,
                 //LowerLinearLimit = -10.0f,
                 //UpperLinearLimit = -10.0f,
-                LowerAngularLimit = -(float)Math.PI / 3.0f,
-                UpperAngularLimit = (float)Math.PI / 3.0f,
+                LowerAngularLimit = -(double)Math.PI / 3.0f,
+                UpperAngularLimit = (double)Math.PI / 3.0f,
                 DebugDrawSize = 5.0f
             };
             World.AddConstraint(slider, true);
@@ -210,10 +210,10 @@ namespace ConstraintDemo
         // Create a slider using the generic D6 constraint
         private void CreateD6Slider()
         {
-            const float mass = 1.0f;
+            const double mass = 1.0f;
 
             Vector3 sliderAxis = Vector3.UnitX;
-            const float angle = (float)Math.PI / 4;
+            const double angle = (double)Math.PI / 4;
             Matrix trans = Matrix.RotationAxis(sliderAxis, angle) * Matrix.Translation(0, 10, 0);
             RigidBody body = PhysicsHelper.CreateBody(mass, trans, _cubeShape, World);
             body.ActivationState = ActivationState.DisableDeactivation;
@@ -238,7 +238,7 @@ namespace ConstraintDemo
                 //AngularUpperLimit = new Vector3(1.5f,0,0),
                 //AngularLowerLimit = new Vector3(0,0,0),
                 //AngularUpperLimit = new Vector3(0,0,0),
-                AngularLowerLimit = new Vector3((float)-Math.PI, 0, 0),
+                AngularLowerLimit = new Vector3((double)-Math.PI, 0, 0),
                 AngularUpperLimit = new Vector3(1.5f, 0, 0),
                 DebugDrawSize = 5
             };
@@ -253,7 +253,7 @@ namespace ConstraintDemo
         // Create a door using a hinge constraint attached to the world
         private void CreateDoor()
         {
-            const float mass = 1.0f;
+            const double mass = 1.0f;
 
             var doorShape = new BoxShape(2.0f, 5.0f, 0.2f);
             RigidBody doorBody = PhysicsHelper.CreateBody(mass, Matrix.Translation(-5.0f, -2.0f, 0.0f), doorShape, World);
@@ -265,21 +265,21 @@ namespace ConstraintDemo
             var hinge = new HingeConstraint(doorBody, pivotA, axisA);
             hinge.DebugDrawSize = 5;
 
-            //hinge.SetLimit(0.0f, (float)Math.PI / 2);
+            //hinge.SetLimit(0.0f, (double)Math.PI / 2);
             // test problem values
-            //hinge.SetLimit(-(float)Math.PI, (float)Math.PI * 0.8f);
+            //hinge.SetLimit(-(double)Math.PI, (double)Math.PI * 0.8f);
             //hinge.SetLimit(1, -1);
-            //hinge.SetLimit(-(float)Math.PI * 0.8f, (float)Math.PI);
-            //hinge.SetLimit(-(float)Math.PI * 0.8f, (float)Math.PI, 0.9f, 0.3f, 0.0f);
-            //hinge.SetLimit(-(float)Math.PI * 0.8f, (float)Math.PI, 0.9f, 0.01f, 0.0f); // "sticky limits"
-            hinge.SetLimit(-(float)Math.PI * 0.25f, (float)Math.PI * 0.25f);
+            //hinge.SetLimit(-(double)Math.PI * 0.8f, (double)Math.PI);
+            //hinge.SetLimit(-(double)Math.PI * 0.8f, (double)Math.PI, 0.9f, 0.3f, 0.0f);
+            //hinge.SetLimit(-(double)Math.PI * 0.8f, (double)Math.PI, 0.9f, 0.01f, 0.0f); // "sticky limits"
+            hinge.SetLimit(-(double)Math.PI * 0.25f, (double)Math.PI * 0.25f);
             //hinge.SetLimit(0, 0);
             World.AddConstraint(hinge);
         }
 
         private void CreateGeneric6DofConstraint()
         {
-            const float mass = 1.0f;
+            const double mass = 1.0f;
 
             RigidBody fixedBody = PhysicsHelper.CreateBody(0, Matrix.Translation(10, 6, 0), _cubeShape, World);
             fixedBody.ActivationState = ActivationState.DisableDeactivation;
@@ -300,17 +300,17 @@ namespace ConstraintDemo
                 //LinearLowerLimit = new Vector3(0, 0, 0),
                 //LinearUpperLimit = new Vector3(0, 0, 0),
 
-                AngularLowerLimit = new Vector3(-(float)Math.PI / 4, -0.75f, -(float)Math.PI * 0.4f),
-                AngularUpperLimit = new Vector3((float)Math.PI / 4, 0.75f, (float)Math.PI * 0.4f),
-                //AngularLowerLimit = new Vector3(0, (float)Math.PI * 0.9f, 0),
-                //AngularUpperLimit = new Vector3(0, -(float)Math.PI * 0.9f, 0),
-                //AngularLowerLimit = new Vector3(0, 0, -(float)Math.PI),
-                //AngularUpperLimit = new Vector3(0, 0, (float)Math.PI),
+                AngularLowerLimit = new Vector3(-(double)Math.PI / 4, -0.75f, -(double)Math.PI * 0.4f),
+                AngularUpperLimit = new Vector3((double)Math.PI / 4, 0.75f, (double)Math.PI * 0.4f),
+                //AngularLowerLimit = new Vector3(0, (double)Math.PI * 0.9f, 0),
+                //AngularUpperLimit = new Vector3(0, -(double)Math.PI * 0.9f, 0),
+                //AngularLowerLimit = new Vector3(0, 0, -(double)Math.PI),
+                //AngularUpperLimit = new Vector3(0, 0, (double)Math.PI),
 
-                //AngularLowerLimit = new Vector3(0, -0.75f, (float)Math.PI * 0.8f),
-                //AngularUpperLimit = new Vector3(0, 0.75f, -(float)Math.PI * 0.8f),
-                //AngularLowerLimit = new Vector3(0, -(float)Math.PI * 0.8f, (float)Math.PI * 1.98f),
-                //AngularUpperLimit = new Vector3(0, (float)Math.PI * 0.8f, -(float)Math.PI * 1.98f),
+                //AngularLowerLimit = new Vector3(0, -0.75f, (double)Math.PI * 0.8f),
+                //AngularUpperLimit = new Vector3(0, 0.75f, -(double)Math.PI * 0.8f),
+                //AngularLowerLimit = new Vector3(0, -(double)Math.PI * 0.8f, (double)Math.PI * 1.98f),
+                //AngularUpperLimit = new Vector3(0, (double)Math.PI * 0.8f, -(double)Math.PI * 1.98f),
 
                 //AngularLowerLimit = new Vector3(-0.75f, -0.5f, -0.5f),
                 //AngularUpperLimit = new Vector3(0.75f, 0.5f, 0.5f),
@@ -336,15 +336,15 @@ namespace ConstraintDemo
             RigidBody bodyB = PhysicsHelper.CreateStaticBody(Matrix.Translation(-10, -5, 0), _cubeShape, World);
             //bodyB = PhysicsHelper.CreateBody(1.0f, Matrix.Translation(-10, -5, 0), cubeShape, World);
 
-            Matrix frameInA = Matrix.RotationYawPitchRoll(0, 0, (float)Math.PI / 2);
+            Matrix frameInA = Matrix.RotationYawPitchRoll(0, 0, (double)Math.PI / 2);
             frameInA *= Matrix.Translation(0, -5, 0);
-            Matrix frameInB = Matrix.RotationYawPitchRoll(0, 0, (float)Math.PI / 2);
+            Matrix frameInB = Matrix.RotationYawPitchRoll(0, 0, (double)Math.PI / 2);
             frameInB *= Matrix.Translation(0, 5, 0);
 
             var coneTwist = new ConeTwistConstraint(bodyA, bodyB, frameInA, frameInB);
-            //coneTwist.SetLimit((float)Math.PI / 4, (float)Math.PI / 4, (float)Math.PI * 0.8f);
-            //coneTwist.SetLimit((((float)Math.PI / 4) * 0.6f), (float)Math.PI / 4, (float)Math.PI * 0.8f, 1.0f); // soft limit == hard limit
-            coneTwist.SetLimit((((float)Math.PI / 4) * 0.6f), (float)Math.PI / 4, (float)Math.PI * 0.8f, 0.5f);
+            //coneTwist.SetLimit((double)Math.PI / 4, (double)Math.PI / 4, (double)Math.PI * 0.8f);
+            //coneTwist.SetLimit((((double)Math.PI / 4) * 0.6f), (double)Math.PI / 4, (double)Math.PI * 0.8f, 1.0f); // soft limit == hard limit
+            coneTwist.SetLimit((((double)Math.PI / 4) * 0.6f), (double)Math.PI / 4, (double)Math.PI * 0.8f, 0.5f);
             coneTwist.DebugDrawSize = 5;
             World.AddConstraint(coneTwist, true);
         }
@@ -365,8 +365,8 @@ namespace ConstraintDemo
             Vector3 anchor = new Vector3(20, 2, 0);
 
             var universal = new UniversalConstraint(bodyA, bodyB, anchor, parentAxis, childAxis);
-            universal.SetLowerLimit(-(float)Math.PI / 4, -(float)Math.PI / 4);
-            universal.SetUpperLimit((float)Math.PI / 4, (float)Math.PI / 4);
+            universal.SetLowerLimit(-(double)Math.PI / 4, -(double)Math.PI / 4);
+            universal.SetUpperLimit((double)Math.PI / 4, (double)Math.PI / 4);
 
             // draw constraint frames and limits for debugging
             universal.DebugDrawSize = 5;
@@ -421,7 +421,7 @@ namespace ConstraintDemo
             var pivotA = new Vector3(-5, 0, 0);
             var pivotB = new Vector3(5, 0, 0);
             var hinge = new HingeConstraint(bodyA, bodyB, pivotA, pivotB, axisA, axisB);
-            hinge.SetLimit(-(float)Math.PI / 4, (float)Math.PI / 4);
+            hinge.SetLimit(-(double)Math.PI / 4, (double)Math.PI / 4);
 
             // draw constraint frames and limits for debugging
             hinge.DebugDrawSize = 5;
@@ -444,8 +444,8 @@ namespace ConstraintDemo
             Vector3 anchor = new Vector3(-20, 0, 0);
             var hinge2 = new Hinge2Constraint(bodyA, bodyB, anchor, parentAxis, childAxis);
 
-            hinge2.SetLowerLimit(-(float)Math.PI / 4);
-            hinge2.SetUpperLimit((float)Math.PI / 4);
+            hinge2.SetLowerLimit(-(double)Math.PI / 4);
+            hinge2.SetUpperLimit((double)Math.PI / 4);
 
             // draw constraint frames and limits for debugging
             hinge2.DebugDrawSize = 5;

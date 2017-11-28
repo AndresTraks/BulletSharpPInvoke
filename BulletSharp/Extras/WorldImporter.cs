@@ -38,8 +38,8 @@ namespace BulletSharp
             MemoryStream stream = new MemoryStream(shapeData, false);
             BulletReader reader = new BulletReader(stream);
 
-            BroadphaseNativeType type = (BroadphaseNativeType) reader.ReadInt32(CollisionShapeFloatData.Offset("ShapeType"));
-            stream.Position = Marshal.SizeOf(typeof(CollisionShapeFloatData));
+            BroadphaseNativeType type = (BroadphaseNativeType) reader.ReadInt32(CollisionShapeData.Offset("ShapeType"));
+            stream.Position = Marshal.SizeOf(typeof(CollisionShapeData));
             switch (type)
             {
                 case BroadphaseNativeType.StaticPlaneShape:
@@ -216,7 +216,7 @@ namespace BulletSharp
                             byte[] localPositionArray = libPointers[localPositionArrayPtr];
                             int localPositionArraySize = reader.ReadInt32();
                             Vector3[] positions = new Vector3[localPositionArraySize];
-                            float[] radi = new float[localPositionArraySize];
+                            double[] radi = new double[localPositionArraySize];
                             using (var localPositionArrayStream = new MemoryStream(localPositionArray, false))
                             {
                                 using (var localPositionArrayReader = new BulletReader(localPositionArrayStream))
@@ -754,21 +754,21 @@ namespace BulletSharp
             return shape;
 		}
 
-		public CollisionShape CreateCapsuleShapeZ(float radius, float height)
+		public CollisionShape CreateCapsuleShapeZ(double radius, double height)
 		{
             CapsuleShapeZ shape = new CapsuleShapeZ(radius, height);
             _allocatedCollisionShapes.Add(shape);
             return shape;
 		}
 
-		public CollisionShape CreateCapsuleShapeX(float radius, float height)
+		public CollisionShape CreateCapsuleShapeX(double radius, double height)
 		{
             CapsuleShapeX shape = new CapsuleShapeX(radius, height);
             _allocatedCollisionShapes.Add(shape);
             return shape;
 		}
 
-		public CollisionShape CreateCapsuleShapeY(float radius, float height)
+		public CollisionShape CreateCapsuleShapeY(double radius, double height)
 		{
             CapsuleShape shape = new CapsuleShape(radius, height);
             _allocatedCollisionShapes.Add(shape);
@@ -787,21 +787,21 @@ namespace BulletSharp
             return shape;
 		}
 
-		public CollisionShape CreateConeShapeZ(float radius, float height)
+		public CollisionShape CreateConeShapeZ(double radius, double height)
 		{
 			ConeShape shape = new ConeShapeZ(radius, height);
             _allocatedCollisionShapes.Add(shape);
             return shape;
 		}
 
-		public CollisionShape CreateConeShapeX(float radius, float height)
+		public CollisionShape CreateConeShapeX(double radius, double height)
 		{
 			ConeShape shape = new ConeShapeX(radius, height);
             _allocatedCollisionShapes.Add(shape);
             return shape;
 		}
 
-		public CollisionShape CreateConeShapeY(float radius, float height)
+		public CollisionShape CreateConeShapeY(double radius, double height)
 		{
 			ConeShape shape = new ConeShape(radius, height);
             _allocatedCollisionShapes.Add(shape);
@@ -834,21 +834,21 @@ namespace BulletSharp
 			return btWorldImporter_createConvexTriangleMeshShape(_native, trimesh._native);
 		}
         */
-		public CollisionShape CreateCylinderShapeZ(float radius, float height)
+		public CollisionShape CreateCylinderShapeZ(double radius, double height)
 		{
             CylinderShapeZ shape = new CylinderShapeZ(radius, radius, height);
             _allocatedCollisionShapes.Add(shape);
             return shape;
 		}
 
-		public CollisionShape CreateCylinderShapeX(float radius, float height)
+		public CollisionShape CreateCylinderShapeX(double radius, double height)
 		{
             CylinderShapeX shape = new CylinderShapeX(height, radius, radius);
             _allocatedCollisionShapes.Add(shape);
             return shape;
 		}
 
-		public CollisionShape CreateCylinderShapeY(float radius, float height)
+		public CollisionShape CreateCylinderShapeY(double radius, double height)
 		{
             CylinderShape shape = new CylinderShape(radius, height, radius);
             _allocatedCollisionShapes.Add(shape);
@@ -995,7 +995,7 @@ namespace BulletSharp
             return meshInterface;
 		}
 
-        public MultiSphereShape CreateMultiSphereShape(Vector3[] positions, float[] radi)
+        public MultiSphereShape CreateMultiSphereShape(Vector3[] positions, double[] radi)
 		{
 			MultiSphereShape shape = new MultiSphereShape(positions, radi);
             _allocatedCollisionShapes.Add(shape);
@@ -1030,7 +1030,7 @@ namespace BulletSharp
             return constraint;
 		}
 
-		public virtual RigidBody CreateRigidBody(bool isDynamic, float mass, ref Matrix startTransform, CollisionShape shape, string bodyName)
+		public virtual RigidBody CreateRigidBody(bool isDynamic, double mass, ref Matrix startTransform, CollisionShape shape, string bodyName)
 		{
             Vector3 localInertia;
             if (mass != 0.0f)
@@ -1082,7 +1082,7 @@ namespace BulletSharp
             return constraint;
 		}
 
-		public CollisionShape CreateSphereShape(float radius)
+		public CollisionShape CreateSphereShape(double radius)
 		{
 			SphereShape shape = new SphereShape(radius);
             _allocatedCollisionShapes.Add(shape);

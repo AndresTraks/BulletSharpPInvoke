@@ -14,12 +14,12 @@ namespace BulletSharp
 			_rigidBodyB = rigidBodyB;
 		}
 
-		public void SetLowerLimit(float ang1min)
+		public void SetLowerLimit(double ang1min)
 		{
 			btHinge2Constraint_setLowerLimit(Native, ang1min);
 		}
 
-		public void SetUpperLimit(float ang1max)
+		public void SetUpperLimit(double ang1max)
 		{
 			btHinge2Constraint_setUpperLimit(Native, ang1max);
 		}
@@ -44,9 +44,9 @@ namespace BulletSharp
 			}
 		}
 
-		public float Angle1 => btHinge2Constraint_getAngle1(Native);
+		public double Angle1 => btHinge2Constraint_getAngle1(Native);
 
-		public float Angle2 => btHinge2Constraint_getAngle2(Native);
+		public double Angle2 => btHinge2Constraint_getAngle2(Native);
 
 		public Vector3 Axis1
 		{

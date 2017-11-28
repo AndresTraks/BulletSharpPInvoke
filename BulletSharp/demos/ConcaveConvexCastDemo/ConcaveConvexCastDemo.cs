@@ -19,7 +19,7 @@ namespace ConcaveConvexCastDemo
 
     internal sealed class ConcaveConvexCastDemo : IDemoConfiguration, IUpdateReceiver
     {
-        private float _groundOffset = 0;
+        private double _groundOffset = 0;
 
         public ISimulation CreateSimulation(Demo demo)
         {
@@ -58,10 +58,10 @@ namespace ConcaveConvexCastDemo
 
     internal sealed class ConcaveConvexCastDemoSimulation : ISimulation
     {
-        private const float TriangleSize = 8.0f;
+        private const double TriangleSize = 8.0f;
         private const int NumVertsX = 30;
         private const int NumVertsY = 30;
-        private const float WaveHeight = 3.0f;
+        private const double WaveHeight = 3.0f;
         private const int NumDynamicBoxesX = 30;
         private const int NumDynamicBoxesY = 30;
 
@@ -120,7 +120,7 @@ namespace ConcaveConvexCastDemo
             }
         }
 
-        public void SetGroundAnimationOffset(float offset)
+        public void SetGroundAnimationOffset(double offset)
         {
             SetVertexPositions(WaveHeight, offset);
 
@@ -131,7 +131,7 @@ namespace ConcaveConvexCastDemo
             Broadphase.OverlappingPairCache.CleanProxyFromPairs(_groundObject.BroadphaseHandle, Dispatcher);
         }
 
-        public void Convexcast(float frameDelta)
+        public void Convexcast(double frameDelta)
         {
             _convexcastBatch.Move(frameDelta);
             _convexcastBatch.Cast(World, _callback, frameDelta);
@@ -211,7 +211,7 @@ namespace ConcaveConvexCastDemo
             }
         }
 
-        private void SetVertexPositions(float waveHeight, float offset)
+        private void SetVertexPositions(double waveHeight, double offset)
         {
             if (_vertexWriter == null)
             {
@@ -224,7 +224,7 @@ namespace ConcaveConvexCastDemo
                 for (int j = 0; j < NumVertsY; j++)
                 {
                     _vertexWriter.Write((i - NumVertsX * 0.5f) * TriangleSize);
-                    _vertexWriter.Write(waveHeight * (float)Math.Sin(i + offset) * (float)Math.Cos(j + offset));
+                    _vertexWriter.Write(waveHeight * (double)Math.Sin(i + offset) * (double)Math.Cos(j + offset));
                     _vertexWriter.Write((j - NumVertsY * 0.5f) * TriangleSize);
                 }
             }
@@ -238,21 +238,21 @@ namespace ConcaveConvexCastDemo
         private Ray[] _rays = new Ray[NumRays];
 
         private int _frameCount;
-        private float _time;
-        private float _timeMin = float.MaxValue;
-        private float _timeMax;
-        private float _timeTotal;
+        private double _time;
+        private double _timeMin = double.MaxValue;
+        private double _timeMax;
+        private double _timeTotal;
         private int _sampleCount;
 
-        private float _dx = 10;
-        private float _minX = -40;
-        private float _maxX = 20;
-        private float _sign = 1;
+        private double _dx = 10;
+        private double _minX = -40;
+        private double _maxX = 20;
+        private double _sign = 1;
 
         private Vector3 _boxBoundMin, _boxBoundMax;
         private BoxShape _boxShape;
 
-        private const float NormalScale = 10.0f; // easier to see if this is big
+        private const double NormalScale = 10.0f; // easier to see if this is big
 
         private Matrix _fromRotation = Matrix.Identity; //Matrix.RotationX(0.7f);
         private Matrix _toRotation = Matrix.RotationX(0.7f);
@@ -261,13 +261,13 @@ namespace ConcaveConvexCastDemo
         private static Vector3 _white = new Vector3(1.0f, 1.0f, 1.0f);
         private static Vector3 _cyan = new Vector3(0.0f, 1.0f, 1.0f);
 
-        public ConvexcastBatch(float rayLength, float z, float minY, float maxY)
+        public ConvexcastBatch(double rayLength, double z, double minY, double maxY)
         {
             _boxBoundMax = new Vector3(1.0f, 1.0f, 1.0f);
             _boxBoundMin = -_boxBoundMax;
             _boxShape = new BoxShape(_boxBoundMax);
 
-            const float alpha = 4 * (float)Math.PI / NumRays;
+            const double alpha = 4 * (double)Math.PI / NumRays;
             for (int i = 0; i < NumRays; i++)
             {
                 Matrix transform = Matrix.RotationY(alpha * i);
@@ -285,12 +285,12 @@ namespace ConcaveConvexCastDemo
             }
         }
 
-        public void Move(float frameDelta)
+        public void Move(double frameDelta)
         {
             if (frameDelta > 1.0f / 60.0f)
                 frameDelta = 1.0f / 60.0f;
 
-            float move = _sign * _dx * frameDelta;
+            double move = _sign * _dx * frameDelta;
             foreach (var ray in _rays)
             {
                 ray.MoveX(move);
@@ -302,7 +302,7 @@ namespace ConcaveConvexCastDemo
                 _sign = -1.0f;
         }
 
-        public void Cast(CollisionWorld cw, ClosestConvexResultCallback callback, float frameDelta)
+        public void Cast(CollisionWorld cw, ClosestConvexResultCallback callback, double frameDelta)
         {
             foreach (var ray in _rays)
             {
@@ -365,7 +365,7 @@ namespace ConcaveConvexCastDemo
 
         private void PrintStats()
         {
-            float timeMean = _timeTotal / _sampleCount;
+            double timeMean = _timeTotal / _sampleCount;
             Console.WriteLine("{0} rays in {1} s, min {2}, max {3}, mean {4}",
                     NumRays * _frameCount,
                     _time.ToString("0.000", CultureInfo.InvariantCulture),
@@ -381,10 +381,10 @@ namespace ConcaveConvexCastDemo
         public Vector3 Destination;
         public Vector3 HitCenterOfMass;
         public Vector3 HitPoint;
-        public float HitFraction;
+        public double HitFraction;
         public Vector3 Normal;
 
-        public void MoveX(float move)
+        public void MoveX(double move)
         {
             Source.X += move;
             Destination.X += move;

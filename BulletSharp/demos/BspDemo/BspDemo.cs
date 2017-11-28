@@ -87,7 +87,7 @@ namespace BspDemo
         {
             if (vertices.Count == 0) return;
 
-            const float mass = 0.0f;
+            const double mass = 0.0f;
             Matrix startTransform = Matrix.Translation(0, 0, -10.0f); // shift
             var shape = new ConvexHullShape(vertices);
 

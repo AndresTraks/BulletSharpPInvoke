@@ -11,21 +11,21 @@ namespace DemoFramework
         public long FrameCount { get; private set; }
         public long SubStepCount { get; private set; }
 
-        public float PhysicsAverage
+        public double PhysicsAverage
         {
             get
             {
                 if (FrameCount == 0) return 0;
-                return (((float)_physicsTimer.ElapsedTicks / Stopwatch.Frequency) / SubStepCount) * 1000.0f;
+                return (((double)_physicsTimer.ElapsedTicks / Stopwatch.Frequency) / SubStepCount) * 1000.0f;
             }
         }
 
-        public float RenderAverage
+        public double RenderAverage
         {
             get
             {
                 if (FrameCount == 0) return 0;
-                return (((float)_renderTimer.ElapsedTicks / Stopwatch.Frequency) / FrameCount) * 1000.0f;
+                return (((double)_renderTimer.ElapsedTicks / Stopwatch.Frequency) / FrameCount) * 1000.0f;
             }
         }
 
@@ -50,11 +50,11 @@ namespace DemoFramework
             _renderTimer.Stop();
         }
 
-        public float GetFrameDelta()
+        public double GetFrameDelta()
         {
             FrameCount++;
 
-            float delta = (float)_frameTimer.ElapsedTicks / Stopwatch.Frequency;
+            double delta = (double)_frameTimer.ElapsedTicks / Stopwatch.Frequency;
             _frameTimer.Restart();
             return delta;
         }

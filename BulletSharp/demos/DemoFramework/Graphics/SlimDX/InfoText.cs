@@ -9,7 +9,7 @@ namespace DemoFramework.SlimDX
         Sprite fontSprite;
         Font font;
         int color = System.Drawing.Color.Red.ToArgb();
-        float fps = -1;
+        double fps = -1;
         string textString = "";
         CultureInfo culture = CultureInfo.InvariantCulture;
 
@@ -54,7 +54,7 @@ namespace DemoFramework.SlimDX
             }
         }
 
-        public void OnRender(float framesPerSecond)
+        public void OnRender(double framesPerSecond)
         {
             if (_isEnabled == false)
                 return;

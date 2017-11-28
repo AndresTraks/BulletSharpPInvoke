@@ -15,8 +15,8 @@ namespace VehicleDemo
 
         private Vector3[] _forwardWS = new Vector3[0];
         private Vector3[] _axle = new Vector3[0];
-        private float[] _forwardImpulse = new float[0];
-        private float[] _sideImpulse = new float[0];
+        private double[] _forwardImpulse = new double[0];
+        private double[] _sideImpulse = new double[0];
 
         public Matrix ChassisWorldTransform
         {
@@ -30,7 +30,7 @@ namespace VehicleDemo
             }
         }
 
-        float currentVehicleSpeedKmHour;
+        double currentVehicleSpeedKmHour;
 
         public int NumWheels
         {
@@ -56,18 +56,18 @@ namespace VehicleDemo
 
         static RigidBody fixedBody;
 
-        public void SetBrake(float brake, int wheelIndex)
+        public void SetBrake(double brake, int wheelIndex)
         {
             Debug.Assert((wheelIndex >= 0) && (wheelIndex < NumWheels));
             GetWheelInfo(wheelIndex).Brake = brake;
         }
 
-        public float GetSteeringValue(int wheel)
+        public double GetSteeringValue(int wheel)
         {
             return GetWheelInfo(wheel).Steering;
         }
 
-        public void SetSteeringValue(float steering, int wheel)
+        public void SetSteeringValue(double steering, int wheel)
         {
             Debug.Assert(wheel >= 0 && wheel < NumWheels);
 
@@ -103,7 +103,7 @@ namespace VehicleDemo
             vehicleRaycaster = raycaster;
         }
 
-        public WheelInfo AddWheel(Vector3 connectionPointCS, Vector3 wheelDirectionCS0, Vector3 wheelAxleCS, float suspensionRestLength, float wheelRadius, VehicleTuning tuning, bool isFrontWheel)
+        public WheelInfo AddWheel(Vector3 connectionPointCS, Vector3 wheelDirectionCS0, Vector3 wheelAxleCS, double suspensionRestLength, double wheelRadius, VehicleTuning tuning, bool isFrontWheel)
         {
             var ci = new WheelInfoConstructionInfo
             {
@@ -129,21 +129,21 @@ namespace VehicleDemo
             return wheel;
         }
 
-        public void ApplyEngineForce(float force, int wheel)
+        public void ApplyEngineForce(double force, int wheel)
         {
             Debug.Assert(wheel >= 0 && wheel < NumWheels);
             WheelInfo wheelInfo = GetWheelInfo(wheel);
             wheelInfo.EngineForce = force;
         }
 
-        float CalcRollingFriction(RigidBody body0, RigidBody body1, Vector3 contactPosWorld, Vector3 frictionDirectionWorld, float maxImpulse)
+        double CalcRollingFriction(RigidBody body0, RigidBody body1, Vector3 contactPosWorld, Vector3 frictionDirectionWorld, double maxImpulse)
         {
-            float denom0 = body0.ComputeImpulseDenominator(contactPosWorld, frictionDirectionWorld);
-            float denom1 = body1.ComputeImpulseDenominator(contactPosWorld, frictionDirectionWorld);
-            const float relaxation = 1.0f;
-            float jacDiagABInv = relaxation / (denom0 + denom1);
+            double denom0 = body0.ComputeImpulseDenominator(contactPosWorld, frictionDirectionWorld);
+            double denom1 = body1.ComputeImpulseDenominator(contactPosWorld, frictionDirectionWorld);
+            const double relaxation = 1.0f;
+            double jacDiagABInv = relaxation / (denom0 + denom1);
 
-            float j1;
+            double j1;
 
             Vector3 rel_pos1 = contactPosWorld - body0.CenterOfMassPosition;
             Vector3 rel_pos2 = contactPosWorld - body1.CenterOfMassPosition;
@@ -152,7 +152,7 @@ namespace VehicleDemo
             Vector3 vel2 = body1.GetVelocityInLocalPoint(rel_pos2);
             Vector3 vel = vel1 - vel2;
 
-            float vrel;
+            double vrel;
             Vector3.Dot(ref frictionDirectionWorld, ref vel, out vrel);
 
             // calculate j that moves us to zero relative velocity
@@ -206,19 +206,19 @@ namespace VehicleDemo
             return _wheelInfo[index];
         }
 
-        private float RayCast(WheelInfo wheel)
+        private double RayCast(WheelInfo wheel)
         {
             UpdateWheelTransformsWS(wheel, false);
 
-            float depth = -1;
-            float raylen = wheel.SuspensionRestLength + wheel.WheelsRadius;
+            double depth = -1;
+            double raylen = wheel.SuspensionRestLength + wheel.WheelsRadius;
 
             Vector3 rayvector = wheel.RaycastInfo.WheelDirectionWS * raylen;
             Vector3 source = wheel.RaycastInfo.HardPointWS;
             wheel.RaycastInfo.ContactPointWS = source + rayvector;
             Vector3 target = wheel.RaycastInfo.ContactPointWS;
 
-            float param = 0;
+            double param = 0;
             VehicleRaycasterResult rayResults = new VehicleRaycasterResult();
 
             Debug.Assert(vehicleRaycaster != null);
@@ -236,12 +236,12 @@ namespace VehicleDemo
                 wheel.RaycastInfo.GroundObject = fixedBody;///@todo for driving on dynamic/movable objects!;
                 /////wheel.RaycastInfo.GroundObject = object;
 
-                float hitDistance = param * raylen;
+                double hitDistance = param * raylen;
                 wheel.RaycastInfo.SuspensionLength = hitDistance - wheel.WheelsRadius;
                 //clamp on max suspension travel
 
-                float minSuspensionLength = wheel.SuspensionRestLength - wheel.MaxSuspensionTravelCm * 0.01f;
-                float maxSuspensionLength = wheel.SuspensionRestLength + wheel.MaxSuspensionTravelCm * 0.01f;
+                double minSuspensionLength = wheel.SuspensionRestLength - wheel.MaxSuspensionTravelCm * 0.01f;
+                double maxSuspensionLength = wheel.SuspensionRestLength + wheel.MaxSuspensionTravelCm * 0.01f;
                 if (wheel.RaycastInfo.SuspensionLength < minSuspensionLength)
                 {
                     wheel.RaycastInfo.SuspensionLength = minSuspensionLength;
@@ -253,14 +253,14 @@ namespace VehicleDemo
 
                 wheel.RaycastInfo.ContactPointWS = rayResults.HitPointInWorld;
 
-                float denominator = Vector3.Dot(wheel.RaycastInfo.ContactNormalWS, wheel.RaycastInfo.WheelDirectionWS);
+                double denominator = Vector3.Dot(wheel.RaycastInfo.ContactNormalWS, wheel.RaycastInfo.WheelDirectionWS);
 
                 Vector3 chassis_velocity_at_contactPoint;
                 Vector3 relpos = wheel.RaycastInfo.ContactPointWS - RigidBody.CenterOfMassPosition;
 
                 chassis_velocity_at_contactPoint = RigidBody.GetVelocityInLocalPoint(relpos);
 
-                float projVel = Vector3.Dot(wheel.RaycastInfo.ContactNormalWS, chassis_velocity_at_contactPoint);
+                double projVel = Vector3.Dot(wheel.RaycastInfo.ContactNormalWS, chassis_velocity_at_contactPoint);
 
                 if (denominator >= -0.1f)
                 {
@@ -269,7 +269,7 @@ namespace VehicleDemo
                 }
                 else
                 {
-                    float inv = -1.0f / denominator;
+                    double inv = -1.0f / denominator;
                     wheel.SuspensionRelativeVelocity = projVel * inv;
                     wheel.ClippedInvContactDotSuspension = inv;
                 }
@@ -300,9 +300,9 @@ namespace VehicleDemo
             }
         }
 
-        private void ResolveSingleBilateral(RigidBody body1, Vector3 pos1, RigidBody body2, Vector3 pos2, float distance, Vector3 normal, ref float impulse, float timeStep)
+        private void ResolveSingleBilateral(RigidBody body1, Vector3 pos1, RigidBody body2, Vector3 pos2, double distance, Vector3 normal, ref double impulse, double timeStep)
         {
-            float normalLenSqr = normal.LengthSquared;
+            double normalLenSqr = normal.LengthSquared;
             Debug.Assert(System.Math.Abs(normalLenSqr) < 1.1f);
             if (normalLenSqr > 1.1f)
             {
@@ -322,34 +322,34 @@ namespace VehicleDemo
             Vector3 m_bJ = Vector3.TransformCoordinate(Vector3.Cross(rel_pos2, -normal), world2B);
             Vector3 m_0MinvJt = body1.InvInertiaDiagLocal * m_aJ;
             Vector3 m_1MinvJt = body2.InvInertiaDiagLocal * m_bJ;
-            float dot0, dot1;
+            double dot0, dot1;
             Vector3.Dot(ref m_0MinvJt, ref m_aJ, out dot0);
             Vector3.Dot(ref m_1MinvJt, ref m_bJ, out dot1);
-            float jacDiagAB = body1.InvMass + dot0 + body2.InvMass + dot1;
-            float jacDiagABInv = 1.0f / jacDiagAB;
+            double jacDiagAB = body1.InvMass + dot0 + body2.InvMass + dot1;
+            double jacDiagABInv = 1.0f / jacDiagAB;
 
-            float rel_vel;
+            double rel_vel;
             Vector3.Dot(ref normal, ref vel, out rel_vel);
 
             //todo: move this into proper structure
-            const float contactDamping = 0.2f;
+            const double contactDamping = 0.2f;
 
 #if ONLY_USE_LINEAR_MASS
-	        float massTerm = 1.0f / (body1.InvMass + body2.InvMass);
+	        double massTerm = 1.0f / (body1.InvMass + body2.InvMass);
 	        impulse = - contactDamping * rel_vel * massTerm;
 #else
-            float velocityImpulse = -contactDamping * rel_vel * jacDiagABInv;
+            double velocityImpulse = -contactDamping * rel_vel * jacDiagABInv;
             impulse = velocityImpulse;
 #endif
         }
 
-        public void UpdateAction(CollisionWorld collisionWorld, float deltaTimeStep)
+        public void UpdateAction(CollisionWorld collisionWorld, double deltaTimeStep)
         {
             UpdateVehicle(deltaTimeStep);
         }
 
-        const float sideFrictionStiffness2 = 1.0f;
-        public void UpdateFriction(float timeStep)
+        const double sideFrictionStiffness2 = 1.0f;
+        public void UpdateFriction(double timeStep)
         {
             //calculate the impulse, so that the wheels don't move sidewards
             int numWheel = NumWheels;
@@ -388,7 +388,7 @@ namespace VehicleDemo
                         wheelTrans[2, indexRightAxis]);
 
                     Vector3 surfNormalWS = wheel.RaycastInfo.ContactNormalWS;
-                    float proj;
+                    double proj;
                     Vector3.Dot(ref _axle[i], ref surfNormalWS, out proj);
                     _axle[i] -= surfNormalWS * proj;
                     _axle[i].Normalize();
@@ -404,8 +404,8 @@ namespace VehicleDemo
                 }
             }
 
-            const float sideFactor = 1.0f;
-            const float fwdFactor = 0.5f;
+            const double sideFactor = 1.0f;
+            const double fwdFactor = 0.5f;
 
             bool sliding = false;
 
@@ -414,7 +414,7 @@ namespace VehicleDemo
                 WheelInfo wheel = _wheelInfo[i];
                 RigidBody groundObject = wheel.RaycastInfo.GroundObject as RigidBody;
 
-                float rollingFriction = 0.0f;
+                double rollingFriction = 0.0f;
 
                 if (groundObject != null)
                 {
@@ -424,8 +424,8 @@ namespace VehicleDemo
                     }
                     else
                     {
-                        float defaultRollingFrictionImpulse = 0.0f;
-                        float maxImpulse = (wheel.Brake != 0) ? wheel.Brake : defaultRollingFrictionImpulse;
+                        double defaultRollingFrictionImpulse = 0.0f;
+                        double maxImpulse = (wheel.Brake != 0) ? wheel.Brake : defaultRollingFrictionImpulse;
                         rollingFriction = CalcRollingFriction(chassisBody, groundObject, wheel.RaycastInfo.ContactPointWS, _forwardWS[i], maxImpulse);
                     }
                 }
@@ -439,24 +439,24 @@ namespace VehicleDemo
                 {
                     _wheelInfo[i].SkidInfo = 1.0f;
 
-                    float maximp = wheel.WheelsSuspensionForce * timeStep * wheel.FrictionSlip;
-                    float maximpSide = maximp;
+                    double maximp = wheel.WheelsSuspensionForce * timeStep * wheel.FrictionSlip;
+                    double maximpSide = maximp;
 
-                    float maximpSquared = maximp * maximpSide;
+                    double maximpSquared = maximp * maximpSide;
 
 
                     _forwardImpulse[i] = rollingFriction;//wheel.EngineForce* timeStep;
 
-                    float x = _forwardImpulse[i] * fwdFactor;
-                    float y = _sideImpulse[i] * sideFactor;
+                    double x = _forwardImpulse[i] * fwdFactor;
+                    double y = _sideImpulse[i] * sideFactor;
 
-                    float impulseSquared = (x * x + y * y);
+                    double impulseSquared = (x * x + y * y);
 
                     if (impulseSquared > maximpSquared)
                     {
                         sliding = true;
 
-                        float factor = maximp / (float)System.Math.Sqrt(impulseSquared);
+                        double factor = maximp / (double)System.Math.Sqrt(impulseSquared);
 
                         _wheelInfo[i].SkidInfo *= factor;
                     }
@@ -506,7 +506,7 @@ namespace VehicleDemo
                         RigidBody.CenterOfMassTransform.Row1[indexUpAxis],
                         RigidBody.CenterOfMassTransform.Row2[indexUpAxis],
                         RigidBody.CenterOfMassTransform.Row3[indexUpAxis]);
-                    float dot;
+                    double dot;
                     Vector3.Dot(ref vChassisWorldUp, ref rel_pos, out dot);
                     rel_pos -= vChassisWorldUp * (dot * (1.0f - wheel.RollInfluence));
 #else
@@ -520,9 +520,9 @@ namespace VehicleDemo
             }
         }
 
-        public void UpdateSuspension(float step)
+        public void UpdateSuspension(double step)
         {
-            float chassisMass = 1.0f / chassisBody.InvMass;
+            double chassisMass = 1.0f / chassisBody.InvMass;
 
             for (int w_it = 0; w_it < NumWheels; w_it++)
             {
@@ -530,13 +530,13 @@ namespace VehicleDemo
 
                 if (wheel_info.RaycastInfo.IsInContact)
                 {
-                    float force;
+                    double force;
                     //	Spring
                     {
-                        float susp_length = wheel_info.SuspensionRestLength;
-                        float current_length = wheel_info.RaycastInfo.SuspensionLength;
+                        double susp_length = wheel_info.SuspensionRestLength;
+                        double current_length = wheel_info.RaycastInfo.SuspensionLength;
 
-                        float length_diff = (susp_length - current_length);
+                        double length_diff = (susp_length - current_length);
 
                         force = wheel_info.SuspensionStiffness
                             * length_diff * wheel_info.ClippedInvContactDotSuspension;
@@ -544,9 +544,9 @@ namespace VehicleDemo
 
                     // Damper
                     {
-                        float projected_rel_vel = wheel_info.SuspensionRelativeVelocity;
+                        double projected_rel_vel = wheel_info.SuspensionRelativeVelocity;
                         {
-                            float susp_damping;
+                            double susp_damping;
                             if (projected_rel_vel < 0.0f)
                             {
                                 susp_damping = wheel_info.WheelsDampingCompression;
@@ -573,7 +573,7 @@ namespace VehicleDemo
             }
         }
 
-        public void UpdateVehicle(float step)
+        public void UpdateVehicle(double step)
         {
             for (int i = 0; i < NumWheels; i++)
             {
@@ -597,7 +597,7 @@ namespace VehicleDemo
             // Simulate suspension
             for (int i = 0; i < _wheelInfo.Count; i++)
             {
-                float depth = RayCast(_wheelInfo[i]);
+                double depth = RayCast(_wheelInfo[i]);
             }
 
 
@@ -608,7 +608,7 @@ namespace VehicleDemo
                 //apply suspension force
                 WheelInfo wheel = _wheelInfo[i];
 
-                float suspensionForce = wheel.WheelsSuspensionForce;
+                double suspensionForce = wheel.WheelsSuspensionForce;
 
                 if (suspensionForce > wheel.MaxSuspensionForce)
                 {
@@ -638,10 +638,10 @@ namespace VehicleDemo
                         chassisWorldTransform[1, indexForwardAxis],
                         chassisWorldTransform[2, indexForwardAxis]);
 
-                    float proj = Vector3.Dot(fwd, wheel.RaycastInfo.ContactNormalWS);
+                    double proj = Vector3.Dot(fwd, wheel.RaycastInfo.ContactNormalWS);
                     fwd -= wheel.RaycastInfo.ContactNormalWS * proj;
 
-                    float proj2;
+                    double proj2;
                     Vector3.Dot(ref fwd, ref vel, out proj2);
 
                     wheel.DeltaRotation = (proj2 * step) / (wheel.WheelsRadius);

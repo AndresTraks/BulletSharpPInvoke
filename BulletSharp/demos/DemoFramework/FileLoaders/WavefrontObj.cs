@@ -83,16 +83,16 @@ namespace DemoFramework.FileLoaders
         //Vector2 ToVector2(string f0, string f1)
         //{
         //    return new Vector2(
-        //        float.Parse(f0, CultureInfo.InvariantCulture),
-        //        float.Parse(f1, CultureInfo.InvariantCulture));
+        //        double.Parse(f0, CultureInfo.InvariantCulture),
+        //        double.Parse(f1, CultureInfo.InvariantCulture));
         //}
 
         Vector3 ToVector3(string f0, string f1, string f2)
         {
             return new Vector3(
-                float.Parse(f0, CultureInfo.InvariantCulture),
-                float.Parse(f1, CultureInfo.InvariantCulture),
-                float.Parse(f2, CultureInfo.InvariantCulture));
+                double.Parse(f0, CultureInfo.InvariantCulture),
+                double.Parse(f1, CultureInfo.InvariantCulture),
+                double.Parse(f2, CultureInfo.InvariantCulture));
         }
 
         private int GetVertex(string[] faceVertex)

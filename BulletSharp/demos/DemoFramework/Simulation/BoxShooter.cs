@@ -10,8 +10,8 @@ namespace DemoFramework
         private readonly DynamicsWorld _world;
 
         private BoxShape _shootBoxShape;
-        private const float ShootBoxInitialSpeed = 40;
-        private const float BoxHalfExtent = 1.0f;
+        private const double ShootBoxInitialSpeed = 40;
+        private const double BoxHalfExtent = 1.0f;
 
         public BoxShooter(DynamicsWorld world)
         {
@@ -20,7 +20,7 @@ namespace DemoFramework
 
         public void Shoot(Vector3 eyePosition, Vector3 destination)
         {
-            const float mass = 1.0f;
+            const double mass = 1.0f;
 
             if (_shootBoxShape == null)
             {

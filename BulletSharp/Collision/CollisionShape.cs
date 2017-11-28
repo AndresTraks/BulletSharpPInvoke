@@ -36,14 +36,14 @@ namespace BulletSharp
 			}
 		}
 
-		public Vector3 CalculateLocalInertia(float mass)
+		public Vector3 CalculateLocalInertia(double mass)
 		{
 			Vector3 inertia;
 			btCollisionShape_calculateLocalInertia(Native, mass, out inertia);
 			return inertia;
 		}
 
-		public void CalculateLocalInertia(float mass, out Vector3 inertia)
+		public void CalculateLocalInertia(double mass, out Vector3 inertia)
 		{
 			btCollisionShape_calculateLocalInertia(Native, mass, out inertia);
 		}
@@ -54,13 +54,13 @@ namespace BulletSharp
 		}
 
 		public void CalculateTemporalAabbRef(ref Matrix curTrans, ref Vector3 linvel, ref Vector3 angvel,
-			float timeStep, out Vector3 temporalAabbMin, out Vector3 temporalAabbMax)
+			double timeStep, out Vector3 temporalAabbMin, out Vector3 temporalAabbMax)
 		{
 			btCollisionShape_calculateTemporalAabb(Native, ref curTrans, ref linvel, ref angvel, timeStep, out temporalAabbMin, out temporalAabbMax);
 		}
 
 		public void CalculateTemporalAabb(Matrix curTrans, Vector3 linvel, Vector3 angvel,
-			float timeStep, out Vector3 temporalAabbMin, out Vector3 temporalAabbMax)
+			double timeStep, out Vector3 temporalAabbMin, out Vector3 temporalAabbMax)
 		{
 			btCollisionShape_calculateTemporalAabb(Native, ref curTrans, ref linvel,
 				ref angvel, timeStep, out temporalAabbMin, out temporalAabbMax);
@@ -76,12 +76,12 @@ namespace BulletSharp
 			btCollisionShape_getAabb(Native, ref t, out aabbMin, out aabbMax);
 		}
 
-		public void GetBoundingSphere(out Vector3 center, out float radius)
+		public void GetBoundingSphere(out Vector3 center, out double radius)
 		{
 			btCollisionShape_getBoundingSphere(Native, out center, out radius);
 		}
 
-		public float GetContactBreakingThreshold(float defaultContactThresholdFactor)
+		public double GetContactBreakingThreshold(double defaultContactThresholdFactor)
 		{
 			return btCollisionShape_getContactBreakingThreshold(Native, defaultContactThresholdFactor);
 		}
@@ -111,7 +111,7 @@ namespace BulletSharp
 			serializer.FinalizeChunk(chunk, structType, DnaID.Shape, Native);
 		}
 
-		public float AngularMotionDisc => btCollisionShape_getAngularMotionDisc(Native);
+		public double AngularMotionDisc => btCollisionShape_getAngularMotionDisc(Native);
 
 		public Vector3 AnisotropicRollingFrictionDirection
 		{
@@ -152,7 +152,7 @@ namespace BulletSharp
 			set => btCollisionShape_setLocalScaling(Native, ref value);
 		}
 
-		public float Margin
+		public double Margin
 		{
 			get => btCollisionShape_getMargin(Native);
 			set => btCollisionShape_setMargin(Native, value);
@@ -208,13 +208,13 @@ namespace BulletSharp
 		}
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
-	internal struct CollisionShapeFloatData
-	{
-		public IntPtr Name;
-		public int ShapeType;
-		public int Padding;
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct CollisionShapeData
+    {
+        public IntPtr Name;
+        public int ShapeType;
+        public int Padding;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CollisionShapeFloatData), fieldName).ToInt32(); }
-	}
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CollisionShapeData), fieldName).ToInt32(); }
+    }
 }

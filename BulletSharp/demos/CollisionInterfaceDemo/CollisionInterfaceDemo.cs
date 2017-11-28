@@ -66,7 +66,7 @@ namespace CollisionInterfaceDemo
             RenderCallback = new DrawingResult(World);
 
             var movingBox = new BoxShape(1.0f) { Margin = 0 };
-            var rotation = Quaternion.RotationYawPitchRoll((float)Math.PI * 0.6f, (float)Math.PI * 0.2f, 0);
+            var rotation = Quaternion.RotationYawPitchRoll((double)Math.PI * 0.6f, (double)Math.PI * 0.2f, 0);
             MovingObject = new CollisionObject
             {
                 CollisionShape = movingBox,
@@ -110,7 +110,7 @@ namespace CollisionInterfaceDemo
             _world = world;
         }
 
-        public override float AddSingleResult(ManifoldPoint cp,
+        public override double AddSingleResult(ManifoldPoint cp,
             CollisionObjectWrapper colObj0Wrap, int partId0, int index0,
             CollisionObjectWrapper colObj1Wrap, int partId1, int index1)
         {

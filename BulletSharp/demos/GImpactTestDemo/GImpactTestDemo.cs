@@ -40,7 +40,7 @@ namespace GImpactTestDemo
 
     internal sealed class GImpactTestDemoSimulation : ISimulation
     {
-        private const float ShootBoxInitialSpeed = 10.0f;
+        private const double ShootBoxInitialSpeed = 10.0f;
 
         private GImpactMeshShape _torusShape;
         private GImpactMeshShape _bunnyShape;
@@ -78,7 +78,7 @@ namespace GImpactTestDemo
 
         public void ShootTrimesh(Vector3 cameraPosition, Vector3 destination)
         {
-            const float mass = 4.0f;
+            const double mass = 4.0f;
             Matrix startTransform = Matrix.Translation(cameraPosition);
             RigidBody body = PhysicsHelper.CreateBody(mass, startTransform, _bunnyShape, World);
 
@@ -149,12 +149,12 @@ namespace GImpactTestDemo
 
         private void CreateTorusChain()
         {
-            const float step = 2.5f;
-            const float mass = 1.0f;
-            const float quarterTurn = (float)Math.PI * 0.5f;
+            const double step = 2.5f;
+            const double mass = 1.0f;
+            const double quarterTurn = (double)Math.PI * 0.5f;
 
-            float angle = quarterTurn;
-            float height = 28;
+            double angle = quarterTurn;
+            double height = 28;
 
             Matrix startTransform =
                 Matrix.RotationYawPitchRoll(angle, 0, quarterTurn) *

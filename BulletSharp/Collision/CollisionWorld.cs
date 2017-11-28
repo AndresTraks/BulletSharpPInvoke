@@ -16,12 +16,12 @@ namespace BulletSharp
 			RayToWorld = rayToWorld;
 
 			CollisionObjects = new List<CollisionObject>();
-			HitFractions = new List<float>();
+			HitFractions = new List<double>();
 			HitNormalWorld = new List<Vector3>();
 			HitPointWorld = new List<Vector3>();
 		}
 
-		public override float AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace)
+		public override double AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace)
 		{
 			CollisionObject = rayResult.CollisionObject;
 			CollisionObjects.Add(rayResult.CollisionObject);
@@ -40,7 +40,7 @@ namespace BulletSharp
 		}
 
 		public List<CollisionObject> CollisionObjects { get; set; }
-		public List<float> HitFractions { get; set; }
+		public List<double> HitFractions { get; set; }
 		public List<Vector3> HitNormalWorld { get; set; }
 		public List<Vector3> HitPointWorld { get; set; }
 		public Vector3 RayFromWorld { get; set; }
@@ -59,7 +59,7 @@ namespace BulletSharp
 			ConvexToWorld = convexToWorld;
 		}
 
-		public override float AddSingleResult(LocalConvexResult convexResult, bool normalInWorldSpace)
+		public override double AddSingleResult(LocalConvexResult convexResult, bool normalInWorldSpace)
 		{
 			//caller already does the filter on the m_closestHitFraction
 			Debug.Assert(convexResult.HitFraction <= ClosestHitFraction);
@@ -94,7 +94,7 @@ namespace BulletSharp
 			RayToWorld = rayToWorld;
 		}
 
-		public override float AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace)
+		public override double AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace)
 		{
 			//caller already does the filter on the m_closestHitFraction
 			Debug.Assert(rayResult.HitFraction <= ClosestHitFraction);
@@ -126,7 +126,7 @@ namespace BulletSharp
 		internal IntPtr Native;
 
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		private delegate float AddSingleResultUnmanagedDelegate(IntPtr cp, IntPtr colObj0Wrap, int partId0, int index0, IntPtr colObj1Wrap, int partId1, int index1);
+		private delegate double AddSingleResultUnmanagedDelegate(IntPtr cp, IntPtr colObj0Wrap, int partId0, int index0, IntPtr colObj1Wrap, int partId1, int index1);
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate bool NeedsCollisionUnmanagedDelegate(IntPtr proxy0);
 
@@ -142,14 +142,14 @@ namespace BulletSharp
 				Marshal.GetFunctionPointerForDelegate(_needsCollision));
 		}
 
-		private float AddSingleResultUnmanaged(IntPtr cp, IntPtr colObj0Wrap, int partId0, int index0, IntPtr colObj1Wrap, int partId1, int index1)
+		private double AddSingleResultUnmanaged(IntPtr cp, IntPtr colObj0Wrap, int partId0, int index0, IntPtr colObj1Wrap, int partId1, int index1)
 		{
 			return AddSingleResult(new ManifoldPoint(cp, true),
 				new CollisionObjectWrapper(colObj0Wrap), partId0, index0,
 				new CollisionObjectWrapper(colObj1Wrap), partId1, index1);
 		}
 
-		public abstract float AddSingleResult(ManifoldPoint cp, CollisionObjectWrapper colObj0Wrap, int partId0, int index0, CollisionObjectWrapper colObj1Wrap, int partId1, int index1);
+		public abstract double AddSingleResult(ManifoldPoint cp, CollisionObjectWrapper colObj0Wrap, int partId0, int index0, CollisionObjectWrapper colObj1Wrap, int partId1, int index1);
 
 		private bool NeedsCollisionUnmanaged(IntPtr proxy0)
 		{
@@ -161,7 +161,7 @@ namespace BulletSharp
 			return btCollisionWorld_ContactResultCallbackWrapper_needsCollision(Native, proxy0.Native);
 		}
 
-		public float ClosestDistanceThreshold
+		public double ClosestDistanceThreshold
 		{
 			get => btCollisionWorld_ContactResultCallback_getClosestDistanceThreshold(Native);
 			set => btCollisionWorld_ContactResultCallback_setClosestDistanceThreshold(Native, value);
@@ -205,7 +205,7 @@ namespace BulletSharp
 		internal IntPtr Native;
 
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		private delegate float AddSingleResultUnmanagedDelegate(IntPtr convexResult, bool normalInWorldSpace);
+		private delegate double AddSingleResultUnmanagedDelegate(IntPtr convexResult, bool normalInWorldSpace);
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate bool NeedsCollisionUnmanagedDelegate(IntPtr proxy0);
 
@@ -221,12 +221,12 @@ namespace BulletSharp
 				Marshal.GetFunctionPointerForDelegate(_needsCollision));
 		}
 
-		private float AddSingleResultUnmanaged(IntPtr convexResult, bool normalInWorldSpace)
+		private double AddSingleResultUnmanaged(IntPtr convexResult, bool normalInWorldSpace)
 		{
 			return AddSingleResult(new LocalConvexResult(convexResult), normalInWorldSpace);
 		}
 
-		public abstract float AddSingleResult(LocalConvexResult convexResult, bool normalInWorldSpace);
+		public abstract double AddSingleResult(LocalConvexResult convexResult, bool normalInWorldSpace);
 
 		private bool NeedsCollisionUnmanaged(IntPtr proxy0)
 		{
@@ -239,7 +239,7 @@ namespace BulletSharp
 				proxy0.Native);
 		}
 
-		public float ClosestHitFraction
+		public double ClosestHitFraction
 		{
 			get => btCollisionWorld_ConvexResultCallback_getClosestHitFraction(Native);
 			set => btCollisionWorld_ConvexResultCallback_setClosestHitFraction(Native, value);
@@ -297,7 +297,7 @@ namespace BulletSharp
 		}
 
 		public LocalConvexResult(CollisionObject hitCollisionObject, LocalShapeInfo localShapeInfo,
-			Vector3 hitNormalLocal, Vector3 hitPointLocal, float hitFraction)
+			Vector3 hitNormalLocal, Vector3 hitPointLocal, double hitFraction)
 		{
 			Native = btCollisionWorld_LocalConvexResult_new(hitCollisionObject.Native,
 				localShapeInfo.Native, ref hitNormalLocal, ref hitPointLocal,
@@ -316,7 +316,7 @@ namespace BulletSharp
 			}
 		}
 
-		public float HitFraction
+		public double HitFraction
 		{
 			get => btCollisionWorld_LocalConvexResult_getHitFraction(Native);
 			set => btCollisionWorld_LocalConvexResult_setHitFraction(Native, value);
@@ -395,7 +395,7 @@ namespace BulletSharp
 		}
 
 		public LocalRayResult(CollisionObject collisionObject, LocalShapeInfo localShapeInfo,
-			Vector3 hitNormalLocal, float hitFraction)
+			Vector3 hitNormalLocal, double hitFraction)
 		{
 			Native = btCollisionWorld_LocalRayResult_new(collisionObject.Native,
 				localShapeInfo.Native, ref hitNormalLocal, hitFraction);
@@ -413,7 +413,7 @@ namespace BulletSharp
 			}
 		}
 
-		public float HitFraction
+		public double HitFraction
 		{
 			get => btCollisionWorld_LocalRayResult_getHitFraction(Native);
 			set => btCollisionWorld_LocalRayResult_setHitFraction(Native, value);
@@ -521,7 +521,7 @@ namespace BulletSharp
 		internal IntPtr Native;
 
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		private delegate float AddSingleResultUnmanagedDelegate(IntPtr rayResult, bool normalInWorldSpace);
+		private delegate double AddSingleResultUnmanagedDelegate(IntPtr rayResult, bool normalInWorldSpace);
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate bool NeedsCollisionUnmanagedDelegate(IntPtr proxy0);
 
@@ -537,12 +537,12 @@ namespace BulletSharp
 				Marshal.GetFunctionPointerForDelegate(_needsCollision));
 		}
 
-		private float AddSingleResultUnmanaged(IntPtr rayResult, bool normalInWorldSpace)
+		private double AddSingleResultUnmanaged(IntPtr rayResult, bool normalInWorldSpace)
 		{
 			return AddSingleResult(new LocalRayResult(rayResult), normalInWorldSpace);
 		}
 
-		public abstract float AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace);
+		public abstract double AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace);
 
 		private bool NeedsCollisionUnmanaged(IntPtr proxy0)
 		{
@@ -554,7 +554,7 @@ namespace BulletSharp
 			return btCollisionWorld_RayResultCallbackWrapper_needsCollision(Native, proxy0.Native);
 		}
 
-		public float ClosestHitFraction
+		public double ClosestHitFraction
 		{
 			get => btCollisionWorld_RayResultCallback_getClosestHitFraction(Native);
 			set => btCollisionWorld_RayResultCallback_setClosestHitFraction(Native, value);
@@ -671,13 +671,13 @@ namespace BulletSharp
 		}
 
 		public void ConvexSweepTestRef(ConvexShape castShape, ref Matrix from, ref Matrix to,
-			ConvexResultCallback resultCallback, float allowedCcdPenetration = 0)
+			ConvexResultCallback resultCallback, double allowedCcdPenetration = 0)
 		{
 			btCollisionWorld_convexSweepTest(Native, castShape.Native, ref from, ref to, resultCallback.Native, allowedCcdPenetration);
 		}
 
 		public void ConvexSweepTest(ConvexShape castShape, Matrix from, Matrix to,
-			ConvexResultCallback resultCallback, float allowedCcdPenetration = 0)
+			ConvexResultCallback resultCallback, double allowedCcdPenetration = 0)
 		{
 			btCollisionWorld_convexSweepTest(Native, castShape.Native, ref from,
 				ref to, resultCallback.Native, allowedCcdPenetration);
@@ -702,7 +702,7 @@ namespace BulletSharp
 
 		public static void ObjectQuerySingleRef(ConvexShape castShape, ref Matrix rayFromTrans,
 			ref Matrix rayToTrans, CollisionObject collisionObject, CollisionShape collisionShape,
-			ref Matrix colObjWorldTransform, ConvexResultCallback resultCallback, float allowedPenetration)
+			ref Matrix colObjWorldTransform, ConvexResultCallback resultCallback, double allowedPenetration)
 		{
 			btCollisionWorld_objectQuerySingle(castShape.Native, ref rayFromTrans,
 				ref rayToTrans, collisionObject.Native, collisionShape.Native, ref colObjWorldTransform,
@@ -711,7 +711,7 @@ namespace BulletSharp
 
 		public static void ObjectQuerySingle(ConvexShape castShape, Matrix rayFromTrans,
 			Matrix rayToTrans, CollisionObject collisionObject, CollisionShape collisionShape,
-			Matrix colObjWorldTransform, ConvexResultCallback resultCallback, float allowedPenetration)
+			Matrix colObjWorldTransform, ConvexResultCallback resultCallback, double allowedPenetration)
 		{
 			btCollisionWorld_objectQuerySingle(castShape.Native, ref rayFromTrans,
 				ref rayToTrans, collisionObject.Native, collisionShape.Native, ref colObjWorldTransform,
@@ -720,7 +720,7 @@ namespace BulletSharp
 
 		public static void ObjectQuerySingleInternalRef(ConvexShape castShape, ref Matrix convexFromTrans,
 			ref Matrix convexToTrans, CollisionObjectWrapper colObjWrap, ConvexResultCallback resultCallback,
-			float allowedPenetration)
+			double allowedPenetration)
 		{
 			btCollisionWorld_objectQuerySingleInternal(castShape.Native, ref convexFromTrans,
 				ref convexToTrans, colObjWrap.Native, resultCallback.Native, allowedPenetration);
@@ -728,7 +728,7 @@ namespace BulletSharp
 
 		public static void ObjectQuerySingleInternal(ConvexShape castShape, Matrix convexFromTrans,
 			Matrix convexToTrans, CollisionObjectWrapper colObjWrap, ConvexResultCallback resultCallback,
-			float allowedPenetration)
+			double allowedPenetration)
 		{
 			btCollisionWorld_objectQuerySingleInternal(castShape.Native, ref convexFromTrans,
 				ref convexToTrans, colObjWrap.Native, resultCallback.Native, allowedPenetration);

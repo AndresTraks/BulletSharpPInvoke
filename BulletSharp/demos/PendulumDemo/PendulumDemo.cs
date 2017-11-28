@@ -40,7 +40,7 @@ namespace PendulumDemo
 
     internal sealed class PendulumDemoSimulation : ISimulation
     {
-        const float radius = 0.05f;
+        const double radius = 0.05f;
 
         private MultiBodyConstraintSolver _solver;
 
@@ -55,7 +55,7 @@ namespace PendulumDemo
             MultiBodyWorld = new MultiBodyDynamicsWorld(Dispatcher, Broadphase, _solver, CollisionConfiguration);
             World.SetInternalTickCallback(TickCallback, null, true);
 
-            const bool floating = false;
+            const bool doubleing = false;
             const bool gyro = false;
             const int numLinks = 1;
             const bool canSleep = false;
@@ -64,9 +64,9 @@ namespace PendulumDemo
             var baseHalfExtents = new Vector3(0.05f, 0.5f, 0.1f);
 
             var baseInertiaDiag = Vector3.Zero;
-            const float baseMass = 0;
+            const double baseMass = 0;
 
-            MultiBody = new MultiBody(numLinks, baseMass, baseInertiaDiag, !floating, canSleep);
+            MultiBody = new MultiBody(numLinks, baseMass, baseInertiaDiag, !doubleing, canSleep);
             //MultiBody.UseRK4Integration = true;
             //MultiBody.BaseWorldTransform = Matrix.Identity;
 
@@ -80,7 +80,7 @@ namespace PendulumDemo
 
             for(int i = 0; i < numLinks; i++)
 		    {
-                const float linkMass = 10;
+                const double linkMass = 10;
 			    Vector3 linkInertiaDiag = Vector3.Zero;
                 using (var shape = new SphereShape(radius))
                 {
@@ -143,7 +143,7 @@ namespace PendulumDemo
             this.StandardCleanup();
         }
 
-        private void TickCallback(DynamicsWorld world, float timeStep)
+        private void TickCallback(DynamicsWorld world, double timeStep)
         {
             MultiBody.AddJointTorque(0, timeStep * 1000.0f);
         }

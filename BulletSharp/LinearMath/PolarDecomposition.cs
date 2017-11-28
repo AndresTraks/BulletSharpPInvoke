@@ -8,7 +8,7 @@ namespace BulletSharp
 	{
 		internal IntPtr _native;
 
-		public PolarDecomposition(float tolerance = 0.0001f, int maxIterations = 16)
+		public PolarDecomposition(double tolerance = 0.0001f, int maxIterations = 16)
 		{
 			_native = btPolarDecomposition_new(tolerance, (uint)maxIterations);
 		}

@@ -22,19 +22,19 @@ namespace BulletSharp
 			Native = native;
 		}
 
-		public float Damping
+		public double Damping
 		{
 			get => btConstraintSetting_getDamping(Native);
 			set => btConstraintSetting_setDamping(Native, value);
 		}
 
-		public float ImpulseClamp
+		public double ImpulseClamp
 		{
 			get => btConstraintSetting_getImpulseClamp(Native);
 			set => btConstraintSetting_setImpulseClamp(Native, value);
 		}
 
-		public float Tau
+		public double Tau
 		{
 			get => btConstraintSetting_getTau(Native);
 			set => btConstraintSetting_setTau(Native, value);
@@ -70,7 +70,7 @@ namespace BulletSharp
 				ref body1Trans);
 		}
 
-		public void UpdateRhs(float timeStep)
+		public void UpdateRhs(double timeStep)
 		{
 			btPoint2PointConstraint_updateRHS(Native, timeStep);
 		}
@@ -108,13 +108,23 @@ namespace BulletSharp
 		}
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
-	internal struct Point2PointConstraintFloatData
-	{
-		public TypedConstraintFloatData TypedConstraintData;
-		public Vector3FloatData PivotInA;
-		public Vector3FloatData PivotInB;
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct Point2PointConstraintFloatData
+    {
+        public TypedConstraintFloatData TypedConstraintData;
+        public Vector3FloatData PivotInA;
+        public Vector3FloatData PivotInB;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Point2PointConstraintFloatData), fieldName).ToInt32(); }
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Point2PointConstraintFloatData), fieldName).ToInt32(); }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+	internal struct Point2PointConstraintDoubleData
+	{
+		public TypedConstraintDoubleData TypedConstraintData;
+		public Vector3DoubleData PivotInA;
+		public Vector3DoubleData PivotInB;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Point2PointConstraintDoubleData), fieldName).ToInt32(); }
 	}
 }

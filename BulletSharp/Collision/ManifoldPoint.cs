@@ -70,78 +70,78 @@ namespace BulletSharp
 			Native = btManifoldPoint_new();
 		}
 
-		public ManifoldPoint(Vector3 pointA, Vector3 pointB, Vector3 normal, float distance)
+		public ManifoldPoint(Vector3 pointA, Vector3 pointB, Vector3 normal, double distance)
 		{
 			Native = btManifoldPoint_new2(ref pointA, ref pointB, ref normal, distance);
 		}
 
-		public float AppliedImpulse
+		public double AppliedImpulse
 		{
 			get => btManifoldPoint_getAppliedImpulse(Native);
 			set => btManifoldPoint_setAppliedImpulse(Native, value);
 		}
 
-		public float AppliedImpulseLateral1
+		public double AppliedImpulseLateral1
 		{
 			get => btManifoldPoint_getAppliedImpulseLateral1(Native);
 			set => btManifoldPoint_setAppliedImpulseLateral1(Native, value);
 		}
 
-		public float AppliedImpulseLateral2
+		public double AppliedImpulseLateral2
 		{
 			get => btManifoldPoint_getAppliedImpulseLateral2(Native);
 			set => btManifoldPoint_setAppliedImpulseLateral2(Native, value);
 		}
 
-		public float CombinedContactDamping1
+		public double CombinedContactDamping1
 		{
 			get => btManifoldPoint_getCombinedContactDamping1(Native);
 			set => btManifoldPoint_setCombinedContactDamping1(Native, value);
 		}
 
-		public float CombinedContactStiffness1
+		public double CombinedContactStiffness1
 		{
 			get => btManifoldPoint_getCombinedContactStiffness1(Native);
 			set => btManifoldPoint_setCombinedContactStiffness1(Native, value);
 		}
 
-		public float CombinedFriction
+		public double CombinedFriction
 		{
 			get => btManifoldPoint_getCombinedFriction(Native);
 			set => btManifoldPoint_setCombinedFriction(Native, value);
 		}
 
-		public float CombinedRestitution
+		public double CombinedRestitution
 		{
 			get => btManifoldPoint_getCombinedRestitution(Native);
 			set => btManifoldPoint_setCombinedRestitution(Native, value);
 		}
 
-		public float CombinedRollingFriction
+		public double CombinedRollingFriction
 		{
 			get => btManifoldPoint_getCombinedRollingFriction(Native);
 			set => btManifoldPoint_setCombinedRollingFriction(Native, value);
 		}
 
-		public float ContactCfm
+		public double ContactCfm
 		{
 			get => btManifoldPoint_getContactCFM(Native);
 			set => btManifoldPoint_setContactCFM(Native, value);
 		}
 
-		public float ContactErp
+		public double ContactErp
 		{
 			get => btManifoldPoint_getContactERP(Native);
 			set => btManifoldPoint_setContactERP(Native, value);
 		}
 
-		public float ContactMotion1
+		public double ContactMotion1
 		{
 			get => btManifoldPoint_getContactMotion1(Native);
 			set => btManifoldPoint_setContactMotion1(Native, value);
 		}
 
-		public float ContactMotion2
+		public double ContactMotion2
 		{
 			get => btManifoldPoint_getContactMotion2(Native);
 			set => btManifoldPoint_setContactMotion2(Native, value);
@@ -153,19 +153,19 @@ namespace BulletSharp
 			set => btManifoldPoint_setContactPointFlags(Native, value);
 		}
 
-		public float Distance
+		public double Distance
 		{
 			get => btManifoldPoint_getDistance(Native);
 			set => btManifoldPoint_setDistance(Native, value);
 		}
 
-		public float Distance1
+		public double Distance1
 		{
 			get => btManifoldPoint_getDistance1(Native);
 			set => btManifoldPoint_setDistance1(Native, value);
 		}
 
-		public float FrictionCfm
+		public double FrictionCfm
 		{
 			get => btManifoldPoint_getFrictionCFM(Native);
 			set => btManifoldPoint_setFrictionCFM(Native, value);

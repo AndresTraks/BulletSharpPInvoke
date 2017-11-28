@@ -224,8 +224,8 @@ namespace DemoFramework.SlimDX
             if (Math.Abs(n[2]) > (Math.Sqrt(2) / 2))
             {
                 // choose p in y-z plane
-                float a = n[1] * n[1] + n[2] * n[2];
-                float k = 1.0f / (float)Math.Sqrt(a);
+                double a = n[1] * n[1] + n[2] * n[2];
+                double k = 1.0f / (double)Math.Sqrt(a);
                 p = new BulletSharp.Math.Vector3(0, -n[2] * k, n[1] * k);
                 // set q = n x p
                 q = BulletSharp.Math.Vector3.Cross(n, p);
@@ -233,8 +233,8 @@ namespace DemoFramework.SlimDX
             else
             {
                 // choose p in x-y plane
-                float a = n[0] * n[0] + n[1] * n[1];
-                float k = 1.0f / (float)Math.Sqrt(a);
+                double a = n[0] * n[0] + n[1] * n[1];
+                double k = 1.0f / (double)Math.Sqrt(a);
                 p = new BulletSharp.Math.Vector3(-n[1] * k, n[0] * k, 0);
                 // set q = n x p
                 q = BulletSharp.Math.Vector3.Cross(n, p);
@@ -363,7 +363,7 @@ namespace DemoFramework.SlimDX
                 return;
 
             object[] userObjArr = softBody.UserObject as object[];
-            FloatArray vertexBuffer = userObjArr[0] as FloatArray;
+            doubleArray vertexBuffer = userObjArr[0] as doubleArray;
             IntArray indexBuffer = userObjArr[1] as IntArray;
 
             int vertexCount = (vertexBuffer.Count / 8);
@@ -392,7 +392,7 @@ namespace DemoFramework.SlimDX
                 mesh.UnlockIndexBuffer();
 
                 DataStream verts = mesh.LockVertexBuffer(LockFlags.Discard);
-                foreach (float f in vertexBuffer)
+                foreach (double f in vertexBuffer)
                     verts.Write(f);
                 mesh.UnlockVertexBuffer();
 

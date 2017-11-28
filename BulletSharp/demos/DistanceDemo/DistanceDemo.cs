@@ -17,7 +17,7 @@ namespace DistanceDemo
 
     internal sealed class DistanceDemo : IDemoConfiguration, IUpdateReceiver
     {
-        private float _rotation = 0;
+        private double _rotation = 0;
 
         public ISimulation CreateSimulation(Demo demo)
         {
@@ -83,7 +83,7 @@ namespace DistanceDemo
         public BroadphaseInterface Broadphase { get; }
         public DiscreteDynamicsWorld World { get; }
 
-        internal void SetRotation(float rotation)
+        internal void SetRotation(double rotation)
         {
             _rotatingBody.CenterOfMassTransform = Matrix.RotationX(rotation) * _rotBodyPosition;
             _rotatingBody.WorldTransform = _rotatingBody.CenterOfMassTransform;

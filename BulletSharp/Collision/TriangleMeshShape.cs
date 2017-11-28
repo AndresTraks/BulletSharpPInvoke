@@ -81,12 +81,12 @@ namespace BulletSharp
 	[StructLayout(LayoutKind.Sequential)]
 	internal struct TriangleMeshShapeData
 	{
-		public CollisionShapeFloatData CollisionShapeData;
+		public CollisionShapeData CollisionShapeData;
 		public StridingMeshInterfaceData MeshInterface;
-		public IntPtr QuantizedFloatBvh;
+		public IntPtr QuantizeddoubleBvh;
 		public IntPtr QuantizedDoubleBvh;
 		public IntPtr TriangleInfoMap;
-		public float CollisionMargin;
+		public double CollisionMargin;
 		public int Pad;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(TriangleMeshShapeData), fieldName).ToInt32(); }

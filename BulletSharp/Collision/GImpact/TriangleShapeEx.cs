@@ -28,12 +28,12 @@ namespace BulletSharp
 			GIM_TRIANGLE_CONTACT_copy_from(Native, other.Native);
 		}
 		/*
-		public void MergePoints(Vector4 plane, float margin, Vector3 points, int pointCount)
+		public void MergePoints(Vector4 plane, double margin, Vector3 points, int pointCount)
 		{
 			GIM_TRIANGLE_CONTACT_merge_points(Native, ref plane, margin, ref points, pointCount);
 		}
 		*/
-		public float PenetrationDepth
+		public double PenetrationDepth
 		{
 			get => GIM_TRIANGLE_CONTACT_getPenetration_depth(Native);
 			set => GIM_TRIANGLE_CONTACT_setPenetration_depth(Native, value);
@@ -123,13 +123,13 @@ namespace BulletSharp
 			return btPrimitiveTriangle_overlap_test_conservative(Native, other.Native);
 		}
 
-		public float Dummy
+		public double Dummy
 		{
 			get => btPrimitiveTriangle_getDummy(Native);
 			set => btPrimitiveTriangle_setDummy(Native, value);
 		}
 
-		public float Margin
+		public double Margin
 		{
 			get => btPrimitiveTriangle_getMargin(Native);
 			set => btPrimitiveTriangle_setMargin(Native, value);

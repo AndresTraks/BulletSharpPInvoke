@@ -6,14 +6,14 @@ namespace BulletSharp
     {
         protected Vector3 ComputeReflectionDirection(ref Vector3 direction, ref Vector3 normal)
         {
-            float dot;
+            double dot;
             Vector3.Dot(ref direction, ref normal, out dot);
             return direction - (2.0f * dot) * normal;
         }
 
         protected Vector3 ParallelComponent(ref Vector3 direction, ref Vector3 normal)
         {
-            float magnitude;
+            double magnitude;
             Vector3.Dot(ref direction, ref normal, out magnitude);
             return normal * magnitude;
         }
@@ -38,7 +38,7 @@ namespace BulletSharp
 
             m_currentPosition = m_ghostObject.WorldTransform.Origin;
 
-            float maxPen = 0f;
+            double maxPen = 0f;
             for (int i = 0; i < m_ghostObject.OverlappingPairCache.NumOverlappingPairs; i++)
             {
                 m_manifoldArray.Clear();
@@ -59,12 +59,12 @@ namespace BulletSharp
                 for (int j = 0; j < m_manifoldArray.Count; j++)
                 {
                     PersistentManifold manifold = m_manifoldArray[j];
-                    float directionSign = manifold.Body0 == m_ghostObject ? -1f : 1f;
+                    double directionSign = manifold.Body0 == m_ghostObject ? -1f : 1f;
                     for (int p = 0; p < manifold.NumContacts; p++)
                     {
                         ManifoldPoint pt = manifold.GetContactPoint(p);
 
-                        float dist = pt.Distance;
+                        double dist = pt.Distance;
 
                         if (dist < 0.0f)
                         {
@@ -142,10 +142,10 @@ namespace BulletSharp
             }
 
         }
-        protected void UpdateTargetPositionBasedOnCollision(ref Vector3 hitNormal, float tangentMag, float normalMag)
+        protected void UpdateTargetPositionBasedOnCollision(ref Vector3 hitNormal, double tangentMag, double normalMag)
         {
             Vector3 movementDirection = m_targetPosition - m_currentPosition;
-            float movementLength = movementDirection.Length;
+            double movementLength = movementDirection.Length;
             if (movementLength > MathUtil.SIMD_EPSILON)
             {
                 movementDirection.Normalize();
@@ -187,13 +187,13 @@ namespace BulletSharp
             Matrix start = Matrix.Identity, end = Matrix.Identity;
             m_targetPosition = m_currentPosition + walkMove;
 
-            float fraction = 1.0f;
-            float distance2 = (m_currentPosition - m_targetPosition).LengthSquared;
+            double fraction = 1.0f;
+            double distance2 = (m_currentPosition - m_targetPosition).LengthSquared;
             //	printf("distance2=%f\n",distance2);
 
             if (m_touchingContact)
             {
-                float dot;
+                double dot;
                 Vector3.Dot(ref m_normalizedDirection, ref m_touchingNormal, out dot);
                 if (dot > 0.0f)
                 {
@@ -216,7 +216,7 @@ namespace BulletSharp
                 callback.CollisionFilterMask = GhostObject.BroadphaseHandle.CollisionFilterMask;
 
 
-                float margin = m_convexShape.Margin;
+                double margin = m_convexShape.Margin;
                 m_convexShape.Margin = margin + m_addedMargin;
 
 
@@ -237,7 +237,7 @@ namespace BulletSharp
                 if (callback.HasHit)
                 {
                     // we moved only a fraction
-                    float hitDistance = (callback.HitPointWorld - m_currentPosition).Length;
+                    double hitDistance = (callback.HitPointWorld - m_currentPosition).Length;
 
                     Vector3 hitNormalWorld = callback.HitNormalWorld;
                     UpdateTargetPositionBasedOnCollision(ref hitNormalWorld, 0f, 1f);
@@ -247,7 +247,7 @@ namespace BulletSharp
                     {
                         currentDir.Normalize();
                         /* See Quake2: "If velocity is against original velocity, stop ead to avoid tiny oscilations in sloping corners." */
-                        float dot;
+                        double dot;
                         Vector3.Dot(ref currentDir, ref m_normalizedDirection, out dot);
                         if (dot <= 0.0f)
                         {
@@ -272,21 +272,21 @@ namespace BulletSharp
             }
 
         }
-        protected void StepDown(CollisionWorld collisionWorld, float dt)
+        protected void StepDown(CollisionWorld collisionWorld, double dt)
         {
             Matrix start, end, end_double;
             bool runonce = false;
 
             // phase 3: down
-            /*float additionalDownStep = (m_wasOnGround && !onGround()) ? m_stepHeight : 0.0;
+            /*double additionalDownStep = (m_wasOnGround && !onGround()) ? m_stepHeight : 0.0;
             btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + additionalDownStep);
-            float downVelocity = (additionalDownStep == 0.0 && m_verticalVelocity<0.0?-m_verticalVelocity:0.0) * dt;
+            double downVelocity = (additionalDownStep == 0.0 && m_verticalVelocity<0.0?-m_verticalVelocity:0.0) * dt;
             btVector3 gravity_drop = getUpAxisDirections()[m_upAxis] * downVelocity; 
             m_targetPosition -= (step_drop + gravity_drop);*/
 
             Vector3 orig_position = m_targetPosition;
 
-            float downVelocity = (m_verticalVelocity < 0.0f ? -m_verticalVelocity : 0.0f) * dt;
+            double downVelocity = (m_verticalVelocity < 0.0f ? -m_verticalVelocity : 0.0f) * dt;
             if (downVelocity > 0.0 && downVelocity > m_fallSpeed
                 && (m_wasOnGround || !m_wasJumping))
             {
@@ -334,7 +334,7 @@ namespace BulletSharp
                     }
                 }
 
-                float downVelocity2 = (m_verticalVelocity < 0.0f ? -m_verticalVelocity : 0.0f) * dt;
+                double downVelocity2 = (m_verticalVelocity < 0.0f ? -m_verticalVelocity : 0.0f) * dt;
                 bool has_hit = false;
                 if (bounce_fix == true)
                     has_hit = callback.HasHit || callback2.HasHit;
@@ -361,7 +361,7 @@ namespace BulletSharp
             if (callback.HasHit || runonce == true)
             {
                 // we dropped a fraction of the height -> hit floor
-                float fraction = (m_currentPosition.Y - callback.HitPointWorld.Y) / 2;
+                double fraction = (m_currentPosition.Y - callback.HitPointWorld.Y) / 2;
 
                 //printf("hitpoint: %g - pos %g\n", callback.m_hitPointWorld.getY(), m_currentPosition.getY());
 
@@ -411,7 +411,7 @@ namespace BulletSharp
             }
         }
 
-        public KinematicCharacterController(PairCachingGhostObject ghostObject, ConvexShape convexShape, float stepHeight, int upAxis = 1)
+        public KinematicCharacterController(PairCachingGhostObject ghostObject, ConvexShape convexShape, double stepHeight, int upAxis = 1)
         {
             m_upAxis = upAxis;
             m_addedMargin = 0.02f;
@@ -438,7 +438,7 @@ namespace BulletSharp
         }
 
         ///btActionInterface interface
-        public virtual void UpdateAction(CollisionWorld collisionWorld, float deltaTime)
+        public virtual void UpdateAction(CollisionWorld collisionWorld, double deltaTime)
         {
             PreStep(collisionWorld);
             PlayerStep(collisionWorld, deltaTime);
@@ -474,7 +474,7 @@ namespace BulletSharp
             SetWalkDirection(ref walkDirection);
         }
 
-        public void SetVelocityForTimeInterval(ref Vector3 velocity, float timeInterval)
+        public void SetVelocityForTimeInterval(ref Vector3 velocity, double timeInterval)
         {
             //	printf("setVelocity!\n");
             //	printf("  interval: %f\n", timeInterval);
@@ -487,7 +487,7 @@ namespace BulletSharp
             m_velocityTimeInterval = timeInterval;
         }
 
-        public void SetVelocityForTimeInterval(Vector3 velocity, float timeInterval)
+        public void SetVelocityForTimeInterval(Vector3 velocity, double timeInterval)
         {
             SetVelocityForTimeInterval(ref velocity, timeInterval);
         }
@@ -534,7 +534,7 @@ namespace BulletSharp
 
         }
 
-        public void PlayerStep(CollisionWorld collisionWorld, float dt)
+        public void PlayerStep(CollisionWorld collisionWorld, double dt)
         {
             // quick check...
             if (!m_useWalkDirection && m_velocityTimeInterval <= 0.0)
@@ -572,7 +572,7 @@ namespace BulletSharp
             {
                 //printf("  time: %f", m_velocityTimeInterval);
                 // still have some time left for moving!
-                float dtMoving =
+                double dtMoving =
                    (dt < m_velocityTimeInterval) ? dt : m_velocityTimeInterval;
                 m_velocityTimeInterval -= dt;
 
@@ -590,17 +590,17 @@ namespace BulletSharp
             m_ghostObject.WorldTransform = xform;
         }
 
-        public void SetFallSpeed(float fallSpeed)
+        public void SetFallSpeed(double fallSpeed)
         {
             m_fallSpeed = fallSpeed;
         }
 
-        public void SetJumpSpeed(float jumpSpeed)
+        public void SetJumpSpeed(double jumpSpeed)
         {
             m_jumpSpeed = jumpSpeed;
         }
 
-        public void SetMaxJumpHeight(float maxJumpHeight)
+        public void SetMaxJumpHeight(double maxJumpHeight)
         {
             m_maxJumpHeight = maxJumpHeight;
         }
@@ -622,7 +622,7 @@ namespace BulletSharp
                 //m_rigidBody.getMotionState().getWorldTransform (out xform);
                 //Vector3 up = xform.Up;
                 //up.Normalize ();
-                //float magnitude = (1.0f/m_rigidBody.getInvMass()) * 8.0f;
+                //double magnitude = (1.0f/m_rigidBody.getInvMass()) * 8.0f;
                 //m_rigidBody.applyCentralImpulse (up * magnitude);
             }
 
@@ -633,17 +633,17 @@ namespace BulletSharp
             Jump();
         }
 
-        public float Gravity { get; set; }
+        public double Gravity { get; set; }
 
         /// The max slope determines the maximum angle that the controller can walk up.
         /// The slope angle is measured in radians.
-        public float MaxSlope
+        public double MaxSlope
         {
             get { return m_maxSlopeRadians; }
             set
             {
                 m_maxSlopeRadians = value;
-                m_maxSlopeCosine = (float)System.Math.Cos(value);
+                m_maxSlopeCosine = (double)System.Math.Cos(value);
             }
         }
 
@@ -672,26 +672,26 @@ namespace BulletSharp
         }
 
 
-        protected float m_halfHeight;
+        protected double m_halfHeight;
 
         protected PairCachingGhostObject m_ghostObject;
         protected ConvexShape m_convexShape;//is also in m_ghostObject, but it needs to be convex, so we store it here to avoid upcast
 
-        protected float m_verticalVelocity;
-        protected float m_verticalOffset;
+        protected double m_verticalVelocity;
+        protected double m_verticalOffset;
 
 
-        protected float m_fallSpeed;
-        protected float m_jumpSpeed;
-        protected float m_maxJumpHeight;
-        protected float m_maxSlopeRadians; // Slope angle that is set (used for returning the exact value)
-        protected float m_maxSlopeCosine;  // Cosine equivalent of m_maxSlopeRadians (calculated once when set, for optimization)
+        protected double m_fallSpeed;
+        protected double m_jumpSpeed;
+        protected double m_maxJumpHeight;
+        protected double m_maxSlopeRadians; // Slope angle that is set (used for returning the exact value)
+        protected double m_maxSlopeCosine;  // Cosine equivalent of m_maxSlopeRadians (calculated once when set, for optimization)
 
-        protected float m_turnAngle;
+        protected double m_turnAngle;
 
-        protected float m_stepHeight;
+        protected double m_stepHeight;
 
-        protected float m_addedMargin;//@todo: remove this and fix the code
+        protected double m_addedMargin;//@todo: remove this and fix the code
 
         ///this is the desired walk direction, set by the user
         protected Vector3 m_walkDirection;
@@ -699,7 +699,7 @@ namespace BulletSharp
 
         //some internal variables
         protected Vector3 m_currentPosition;
-        float m_currentStepOffset;
+        double m_currentStepOffset;
         protected Vector3 m_targetPosition;
 
         ///keep track of the contact manifolds
@@ -714,7 +714,7 @@ namespace BulletSharp
 
         protected int m_upAxis;
         protected bool m_useWalkDirection;
-        protected float m_velocityTimeInterval;
+        protected double m_velocityTimeInterval;
         
         protected bool m_interpolateUp;
         protected bool full_drop;
@@ -743,7 +743,7 @@ namespace BulletSharp
             _me = me;
         }
 
-        public override float AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace)
+        public override double AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace)
         {
             if (rayResult.CollisionObject == _me)
                 return 1.0f;
@@ -758,7 +758,7 @@ namespace BulletSharp
     {
         static Vector3 zero = new Vector3();
 
-        public KinematicClosestNotMeConvexResultCallback(CollisionObject me, Vector3 up, float minSlopeDot)
+        public KinematicClosestNotMeConvexResultCallback(CollisionObject me, Vector3 up, double minSlopeDot)
             : base(ref zero, ref zero)
         {
             _me = me;
@@ -766,7 +766,7 @@ namespace BulletSharp
             _minSlopeDot = minSlopeDot;
         }
 
-        public override float AddSingleResult(LocalConvexResult convexResult, bool normalInWorldSpace)
+        public override double AddSingleResult(LocalConvexResult convexResult, bool normalInWorldSpace)
         {
             if (convexResult.HitCollisionObject == _me)
             {
@@ -789,7 +789,7 @@ namespace BulletSharp
                 hitNormalWorld = Vector3.TransformCoordinate(convexResult.HitNormalLocal, convexResult.HitCollisionObject.WorldTransform.Basis);
             }
 
-            float dotUp;
+            double dotUp;
             Vector3.Dot(ref _up, ref hitNormalWorld, out dotUp);
             if (dotUp < _minSlopeDot)
             {
@@ -801,6 +801,6 @@ namespace BulletSharp
 
         protected CollisionObject _me;
         protected Vector3 _up;
-        protected float _minSlopeDot;
+        protected double _minSlopeDot;
     }
 }

@@ -29,17 +29,17 @@ namespace BulletSharp
 			btGeneric6DofSpringConstraint_enableSpring(Native, index, onOff);
 		}
 
-		public float GetDamping(int index)
+		public double GetDamping(int index)
 		{
 			return btGeneric6DofSpringConstraint_getDamping(Native, index);
 		}
 
-		public float GetEquilibriumPoint(int index)
+		public double GetEquilibriumPoint(int index)
 		{
 			return btGeneric6DofSpringConstraint_getEquilibriumPoint(Native, index);
 		}
 
-		public float GetStiffness(int index)
+		public double GetStiffness(int index)
 		{
 			return btGeneric6DofSpringConstraint_getStiffness(Native, index);
 		}
@@ -49,7 +49,7 @@ namespace BulletSharp
 			return btGeneric6DofSpringConstraint_isSpringEnabled(Native, index);
 		}
 
-		public void SetDamping(int index, float damping)
+		public void SetDamping(int index, double damping)
 		{
 			btGeneric6DofSpringConstraint_setDamping(Native, index, damping);
 		}
@@ -64,12 +64,12 @@ namespace BulletSharp
 			btGeneric6DofSpringConstraint_setEquilibriumPoint2(Native, index);
 		}
 
-		public void SetEquilibriumPoint(int index, float val)
+		public void SetEquilibriumPoint(int index, double val)
 		{
 			btGeneric6DofSpringConstraint_setEquilibriumPoint3(Native, index, val);
 		}
 
-		public void SetStiffness(int index, float stiffness)
+		public void SetStiffness(int index, double stiffness)
 		{
 			btGeneric6DofSpringConstraint_setStiffness(Native, index, stiffness);
 		}
@@ -85,5 +85,17 @@ namespace BulletSharp
 		public fixed float SpringDamping[6];
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofSpringConstraintFloatData), fieldName).ToInt32(); }
+    }
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal unsafe struct Generic6DofSpringConstraintDoubleData
+	{
+		public Generic6DofConstraintDoubleData SixDofData;
+		public fixed int SpringEnabled[6];
+		public fixed double EquilibriumPoint[6];
+		public fixed double SpringStiffness[6];
+		public fixed double SpringDamping[6];
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofSpringConstraintDoubleData), fieldName).ToInt32(); }
 	}
 }

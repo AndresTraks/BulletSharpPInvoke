@@ -104,7 +104,7 @@ namespace BulletSharp.SoftBody
 			Native = btSoftBodyWorldInfo_new();
 		}
 
-		public float AirDensity
+		public double AirDensity
 		{
 			get => btSoftBodyWorldInfo_getAir_density(Native);
 			set => btSoftBodyWorldInfo_setAir_density(Native, value);
@@ -141,7 +141,7 @@ namespace BulletSharp.SoftBody
 			set => btSoftBodyWorldInfo_setGravity(Native, ref value);
 		}
 
-		public float MaxDisplacement
+		public double MaxDisplacement
 		{
 			get => btSoftBodyWorldInfo_getMaxDisplacement(Native);
 			set => btSoftBodyWorldInfo_setMaxDisplacement(Native, value);
@@ -159,7 +159,7 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
-		public float WaterDensity
+		public double WaterDensity
 		{
 			get => btSoftBodyWorldInfo_getWater_density(Native);
 			set => btSoftBodyWorldInfo_setWater_density(Native, value);
@@ -176,7 +176,7 @@ namespace BulletSharp.SoftBody
 			set => btSoftBodyWorldInfo_setWater_normal(Native, ref value);
 		}
 
-		public float WaterOffset
+		public double WaterOffset
 		{
 			get => btSoftBodyWorldInfo_getWater_offset(Native);
 			set => btSoftBodyWorldInfo_setWater_offset(Native, value);
@@ -216,7 +216,7 @@ namespace BulletSharp.SoftBody
 			[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 			private delegate void PrepareUnmanagedDelegate(IntPtr angularJoint);
 			[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-			private delegate float SpeedUnmanagedDelegate(IntPtr angularJoint, float current);
+			private delegate double SpeedUnmanagedDelegate(IntPtr angularJoint, double current);
 
 			private PrepareUnmanagedDelegate _prepare;
 			private SpeedUnmanagedDelegate _speed;
@@ -273,7 +273,7 @@ namespace BulletSharp.SoftBody
 				Prepare(new AngularJoint(angularJoint));
 			}
 
-			public float SpeedUnmanaged(IntPtr angularJoint, float current)
+			public double SpeedUnmanaged(IntPtr angularJoint, double current)
 			{
 				return Speed(new AngularJoint(angularJoint), current);
 			}
@@ -282,7 +282,7 @@ namespace BulletSharp.SoftBody
 			{
 			}
 
-			public virtual float Speed(AngularJoint angularJoint, float current)
+			public virtual double Speed(AngularJoint angularJoint, double current)
 			{
 				return current;
 			}
@@ -428,13 +428,13 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_Anchor_setC1(Native, ref value);
 		}
 
-		public float C2
+		public double C2
 		{
 			get => btSoftBody_Anchor_getC2(Native);
 			set => btSoftBody_Anchor_setC2(Native, value);
 		}
 
-		public float Influence
+		public double Influence
 		{
 			get => btSoftBody_Anchor_getInfluence(Native);
 			set => btSoftBody_Anchor_setInfluence(Native, value);
@@ -565,7 +565,7 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_Body_setCollisionObject(Native, value.Native);
 		}
 
-		public float InverseMass => btSoftBody_Body_invMass(Native);
+		public double InverseMass => btSoftBody_Body_invMass(Native);
 
 		public Matrix InverseWorldInertia
 		{
@@ -650,7 +650,7 @@ namespace BulletSharp.SoftBody
 		{
 		}
 
-		public float Friction
+		public double Friction
 		{
 			get => btSoftBody_CJoint_getFriction(Native);
 			set => btSoftBody_CJoint_setFriction(Native, value);
@@ -708,7 +708,7 @@ namespace BulletSharp.SoftBody
 			Native = native;
 		}
 
-		public float AngularDamping
+		public double AngularDamping
 		{
 			get => btSoftBody_Cluster_getAdamping(Native);
 			set => btSoftBody_Cluster_setAdamping(Native, value);
@@ -789,13 +789,13 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_Cluster_setFramexform(Native, ref value);
 		}
 
-		public float Idmass
+		public double Idmass
 		{
 			get => btSoftBody_Cluster_getIdmass(Native);
 			set => btSoftBody_Cluster_setIdmass(Native, value);
 		}
 
-		public float InverseMass
+		public double InverseMass
 		{
 			get => btSoftBody_Cluster_getImass(Native);
 			set => btSoftBody_Cluster_setImass(Native, value);
@@ -812,7 +812,7 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_Cluster_setInvwi(Native, ref value);
 		}
 
-		public float LinearDamping
+		public double LinearDamping
 		{
 			get => btSoftBody_Cluster_getLdamping(Native);
 			set => btSoftBody_Cluster_setLdamping(Native, value);
@@ -870,19 +870,19 @@ namespace BulletSharp.SoftBody
 			}
 		}
 		*/
-		public float Matching
+		public double Matching
 		{
 			get => btSoftBody_Cluster_getMatching(Native);
 			set => btSoftBody_Cluster_setMatching(Native, value);
 		}
 
-		public float MaxSelfCollisionImpulse
+		public double MaxSelfCollisionImpulse
 		{
 			get => btSoftBody_Cluster_getMaxSelfCollisionImpulse(Native);
 			set => btSoftBody_Cluster_setMaxSelfCollisionImpulse(Native, value);
 		}
 
-		public float NodeDamping
+		public double NodeDamping
 		{
 			get => btSoftBody_Cluster_getNdamping(Native);
 			set => btSoftBody_Cluster_setNdamping(Native, value);
@@ -912,7 +912,7 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_Cluster_setNvimpulses(Native, value);
 		}
 
-		public float SelfCollisionImpulseFactor
+		public double SelfCollisionImpulseFactor
 		{
 			get => btSoftBody_Cluster_getSelfCollisionImpulseFactor(Native);
 			set => btSoftBody_Cluster_setSelfCollisionImpulseFactor(Native, value);
@@ -950,7 +950,7 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_Config_setAeromodel(Native, value);
 		}
 
-		public float AnchorHardness
+		public double AnchorHardness
 		{
 			get => btSoftBody_Config_getKAHR(Native);
 			set => btSoftBody_Config_setKAHR(Native, value);
@@ -968,19 +968,19 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_Config_setCollisions(Native, value);
 		}
 
-		public float Damping
+		public double Damping
 		{
 			get => btSoftBody_Config_getKDP(Native);
 			set => btSoftBody_Config_setKDP(Native, value);
 		}
 
-		public float DynamicFriction
+		public double DynamicFriction
 		{
 			get => btSoftBody_Config_getKDF(Native);
 			set => btSoftBody_Config_setKDF(Native, value);
 		}
 
-		public float Drag
+		public double Drag
 		{
 			get => btSoftBody_Config_getKDG(Native);
 			set => btSoftBody_Config_setKDG(Native, value);
@@ -1004,25 +1004,25 @@ namespace BulletSharp.SoftBody
 			}
 		}
 		*/
-		public float KineticContactHardness
+		public double KineticContactHardness
 		{
 			get => btSoftBody_Config_getKKHR(Native);
 			set => btSoftBody_Config_setKKHR(Native, value);
 		}
 
-		public float Lift
+		public double Lift
 		{
 			get => btSoftBody_Config_getKLF(Native);
 			set => btSoftBody_Config_setKLF(Native, value);
 		}
 
-		public float MaxVolume
+		public double MaxVolume
 		{
 			get => btSoftBody_Config_getMaxvolume(Native);
 			set => btSoftBody_Config_setMaxvolume(Native, value);
 		}
 
-		public float PoseMatching
+		public double PoseMatching
 		{
 			get => btSoftBody_Config_getKMT(Native);
 			set => btSoftBody_Config_setKMT(Native, value);
@@ -1046,73 +1046,73 @@ namespace BulletSharp.SoftBody
 			}
 		}
 		*/
-		public float Pressure
+		public double Pressure
 		{
 			get => btSoftBody_Config_getKPR(Native);
 			set => btSoftBody_Config_setKPR(Native, value);
 		}
 
-		public float RigidContactHardness
+		public double RigidContactHardness
 		{
 			get => btSoftBody_Config_getKCHR(Native);
 			set => btSoftBody_Config_setKCHR(Native, value);
 		}
 
-		public float SoftContactHardness
+		public double SoftContactHardness
 		{
 			get => btSoftBody_Config_getKSHR(Native);
 			set => btSoftBody_Config_setKSHR(Native, value);
 		}
 
-		public float SoftKineticHardness
+		public double SoftKineticHardness
 		{
 			get => btSoftBody_Config_getKSKHR_CL(Native);
 			set => btSoftBody_Config_setKSKHR_CL(Native, value);
 		}
 
-		public float SoftKineticImpulseSplit
+		public double SoftKineticImpulseSplit
 		{
 			get => btSoftBody_Config_getKSK_SPLT_CL(Native);
 			set => btSoftBody_Config_setKSK_SPLT_CL(Native, value);
 		}
 
-		public float SoftRigidHardness
+		public double SoftRigidHardness
 		{
 			get => btSoftBody_Config_getKSRHR_CL(Native);
 			set => btSoftBody_Config_setKSRHR_CL(Native, value);
 		}
 
-		public float SoftRigidImpulseSplit
+		public double SoftRigidImpulseSplit
 		{
 			get => btSoftBody_Config_getKSR_SPLT_CL(Native);
 			set => btSoftBody_Config_setKSR_SPLT_CL(Native, value);
 		}
 
-		public float SoftSoftHardness
+		public double SoftSoftHardness
 		{
 			get => btSoftBody_Config_getKSSHR_CL(Native);
 			set => btSoftBody_Config_setKSSHR_CL(Native, value);
 		}
 
-		public float SoftSoftImpulseSplit
+		public double SoftSoftImpulseSplit
 		{
 			get => btSoftBody_Config_getKSS_SPLT_CL(Native);
 			set => btSoftBody_Config_setKSS_SPLT_CL(Native, value);
 		}
 
-		public float VolumeConversation
+		public double VolumeConversation
 		{
 			get => btSoftBody_Config_getKVC(Native);
 			set => btSoftBody_Config_setKVC(Native, value);
 		}
 
-		public float VelocityCorrectionFactor
+		public double VelocityCorrectionFactor
 		{
 			get => btSoftBody_Config_getKVCF(Native);
 			set => btSoftBody_Config_setKVCF(Native, value);
 		}
 
-		public float Timescale
+		public double Timescale
 		{
 			get => btSoftBody_Config_getTimescale(Native);
 			set => btSoftBody_Config_setTimescale(Native, value);
@@ -1219,7 +1219,7 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_Face_setNormal(Native, ref value);
 		}
 
-		public float RestArea
+		public double RestArea
 		{
 			get => btSoftBody_Face_getRa(Native);
 			set => btSoftBody_Face_setRa(Native, value);
@@ -1258,7 +1258,7 @@ namespace BulletSharp.SoftBody
 		internal IntPtr Native;
 
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		private delegate float EvalUnmanagedDelegate([In] ref Vector3 x);
+		private delegate double EvalUnmanagedDelegate([In] ref Vector3 x);
 
 		private EvalUnmanagedDelegate _eval;
 
@@ -1269,7 +1269,7 @@ namespace BulletSharp.SoftBody
 			Native = btSoftBody_ImplicitFnWrapper_new(Marshal.GetFunctionPointerForDelegate(_eval));
 		}
 
-		public abstract float Eval(ref Vector3 x);
+		public abstract double Eval(ref Vector3 x);
 
 		public void Dispose()
 		{
@@ -1311,7 +1311,7 @@ namespace BulletSharp.SoftBody
 			return btSoftBody_Impulse_operator_n(Native);
 		}
 
-		public Impulse operator*(float x)
+		public Impulse operator*(double x)
 		{
 			return btSoftBody_Impulse_operator_m(Native, x);
 		}
@@ -1382,19 +1382,19 @@ namespace BulletSharp.SoftBody
 				Native = native;
 			}
 
-			public float ConstraintForceMixing
+			public double ConstraintForceMixing
 			{
 				get => btSoftBody_Joint_Specs_getCfm(Native);
 				set => btSoftBody_Joint_Specs_setCfm(Native, value);
 			}
 
-			public float ErrorReductionParameter
+			public double ErrorReductionParameter
 			{
 				get => btSoftBody_Joint_Specs_getErp(Native);
 				set => btSoftBody_Joint_Specs_setErp(Native, value);
 			}
 
-			public float Split
+			public double Split
 			{
 				get => btSoftBody_Joint_Specs_getSplit(Native);
 				set => btSoftBody_Joint_Specs_setSplit(Native, value);
@@ -1450,17 +1450,17 @@ namespace BulletSharp.SoftBody
 			Native = native;
 		}
 
-		public void Prepare(float deltaTime, int iterations)
+		public void Prepare(double deltaTime, int iterations)
 		{
 			btSoftBody_Joint_Prepare(Native, deltaTime, iterations);
 		}
 
-		public void Solve(float deltaTime, float sor)
+		public void Solve(double deltaTime, double sor)
 		{
 			btSoftBody_Joint_Solve(Native, deltaTime, sor);
 		}
 
-		public void Terminate(float deltaTime)
+		public void Terminate(double deltaTime)
 		{
 			btSoftBody_Joint_Terminate(Native, deltaTime);
 		}
@@ -1470,7 +1470,7 @@ namespace BulletSharp.SoftBody
 			get { return btSoftBody_Joint_getBodies(Native); }
 		}
 		*/
-		public float ConstraintForceMixing
+		public double ConstraintForceMixing
 		{
 			get => btSoftBody_Joint_getCfm(Native);
 			set => btSoftBody_Joint_setCfm(Native, value);
@@ -1493,7 +1493,7 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_Joint_setDrift(Native, ref value);
 		}
 
-		public float ErrorReductionParameter
+		public double ErrorReductionParameter
 		{
 			get => btSoftBody_Joint_getErp(Native);
 			set => btSoftBody_Joint_setErp(Native, value);
@@ -1533,7 +1533,7 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_Joint_setSdrift(Native, ref value);
 		}
 
-		public float Split
+		public double Split
 		{
 			get => btSoftBody_Joint_getSplit(Native);
 			set => btSoftBody_Joint_setSplit(Native, value);
@@ -1551,19 +1551,19 @@ namespace BulletSharp.SoftBody
 		{
 		}
 
-		public float C0
+		public double C0
 		{
 			get => btSoftBody_Link_getC0(Native);
 			set => btSoftBody_Link_setC0(Native, value);
 		}
 
-		public float C1
+		public double C1
 		{
 			get => btSoftBody_Link_getC1(Native);
 			set => btSoftBody_Link_setC1(Native, value);
 		}
 
-		public float C2
+		public double C2
 		{
 			get => btSoftBody_Link_getC2(Native);
 			set => btSoftBody_Link_setC2(Native, value);
@@ -1598,7 +1598,7 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
-		public float RestLength
+		public double RestLength
 		{
 			get => btSoftBody_Link_getRl(Native);
 			set => btSoftBody_Link_setRl(Native, value);
@@ -1653,7 +1653,7 @@ namespace BulletSharp.SoftBody
 		{
 		}
 
-		public float AngularStiffness
+		public double AngularStiffness
 		{
 			get => btSoftBody_Material_getKAST(Native);
 			set => btSoftBody_Material_setKAST(Native, value);
@@ -1665,13 +1665,13 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_Material_setFlags(Native, value);
 		}
 
-		public float LinearStiffness
+		public double LinearStiffness
 		{
 			get => btSoftBody_Material_getKLST(Native);
 			set => btSoftBody_Material_setKLST(Native, value);
 		}
 
-		public float VolumeStiffness
+		public double VolumeStiffness
 		{
 			get => btSoftBody_Material_getKVST(Native);
 			set => btSoftBody_Material_setKVST(Native, value);
@@ -1687,7 +1687,7 @@ namespace BulletSharp.SoftBody
 		{
 		}
 
-		public float Area
+		public double Area
 		{
 			get => btSoftBody_Node_getArea(Native);
 			set => btSoftBody_Node_setArea(Native, value);
@@ -1704,7 +1704,7 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_Node_setF(Native, ref value);
 		}
 
-		public float InverseMass
+		public double InverseMass
 		{
 			get => btSoftBody_Node_getIm(Native);
 			set => btSoftBody_Node_setIm(Native, value);
@@ -1787,7 +1787,7 @@ namespace BulletSharp.SoftBody
 		{
 		}
 		/*
-		public FloatArray Coords
+		public doubleArray Coords
 		{
 			get { return btSoftBody_Note_getCoords(Native); }
 		}
@@ -1921,7 +1921,7 @@ namespace BulletSharp.SoftBody
 			}
 		}
 		*/
-		public float Volume
+		public double Volume
 		{
 			get => btSoftBody_Pose_getVolume(Native);
 			set => btSoftBody_Pose_setVolume(Native, value);
@@ -1937,13 +1937,13 @@ namespace BulletSharp.SoftBody
 		{
 		}
 
-		public RayFromToCaster(Vector3 rayFrom, Vector3 rayTo, float mxt)
+		public RayFromToCaster(Vector3 rayFrom, Vector3 rayTo, double mxt)
 			: base(btSoftBody_RayFromToCaster_new(ref rayFrom, ref rayTo, mxt))
 		{
 		}
 
-		public static float RayFromToTriangle(Vector3 rayFrom, Vector3 rayTo,
-			Vector3 rayNormalizedDirection, Vector3 a, Vector3 b, Vector3 c, float maxt = float.MaxValue)
+		public static double RayFromToTriangle(Vector3 rayFrom, Vector3 rayTo,
+			Vector3 rayNormalizedDirection, Vector3 a, Vector3 b, Vector3 c, double maxt = double.MaxValue)
 		{
 			return btSoftBody_RayFromToCaster_rayFromToTriangle(ref rayFrom,
 				ref rayTo, ref rayNormalizedDirection, ref a, ref b, ref c, maxt);
@@ -1970,7 +1970,7 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
-		public float Mint
+		public double Mint
 		{
 			get => btSoftBody_RayFromToCaster_getMint(Native);
 			set => btSoftBody_RayFromToCaster_setMint(Native, value);
@@ -2055,19 +2055,19 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_RContact_setC1(Native, ref value);
 		}
 
-		public float C2
+		public double C2
 		{
 			get => btSoftBody_RContact_getC2(Native);
 			set => btSoftBody_RContact_setC2(Native, value);
 		}
 
-		public float C3
+		public double C3
 		{
 			get => btSoftBody_RContact_getC3(Native);
 			set => btSoftBody_RContact_setC3(Native, value);
 		}
 
-		public float C4
+		public double C4
 		{
 			get => btSoftBody_RContact_getC4(Native);
 			set => btSoftBody_RContact_setC4(Native, value);
@@ -2154,7 +2154,7 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_sCti_setNormal(Native, ref value);
 		}
 
-		public float Offset
+		public double Offset
 		{
 			get => btSoftBody_sCti_getOffset(Native);
 			set => btSoftBody_sCti_setOffset(Native, value);
@@ -2232,13 +2232,13 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
-		public float Friction
+		public double Friction
 		{
 			get => btSoftBody_SContact_getFriction(Native);
 			set => btSoftBody_SContact_setFriction(Native, value);
 		}
 
-		public float Margin
+		public double Margin
 		{
 			get => btSoftBody_SContact_getMargin(Native);
 			set => btSoftBody_SContact_setMargin(Native, value);
@@ -2313,31 +2313,31 @@ namespace BulletSharp.SoftBody
 			Native = native;
 		}
 
-		public float InverseSdt
+		public double InverseSdt
 		{
 			get => btSoftBody_SolverState_getIsdt(Native);
 			set => btSoftBody_SolverState_setIsdt(Native, value);
 		}
 
-		public float RadialMargin
+		public double RadialMargin
 		{
 			get => btSoftBody_SolverState_getRadmrg(Native);
 			set => btSoftBody_SolverState_setRadmrg(Native, value);
 		}
 
-		public float Sdt
+		public double Sdt
 		{
 			get => btSoftBody_SolverState_getSdt(Native);
 			set => btSoftBody_SolverState_setSdt(Native, value);
 		}
 
-		public float UpdateMargin
+		public double UpdateMargin
 		{
 			get => btSoftBody_SolverState_getUpdmrg(Native);
 			set => btSoftBody_SolverState_setUpdmrg(Native, value);
 		}
 
-		public float VelocityMargin
+		public double VelocityMargin
 		{
 			get => btSoftBody_SolverState_getVelmrg(Native);
 			set => btSoftBody_SolverState_setVelmrg(Native, value);
@@ -2348,7 +2348,7 @@ namespace BulletSharp.SoftBody
 	{
 		public SoftBody Body { get; set; }
 		public FeatureType Feature { get; set; }
-		public float Fraction { get; set; }
+		public double Fraction { get; set; }
 		public int Index { get; set; }
 	}
 
@@ -2375,13 +2375,13 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
-		public float C1
+		public double C1
 		{
 			get => btSoftBody_Tetra_getC1(Native);
 			set => btSoftBody_Tetra_setC1(Native, value);
 		}
 
-		public float C2
+		public double C2
 		{
 			get => btSoftBody_Tetra_getC2(Native);
 			set => btSoftBody_Tetra_setC2(Native, value);
@@ -2416,7 +2416,7 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
-		public float RestVolume
+		public double RestVolume
 		{
 			get => btSoftBody_Tetra_getRv(Native);
 			set => btSoftBody_Tetra_setRv(Native, value);
@@ -2457,7 +2457,7 @@ namespace BulletSharp.SoftBody
 			_collisionShape = new SoftBodyCollisionShape(btCollisionObject_getCollisionShape(Native));
 		}
 
-		public SoftBody(SoftBodyWorldInfo worldInfo, int nodeCount, Vector3[] positions, float[] masses)
+		public SoftBody(SoftBodyWorldInfo worldInfo, int nodeCount, Vector3[] positions, double[] masses)
 			: base(btSoftBody_new(worldInfo.Native, nodeCount, positions, masses))
 		{
 			_collisionShape = new SoftBodyCollisionShape(btCollisionObject_getCollisionShape(Native));
@@ -2502,14 +2502,14 @@ namespace BulletSharp.SoftBody
 		}
 
 		public void AppendAnchor(int node, RigidBody body, Vector3 localPivot, bool disableCollisionBetweenLinkedBodies = false,
-			float influence = 1.0f)
+			double influence = 1.0f)
 		{
 			btSoftBody_appendAnchor(Native, node, body.Native, ref localPivot,
 				disableCollisionBetweenLinkedBodies, influence);
 		}
 
 		public void AppendAnchor(int node, RigidBody body, bool disableCollisionBetweenLinkedBodies = false,
-			float influence = 1.0f)
+			double influence = 1.0f)
 		{
 			btSoftBody_appendAnchor2(Native, node, body.Native, disableCollisionBetweenLinkedBodies,
 				influence);
@@ -2597,7 +2597,7 @@ namespace BulletSharp.SoftBody
 			return new Material(btSoftBody_appendMaterial(Native));
 		}
 
-		public void AppendNode(Vector3 x, float m)
+		public void AppendNode(Vector3 x, double m)
 		{
 			btSoftBody_appendNode(Native, ref x, m);
 		}
@@ -2652,7 +2652,7 @@ namespace BulletSharp.SoftBody
 			btSoftBody_applyForces(Native);
 		}
 
-		public bool CheckContact(CollisionObjectWrapper colObjWrap, Vector3 x, float margin,
+		public bool CheckContact(CollisionObjectWrapper colObjWrap, Vector3 x, double margin,
 			ContactInfo cti)
 		{
 			return btSoftBody_checkContact(Native, colObjWrap.Native, ref x, margin,
@@ -2741,12 +2741,12 @@ namespace BulletSharp.SoftBody
 			btSoftBody_clusterVImpulse(cluster.Native, ref rpos, ref impulse);
 		}
 
-		public bool CutLink(Node node0, Node node1, float position)
+		public bool CutLink(Node node0, Node node1, double position)
 		{
 			return btSoftBody_cutLink(Native, node0.Native, node1.Native, position);
 		}
 
-		public bool CutLink(int node0, int node1, float position)
+		public bool CutLink(int node0, int node1, double position)
 		{
 			return btSoftBody_cutLink2(Native, node0, node1, position);
 		}
@@ -2793,7 +2793,7 @@ namespace BulletSharp.SoftBody
 			btSoftBody_getAabb(Native, out aabbMin, out aabbMax);
 		}
 
-		public float GetMass(int node)
+		public double GetMass(int node)
 		{
 			return btSoftBody_getMass(Native, node);
 		}
@@ -2838,7 +2838,7 @@ namespace BulletSharp.SoftBody
 			btSoftBody_pointersToIndices(Native);
 		}
 
-		public void PredictMotion(float deltaTime)
+		public void PredictMotion(double deltaTime)
 		{
 			btSoftBody_predictMotion(Native, deltaTime);
 		}
@@ -2848,22 +2848,22 @@ namespace BulletSharp.SoftBody
 			btSoftBody_prepareClusters(Native, iterations);
 		}
 
-		public static void PSolveAnchors(SoftBody psb, float kst, float ti)
+		public static void PSolveAnchors(SoftBody psb, double kst, double ti)
 		{
 			btSoftBody_PSolve_Anchors(psb.Native, kst, ti);
 		}
 
-		public static void PSolveLinks(SoftBody psb, float kst, float ti)
+		public static void PSolveLinks(SoftBody psb, double kst, double ti)
 		{
 			btSoftBody_PSolve_Links(psb.Native, kst, ti);
 		}
 
-		public static void PSolveRContacts(SoftBody psb, float kst, float ti)
+		public static void PSolveRContacts(SoftBody psb, double kst, double ti)
 		{
 			btSoftBody_PSolve_RContacts(psb.Native, kst, ti);
 		}
 
-		public static void PSolveSContacts(SoftBody psb, float __unnamed1, float ti)
+		public static void PSolveSContacts(SoftBody psb, double __unnamed1, double ti)
 		{
 			btSoftBody_PSolve_SContacts(psb.Native, __unnamed1, ti);
 		}
@@ -2897,14 +2897,14 @@ namespace BulletSharp.SoftBody
 			return ret;
 		}
 
-		public int RayTest(Vector3 rayFrom, Vector3 rayTo, ref float mint, out FeatureType feature,
+		public int RayTest(Vector3 rayFrom, Vector3 rayTo, ref double mint, out FeatureType feature,
 			out int index, bool countOnly)
 		{
 			return btSoftBody_rayTest2(Native, ref rayFrom, ref rayTo, ref mint,
 				out feature, out index, countOnly);
 		}
 
-		public void Refine(ImplicitFn ifn, float accurary, bool cut)
+		public void Refine(ImplicitFn ifn, double accurary, bool cut)
 		{
 			btSoftBody_refine(Native, ifn.Native, accurary, cut);
 		}
@@ -2934,7 +2934,7 @@ namespace BulletSharp.SoftBody
 			btSoftBody_scale(Native, ref scl);
 		}
 
-		public void SetMass(int node, float mass)
+		public void SetMass(int node, double mass)
 		{
 			btSoftBody_setMass(Native, node, mass);
 		}
@@ -2949,12 +2949,12 @@ namespace BulletSharp.SoftBody
 			btSoftBody_setSolver(_native, preset._native);
 		}
 		*/
-		public void SetTotalDensity(float density)
+		public void SetTotalDensity(double density)
 		{
 			btSoftBody_setTotalDensity(Native, density);
 		}
 
-		public void SetTotalMass(float mass, bool fromFaces = false)
+		public void SetTotalMass(double mass, bool fromFaces = false)
 		{
 			btSoftBody_setTotalMass(Native, mass, fromFaces);
 		}
@@ -2964,12 +2964,12 @@ namespace BulletSharp.SoftBody
 			btSoftBody_setVelocity(Native, ref velocity);
 		}
 
-		public void SetVolumeDensity(float density)
+		public void SetVolumeDensity(double density)
 		{
 			btSoftBody_setVolumeDensity(Native, density);
 		}
 
-		public void SetVolumeMass(float mass)
+		public void SetVolumeMass(double mass)
 		{
 			btSoftBody_setVolumeMass(Native, mass);
 		}
@@ -2979,7 +2979,7 @@ namespace BulletSharp.SoftBody
 			btSoftBody_solveClusters(bodies._native);
 		}
 
-		public void SolveClusters(float sor)
+		public void SolveClusters(double sor)
 		{
 			btSoftBody_solveClusters2(Native, sor);
 		}
@@ -3009,7 +3009,7 @@ namespace BulletSharp.SoftBody
 			btSoftBody_translate(Native, ref trs);
 		}
 
-		public void Translate(float x, float y, float z)
+		public void Translate(double x, double y, double z)
 		{
 			Vector3 trs = new Vector3(x, y, z);
 			btSoftBody_translate(Native, ref trs);
@@ -3055,19 +3055,19 @@ namespace BulletSharp.SoftBody
 			btSoftBody_updatePose(Native);
 		}
 
-		public static void VSolveLinks(SoftBody psb, float kst)
+		public static void VSolveLinks(SoftBody psb, double kst)
 		{
 			btSoftBody_VSolve_Links(psb.Native, kst);
 		}
 
-		public int GetFaceVertexData(ref float[] vertices)
+		public int GetFaceVertexData(ref double[] vertices)
 		{
-			int floatCount = Faces.Count * 3 * 3;
+			int doubleCount = Faces.Count * 3 * 3;
 
 			// Do not use Array.Resize, because it copies the old data
-			if (vertices == null || vertices.Length != floatCount)
+			if (vertices == null || vertices.Length != doubleCount)
 			{
-				vertices = new float[floatCount];
+				vertices = new double[doubleCount];
 			}
 
 			return btSoftBody_getFaceVertexData(Native, vertices);
@@ -3401,7 +3401,7 @@ namespace BulletSharp.SoftBody
 			set { btSoftBody_setRcontacts(_native, value._native); }
 		}
 		*/
-		public float RestLengthScale
+		public double RestLengthScale
 		{
 			get => btSoftBody_getRestLengthScale(Native);
 			set => btSoftBody_setRestLengthScale(Native, value);
@@ -3449,13 +3449,13 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
-		public float Timeacc
+		public double Timeacc
 		{
 			get => btSoftBody_getTimeacc(Native);
 			set => btSoftBody_setTimeacc(Native, value);
 		}
 
-		public float TotalMass
+		public double TotalMass
 		{
 			get => btSoftBody_getTotalMass(Native);
 			set => SetTotalMass(value);
@@ -3484,7 +3484,7 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_setWindVelocity(Native, ref value);
 		}
 
-		public float Volume => btSoftBody_getVolume(Native);
+		public double Volume => btSoftBody_getVolume(Native);
 
 		public SoftBodyWorldInfo WorldInfo
 		{

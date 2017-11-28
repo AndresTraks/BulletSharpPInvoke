@@ -9,7 +9,7 @@ namespace ConvexDecompositionDemo
     {
         private FileStream _outputFile;
         private StreamWriter _outputStream;
-        private CultureInfo _floatFormat = new CultureInfo("en-US");
+        private CultureInfo _doubleFormat = new CultureInfo("en-US");
 
         private long _baseIndex = 0;
         private int _objectCount = 0;
@@ -29,7 +29,7 @@ namespace ConvexDecompositionDemo
 
             foreach (Vector3 p in hullVertices)
             {
-                _outputStream.WriteLine(string.Format(_floatFormat, "v {0:F9} {1:F9} {2:F9}", p.X, p.Y, p.Z));
+                _outputStream.WriteLine(string.Format(_doubleFormat, "v {0:F9} {1:F9} {2:F9}", p.X, p.Y, p.Z));
             }
 
             for (int i = 0; i < hullIndices.Length; i += 3)

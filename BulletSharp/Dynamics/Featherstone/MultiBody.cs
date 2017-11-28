@@ -15,7 +15,7 @@ namespace BulletSharp
 			Native = native;
 		}
 
-		public MultiBody(int nLinks, float mass, Vector3 inertia, bool fixedBase,
+		public MultiBody(int nLinks, double mass, Vector3 inertia, bool fixedBase,
 			bool canSleep)
 		{
 			Native = btMultiBody_new(nLinks, mass, ref inertia, fixedBase, canSleep);
@@ -41,17 +41,17 @@ namespace BulletSharp
 			btMultiBody_addBaseTorque(Native, ref t);
 		}
 
-		public void AddJointTorque(int i, float q)
+		public void AddJointTorque(int i, double q)
 		{
 			btMultiBody_addJointTorque(Native, i, q);
 		}
 
-		public void AddJointTorqueMultiDof(int i, float[] q)
+		public void AddJointTorqueMultiDof(int i, double[] q)
 		{
 			btMultiBody_addJointTorqueMultiDof(Native, i, q);
 		}
 
-		public void AddJointTorqueMultiDof(int i, int dof, float q)
+		public void AddJointTorqueMultiDof(int i, int dof, double q)
 		{
 			btMultiBody_addJointTorqueMultiDof2(Native, i, dof, q);
 		}
@@ -77,17 +77,17 @@ namespace BulletSharp
 		}
 		/*
 
-		public void ApplyDeltaVeeMultiDof(float deltaVee, float multiplier)
+		public void ApplyDeltaVeeMultiDof(double deltaVee, double multiplier)
 		{
 			btMultiBody_applyDeltaVeeMultiDof(Native, deltaVee.Native, multiplier);
 		}
 
-		public void ApplyDeltaVeeMultiDof2(float deltaVee, float multiplier)
+		public void ApplyDeltaVeeMultiDof2(double deltaVee, double multiplier)
 		{
 			btMultiBody_applyDeltaVeeMultiDof2(Native, deltaVee.Native, multiplier);
 		}
 
-		public void CalcAccelerationDeltasMultiDof(float force, float output, AlignedObjectArray<float> scratchR,
+		public void CalcAccelerationDeltasMultiDof(double force, double output, AlignedObjectArray<double> scratchR,
 			AlignedObjectArray<btVector3> scratchV)
 		{
 			btMultiBody_calcAccelerationDeltasMultiDof(Native, force.Native, output.Native,
@@ -99,7 +99,7 @@ namespace BulletSharp
 			return btMultiBody_calculateSerializeBufferSize(Native);
 		}
 
-		public void CheckMotionAndSleepIfRequired(float timestep)
+		public void CheckMotionAndSleepIfRequired(double timestep)
 		{
 			btMultiBody_checkMotionAndSleepIfRequired(Native, timestep);
 		}
@@ -119,8 +119,8 @@ namespace BulletSharp
 			btMultiBody_clearVelocities(Native);
 		}
 		/*
-		public void ComputeAccelerationsArticulatedBodyAlgorithmMultiDof(float deltaTime,
-			AlignedObjectArray<float> scratchR, AlignedObjectArray<btVector3> scratchV,
+		public void ComputeAccelerationsArticulatedBodyAlgorithmMultiDof(double deltaTime,
+			AlignedObjectArray<double> scratchR, AlignedObjectArray<btVector3> scratchV,
 			AlignedObjectArray<btMatrix3x3> scratchM, bool isConstraintPass = false)
 		{
 			btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof(Native,
@@ -128,7 +128,7 @@ namespace BulletSharp
 		}
 
 		public void FillConstraintJacobianMultiDof(int link, Vector3 contactPoint,
-			Vector3 normalAng, Vector3 normalLin, float jac, AlignedObjectArray<float> scratchR,
+			Vector3 normalAng, Vector3 normalLin, double jac, AlignedObjectArray<double> scratchR,
 			AlignedObjectArray<btVector3> scratchV, AlignedObjectArray<btMatrix3x3> scratchM)
 		{
 			btMultiBody_fillConstraintJacobianMultiDof(Native, link, ref contactPoint,
@@ -137,7 +137,7 @@ namespace BulletSharp
 		}
 
 		public void FillContactJacobianMultiDof(int link, Vector3 contactPoint, Vector3 normal,
-			float jac, AlignedObjectArray<float> scratchR, AlignedObjectArray<btVector3> scratchV,
+			double jac, AlignedObjectArray<double> scratchR, AlignedObjectArray<btVector3> scratchV,
 			AlignedObjectArray<btMatrix3x3> scratchM)
 		{
 			btMultiBody_fillContactJacobianMultiDof(Native, link, ref contactPoint,
@@ -155,32 +155,32 @@ namespace BulletSharp
 			btMultiBody_forwardKinematics(Native, scratchQ.Native, scratchM.Native);
 		}
 		*/
-		public float GetJointPos(int i)
+		public double GetJointPos(int i)
 		{
 			return btMultiBody_getJointPos(Native, i);
 		}
 		/*
-		public float GetJointPosMultiDof(int i)
+		public double GetJointPosMultiDof(int i)
 		{
 			return btMultiBody_getJointPosMultiDof(Native, i);
 		}
 		*/
-		public float GetJointTorque(int i)
+		public double GetJointTorque(int i)
 		{
 			return btMultiBody_getJointTorque(Native, i);
 		}
 		/*
-		public float GetJointTorqueMultiDof(int i)
+		public double GetJointTorqueMultiDof(int i)
 		{
 			return btMultiBody_getJointTorqueMultiDof(Native, i);
 		}
 		*/
-		public float GetJointVel(int i)
+		public double GetJointVel(int i)
 		{
 			return btMultiBody_getJointVel(Native, i);
 		}
 		/*
-		public float GetJointVelMultiDof(int i)
+		public double GetJointVelMultiDof(int i)
 		{
 			return btMultiBody_getJointVelMultiDof(Native, i);
 		}
@@ -210,7 +210,7 @@ namespace BulletSharp
 			return value;
 		}
 
-		public float GetLinkMass(int i)
+		public double GetLinkMass(int i)
 		{
 			return btMultiBody_getLinkMass(Native, i);
 		}
@@ -282,22 +282,22 @@ namespace BulletSharp
 			return Marshal.PtrToStringAnsi(btMultiBody_serialize(Native, dataBuffer, serializer._native));
 		}
 
-		public void SetJointPos(int i, float q)
+		public void SetJointPos(int i, double q)
 		{
 			btMultiBody_setJointPos(Native, i, q);
 		}
 
-		public void SetJointPosMultiDof(int i, float[] q)
+		public void SetJointPosMultiDof(int i, double[] q)
 		{
 			btMultiBody_setJointPosMultiDof(Native, i, q);
 		}
 
-		public void SetJointVel(int i, float qdot)
+		public void SetJointVel(int i, double qdot)
 		{
 			btMultiBody_setJointVel(Native, i, qdot);
 		}
 
-		public void SetJointVelMultiDof(int i, float[] qdot)
+		public void SetJointVelMultiDof(int i, double[] qdot)
 		{
 			btMultiBody_setJointVelMultiDof(Native, i, qdot);
 		}
@@ -307,7 +307,7 @@ namespace BulletSharp
 			btMultiBody_setPosUpdated(Native, updated);
 		}
 
-		public void SetupFixed(int linkIndex, float mass, Vector3 inertia, int parent,
+		public void SetupFixed(int linkIndex, double mass, Vector3 inertia, int parent,
 			Quaternion rotParentToThis, Vector3 parentComToThisPivotOffset, Vector3 thisPivotToThisComOffset,
 			bool deprecatedDisableParentCollision = true)
 		{
@@ -316,14 +316,14 @@ namespace BulletSharp
 				deprecatedDisableParentCollision);
 		}
 
-		public void SetupPlanar(int i, float mass, Vector3 inertia, int parent, Quaternion rotParentToThis,
+		public void SetupPlanar(int i, double mass, Vector3 inertia, int parent, Quaternion rotParentToThis,
 			Vector3 rotationAxis, Vector3 parentComToThisComOffset, bool disableParentCollision = false)
 		{
 			btMultiBody_setupPlanar(Native, i, mass, ref inertia, parent, ref rotParentToThis,
 				ref rotationAxis, ref parentComToThisComOffset, disableParentCollision);
 		}
 
-		public void SetupPrismatic(int i, float mass, Vector3 inertia, int parent,
+		public void SetupPrismatic(int i, double mass, Vector3 inertia, int parent,
 			Quaternion rotParentToThis, Vector3 jointAxis, Vector3 parentComToThisPivotOffset,
 			Vector3 thisPivotToThisComOffset, bool disableParentCollision)
 		{
@@ -332,7 +332,7 @@ namespace BulletSharp
 				disableParentCollision);
 		}
 
-		public void SetupRevolute(int linkIndex, float mass, Vector3 inertia, int parentIndex,
+		public void SetupRevolute(int linkIndex, double mass, Vector3 inertia, int parentIndex,
 			Quaternion rotParentToThis, Vector3 jointAxis, Vector3 parentComToThisPivotOffset,
 			Vector3 thisPivotToThisComOffset, bool disableParentCollision = false)
 		{
@@ -341,7 +341,7 @@ namespace BulletSharp
 				ref thisPivotToThisComOffset, disableParentCollision);
 		}
 
-		public void SetupSpherical(int linkIndex, float mass, Vector3 inertia, int parent,
+		public void SetupSpherical(int linkIndex, double mass, Vector3 inertia, int parent,
 			Quaternion rotParentToThis, Vector3 parentComToThisPivotOffset, Vector3 thisPivotToThisComOffset,
 			bool disableParentCollision = false)
 		{
@@ -350,12 +350,12 @@ namespace BulletSharp
 				disableParentCollision);
 		}
 
-		public void StepPositionsMultiDof(float deltaTime, float[] pq = null, float[] pqd = null)
+		public void StepPositionsMultiDof(double deltaTime, double[] pq = null, double[] pqd = null)
 		{
 			btMultiBody_stepPositionsMultiDof(Native, deltaTime, pq, pqd);
 		}
 		/*
-		public void StepVelocitiesMultiDof(float deltaTime, AlignedObjectArray<float> scratchR,
+		public void StepVelocitiesMultiDof(double deltaTime, AlignedObjectArray<double> scratchR,
 			AlignedObjectArray<btVector3> scratchV, AlignedObjectArray<btMatrix3x3> scratchM,
 			bool isConstraintPass = false)
 		{
@@ -389,7 +389,7 @@ namespace BulletSharp
 			return value;
 		}
 
-		public float AngularDamping
+		public double AngularDamping
 		{
 			get => btMultiBody_getAngularDamping(Native);
 			set => btMultiBody_setAngularDamping(Native, value);
@@ -432,7 +432,7 @@ namespace BulletSharp
 			set => btMultiBody_setBaseInertia(Native, ref value);
 		}
 
-		public float BaseMass
+		public double BaseMass
 		{
 			get => btMultiBody_getBaseMass(Native);
 			set => btMultiBody_setBaseMass(Native, value);
@@ -533,21 +533,21 @@ namespace BulletSharp
 			set => btMultiBody_useRK4Integration(Native, value);
 		}
 
-		public float KineticEnergy => btMultiBody_getKineticEnergy(Native);
+		public double KineticEnergy => btMultiBody_getKineticEnergy(Native);
 
-		public float LinearDamping
+		public double LinearDamping
 		{
 			get => btMultiBody_getLinearDamping(Native);
 			set => btMultiBody_setLinearDamping(Native, value);
 		}
 
-		public float MaxAppliedImpulse
+		public double MaxAppliedImpulse
 		{
 			get => btMultiBody_getMaxAppliedImpulse(Native);
 			set => btMultiBody_setMaxAppliedImpulse(Native, value);
 		}
 
-		public float MaxCoordinateVelocity
+		public double MaxCoordinateVelocity
 		{
 			get => btMultiBody_getMaxCoordinateVelocity(Native);
 			set => btMultiBody_setMaxCoordinateVelocity(Native, value);
@@ -594,7 +594,7 @@ namespace BulletSharp
 			set => btMultiBody_setUserPointer(Native, value);
 		}
 		/*
-		public float VelocityVector
+		public double VelocityVector
 		{
 			get { return btMultiBody_getVelocityVector(Native); }
 		}
