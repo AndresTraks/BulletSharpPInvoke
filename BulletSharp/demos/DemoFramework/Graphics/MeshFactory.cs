@@ -795,14 +795,15 @@ namespace DemoFramework
 
                 int vertexStride = mesh.VertexStride;
                 int triangleStrideDelta = mesh.TriangleIndexStride - 3 * sizeof(int);
+                PhyScalarType vertexType = mesh.VertexType;
 
                 while (indexStream.Position < indexStream.Length)
                 {
                     uint i = indexReader.ReadUInt32();
                     vertexStream.Position = vertexStride * i;
-                    float f1 = vertexReader.ReadSingle();
-                    float f2 = vertexReader.ReadSingle();
-                    float f3 = vertexReader.ReadSingle();
+                    float f1 = ReadFloat(vertexReader, vertexType);
+                    float f2 = ReadFloat(vertexReader, vertexType);
+                    float f3 = ReadFloat(vertexReader, vertexType);
                     Vector3 v0 = new Vector3(f1, f2, f3);
                     i = indexReader.ReadUInt32();
                     vertexStream.Position = vertexStride * i;
@@ -812,9 +813,9 @@ namespace DemoFramework
                     Vector3 v1 = new Vector3(f1, f2, f3);
                     i = indexReader.ReadUInt32();
                     vertexStream.Position = vertexStride * i;
-                    f1 = vertexReader.ReadSingle();
-                    f2 = vertexReader.ReadSingle();
-                    f3 = vertexReader.ReadSingle();
+                    f1 = ReadFloat(vertexReader, vertexType);
+                    f2 = ReadFloat(vertexReader, vertexType);
+                    f3 = ReadFloat(vertexReader, vertexType);
                     Vector3 v2 = new Vector3(f1, f2, f3);
 
                     Vector3 v01 = v0 - v1;
@@ -839,6 +840,15 @@ namespace DemoFramework
             }
 
             return vertices;
+        }
+
+        private static float ReadFloat(BinaryReader vertexReader, PhyScalarType vertexType)
+        {
+            if (vertexType == PhyScalarType.Double)
+            {
+                return (float)vertexReader.ReadDouble();
+            }
+            return vertexReader.ReadSingle();
         }
 
         private static Vector3[] CreateHeightFieldTerrainShape(HeightfieldTerrainShape heightfieldTerrainShape, out uint[] indices)

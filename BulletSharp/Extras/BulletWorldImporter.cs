@@ -120,7 +120,7 @@ namespace BulletSharp
                     {
                         using (var reader = new BulletReader(stream))
                         {
-                            long namePtr = reader.ReadPtr(CollisionShapeFloatData.Offset("Name"));
+                            long namePtr = reader.ReadPtr(CollisionShapeData.Offset("Name"));
                             if (namePtr != 0)
                             {
                                 byte[] nameData = file.LibPointers[namePtr];

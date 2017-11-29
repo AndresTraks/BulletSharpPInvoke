@@ -348,4 +348,20 @@ namespace BulletSharp
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(SliderConstraintFloatData), fieldName).ToInt32(); }
 	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct SliderConstraintDoubleData
+	{
+		public TypedConstraintDoubleData TypedConstraintData;
+		public TransformDoubleData RigidBodyAFrame;
+		public TransformDoubleData RigidBodyBFrame;
+		public double LinearUpperLimit;
+		public double LinearLowerLimit;
+		public double AngularUpperLimit;
+		public double AngularLowerLimit;
+		public int UseLinearReferenceFrameA;
+		public int UseOffsetForConstraintFrame;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(SliderConstraintDoubleData), fieldName).ToInt32(); }
+	}
 }

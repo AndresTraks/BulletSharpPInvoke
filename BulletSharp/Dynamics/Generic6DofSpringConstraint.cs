@@ -86,4 +86,16 @@ namespace BulletSharp
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofSpringConstraintFloatData), fieldName).ToInt32(); }
 	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal unsafe struct Generic6DofSpringConstraintDoubleData
+	{
+		public Generic6DofConstraintDoubleData SixDofData;
+		public fixed int SpringEnabled[6];
+		public fixed double EquilibriumPoint[6];
+		public fixed double SpringStiffness[6];
+		public fixed double SpringDamping[6];
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofSpringConstraintDoubleData), fieldName).ToInt32(); }
+	}
 }

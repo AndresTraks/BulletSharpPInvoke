@@ -13,7 +13,7 @@ namespace BulletSharp
         {
         }
 
-        public float ReadByte(int position)
+        public byte ReadByte(int position)
         {
             BaseStream.Position = position;
             return ReadByte();
@@ -152,7 +152,7 @@ namespace BulletSharp
             float x = ReadSingle();
             float y = ReadSingle();
             float z = ReadSingle();
-            BaseStream.Position += 4; // float w = ReadSingle();
+            BaseStream.Position += sizeof(float); // float w = ReadSingle();
             return new Vector3(x, y, z);
         }
 

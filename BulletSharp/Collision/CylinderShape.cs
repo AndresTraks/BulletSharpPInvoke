@@ -74,12 +74,12 @@ namespace BulletSharp
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct CylinderShapeFloatData
+	internal struct CylinderShapeData
 	{
-		public ConvexInternalShapeFloatData ConvexInternalShapeData;
+		public ConvexInternalShapeData ConvexInternalShapeData;
 		public int UpAxis;
 		public int Padding;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CylinderShapeFloatData), fieldName).ToInt32(); }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CylinderShapeData), fieldName).ToInt32(); }
 	}
 }

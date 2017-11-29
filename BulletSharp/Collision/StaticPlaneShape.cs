@@ -25,14 +25,14 @@ namespace BulletSharp
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct StaticPlaneShapeFloatData
+	internal struct StaticPlaneShapeData
 	{
-		public CollisionShapeFloatData CollisionShapeData;
+		public CollisionShapeData CollisionShapeData;
 		public Vector3FloatData LocalScaling;
 		public Vector3FloatData PlaneNormal;
 		public float PlaneConstant;
 		public int Padding;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(StaticPlaneShapeFloatData), fieldName).ToInt32(); }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(StaticPlaneShapeData), fieldName).ToInt32(); }
 	}
 }

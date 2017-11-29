@@ -117,4 +117,14 @@ namespace BulletSharp
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Point2PointConstraintFloatData), fieldName).ToInt32(); }
 	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct Point2PointConstraintDoubleData
+	{
+		public TypedConstraintDoubleData TypedConstraintData;
+		public Vector3DoubleData PivotInA;
+		public Vector3DoubleData PivotInB;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Point2PointConstraintDoubleData), fieldName).ToInt32(); }
+	}
 }

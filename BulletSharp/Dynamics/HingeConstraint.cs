@@ -328,4 +328,24 @@ namespace BulletSharp
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(HingeConstraintFloatData), fieldName).ToInt32(); }
 	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct HingeConstraintDoubleData
+	{
+		public TypedConstraintDoubleData TypedConstraintData;
+		public TransformDoubleData RigidBodyAFrame;
+		public TransformDoubleData RigidBodyBFrame;
+		public int UseReferenceFrameA;
+		public int AngularOnly;
+		public int EnableAngularMotor;
+		public double MotorTargetVelocity;
+		public double MaxMotorImpulse;
+		public double LowerLimit;
+		public double UpperLimit;
+		public double LimitSoftness;
+		public double BiasFactor;
+		public double RelaxationFactor;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(HingeConstraintDoubleData), fieldName).ToInt32(); }
+	}
 }

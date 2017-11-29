@@ -81,7 +81,7 @@ namespace BulletSharp
 	[StructLayout(LayoutKind.Sequential)]
 	internal struct TriangleMeshShapeData
 	{
-		public CollisionShapeFloatData CollisionShapeData;
+		public CollisionShapeData CollisionShapeData;
 		public StridingMeshInterfaceData MeshInterface;
 		public IntPtr QuantizedFloatBvh;
 		public IntPtr QuantizedDoubleBvh;

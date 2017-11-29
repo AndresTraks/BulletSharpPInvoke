@@ -449,7 +449,7 @@ namespace BulletSharp
 	[StructLayout(LayoutKind.Sequential)]
 	internal unsafe struct GImpactMeshShapeData
 	{
-		public CollisionShapeFloatData CollisionShapeData;
+		public CollisionShapeData CollisionShapeData;
 		public StridingMeshInterfaceData MeshInterface;
 		public Vector3FloatData LocalScaling;
 		public float CollisionMargin;

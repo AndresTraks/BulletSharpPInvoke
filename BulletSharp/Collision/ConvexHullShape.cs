@@ -109,14 +109,14 @@ namespace BulletSharp
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct ConvexHullShapeFloatData
+	internal struct ConvexHullShapeData
 	{
-		public ConvexInternalShapeFloatData ConvexInternalShapeData;
+		public ConvexInternalShapeData ConvexInternalShapeData;
 		public IntPtr UnscaledPointsFloatPtr;
 		public IntPtr UnscaledPointsDoublePtr;
 		public int NumUnscaledPoints;
 		public int Padding;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConvexHullShapeFloatData), fieldName).ToInt32(); }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConvexHullShapeData), fieldName).ToInt32(); }
 	}
 }

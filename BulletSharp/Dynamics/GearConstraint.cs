@@ -55,4 +55,16 @@ namespace BulletSharp
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(GearConstraintFloatData), fieldName).ToInt32(); }
 	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct GearConstraintDoubleData
+	{
+		public TypedConstraintDoubleData TypedConstraintData;
+		public Vector3DoubleData AxisInA;
+		public Vector3DoubleData AxisInB;
+		public double Ratio;
+		public int Padding;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(GearConstraintDoubleData), fieldName).ToInt32(); }
+	}
 }

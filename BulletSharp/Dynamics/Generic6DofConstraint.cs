@@ -664,4 +664,20 @@ namespace BulletSharp
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofConstraintFloatData), fieldName).ToInt32(); }
 	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct Generic6DofConstraintDoubleData
+	{
+		public TypedConstraintDoubleData TypedConstraintData;
+		public TransformDoubleData RigidBodyAFrame;
+		public TransformDoubleData RigidBodyBFrame;
+		public Vector3DoubleData LinearUpperLimit;
+		public Vector3DoubleData LinearLowerLimit;
+		public Vector3DoubleData AngularUpperLimit;
+		public Vector3DoubleData AngularLowerLimit;
+		public int UseLinearReferenceFrameA;
+		public int UseOffsetForConstraintFrame;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofConstraintDoubleData), fieldName).ToInt32(); }
+	}
 }

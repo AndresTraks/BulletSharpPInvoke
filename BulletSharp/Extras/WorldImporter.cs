@@ -38,8 +38,8 @@ namespace BulletSharp
             MemoryStream stream = new MemoryStream(shapeData, false);
             BulletReader reader = new BulletReader(stream);
 
-            BroadphaseNativeType type = (BroadphaseNativeType) reader.ReadInt32(CollisionShapeFloatData.Offset("ShapeType"));
-            stream.Position = Marshal.SizeOf(typeof(CollisionShapeFloatData));
+            BroadphaseNativeType type = (BroadphaseNativeType) reader.ReadInt32(CollisionShapeData.Offset("ShapeType"));
+            stream.Position = Marshal.SizeOf(typeof(CollisionShapeData));
             switch (type)
             {
                 case BroadphaseNativeType.StaticPlaneShape:

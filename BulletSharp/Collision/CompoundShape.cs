@@ -142,24 +142,24 @@ namespace BulletSharp
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct CompoundShapeFloatData
+	internal struct CompoundShapeData
 	{
-		public CollisionShapeFloatData CollisionShapeData;
+		public CollisionShapeData CollisionShapeData;
 		public IntPtr ChildShapePtr;
 		public int NumChildShapes;
 		public float CollisionMargin;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CompoundShapeFloatData), fieldName).ToInt32(); }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CompoundShapeData), fieldName).ToInt32(); }
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct CompoundShapeChildFloatData
+	internal struct CompoundShapeChildData
 	{
 		public TransformFloatData Transform;
 		public IntPtr ChildShape;
 		public int ChildShapeType;
 		public float ChildMargin;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CompoundShapeChildFloatData), fieldName).ToInt32(); }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CompoundShapeChildData), fieldName).ToInt32(); }
 	}
 }

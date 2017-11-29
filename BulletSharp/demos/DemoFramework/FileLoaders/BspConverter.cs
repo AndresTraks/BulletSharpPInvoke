@@ -45,7 +45,7 @@ namespace DemoFramework.FileLoaders
             var planeEquations = sides.Select(side =>
             {
                 BspPlane plane = bspLoader.Planes[side.PlaneNum];
-                return new Vector4(plane.Normal, scaling * -plane.Distance);
+                return new Vector4(plane.NormalX, plane.NormalY, plane.NormalZ, scaling * -plane.Distance);
             }).ToList();
 
             if (planeEquations.Count != 0)

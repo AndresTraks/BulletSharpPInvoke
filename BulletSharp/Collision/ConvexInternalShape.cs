@@ -65,14 +65,14 @@ namespace BulletSharp
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct ConvexInternalShapeFloatData
+	internal struct ConvexInternalShapeData
 	{
-		public CollisionShapeFloatData CollisionShapeData;
+		public CollisionShapeData CollisionShapeData;
 		public Vector3FloatData LocalScaling;
 		public Vector3FloatData ImplicitShapeDimensions;
 		public float CollisionMargin;
 		public int Padding;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConvexInternalShapeFloatData), fieldName).ToInt32(); }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConvexInternalShapeData), fieldName).ToInt32(); }
 	}
 }

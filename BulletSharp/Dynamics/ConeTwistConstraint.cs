@@ -234,4 +234,22 @@ namespace BulletSharp
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConeTwistConstraintFloatData), fieldName).ToInt32(); }
 	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct ConeTwistConstraintDoubleData
+	{
+		public TypedConstraintDoubleData TypedConstraintData;
+		public TransformDoubleData RigidBodyAFrame;
+		public TransformDoubleData RigidBodyBFrame;
+		public double SwingSpan1;
+		public double SwingSpan2;
+		public double TwistSpan;
+		public double LimitSoftness;
+		public double BiasFactor;
+		public double RelaxationFactor;
+		public double Damping;
+		public int Pad;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConeTwistConstraintDoubleData), fieldName).ToInt32(); }
+	}
 }

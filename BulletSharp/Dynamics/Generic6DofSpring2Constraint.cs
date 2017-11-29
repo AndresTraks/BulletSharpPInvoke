@@ -820,4 +820,52 @@ namespace BulletSharp
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofSpring2ConstraintFloatData), fieldName).ToInt32(); }
 	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal unsafe struct Generic6DofSpring2ConstraintDoubleData
+	{
+		public TypedConstraintDoubleData TypeConstraintData;
+		public TransformDoubleData RigidBodyAFrame;
+		public TransformDoubleData RigidBodyBFrame;
+		public Vector3DoubleData LinearUpperLimit;
+		public Vector3DoubleData LinearLowerLimit;
+		public Vector3DoubleData LinearBounce;
+		public Vector3DoubleData LinearStopErp;
+		public Vector3DoubleData LinearStopCfm;
+		public Vector3DoubleData LinearMotorErp;
+		public Vector3DoubleData LinearMotorCfm;
+		public Vector3DoubleData LinearTargetVelocity;
+		public Vector3DoubleData LinearMaxMotorForce;
+		public Vector3DoubleData LinearServoTarget;
+		public Vector3DoubleData LinearSpringStiffness;
+		public Vector3DoubleData LinearSpringDamping;
+		public Vector3DoubleData LinearEquilibriumPoint;
+		public fixed byte LinearEnableMotor[4];
+		public fixed byte LinearServoMotor[4];
+		public fixed byte LinearEnableSpring[4];
+		public fixed byte LinearSpringStiffnessLimited[4];
+		public fixed byte LinearSpringDampingLimited[4];
+		public int Padding;
+		public Vector3DoubleData AngularUpperLimit;
+		public Vector3DoubleData AngularLowerLimit;
+		public Vector3DoubleData AngularBounce;
+		public Vector3DoubleData AngularStopErp;
+		public Vector3DoubleData AngularStopCfm;
+		public Vector3DoubleData AngularMotorErp;
+		public Vector3DoubleData AngularMotorCfm;
+		public Vector3DoubleData AngularTargetVelocity;
+		public Vector3DoubleData AngularMaxMotorForce;
+		public Vector3DoubleData AngularServoTarget;
+		public Vector3DoubleData AngularSpringStiffness;
+		public Vector3DoubleData AngularSpringDamping;
+		public Vector3DoubleData AngularEquilibriumPoint;
+		public fixed byte AngularEnableMotor[4];
+		public fixed byte AngularServoMotor[4];
+		public fixed byte AngularEnableSpring[4];
+		public fixed byte AngularSpringStiffnessLimited[4];
+		public fixed byte AngularSpringDampingLimited[4];
+		public int RotateOrder;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofSpring2ConstraintDoubleData), fieldName).ToInt32(); }
+	}
 }

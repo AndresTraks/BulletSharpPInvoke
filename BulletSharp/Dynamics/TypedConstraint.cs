@@ -537,4 +537,24 @@ namespace BulletSharp
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(TypedConstraintFloatData), fieldName).ToInt32(); }
 	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct TypedConstraintDoubleData
+	{
+		public IntPtr RigidBodyA;
+		public IntPtr RigidBodyB;
+		public IntPtr Name;
+		public int ObjectType;
+		public int UserConstraintType;
+		public int UserConstraintId;
+		public int NeedsFeedback;
+		public double AppliedImpulse;
+		public double DebugDrawSize;
+		public int DisableCollisionsBetweenLinkedBodies;
+		public int OverrideNumSolverIterations;
+		public double BreakingImpulseThreshold;
+		public int IsEnabled;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(TypedConstraintDoubleData), fieldName).ToInt32(); }
+	}
 }
