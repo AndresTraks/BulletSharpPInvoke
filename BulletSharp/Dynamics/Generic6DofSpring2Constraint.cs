@@ -822,7 +822,7 @@ namespace BulletSharp
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	internal unsafe struct Generic6DofSpring2ConstraintdoubleData
+	internal unsafe struct Generic6DofSpring2ConstraintDoubleData
 	{
 		public TypedConstraintDoubleData TypeConstraintData;
 		public TransformDoubleData RigidBodyAFrame;
@@ -866,6 +866,6 @@ namespace BulletSharp
 		public fixed byte AngularSpringDampingLimited[4];
 		public int RotateOrder;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofSpring2ConstraintdoubleData), fieldName).ToInt32(); }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofSpring2ConstraintDoubleData), fieldName).ToInt32(); }
 	}
 }

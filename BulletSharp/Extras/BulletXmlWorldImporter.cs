@@ -127,7 +127,7 @@ namespace BulletSharp
             XmlNodeList childMargins = element.SelectNodes("m_childMargin");
 
             int numChildren = transforms.Count;
-            int dataSize = Marshal.SizeOf(typeof(CompoundShapeChildFloatData));
+            int dataSize = Marshal.SizeOf(typeof(CompoundShapeChildData));
             byte[] compoundChild = new byte[dataSize * numChildren];
 
             using (var stream = new MemoryStream(compoundChild))
@@ -137,10 +137,10 @@ namespace BulletSharp
                     int offset = 0;
                     for (int i = 0; i < numChildren; i++)
                     {
-                        SetTransformValue(writer, transforms[i], offset + CompoundShapeChildFloatData.Offset("Transform"));
-                        SetPointerValue(writer, childShapes[i], offset + CompoundShapeChildFloatData.Offset("ChildShape"));
-                        SetIntValue(writer, childShapeTypes[i], offset + CompoundShapeChildFloatData.Offset("ChildShapeType"));
-                        SetFloatValue(writer, childMargins[i], offset + CompoundShapeChildFloatData.Offset("ChildMargin"));
+                        SetTransformValue(writer, transforms[i], offset + CompoundShapeChildData.Offset("Transform"));
+                        SetPointerValue(writer, childShapes[i], offset + CompoundShapeChildData.Offset("ChildShape"));
+                        SetIntValue(writer, childShapeTypes[i], offset + CompoundShapeChildData.Offset("ChildShapeType"));
+                        SetFloatValue(writer, childMargins[i], offset + CompoundShapeChildData.Offset("ChildMargin"));
 
                         offset += dataSize;
                     }
@@ -153,7 +153,7 @@ namespace BulletSharp
         private void DeSerializeCompoundShapeData(XmlElement element)
         {
             int ptr = int.Parse(element.GetAttribute("pointer"));
-            byte[] convexShape = new byte[Marshal.SizeOf(typeof(CompoundShapeFloatData))];
+            byte[] convexShape = new byte[Marshal.SizeOf(typeof(CompoundShapeData))];
 
             using (var stream = new MemoryStream(convexShape))
             {
@@ -166,9 +166,9 @@ namespace BulletSharp
                     }
                     DeSerializeCollisionShapeData(node as XmlElement, writer);
 
-                    SetIntValue(writer, element["m_numChildShapes"], CompoundShapeFloatData.Offset("NumChildShapes"));
-                    SetPointerValue(writer, element["m_childShapePtr"], CompoundShapeFloatData.Offset("ChildShapePtr"));
-                    SetFloatValue(writer, element["m_collisionMargin"], CompoundShapeFloatData.Offset("CollisionMargin"));
+                    SetIntValue(writer, element["m_numChildShapes"], CompoundShapeData.Offset("NumChildShapes"));
+                    SetPointerValue(writer, element["m_childShapePtr"], CompoundShapeData.Offset("ChildShapePtr"));
+                    SetFloatValue(writer, element["m_collisionMargin"], CompoundShapeData.Offset("CollisionMargin"));
                 }
             }
 

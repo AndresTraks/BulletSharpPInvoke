@@ -152,7 +152,7 @@ namespace BulletSharp
             double x = ReadSingle();
             double y = ReadSingle();
             double z = ReadSingle();
-            BaseStream.Position += 4; // double w = ReadSingle();
+            BaseStream.Position += sizeof(float); // double w = ReadSingle();
             return new Vector3(x, y, z);
         }
 

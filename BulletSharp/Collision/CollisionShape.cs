@@ -209,12 +209,12 @@ namespace BulletSharp
 	}
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct CollisionShapeData
-    {
-        public IntPtr Name;
-        public int ShapeType;
-        public int Padding;
+	internal struct CollisionShapeData
+	{
+		public IntPtr Name;
+		public int ShapeType;
+		public int Padding;
 
-        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CollisionShapeData), fieldName).ToInt32(); }
-    }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CollisionShapeData), fieldName).ToInt32(); }
+	}
 }
