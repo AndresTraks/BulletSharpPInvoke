@@ -16,7 +16,7 @@ namespace BulletSharp
 			: base(null)
 		{
 		}
-        
+
 		public bool ConvertAllObjects(BulletFile file)
 		{
             _shapeMap.Clear();
@@ -32,64 +32,19 @@ namespace BulletSharp
                 }
                 else
                 {
-                    // QuantizedBvhData is parsed in C++, so we need to actually fix pointers
+                    // QuantizedBvhData is parsed in C++, so we need to set pointers to actual values
+                    GCHandle? contiguousNodes = PinDataAtPointer(bvhData, QuantizedBvhFloatData.Offset("ContiguousNodesPtr"), file);
+                    GCHandle? quantizedContiguousNodes = PinDataAtPointer(bvhData, QuantizedBvhFloatData.Offset("QuantizedContiguousNodesPtr"), file);
+                    GCHandle? subTreeInfo = PinDataAtPointer(bvhData, QuantizedBvhFloatData.Offset("SubTreeInfoPtr"), file);
+
                     GCHandle bvhDataHandle = GCHandle.Alloc(bvhData, GCHandleType.Pinned);
                     IntPtr bvhDataPinnedPtr = bvhDataHandle.AddrOfPinnedObject();
-
-                    IntPtr contiguousNodesHandlePtr = IntPtr.Zero;
-                    IntPtr quantizedContiguousNodesHandlePtr = IntPtr.Zero;
-                    IntPtr subTreeInfoHandlePtr = IntPtr.Zero;
-
-                    using (var stream = new MemoryStream(bvhData))
-                    {
-                        using (var reader = new BulletReader(stream))
-                        {
-                            long contiguousNodesPtr = reader.ReadPtr(QuantizedBvhFloatData.Offset("ContiguousNodesPtr"));
-                            long quantizedContiguousNodesPtr = reader.ReadPtr(QuantizedBvhFloatData.Offset("QuantizedContiguousNodesPtr"));
-                            long subTreeInfoPtr = reader.ReadPtr(QuantizedBvhFloatData.Offset("SubTreeInfoPtr"));
-
-                            using (var writer = new BulletWriter(stream))
-                            {
-                                if (contiguousNodesPtr != 0)
-                                {
-                                    GCHandle contiguousNodesHandle = GCHandle.Alloc(file.LibPointers[contiguousNodesPtr], GCHandleType.Pinned);
-                                    contiguousNodesHandlePtr = GCHandle.ToIntPtr(contiguousNodesHandle);
-                                    stream.Position = QuantizedBvhFloatData.Offset("ContiguousNodesPtr");
-                                    writer.Write(contiguousNodesHandle.AddrOfPinnedObject());
-                                }
-                                if (quantizedContiguousNodesPtr != 0)
-                                {
-                                    GCHandle quantizedContiguousNodesHandle = GCHandle.Alloc(file.LibPointers[quantizedContiguousNodesPtr], GCHandleType.Pinned);
-                                    quantizedContiguousNodesHandlePtr = GCHandle.ToIntPtr(quantizedContiguousNodesHandle);
-                                    stream.Position = QuantizedBvhFloatData.Offset("QuantizedContiguousNodesPtr");
-                                    writer.Write(quantizedContiguousNodesHandle.AddrOfPinnedObject());
-                                }
-                                if (subTreeInfoPtr != 0)
-                                {
-                                    GCHandle subTreeInfoHandle = GCHandle.Alloc(file.LibPointers[subTreeInfoPtr], GCHandleType.Pinned);
-                                    subTreeInfoHandlePtr = GCHandle.ToIntPtr(subTreeInfoHandle);
-                                    stream.Position = QuantizedBvhFloatData.Offset("SubTreeInfoPtr");
-                                    writer.Write(subTreeInfoHandle.AddrOfPinnedObject());
-                                }
-                            }
-                        }
-                    }
-
                     bvh.DeSerializeFloat(bvhDataPinnedPtr);
                     bvhDataHandle.Free();
 
-                    if (contiguousNodesHandlePtr != IntPtr.Zero)
-                    {
-                        GCHandle.FromIntPtr(contiguousNodesHandlePtr).Free();
-                    }
-                    if (quantizedContiguousNodesHandlePtr != IntPtr.Zero)
-                    {
-                        GCHandle.FromIntPtr(quantizedContiguousNodesHandlePtr).Free();
-                    }
-                    if (subTreeInfoHandlePtr != IntPtr.Zero)
-                    {
-                        GCHandle.FromIntPtr(subTreeInfoHandlePtr).Free();
-                    }
+                    contiguousNodes?.Free();
+                    quantizedContiguousNodes?.Free();
+                    subTreeInfo?.Free();
                 }
 
                 foreach (KeyValuePair<long, byte[]> lib in file.LibPointers)
@@ -116,20 +71,14 @@ namespace BulletSharp
                         }
                     }
 
-                    using (var stream = new MemoryStream(shapeData, false))
+                    long namePtr = BulletReader.ToPtr(shapeData, CollisionShapeData.Offset("Name"));
+                    if (namePtr != 0)
                     {
-                        using (var reader = new BulletReader(stream))
-                        {
-                            long namePtr = reader.ReadPtr(CollisionShapeData.Offset("Name"));
-                            if (namePtr != 0)
-                            {
-                                byte[] nameData = file.LibPointers[namePtr];
-                                int length = Array.IndexOf(nameData, (byte)0);
-                                string name = System.Text.Encoding.ASCII.GetString(nameData, 0, length);
-                                _objectNameMap.Add(shape, name);
-                                _nameShapeMap.Add(name, shape);
-                            }
-                        }
+                        byte[] nameData = file.LibPointers[namePtr];
+                        int length = Array.IndexOf(nameData, (byte)0);
+                        string name = System.Text.Encoding.ASCII.GetString(nameData, 0, length);
+                        _objectNameMap.Add(shape, name);
+                        _nameShapeMap.Add(name, shape);
                     }
                 }
             }
@@ -202,68 +151,84 @@ namespace BulletSharp
 
             foreach (byte[] constraintData in file.Constraints)
             {
-                var stream = new MemoryStream(constraintData, false);
-                using (var reader = new BulletReader(stream))
+                RigidBody a = null, b = null;
+
+                long collisionObjectAPtr = BulletReader.ToPtr(constraintData, TypedConstraintFloatData.Offset("RigidBodyA"));
+                if (collisionObjectAPtr != 0)
                 {
-                    long collisionObjectAPtr = reader.ReadPtr(TypedConstraintFloatData.Offset("RigidBodyA"));
-                    long collisionObjectBPtr = reader.ReadPtr(TypedConstraintFloatData.Offset("RigidBodyB"));
-
-                    RigidBody a = null, b = null;
-
-                    if (collisionObjectAPtr != 0)
+                    if (!file.LibPointers.ContainsKey(collisionObjectAPtr))
                     {
-                        if (!file.LibPointers.ContainsKey(collisionObjectAPtr))
-                        {
-                            a = TypedConstraint.GetFixedBody();
-                        }
-                        else
-                        {
-                            byte[] coData = file.LibPointers[collisionObjectAPtr];
-                            a = RigidBody.Upcast(_bodyMap[coData]);
-                            if (a == null)
-                            {
-                                a = TypedConstraint.GetFixedBody();
-                            }
-                        }
-                    }
-
-                    if (collisionObjectBPtr != 0)
-                    {
-                        if (!file.LibPointers.ContainsKey(collisionObjectBPtr))
-                        {
-                            b = TypedConstraint.GetFixedBody();
-                        }
-                        else
-                        {
-                            byte[] coData = file.LibPointers[collisionObjectBPtr];
-                            b = RigidBody.Upcast(_bodyMap[coData]);
-                            if (b == null)
-                            {
-                                b = TypedConstraint.GetFixedBody();
-                            }
-                        }
-                    }
-
-                    if (a == null && b == null)
-                    {
-                        stream.Dispose();
-                        continue;
-                    }
-
-                    if ((file.Flags & FileFlags.DoublePrecision) != 0)
-                    {
-                        throw new NotImplementedException();
+                        a = TypedConstraint.GetFixedBody();
                     }
                     else
                     {
-                        ConvertConstraintFloat(a, b, constraintData, file.Version, file.LibPointers);
+                        byte[] coData = file.LibPointers[collisionObjectAPtr];
+                        a = RigidBody.Upcast(_bodyMap[coData]);
+                        if (a == null)
+                        {
+                            a = TypedConstraint.GetFixedBody();
+                        }
                     }
                 }
-                stream.Dispose();
+
+                long collisionObjectBPtr = BulletReader.ToPtr(constraintData, TypedConstraintFloatData.Offset("RigidBodyB"));
+                if (collisionObjectBPtr != 0)
+                {
+                    if (!file.LibPointers.ContainsKey(collisionObjectBPtr))
+                    {
+                        b = TypedConstraint.GetFixedBody();
+                    }
+                    else
+                    {
+                        byte[] coData = file.LibPointers[collisionObjectBPtr];
+                        b = RigidBody.Upcast(_bodyMap[coData]);
+                        if (b == null)
+                        {
+                            b = TypedConstraint.GetFixedBody();
+                        }
+                    }
+                }
+
+                if (a == null && b == null)
+                {
+                    continue;
+                }
+
+                if ((file.Flags & FileFlags.DoublePrecision) != 0)
+                {
+                    throw new NotImplementedException();
+                }
+                else
+                {
+                    ConvertConstraintFloat(a, b, constraintData, file.Version, file.LibPointers);
+                }
             }
 
             return true;
 		}
+
+        // Replaces an identifier in serialized data with an actual pointer to something.
+        // The handle should be used to free the pointer once it is no longer used.
+        private static GCHandle? PinDataAtPointer(byte[] data, int pointerPosition, BulletFile file)
+        {
+            long pointer = BulletReader.ToPtr(data, pointerPosition);
+            if (pointer != 0)
+            {
+                byte[] referencedData = file.LibPointers[pointer];
+                GCHandle dataHandle = GCHandle.Alloc(referencedData, GCHandleType.Pinned);
+                WritePointer(data, pointerPosition, dataHandle.AddrOfPinnedObject());
+                return dataHandle;
+            }
+            return null;
+        }
+
+        private static void WritePointer(byte[] destinationArray, int destinationIndex, IntPtr pointer)
+        {
+            byte[] sourceArray = IntPtr.Size == 8
+                ? BitConverter.GetBytes(pointer.ToInt64())
+                : BitConverter.GetBytes(pointer.ToInt32());
+            Array.Copy(sourceArray, 0, destinationArray, destinationIndex, IntPtr.Size);
+        }
 
         public bool LoadFile(string fileName, string preSwapFilenameOut)
 		{

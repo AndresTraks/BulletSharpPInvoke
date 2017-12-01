@@ -621,30 +621,18 @@ namespace BulletSharp
             stream.Dispose();
         }
 
-        protected void ConvertRigidBodyFloat(byte[] bodyData, Dictionary<long, byte[]> libPointers)
+        protected void ConvertRigidBodyFloat(byte[] data, Dictionary<long, byte[]> libPointers)
         {
-            long collisionShapePtr, namePtr;
-            Matrix startTransform;
-            float inverseMass;
-            float friction, restitution;
-            Vector3 angularFactor, linearFactor;
+            int cod = RigidBodyFloatData.Offset("CollisionObjectData");
+            long collisionShapePtr = BulletReader.ToPtr(data, cod + CollisionObjectFloatData.Offset("CollisionShape"));
+            Matrix startTransform = BulletReader.ToMatrix(data, cod + CollisionObjectFloatData.Offset("WorldTransform"));
+            long namePtr = BulletReader.ToPtr(data, cod + CollisionObjectFloatData.Offset("Name"));
+            float friction = BitConverter.ToSingle(data, cod + CollisionObjectFloatData.Offset("Friction"));
+            float restitution = BitConverter.ToSingle(data, cod + CollisionObjectFloatData.Offset("Restitution"));
 
-            using (var stream = new MemoryStream(bodyData, false))
-            {
-                using (var reader = new BulletReader(stream))
-                {
-                    int cod = RigidBodyFloatData.Offset("CollisionObjectData");
-                    collisionShapePtr = reader.ReadPtr(cod + CollisionObjectFloatData.Offset("CollisionShape"));
-                    startTransform = reader.ReadMatrix(cod + CollisionObjectFloatData.Offset("WorldTransform"));
-                    namePtr = reader.ReadPtr(cod + CollisionObjectFloatData.Offset("Name"));
-                    friction = reader.ReadSingle(cod + CollisionObjectFloatData.Offset("Friction"));
-                    restitution = reader.ReadSingle(cod + CollisionObjectFloatData.Offset("Restitution"));
-
-                    inverseMass = reader.ReadSingle(RigidBodyFloatData.Offset("InverseMass"));
-                    angularFactor = reader.ReadVector3(RigidBodyFloatData.Offset("AngularFactor"));
-                    linearFactor = reader.ReadVector3(RigidBodyFloatData.Offset("LinearFactor"));
-                }
-            }
+            float inverseMass = BitConverter.ToSingle(data, RigidBodyFloatData.Offset("InverseMass"));
+            Vector3 angularFactor = BulletReader.ToVector3(data, RigidBodyFloatData.Offset("AngularFactor"));
+            Vector3 linearFactor = BulletReader.ToVector3(data, RigidBodyFloatData.Offset("LinearFactor"));
 
             CollisionShape shape = _shapeMap[collisionShapePtr];
 
@@ -673,33 +661,21 @@ namespace BulletSharp
             body.Restitution = restitution;
             body.AngularFactor = angularFactor;
             body.LinearFactor = linearFactor;
-            _bodyMap.Add(bodyData, body);
+            _bodyMap.Add(data, body);
         }
 
-        protected void ConvertRigidBodyDouble(byte[] bodyData, Dictionary<long, byte[]> libPointers)
+        protected void ConvertRigidBodyDouble(byte[] data, Dictionary<long, byte[]> libPointers)
         {
-            long collisionShapePtr, namePtr;
-            Matrix startTransform;
-            double inverseMass;
-            double friction, restitution;
-            Vector3 angularFactor, linearFactor;
+            int cod = RigidBodyFloatData.Offset("CollisionObjectData");
+            long collisionShapePtr = BulletReader.ToPtr(data, cod + CollisionObjectFloatData.Offset("CollisionShape"));
+            Matrix startTransform = BulletReader.ToMatrixDouble(data, cod + CollisionObjectFloatData.Offset("WorldTransform"));
+            long namePtr = BulletReader.ToPtr(data, cod + CollisionObjectFloatData.Offset("Name"));
+            double friction = BitConverter.ToDouble(data, cod + CollisionObjectFloatData.Offset("Friction"));
+            double restitution = BitConverter.ToDouble(data, cod + CollisionObjectFloatData.Offset("Restitution"));
 
-            using (var stream = new MemoryStream(bodyData, false))
-            {
-                using (var reader = new BulletReader(stream))
-                {
-                    int cod = RigidBodyDoubleData.Offset("CollisionObjectData");
-                    collisionShapePtr = reader.ReadPtr(cod + CollisionObjectDoubleData.Offset("CollisionShape"));
-                    startTransform = reader.ReadMatrixDouble(cod + CollisionObjectDoubleData.Offset("WorldTransform"));
-                    namePtr = reader.ReadPtr(cod + CollisionObjectDoubleData.Offset("Name"));
-                    friction = reader.ReadDouble(cod + CollisionObjectDoubleData.Offset("Friction"));
-                    restitution = reader.ReadDouble(cod + CollisionObjectDoubleData.Offset("Restitution"));
-
-                    inverseMass = reader.ReadDouble(RigidBodyDoubleData.Offset("InverseMass"));
-                    angularFactor = reader.ReadVector3Double(RigidBodyDoubleData.Offset("AngularFactor"));
-                    linearFactor = reader.ReadVector3Double(RigidBodyDoubleData.Offset("LinearFactor"));
-                }
-            }
+            double inverseMass = BitConverter.ToDouble(data, RigidBodyFloatData.Offset("InverseMass"));
+            Vector3 angularFactor = BulletReader.ToVector3Double(data, RigidBodyFloatData.Offset("AngularFactor"));
+            Vector3 linearFactor = BulletReader.ToVector3Double(data, RigidBodyFloatData.Offset("LinearFactor"));
 
             CollisionShape shape = _shapeMap[collisionShapePtr];
 
@@ -728,7 +704,7 @@ namespace BulletSharp
             body.Restitution = (float)restitution;
             body.AngularFactor = angularFactor;
             body.LinearFactor = linearFactor;
-            _bodyMap.Add(bodyData, body);
+            _bodyMap.Add(data, body);
         }
 
         public CollisionShape CreateBoxShape(ref Vector3 halfExtents)
