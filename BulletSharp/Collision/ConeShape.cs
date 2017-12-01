@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -48,5 +49,15 @@ namespace BulletSharp
 			: base(btConeShapeZ_new(radius, height))
 		{
 		}
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct ConeShapeData
+	{
+		public ConvexInternalShapeData ConvexInternalShapeData;
+		public int UpAxis;
+		public int Padding;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(ConeShapeData), fieldName).ToInt32(); }
 	}
 }

@@ -127,7 +127,7 @@ namespace BulletSharp
 
 		public void RemoveConstraint(TypedConstraint constraint)
 		{
-			RigidBody rigidBody = constraint.RigidBodyA;
+            RigidBody rigidBody = constraint.RigidBodyA;
 			if (rigidBody._constraintRefs != null)
 			{
 				rigidBody._constraintRefs.Remove(constraint);
@@ -138,8 +138,13 @@ namespace BulletSharp
 				rigidBody._constraintRefs.Remove(constraint);
 			}
 
-			int itemIndex = _constraints.IndexOf(constraint);
-			int lastIndex = _constraints.Count - 1;
+            int itemIndex = _constraints.IndexOf(constraint);
+            if (itemIndex == -1)
+            {
+                return;
+            }
+
+            int lastIndex = _constraints.Count - 1;
 			_constraints[itemIndex] = _constraints[lastIndex];
 			_constraints.RemoveAt(lastIndex);
 			btDynamicsWorld_removeConstraint(Native, constraint.Native);
