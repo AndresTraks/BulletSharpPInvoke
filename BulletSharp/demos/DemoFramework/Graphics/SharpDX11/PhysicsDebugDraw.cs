@@ -1,6 +1,7 @@
 ﻿using BulletSharp;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
+using System.Runtime.InteropServices;
 using DataStream = global::SharpDX.DataStream;
 using Device = SharpDX.Direct3D11.Device;
 
@@ -15,6 +16,8 @@ namespace DemoFramework.SharpDX11
         Buffer _vertexBuffer;
         VertexBufferBinding _vertexBufferBinding;
         int _vertexCount;
+
+        private PositionColoredFloat[] _lines = new PositionColoredFloat[0];
 
         public PhysicsDebugDraw(SharpDX11Graphics graphics)
         {
@@ -34,7 +37,7 @@ namespace DemoFramework.SharpDX11
                 CpuAccessFlags = CpuAccessFlags.Write
             };
 
-            _vertexBufferBinding = new VertexBufferBinding(null, PositionColored.Stride, 0);
+            _vertexBufferBinding = new VertexBufferBinding(null, PositionColoredFloat.Stride, 0);
         }
         /*
         protected override void Dispose(bool disposing)
@@ -60,15 +63,23 @@ namespace DemoFramework.SharpDX11
 
             if (_vertexCount != LineIndex)
             {
+                if (_lines.Length != Lines.Length)
+                {
+                    System.Array.Resize(ref _lines, Lines.Length);
+                }
                 _vertexCount = LineIndex;
+                for (int i = 0; i < _vertexCount; i++)
+                {
+                    _lines[i] = new PositionColoredFloat(ref Lines[i]);
+                }
                 if (_vertexBuffer != null)
                 {
                     _vertexBuffer.Dispose();
                 }
-                _vertexBufferDesc.SizeInBytes = PositionColored.Stride * _vertexCount;
+                _vertexBufferDesc.SizeInBytes = PositionColoredFloat.Stride * _vertexCount;
                 using (var data = new DataStream(_vertexBufferDesc.SizeInBytes, false, true))
                 {
-                    data.WriteRange(Lines, 0, _vertexCount);
+                    data.WriteRange(_lines, 0, _vertexCount);
                     data.Position = 0;
                     _vertexBuffer = new Buffer(_device, data, _vertexBufferDesc);
                 }
@@ -76,9 +87,13 @@ namespace DemoFramework.SharpDX11
             }
             else
             {
+                for (int i = 0; i < _vertexCount; i++)
+                {
+                    _lines[i] = new PositionColoredFloat(ref Lines[i]);
+                }
                 DataStream data;
                 _device.ImmediateContext.MapSubresource(_vertexBuffer, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
-                data.WriteRange(Lines, 0, _vertexCount);
+                data.WriteRange(_lines, 0, _vertexCount);
                 _device.ImmediateContext.UnmapSubresource(_vertexBuffer, 0);
                 data.Dispose();
             }
@@ -90,6 +105,21 @@ namespace DemoFramework.SharpDX11
             _device.ImmediateContext.Draw(_vertexCount, 0);
 
             LineIndex = 0;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct PositionColoredFloat
+        {
+            public const int Stride = 3 * sizeof(float) + sizeof(int);
+
+            public SharpDX.Vector3 Position;
+            public int Color;
+
+            public PositionColoredFloat(ref PositionColored point)
+            {
+                Position = new SharpDX.Vector3((float)point.Position.X, (float)point.Position.Y, (float)point.Position.Z);
+                Color = point.Color;
+            }
         }
     }
 };

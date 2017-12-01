@@ -6,7 +6,7 @@ namespace DemoFramework.SharpDX11
     [StructLayout(LayoutKind.Sequential)]
     public struct InstanceData
     {
-        public Matrix WorldTransform;
+        public SharpDX.Matrix WorldTransform;
         public uint Color;
 
         public static readonly int SizeInBytes = Marshal.SizeOf(typeof(InstanceData));
@@ -30,7 +30,7 @@ namespace DemoFramework.SharpDX11
         public void Add(ref Matrix transform, uint color)
         {
             EnsureCapacity();
-            _array[_nextIndex].WorldTransform = transform;
+            _array[_nextIndex].WorldTransform = MathHelper.Convert(ref transform);
             _array[_nextIndex].Color = color;
             _nextIndex++;
         }
@@ -38,7 +38,7 @@ namespace DemoFramework.SharpDX11
         public void Add(uint color)
         {
             EnsureCapacity();
-            _array[_nextIndex].WorldTransform = Matrix.Identity;
+            _array[_nextIndex].WorldTransform = SharpDX.Matrix.Identity;
             _array[_nextIndex].Color = color;
             _nextIndex++;
         }

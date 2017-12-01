@@ -72,7 +72,7 @@ namespace BulletSharp
 				}
 			}
 
-			serializer.FinalizeChunk(chunk, "btDynamicsWorlddoubleData", DnaID.DynamicsWorld, chunk.OldPtr);
+			serializer.FinalizeChunk(chunk, "btDynamicsWorldDoubleData", DnaID.DynamicsWorld, chunk.OldPtr);
 		}
 
 		void SerializeRigidBodies(Serializer serializer)
