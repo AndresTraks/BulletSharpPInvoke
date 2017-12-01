@@ -176,5 +176,70 @@ namespace BulletSharp
             BaseStream.Position = position;
             return ReadVector3Double();
         }
+
+        public static Matrix ToMatrix(byte[] value, int startIndex)
+        {
+            return new Matrix(
+                BitConverter.ToSingle(value, startIndex), 
+                BitConverter.ToSingle(value, startIndex + 4), 
+                BitConverter.ToSingle(value, startIndex + 8),
+                0,
+                BitConverter.ToSingle(value, startIndex + 16),
+                BitConverter.ToSingle(value, startIndex + 20),
+                BitConverter.ToSingle(value, startIndex + 24), 
+                0,
+                BitConverter.ToSingle(value, startIndex + 32),
+                BitConverter.ToSingle(value, startIndex + 36), 
+                BitConverter.ToSingle(value, startIndex + 40),
+                0,
+                BitConverter.ToSingle(value, startIndex + 48),
+                BitConverter.ToSingle(value, startIndex + 52),
+                BitConverter.ToSingle(value, startIndex + 56),
+                1);
+        }
+
+        public static Matrix ToMatrixDouble(byte[] value, int startIndex)
+        {
+            return new Matrix(
+                (float)BitConverter.ToDouble(value, startIndex),
+                (float)BitConverter.ToDouble(value, startIndex + 8),
+                (float)BitConverter.ToDouble(value, startIndex + 16),
+                0,
+                (float)BitConverter.ToDouble(value, startIndex + 32),
+                (float)BitConverter.ToDouble(value, startIndex + 40),
+                (float)BitConverter.ToDouble(value, startIndex + 48),
+                0,
+                (float)BitConverter.ToDouble(value, startIndex + 64),
+                (float)BitConverter.ToDouble(value, startIndex + 72),
+                (float)BitConverter.ToDouble(value, startIndex + 80),
+                0,
+                (float)BitConverter.ToDouble(value, startIndex + 96),
+                (float)BitConverter.ToDouble(value, startIndex + 104),
+                (float)BitConverter.ToDouble(value, startIndex + 112),
+                1);
+        }
+
+        public static long ToPtr(byte[] value, int startIndex)
+        {
+            return IntPtr.Size == 8
+                ? BitConverter.ToInt64(value, startIndex)
+                : BitConverter.ToInt32(value, startIndex);
+        }
+
+        public static Vector3 ToVector3(byte[] value, int startIndex)
+        {
+            return new Vector3(
+                BitConverter.ToSingle(value, startIndex),
+                BitConverter.ToSingle(value, startIndex + 4),
+                BitConverter.ToSingle(value, startIndex + 8));
+        }
+
+        public static Vector3 ToVector3Double(byte[] value, int startIndex)
+        {
+            return new Vector3(
+                (float)BitConverter.ToDouble(value, startIndex),
+                (float)BitConverter.ToDouble(value, startIndex + 8),
+                (float)BitConverter.ToDouble(value, startIndex + 16));
+        }
     }
 }
