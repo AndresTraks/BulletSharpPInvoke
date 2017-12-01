@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
+using System.Runtime.InteropServices;
 
 namespace BulletSharp
 {
@@ -61,5 +62,25 @@ namespace BulletSharp
 		}
 		*/
 		public int SphereCount => btMultiSphereShape_getSphereCount(Native);
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct MultiSphereShapeData
+	{
+		public ConvexInternalShapeData ConvexInternalShapeData;
+		public PositionAndRadius LocalPositionArrayPtr;
+		public int LocalPositionArraySize;
+		public int Padding;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(MultiSphereShapeData), fieldName).ToInt32(); }
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct PositionAndRadius
+	{
+		public Vector3FloatData Position;
+		public float Radius;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(PositionAndRadius), fieldName).ToInt32(); }
 	}
 }

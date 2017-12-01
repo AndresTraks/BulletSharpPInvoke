@@ -32,21 +32,18 @@ namespace BulletSharp
             _dynamicsWorld = world;
 		}
 
-        protected CollisionShape ConvertCollisionShape(byte[] shapeData, Dictionary<long, byte[]> libPointers)
+        protected CollisionShape ConvertCollisionShape(byte[] data, Dictionary<long, byte[]> libPointers)
         {
             CollisionShape shape = null;
-            MemoryStream stream = new MemoryStream(shapeData, false);
-            BulletReader reader = new BulletReader(stream);
 
-            BroadphaseNativeType type = (BroadphaseNativeType) reader.ReadInt32(CollisionShapeData.Offset("ShapeType"));
-            stream.Position = Marshal.SizeOf(typeof(CollisionShapeData));
+            BroadphaseNativeType type = (BroadphaseNativeType) BitConverter.ToInt32(data, CollisionShapeData.Offset("ShapeType"));
             switch (type)
             {
                 case BroadphaseNativeType.StaticPlaneShape:
                 {
-                    Vector3 localScaling = reader.ReadVector3();
-                    Vector3 planeNormal = reader.ReadVector3();
-                    float planeConstant = reader.ReadSingle();
+                    Vector3 localScaling = BulletReader.ToVector3(data, StaticPlaneShapeData.Offset("LocalScaling"));
+                    Vector3 planeNormal = BulletReader.ToVector3(data, StaticPlaneShapeData.Offset("PlaneNormal"));
+                    float planeConstant = BitConverter.ToSingle(data, StaticPlaneShapeData.Offset("PlaneConstant"));
                     shape = CreatePlaneShape(ref planeNormal, planeConstant);
                     shape.LocalScaling = localScaling;
                     break;
@@ -54,15 +51,15 @@ namespace BulletSharp
                 case BroadphaseNativeType.GImpactShape:
                 {
                     //StridingMeshInterfaceData* interfaceData = CreateStridingMeshInterfaceData(&gimpactData->m_meshInterface)
-                    TriangleIndexVertexArray meshInterface = CreateMeshInterface(shapeData,
+                    TriangleIndexVertexArray meshInterface = CreateMeshInterface(data,
                         GImpactMeshShapeData.Offset("MeshInterface"), libPointers);
 
-                    GImpactShapeType gImpactType = (GImpactShapeType)reader.ReadInt32(GImpactMeshShapeData.Offset("GImpactSubType"));
+                    GImpactShapeType gImpactType = (GImpactShapeType)BitConverter.ToSingle(data, GImpactMeshShapeData.Offset("GImpactSubType"));
                     if (gImpactType == GImpactShapeType.TrimeshShape)
                     {
                         GImpactMeshShape gimpactShape = CreateGimpactShape(meshInterface);
-                        gimpactShape.LocalScaling = reader.ReadVector3(GImpactMeshShapeData.Offset("LocalScaling"));
-                        gimpactShape.Margin = reader.ReadSingle(GImpactMeshShapeData.Offset("CollisionMargin"));
+                        gimpactShape.LocalScaling = BulletReader.ToVector3(data, GImpactMeshShapeData.Offset("LocalScaling"));
+                        gimpactShape.Margin = BitConverter.ToSingle(data, GImpactMeshShapeData.Offset("CollisionMargin"));
                         gimpactShape.UpdateBound();
                         shape = gimpactShape;
                     }
@@ -76,25 +73,22 @@ namespace BulletSharp
                 }
                 case BroadphaseNativeType.CompoundShape:
                 {
-                    long childShapesPtr = reader.ReadPtr();
-                    byte[] childShapes = libPointers[childShapesPtr];
-                    int numChildShapes = reader.ReadInt32();
-                    //float collisionMargin = reader.ReadInt32();
+                    long childShapesPtr = BulletReader.ToPtr(data, CompoundShapeData.Offset("ChildShapePtr"));
+                    int numChildShapes = BitConverter.ToInt32(data, CompoundShapeData.Offset("NumChildShapes"));
+                    //int collisionMargin = BitConverter.ToInt32(data, CompoundShapeData.Offset("CollisionMargin"));
                     CompoundShape compoundShape = CreateCompoundShape();
-                    using (var shapeStream = new MemoryStream(childShapes, false))
+
+                    byte[] childShapes = libPointers[childShapesPtr];
+                    int childLength = Marshal.SizeOf(typeof(CompoundShapeChildData));
+                    for (int i = 0; i < numChildShapes; i++)
                     {
-                        using (var shapeReader = new BulletReader(shapeStream))
-                        {
-                            for (int i = 0; i < numChildShapes; i++)
-                            {
-                                Matrix localTransform = shapeReader.ReadMatrix();
-                                long childShapePtr = shapeReader.ReadPtr();
-                                int childShapeType = shapeReader.ReadInt32();
-                                float childMargin = shapeReader.ReadSingle();
-                                CollisionShape childShape = ConvertCollisionShape(libPointers[childShapePtr], libPointers);
-                                compoundShape.AddChildShape(localTransform, childShape);
-                            }
-                        }
+                        int cs = i * childLength;
+                        Matrix localTransform = BulletReader.ToMatrix(childShapes, cs + CompoundShapeChildData.Offset("Transform"));
+                        long childShapePtr = BulletReader.ToPtr(childShapes, cs + CompoundShapeChildData.Offset("ChildShape"));
+                        //int childShapeType = BitConverter.ToInt32(childShapes, cs + CompoundShapeChildData.Offset("ChildShapeType"));
+                        //float childMargin = BitConverter.ToSingle(childShapes, cs + CompoundShapeChildData.Offset("ChildMargin"));
+                        CollisionShape childShape = ConvertCollisionShape(libPointers[childShapePtr], libPointers);
+                        compoundShape.AddChildShapeRef(ref localTransform, childShape);
                     }
                     shape = compoundShape;
                     break;
@@ -107,10 +101,9 @@ namespace BulletSharp
                 case BroadphaseNativeType.MultiSphereShape:
                 case BroadphaseNativeType.SphereShape:
                 {
-                    Vector3 localScaling = reader.ReadVector3();
-                    Vector3 implicitShapeDimensions = reader.ReadVector3();
-                    float collisionMargin = reader.ReadSingle();
-                    stream.Position += 4; // m_padding
+                    Vector3 localScaling = BulletReader.ToVector3(data, ConvexInternalShapeData.Offset("LocalScaling"));
+                    Vector3 implicitShapeDimensions = BulletReader.ToVector3(data, ConvexInternalShapeData.Offset("ImplicitShapeDimensions"));
+                    float collisionMargin = BitConverter.ToSingle(data, ConvexInternalShapeData.Offset("CollisionMargin"));
                     switch (type)
                     {
                         case BroadphaseNativeType.BoxShape:
@@ -124,7 +117,7 @@ namespace BulletSharp
                         case BroadphaseNativeType.CapsuleShape:
                         {
                             Vector3 halfExtents = implicitShapeDimensions + new Vector3(collisionMargin);
-                            int upAxis = reader.ReadInt32();
+                            int upAxis = BitConverter.ToInt32(data, CapsuleShapeData.Offset("UpAxis"));
                             switch (upAxis)
                             {
                                 case 0:
@@ -145,7 +138,7 @@ namespace BulletSharp
                         case BroadphaseNativeType.ConeShape:
                         {
                             Vector3 halfExtents = implicitShapeDimensions; // + new Vector3(collisionMargin);
-                            int upAxis = reader.ReadInt32();
+                            int upAxis = BitConverter.ToInt32(data, ConeShapeData.Offset("UpAxis"));
                             switch (upAxis)
                             {
                                 case 0:
@@ -165,24 +158,21 @@ namespace BulletSharp
                         }
                         case BroadphaseNativeType.ConvexHullShape:
                         {
-                            long unscaledPointsFloatPtr = reader.ReadPtr();
-                            long unscaledPointsDoublePtr = reader.ReadPtr();
-                            int numPoints = reader.ReadInt32();
+                            long unscaledPointsFloatPtr = BulletReader.ToPtr(data, ConvexHullShapeData.Offset("UnscaledPointsFloatPtr"));
+                            long unscaledPointsDoublePtr = BulletReader.ToPtr(data, ConvexHullShapeData.Offset("UnscaledPointsDoublePtr"));
+                            int numPoints = BitConverter.ToInt32(data, ConvexHullShapeData.Offset("NumUnscaledPoints"));
                             bool isFloat = unscaledPointsFloatPtr != 0;
 
                             byte[] points = libPointers[isFloat ? unscaledPointsFloatPtr : unscaledPointsDoublePtr];
                             ConvexHullShape hullShape = CreateConvexHullShape();
-                            using (var pointStream = new MemoryStream(points, false))
+                            int vectorLength = 4 * (isFloat ? sizeof(float) : sizeof(double));
+                            for (int i = 0; i < numPoints; i++)
                             {
-                                using (var pointReader = new BulletReader(pointStream))
-                                {
-                                    for (int i = 0; i < numPoints; i++)
-                                    {
-                                        hullShape.AddPoint(isFloat
-                                            ? pointReader.ReadVector3()
-                                            : pointReader.ReadVector3Double());
-                                    }
-                                }
+                                int v = i * vectorLength;
+                                Vector3 point = isFloat
+                                    ? BulletReader.ToVector3(points, v)
+                                    : BulletReader.ToVector3Double(points, v);
+                                hullShape.AddPoint(point);
                             }
                             hullShape.Margin = collisionMargin;
                             //hullShape.InitializePolyhedralFeatures();
@@ -192,7 +182,7 @@ namespace BulletSharp
                         case BroadphaseNativeType.CylinderShape:
                         {
                             Vector3 halfExtents = implicitShapeDimensions + new Vector3(collisionMargin);
-                            int upAxis = reader.ReadInt32();
+                            int upAxis = BitConverter.ToInt32(data, CylinderShapeData.Offset("UpAxis"));
                             switch (upAxis)
                             {
                                 case 0:
@@ -212,21 +202,17 @@ namespace BulletSharp
                         }
                         case BroadphaseNativeType.MultiSphereShape:
                         {
-                            long localPositionArrayPtr = reader.ReadPtr();
+                            long localPositionArrayPtr = BulletReader.ToPtr(data, MultiSphereShapeData.Offset("LocalPositionArrayPtr"));
+                            int localPositionArraySize = BitConverter.ToInt32(data, MultiSphereShapeData.Offset("LocalPositionArraySize"));
                             byte[] localPositionArray = libPointers[localPositionArrayPtr];
-                            int localPositionArraySize = reader.ReadInt32();
                             Vector3[] positions = new Vector3[localPositionArraySize];
                             float[] radi = new float[localPositionArraySize];
-                            using (var localPositionArrayStream = new MemoryStream(localPositionArray, false))
+                            int positionAndRadiusLength = Marshal.SizeOf(typeof(PositionAndRadius));
+                            for (int i = 0; i < localPositionArraySize; i++)
                             {
-                                using (var localPositionArrayReader = new BulletReader(localPositionArrayStream))
-                                {
-                                    for (int i = 0; i < localPositionArraySize; i++)
-                                    {
-                                        positions[i] = localPositionArrayReader.ReadVector3();
-                                        radi[i] = localPositionArrayReader.ReadSingle();
-                                    }
-                                }
+                                int p = i * positionAndRadiusLength;
+                                positions[i] = BulletReader.ToVector3(localPositionArray, p + PositionAndRadius.Offset("Position"));
+                                radi[i] = BitConverter.ToSingle(localPositionArray, p + PositionAndRadius.Offset("Radius"));
                             }
                             shape = CreateMultiSphereShape(positions, radi);
                             break;
@@ -245,14 +231,14 @@ namespace BulletSharp
                 }
                 case BroadphaseNativeType.TriangleMeshShape:
                 {
-                    TriangleIndexVertexArray meshInterface = CreateMeshInterface(shapeData,
+                    TriangleIndexVertexArray meshInterface = CreateMeshInterface(data,
                         TriangleMeshShapeData.Offset("MeshInterface"), libPointers);
                     if (meshInterface.NumSubParts == 0)
                     {
                         return null;
                     }
                     OptimizedBvh bvh = null;
-                    long bvhPtr = reader.ReadPtr(TriangleMeshShapeData.Offset("QuantizedFloatBvh"));
+                    long bvhPtr = BulletReader.ToPtr(data, TriangleMeshShapeData.Offset("QuantizedFloatBvh"));
                     if (bvhPtr != 0)
                     {
                         if (_bvhMap.ContainsKey(bvhPtr))
@@ -266,13 +252,13 @@ namespace BulletSharp
                             //bvh.DeserializeFloat(bvhPtr);
                         }
                     }
-                    bvhPtr = reader.ReadPtr(TriangleMeshShapeData.Offset("QuantizedDoubleBvh"));
+                    bvhPtr = BulletReader.ToPtr(data, TriangleMeshShapeData.Offset("QuantizedDoubleBvh"));
                     if (bvhPtr != 0)
                     {
                         throw new NotImplementedException();
                     }
                     BvhTriangleMeshShape trimeshShape = CreateBvhTriangleMeshShape(meshInterface, bvh);
-                    trimeshShape.Margin = reader.ReadSingle(TriangleMeshShapeData.Offset("CollisionMargin"));
+                    trimeshShape.Margin = BitConverter.ToSingle(data, TriangleMeshShapeData.Offset("CollisionMargin"));
                     shape = trimeshShape;
                     break;
                 }
@@ -285,26 +271,22 @@ namespace BulletSharp
                     throw new NotImplementedException();
             }
 
-            reader.Dispose();
-            stream.Dispose();
             return shape;
         }
 
-        protected void ConvertConstraintFloat(RigidBody rigidBodyA, RigidBody rigidBodyB, byte[] constraintData, int fileVersion, Dictionary<long, byte[]> libPointers)
+        protected void ConvertConstraintFloat(RigidBody rigidBodyA, RigidBody rigidBodyB, byte[] data, int fileVersion, Dictionary<long, byte[]> libPointers)
         {
             TypedConstraint constraint = null;
-            var stream = new MemoryStream(constraintData, false);
-            var reader = new BulletReader(stream);
 
-            TypedConstraintType type = (TypedConstraintType)reader.ReadInt32(TypedConstraintFloatData.Offset("ObjectType"));
+            TypedConstraintType type = (TypedConstraintType)BitConverter.ToInt32(data, TypedConstraintFloatData.Offset("ObjectType"));
             switch (type)
             {
                 case TypedConstraintType.Point2Point:
                 {
-                    Vector3 pivotInA = reader.ReadVector3(Point2PointConstraintFloatData.Offset("PivotInA"));
+                    Vector3 pivotInA = BulletReader.ToVector3(data, Point2PointConstraintFloatData.Offset("PivotInA"));
                     if (rigidBodyA != null && rigidBodyB != null)
                     {
-                        Vector3 pivotInB = reader.ReadVector3(Point2PointConstraintFloatData.Offset("PivotInB"));
+                        Vector3 pivotInB = BulletReader.ToVector3(data, Point2PointConstraintFloatData.Offset("PivotInB"));
                         constraint = CreatePoint2PointConstraint(rigidBodyA, rigidBodyB, ref pivotInA, ref pivotInB);
                     }
                     else
@@ -316,10 +298,10 @@ namespace BulletSharp
                 case TypedConstraintType.ConeTwist:
                 {
                     ConeTwistConstraint coneTwist;
-                    Matrix rbaFrame = reader.ReadMatrix(ConeTwistConstraintFloatData.Offset("RigidBodyAFrame"));
+                    Matrix rbaFrame = BulletReader.ToMatrix(data, ConeTwistConstraintFloatData.Offset("RigidBodyAFrame"));
                     if (rigidBodyA != null && rigidBodyB != null)
                     {
-                        Matrix rbbFrame = reader.ReadMatrix(ConeTwistConstraintFloatData.Offset("RigidBodyBFrame"));
+                        Matrix rbbFrame = BulletReader.ToMatrix(data, ConeTwistConstraintFloatData.Offset("RigidBodyBFrame"));
                         coneTwist = CreateConeTwistConstraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame);
                     }
                     else
@@ -327,13 +309,13 @@ namespace BulletSharp
                         coneTwist = CreateConeTwistConstraint(rigidBodyA, ref rbaFrame);
                     }
                     coneTwist.SetLimit(
-                        reader.ReadSingle(ConeTwistConstraintFloatData.Offset("SwingSpan1")),
-                        reader.ReadSingle(ConeTwistConstraintFloatData.Offset("SwingSpan2")),
-                        reader.ReadSingle(ConeTwistConstraintFloatData.Offset("TwistSpan")),
-                        reader.ReadSingle(ConeTwistConstraintFloatData.Offset("LimitSoftness")),
-                        reader.ReadSingle(ConeTwistConstraintFloatData.Offset("BiasFactor")),
-                        reader.ReadSingle(ConeTwistConstraintFloatData.Offset("RelaxationFactor")));
-                    coneTwist.Damping = reader.ReadSingle(ConeTwistConstraintFloatData.Offset("Damping"));
+                        BitConverter.ToSingle(data, ConeTwistConstraintFloatData.Offset("SwingSpan1")),
+                        BitConverter.ToSingle(data, ConeTwistConstraintFloatData.Offset("SwingSpan2")),
+                        BitConverter.ToSingle(data, ConeTwistConstraintFloatData.Offset("TwistSpan")),
+                        BitConverter.ToSingle(data, ConeTwistConstraintFloatData.Offset("LimitSoftness")),
+                        BitConverter.ToSingle(data, ConeTwistConstraintFloatData.Offset("BiasFactor")),
+                        BitConverter.ToSingle(data, ConeTwistConstraintFloatData.Offset("RelaxationFactor")));
+                    coneTwist.Damping = BitConverter.ToSingle(data, ConeTwistConstraintFloatData.Offset("Damping"));
 
                     constraint = coneTwist;
                     break;
@@ -343,10 +325,10 @@ namespace BulletSharp
                     Generic6DofConstraint dof = null;
                     if (rigidBodyA != null && rigidBodyB != null)
                     {
-                        Matrix rbaFrame = reader.ReadMatrix(Generic6DofConstraintFloatData.Offset("RigidBodyAFrame"));
-                        Matrix rbbFrame = reader.ReadMatrix(Generic6DofConstraintFloatData.Offset("RigidBodyBFrame"));
+                        Matrix rbaFrame = BulletReader.ToMatrix(data, Generic6DofConstraintFloatData.Offset("RigidBodyAFrame"));
+                        Matrix rbbFrame = BulletReader.ToMatrix(data, Generic6DofConstraintFloatData.Offset("RigidBodyBFrame"));
                         int useLinearReferenceFrameA =
-                            reader.ReadInt32(Generic6DofConstraintFloatData.Offset("UseLinearReferenceFrameA"));
+                            BitConverter.ToInt32(data, Generic6DofConstraintFloatData.Offset("UseLinearReferenceFrameA"));
                         dof = CreateGeneric6DofConstraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame,
                             useLinearReferenceFrameA != 0);
                     }
@@ -354,9 +336,9 @@ namespace BulletSharp
                     {
                         if (rigidBodyB != null)
                         {
-                            Matrix rbbFrame = reader.ReadMatrix(Generic6DofConstraintFloatData.Offset("RigidBodyBFrame"));
+                            Matrix rbbFrame = BulletReader.ToMatrix(data, Generic6DofConstraintFloatData.Offset("RigidBodyBFrame"));
                             int useLinearReferenceFrameA =
-                                reader.ReadInt32(Generic6DofConstraintFloatData.Offset("UseLinearReferenceFrameA"));
+                                BitConverter.ToInt32(data, Generic6DofConstraintFloatData.Offset("UseLinearReferenceFrameA"));
                             dof = CreateGeneric6DofConstraint(rigidBodyB, ref rbbFrame, useLinearReferenceFrameA != 0);
                         }
                         else
@@ -368,13 +350,13 @@ namespace BulletSharp
                     if (dof != null)
                     {
                         dof.AngularLowerLimit =
-                            reader.ReadVector3(Generic6DofConstraintFloatData.Offset("AngularLowerLimit"));
+                            BulletReader.ToVector3(data, Generic6DofConstraintFloatData.Offset("AngularLowerLimit"));
                         dof.AngularUpperLimit =
-                            reader.ReadVector3(Generic6DofConstraintFloatData.Offset("AngularUpperLimit"));
+                            BulletReader.ToVector3(data, Generic6DofConstraintFloatData.Offset("AngularUpperLimit"));
                         dof.LinearLowerLimit =
-                            reader.ReadVector3(Generic6DofConstraintFloatData.Offset("LinearLowerLimit"));
+                            BulletReader.ToVector3(data, Generic6DofConstraintFloatData.Offset("LinearLowerLimit"));
                         dof.LinearUpperLimit =
-                            reader.ReadVector3(Generic6DofConstraintFloatData.Offset("LinearUpperLimit"));
+                            BulletReader.ToVector3(data, Generic6DofConstraintFloatData.Offset("LinearUpperLimit"));
                     }
                     constraint = dof;
                     break;
@@ -385,9 +367,9 @@ namespace BulletSharp
                     int sixDofData = Generic6DofSpringConstraintFloatData.Offset("SixDofData");
                     if (rigidBodyA != null && rigidBodyB != null)
                     {
-                        Matrix rbaFrame = reader.ReadMatrix(sixDofData + Generic6DofConstraintFloatData.Offset("RigidBodyAFrame"));
-                        Matrix rbbFrame = reader.ReadMatrix(sixDofData + Generic6DofConstraintFloatData.Offset("RigidBodyBFrame"));
-                        int useLinearReferenceFrameA = reader.ReadInt32(sixDofData +
+                        Matrix rbaFrame = BulletReader.ToMatrix(data, sixDofData + Generic6DofConstraintFloatData.Offset("RigidBodyAFrame"));
+                        Matrix rbbFrame = BulletReader.ToMatrix(data, sixDofData + Generic6DofConstraintFloatData.Offset("RigidBodyBFrame"));
+                        int useLinearReferenceFrameA = BitConverter.ToInt32(data, sixDofData +
                             Generic6DofConstraintFloatData.Offset("UseLinearReferenceFrameA"));
                         dof = CreateGeneric6DofSpringConstraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame,
                             useLinearReferenceFrameA != 0);
@@ -400,10 +382,10 @@ namespace BulletSharp
 
                     if (dof != null)
                     {
-                        dof.AngularLowerLimit = reader.ReadVector3(sixDofData + Generic6DofConstraintFloatData.Offset("AngularLowerLimit"));
-                        dof.AngularUpperLimit = reader.ReadVector3(sixDofData + Generic6DofConstraintFloatData.Offset("AngularUpperLimit"));
-                        dof.LinearLowerLimit = reader.ReadVector3(sixDofData + Generic6DofConstraintFloatData.Offset("LinearLowerLimit"));
-                        dof.LinearUpperLimit = reader.ReadVector3(sixDofData + Generic6DofConstraintFloatData.Offset("LinearUpperLimit"));
+                        dof.AngularLowerLimit = BulletReader.ToVector3(data, sixDofData + Generic6DofConstraintFloatData.Offset("AngularLowerLimit"));
+                        dof.AngularUpperLimit = BulletReader.ToVector3(data, sixDofData + Generic6DofConstraintFloatData.Offset("AngularUpperLimit"));
+                        dof.LinearLowerLimit = BulletReader.ToVector3(data, sixDofData + Generic6DofConstraintFloatData.Offset("LinearLowerLimit"));
+                        dof.LinearUpperLimit = BulletReader.ToVector3(data, sixDofData + Generic6DofConstraintFloatData.Offset("LinearUpperLimit"));
 
                         int i;
                         if (fileVersion > 280)
@@ -414,10 +396,10 @@ namespace BulletSharp
                             int springDampingOffset = Generic6DofSpringConstraintFloatData.Offset("SpringDamping");
                             for (i = 0; i < 6; i++)
                             {
-                                dof.SetStiffness(i, reader.ReadSingle(springStiffnessOffset + sizeof (float)*i));
-                                dof.SetEquilibriumPoint(i, reader.ReadSingle(equilibriumPointOffset + sizeof (float)*i));
-                                dof.EnableSpring(i, reader.ReadInt32(springEnabledOffset + sizeof (int)*i) != 0);
-                                dof.SetDamping(i, reader.ReadSingle(springDampingOffset + sizeof (float)*i));
+                                dof.SetStiffness(i, BitConverter.ToSingle(data, springStiffnessOffset + sizeof (float)*i));
+                                dof.SetEquilibriumPoint(i, BitConverter.ToSingle(data, equilibriumPointOffset + sizeof (float)*i));
+                                dof.EnableSpring(i, BitConverter.ToInt32(data, springEnabledOffset + sizeof (int)*i) != 0);
+                                dof.SetDamping(i, BitConverter.ToSingle(data, springDampingOffset + sizeof (float)*i));
                             }
                         }
                     }
@@ -429,9 +411,9 @@ namespace BulletSharp
                     Generic6DofSpring2Constraint dof = null;
                     if (rigidBodyA != null && rigidBodyB != null)
                     {
-                        Matrix rbaFrame = reader.ReadMatrix(Generic6DofSpring2ConstraintFloatData.Offset("RigidBodyAFrame"));
-                        Matrix rbbFrame = reader.ReadMatrix(Generic6DofSpring2ConstraintFloatData.Offset("RigidBodyBFrame"));
-                        RotateOrder rotateOrder = (RotateOrder)reader.ReadInt32(Generic6DofSpring2ConstraintFloatData.Offset("RotateOrder"));
+                        Matrix rbaFrame = BulletReader.ToMatrix(data, Generic6DofSpring2ConstraintFloatData.Offset("RigidBodyAFrame"));
+                        Matrix rbbFrame = BulletReader.ToMatrix(data, Generic6DofSpring2ConstraintFloatData.Offset("RigidBodyBFrame"));
+                        RotateOrder rotateOrder = (RotateOrder)BitConverter.ToInt32(data, Generic6DofSpring2ConstraintFloatData.Offset("RotateOrder"));
                         dof = CreateGeneric6DofSpring2Constraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame, rotateOrder);
                     }
                     else
@@ -442,10 +424,10 @@ namespace BulletSharp
 
                     if (dof != null)
                     {
-                        dof.AngularLowerLimit = reader.ReadVector3(Generic6DofSpring2ConstraintFloatData.Offset("AngularLowerLimit"));
-                        dof.AngularUpperLimit = reader.ReadVector3(Generic6DofSpring2ConstraintFloatData.Offset("AngularUpperLimit"));
-                        dof.LinearLowerLimit = reader.ReadVector3(Generic6DofSpring2ConstraintFloatData.Offset("LinearLowerLimit"));
-                        dof.LinearUpperLimit = reader.ReadVector3(Generic6DofSpring2ConstraintFloatData.Offset("LinearUpperLimit"));
+                        dof.AngularLowerLimit = BulletReader.ToVector3(data, Generic6DofSpring2ConstraintFloatData.Offset("AngularLowerLimit"));
+                        dof.AngularUpperLimit = BulletReader.ToVector3(data, Generic6DofSpring2ConstraintFloatData.Offset("AngularUpperLimit"));
+                        dof.LinearLowerLimit = BulletReader.ToVector3(data, Generic6DofSpring2ConstraintFloatData.Offset("LinearLowerLimit"));
+                        dof.LinearUpperLimit = BulletReader.ToVector3(data, Generic6DofSpring2ConstraintFloatData.Offset("LinearUpperLimit"));
 
                         int i;
                         if (fileVersion > 280)
@@ -458,12 +440,12 @@ namespace BulletSharp
                             int linearSpringDampingLimitedOffset = Generic6DofSpring2ConstraintFloatData.Offset("LinearSpringDampingLimited");
                             for (i = 0; i < 3; i++)
                             {
-                                dof.SetStiffness(i, reader.ReadSingle(linearSpringStiffnessOffset + sizeof (float)*i),
-                                    reader.ReadByte(linearSpringStiffnessLimitedOffset + sizeof (byte)*i) != 0);
-                                dof.SetEquilibriumPoint(i, reader.ReadSingle(linearEquilibriumPointOffset + sizeof (float)*i));
-                                dof.EnableSpring(i, reader.ReadInt32(linearEnableSpringdOffset + sizeof (byte)*i) != 0);
-                                dof.SetDamping(i, reader.ReadSingle(linearSpringDampingOffset + sizeof (float)*i),
-                                    reader.ReadByte(linearSpringDampingLimitedOffset + sizeof (float)*i) != 0);
+                                dof.SetStiffness(i, BitConverter.ToSingle(data, linearSpringStiffnessOffset + sizeof (float)*i),
+                                    data[linearSpringStiffnessLimitedOffset + sizeof (byte)*i] != 0);
+                                dof.SetEquilibriumPoint(i, BitConverter.ToSingle(data, linearEquilibriumPointOffset + sizeof (float)*i));
+                                dof.EnableSpring(i, BitConverter.ToInt32(data, linearEnableSpringdOffset + sizeof (byte)*i) != 0);
+                                dof.SetDamping(i, BitConverter.ToSingle(data, linearSpringDampingOffset + sizeof (float)*i),
+                                    data[linearSpringDampingLimitedOffset + sizeof (float)*i] != 0);
                             }
 
                             int angularSpringStiffnessOffset = Generic6DofSpring2ConstraintFloatData.Offset("AngularSpringStiffness");
@@ -475,14 +457,14 @@ namespace BulletSharp
                             for (i = 0; i < 3; i++)
                             {
                                 dof.SetStiffness(i + 3,
-                                    reader.ReadSingle(angularSpringStiffnessOffset + sizeof (float)*i),
-                                    reader.ReadByte(angularSpringStiffnessLimitedOffset + sizeof (byte)*i) != 0);
+                                    BitConverter.ToSingle(data, angularSpringStiffnessOffset + sizeof (float)*i),
+                                    data[angularSpringStiffnessLimitedOffset + sizeof (byte)*i] != 0);
                                 dof.SetEquilibriumPoint(i + 3,
-                                    reader.ReadSingle(angularEquilibriumPointOffset + sizeof (float)*i));
+                                    BitConverter.ToSingle(data, angularEquilibriumPointOffset + sizeof (float)*i));
                                 dof.EnableSpring(i + 3,
-                                    reader.ReadInt32(angularEnableSpringdOffset + sizeof (byte)*i) != 0);
-                                dof.SetDamping(i + 3, reader.ReadSingle(angularSpringDampingOffset + sizeof (float)*i),
-                                    reader.ReadByte(angularSpringDampingLimitedOffset + sizeof (float)*i) != 0);
+                                    BitConverter.ToInt32(data, angularEnableSpringdOffset + sizeof (byte)*i) != 0);
+                                dof.SetDamping(i + 3, BitConverter.ToSingle(data, angularSpringDampingOffset + sizeof (float)*i),
+                                    data[angularSpringDampingLimitedOffset + sizeof (float)*i] != 0);
                             }
                         }
                     }
@@ -494,9 +476,9 @@ namespace BulletSharp
                     GearConstraint gear;
                     if (rigidBodyA != null && rigidBodyB != null)
                     {
-                        Vector3 axisInA = reader.ReadVector3(GearConstraintFloatData.Offset("AxisInA"));
-                        Vector3 axisInB = reader.ReadVector3(GearConstraintFloatData.Offset("AxisInB"));
-                        float ratio = reader.ReadSingle(GearConstraintFloatData.Offset("Ratio"));
+                        Vector3 axisInA = BulletReader.ToVector3(data, GearConstraintFloatData.Offset("AxisInA"));
+                        Vector3 axisInB = BulletReader.ToVector3(data, GearConstraintFloatData.Offset("AxisInB"));
+                        float ratio = BitConverter.ToSingle(data, GearConstraintFloatData.Offset("Ratio"));
                         gear = CreateGearConstraint(rigidBodyA, rigidBodyB, ref axisInA, ref axisInB, ratio);
                     }
                     else
@@ -509,11 +491,11 @@ namespace BulletSharp
                 case TypedConstraintType.Hinge:
                 {
                     HingeConstraint hinge;
-                    Matrix rbaFrame = reader.ReadMatrix(HingeConstraintFloatData.Offset("RigidBodyAFrame"));
-                    int useReferenceFrameA = reader.ReadInt32(HingeConstraintFloatData.Offset("UseReferenceFrameA"));
+                    Matrix rbaFrame = BulletReader.ToMatrix(data, HingeConstraintFloatData.Offset("RigidBodyAFrame"));
+                    int useReferenceFrameA = BitConverter.ToInt32(data, HingeConstraintFloatData.Offset("UseReferenceFrameA"));
                     if (rigidBodyA != null && rigidBodyB != null)
                     {
-                        Matrix rbbFrame = reader.ReadMatrix(HingeConstraintFloatData.Offset("RigidBodyBFrame"));
+                        Matrix rbbFrame = BulletReader.ToMatrix(data, HingeConstraintFloatData.Offset("RigidBodyBFrame"));
                         hinge = CreateHingeConstraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame,
                             useReferenceFrameA != 0);
                     }
@@ -521,31 +503,31 @@ namespace BulletSharp
                     {
                         hinge = CreateHingeConstraint(rigidBodyA, ref rbaFrame, useReferenceFrameA != 0);
                     }
-                    if (reader.ReadInt32(HingeConstraintFloatData.Offset("EnableAngularMotor")) != 0)
+                    if (BitConverter.ToInt32(data, HingeConstraintFloatData.Offset("EnableAngularMotor")) != 0)
                     {
                         hinge.EnableAngularMotor(true,
-                            reader.ReadSingle(HingeConstraintFloatData.Offset("MotorTargetVelocity")),
-                            reader.ReadSingle(HingeConstraintFloatData.Offset("MaxMotorImpulse")));
+                            BitConverter.ToSingle(data, HingeConstraintFloatData.Offset("MotorTargetVelocity")),
+                            BitConverter.ToSingle(data, HingeConstraintFloatData.Offset("MaxMotorImpulse")));
                     }
-                    hinge.AngularOnly = reader.ReadInt32(HingeConstraintFloatData.Offset("AngularOnly")) != 0;
+                    hinge.AngularOnly = BitConverter.ToInt32(data, HingeConstraintFloatData.Offset("AngularOnly")) != 0;
                     hinge.SetLimit(
-                        reader.ReadSingle(HingeConstraintFloatData.Offset("LowerLimit")),
-                        reader.ReadSingle(HingeConstraintFloatData.Offset("UpperLimit")),
-                        reader.ReadSingle(HingeConstraintFloatData.Offset("LimitSoftness")),
-                        reader.ReadSingle(HingeConstraintFloatData.Offset("BiasFactor")),
-                        reader.ReadSingle(HingeConstraintFloatData.Offset("RelaxationFactor")));
+                        BitConverter.ToSingle(data, HingeConstraintFloatData.Offset("LowerLimit")),
+                        BitConverter.ToSingle(data, HingeConstraintFloatData.Offset("UpperLimit")),
+                        BitConverter.ToSingle(data, HingeConstraintFloatData.Offset("LimitSoftness")),
+                        BitConverter.ToSingle(data, HingeConstraintFloatData.Offset("BiasFactor")),
+                        BitConverter.ToSingle(data, HingeConstraintFloatData.Offset("RelaxationFactor")));
                     constraint = hinge;
                     break;
                 }
                 case TypedConstraintType.Slider:
                 {
                     SliderConstraint slider;
-                    Matrix rbbFrame = reader.ReadMatrix(SliderConstraintFloatData.Offset("RigidBodyBFrame"));
+                    Matrix rbbFrame = BulletReader.ToMatrix(data, SliderConstraintFloatData.Offset("RigidBodyBFrame"));
                     int useLinearReferenceFrameA =
-                        reader.ReadInt32(SliderConstraintFloatData.Offset("UseLinearReferenceFrameA"));
+                        BitConverter.ToInt32(data, SliderConstraintFloatData.Offset("UseLinearReferenceFrameA"));
                     if (rigidBodyA != null && rigidBodyB != null)
                     {
-                        Matrix rbaFrame = reader.ReadMatrix(SliderConstraintFloatData.Offset("RigidBodyAFrame"));
+                        Matrix rbaFrame = BulletReader.ToMatrix(data, SliderConstraintFloatData.Offset("RigidBodyAFrame"));
                         slider = CreateSliderConstraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame,
                             useLinearReferenceFrameA != 0);
                     }
@@ -553,12 +535,12 @@ namespace BulletSharp
                     {
                         slider = CreateSliderConstraint(rigidBodyB, ref rbbFrame, useLinearReferenceFrameA != 0);
                     }
-                    slider.LowerLinearLimit = reader.ReadSingle(SliderConstraintFloatData.Offset("LinearLowerLimit"));
-                    slider.UpperLinearLimit = reader.ReadSingle(SliderConstraintFloatData.Offset("LinearUpperLimit"));
-                    slider.LowerAngularLimit = reader.ReadSingle(SliderConstraintFloatData.Offset("AngularLowerLimit"));
-                    slider.UpperAngularLimit = reader.ReadSingle(SliderConstraintFloatData.Offset("AngularUpperLimit"));
+                    slider.LowerLinearLimit = BitConverter.ToSingle(data, SliderConstraintFloatData.Offset("LinearLowerLimit"));
+                    slider.UpperLinearLimit = BitConverter.ToSingle(data, SliderConstraintFloatData.Offset("LinearUpperLimit"));
+                    slider.LowerAngularLimit = BitConverter.ToSingle(data, SliderConstraintFloatData.Offset("AngularLowerLimit"));
+                    slider.UpperAngularLimit = BitConverter.ToSingle(data, SliderConstraintFloatData.Offset("AngularUpperLimit"));
                     slider.UseFrameOffset =
-                        reader.ReadInt32(SliderConstraintFloatData.Offset("UseOffsetForConstraintFrame")) != 0;
+                        BitConverter.ToInt32(data, SliderConstraintFloatData.Offset("UseOffsetForConstraintFrame")) != 0;
                     constraint = slider;
                     break;
                 }
@@ -592,16 +574,16 @@ namespace BulletSharp
 
             if (constraint != null)
             {
-                constraint.DebugDrawSize = reader.ReadSingle(TypedConstraintFloatData.Offset("DebugDrawSize"));
+                constraint.DebugDrawSize = BitConverter.ToSingle(data, TypedConstraintFloatData.Offset("DebugDrawSize"));
                 // those fields didn't exist and set to zero for pre-280 versions, so do a check here
                 if (fileVersion >= 280)
                 {
-                    constraint.BreakingImpulseThreshold = reader.ReadSingle(TypedConstraintFloatData.Offset("BreakingImpulseThreshold"));
-                    constraint.IsEnabled = reader.ReadInt32(TypedConstraintFloatData.Offset("IsEnabled")) != 0;
-                    constraint.OverrideNumSolverIterations = reader.ReadInt32(TypedConstraintFloatData.Offset("OverrideNumSolverIterations"));
+                    constraint.BreakingImpulseThreshold = BitConverter.ToSingle(data, TypedConstraintFloatData.Offset("BreakingImpulseThreshold"));
+                    constraint.IsEnabled = BitConverter.ToInt32(data, TypedConstraintFloatData.Offset("IsEnabled")) != 0;
+                    constraint.OverrideNumSolverIterations = BitConverter.ToInt32(data, TypedConstraintFloatData.Offset("OverrideNumSolverIterations"));
                 }
 
-                long namePtr = reader.ReadPtr(TypedConstraintFloatData.Offset("Name"));
+                long namePtr = BulletReader.ToPtr(data, TypedConstraintFloatData.Offset("Name"));
                 if (namePtr != 0)
                 {
                     byte[] nameData = libPointers[namePtr];
@@ -616,9 +598,6 @@ namespace BulletSharp
                     _dynamicsWorld.AddConstraint(constraint);
                 }
             }
-
-            reader.Dispose();
-            stream.Dispose();
         }
 
         protected void ConvertRigidBodyFloat(byte[] data, Dictionary<long, byte[]> libPointers)
@@ -901,75 +880,60 @@ namespace BulletSharp
             return constraint;
 		}
 
-        public TriangleIndexVertexArray CreateMeshInterface(byte[] meshData, int offset, Dictionary<long, byte[]> libPointers)
-		{
+        public TriangleIndexVertexArray CreateMeshInterface(byte[] data, int offset, Dictionary<long, byte[]> libPointers)
+        {
             TriangleIndexVertexArray meshInterface = CreateTriangleMeshContainer();
-            byte[] meshParts;
-            Vector3 scaling;
-            int numMeshParts;
-            using (var shapeStream = new MemoryStream(meshData, false))
+            long meshPartsPtr = BulletReader.ToPtr(data, offset + StridingMeshInterfaceData.Offset("MeshPartsPtr"));
+            Vector3 scaling = BulletReader.ToVector3(data, offset + StridingMeshInterfaceData.Offset("Scaling"));
+            int numMeshParts = BitConverter.ToInt32(data, offset + StridingMeshInterfaceData.Offset("NumMeshParts"));
+
+            byte[] meshParts = libPointers[meshPartsPtr];
+                    int meshPartDataLength = Marshal.SizeOf(typeof(MeshPartData));
+            for (int i = 0; i < numMeshParts; i++)
             {
-                using (var shapeReader = new BulletReader(shapeStream))
+                int meshOffset = i * meshPartDataLength;
+
+                IndexedMesh meshPart = new IndexedMesh();
+                long vertices3f = BulletReader.ToPtr(meshParts, meshOffset + MeshPartData.Offset("Vertices3F"));
+                long vertices3d = BulletReader.ToPtr(meshParts, meshOffset + MeshPartData.Offset("Vertices3D"));
+                long indices32 = BulletReader.ToPtr(meshParts, meshOffset + MeshPartData.Offset("Indices32"));
+                meshPart.NumTriangles = BitConverter.ToInt32(meshParts, meshOffset + MeshPartData.Offset("NumTriangles"));
+                meshPart.NumVertices = BitConverter.ToInt32(meshParts, meshOffset + MeshPartData.Offset("NumVertices"));
+                meshPart.Allocate(meshPart.NumTriangles, meshPart.NumVertices, sizeof(int) * 3, sizeof(float) * 4);
+
+                if (indices32 != 0)
                 {
-                    shapeStream.Position += offset;
-                    long meshPartsPtr = shapeReader.ReadPtr();
-                    meshParts = libPointers[meshPartsPtr];
-                    scaling = shapeReader.ReadVector3();
-                    numMeshParts = shapeReader.ReadInt32();
-                }
-            }
-            using (var meshStream = new MemoryStream(meshParts, false))
-            {
-                using (var meshReader = new BulletReader(meshStream))
-                {
-                    for (int i = 0; i < numMeshParts; i++)
+                    using (Stream triangleStream = meshPart.GetTriangleStream())
                     {
-                        int meshOffset = i * Marshal.SizeOf(typeof(MeshPartData));
-
-                        IndexedMesh meshPart = new IndexedMesh();
-                        long vertices3f = meshReader.ReadPtr(meshOffset + MeshPartData.Offset("Vertices3F"));
-                        long vertices3d = meshReader.ReadPtr(meshOffset + MeshPartData.Offset("Vertices3D"));
-                        long indices32 = meshReader.ReadPtr(meshOffset + MeshPartData.Offset("Indices32"));
-                        meshPart.NumTriangles = meshReader.ReadInt32(meshOffset + MeshPartData.Offset("NumTriangles"));
-                        meshPart.NumVertices = meshReader.ReadInt32(meshOffset + MeshPartData.Offset("NumVertices"));
-                        meshPart.Allocate(meshPart.NumTriangles, meshPart.NumVertices, sizeof(int) * 3, sizeof(float) * 4);
-
-                        if (indices32 != 0)
-                        {
-                            using (Stream triangleStream = meshPart.GetTriangleStream())
-                            {
-                                byte[] indices = libPointers[indices32];
-                                triangleStream.Write(indices, 0, indices.Length);
-                            }
-                        }
-                        else
-                        {
-                            throw new NotImplementedException();
-                            //long indices16 = meshReader.ReadPtr(meshOffset + MeshPartData.Offset("Indices16"));
-                        }
-
-                        if (vertices3f != 0)
-                        {
-                            using (Stream vertexStream = meshPart.GetVertexStream())
-                            {
-                                byte[] vertices = libPointers[vertices3f];
-                                vertexStream.Write(vertices, 0, vertices.Length);
-                            }
-                        }
-                        else
-                        {
-                            throw new NotImplementedException();
-                        }
-                        if (meshPart.TriangleIndexBase != IntPtr.Zero && meshPart.VertexBase != IntPtr.Zero)
-                        {
-                            meshInterface.AddIndexedMesh(meshPart, meshPart.IndexType);
-                        }
-                        //meshPart.Dispose();
+                        byte[] indices = libPointers[indices32];
+                        triangleStream.Write(indices, 0, indices.Length);
                     }
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                    //long indices16 = meshReader.ReadPtr(meshOffset + MeshPartData.Offset("Indices16"));
+                }
+
+                if (vertices3f != 0)
+                {
+                    using (Stream vertexStream = meshPart.GetVertexStream())
+                    {
+                        byte[] vertices = libPointers[vertices3f];
+                        vertexStream.Write(vertices, 0, vertices.Length);
+                    }
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+                if (meshPart.TriangleIndexBase != IntPtr.Zero && meshPart.VertexBase != IntPtr.Zero)
+                {
+                    meshInterface.AddIndexedMesh(meshPart, meshPart.IndexType);
                 }
             }
             return meshInterface;
-		}
+        }
 
         public MultiSphereShape CreateMultiSphereShape(Vector3[] positions, float[] radi)
 		{

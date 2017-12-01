@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -36,5 +37,14 @@ namespace BulletSharp
 			: base(btCapsuleShapeZ_new(radius, height))
 		{
 		}
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct CapsuleShapeData
+	{
+		public ConvexInternalShapeData ConvexInternalShapeData;
+		public int UpAxis;
+
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CapsuleShapeData), fieldName).ToInt32(); }
 	}
 }
