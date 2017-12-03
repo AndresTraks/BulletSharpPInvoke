@@ -250,7 +250,7 @@ namespace SoftDemo
                 InitClusterCombine, InitClusterCar, InitClusterRobot, InitClusterTorusStack, InitClusterStackMixed,
                 InitTetraCube, InitTetraBunny, InitBending
             };
-            demos[demoIndex % demos.Length]();
+            demos[PositiveMod(demoIndex, demos.Length)]();
         }
 
         public CollisionConfiguration CollisionConfiguration { get; }
@@ -1255,6 +1255,11 @@ namespace SoftDemo
             };
             SteerControlFront = new SteerControl(1, MotorControl);
             SteerControlRear = new SteerControl(-1, MotorControl);
+        }
+
+        private int PositiveMod(int value, int n)
+        {
+            return (n + (value % n)) % n;
         }
     }
 
