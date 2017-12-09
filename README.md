@@ -1,5 +1,5 @@
 # BulletSharp
-BulletSharp is a .NET wrapper for the [Bullet](http://bulletphysics.org/) physics library.
+BulletSharp is a .NET wrapper for the [Bullet](https://pybullet.org/) physics library.
 
 This version uses Platform Invoke. There is also an equivalent version written in C++/CLI: https://github.com/AndresTraks/BulletSharp
 
