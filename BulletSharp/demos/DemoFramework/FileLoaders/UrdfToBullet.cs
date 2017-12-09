@@ -20,7 +20,7 @@ namespace DemoFramework.FileLoaders
 
         public void Convert(UrdfRobot robot, string baseDirectory)
         {
-            foreach (UrdfLink link in robot.Links)
+            foreach (UrdfLink link in robot.Links.Values)
             {
                 LoadLink(link, baseDirectory);
             }
@@ -40,30 +40,13 @@ namespace DemoFramework.FileLoaders
             {
                 Matrix origin = ParsePose(collision.Origin);
                 UrdfGeometry geometry = collision.Geometry;
-                switch (geometry.Type)
+                CollisionShape shape = CreateShapeFromGeometry(baseDirectory, mass, geometry);
+                if (mass == 0)
                 {
-                    case UrdfGeometryType.Box:
-                        var box = geometry as UrdfBox;
-                        Vector3 size = ParseVector3(box.Size);
-                        var boxShape = new BoxShape(size * 0.5f);
-                        PhysicsHelper.CreateBody(mass, origin, boxShape, World);
-                        break;
-                    case UrdfGeometryType.Cylinder:
-                        var cylinder = geometry as UrdfCylinder;
-                        double radius = (double)cylinder.Radius * 0.5f;
-                        double length = (double)cylinder.Length * 0.5f;
-                        var cylinderShape = new CylinderShape(radius, length, radius);
-                        PhysicsHelper.CreateBody(mass, origin, cylinderShape, World);
-                        break;
-                    case UrdfGeometryType.Mesh:
-                        var mesh = geometry as UrdfMesh;
-                        LoadFile(mesh.FileName, baseDirectory, origin);
-                        break;
-                    case UrdfGeometryType.Sphere:
-                        var sphere = geometry as UrdfSphere;
-                        var sphereShape = new SphereShape((double)sphere.Radius);
-                        PhysicsHelper.CreateBody(mass, origin, sphereShape, World);
-                        break;
+                }
+                else
+                {
+                    PhysicsHelper.CreateBody(mass, origin, shape, World);
                 }
             }
         }
@@ -82,6 +65,10 @@ namespace DemoFramework.FileLoaders
 
         private static Vector3 ParseVector3(string vector)
         {
+            if (vector == null)
+            {
+                return Vector3.Zero;
+            }
             string[] components = vector.Split(_spaceSeparator, StringSplitOptions.RemoveEmptyEntries);
             return new Vector3(
                 double.Parse(components[0], CultureInfo.InvariantCulture),
@@ -89,7 +76,60 @@ namespace DemoFramework.FileLoaders
                 double.Parse(components[2], CultureInfo.InvariantCulture));
         }
 
-        private void LoadFile(string fileName, string baseDirectory, Matrix transform)
+        private CollisionShape CreateShapeFromGeometry(string baseDirectory, double mass, UrdfGeometry geometry)
+        {
+            CollisionShape shape;
+            switch (geometry.Type)
+            {
+                case UrdfGeometryType.Box:
+                    shape = CreateBoxShape((UrdfBox)geometry);
+                    break;
+                case UrdfGeometryType.Capsule:
+                    shape = CreateCapsuleShape((UrdfCapsule)geometry);
+                    break;
+                case UrdfGeometryType.Cylinder:
+                    shape = CreateCylinderShape((UrdfCylinder)geometry);
+                    break;
+                case UrdfGeometryType.Mesh:
+                    var mesh = geometry as UrdfMesh;
+                    shape = LoadShapeFromFile(mesh.FileName, baseDirectory);
+                    break;
+                case UrdfGeometryType.Sphere:
+                    shape = CreateSphereShape((UrdfSphere)geometry);
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
+            return shape;
+        }
+
+        private static CollisionShape CreateBoxShape(UrdfBox box)
+        {
+            Vector3 size = ParseVector3(box.Size);
+            var halfExtents = size * 0.5f;
+            return new BoxShape(halfExtents);
+        }
+
+        private static CollisionShape CreateCapsuleShape(UrdfCapsule capsule)
+        {
+            float radius = (float)capsule.Radius * 0.5f;
+            float length = (float)capsule.Length * 0.5f;
+            return new CapsuleShape(radius, length);
+        }
+
+        private static CollisionShape CreateCylinderShape(UrdfCylinder cylinder)
+        {
+            float radius = (float)cylinder.Radius * 0.5f;
+            float length = (float)cylinder.Length * 0.5f;
+            return new CylinderShape(radius, length, radius);
+        }
+
+        private static CollisionShape CreateSphereShape(UrdfSphere sphere)
+        {
+            return new SphereShape((float)sphere.Radius);
+        }
+
+        private CollisionShape LoadShapeFromFile(string fileName, string baseDirectory)
         {
             string fullPath = Path.Combine(baseDirectory, fileName);
             string extension = Path.GetExtension(fullPath);
@@ -98,8 +138,8 @@ namespace DemoFramework.FileLoaders
                 case ".obj":
                     WavefrontObj obj = WavefrontObj.Load(fullPath);
                     var mesh = CreateTriangleMesh(obj.Indices, obj.Vertices, Vector3.One);
-                    CreateMeshBody(mesh, transform);
-                    break;
+                    const bool useQuantization = true;
+                    return new BvhTriangleMeshShape(mesh, useQuantization);
                 default:
                     throw new NotSupportedException();
             }
@@ -124,13 +164,6 @@ namespace DemoFramework.FileLoaders
             }
 
             return triangleMesh;
-        }
-
-        private void CreateMeshBody(TriangleMesh mesh, Matrix transform)
-        {
-            const bool useQuantization = true;
-            var concaveShape = new BvhTriangleMeshShape(mesh, useQuantization);
-            PhysicsHelper.CreateStaticBody(transform, concaveShape, World);
         }
     }
 }
