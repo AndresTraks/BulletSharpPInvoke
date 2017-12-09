@@ -142,6 +142,12 @@ namespace DemoFramework.FileLoaders
                 case "prismatic":
                     joint = new UrdfPrismaticJoint();
                     break;
+                case "fixed":
+                    joint = new UrdfFixedJoint();
+                    break;
+                case "revolute":
+                    joint = new UrdfRevoluteJoint();
+                    break;
                 default:
                     throw new NotSupportedException();
             }
@@ -256,7 +262,9 @@ namespace DemoFramework.FileLoaders
     public enum UrdfJointType
     {
         Continuous,
-        Prismatic
+        Prismatic,
+        Fixed,
+        Revolute
     }
 
     public abstract class UrdfJoint
@@ -265,6 +273,11 @@ namespace DemoFramework.FileLoaders
 
         public UrdfLink Parent { get; set; }
         public UrdfLink Child { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Child} -> {Parent}";
+        }
     }
 
     public class UrdfContinuousJoint : UrdfJoint
@@ -275,6 +288,16 @@ namespace DemoFramework.FileLoaders
     public class UrdfPrismaticJoint : UrdfJoint
     {
         public override UrdfJointType Type => UrdfJointType.Prismatic;
+    }
+
+    public class UrdfFixedJoint : UrdfJoint
+    {
+        public override UrdfJointType Type => UrdfJointType.Fixed;
+    }
+
+    public class UrdfRevoluteJoint : UrdfJoint
+    {
+        public override UrdfJointType Type => UrdfJointType.Revolute;
     }
 
     public class UrdfPose

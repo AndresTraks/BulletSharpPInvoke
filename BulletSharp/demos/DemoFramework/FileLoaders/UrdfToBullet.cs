@@ -11,6 +11,8 @@ namespace DemoFramework.FileLoaders
     {
         private static char[] _spaceSeparator = new[] { ' ' };
 
+        private IDictionary<string, RigidBody> _linkToRigidBody = new Dictionary<string, RigidBody>();
+
         public UrdfToBullet(DiscreteDynamicsWorld world)
         {
             World = world;
@@ -23,6 +25,11 @@ namespace DemoFramework.FileLoaders
             foreach (UrdfLink link in robot.Links.Values)
             {
                 LoadLink(link, baseDirectory);
+            }
+
+            foreach (UrdfJoint joint in robot.Joints)
+            {
+                LoadJoint(joint);
             }
         }
 
@@ -41,13 +48,17 @@ namespace DemoFramework.FileLoaders
                 Matrix origin = ParsePose(collision.Origin);
                 UrdfGeometry geometry = collision.Geometry;
                 CollisionShape shape = CreateShapeFromGeometry(baseDirectory, mass, geometry);
+                RigidBody body;
                 if (mass == 0)
                 {
+                    body = PhysicsHelper.CreateStaticBody(origin, shape, World);
                 }
                 else
                 {
-                    PhysicsHelper.CreateBody(mass, origin, shape, World);
+                    body = PhysicsHelper.CreateBody(mass, origin, shape, World);
                 }
+
+                _linkToRigidBody[link.Name] = body;
             }
         }
 
@@ -164,6 +175,56 @@ namespace DemoFramework.FileLoaders
             }
 
             return triangleMesh;
+        }
+
+        private void LoadJoint(UrdfJoint joint)
+        {
+            RigidBody parentRigidBody;
+            RigidBody childRigidBody;
+            if (!_linkToRigidBody.TryGetValue(joint.Parent.Name, out parentRigidBody))
+            {
+                return;
+            }
+            if (!_linkToRigidBody.TryGetValue(joint.Child.Name, out childRigidBody))
+            {
+                return;
+            }
+
+            TypedConstraint constraint;
+            if (joint is UrdfContinuousJoint)
+            {
+                constraint = CreateRevoluteJoint(childRigidBody, parentRigidBody);
+            }
+            else if (joint is UrdfFixedJoint)
+            {
+                constraint = CreateFixedJoint(childRigidBody, parentRigidBody);
+            }
+            else
+            {
+                //throw new NotImplementedException();
+                return;
+            }
+            World.AddConstraint(constraint, true);
+        }
+
+        private Generic6DofSpring2Constraint CreateRevoluteJoint(RigidBody rigidBodyA, RigidBody rigidBodyB)
+        {
+            return new Generic6DofSpring2Constraint(rigidBodyA, rigidBodyB, Matrix.Identity, Matrix.Identity)
+            {
+                LinearLowerLimit = Vector3.Zero,
+                LinearUpperLimit = Vector3.Zero
+            };
+        }
+
+        private Generic6DofSpring2Constraint CreateFixedJoint(RigidBody rigidBodyA, RigidBody rigidBodyB)
+        {
+            return new Generic6DofSpring2Constraint(rigidBodyA, rigidBodyB, Matrix.Identity, Matrix.Identity)
+            {
+                AngularLowerLimit = Vector3.Zero,
+                AngularUpperLimit = Vector3.Zero,
+                LinearLowerLimit = Vector3.Zero,
+                LinearUpperLimit = Vector3.Zero
+            };
         }
     }
 }
