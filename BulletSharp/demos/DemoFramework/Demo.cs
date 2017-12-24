@@ -1,5 +1,6 @@
 ﻿using BulletSharp;
 using BulletSharp.Math;
+using DemoFramework.DebugInfo;
 using System;
 using System.Drawing;
 using System.Globalization;
@@ -266,6 +267,10 @@ namespace DemoFramework
                     break;
                 case Keys.F3:
                     IsDebugDrawEnabled = !IsDebugDrawEnabled;
+                    break;
+                case Keys.F5:
+                    var debugForm = new DebugInfoForm(this);
+                    debugForm.Show();
                     break;
                 case Keys.F8:
                     Input.ClearKeyCache();

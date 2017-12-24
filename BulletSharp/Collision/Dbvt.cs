@@ -136,19 +136,40 @@ namespace BulletSharp
 
 	public class DbvtNode
 	{
-		internal IntPtr Native;
+		internal readonly IntPtr Native;
 
 		internal DbvtNode(IntPtr native)
 		{
 			Native = native;
 		}
-		/*
+
+		public override bool Equals(object obj)
+		{
+			if (this == obj)
+			{
+				return true;
+			}
+
+			var objDbvt = obj as DbvtNode;
+			if (objDbvt == null)
+			{
+				return false;
+			}
+
+			return Native == objDbvt.Native;
+		}
+
+		public override int GetHashCode() => (int)Native;
 
 		public DbvtNodePtrArray Childs
 		{
-			get { return btDbvtNode_getChilds(Native); }
+			get
+			{
+				int childCount = IsLeaf ? 0 : 2;
+				return new DbvtNodePtrArray(btDbvtNode_getChilds(Native), childCount);
+			}
 		}
-		*/
+
 		public IntPtr Data
 		{
 			get => btDbvtNode_getData(Native);
@@ -163,7 +184,7 @@ namespace BulletSharp
 
 		public bool IsInternal => btDbvtNode_isinternal(Native);
 
-		public bool Isleaf => btDbvtNode_isleaf(Native);
+		public bool IsLeaf => btDbvtNode_isleaf(Native);
 
 		public DbvtNode Parent
 		{
@@ -193,7 +214,7 @@ namespace BulletSharp
 		}
 	}
 
-	public class Dbvt : IDisposable
+	public class Dbvt
 	{
 		public class IClone : IDisposable
 		{
@@ -570,18 +591,11 @@ namespace BulletSharp
 			}
 		}
 
-		internal IntPtr Native;
-		bool _preventDelete;
+		internal readonly IntPtr Native;
 
-		internal Dbvt(IntPtr native, bool preventDelete)
+		internal Dbvt(IntPtr native)
 		{
 			Native = native;
-			_preventDelete = preventDelete;
-		}
-
-		public Dbvt()
-		{
-			Native = btDbvt_new();
 		}
 		/*
 		public static int Allocate(AlignedIntArray ifree, AlignedStkNpsArray stock,
@@ -661,7 +675,7 @@ namespace BulletSharp
 		{
 			return btDbvt_empty(Native);
 		}
-		/*
+        /*
 		public static void EnumLeaves(DbvtNode root, ICollide policy)
 		{
 			btDbvt_enumLeaves(root.Native, policy.Native);
@@ -671,13 +685,31 @@ namespace BulletSharp
 		{
 			btDbvt_enumNodes(root.Native, policy.Native);
 		}
+		*/
+		public override bool Equals(object obj)
+		{
+			if (this == obj)
+			{
+				return true;
+			}
 
+			var objDbvt = obj as Dbvt;
+			if (objDbvt == null)
+			{
+				return false;
+			}
+
+			return Native == objDbvt.Native;
+		}
+		/*
 		public static void ExtractLeaves(DbvtNode node, AlignedDbvtNodeArray leaves)
 		{
 			btDbvt_extractLeaves(node.Native, leaves.Native);
 		}
 		*/
-		public DbvtNode Insert(DbvtVolume box, IntPtr data)
+		public override int GetHashCode() => (int)Native;
+
+        public DbvtNode Insert(DbvtVolume box, IntPtr data)
 		{
 			return new DbvtNode(btDbvt_insert(Native, box.Native, data));
 		}
@@ -811,27 +843,5 @@ namespace BulletSharp
 			get { return btDbvt_getStkStack(Native); }
 		}
 		*/
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				if (!_preventDelete)
-				{
-					btDbvt_delete(Native);
-				}
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~Dbvt()
-		{
-			Dispose(false);
-		}
 	}
 }

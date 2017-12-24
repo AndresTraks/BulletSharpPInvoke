@@ -402,11 +402,6 @@ void btDbvt_sStkNPS_delete(btDbvt_sStkNPS* obj)
 }
 
 
-btDbvt* btDbvt_new()
-{
-	return new btDbvt();
-}
-
 int btDbvt_allocate(btAlignedObjectArray_int* ifree, btAlignedObjectArray_btDbvt_sStkNPS* stock,
 	const btDbvt_sStkNPS* value)
 {
@@ -656,7 +651,38 @@ void btDbvt_write(btDbvt* obj, btDbvt_IWriter* iwriter)
 	obj->write(iwriter);
 }
 
-void btDbvt_delete(btDbvt* obj)
+
+btDbvt* btDbvt_array_at(btDbvt* obj, int index)
 {
-	delete obj;
+	return &obj[index];
+}
+
+int btDbvt_array_index_of(btDbvt* obj, btDbvt* value, int length)
+{
+	for (int i = 0; i < length; i++)
+	{
+		if (&obj[i] == value)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+
+btDbvtNode* btDbvtNodePtr_array_at(btDbvtNode** obj, int index)
+{
+	return obj[index];
+}
+
+int btDbvtNodePtr_array_index_of(btDbvtNode** obj, btDbvtNode* value, int length)
+{
+	for (int i = 0; i < length; i++)
+	{
+		if (obj[i] == value)
+		{
+			return i;
+		}
+	}
+	return -1;
 }

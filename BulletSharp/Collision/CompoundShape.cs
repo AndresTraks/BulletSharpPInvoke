@@ -134,7 +134,7 @@ namespace BulletSharp
 
 		public CompoundShapeChildArray ChildList => _childList;
 
-		public Dbvt DynamicAabbTree => new Dbvt(btCompoundShape_getDynamicAabbTree(Native), true);
+		public Dbvt DynamicAabbTree => new Dbvt(btCompoundShape_getDynamicAabbTree(Native));
 
 		public int NumChildShapes => _childList.Count;
 

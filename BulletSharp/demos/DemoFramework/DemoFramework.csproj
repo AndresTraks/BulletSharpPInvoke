@@ -76,11 +76,18 @@
       <HintPath>..\..\bin\Release\BulletSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DebugInfo\DebugInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DebugInfo\DebugInfoForm.Designer.cs">
+      <DependentUpon>DebugInfoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FileLoaders\UrdfLoader.cs" />
     <Compile Include="FileLoaders\UrdfToBullet.cs" />
     <Compile Include="IUpdateReceiver.cs" />
@@ -115,6 +122,9 @@
     <Compile Include="Simulation\SimulationExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DebugInfo\DebugInfoForm.resx">
+      <DependentUpon>DebugInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\LibrarySelection.resx">
       <DependentUpon>LibrarySelection.cs</DependentUpon>
       <SubType>Designer</SubType>

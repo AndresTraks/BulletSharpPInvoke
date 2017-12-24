@@ -85,7 +85,6 @@ extern "C" {
 	EXPORT void btDbvt_sStkNPS_setValue(btDbvt_sStkNPS* obj, btScalar value);
 	EXPORT void btDbvt_sStkNPS_delete(btDbvt_sStkNPS* obj);
 
-	EXPORT btDbvt* btDbvt_new();
 	EXPORT int btDbvt_allocate(btAlignedObjectArray_int* ifree, btAlignedObjectArray_btDbvt_sStkNPS* stock, const btDbvt_sStkNPS* value);
 	EXPORT void btDbvt_benchmark();
 	EXPORT void btDbvt_clear(btDbvt* obj);
@@ -131,7 +130,12 @@ extern "C" {
 	EXPORT bool btDbvt_update5(btDbvt* obj, btDbvtNode* leaf, btDbvtVolume* volume, const btVector3* velocity);
 	EXPORT bool btDbvt_update6(btDbvt* obj, btDbvtNode* leaf, btDbvtVolume* volume, const btVector3* velocity, btScalar margin);
 	EXPORT void btDbvt_write(btDbvt* obj, btDbvt_IWriter* iwriter);
-	EXPORT void btDbvt_delete(btDbvt* obj);
+
+	EXPORT btDbvt* btDbvt_array_at(btDbvt* obj, int index);
+	EXPORT int btDbvt_array_index_of(btDbvt* obj, btDbvt* value, int length);
+
+	EXPORT btDbvtNode* btDbvtNodePtr_array_at(btDbvtNode** obj, int index);
+	EXPORT int btDbvtNodePtr_array_index_of(btDbvtNode** obj, btDbvtNode* value, int length);
 #ifdef __cplusplus
 }
 #endif

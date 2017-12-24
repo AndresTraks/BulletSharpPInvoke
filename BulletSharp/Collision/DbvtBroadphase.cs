@@ -160,7 +160,7 @@ namespace BulletSharp
 			set => btDbvtBroadphase_setReleasepaircache(Native, value);
 		}
 
-        //public DbvtArray Sets => btDbvtBroadphase_getSets(Native);
+        public DbvtArray Sets => new DbvtArray(btDbvtBroadphase_getSets(Native), 2);
 
         public int StageCurrent
 		{
