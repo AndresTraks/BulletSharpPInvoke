@@ -3234,7 +3234,7 @@ namespace BulletSharp.SoftBody
 			{
 				if (_clusterDbvt == null)
 				{
-					_clusterDbvt = new Dbvt(btSoftBody_getCdbvt(Native), true);
+					_clusterDbvt = new Dbvt(btSoftBody_getCdbvt(Native));
 				}
 				return _clusterDbvt;
 			}
@@ -3294,7 +3294,7 @@ namespace BulletSharp.SoftBody
 			{
 				if (_faceDbvt == null)
 				{
-					_faceDbvt = new Dbvt(btSoftBody_getFdbvt(Native), true);
+					_faceDbvt = new Dbvt(btSoftBody_getFdbvt(Native));
 				}
 				return _faceDbvt;
 			}
@@ -3353,7 +3353,7 @@ namespace BulletSharp.SoftBody
 			{
 				if (_nodeDbvt == null)
 				{
-					_nodeDbvt = new Dbvt(btSoftBody_getNdbvt(Native), true);
+					_nodeDbvt = new Dbvt(btSoftBody_getNdbvt(Native));
 				}
 				return _nodeDbvt;
 			}

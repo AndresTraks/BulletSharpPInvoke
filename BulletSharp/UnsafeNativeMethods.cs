@@ -295,7 +295,7 @@ namespace BulletSharp
 		public static extern int btAlignedObjectArray_btSoftBody_Tetra_size(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btSoftBodyNodePtrArray_at(IntPtr obj, int n);
+		public static extern IntPtr btSoftBodyNodePtrArray_at(IntPtr obj, int index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btSoftBodyNodePtrArray_set(IntPtr obj, IntPtr value, int index);
 
@@ -1214,7 +1214,7 @@ namespace BulletSharp
 		public static extern void btCompoundShapeChild_setTransform(IntPtr obj, [In] ref Matrix value);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btCompoundShapeChild_array_at(IntPtr obj, int n);
+		public static extern IntPtr btCompoundShapeChild_array_at(IntPtr obj, int index);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btConcaveShape_processAllTriangles(IntPtr obj, IntPtr callback, [In] ref Vector3 aabbMin, [In] ref Vector3 aabbMax);
@@ -1862,6 +1862,11 @@ namespace BulletSharp
 		public static extern void btDbvtNode_setParent(IntPtr obj, IntPtr value);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btDbvtNodePtr_array_at(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btDbvtNodePtr_array_index_of(IntPtr obj, IntPtr value, int length);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btDbvtProxy_getLeaf(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btDbvtProxy_getLinks(IntPtr obj);
@@ -1872,8 +1877,6 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btDbvtProxy_setStage(IntPtr obj, int value);
 
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btDbvt_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern int btDbvt_allocate(IntPtr ifree, IntPtr stock, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -1946,10 +1949,13 @@ namespace BulletSharp
 		public static extern bool btDbvt_update6(IntPtr obj, IntPtr leaf, IntPtr volume, [In] ref Vector3 velocity, float margin);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btDbvt_write(IntPtr obj, IntPtr iwriter);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btDbvt_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btDbvt_array_at(IntPtr obj, int index);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btDbvt_array_index_of(IntPtr obj, IntPtr value, int length);
+
+        [DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btDbvtAabbMm_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btDbvtAabbMm_Center(IntPtr obj, out Vector3 value);
@@ -7128,9 +7134,9 @@ namespace BulletSharp
 		public static extern void btUsageBitfield_setUsedVertexD(IntPtr obj, bool value);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btVector3_array_at(IntPtr obj, int n, [Out] out Vector3 value);
+		public static extern IntPtr btVector3_array_at(IntPtr obj, int index, [Out] out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btVector3_array_set(IntPtr obj, int n, [In] ref Vector3 value);
+		public static extern IntPtr btVector3_array_set(IntPtr obj, int index, [In] ref Vector3 value);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btVoronoiSimplexSolver_new();

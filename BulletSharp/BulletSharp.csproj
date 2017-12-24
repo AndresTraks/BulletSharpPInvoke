@@ -58,6 +58,8 @@
     <Compile Include="Collision\ConvexPointCloudShape.cs" />
     <Compile Include="Collision\ConvexTriangleMeshShape.cs" />
     <Compile Include="Collision\Dbvt.cs" />
+    <Compile Include="Collision\DbvtArray.cs" />
+    <Compile Include="Collision\DbvtNodePtrArray.cs" />
     <Compile Include="Collision\EmptyCollisionAlgorithm.cs" />
     <Compile Include="Collision\EmptyShape.cs" />
     <Compile Include="Collision\GImpact\CompoundFromGImpact.cs" />
@@ -208,6 +210,7 @@
     <Compile Include="Math\Matrix.cs" />
     <Compile Include="Math\Quaternion.cs" />
     <Compile Include="Math\Vector3.cs" />
+    <Compile Include="Math\Vector3Array.cs" />
     <Compile Include="Math\Vector4.cs" />
     <Compile Include="Native.cs">
       <SubType>Code</SubType>

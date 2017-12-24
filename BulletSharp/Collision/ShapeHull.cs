@@ -1,9 +1,10 @@
+using BulletSharp.Math;
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class ShapeHull : IDisposable
+    public class ShapeHull : IDisposable
 	{
 		internal IntPtr Native;
 
