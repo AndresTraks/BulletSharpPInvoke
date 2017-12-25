@@ -60,7 +60,7 @@ namespace BulletSharp
 
 	public class BroadphaseProxy
 	{
-		internal IntPtr Native;
+		internal readonly IntPtr Native;
 		private Object _clientObject;
 
 		internal BroadphaseProxy(IntPtr native)
@@ -147,7 +147,7 @@ namespace BulletSharp
 			set => btBroadphaseProxy_setAabbMin(Native, ref value);
 		}
 
-		public Object ClientObject
+		public virtual Object ClientObject
 		{
 			get
 			{

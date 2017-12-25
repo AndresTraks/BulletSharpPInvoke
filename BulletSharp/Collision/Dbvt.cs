@@ -6,7 +6,7 @@ namespace BulletSharp
 {
 	public class DbvtAabbMm
 	{
-		internal IntPtr Native;
+		internal readonly IntPtr Native;
 
 		internal DbvtAabbMm(IntPtr native)
 		{
@@ -170,10 +170,16 @@ namespace BulletSharp
 			}
 		}
 
-		public IntPtr Data
+		public DbvtProxy Data
 		{
-			get => btDbvtNode_getData(Native);
-			set => btDbvtNode_setData(Native, value);
+			get
+			{
+				IntPtr ptr = btDbvtNode_getData(Native);
+				return ptr != null
+					? new DbvtProxy(ptr)
+					: null;
+			}
+			set => btDbvtNode_setData(Native, value.Native);
 		}
 
 		public int DataAsInt
