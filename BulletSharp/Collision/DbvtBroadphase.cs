@@ -15,7 +15,7 @@ namespace BulletSharp
 		{
 			get 
 			{
-				if (Stage == 0 || Leaf?.Parent == null)
+				if (Stage != 1 || Leaf?.Parent == null)
 				{
 					return null;
 				}
