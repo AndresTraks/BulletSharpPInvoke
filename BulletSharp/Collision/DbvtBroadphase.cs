@@ -11,6 +11,18 @@ namespace BulletSharp
 		{
 		}
 
+		public override object ClientObject
+		{
+			get 
+			{
+				if (Stage == 0 || Leaf?.Parent == null)
+				{
+					return null;
+				}
+				return base.ClientObject;
+			}
+		}
+
 		public DbvtNode Leaf
 		{
 			get
@@ -160,9 +172,9 @@ namespace BulletSharp
 			set => btDbvtBroadphase_setReleasepaircache(Native, value);
 		}
 
-        public DbvtArray Sets => new DbvtArray(btDbvtBroadphase_getSets(Native), 2);
+		public DbvtArray Sets => new DbvtArray(btDbvtBroadphase_getSets(Native), 2);
 
-        public int StageCurrent
+		public int StageCurrent
 		{
 			get => btDbvtBroadphase_getStageCurrent(Native);
 			set => btDbvtBroadphase_setStageCurrent(Native, value);
@@ -170,7 +182,7 @@ namespace BulletSharp
 
         //public DbvtProxyPtrArray StageRoots => btDbvtBroadphase_getStageRoots(Native);
 
-        public uint UpdatesCall
+		public uint UpdatesCall
 		{
 			get => btDbvtBroadphase_getUpdates_call(Native);
 			set => btDbvtBroadphase_setUpdates_call(Native, value);

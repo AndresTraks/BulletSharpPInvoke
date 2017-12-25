@@ -111,14 +111,17 @@ namespace DemoFramework.DebugInfo
                 return;
             }
 
-            string text = dbvtNode.GetType().Name + " " + dbvtNode.Data;
+            string text = dbvtNode.GetType().Name;
             TreeNode dbvtNodeNode = GetOrCreateChildNode(dbvtNode, text, parentNode);
+
+            RemoveObjectsOfType<DbvtProxy>(dbvtNodeNode);
+            DbvtProxy proxy = dbvtNode.Data;
+            GetOrCreateChildNode(proxy, "DbvtProxy" + " " + proxy.ClientObject, dbvtNodeNode);
 
             foreach (DbvtNode child in dbvtNode.Childs)
             {
                 SetDbvtNodeInfo(child, dbvtNodeNode);
             }
-
             RemoveMissingObjects(dbvtNode.Childs, dbvtNodeNode);
         }
 
@@ -185,7 +188,25 @@ namespace DemoFramework.DebugInfo
             IList<TreeNode> nodesToRemove = new List<TreeNode>();
             foreach (TreeNode objectNode in parentNode.Nodes)
             {
-                if (!collection.Contains(objectNode.Tag as T))
+                var tag = objectNode.Tag;
+                if (tag is T && !collection.Contains(tag as T))
+                {
+                    nodesToRemove.Add(objectNode);
+                }
+            }
+
+            foreach (TreeNode node in nodesToRemove)
+            {
+                parentNode.Nodes.Remove(node);
+            }
+        }
+
+        private void RemoveObjectsOfType<T>(TreeNode parentNode) where T : class
+        {
+            IList<TreeNode> nodesToRemove = new List<TreeNode>();
+            foreach (TreeNode objectNode in parentNode.Nodes)
+            {
+                if (objectNode.Tag is T)
                 {
                     nodesToRemove.Add(objectNode);
                 }
