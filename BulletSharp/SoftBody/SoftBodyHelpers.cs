@@ -1,19 +1,17 @@
+using BulletSharp.Math;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Security;
-using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp.SoftBody
 {
-	public enum DrawFlags
+    public enum DrawFlags
 	{
 		None = 0x00,
-		Nodex = 0x01,
+		Nodes = 0x01,
 		Links = 0x02,
 		Faces = 0x04,
 		Tetras = 0x08,

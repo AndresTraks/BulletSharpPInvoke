@@ -77,7 +77,8 @@ namespace BulletSharp
 		DrawConstraintLimits = (1 << 12),
 		DrawFastWireframe = (1 << 13),
 		DrawNormals = (1 << 14),
-		All = DrawWireframe | DrawAabb | DrawFeaturesText | DrawContactPoints | DrawText | DrawConstraints | DrawConstraintLimits,
+		DrawFrames = (1 << 15),
+		All = DrawWireframe | DrawAabb | DrawFeaturesText | DrawContactPoints | DrawText | DrawConstraints | DrawConstraintLimits | DrawFastWireframe | DrawNormals | DrawFrames,
 		MaxDebugDrawMode
 	}
 }

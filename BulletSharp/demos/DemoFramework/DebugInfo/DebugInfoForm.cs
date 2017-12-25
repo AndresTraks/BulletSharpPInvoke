@@ -7,6 +7,16 @@ namespace DemoFramework.DebugInfo
     public partial class DebugInfoForm : Form
     {
         private readonly Demo _demo;
+        private DebugDrawModes[] _debugDrawModesList = new[] {
+            DebugDrawModes.DrawWireframe,
+            DebugDrawModes.DrawAabb,
+            DebugDrawModes.DrawContactPoints,
+            DebugDrawModes.DrawConstraints,
+            DebugDrawModes.DrawConstraintLimits,
+            DebugDrawModes.DrawFastWireframe,
+            DebugDrawModes.DrawNormals,
+            DebugDrawModes.DrawFrames
+        };
 
         public DebugInfoForm(Demo demo)
         {
@@ -15,6 +25,37 @@ namespace DemoFramework.DebugInfo
             InitializeComponent();
 
             TakeSnapshot();
+            SetDebugDrawFlags();
+
+            debugDrawFlags.ItemCheck += DebugDrawFlags_ItemCheck;
+        }
+
+        private void SetDebugDrawFlags()
+        {
+            for (int i = 0; i < _debugDrawModesList.Length; i++)
+            {
+                SetDebugDrawFlag(i, _debugDrawModesList[i]);
+            }
+        }
+
+        private void SetDebugDrawFlag(int index, DebugDrawModes drawMode)
+        {
+            bool isChecked = (_demo.DebugDrawMode & drawMode) != 0;
+            debugDrawFlags.SetItemChecked(index, isChecked);
+        }
+
+        private void DebugDrawFlags_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            DebugDrawModes drawModes = _demo.DebugDrawMode;
+            if (e.NewValue == CheckState.Checked)
+            {
+                drawModes |= _debugDrawModesList[e.Index];
+            }
+            else
+            {
+                drawModes &= (DebugDrawModes.All ^ _debugDrawModesList[e.Index]);
+            }
+            _demo.DebugDrawMode = drawModes;
         }
 
         private void TakeSnapshot()
