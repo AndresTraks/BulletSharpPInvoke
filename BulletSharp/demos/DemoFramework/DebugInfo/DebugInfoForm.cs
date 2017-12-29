@@ -1,6 +1,7 @@
 ﻿using BulletSharp;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System;
 
 namespace DemoFramework.DebugInfo
 {
@@ -25,42 +26,14 @@ namespace DemoFramework.DebugInfo
             InitializeComponent();
 
             TakeSnapshot();
-            SetDebugDrawFlags();
 
             debugDrawFlags.ItemCheck += DebugDrawFlags_ItemCheck;
-        }
-
-        private void SetDebugDrawFlags()
-        {
-            for (int i = 0; i < _debugDrawModesList.Length; i++)
-            {
-                SetDebugDrawFlag(i, _debugDrawModesList[i]);
-            }
-        }
-
-        private void SetDebugDrawFlag(int index, DebugDrawModes drawMode)
-        {
-            bool isChecked = (_demo.DebugDrawMode & drawMode) != 0;
-            debugDrawFlags.SetItemChecked(index, isChecked);
-        }
-
-        private void DebugDrawFlags_ItemCheck(object sender, ItemCheckEventArgs e)
-        {
-            DebugDrawModes drawModes = _demo.DebugDrawMode;
-            if (e.NewValue == CheckState.Checked)
-            {
-                drawModes |= _debugDrawModesList[e.Index];
-            }
-            else
-            {
-                drawModes &= (DebugDrawModes.All ^ _debugDrawModesList[e.Index]);
-            }
-            _demo.DebugDrawMode = drawModes;
         }
 
         private void TakeSnapshot()
         {
             SetWorldTreeInfo();
+            SetDebugDrawFlags();
         }
 
         private void SetWorldTreeInfo()
@@ -123,6 +96,12 @@ namespace DemoFramework.DebugInfo
             {
                 SetDbvtBroadphaseInfo(dbvtBroadphase, broadphaseNode);
             }
+
+            var axisSweepBroadphase = broadphase as AxisSweep3;
+            if (axisSweepBroadphase != null)
+            {
+                SetAxisSweepBroadphaseInfo(axisSweepBroadphase, broadphaseNode);
+            }
         }
 
         private void SetDbvtBroadphaseInfo(DbvtBroadphase dbvtBroadphase, TreeNode broadphaseNode)
@@ -166,7 +145,18 @@ namespace DemoFramework.DebugInfo
             RemoveMissingObjects(dbvtNode.Childs, dbvtNodeNode);
         }
 
-        private void snapshotButton_Click(object sender, System.EventArgs e)
+        private void SetAxisSweepBroadphaseInfo(AxisSweep3 axisSweepBroadphase, TreeNode broadphaseNode)
+        {
+            broadphaseNode.Nodes.Clear();
+
+            for (int i = 0; i < axisSweepBroadphase.NumHandles; i++)
+            {
+                // axisSweepBroadphase.GetHandle(i);
+                broadphaseNode.Nodes.Add("Handle");
+            }
+        }
+
+        private void snapshotButton_Click(object sender, EventArgs e)
         {
             TakeSnapshot();
         }
@@ -257,6 +247,34 @@ namespace DemoFramework.DebugInfo
             {
                 parentNode.Nodes.Remove(node);
             }
+        }
+
+        private void SetDebugDrawFlags()
+        {
+            for (int i = 0; i < _debugDrawModesList.Length; i++)
+            {
+                SetDebugDrawFlag(i, _debugDrawModesList[i]);
+            }
+        }
+
+        private void SetDebugDrawFlag(int index, DebugDrawModes drawMode)
+        {
+            bool isChecked = (_demo.DebugDrawMode & drawMode) != 0;
+            debugDrawFlags.SetItemChecked(index, isChecked);
+        }
+
+        private void DebugDrawFlags_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            DebugDrawModes drawModes = _demo.DebugDrawMode;
+            if (e.NewValue == CheckState.Checked)
+            {
+                drawModes |= _debugDrawModesList[e.Index];
+            }
+            else
+            {
+                drawModes &= (DebugDrawModes.All ^ _debugDrawModesList[e.Index]);
+            }
+            _demo.DebugDrawMode = drawModes;
         }
     }
 }
