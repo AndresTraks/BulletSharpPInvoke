@@ -16,7 +16,8 @@ namespace BulletSharp
 		CacheFriendly = 128,
 		Simd = 256,
 		InterleaveContactAndFrictionConstraints = 512,
-		AllowZeroLengthFrictionDirections = 1024
+		AllowZeroLengthFrictionDirections = 1024,
+		DisableImplicitConeFriction = 2048
 	}
 
 	public class ContactSolverInfoData : IDisposable

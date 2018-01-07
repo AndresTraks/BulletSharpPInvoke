@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 
 namespace DemoFramework.FileLoaders
 {
@@ -11,6 +12,7 @@ namespace DemoFramework.FileLoaders
     {
         private static char[] _spaceSeparator = new[] { ' ' };
 
+        private IDictionary<UrdfLink, UrdfJoint> _linkToParentJoint;
         private IDictionary<string, RigidBody> _linkToRigidBody = new Dictionary<string, RigidBody>();
 
         public UrdfToBullet(DiscreteDynamicsWorld world)
@@ -22,18 +24,27 @@ namespace DemoFramework.FileLoaders
 
         public void Convert(UrdfRobot robot, string baseDirectory)
         {
-            foreach (UrdfLink link in robot.Links.Values)
-            {
-                LoadLink(link, baseDirectory);
-            }
+            _linkToParentJoint = FindLinkParents(robot);
 
-            foreach (UrdfJoint joint in robot.Joints)
+            var rootLink = _linkToParentJoint.FirstOrDefault(link => link.Value == null).Key;
+            if (rootLink != null)
             {
-                LoadJoint(joint);
+                LoadLink(rootLink, Matrix.Identity, baseDirectory);
             }
         }
 
-        private void LoadLink(UrdfLink link, string baseDirectory)
+        private static IDictionary<UrdfLink, UrdfJoint> FindLinkParents(UrdfRobot robot)
+        {
+            var linkToParent = new Dictionary<UrdfLink, UrdfJoint>();
+            foreach (UrdfLink link in robot.Links.Values)
+            {
+                UrdfJoint parentJoint = robot.Joints.FirstOrDefault(joint => joint.Child == link);
+                linkToParent[link] = parentJoint;
+            }
+            return linkToParent;
+        }
+
+        private void LoadLink(UrdfLink link, Matrix parentTransform, string baseDirectory)
         {
             float mass = 0;
             UrdfInertial inertial = link.Inertial;
@@ -42,23 +53,33 @@ namespace DemoFramework.FileLoaders
                 mass = (float)inertial.Mass;
             }
 
+            Matrix worldTransform = parentTransform;
+
             UrdfCollision collision = link.Collision;
             if (collision != null)
             {
                 Matrix origin = ParsePose(collision.Origin);
+                worldTransform = worldTransform * origin;
                 UrdfGeometry geometry = collision.Geometry;
                 CollisionShape shape = CreateShapeFromGeometry(baseDirectory, mass, geometry);
                 RigidBody body;
                 if (mass == 0)
                 {
-                    body = PhysicsHelper.CreateStaticBody(origin, shape, World);
+                    body = PhysicsHelper.CreateStaticBody(worldTransform, shape, World);
                 }
                 else
                 {
-                    body = PhysicsHelper.CreateBody(mass, origin, shape, World);
+                    body = PhysicsHelper.CreateBody(mass, worldTransform, shape, World);
                 }
 
                 _linkToRigidBody[link.Name] = body;
+            }
+
+            var children = _linkToParentJoint.Where(l => l.Value?.Parent == link);
+            foreach (KeyValuePair<UrdfLink, UrdfJoint> child in children)
+            {
+                LoadLink(child.Key, worldTransform, baseDirectory);
+                LoadJoint(child.Value);
             }
         }
 
@@ -179,15 +200,23 @@ namespace DemoFramework.FileLoaders
 
         private void LoadJoint(UrdfJoint joint)
         {
-            RigidBody parentRigidBody;
             RigidBody childRigidBody;
-            if (!_linkToRigidBody.TryGetValue(joint.Parent.Name, out parentRigidBody))
-            {
-                return;
-            }
             if (!_linkToRigidBody.TryGetValue(joint.Child.Name, out childRigidBody))
             {
                 return;
+            }
+
+            RigidBody parentRigidBody;
+            if (joint.Parent.Collision != null)
+            {
+                if (!_linkToRigidBody.TryGetValue(joint.Parent.Name, out parentRigidBody))
+                {
+                    return;
+                }
+            }
+            else
+            {
+                parentRigidBody = TypedConstraint.GetFixedBody();
             }
 
             TypedConstraint constraint;
@@ -197,6 +226,8 @@ namespace DemoFramework.FileLoaders
             }
             else if (joint is UrdfFixedJoint)
             {
+                Matrix inertia = ParseInertia(joint.Child.Inertial.Inertia);
+
                 constraint = CreateFixedJoint(childRigidBody, parentRigidBody);
             }
             else
@@ -225,6 +256,20 @@ namespace DemoFramework.FileLoaders
                 LinearLowerLimit = Vector3.Zero,
                 LinearUpperLimit = Vector3.Zero
             };
+        }
+
+        private Matrix ParseInertia(UrdfInertia inertia)
+        {
+            if (inertia.XY == 0 && inertia.XZ == 0 && inertia.YZ == 0)
+            {
+                return Matrix.Identity;
+            }
+
+            return new Matrix(
+                (float)inertia.XX, (float)inertia.XY, (float)inertia.XZ, 0,
+                (float)inertia.XY, (float)inertia.YY, (float)inertia.YZ, 0,
+                (float)inertia.XZ, (float)inertia.YZ, (float)inertia.ZZ, 0,
+                0, 0, 0, 1);
         }
     }
 }
