@@ -453,9 +453,11 @@ namespace BulletSharp
 		public int ActivationState1;
 		public int InternalType;
 		public int CheckCollideWith;
-		public int Padding;
+		public int CollisionFilterGroup;
+		public int CollisionFilterMask;
+		public int UniqueId;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CollisionObjectFloatData), fieldName).ToInt32(); }
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CollisionObjectFloatData), fieldName).ToInt32(); }
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
@@ -487,8 +489,10 @@ namespace BulletSharp
 		public int ActivationState1;
 		public int InternalType;
 		public int CheckCollideWith;
-		public int Padding;
+		public int CollisionFilterGroup;
+		public int CollisionFilterMask;
+		public int UniqueId;
 
-		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CollisionObjectDoubleData), fieldName).ToInt32(); }
+        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CollisionObjectDoubleData), fieldName).ToInt32(); }
 	}
 }

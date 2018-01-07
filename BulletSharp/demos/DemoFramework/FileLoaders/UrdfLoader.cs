@@ -67,13 +67,27 @@ namespace DemoFramework.FileLoaders
             }
             return new UrdfInertial
             {
-                Mass = ParseMass(element["mass"])
+                Mass = ParseMass(element["mass"]),
+                Inertia = ParseInertia(element["inertia"])
             };
         }
 
         private static double ParseMass(XmlElement element)
         {
-            return double.Parse(element.Attributes["value"].Value, CultureInfo.InvariantCulture);
+            return ParseDouble(element.Attributes["value"].Value);
+        }
+
+        private static UrdfInertia ParseInertia(XmlElement element)
+        {
+            return new UrdfInertia()
+            {
+                XX = ParseDouble(element.Attributes["ixx"].Value),
+                XY = ParseDouble(element.Attributes["ixy"].Value),
+                XZ = ParseDouble(element.Attributes["ixz"].Value),
+                YY = ParseDouble(element.Attributes["iyy"].Value),
+                YZ = ParseDouble(element.Attributes["iyz"].Value),
+                ZZ = ParseDouble(element.Attributes["izz"].Value)
+            };
         }
 
         private static UrdfGeometry ParseGeometry(XmlElement element)
@@ -89,22 +103,14 @@ namespace DemoFramework.FileLoaders
                 case "capsule":
                     return new UrdfCapsule
                     {
-                        Radius = double.Parse(
-                            shapeElement.Attributes["radius"].Value,
-                            CultureInfo.InvariantCulture),
-                        Length = double.Parse(
-                            shapeElement.Attributes["length"].Value,
-                            CultureInfo.InvariantCulture)
+                        Radius = ParseDouble(shapeElement.Attributes["radius"].Value),
+                        Length = ParseDouble(shapeElement.Attributes["length"].Value)
                     };
                 case "cylinder":
                     return new UrdfCylinder
                     {
-                        Radius = double.Parse(
-                            shapeElement.Attributes["radius"].Value,
-                            CultureInfo.InvariantCulture),
-                        Length = double.Parse(
-                            shapeElement.Attributes["length"].Value,
-                            CultureInfo.InvariantCulture)
+                        Radius = ParseDouble(shapeElement.Attributes["radius"].Value),
+                        Length = ParseDouble(shapeElement.Attributes["length"].Value)
                     };
                 case "mesh":
                     return new UrdfMesh
@@ -115,9 +121,7 @@ namespace DemoFramework.FileLoaders
                 case "sphere":
                     return new UrdfSphere
                     {
-                        Radius = double.Parse(
-                            shapeElement.Attributes["radius"].Value,
-                            CultureInfo.InvariantCulture)
+                        Radius = ParseDouble(shapeElement.Attributes["radius"].Value)
                     };
             }
             throw new NotSupportedException();
@@ -170,6 +174,11 @@ namespace DemoFramework.FileLoaders
                 RollPitchYaw = element.Attributes["rpy"]?.Value
             };
         }
+
+        private static double ParseDouble(string value)
+        {
+            return double.Parse(value, CultureInfo.InvariantCulture);
+        }
     }
 
     public class UrdfRobot
@@ -202,9 +211,20 @@ namespace DemoFramework.FileLoaders
         public UrdfPose Origin { get; set; }
     }
 
+    public class UrdfInertia
+    {
+        public double XX { get; set; }
+        public double XY { get; set; }
+        public double XZ { get; set; }
+        public double YY { get; set; }
+        public double YZ { get; set; }
+        public double ZZ { get; set; }
+    }
+
     public class UrdfInertial
     {
         public double Mass { get; set; }
+        public UrdfInertia Inertia { get; set; }
     }
 
     public enum UrdfGeometryType
