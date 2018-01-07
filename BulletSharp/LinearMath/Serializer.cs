@@ -545,7 +545,7 @@ namespace BulletSharp
 			dnaHandle.Free();
 		}
 
-		public unsafe void WriteHeader(IntPtr buffer)
+		public void WriteHeader(IntPtr buffer)
 		{
 			byte[] header = Encoding.ASCII.GetBytes("BULLETf_v286");
 			if (IntPtr.Size == 8)
