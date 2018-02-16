@@ -1914,12 +1914,14 @@ namespace BulletSharp.Math
     [StructLayout(LayoutKind.Sequential)]
     internal unsafe struct Vector3FloatData
     {
-        public fixed float floats[4];
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        public float[] floats;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     internal unsafe struct Vector3DoubleData
     {
-        public fixed double floats[4];
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        public double[] floats;
     }
 }
