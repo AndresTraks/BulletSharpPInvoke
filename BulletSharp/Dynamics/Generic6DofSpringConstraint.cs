@@ -79,10 +79,14 @@ namespace BulletSharp
 	internal unsafe struct Generic6DofSpringConstraintFloatData
 	{
 		public Generic6DofConstraintFloatData SixDofData;
-		public fixed int SpringEnabled[6];
-		public fixed float EquilibriumPoint[6];
-		public fixed float SpringStiffness[6];
-		public fixed float SpringDamping[6];
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+		public int[] SpringEnabled;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+		public float[] EquilibriumPoint;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+		public float[] SpringStiffness;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+		public float[] SpringDamping;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofSpringConstraintFloatData), fieldName).ToInt32(); }
     }
@@ -91,10 +95,14 @@ namespace BulletSharp
 	internal unsafe struct Generic6DofSpringConstraintDoubleData
 	{
 		public Generic6DofConstraintDoubleData SixDofData;
-		public fixed int SpringEnabled[6];
-		public fixed double EquilibriumPoint[6];
-		public fixed double SpringStiffness[6];
-		public fixed double SpringDamping[6];
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+		public int[] SpringEnabled;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+		public double[] EquilibriumPoint;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+		public double[] SpringStiffness;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+		public double[] SpringDamping;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofSpringConstraintDoubleData), fieldName).ToInt32(); }
 	}

@@ -792,11 +792,16 @@ namespace BulletSharp
 		public Vector3FloatData LinearSpringStiffness;
 		public Vector3FloatData LinearSpringDamping;
 		public Vector3FloatData LinearEquilibriumPoint;
-		public fixed byte LinearEnableMotor[4];
-		public fixed byte LinearServoMotor[4];
-		public fixed byte LinearEnableSpring[4];
-		public fixed byte LinearSpringStiffnessLimited[4];
-		public fixed byte LinearSpringDampingLimited[4];
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] LinearEnableMotor;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] LinearServoMotor;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] LinearEnableSpring;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] LinearSpringStiffnessLimited;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] LinearSpringDampingLimited;
 		public int Padding;
 		public Vector3FloatData AngularUpperLimit;
 		public Vector3FloatData AngularLowerLimit;
@@ -811,11 +816,16 @@ namespace BulletSharp
 		public Vector3FloatData AngularSpringStiffness;
 		public Vector3FloatData AngularSpringDamping;
 		public Vector3FloatData AngularEquilibriumPoint;
-		public fixed byte AngularEnableMotor[4];
-		public fixed byte AngularServoMotor[4];
-		public fixed byte AngularEnableSpring[4];
-		public fixed byte AngularSpringStiffnessLimited[4];
-		public fixed byte AngularSpringDampingLimited[4];
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] AngularEnableMotor;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] AngularServoMotor;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] AngularEnableSpring;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] AngularSpringStiffnessLimited;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] AngularSpringDampingLimited;
 		public int RotateOrder;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofSpring2ConstraintFloatData), fieldName).ToInt32(); }
@@ -840,11 +850,16 @@ namespace BulletSharp
 		public Vector3DoubleData LinearSpringStiffness;
 		public Vector3DoubleData LinearSpringDamping;
 		public Vector3DoubleData LinearEquilibriumPoint;
-		public fixed byte LinearEnableMotor[4];
-		public fixed byte LinearServoMotor[4];
-		public fixed byte LinearEnableSpring[4];
-		public fixed byte LinearSpringStiffnessLimited[4];
-		public fixed byte LinearSpringDampingLimited[4];
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] LinearEnableMotor;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] LinearServoMotor;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] LinearEnableSpring;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] LinearSpringStiffnessLimited;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] LinearSpringDampingLimited;
 		public int Padding;
 		public Vector3DoubleData AngularUpperLimit;
 		public Vector3DoubleData AngularLowerLimit;
@@ -859,11 +874,16 @@ namespace BulletSharp
 		public Vector3DoubleData AngularSpringStiffness;
 		public Vector3DoubleData AngularSpringDamping;
 		public Vector3DoubleData AngularEquilibriumPoint;
-		public fixed byte AngularEnableMotor[4];
-		public fixed byte AngularServoMotor[4];
-		public fixed byte AngularEnableSpring[4];
-		public fixed byte AngularSpringStiffnessLimited[4];
-		public fixed byte AngularSpringDampingLimited[4];
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] AngularEnableMotor;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] AngularServoMotor;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] AngularEnableSpring;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] AngularSpringStiffnessLimited;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public byte[] AngularSpringDampingLimited;
 		public int RotateOrder;
 
 		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(Generic6DofSpring2ConstraintDoubleData), fieldName).ToInt32(); }
