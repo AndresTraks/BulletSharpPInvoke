@@ -2255,6 +2255,9 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btDispatcherInfo_getDebugDraw(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btDispatcherInfo_getDeterministicOverlappingPairs(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern DispatchFunc btDispatcherInfo_getDispatchFunc(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		[return: MarshalAs(UnmanagedType.I1)]
@@ -2283,6 +2286,8 @@ namespace BulletSharp
 		public static extern void btDispatcherInfo_setConvexConservativeDistanceThreshold(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btDispatcherInfo_setDebugDraw(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btDispatcherInfo_setDeterministicOverlappingPairs(IntPtr obj, bool value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btDispatcherInfo_setDispatchFunc(IntPtr obj, DispatchFunc value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]

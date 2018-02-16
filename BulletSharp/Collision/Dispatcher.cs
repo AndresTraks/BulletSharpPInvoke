@@ -43,7 +43,14 @@ namespace BulletSharp
 			set => btDispatcherInfo_setDebugDraw(Native, BulletSharp.DebugDraw.GetUnmanaged(value));
 		}
 
-		public DispatchFunc DispatchFunc
+		public bool DeterministicOverlappingPairs
+		{
+			get => btDispatcherInfo_getDeterministicOverlappingPairs(Native);
+			set => btDispatcherInfo_setDeterministicOverlappingPairs(Native, value);
+		}
+
+
+        public DispatchFunc DispatchFunc
 		{
 			get => btDispatcherInfo_getDispatchFunc(Native);
 			set => btDispatcherInfo_setDispatchFunc(Native, value);
