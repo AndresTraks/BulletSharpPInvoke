@@ -19,8 +19,8 @@ namespace BenchmarkDemo
     {
         public ISimulation CreateSimulation(Demo demo)
         {
-            demo.FreeLook.Eye = new Vector3(60, 40, 20);
-            demo.FreeLook.Target = new Vector3(0, 5, -4);
+            demo.FreeLook.Eye = new Vector3(35, 20, 10);
+            demo.FreeLook.Target = new Vector3(0, 0, -2);
             demo.Graphics.WindowTitle = "BulletSharp - Benchmark Demo";
             return new BenchmarkDemoSimulation();
         }
@@ -87,7 +87,7 @@ namespace BenchmarkDemo
             const float mass = 2.0f;
             const int arrayWidth = 8;
             const int arrayHeight = 47;
-            const float cubeHalfExtent = 1.0f;
+            const float cubeHalfExtent = 0.5f;
             const float cubeWidth = cubeHalfExtent * 2;
             const float spacing = cubeHalfExtent;
             const float offset = cubeWidth + spacing;
@@ -100,12 +100,12 @@ namespace BenchmarkDemo
         private void CreateStructures()
         {
             CreateGround();
-            var boxSize = new Vector3(1);
-            CreatePyramid(new Vector3(-20, 0, 0), 12, boxSize);
-            CreateWall(new Vector3(-2, 0, 0), 12, boxSize);
-            CreateWall(new Vector3(4, 0, 0), 12, boxSize);
-            CreateWall(new Vector3(10, 0, 0), 12, boxSize);
-            CreateTowerCircle(new Vector3(25, 0, 0), 8, 24, boxSize);
+            var boxSize = new Vector3(0.5f);
+            CreatePyramid(new Vector3(-10, 0, 0), 12, boxSize);
+            CreateWall(new Vector3(-1, 0, 0), 12, boxSize);
+            CreateWall(new Vector3(2, 0, 0), 12, boxSize);
+            CreateWall(new Vector3(5, 0, 0), 12, boxSize);
+            CreateTowerCircle(new Vector3(12, 0, 0), 8, 24, boxSize);
         }
 
         private void CreateTaruStack()
@@ -117,7 +117,7 @@ namespace BenchmarkDemo
             const int arrayHeight = 15;
             const float offset = 5;
             const float widthSpacingFactor = 1.02f;
-            var startPosition = new Vector3(-20, 0, -10);
+            var startPosition = new Vector3(-30, 0, -10);
             var convexHullShape = new ConvexHullShape(Taru.Vertices);
 
             //this will enable polyhedral contact clipping, better quality, slightly slower

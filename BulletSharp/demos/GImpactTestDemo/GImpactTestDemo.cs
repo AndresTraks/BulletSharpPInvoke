@@ -178,11 +178,11 @@ namespace GImpactTestDemo
 
         private void CreateBoxes()
         {
-            var boxShape = new BoxShape(1);
+            var boxShape = new BoxShape(0.5f);
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 16; i++)
             {
-                PhysicsHelper.CreateBody(1, Matrix.Translation(2 * i - 5, 2, -3), boxShape, World);
+                PhysicsHelper.CreateBody(1, Matrix.Translation(i - 5, 2, -3), boxShape, World);
             }
         }
     }
