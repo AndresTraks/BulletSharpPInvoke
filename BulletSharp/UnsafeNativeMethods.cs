@@ -2215,7 +2215,7 @@ namespace BulletSharp
 		public static extern void btDiscreteDynamicsWorld_updateVehicles(IntPtr obj, float timeStep);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btDiscreteDynamicsWorldMt_new(IntPtr dispatcher, IntPtr pairCache, IntPtr constraintSolver, IntPtr collisionConfiguration);
+		public static extern IntPtr btDiscreteDynamicsWorldMt_new(IntPtr dispatcher, IntPtr pairCache, IntPtr constraintSolver, IntPtr constraintSolverMt, IntPtr collisionConfiguration);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btDispatcher_allocateCollisionAlgorithm(IntPtr obj, int size);

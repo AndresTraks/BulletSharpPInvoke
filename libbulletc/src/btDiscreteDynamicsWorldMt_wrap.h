@@ -6,7 +6,7 @@ extern "C" {
 	EXPORT btConstraintSolverPoolMt* btConstraintSolverPoolMt_new(int numSolvers);
 	EXPORT btConstraintSolverPoolMt* btConstraintSolverPoolMt_new2(btConstraintSolver** solvers, int numSolvers);
 
-	EXPORT btDiscreteDynamicsWorldMt* btDiscreteDynamicsWorldMt_new(btDispatcher* dispatcher, btBroadphaseInterface* pairCache, btConstraintSolverPoolMt* constraintSolver, btCollisionConfiguration* collisionConfiguration);
+	EXPORT btDiscreteDynamicsWorldMt* btDiscreteDynamicsWorldMt_new(btDispatcher* dispatcher, btBroadphaseInterface* pairCache, btConstraintSolverPoolMt* constraintSolver, btConstraintSolver* constraintSolverMt, btCollisionConfiguration* collisionConfiguration);
 #ifdef __cplusplus
 }
 #endif
