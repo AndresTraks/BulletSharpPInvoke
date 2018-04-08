@@ -17,7 +17,9 @@ btConstraintSolverPoolMt* btConstraintSolverPoolMt_new2(btConstraintSolver** sol
 
 
 btDiscreteDynamicsWorldMt* btDiscreteDynamicsWorldMt_new(btDispatcher* dispatcher, btBroadphaseInterface* pairCache,
-	btConstraintSolverPoolMt* constraintSolver, btCollisionConfiguration* collisionConfiguration)
+	btConstraintSolverPoolMt* constraintSolver, btConstraintSolver* constraintSolverMt,
+	btCollisionConfiguration* collisionConfiguration)
 {
-	return new btDiscreteDynamicsWorldMt(dispatcher, pairCache, constraintSolver, collisionConfiguration);
+	return new btDiscreteDynamicsWorldMt(dispatcher, pairCache, constraintSolver, constraintSolverMt,
+		collisionConfiguration);
 }
