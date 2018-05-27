@@ -6,8 +6,8 @@ namespace BulletSharpTest
 {
     public class CustomOverlapFilterCallback : OverlapFilterCallback
     {
-        private RigidBody _expectedBody0;
-        private RigidBody _expectedBody1;
+        private readonly RigidBody _expectedBody0;
+        private readonly RigidBody _expectedBody1;
 
         public bool WasCalled { get; private set; }
 

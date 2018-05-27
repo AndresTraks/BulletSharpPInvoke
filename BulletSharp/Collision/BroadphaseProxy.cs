@@ -147,7 +147,7 @@ namespace BulletSharp
 			set => btBroadphaseProxy_setAabbMin(Native, ref value);
 		}
 
-		public virtual Object ClientObject
+		public Object ClientObject
 		{
 			get
 			{
