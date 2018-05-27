@@ -174,10 +174,12 @@ namespace BulletSharp
 		{
 			get
 			{
-				IntPtr ptr = btDbvtNode_getData(Native);
-				return ptr != null
-					? new DbvtProxy(ptr)
-					: null;
+				if (IsLeaf)
+				{
+					IntPtr ptr = btDbvtNode_getData(Native);
+					return new DbvtProxy(ptr);
+				}
+				return null;
 			}
 			set => btDbvtNode_setData(Native, value.Native);
 		}
