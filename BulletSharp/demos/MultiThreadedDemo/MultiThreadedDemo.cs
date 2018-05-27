@@ -54,7 +54,8 @@ namespace BasicDemo
         private const float StackSpacingZ = 50 * Scale;
         private Vector3 _startPosition = new Vector3(0, 20, -40);
         private const int MaxThreadCount = 64;
-        private ConstraintSolverPoolMultiThreaded _constraintSolver;
+        private ConstraintSolverPoolMultiThreaded _solverPool;
+        private SequentialImpulseConstraintSolverMultiThreaded _parallelSolver;
         private List<TaskScheduler> _schedulers = new List<TaskScheduler>();
         private int _currentScheduler = 0;
 
@@ -73,8 +74,9 @@ namespace BasicDemo
             };
             Dispatcher = new CollisionDispatcherMultiThreaded(CollisionConfiguration);
             Broadphase = new DbvtBroadphase();
-            _constraintSolver = new ConstraintSolverPoolMultiThreaded(MaxThreadCount);
-            World = new DiscreteDynamicsWorldMultiThreaded(Dispatcher, Broadphase, _constraintSolver, CollisionConfiguration);
+            _solverPool = new ConstraintSolverPoolMultiThreaded(MaxThreadCount);
+            _parallelSolver = new SequentialImpulseConstraintSolverMultiThreaded();
+            World = new DiscreteDynamicsWorldMultiThreaded(Dispatcher, Broadphase, _solverPool, _parallelSolver, CollisionConfiguration);
             World.SolverInfo.SolverMode = SolverModes.Simd | SolverModes.UseWarmStarting;
 
             CreateGround();
@@ -89,6 +91,18 @@ namespace BasicDemo
         public void Dispose()
         {
             this.StandardCleanup();
+
+            if (_solverPool != null)
+            {
+                _solverPool.Dispose();
+                _solverPool = null;
+            }
+
+            if (_parallelSolver != null)
+            {
+                _parallelSolver.Dispose();
+                _parallelSolver = null;
+            }
         }
 
         public void NextTaskScheduler()

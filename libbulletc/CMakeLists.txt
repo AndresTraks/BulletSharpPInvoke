@@ -321,6 +321,8 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btScaledBvhTriangleMeshShape_wrap.h
     src/btSequentialImpulseConstraintSolver_wrap.cpp
     src/btSequentialImpulseConstraintSolver_wrap.h
+    src/btSequentialImpulseConstraintSolverMt_wrap.cpp
+    src/btSequentialImpulseConstraintSolverMt_wrap.h
     src/btSerializer_wrap.cpp
     src/btSerializer_wrap.h
     src/btShapeHull_wrap.cpp

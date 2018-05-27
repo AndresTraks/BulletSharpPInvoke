@@ -106,6 +106,7 @@
     <Compile Include="Dynamics\MlcpSolver.cs" />
     <Compile Include="Dynamics\MlcpSolverInterface.cs" />
     <Compile Include="Dynamics\NncgConstraintSolver.cs" />
+    <Compile Include="Dynamics\SequentialImpulseConstraintSolverMultiThreaded.cs" />
     <Compile Include="Extras\BulletReader.cs" />
     <Compile Include="Extras\BulletWriter.cs" />
     <Compile Include="Extras\Chunk.cs" />

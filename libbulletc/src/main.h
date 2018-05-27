@@ -708,6 +708,10 @@
 #define btSequentialImpulseConstraintSolver void
 #endif
 
+#ifndef BT_SEQUENTIAL_IMPULSE_CONSTRAINT_SOLVER_MT_H
+#define btSequentialImpulseConstraintSolverMt void
+#endif
+
 #ifndef BT_SERIALIZER_H
 #define btChunk void
 #define btDefaultSerializer void

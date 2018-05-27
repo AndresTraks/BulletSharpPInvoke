@@ -4943,6 +4943,9 @@ namespace BulletSharp
 		public static extern void btSequentialImpulseConstraintSolver_setRandSeed(IntPtr obj, ulong seed);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btSequentialImpulseConstraintSolverMt_new();
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btShapeHull_new(IntPtr shape);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		[return: MarshalAs(UnmanagedType.I1)]
