@@ -135,14 +135,38 @@ namespace DemoFramework.DebugInfo
             TreeNode dbvtNodeNode = GetOrCreateChildNode(dbvtNode, text, parentNode);
 
             RemoveObjectsOfType<DbvtProxy>(dbvtNodeNode);
-            DbvtProxy proxy = dbvtNode.Data;
-            GetOrCreateChildNode(proxy, "DbvtProxy" + " " + proxy.ClientObject, dbvtNodeNode);
 
-            foreach (DbvtNode child in dbvtNode.Childs)
+            if (dbvtNode.IsLeaf)
             {
-                SetDbvtNodeInfo(child, dbvtNodeNode);
+                DbvtProxy proxy = dbvtNode.Data;
+                string description = GetProxyDescription(proxy);
+                GetOrCreateChildNode(proxy, description, dbvtNodeNode);
             }
+            else
+            {
+                foreach (DbvtNode child in dbvtNode.Childs)
+                {
+                    SetDbvtNodeInfo(child, dbvtNodeNode);
+                }
+            }
+            
             RemoveMissingObjects(dbvtNode.Childs, dbvtNodeNode);
+        }
+
+        private static string GetProxyDescription(DbvtProxy proxy)
+        {
+            return "DbvtProxy" + " " + GetClientObjectDescription(proxy.ClientObject);
+        }
+
+        private static string GetClientObjectDescription(object clientObject)
+        {
+            var collisionObject = clientObject as CollisionObject;
+            if (collisionObject != null)
+            {
+                return "body(" + collisionObject.CollisionShape.ToString() + ")";
+            }
+
+            return clientObject.ToString();
         }
 
         private void SetAxisSweepBroadphaseInfo(AxisSweep3 axisSweepBroadphase, TreeNode broadphaseNode)

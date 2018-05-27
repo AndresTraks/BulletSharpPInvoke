@@ -11,18 +11,6 @@ namespace BulletSharp
 		{
 		}
 
-		public override object ClientObject
-		{
-			get 
-			{
-				if (Stage != 1 || Leaf?.Parent == null)
-				{
-					return null;
-				}
-				return base.ClientObject;
-			}
-		}
-
 		public DbvtNode Leaf
 		{
 			get
