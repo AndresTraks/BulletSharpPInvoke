@@ -12,6 +12,7 @@ extern "C" {
 	EXPORT void btPolyhedralConvexShape_getVertex(btPolyhedralConvexShape* obj, int i, btVector3* vtx);
 	EXPORT bool btPolyhedralConvexShape_initializePolyhedralFeatures(btPolyhedralConvexShape* obj, int shiftVerticesByMargin);
 	EXPORT bool btPolyhedralConvexShape_isInside(btPolyhedralConvexShape* obj, const btVector3* pt, btScalar tolerance);
+	EXPORT void btPolyhedralConvexShape_setPolyhedralFeatures(btPolyhedralConvexShape* obj, btConvexPolyhedron* polyhedron);
 
 	EXPORT void btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(btPolyhedralConvexAabbCachingShape* obj, const btTransform* trans, btVector3* aabbMin, btVector3* aabbMax, btScalar margin);
 	EXPORT void btPolyhedralConvexAabbCachingShape_recalcLocalAabb(btPolyhedralConvexAabbCachingShape* obj);

@@ -74,6 +74,11 @@ void btConvexPolyhedron_initialize(btConvexPolyhedron* obj)
 	obj->initialize();
 }
 
+void btConvexPolyhedron_initialize2(btConvexPolyhedron* obj)
+{
+	obj->initialize2();
+}
+
 void btConvexPolyhedron_project(btConvexPolyhedron* obj, const btTransform* trans,
 	const btVector3* dir, btScalar* minProj, btScalar* maxProj, btVector3* witnesPtMin,
 	btVector3* witnesPtMax)

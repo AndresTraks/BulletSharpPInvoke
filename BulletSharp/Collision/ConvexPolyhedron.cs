@@ -72,6 +72,11 @@ namespace BulletSharp
 			btConvexPolyhedron_initialize(Native);
 		}
 
+		public void Initialize2()
+		{
+			btConvexPolyhedron_initialize2(Native);
+		}
+
 		public void ProjectRef(ref Matrix trans, ref Vector3 dir, out double minProj, out double maxProj,
 			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
 		{

@@ -18,6 +18,7 @@ extern "C" {
 	EXPORT btAlignedObjectArray_btVector3* btConvexPolyhedron_getUniqueEdges(btConvexPolyhedron* obj);
 	EXPORT btAlignedObjectArray_btVector3* btConvexPolyhedron_getVertices(btConvexPolyhedron* obj);
 	EXPORT void btConvexPolyhedron_initialize(btConvexPolyhedron* obj);
+	EXPORT void btConvexPolyhedron_initialize2(btConvexPolyhedron* obj);
 	EXPORT void btConvexPolyhedron_project(btConvexPolyhedron* obj, const btTransform* trans, const btVector3* dir, btScalar* minProj, btScalar* maxProj, btVector3* witnesPtMin, btVector3* witnesPtMax);
 	EXPORT void btConvexPolyhedron_setExtents(btConvexPolyhedron* obj, const btVector3* value);
 	EXPORT void btConvexPolyhedron_setLocalCenter(btConvexPolyhedron* obj, const btVector3* value);

@@ -106,13 +106,20 @@ namespace BulletSharp
 		{
 			return new BroadphasePair(btOverlappingPairCache_findPair(Native, proxy0.Native, proxy1.Native));
 		}
-		/*
+
 		public void ProcessAllOverlappingPairs(OverlapCallback __unnamed0, Dispatcher dispatcher)
 		{
 			btOverlappingPairCache_processAllOverlappingPairs(Native, __unnamed0.Native,
 				dispatcher.Native);
 		}
-		*/
+
+		public void ProcessAllOverlappingPairs(OverlapCallback __unnamed0, Dispatcher dispatcher,
+			DispatcherInfo dispatcherInfo)
+		{
+			btOverlappingPairCache_processAllOverlappingPairs2(Native, __unnamed0.Native,
+				dispatcher.Native, dispatcherInfo.Native);
+		}
+
 		public void SetInternalGhostPairCallback(OverlappingPairCallback ghostPairCallback)
 		{
 			_ghostPairCallback = ghostPairCallback;
