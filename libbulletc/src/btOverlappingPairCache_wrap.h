@@ -35,6 +35,7 @@ extern "C" {
 	EXPORT btBroadphasePair* btOverlappingPairCache_getOverlappingPairArrayPtr(btOverlappingPairCache* obj);
 	EXPORT bool btOverlappingPairCache_hasDeferredRemoval(btOverlappingPairCache* obj);
 	EXPORT void btOverlappingPairCache_processAllOverlappingPairs(btOverlappingPairCache* obj, btOverlapCallback* __unnamed0, btDispatcher* dispatcher);
+	EXPORT void btOverlappingPairCache_processAllOverlappingPairs2(btOverlappingPairCache* obj, btOverlapCallback* callback, btDispatcher* dispatcher, const btDispatcherInfo* dispatchInfo);
 	EXPORT void btOverlappingPairCache_setInternalGhostPairCallback(btOverlappingPairCache* obj, btOverlappingPairCallback* ghostPairCallback);
 	EXPORT void btOverlappingPairCache_setOverlapFilterCallback(btOverlappingPairCache* obj, btOverlapFilterCallback* callback);
 	EXPORT void btOverlappingPairCache_sortOverlappingPairs(btOverlappingPairCache* obj, btDispatcher* dispatcher);

@@ -45,6 +45,11 @@ namespace BulletSharp
 			return btPolyhedralConvexShape_isInside(Native, ref pt, tolerance);
 		}
 
+		public void SetPolyhedralFeatures(ConvexPolyhedron polyhedron)
+		{
+			btPolyhedralConvexShape_setPolyhedralFeatures(Native, polyhedron.Native);
+		}
+
 		public ConvexPolyhedron ConvexPolyhedron
 		{
 			get

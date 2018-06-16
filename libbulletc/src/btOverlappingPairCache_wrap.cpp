@@ -71,6 +71,12 @@ void btOverlappingPairCache_processAllOverlappingPairs(btOverlappingPairCache* o
 	obj->processAllOverlappingPairs(__unnamed0, dispatcher);
 }
 
+void btOverlappingPairCache_processAllOverlappingPairs2(btOverlappingPairCache* obj,
+	btOverlapCallback* callback, btDispatcher* dispatcher, const btDispatcherInfo* dispatchInfo)
+{
+	obj->processAllOverlappingPairs(callback, dispatcher, *dispatchInfo);
+}
+
 void btOverlappingPairCache_setInternalGhostPairCallback(btOverlappingPairCache* obj,
 	btOverlappingPairCallback* ghostPairCallback)
 {

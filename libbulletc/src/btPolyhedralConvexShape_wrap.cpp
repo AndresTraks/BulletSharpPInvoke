@@ -64,6 +64,11 @@ bool btPolyhedralConvexShape_isInside(btPolyhedralConvexShape* obj, const btVect
 	return obj->isInside(BTVECTOR3_USE(pt), tolerance);
 }
 
+void btPolyhedralConvexShape_setPolyhedralFeatures(btPolyhedralConvexShape* obj, btConvexPolyhedron* polyhedron)
+{
+	obj->setPolyhedralFeatures(*polyhedron);
+}
+
 
 void btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(btPolyhedralConvexAabbCachingShape* obj,
 	const btTransform* trans, btVector3* aabbMin, btVector3* aabbMax, btScalar margin)

@@ -1663,6 +1663,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btConvexPolyhedron_initialize(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btConvexPolyhedron_initialize2(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btConvexPolyhedron_project(IntPtr obj, [In] ref Matrix trans, [In] ref Vector3 dir, out float minProj, out float maxProj, out Vector3 witnesPtMin, out Vector3 witnesPtMax);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btConvexPolyhedron_setExtents(IntPtr obj, [In] ref Vector3 value);
@@ -4184,6 +4186,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btOverlappingPairCache_processAllOverlappingPairs(IntPtr obj, IntPtr __unnamed0, IntPtr dispatcher);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btOverlappingPairCache_processAllOverlappingPairs2(IntPtr obj, IntPtr callback, IntPtr dispatcher, IntPtr dispatchInfo);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btOverlappingPairCache_setInternalGhostPairCallback(IntPtr obj, IntPtr ghostPairCallback);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btOverlappingPairCache_setOverlapFilterCallback(IntPtr obj, IntPtr callback);
@@ -4351,6 +4355,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		[return: MarshalAs(UnmanagedType.I1)]
 		public static extern bool btPolyhedralConvexShape_isInside(IntPtr obj, [In] ref Vector3 pt, float tolerance);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btPolyhedralConvexShape_setPolyhedralFeatures(IntPtr obj, IntPtr polyhedron);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btPoolAllocator_new(int elemSize, int maxElements);
