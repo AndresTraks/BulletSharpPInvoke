@@ -120,11 +120,11 @@ namespace DemoFramework.OpenTK
             GL.Enable(EnableCap.Texture2D);
             GL.Disable(EnableCap.Lighting);
             GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
             GL.BindTexture(TextureTarget.Texture2D, texture);
 
-            GL.Begin(BeginMode.Quads);
+            GL.Begin(PrimitiveType.Quads);
             GL.TexCoord2(0.0f, 1.0f); GL.Vertex2(0, 0);
             GL.TexCoord2(0.0f, 0.0f); GL.Vertex2(0, height);
             GL.TexCoord2(1.0f, 0.0f); GL.Vertex2(width, height);
