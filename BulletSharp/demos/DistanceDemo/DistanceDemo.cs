@@ -112,6 +112,8 @@ namespace DistanceDemo
                     World.DebugDrawer.DrawLine(ref distanceFrom, ref distanceTo, ref _red);
                 }
             }
+
+            input.Dispose();
         }
 
         public void Dispose()
