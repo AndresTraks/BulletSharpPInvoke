@@ -76,7 +76,7 @@ namespace DemoFramework.SlimDX
         FormBorderStyle windowedFormBorderStyle;
         bool togglingFullScreen = false;
 
-        public override IDebugDraw GetPhysicsDebugDrawer()
+        public override DebugDraw GetPhysicsDebugDrawer()
         {
             return new PhysicsDebugDraw(Device);
         }

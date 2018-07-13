@@ -97,13 +97,13 @@ void btSoftBodyHelpers_DrawFrame(btSoftBody* psb, btIDebugDraw* idraw)
 {
 	btSoftBodyHelpers::DrawFrame(psb, idraw);
 }
-
+#ifndef BULLETC_DISABLE_SOFTBODY_HELPERS
 void btSoftBodyHelpers_DrawInfos(btSoftBody* psb, btIDebugDraw* idraw, bool masses,
 	bool areas, bool stress)
 {
 	btSoftBodyHelpers::DrawInfos(psb, idraw, masses, areas, stress);
 }
-
+#endif
 void btSoftBodyHelpers_DrawNodeTree(btSoftBody* psb, btIDebugDraw* idraw, int mindepth,
 	int maxdepth)
 {
