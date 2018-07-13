@@ -1,23 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using BulletSharp;
 using BulletSharp.Math;
 using BulletSharp.SoftBody;
+using System;
+using System.Collections.Generic;
 
 namespace BulletSharpTest
 {
-    [StructLayout(LayoutKind.Explicit)]
-    struct Vector3WriteTest
-    {
-        [FieldOffset(0)]
-        public float Value1;
-        [FieldOffset(4)]
-        public Vector3 Vector;
-        [FieldOffset(16)]
-        public float Value2;
-    }
-
     class Program
     {
         static DiscreteDynamicsWorld world;
@@ -39,22 +27,6 @@ namespace BulletSharpTest
             AddToDisposeQueue(shape);
 
             return collisionObject;
-        }
-
-        static void TestAlignment()
-        {
-            const float mass = 1.0f;
-            Vector3WriteTest vTest = new Vector3WriteTest();
-            vTest.Value1 = 2.0f;
-            vTest.Value2 = 3.0f;
-            using (BoxShape shape = new BoxShape(1))
-            {
-                shape.CalculateLocalInertia(mass, out vTest.Vector);
-            }
-            if (vTest.Value1 != 2.0f || vTest.Value2 != 3.0f)
-            {
-                Console.WriteLine("Vector3 value was overwritten with padding!");
-            }
         }
 
         static void TestAxisSweepOverlapCallback()
@@ -95,21 +67,6 @@ namespace BulletSharpTest
             disposeQueue.Clear();
         }
 
-        static void TestContactTest(RigidBody testBody, RigidBody testBody2)
-        {
-            object context = "your context";
-            ContactSensorCallback contactCallback = new ContactSensorCallback(testBody, context);
-            world.ContactTest(testBody, contactCallback);
-
-            testBody.CollisionFlags |= CollisionFlags.CustomMaterialCallback;
-            testBody2.CollisionFlags |= CollisionFlags.CustomMaterialCallback;
-            world.ContactPairTest(testBody, testBody2, contactCallback);
-            testBody.CollisionFlags &= ~CollisionFlags.CustomMaterialCallback;
-            testBody2.CollisionFlags &= ~CollisionFlags.CustomMaterialCallback;
-
-            AddToDisposeQueue(contactCallback);
-        }
-
         static void TestGCCollection()
         {
             var conf = new DefaultCollisionConfiguration();
@@ -123,15 +80,6 @@ namespace BulletSharpTest
             CreateBody(0.0f, new BoxShape(50, 1, 50), Vector3.Zero);
             var dynamicObject = CreateBody(10.0f, new SphereShape(1.0f), new Vector3(2, 2, 0));
             var dynamicObject2 = CreateBody(1.0f, new SphereShape(1.0f), new Vector3(0, 2, 0));
-
-            var ghostPairCallback = new GhostPairCallback();
-            broadphase.OverlappingPairCache.SetInternalGhostPairCallback(ghostPairCallback);
-            AddToDisposeQueue(ghostPairCallback);
-            ghostPairCallback = null;
-            var ghostObject = new PairCachingGhostObject();
-            ghostObject.CollisionShape = new BoxShape(2);
-            ghostObject.WorldTransform = Matrix.Translation(2,2,0);
-            world.AddCollisionObject(ghostObject);
 
             var trimesh = new TriangleMesh();
             Vector3 v0 = new Vector3(0, 0, 0);
@@ -183,8 +131,6 @@ namespace BulletSharpTest
             AddToDisposeQueue(world.DebugDrawer);
             world.DebugDrawer = null;
 
-            TestContactTest(dynamicObject, dynamicObject2);
-            TestGhostObjectPairs(ghostObject);
             TestRayCast(dynamicObject);
             TestTriangleMeshRayCast(triMeshObject);
             dynamicObject = null;
@@ -200,45 +146,6 @@ namespace BulletSharpTest
 
             TestWeakRefs();
             disposeQueue.Clear();
-        }
-
-        static void TestGhostObjectPairs(PairCachingGhostObject ghostObject)
-        {
-            AlignedManifoldArray manifoldArray = new AlignedManifoldArray();
-            AlignedBroadphasePairArray pairArray = ghostObject.OverlappingPairCache.OverlappingPairArray;
-            int numPairs = pairArray.Count;
-
-            for (int i = 0; i < numPairs; i++)
-            {
-                manifoldArray.Clear();
-
-                BroadphasePair pair = pairArray[i];
-
-                //unless we manually perform collision detection on this pair, the contacts are in the dynamics world paircache:
-                BroadphasePair collisionPair = world.PairCache.FindPair(pair.Proxy0, pair.Proxy1);
-                if (collisionPair == null)
-                    continue;
-
-                if (collisionPair.Algorithm != null)
-                    collisionPair.Algorithm.GetAllContactManifolds(manifoldArray);
-
-                for (int j = 0; j < manifoldArray.Count; j++)
-                {
-                    PersistentManifold manifold = manifoldArray[j];
-                    float directionSign = manifold.Body0 == ghostObject ? -1.0f : 1.0f;
-                    for (int p = 0; p < manifold.NumContacts; p++)
-                    {
-                        ManifoldPoint pt = manifold.GetContactPoint(p);
-                        if (pt.Distance < 0.0f)
-                        {
-                            Vector3 ptA = pt.PositionWorldOnA;
-                            Vector3 ptB = pt.PositionWorldOnB;
-                            Vector3 normalOnB = pt.NormalWorldOnB;
-                            /// work here
-                        }
-                    }
-                }
-            }
         }
 
         static void TestManifoldPoints()
@@ -392,7 +299,6 @@ namespace BulletSharpTest
 
         static void Main(string[] args)
         {
-            TestAlignment();
             TestAxisSweepOverlapCallback();
             TestGCCollection();
             TestSoftBody();
