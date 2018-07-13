@@ -611,7 +611,7 @@ namespace BulletSharp
 	{
 		internal IntPtr Native;
 
-		internal IDebugDraw _debugDrawer;
+		private DebugDraw _debugDrawer;
 		private BroadphaseInterface _broadphase;
 		private Dispatcher _dispatcher;
 		private DispatcherInfo _dispatchInfo;
@@ -846,36 +846,15 @@ namespace BulletSharp
 
 		public AlignedCollisionObjectArray CollisionObjectArray { get; protected set; }
 
-		public IDebugDraw DebugDrawer
+		public DebugDraw DebugDrawer
 		{
 			get => _debugDrawer;
 			set
 			{
-				if (_debugDrawer != null)
+				if (_debugDrawer != value)
 				{
-					if (_debugDrawer == value) {
-						return;
-					}
-
-					// Clear IDebugDraw wrapper
-					if (!(_debugDrawer is DebugDraw)) {
-						//btIDebugDrawer_delete(btCollisionWorld_getDebugDrawer(Native));
-					}
-				}
-
-				_debugDrawer = value;
-				if (value == null) {
-					btCollisionWorld_setDebugDrawer(Native, IntPtr.Zero);
-					return;
-				}
-
-				DebugDraw cast = value as DebugDraw;
-				if (cast != null) {
-					btCollisionWorld_setDebugDrawer(Native, cast._native);
-				} else {
-					// Create IDebugDraw wrapper, remember to delete it
-					IntPtr wrapper = DebugDraw.CreateWrapper(value, false);
-					btCollisionWorld_setDebugDrawer(Native, wrapper);
+					_debugDrawer = value;
+					btCollisionWorld_setDebugDrawer(Native, value != null ? value._native : IntPtr.Zero);
 				}
 			}
 		}

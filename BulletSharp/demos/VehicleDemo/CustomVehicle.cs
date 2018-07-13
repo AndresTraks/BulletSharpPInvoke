@@ -165,7 +165,7 @@ namespace VehicleDemo
 
         Vector3 blue = new Vector3(0, 0, 1);
         Vector3 magenta = new Vector3(1, 0, 1);
-        public void DebugDraw(IDebugDraw debugDrawer)
+        public void DebugDraw(DebugDraw debugDrawer)
         {
             for (int v = 0; v < NumWheels; v++)
             {

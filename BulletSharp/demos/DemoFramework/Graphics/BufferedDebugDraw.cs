@@ -43,7 +43,7 @@ namespace DemoFramework
             return ((int)(c.X * 255.0f)) + ((int)(c.Y * 255.0f) << 8) + ((int)(c.Z * 255.0f) << 16);
         }
 
-        public override void Draw3dText(ref Vector3 location, string textString)
+        public override void Draw3DText(ref Vector3 location, string textString)
         {
             throw new NotImplementedException();
         }

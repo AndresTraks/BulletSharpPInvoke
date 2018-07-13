@@ -232,11 +232,11 @@ namespace VehicleDemo
                     for (int j = 0; j < NumVertsY; j++)
                     {
                         const double waveLength = .2f;
-                        double height = (double)(Math.Sin(i * waveLength) * Math.Cos(j * waveLength));
+                        double height = Math.Sin(i * waveLength) * Math.Cos(j * waveLength);
 
-                        vertices.Write(i - NumVertsX * 0.5f);
+                        vertices.Write((double)i - NumVertsX * 0.5f);
                         vertices.Write(height);
-                        vertices.Write(j - NumVertsY * 0.5f);
+                        vertices.Write((double)j - NumVertsY * 0.5f);
                     }
                 }
                 vertices.Dispose();
@@ -301,7 +301,7 @@ namespace VehicleDemo
             const double heightScale = maxHeight / 256.0f;
             const int width = 64, length = 64;
             const int dataLength = width * length * sizeof(double);
-            const PhyScalarType scalarType = PhyScalarType.Single;
+            const PhyScalarType scalarType = PhyScalarType.Double;
 
             var scale = new Vector3(15.0f, maxHeight, 15.0f);
 
@@ -316,7 +316,7 @@ namespace VehicleDemo
                     {
                         for (int j = 0; j < length; j++)
                         {
-                            writer.Write((double)((maxHeight / 2) + 4 * Math.Sin(j * 0.5f) * Math.Cos(i)));
+                            writer.Write((maxHeight / 2) + 4 * Math.Sin(j * 0.5f) * Math.Cos(i));
                         }
                     }
                 }

@@ -53,7 +53,7 @@ namespace DemoFramework.OpenTK
             }
         }
 
-        public override BulletSharp.IDebugDraw GetPhysicsDebugDrawer()
+        public override BulletSharp.DebugDraw GetPhysicsDebugDrawer()
         {
             return new PhysicsDebugDraw();
         }

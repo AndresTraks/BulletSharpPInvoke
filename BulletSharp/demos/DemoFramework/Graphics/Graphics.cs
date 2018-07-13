@@ -27,7 +27,7 @@ namespace DemoFramework
 
         public MeshFactory MeshFactory;
 
-        public abstract IDebugDraw GetPhysicsDebugDrawer();
+        public abstract DebugDraw GetPhysicsDebugDrawer();
 
         protected Graphics(Demo demo)
         {

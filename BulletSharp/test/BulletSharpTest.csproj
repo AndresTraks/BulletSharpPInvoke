@@ -65,10 +65,9 @@
   <ItemGroup>
     <Compile Include="AlignedCollisionObjectArrayTests.cs" />
     <Compile Include="ContactTestCallbackTests.cs" />
-    <Compile Include="DebugDrawTest.cs" />
-    <Compile Include="DebugDrawTest2.cs" />
     <Compile Include="GhostObjectTests.cs" />
     <Compile Include="GImpactTests.cs" />
+    <Compile Include="DebugDrawTests.cs" />
     <Compile Include="OverlapFilterCallbackTests.cs" />
     <Compile Include="PhysicsContext.cs" />
     <Compile Include="Program.cs" />

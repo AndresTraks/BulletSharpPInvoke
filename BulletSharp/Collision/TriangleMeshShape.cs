@@ -83,7 +83,7 @@ namespace BulletSharp
 	{
 		public CollisionShapeData CollisionShapeData;
 		public StridingMeshInterfaceData MeshInterface;
-		public IntPtr QuantizeddoubleBvh;
+		public IntPtr QuantizedFloatBvh;
 		public IntPtr QuantizedDoubleBvh;
 		public IntPtr TriangleInfoMap;
 		public double CollisionMargin;

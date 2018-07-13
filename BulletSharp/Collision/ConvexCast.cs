@@ -10,6 +10,8 @@ namespace BulletSharp
 		{
 			internal IntPtr Native;
 
+			private DebugDraw _debugDrawer;
+
 			internal CastResult(IntPtr native)
 			{
 				Native = native;
@@ -41,10 +43,14 @@ namespace BulletSharp
 				set => btConvexCast_CastResult_setAllowedPenetration(Native, value);
 			}
 
-			public IDebugDraw DebugDrawer
+			public DebugDraw DebugDrawer
 			{
-				get => BulletSharp.DebugDraw.GetManaged(btConvexCast_CastResult_getDebugDrawer(Native));
-				set => btConvexCast_CastResult_setDebugDrawer(Native, BulletSharp.DebugDraw.GetUnmanaged(value));
+				get => _debugDrawer;
+				set
+				{
+					_debugDrawer = value;
+					btConvexCast_CastResult_setDebugDrawer(Native, value != null ? value._native : IntPtr.Zero);
+				}
 			}
 
 			public double Fraction

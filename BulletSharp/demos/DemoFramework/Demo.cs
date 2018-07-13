@@ -48,7 +48,7 @@ namespace DemoFramework
         // Debug drawing
         bool _isDebugDrawEnabled;
         DebugDrawModes _debugDrawMode = DebugDrawModes.DrawWireframe;
-        IDebugDraw _debugDrawer;
+        DebugDraw _debugDrawer;
 
         public DebugDrawModes DebugDrawMode
         {
@@ -255,8 +255,8 @@ namespace DemoFramework
                     MessageBox.Show(
                         "WASD + Shift\tMove\n" +
                         "Left click\t\tPoint camera\n" +
-                        "Right click\t\tPick up an object using a Point2PointConstraint\n" +
-                        "Shift + Right click\tPick up an object using a fixed Generic6DofConstraint\n" +
+                        "Right click\tPick up an object using a Point2PointConstraint\n" +
+                        "Shift + Right click\tPick up an object using a fixed constraint\n" +
                         "Space\t\tShoot box\n" +
                         "Return\t\tReset\n" +
                         "F11\t\tFullscreen\n" +

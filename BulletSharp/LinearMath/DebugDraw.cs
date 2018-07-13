@@ -29,9 +29,10 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public abstract class DebugDraw : IDebugDraw//, IDisposable
+	public abstract class DebugDraw : IDisposable
 	{
 		internal IntPtr _native;
+		private bool _isDisposed = false;
 
 		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawAabbUnmanagedDelegate([In] ref Vector3 from, [In] ref Vector3 to, [In] ref Vector3 color);
@@ -82,10 +83,30 @@ namespace BulletSharp
 		GetDebugModeUnmanagedDelegate _getDebugMode;
 		SimpleCallback _cb;
 
-		internal static IntPtr CreateWrapper(IDebugDraw value, bool weakReference)
+		internal static DebugDraw GetManaged(IntPtr debugDrawer)
 		{
-			DrawAabbUnmanagedDelegate a = new DrawAabbUnmanagedDelegate(value.DrawAabb);
-			/*
+			if (debugDrawer == IntPtr.Zero)
+			{
+				return null;
+			}
+
+			IntPtr handle = btIDebugDrawWrapper_getGCHandle(debugDrawer);
+			return GCHandle.FromIntPtr(handle).Target as DebugDraw;
+		}
+		
+		private void SimpleCallbackUnmanaged(int x)
+		{
+			throw new NotImplementedException();
+		}
+
+		private DebugDrawModes GetDebugModeUnmanaged()
+		{
+			return DebugMode;
+		}
+
+		public DebugDraw()
+		{
+			_drawAabb = new DrawAabbUnmanagedDelegate(DrawAabb);
 			_drawArc = new DrawArcUnmanagedDelegate(DrawArc);
 			_drawBox = new DrawBoxUnmanagedDelegate(DrawBox);
 			_drawCapsule = new DrawCapsuleUnmanagedDelegate(DrawCapsule);
@@ -118,105 +139,10 @@ namespace BulletSharp
 				Marshal.GetFunctionPointerForDelegate(_drawTriangle),
 				Marshal.GetFunctionPointerForDelegate(_getDebugMode),
 				Marshal.GetFunctionPointerForDelegate(_cb));
-			*/
-			return IntPtr.Zero;
-		}
-
-		internal static IntPtr GetUnmanaged(IDebugDraw debugDrawer)
-		{
-			if (debugDrawer == null)
-			{
-				return IntPtr.Zero;
-			}
-
-			if (debugDrawer is DebugDraw)
-			{
-				return (debugDrawer as DebugDraw)._native;
-			}
-
-			//if (ObjectTable.Contains(debugDraw))
-			//	return ObjectTable.GetUnmanagedObject(debugDraw);
-
-			throw new NotImplementedException();
-			//GCHandle handle = GCHandle.Alloc(debugDrawer);
-			//IntPtr wrapper = btIDebugDrawWrapper_new(GCHandle.ToIntPtr(handle), IntPtr.Zero);
-			//ObjectTable.Add(debugDraw, wrapper);
-			//return wrapper;
-		}
-
-		internal static IDebugDraw GetManaged(IntPtr debugDrawer)
-		{
-			if (debugDrawer == IntPtr.Zero)
-			{
-				return null;
-			}
-
-			//if (ObjectTable.Contains(debugDrawer)
-			//	return ObjectTable.GetObject<IDebugDraw^>(debugDrawer);
-
-			IntPtr handle = btIDebugDrawWrapper_getGCHandle(debugDrawer);
-			return GCHandle.FromIntPtr(handle).Target as IDebugDraw;
-		}
-		
-		void SimpleCallbackUnmanaged(int x)
-		{
-			throw new NotImplementedException();
-		}
-
-		DebugDrawModes GetDebugModeUnmanaged()
-		{
-			return DebugMode;
-		}
-
-		internal void InitTarget(IDebugDraw target)
-		{
-			_drawAabb = new DrawAabbUnmanagedDelegate(target.DrawAabb);
-			_drawArc = new DrawArcUnmanagedDelegate(target.DrawArc);
-			_drawBox = new DrawBoxUnmanagedDelegate(target.DrawBox);
-			_drawCapsule = new DrawCapsuleUnmanagedDelegate(target.DrawCapsule);
-			_drawCone = new DrawConeUnmanagedDelegate(target.DrawCone);
-			_drawContactPoint = new DrawContactPointUnmanagedDelegate(target.DrawContactPoint);
-			_drawCylinder = new DrawCylinderUnmanagedDelegate(target.DrawCylinder);
-			_drawLine = new DrawLineUnmanagedDelegate(target.DrawLine);
-			_drawPlane = new DrawPlaneUnmanagedDelegate(target.DrawPlane);
-			_drawSphere = new DrawSphereUnmanagedDelegate(target.DrawSphere);
-			_drawSpherePatch = new DrawSpherePatchUnmanagedDelegate(target.DrawSpherePatch);
-			_drawTransform = new DrawTransformUnmanagedDelegate(target.DrawTransform);
-			_drawTriangle = new DrawTriangleUnmanagedDelegate(target.DrawTriangle);
-			_getDebugMode = new GetDebugModeUnmanagedDelegate(GetDebugModeUnmanaged);
-			_cb = new SimpleCallback(SimpleCallbackUnmanaged);
-
-			_native = btIDebugDrawWrapper_new(
-				GCHandle.ToIntPtr(GCHandle.Alloc(this)),
-				Marshal.GetFunctionPointerForDelegate(_drawAabb),
-				Marshal.GetFunctionPointerForDelegate(_drawArc),
-				Marshal.GetFunctionPointerForDelegate(_drawBox),
-				Marshal.GetFunctionPointerForDelegate(_drawCapsule),
-				Marshal.GetFunctionPointerForDelegate(_drawCone),
-				Marshal.GetFunctionPointerForDelegate(_drawContactPoint),
-				Marshal.GetFunctionPointerForDelegate(_drawCylinder),
-				Marshal.GetFunctionPointerForDelegate(_drawLine),
-				Marshal.GetFunctionPointerForDelegate(_drawPlane),
-				Marshal.GetFunctionPointerForDelegate(_drawSphere),
-				Marshal.GetFunctionPointerForDelegate(_drawSpherePatch),
-				Marshal.GetFunctionPointerForDelegate(_drawTransform),
-				Marshal.GetFunctionPointerForDelegate(_drawTriangle),
-				Marshal.GetFunctionPointerForDelegate(_getDebugMode),
-				Marshal.GetFunctionPointerForDelegate(_cb));
-		}
-
-		internal DebugDraw(IDebugDraw target)
-		{
-			InitTarget(target);
-		}
-
-		public DebugDraw()
-		{
-			InitTarget(this);
 		}
 
 		public abstract void DrawLine(ref Vector3 from, ref Vector3 to, ref Vector3 color);
-		public abstract void Draw3dText(ref Vector3 location, String textString);
+		public abstract void Draw3DText(ref Vector3 location, String textString);
 		public abstract void ReportErrorWarning(String warningString);
 		public abstract DebugDrawModes DebugMode { get; set; }
 
@@ -232,53 +158,49 @@ namespace BulletSharp
 
 		public virtual void DrawAabb(ref Vector3 from, ref Vector3 to, ref Vector3 color)
 		{
-			Vector3 halfExtents = (to - from) * 0.5f;
-			Vector3 center = (to + from) * 0.5f;
-			int i, j;
+			Vector3 a = from;
+			a.X = to.X;
+			DrawLine(ref from, ref a, ref color);
 
-			Vector3 edgecoord = new Vector3(1.0f, 1.0f, 1.0f), pa, pb;
-			for (i = 0; i < 4; i++)
-			{
-				for (j = 0; j < 3; j++)
-				{
-					pa = new Vector3(edgecoord.X * halfExtents.X, edgecoord.Y * halfExtents.Y,
-						   edgecoord.Z * halfExtents.Z);
-					pa += center;
+			Vector3 b = to;
+			b.Y = from.Y;
+			DrawLine(ref b, ref to, ref color);
+			DrawLine(ref a, ref b, ref color);
 
-					int othercoord = j % 3;
-					edgecoord[othercoord] *= -1.0f;
-					pb = new Vector3(edgecoord.X * halfExtents.X, edgecoord.Y * halfExtents.Y,
-							edgecoord.Z * halfExtents.Z);
-					pb += center;
+			Vector3 c = from;
+			c.Z = to.Z;
+			DrawLine(ref from, ref c, ref color);
+			DrawLine(ref b, ref c, ref color);
 
-					DrawLine(ref pa, ref pb, ref color);
-				}
-				edgecoord = new Vector3(-1.0f, -1.0f, -1.0f);
-				if (i < 3)
-				{
-					edgecoord[i] *= -1.0f;
-				}
-			}
+			b.Y = to.Y;
+			b.Z = from.Z;
+			DrawLine(ref b, ref to, ref color);
+			DrawLine(ref a, ref b, ref color);
+
+			a.Y = to.Y;
+			a.X = from.X;
+			DrawLine(ref from, ref a, ref color);
+			DrawLine(ref a, ref b, ref color);
+
+			b.X = from.X;
+			b.Z = to.Z;
+			DrawLine(ref c, ref b, ref color);
+			DrawLine(ref a, ref b, ref color);
+			DrawLine(ref b, ref to, ref color);
 		}
 
-		public virtual void DrawArc(ref Vector3 center, ref Vector3 normal, ref Vector3 axis, double radiusA, double radiusB, double minAngle, double maxAngle,
-			ref Vector3 color, bool drawSect)
+		public virtual void DrawArc(ref Vector3 center, ref Vector3 normal, ref Vector3 axis, double radiusA, double radiusB,
+			double minAngle, double maxAngle, ref Vector3 color, bool drawSect, double stepDegrees = 10.0f)
 		{
-			DrawArc(ref center, ref normal, ref axis, radiusA, radiusB, minAngle, maxAngle, ref color, drawSect, 10f);
-		}
-
-		public virtual void DrawArc(ref Vector3 center, ref Vector3 normal, ref Vector3 axis, double radiusA, double radiusB, double minAngle, double maxAngle,
-			ref Vector3 color, bool drawSect, double stepDegrees)
-		{
-			Vector3 vx = axis;
-			Vector3 vy = Vector3.Cross(normal, axis);
+			Vector3 xAxis = radiusA * axis;
+			Vector3 yAxis = radiusB * Vector3.Cross(normal, axis);
 			double step = stepDegrees * MathUtil.SIMD_RADS_PER_DEG;
 			int nSteps = (int)((maxAngle - minAngle) / step);
 			if (nSteps == 0)
 			{
 				nSteps = 1;
 			}
-			Vector3 prev = center + radiusA * vx * (double)System.Math.Cos(minAngle) + radiusB * vy * (double)System.Math.Sin(minAngle);
+			Vector3 prev = center + xAxis * (float)System.Math.Cos(minAngle) + yAxis * (float)System.Math.Sin(minAngle);
 			if (drawSect)
 			{
 				DrawLine(ref center, ref prev, ref color);
@@ -286,7 +208,7 @@ namespace BulletSharp
 			for (int i = 1; i <= nSteps; i++)
 			{
 				double angle = minAngle + (maxAngle - minAngle) * i / nSteps;
-				Vector3 next = center + radiusA * vx * (double)System.Math.Cos(angle) + radiusB * vy * (double)System.Math.Sin(angle);
+				Vector3 next = center + xAxis * (float)System.Math.Cos(angle) + yAxis * (float)System.Math.Sin(angle);
 				DrawLine(ref prev, ref next, ref color);
 				prev = next;
 			}
@@ -669,6 +591,26 @@ namespace BulletSharp
 				// set q = n x p
 				q = new Vector3(-n.Z * p.Y, n.Z * p.X, a * k);
 			}
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!_isDisposed)
+			{
+				btIDebugDraw_delete(_native);
+				_isDisposed = true;
+			}
+		}
+
+		~DebugDraw()
+		{
+			Dispose(false);
 		}
 	}
 }
