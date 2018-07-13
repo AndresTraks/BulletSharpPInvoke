@@ -278,7 +278,7 @@ namespace BulletSharpTest
             disposeQueue.Add(name, r);
         }
 
-        static void WorldPreTickCallback(DynamicsWorld world2, float timeStep)
+        static void WorldPreTickCallback(DynamicsWorld world2, double timeStep)
         {
             TestManifoldPoints();
 
@@ -315,7 +315,7 @@ namespace BulletSharpTest
         {
         }
 
-        public override float AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace)
+        public override double AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace)
         {
             return base.AddSingleResult(rayResult, normalInWorldSpace);
         }
@@ -369,7 +369,7 @@ namespace BulletSharpTest
         {
         }
 
-        public override float AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace)
+        public override double AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace)
         {
             if (rayResult.LocalShapeInfo != null)
             {

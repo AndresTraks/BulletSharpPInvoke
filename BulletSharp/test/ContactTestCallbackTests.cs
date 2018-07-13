@@ -76,7 +76,7 @@ namespace BulletSharpTest
             }
 
             // Called with each contact for your own processing (e.g. test if contacts fall in within sensor parameters)
-            public override float AddSingleResult(ManifoldPoint contact,
+            public override double AddSingleResult(ManifoldPoint contact,
                 CollisionObjectWrapper colObj0, int partId0, int index0,
                 CollisionObjectWrapper colObj1, int partId1, int index1)
             {

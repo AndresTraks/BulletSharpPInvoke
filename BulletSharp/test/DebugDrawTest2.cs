@@ -24,7 +24,7 @@ namespace BulletSharpTest
             throw new System.NotImplementedException();
         }
 
-        public override void DrawContactPoint(ref Vector3 pointOnB, ref Vector3 normalOnB, float distance, int lifeTime, ref Vector3 color)
+        public override void DrawContactPoint(ref Vector3 pointOnB, ref Vector3 normalOnB, double distance, int lifeTime, ref Vector3 color)
         {
             throw new System.NotImplementedException();
         }

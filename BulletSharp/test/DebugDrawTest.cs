@@ -29,12 +29,12 @@ namespace BulletSharpTest
             //throw new System.NotImplementedException();
         }
 
-        public void DrawArc(ref Vector3 center, ref Vector3 normal, ref Vector3 axis, float radiusA, float radiusB, float minAngle, float maxAngle, ref Vector3 color, bool drawSect, float stepDegrees)
+        public void DrawArc(ref Vector3 center, ref Vector3 normal, ref Vector3 axis, double radiusA, double radiusB, double minAngle, double maxAngle, ref Vector3 color, bool drawSect, double stepDegrees)
         {
             throw new System.NotImplementedException();
         }
 
-        public void DrawArc(ref Vector3 center, ref Vector3 normal, ref Vector3 axis, float radiusA, float radiusB, float minAngle, float maxAngle, ref Vector3 color, bool drawSect)
+        public void DrawArc(ref Vector3 center, ref Vector3 normal, ref Vector3 axis, double radiusA, double radiusB, double minAngle, double maxAngle, ref Vector3 color, bool drawSect)
         {
             throw new System.NotImplementedException();
         }
@@ -49,22 +49,22 @@ namespace BulletSharpTest
             //throw new System.NotImplementedException();
         }
 
-        public void DrawCapsule(float radius, float halfHeight, int upAxis, ref Matrix transform, ref Vector3 color)
+        public void DrawCapsule(double radius, double halfHeight, int upAxis, ref Matrix transform, ref Vector3 color)
         {
             throw new System.NotImplementedException();
         }
 
-        public void DrawCone(float radius, float height, int upAxis, ref Matrix transform, ref Vector3 color)
+        public void DrawCone(double radius, double height, int upAxis, ref Matrix transform, ref Vector3 color)
         {
             throw new System.NotImplementedException();
         }
 
-        public void DrawContactPoint(ref Vector3 PointOnB, ref Vector3 normalOnB, float distance, int lifeTime, ref Vector3 color)
+        public void DrawContactPoint(ref Vector3 PointOnB, ref Vector3 normalOnB, double distance, int lifeTime, ref Vector3 color)
         {
             throw new System.NotImplementedException();
         }
 
-        public void DrawCylinder(float radius, float halfHeight, int upAxis, ref Matrix transform, ref Vector3 color)
+        public void DrawCylinder(double radius, double halfHeight, int upAxis, ref Matrix transform, ref Vector3 color)
         {
             throw new System.NotImplementedException();
         }
@@ -79,47 +79,47 @@ namespace BulletSharpTest
             throw new System.NotImplementedException();
         }
 
-        public void DrawPlane(ref Vector3 planeNormal, float planeConst, ref Matrix transform, ref Vector3 color)
+        public void DrawPlane(ref Vector3 planeNormal, double planeConst, ref Matrix transform, ref Vector3 color)
         {
             throw new System.NotImplementedException();
         }
 
-        public void DrawSphere(ref Vector3 p, float radius, ref Vector3 color)
+        public void DrawSphere(ref Vector3 p, double radius, ref Vector3 color)
         {
             throw new System.NotImplementedException();
         }
 
-        public void DrawSphere(float radius, ref Matrix transform, ref Vector3 color)
+        public void DrawSphere(double radius, ref Matrix transform, ref Vector3 color)
         {
             //throw new System.NotImplementedException();
         }
 
-        public void DrawSpherePatch(ref Vector3 center, ref Vector3 up, ref Vector3 axis, float radius, float minTh, float maxTh, float minPs, float maxPs, ref Vector3 color, float stepDegrees, bool drawCenter)
+        public void DrawSpherePatch(ref Vector3 center, ref Vector3 up, ref Vector3 axis, double radius, double minTh, double maxTh, double minPs, double maxPs, ref Vector3 color, double stepDegrees, bool drawCenter)
         {
             throw new System.NotImplementedException();
         }
 
-        public void DrawSpherePatch(ref Vector3 center, ref Vector3 up, ref Vector3 axis, float radius, float minTh, float maxTh, float minPs, float maxPs, ref Vector3 color, float stepDegrees)
+        public void DrawSpherePatch(ref Vector3 center, ref Vector3 up, ref Vector3 axis, double radius, double minTh, double maxTh, double minPs, double maxPs, ref Vector3 color, double stepDegrees)
         {
             throw new System.NotImplementedException();
         }
 
-        public void DrawSpherePatch(ref Vector3 center, ref Vector3 up, ref Vector3 axis, float radius, float minTh, float maxTh, float minPs, float maxPs, ref Vector3 color)
+        public void DrawSpherePatch(ref Vector3 center, ref Vector3 up, ref Vector3 axis, double radius, double minTh, double maxTh, double minPs, double maxPs, ref Vector3 color)
         {
             throw new System.NotImplementedException();
         }
 
-        public void DrawTransform(ref Matrix transform, float orthoLen)
+        public void DrawTransform(ref Matrix transform, double orthoLen)
         {
             throw new System.NotImplementedException();
         }
 
-        public void DrawTriangle(ref Vector3 v0, ref Vector3 v1, ref Vector3 v2, ref Vector3 __unnamed3, ref Vector3 __unnamed4, ref Vector3 __unnamed5, ref Vector3 color, float alpha)
+        public void DrawTriangle(ref Vector3 v0, ref Vector3 v1, ref Vector3 v2, ref Vector3 __unnamed3, ref Vector3 __unnamed4, ref Vector3 __unnamed5, ref Vector3 color, double alpha)
         {
             throw new System.NotImplementedException();
         }
 
-        public void DrawTriangle(ref Vector3 v0, ref Vector3 v1, ref Vector3 v2, ref Vector3 color, float alpha)
+        public void DrawTriangle(ref Vector3 v0, ref Vector3 v1, ref Vector3 v2, ref Vector3 color, double alpha)
         {
             throw new System.NotImplementedException();
         }
