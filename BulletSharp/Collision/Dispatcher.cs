@@ -37,10 +37,10 @@ namespace BulletSharp
 			set => btDispatcherInfo_setConvexConservativeDistanceThreshold(Native, value);
 		}
 
-		public IDebugDraw DebugDraw
+		public DebugDraw DebugDraw
 		{
-			get => BulletSharp.DebugDraw.GetManaged(btDispatcherInfo_getDebugDraw(Native));
-			set => btDispatcherInfo_setDebugDraw(Native, BulletSharp.DebugDraw.GetUnmanaged(value));
+			get => DebugDraw.GetManaged(btDispatcherInfo_getDebugDraw(Native));
+			set => btDispatcherInfo_setDebugDraw(Native, value != null ? value._native : IntPtr.Zero);
 		}
 
 		public bool DeterministicOverlappingPairs

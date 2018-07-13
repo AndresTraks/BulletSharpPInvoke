@@ -445,7 +445,7 @@ namespace BulletSharp
         }
 
         ///btActionInterface interface
-        public void DebugDraw(IDebugDraw debugDrawer)
+        public void DebugDraw(DebugDraw debugDrawer)
         {
         }
 

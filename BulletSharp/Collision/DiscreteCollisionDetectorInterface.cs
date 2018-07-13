@@ -120,11 +120,11 @@ namespace BulletSharp
 			Native = native;
 		}
 
-		public void GetClosestPoints(ClosestPointInput input, Result output, IDebugDraw debugDraw,
+		public void GetClosestPoints(ClosestPointInput input, Result output, DebugDraw debugDraw,
 			bool swapResults = false)
 		{
 			btDiscreteCollisionDetectorInterface_getClosestPoints(Native, input.Native,
-				output.Native, DebugDraw.GetUnmanaged(debugDraw), swapResults);
+				output.Native, debugDraw != null ? debugDraw._native : IntPtr.Zero, swapResults);
 		}
 
 		public void Dispose()

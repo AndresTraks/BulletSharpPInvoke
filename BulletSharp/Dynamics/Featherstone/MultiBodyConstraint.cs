@@ -26,9 +26,9 @@ namespace BulletSharp
 				data.Native, infoGlobal.Native);
 		}
 		*/
-		public void DebugDraw(IDebugDraw drawer)
+		public void DebugDraw(DebugDraw drawer)
 		{
-			btMultiBodyConstraint_debugDraw(Native, BulletSharp.DebugDraw.GetUnmanaged(drawer));
+			btMultiBodyConstraint_debugDraw(Native, drawer._native);
 		}
 
 		public void FinalizeMultiDof()

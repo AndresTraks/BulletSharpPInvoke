@@ -328,7 +328,7 @@ namespace ConcaveRaycastDemo
 #endif
         }
 
-        public void Draw(IDebugDraw drawer)
+        public void Draw(DebugDraw drawer)
         {
             foreach (var ray in _rays)
             {

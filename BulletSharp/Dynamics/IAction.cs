@@ -7,7 +7,7 @@ namespace BulletSharp
 {
 	public interface IAction
 	{
-		void DebugDraw(IDebugDraw debugDrawer);
+		void DebugDraw(DebugDraw debugDrawer);
 		void UpdateAction(CollisionWorld collisionWorld, float deltaTimeStep);
 	}
 

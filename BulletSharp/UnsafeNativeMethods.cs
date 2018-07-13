@@ -175,6 +175,8 @@ namespace BulletSharp
 			IntPtr drawCylinderCallback, IntPtr drawLineCallback, IntPtr drawPlaneCallback, IntPtr drawSphereCallback, IntPtr drawSpherePatchCallback, IntPtr drawTransformCallback, IntPtr drawTriangleCallback, IntPtr getDebugModeCallback, IntPtr cb);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btIDebugDrawWrapper_getGCHandle(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btIDebugDraw_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btAlignedObjectArray_btIndexedMesh_at(IntPtr obj, int n);
@@ -1505,8 +1507,6 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btConvexCast_CastResult_getAllowedPenetration(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btConvexCast_CastResult_getDebugDrawer(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btConvexCast_CastResult_getFraction(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btConvexCast_CastResult_getHitPoint(IntPtr obj, out Vector3 value);
@@ -1957,7 +1957,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern int btDbvt_array_index_of(IntPtr obj, IntPtr value, int length);
 
-        [DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btDbvtAabbMm_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btDbvtAabbMm_Center(IntPtr obj, out Vector3 value);
@@ -6272,8 +6272,6 @@ namespace BulletSharp
 		public static extern void btSoftBodyHelpers_DrawFaceTree(IntPtr psb, IntPtr idraw, int minDepth, int maxDepth);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBodyHelpers_DrawFrame(IntPtr psb, IntPtr idraw);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btSoftBodyHelpers_DrawInfos(IntPtr psb, IntPtr idraw, bool masses, bool areas, bool stress);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBodyHelpers_DrawNodeTree(IntPtr psb, IntPtr idraw, int minDepth, int maxDepth);
 

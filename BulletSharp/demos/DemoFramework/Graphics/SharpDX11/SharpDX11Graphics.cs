@@ -141,7 +141,7 @@ namespace DemoFramework.SharpDX11
 
         MeshFactory _meshFactory;
 
-        public override IDebugDraw GetPhysicsDebugDrawer()
+        public override DebugDraw GetPhysicsDebugDrawer()
         {
             return new PhysicsDebugDraw(this);
         }

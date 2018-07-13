@@ -21,9 +21,9 @@ namespace BulletSharp
 			_preventDelete = preventDelete;
 		}
 
-		public void AllSolved(ContactSolverInfo __unnamed0, IDebugDraw __unnamed1)
+		public void AllSolved(ContactSolverInfo __unnamed0, DebugDraw __unnamed1)
 		{
-			btConstraintSolver_allSolved(Native, __unnamed0.Native, DebugDraw.GetUnmanaged(__unnamed1));
+			btConstraintSolver_allSolved(Native, __unnamed0.Native, __unnamed1 != null ? __unnamed1._native : IntPtr.Zero);
 		}
 
 		public void PrepareSolve(int __unnamed0, int __unnamed1)

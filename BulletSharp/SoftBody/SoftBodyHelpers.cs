@@ -8,7 +8,7 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp.SoftBody
 {
-    public enum DrawFlags
+	public enum DrawFlags
 	{
 		None = 0x00,
 		Nodes = 0x01,
@@ -346,41 +346,56 @@ namespace BulletSharp.SoftBody
 			return body;
 		}
 
-		public static void Draw(SoftBody psb, IDebugDraw iDraw, DrawFlags drawFlags = DrawFlags.Std)
+		public static void Draw(SoftBody psb, DebugDraw iDraw, DrawFlags drawFlags = DrawFlags.Std)
 		{
-			btSoftBodyHelpers_Draw(psb.Native, DebugDraw.GetUnmanaged(iDraw), drawFlags);
+			btSoftBodyHelpers_Draw(psb.Native, iDraw._native, drawFlags);
 		}
 
-		public static void DrawClusterTree(SoftBody psb, IDebugDraw iDraw, int minDepth = 0,
+		public static void DrawClusterTree(SoftBody psb, DebugDraw iDraw, int minDepth = 0,
 			int maxDepth = -1)
 		{
-			btSoftBodyHelpers_DrawClusterTree(psb.Native, DebugDraw.GetUnmanaged(iDraw),
+			btSoftBodyHelpers_DrawClusterTree(psb.Native, iDraw._native,
 				minDepth, maxDepth);
 		}
 
-		public static void DrawFaceTree(SoftBody psb, IDebugDraw iDraw, int minDepth = 0,
+		public static void DrawFaceTree(SoftBody psb, DebugDraw iDraw, int minDepth = 0,
 			int maxDepth = -1)
 		{
-			btSoftBodyHelpers_DrawFaceTree(psb.Native, DebugDraw.GetUnmanaged(iDraw),
+			btSoftBodyHelpers_DrawFaceTree(psb.Native, iDraw._native,
 				minDepth, maxDepth);
 		}
 
-		public static void DrawFrame(SoftBody psb, IDebugDraw iDraw)
+		public static void DrawFrame(SoftBody psb, DebugDraw iDraw)
 		{
-			btSoftBodyHelpers_DrawFrame(psb.Native, DebugDraw.GetUnmanaged(iDraw));
+			btSoftBodyHelpers_DrawFrame(psb.Native, iDraw._native);
 		}
 
-		public static void DrawInfos(SoftBody psb, IDebugDraw iDraw, bool masses,
+		public static void DrawInfos(SoftBody psb, DebugDraw iDraw, bool masses,
 			bool areas, bool stress)
 		{
-			btSoftBodyHelpers_DrawInfos(psb.Native, DebugDraw.GetUnmanaged(iDraw),
-				masses, areas, stress);
+			if (masses || areas)
+			{
+				foreach (Node node in psb.Nodes)
+				{
+					string text = string.Empty;
+					if (masses)
+					{
+						text = $" M({node.InverseMass:F2})";
+					}
+					if (areas)
+					{
+						text += $" A({node.Area:F2})";
+					}
+					Vector3 location = node.Position;
+					iDraw.Draw3DText(ref location, text);
+				}
+			}
 		}
 
-		public static void DrawNodeTree(SoftBody psb, IDebugDraw iDraw, int minDepth = 0,
+		public static void DrawNodeTree(SoftBody psb, DebugDraw iDraw, int minDepth = 0,
 			int maxDepth = -1)
 		{
-			btSoftBodyHelpers_DrawNodeTree(psb.Native, DebugDraw.GetUnmanaged(iDraw),
+			btSoftBodyHelpers_DrawNodeTree(psb.Native, iDraw._native,
 				minDepth, maxDepth);
 		}
 
