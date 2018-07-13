@@ -21,7 +21,9 @@ extern "C" {
 	EXPORT void btSoftBodyHelpers_DrawClusterTree(btSoftBody* psb, btIDebugDraw* idraw, int mindepth, int maxdepth);
 	EXPORT void btSoftBodyHelpers_DrawFaceTree(btSoftBody* psb, btIDebugDraw* idraw, int mindepth, int maxdepth);
 	EXPORT void btSoftBodyHelpers_DrawFrame(btSoftBody* psb, btIDebugDraw* idraw);
+#ifndef BULLETC_DISABLE_SOFTBODY_HELPERS
 	EXPORT void btSoftBodyHelpers_DrawInfos(btSoftBody* psb, btIDebugDraw* idraw, bool masses, bool areas, bool stress);
+#endif
 	EXPORT void btSoftBodyHelpers_DrawNodeTree(btSoftBody* psb, btIDebugDraw* idraw, int mindepth, int maxdepth);
 #ifndef BULLETC_DISABLE_SOFTBODY_HELPERS
 	EXPORT void btSoftBodyHelpers_ReoptimizeLinkOrder(btSoftBody* psb);
