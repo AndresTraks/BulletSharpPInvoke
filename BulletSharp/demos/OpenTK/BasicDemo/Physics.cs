@@ -8,46 +8,39 @@ namespace BasicDemo
     class Physics
     {
         ///create 125 (5x5x5) dynamic objects
-        int ArraySizeX = 5, ArraySizeY = 5, ArraySizeZ = 5;
+        private const int ArraySizeX = 5, ArraySizeY = 5, ArraySizeZ = 5;
+        private Vector3 _startPosition = new Vector3(-5, 1, -3) - new Vector3(ArraySizeX / 2, 0, ArraySizeZ / 2);
 
-        ///scaling of the objects (0.1 = 20 centimeter boxes )
-        float StartPosX = -5;
-        float StartPosY = -5;
-        float StartPosZ = -3;
+        public DiscreteDynamicsWorld World { get; }
 
-        public DiscreteDynamicsWorld World { get; set; }
-        CollisionDispatcher dispatcher;
-        DbvtBroadphase broadphase;
-        List<CollisionShape> collisionShapes = new List<CollisionShape>();
-        CollisionConfiguration collisionConf;
+        private CollisionDispatcher _dispatcher;
+        private DbvtBroadphase _broadphase;
+        private List<CollisionShape> _collisionShapes = new List<CollisionShape>();
+        private CollisionConfiguration _collisionConf;
 
         public Physics()
         {
             // collision configuration contains default setup for memory, collision setup
-            collisionConf = new DefaultCollisionConfiguration();
-            dispatcher = new CollisionDispatcher(collisionConf);
+            _collisionConf = new DefaultCollisionConfiguration();
+            _dispatcher = new CollisionDispatcher(_collisionConf);
 
-            broadphase = new DbvtBroadphase();
-            World = new DiscreteDynamicsWorld(dispatcher, broadphase, null, collisionConf);
+            _broadphase = new DbvtBroadphase();
+            World = new DiscreteDynamicsWorld(_dispatcher, _broadphase, null, _collisionConf);
 
             // create the ground
             var groundShape = new BoxShape(50, 50, 50);
-            collisionShapes.Add(groundShape);
-            CollisionObject ground = LocalCreateRigidBody(0, Matrix.Translation(0, -50, 0), groundShape);
+            _collisionShapes.Add(groundShape);
+            CollisionObject ground = CreateStaticBody(Matrix.Translation(0, -50, 0), groundShape);
             ground.UserObject = "Ground";
 
             // create a few dynamic rigidbodies
-            float mass = 1.0f;
-
             var colShape = new BoxShape(1);
-            collisionShapes.Add(colShape);
+            _collisionShapes.Add(colShape);
 
-            var rbInfo = new RigidBodyConstructionInfo(mass, null, colShape);
-            rbInfo.LocalInertia = colShape.CalculateLocalInertia(mass);
+            float mass = 1.0f;
+            Vector3 localInertia = colShape.CalculateLocalInertia(mass);
 
-            float start_x = StartPosX - ArraySizeX / 2;
-            float start_y = StartPosY;
-            float start_z = StartPosZ - ArraySizeZ / 2;
+            var rbInfo = new RigidBodyConstructionInfo(mass, null, colShape, localInertia);
 
             for (int y = 0; y < ArraySizeY; y++)
             {
@@ -56,12 +49,7 @@ namespace BasicDemo
                     for (int z = 0; z < ArraySizeZ; z++)
                     {
                         Matrix startTransform = Matrix.Translation(
-                            new Vector3(
-                                2*x + start_x,
-                                2*y + start_y,
-                                2*z + start_z
-                                )
-                            );
+                            _startPosition + 2 * new Vector3(x, y, z));
 
                         // using motionstate is recommended, it provides interpolation capabilities
                         // and only synchronizes 'active' objects
@@ -69,7 +57,7 @@ namespace BasicDemo
                         var body = new RigidBody(rbInfo);
                         
                         // make it drop from a height
-                        body.Translate(new Vector3(0, 20, 0));
+                        body.Translate(new Vector3(0, 15, 0));
 
                         World.AddRigidBody(body);
                     }
@@ -91,7 +79,7 @@ namespace BasicDemo
             {
                 TypedConstraint constraint = World.GetConstraint(i);
                 World.RemoveConstraint(constraint);
-                constraint.Dispose(); ;
+                constraint.Dispose();
             }
 
             // remove the rigidbodies from the dynamics world and delete them
@@ -108,30 +96,37 @@ namespace BasicDemo
             }
 
             // delete collision shapes
-            foreach (CollisionShape shape in collisionShapes)
+            foreach (CollisionShape shape in _collisionShapes)
+            {
                 shape.Dispose();
-            collisionShapes.Clear();
+            }
+            _collisionShapes.Clear();
 
             World.Dispose();
-            broadphase.Dispose();
-            if (dispatcher != null)
+            _broadphase.Dispose();
+            if (_dispatcher != null)
             {
-                dispatcher.Dispose();
+                _dispatcher.Dispose();
             }
-            collisionConf.Dispose();
+            _collisionConf.Dispose();
         }
 
-        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape)
+        private RigidBody CreateStaticBody(Matrix startTransform, CollisionShape shape)
         {
-            bool isDynamic = (mass != 0.0f);
-
             Vector3 localInertia = Vector3.Zero;
-            if (isDynamic)
-                shape.CalculateLocalInertia(mass, out localInertia);
+            return CreateBody(0, startTransform, shape, localInertia);
+        }
 
-            var myMotionState = new DefaultMotionState(startTransform);
+        private RigidBody CreateDynamicBody(float mass, Matrix startTransform, CollisionShape shape)
+        {
+            Vector3 localInertia = shape.CalculateLocalInertia(mass);
+            return CreateBody(mass, startTransform, shape, localInertia);
+        }
 
-            using (var rbInfo = new RigidBodyConstructionInfo(mass, myMotionState, shape, localInertia))
+        private RigidBody CreateBody(float mass, Matrix startTransform, CollisionShape shape, Vector3 localInertia)
+        {
+            var motionState = new DefaultMotionState(startTransform);
+            using (var rbInfo = new RigidBodyConstructionInfo(mass, motionState, shape, localInertia))
             {
                 var body = new RigidBody(rbInfo);
                 World.AddRigidBody(body);

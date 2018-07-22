@@ -17,7 +17,7 @@ namespace BasicDemo
             }
             catch(Exception e)
             {
-                MessageBox.Show(e.ToString(), "BulletSharp Error!");
+                MessageBox.Show(e.ToString(), "Error loading BulletSharp!");
                 return;
             }
 
