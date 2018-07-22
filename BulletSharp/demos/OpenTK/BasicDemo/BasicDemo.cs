@@ -3,22 +3,23 @@ using BulletSharp;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
 using Vector3 = OpenTK.Vector3;
 
 namespace BasicDemo
 {
     class BasicDemo : GameWindow
     {
-        Physics physics;
-        float angle = 0.0f;
-        float frameTime; int fps;
+        private Physics _physics;
+        private float _frameTime;
+        private int _fps;
 
         public BasicDemo(GraphicsMode mode)
             : base(800, 600,
             mode, "BulletSharp OpenTK Demo")
         {
             VSync = VSyncMode.Off;
-            physics = new Physics();
+            _physics = new Physics();
         }
 
         protected override void OnLoad(System.EventArgs e)
@@ -33,49 +34,47 @@ namespace BasicDemo
 
         protected override void OnUnload(System.EventArgs e)
         {
-            physics.ExitPhysics();
+            _physics.ExitPhysics();
             base.OnUnload(e);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            physics.Update((float)e.Time);
+            _physics.Update((float)e.Time);
 
-            if (Keyboard[OpenTK.Input.Key.Escape] || Keyboard[OpenTK.Input.Key.Q])
+            var keyboard = Keyboard.GetState();
+            if (keyboard[Key.Escape] || keyboard[Key.Q])
                 Exit();
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            frameTime += (float)e.Time;
-            fps++;
-            if (frameTime >= 1)
+            _frameTime += (float)e.Time;
+            _fps++;
+            if (_frameTime >= 1)
             {
-                frameTime = 0;
-                Title = "BulletSharp OpenTK Demo, FPS = " + fps.ToString();
-                fps = 0;
+                _frameTime = 0;
+                Title = $"BulletSharp OpenTK Demo, FPS = {_fps}";
+                _fps = 0;
             }
 
             GL.Viewport(0, 0, Width, Height);
 
-            float aspect_ratio = Width / (float)Height;
-            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspect_ratio, 0.1f, 100);
+            float aspectRatio = Width / (float)Height;
+            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspectRatio, 0.1f, 100);
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref perspective);
 
-            Matrix4 lookat = Matrix4.LookAt(new Vector3(10, 20, 30), Vector3.Zero, Vector3.UnitY);
+            Matrix4 lookAt = Matrix4.LookAt(new Vector3(10, 20, 30), Vector3.Zero, Vector3.UnitY);
             GL.MatrixMode(MatrixMode.Modelview);
-
-            GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
-            angle += (float)e.Time*100;
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            InitCube();
+            InitCubeBuffer();
 
-            foreach (RigidBody body in physics.World.CollisionObjectArray)
+            foreach (RigidBody body in _physics.World.CollisionObjectArray)
             {
-                Matrix4 modelLookAt = Convert(body.MotionState.WorldTransform) * lookat;
+                Matrix4 modelLookAt = Convert(body.MotionState.WorldTransform) * lookAt;
                 GL.LoadMatrix(ref modelLookAt);
 
                 if ("Ground".Equals(body.UserObject))
@@ -84,13 +83,13 @@ namespace BasicDemo
                     continue;
                 }
 
-                if (body.ActivationState == ActivationState.ActiveTag)
-                    DrawCube2(Color.Orange, 1);
-                else
-                    DrawCube2(Color.Red, 1);
+                var color = body.ActivationState == ActivationState.ActiveTag
+                    ? Color.Orange
+                    : Color.Red;
+                DrawCubeBuffer(color, 1);
             }
 
-            UninitCube();
+            UninitCubeBuffer();
 
             SwapBuffers();
         }
@@ -138,48 +137,51 @@ namespace BasicDemo
             GL.End();
         }
 
-        float[] vertices = new float[] {1,1,1,  -1,1,1,  -1,-1,1,  1,-1,1,
+        private readonly float[] _vertices = new float[] {
+            1,1,1,  -1,1,1,  -1,-1,1,  1,-1,1,
             1,1,1,  1,-1,1,  1,-1,-1,  1,1,-1,
             1,1,1,  1,1,-1,  -1,1,-1,  -1,1,1,
             -1,1,1,  -1,1,-1,  -1,-1,-1,  -1,-1,1,
             -1,-1,-1,  1,-1,-1,  1,-1,1,  -1,-1,1,
             1,-1,-1,  -1,-1,-1,  -1,1,-1,  1,1,-1};
 
-        float[] normals = new float[] {0,0,1,  0,0,1,  0,0,1,  0,0,1,
-            1,0,0,  1,0,0,  1,0,0, 1,0,0,
-            0,1,0,  0,1,0,  0,1,0, 0,1,0,
+        private readonly float[] _normals = new float[] {
+            0,0,1,  0,0,1,  0,0,1,  0,0,1,
+            1,0,0,  1,0,0,  1,0,0,  1,0,0,
+            0,1,0,  0,1,0,  0,1,0,  0,1,0,
             -1,0,0,  -1,0,0, -1,0,0,  -1,0,0,
             0,-1,0,  0,-1,0,  0,-1,0,  0,-1,0,
             0,0,-1,  0,0,-1,  0,0,-1,  0,0,-1};
 
-        byte[] indices = {0,1,2,3,
+        private readonly byte[] _indices = {
+            0,1,2,3,
             4,5,6,7,
             8,9,10,11,
             12,13,14,15,
             16,17,18,19,
             20,21,22,23};
 
-        void InitCube()
+        private void InitCubeBuffer()
         {
             GL.EnableClientState(ArrayCap.NormalArray);
             GL.EnableClientState(ArrayCap.VertexArray);
-            GL.NormalPointer(NormalPointerType.Float, 0, normals);
-            GL.VertexPointer(3, VertexPointerType.Float, 0, vertices);
+            GL.NormalPointer(NormalPointerType.Float, 0, _normals);
+            GL.VertexPointer(3, VertexPointerType.Float, 0, _vertices);
         }
 
-        void UninitCube()
+        private void UninitCubeBuffer()
         {
             GL.DisableClientState(ArrayCap.VertexArray);
             GL.DisableClientState(ArrayCap.NormalArray);
         }
 
-        void DrawCube2(Color color, float size)
+        private void DrawCubeBuffer(Color color, float size)
         {
             GL.Color3(color);
-            GL.DrawElements(PrimitiveType.Quads, 24, DrawElementsType.UnsignedByte, indices);
+            GL.DrawElements(PrimitiveType.Quads, 24, DrawElementsType.UnsignedByte, _indices);
         }
 
-        public static Matrix4 Convert(BulletSharp.Math.Matrix m)
+        private static Matrix4 Convert(BulletSharp.Math.Matrix m)
         {
             return new Matrix4(
                 m.M11, m.M12, m.M13, m.M14,
