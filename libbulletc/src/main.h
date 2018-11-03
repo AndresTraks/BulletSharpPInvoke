@@ -1089,7 +1089,7 @@ typedef void* (*Win32lsMemorySetupFunc)();
 #define btBulletXmlWorldImporter void
 #endif
 
-#ifndef GIM_BOX_SET_H_INCLUDED
+#ifndef BT_GIMPACT_BVH_H_INCLUDED
 #define btBvhTree void
 #define btPairSet void
 #define GIM_BVH_DATA void
@@ -1098,6 +1098,7 @@ typedef void* (*Win32lsMemorySetupFunc)();
 #define GIM_BVH_TREE_NODE_ARRAY void
 #define GIM_PAIR void
 #define btGImpactBvh void
+#define btPrimitiveManagerBase void
 #endif
 
 #ifndef GIM_QUANTIZED_SET_H_INCLUDED
@@ -1126,10 +1127,6 @@ typedef void* (*Win32lsMemorySetupFunc)();
 #define btPrimitiveTriangle void
 #define btTriangleShapeEx void
 #define GIM_TRIANGLE_CONTACT void
-#endif
-
-#ifndef GIM_BOX_SET_H_INCLUDED
-#define btPrimitiveManagerBase void
 #endif
 
 #ifndef POLARDECOMPOSITION_H
