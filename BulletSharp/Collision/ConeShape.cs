@@ -6,14 +6,14 @@ namespace BulletSharp
 {
 	public class ConeShape : ConvexInternalShape
 	{
-		internal ConeShape(IntPtr native)
-			: base(native)
+		protected internal ConeShape()
 		{
 		}
 
 		public ConeShape(float radius, float height)
-			: base(btConeShape_new(radius, height))
 		{
+			IntPtr native = btConeShape_new(radius, height);
+			InitializeCollisionShape(native);
 		}
 
 		public int ConeUpIndex
@@ -38,16 +38,18 @@ namespace BulletSharp
 	public class ConeShapeX : ConeShape
 	{
 		public ConeShapeX(float radius, float height)
-			: base(btConeShapeX_new(radius, height))
 		{
+			IntPtr native = btConeShapeX_new(radius, height);
+			InitializeCollisionShape(native);
 		}
 	}
 
 	public class ConeShapeZ : ConeShape
 	{
 		public ConeShapeZ(float radius, float height)
-			: base(btConeShapeZ_new(radius, height))
 		{
+			IntPtr native = btConeShapeZ_new(radius, height);
+			InitializeCollisionShape(native);
 		}
 	}
 

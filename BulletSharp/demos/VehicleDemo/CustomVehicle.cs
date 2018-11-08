@@ -9,7 +9,7 @@ using System.Diagnostics;
 namespace VehicleDemo
 {
     // This class is equivalent to RaycastVehicle, but is used to test the IAction interface
-    public class CustomVehicle : IAction
+    public sealed class CustomVehicle : IAction, IDisposable
     {
         private List<WheelInfo> _wheelInfo = new List<WheelInfo>();
 
@@ -54,7 +54,12 @@ namespace VehicleDemo
 
         IVehicleRaycaster vehicleRaycaster;
 
-        static RigidBody fixedBody;
+        private RigidBody _fixedBody;
+
+        public void Dispose()
+        {
+            _fixedBody.Dispose();
+        }
 
         public void SetBrake(float brake, int wheelIndex)
         {
@@ -88,19 +93,16 @@ namespace VehicleDemo
             return _wheelInfo[wheelIndex].WorldTransform;
         }
 
-        static CustomVehicle()
-        {
-            using (var ci = new RigidBodyConstructionInfo(0, null, null))
-            {
-                fixedBody = new RigidBody(ci);
-                fixedBody.SetMassProps(0, Vector3.Zero);
-            }
-        }
-
         public CustomVehicle(VehicleTuning tuning, RigidBody chassis, IVehicleRaycaster raycaster)
         {
             chassisBody = chassis;
             vehicleRaycaster = raycaster;
+
+            using (var ci = new RigidBodyConstructionInfo(0, null, null))
+            {
+                _fixedBody = new RigidBody(ci);
+                _fixedBody.SetMassProps(0, Vector3.Zero);
+            }
         }
 
         public WheelInfo AddWheel(Vector3 connectionPointCS, Vector3 wheelDirectionCS0, Vector3 wheelAxleCS, float suspensionRestLength, float wheelRadius, VehicleTuning tuning, bool isFrontWheel)
@@ -233,7 +235,7 @@ namespace VehicleDemo
                 wheel.RaycastInfo.ContactNormalWS = rayResults.HitNormalInWorld;
                 wheel.RaycastInfo.IsInContact = true;
 
-                wheel.RaycastInfo.GroundObject = fixedBody;///@todo for driving on dynamic/movable objects!;
+                wheel.RaycastInfo.GroundObject = _fixedBody;///@todo for driving on dynamic/movable objects!;
                 /////wheel.RaycastInfo.GroundObject = object;
 
                 float hitDistance = param * raylen;

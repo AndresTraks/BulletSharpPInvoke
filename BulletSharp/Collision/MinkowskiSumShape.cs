@@ -1,4 +1,5 @@
 using BulletSharp.Math;
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -6,8 +7,10 @@ namespace BulletSharp
 	public class MinkowskiSumShape : ConvexInternalShape
 	{
 		public MinkowskiSumShape(ConvexShape shapeA, ConvexShape shapeB)
-			: base(btMinkowskiSumShape_new(shapeA.Native, shapeB.Native))
 		{
+			IntPtr native = btMinkowskiSumShape_new(shapeA.Native, shapeB.Native);
+			InitializeCollisionShape(native);
+
 			ShapeA = shapeA;
 			ShapeB = shapeB;
 		}

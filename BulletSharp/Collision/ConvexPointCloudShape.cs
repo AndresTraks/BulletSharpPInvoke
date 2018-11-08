@@ -9,15 +9,18 @@ namespace BulletSharp
 		private Vector3Array _unscaledPoints;
 
 		public ConvexPointCloudShape()
-			: base(btConvexPointCloudShape_new())
 		{
+			IntPtr native = btConvexPointCloudShape_new();
+			InitializeCollisionShape(native);
 		}
 
 		public ConvexPointCloudShape(Vector3Array points, int numPoints, Vector3 localScaling,
 			bool computeAabb = true)
-			: base(btConvexPointCloudShape_new2(points._native, numPoints, ref localScaling,
-				computeAabb))
 		{
+			IntPtr native = btConvexPointCloudShape_new2(points._native, numPoints, ref localScaling,
+				computeAabb);
+			InitializeCollisionShape(native);
+
 			_unscaledPoints = points;
 		}
 

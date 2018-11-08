@@ -76,8 +76,10 @@ namespace BulletSharp.SoftBody
 			Vector3[] vertices, int nVertices, bool randomizeConstraints = true)
 		{
 			var body = new SoftBody(btSoftBodyHelpers_CreateFromConvexHull(
-				worldInfo.Native, vertices, nVertices, randomizeConstraints));
-			body.WorldInfo = worldInfo;
+				worldInfo.Native, vertices, nVertices, randomizeConstraints))
+			{
+				WorldInfo = worldInfo
+			};
 			return body;
 		}
 
@@ -85,8 +87,10 @@ namespace BulletSharp.SoftBody
 			Vector3[] vertices, bool randomizeConstraints = true)
 		{
 			var body = new SoftBody(btSoftBodyHelpers_CreateFromConvexHull(
-				worldInfo.Native, vertices, vertices.Length, randomizeConstraints));
-			body.WorldInfo = worldInfo;
+				worldInfo.Native, vertices, vertices.Length, randomizeConstraints))
+			{
+				WorldInfo = worldInfo
+			};
 			return body;
 		}
 
@@ -312,8 +316,10 @@ namespace BulletSharp.SoftBody
 		{
 			var body = new SoftBody(btSoftBodyHelpers_CreatePatchUV(worldInfo.Native,
 				ref corner00, ref corner10, ref corner01, ref corner11, resolutionX, resolutionY,
-				fixedCorners, generateDiagonals, texCoords));
-			body.WorldInfo = worldInfo;
+				fixedCorners, generateDiagonals, texCoords))
+			{
+				WorldInfo = worldInfo
+			};
 			return body;
 		}
 

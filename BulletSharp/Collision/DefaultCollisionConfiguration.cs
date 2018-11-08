@@ -3,15 +3,15 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class DefaultCollisionConstructionInfo : IDisposable
+	public class DefaultCollisionConstructionInfo : BulletDisposableObject
 	{
-		internal IntPtr _native;
 		private PoolAllocator _collisionAlgorithmPool;
 		private PoolAllocator _persistentManifoldPool;
 
 		public DefaultCollisionConstructionInfo()
 		{
-			_native = btDefaultCollisionConstructionInfo_new();
+			IntPtr native = btDefaultCollisionConstructionInfo_new();
+			InitializeUserOwned(native);
 		}
 
 		public PoolAllocator CollisionAlgorithmPool
@@ -19,27 +19,27 @@ namespace BulletSharp
 			get => _collisionAlgorithmPool;
 			set
 			{
-				btDefaultCollisionConstructionInfo_setCollisionAlgorithmPool(_native, value._native);
+				btDefaultCollisionConstructionInfo_setCollisionAlgorithmPool(Native, value._native);
 				_collisionAlgorithmPool = value;
 			}
 		}
 
 		public int CustomCollisionAlgorithmMaxElementSize
 		{
-			get => btDefaultCollisionConstructionInfo_getCustomCollisionAlgorithmMaxElementSize(_native);
-			set => btDefaultCollisionConstructionInfo_setCustomCollisionAlgorithmMaxElementSize(_native, value);
+			get => btDefaultCollisionConstructionInfo_getCustomCollisionAlgorithmMaxElementSize(Native);
+			set => btDefaultCollisionConstructionInfo_setCustomCollisionAlgorithmMaxElementSize(Native, value);
 		}
 
 		public int DefaultMaxCollisionAlgorithmPoolSize
 		{
-			get => btDefaultCollisionConstructionInfo_getDefaultMaxCollisionAlgorithmPoolSize(_native);
-			set => btDefaultCollisionConstructionInfo_setDefaultMaxCollisionAlgorithmPoolSize(_native, value);
+			get => btDefaultCollisionConstructionInfo_getDefaultMaxCollisionAlgorithmPoolSize(Native);
+			set => btDefaultCollisionConstructionInfo_setDefaultMaxCollisionAlgorithmPoolSize(Native, value);
 		}
 
 		public int DefaultMaxPersistentManifoldPoolSize
 		{
-			get => btDefaultCollisionConstructionInfo_getDefaultMaxPersistentManifoldPoolSize(_native);
-			set => btDefaultCollisionConstructionInfo_setDefaultMaxPersistentManifoldPoolSize(_native, value);
+			get => btDefaultCollisionConstructionInfo_getDefaultMaxPersistentManifoldPoolSize(Native);
+			set => btDefaultCollisionConstructionInfo_setDefaultMaxPersistentManifoldPoolSize(Native, value);
 		}
 
 		public PoolAllocator PersistentManifoldPool
@@ -47,58 +47,53 @@ namespace BulletSharp
 			get => _persistentManifoldPool;
 			set
 			{
-				btDefaultCollisionConstructionInfo_setPersistentManifoldPool(_native, value._native);
+				btDefaultCollisionConstructionInfo_setPersistentManifoldPool(Native, value._native);
 				_persistentManifoldPool = value;
 			}
 		}
 
 		public int UseEpaPenetrationAlgorithm
 		{
-			get => btDefaultCollisionConstructionInfo_getUseEpaPenetrationAlgorithm(_native);
-			set => btDefaultCollisionConstructionInfo_setUseEpaPenetrationAlgorithm(_native, value);
+			get => btDefaultCollisionConstructionInfo_getUseEpaPenetrationAlgorithm(Native);
+			set => btDefaultCollisionConstructionInfo_setUseEpaPenetrationAlgorithm(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
+			if (IsDisposed == false)
 			{
-				btDefaultCollisionConstructionInfo_delete(_native);
-				_native = IntPtr.Zero;
+				btDefaultCollisionConstructionInfo_delete(Native);
 			}
-		}
-
-		~DefaultCollisionConstructionInfo()
-		{
-			Dispose(false);
 		}
 	}
 
 	public class DefaultCollisionConfiguration : CollisionConfiguration
 	{
-		private PoolAllocator _collisionAlgorithmPool;
-		private PoolAllocator _persistentManifoldPool;
+		protected PoolAllocator _collisionAlgorithmPool;
+		protected PoolAllocator _persistentManifoldPool;
 
-		internal DefaultCollisionConfiguration(IntPtr native)
-			: base(native)
+		internal DefaultCollisionConfiguration(ConstructionInfo info)
 		{
 		}
 
 		public DefaultCollisionConfiguration()
-			: base(btDefaultCollisionConfiguration_new())
 		{
+			IntPtr native = btDefaultCollisionConfiguration_new();
+			InitializeUserOwned(native);
 		}
 
-		public DefaultCollisionConfiguration(DefaultCollisionConstructionInfo constructionInfo)
-			: base(btDefaultCollisionConfiguration_new2(constructionInfo._native))
+		public DefaultCollisionConfiguration(DefaultCollisionConstructionInfo constructionInfo) 
 		{
+			if (constructionInfo == null)
+			{
+				throw new ArgumentNullException(nameof(constructionInfo));
+			}
+
 			_collisionAlgorithmPool = constructionInfo.CollisionAlgorithmPool;
 			_persistentManifoldPool = constructionInfo.PersistentManifoldPool;
+
+			IntPtr native = btDefaultCollisionConfiguration_new2(constructionInfo.Native);
+			InitializeUserOwned(native);
 		}
 
 		public override CollisionAlgorithmCreateFunc GetClosestPointsAlgorithmCreateFunc(BroadphaseNativeType proxyType0, BroadphaseNativeType proxyType1)

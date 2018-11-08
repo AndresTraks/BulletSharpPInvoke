@@ -81,9 +81,9 @@
     <Compile Include="BenchmarkDemo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="BulletSharp, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="BulletSharp, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\Release\BulletSharp.dll</HintPath>
+      <HintPath>..\..\bin\Debug\BulletSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>

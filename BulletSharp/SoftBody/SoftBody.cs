@@ -9,9 +9,9 @@ namespace BulletSharp.SoftBody
 {
 	public class SoftBodyCollisionShape : ConvexShape
 	{
-		internal SoftBodyCollisionShape(IntPtr native)
-			: base(native, true)
+		internal SoftBodyCollisionShape(IntPtr native, SoftBody owner)
 		{
+			InitializeCollisionShape(native, owner);
 		}
 	}
 
@@ -2452,22 +2452,34 @@ namespace BulletSharp.SoftBody
 		private List<AngularJoint.IControl> _aJointControls = new List<AngularJoint.IControl>();
 
 		internal SoftBody(IntPtr native)
-			: base(native)
+			: base(ConstructionInfo.Null)
 		{
-			_collisionShape = new SoftBodyCollisionShape(btCollisionObject_getCollisionShape(Native));
+			InitializeCollisionObject(native);
+
+			_collisionShape = new SoftBodyCollisionShape(btCollisionObject_getCollisionShape(Native), this);
+			_collisionShape.AllocateUnmanagedHandle();
+
 		}
 
 		public SoftBody(SoftBodyWorldInfo worldInfo, int nodeCount, Vector3[] positions, float[] masses)
-			: base(btSoftBody_new(worldInfo.Native, nodeCount, positions, masses))
+			: base(ConstructionInfo.Null)
 		{
-			_collisionShape = new SoftBodyCollisionShape(btCollisionObject_getCollisionShape(Native));
+			IntPtr native = btSoftBody_new(worldInfo.Native, nodeCount, positions, masses);
+			InitializeCollisionObject(native);
+
+			_collisionShape = new SoftBodyCollisionShape(btCollisionObject_getCollisionShape(Native), this);
+			_collisionShape.AllocateUnmanagedHandle();
 			_worldInfo = worldInfo;
 		}
 
 		public SoftBody(SoftBodyWorldInfo worldInfo)
-			: base(btSoftBody_new2(worldInfo.Native))
+			: base(ConstructionInfo.Null)
 		{
-			_collisionShape = new SoftBodyCollisionShape(btCollisionObject_getCollisionShape(Native));
+			IntPtr native = btSoftBody_new2(worldInfo.Native);
+			InitializeCollisionObject(native);
+
+			_collisionShape = new SoftBodyCollisionShape(btCollisionObject_getCollisionShape(Native), this);
+			_collisionShape.AllocateUnmanagedHandle();
 			_worldInfo = worldInfo;
 		}
 
@@ -3202,6 +3214,13 @@ namespace BulletSharp.SoftBody
 			}
 			normals = null;
 			return GetLinkVertexData(ref vertices);
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			_collisionShape.FreeUnmanagedHandle();
+
+			base.Dispose(disposing);
 		}
 
 		public AlignedAnchorArray Anchors

@@ -8,8 +8,7 @@ namespace BulletSharp
 	{
 		private ConvexPolyhedron _convexPolyhedron;
 
-		internal PolyhedralConvexShape(IntPtr native)
-			: base(native)
+		protected internal PolyhedralConvexShape()
 		{
 		}
 
@@ -76,8 +75,7 @@ namespace BulletSharp
 
 	public abstract class PolyhedralConvexAabbCachingShape : PolyhedralConvexShape
 	{
-		internal PolyhedralConvexAabbCachingShape(IntPtr native)
-			: base(native)
+		protected internal PolyhedralConvexAabbCachingShape()
 		{
 		}
 

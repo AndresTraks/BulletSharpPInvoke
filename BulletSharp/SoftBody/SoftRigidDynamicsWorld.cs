@@ -12,7 +12,6 @@ namespace BulletSharp.SoftBody
 		public SoftRigidDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
 			ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration,
 			SoftBodySolver softBodySolver = null)
-			: base(IntPtr.Zero, dispatcher, pairCache)
 		{
 			if (softBodySolver != null) {
 				_softBodySolver = softBodySolver;
@@ -22,16 +21,17 @@ namespace BulletSharp.SoftBody
 				_ownsSolver = true;
 			}
 
-			Native = btSoftRigidDynamicsWorld_new(dispatcher.Native, pairCache.Native,
+			IntPtr native = btSoftRigidDynamicsWorld_new(dispatcher.Native, pairCache.Native,
 				(constraintSolver != null) ? constraintSolver.Native : IntPtr.Zero,
 				collisionConfiguration.Native, _softBodySolver._native);
+			InitializeUserOwned(native);
+			InitializeMembers(dispatcher, pairCache, constraintSolver);
 
-			CollisionObjectArray = new AlignedCollisionObjectArray(btCollisionWorld_getCollisionObjectArray(Native), this);
-
-			_constraintSolver = constraintSolver;
-			WorldInfo = new SoftBodyWorldInfo(btSoftRigidDynamicsWorld_getWorldInfo(Native), true);
-			WorldInfo.Dispatcher = dispatcher;
-			WorldInfo.Broadphase = pairCache;
+			WorldInfo = new SoftBodyWorldInfo(btSoftRigidDynamicsWorld_getWorldInfo(Native), true)
+			{
+				Dispatcher = dispatcher,
+				Broadphase = pairCache
+			};
 		}
 
 		public void AddSoftBody(SoftBody body)

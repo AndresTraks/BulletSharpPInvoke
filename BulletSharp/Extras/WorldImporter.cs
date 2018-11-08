@@ -847,7 +847,7 @@ namespace BulletSharp
 
 		public GImpactMeshShape CreateGimpactShape(StridingMeshInterface trimesh)
 		{
-            GImpactMeshShape shape = new GImpactMeshShape(trimesh.Native);
+            var shape = new GImpactMeshShape(trimesh);
             _allocatedCollisionShapes.Add(shape);
             return shape;
 		}
@@ -982,9 +982,11 @@ namespace BulletSharp
                 localInertia = Vector3.Zero;
             }
 
-            RigidBodyConstructionInfo info = new RigidBodyConstructionInfo(mass, null, shape, localInertia);
-            RigidBody body = new RigidBody(info);
-            info.Dispose();
+            RigidBody body;
+            using (var info = new RigidBodyConstructionInfo(mass, null, shape, localInertia))
+            {
+                body = new RigidBody(info);
+            }
             body.WorldTransform = startTransform;
 
             if (_dynamicsWorld != null)

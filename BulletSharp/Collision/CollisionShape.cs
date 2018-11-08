@@ -5,11 +5,25 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public abstract class CollisionShape : IDisposable
+	public abstract class CollisionShape : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
-		private bool _isDisposed;
+		protected internal CollisionShape()
+		{
+		}
+
+		protected internal void InitializeCollisionShape(IntPtr native, BulletObject owner = null)
+		{
+			if (owner != null)
+			{
+				InitializeSubObject(native, owner);
+			}
+			else
+			{
+				InitializeUserOwned(native);
+
+				AllocateUnmanagedHandle();
+			}
+		}
 
 		internal static CollisionShape GetManaged(IntPtr obj)
 		{
@@ -19,21 +33,12 @@ namespace BulletSharp
 			}
 
 			IntPtr userPtr = btCollisionShape_getUserPointer(obj);
-			return GCHandle.FromIntPtr(userPtr).Target as CollisionShape;
-		}
+			if (userPtr != IntPtr.Zero)
+			{
+				return GCHandle.FromIntPtr(userPtr).Target as CollisionShape;
+			}
 
-		internal CollisionShape(IntPtr native, bool preventDelete = false)
-		{
-			Native = native;
-			if (preventDelete)
-			{
-				_preventDelete = true;
-			}
-			else
-			{
-				GCHandle handle = GCHandle.Alloc(this, GCHandleType.Weak);
-				btCollisionShape_setUserPointer(native, GCHandle.ToIntPtr(handle));
-			}
+			throw new InvalidOperationException("Unknown collision object!");
 		}
 
 		public Vector3 CalculateLocalInertia(float mass)
@@ -131,8 +136,6 @@ namespace BulletSharp
 
 		public bool IsConvex2D => btCollisionShape_isConvex2d(Native);
 
-		public bool IsDisposed => _isDisposed;
-
 		public bool IsInfinite => btCollisionShape_isInfinite(Native);
 
 		public bool IsNonMoving => btCollisionShape_isNonMoving(Native);
@@ -180,31 +183,26 @@ namespace BulletSharp
 			return Native.GetHashCode();
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!_isDisposed)
+			if (Owner == null)
 			{
-				_isDisposed = true;
+				FreeUnmanagedHandle();
 
-				if (!_preventDelete)
-				{
-					IntPtr userPtr = btCollisionShape_getUserPointer(Native);
-					GCHandle.FromIntPtr(userPtr).Free();
-
-					btCollisionShape_delete(Native);
-				}
+				btCollisionShape_delete(Native);
 			}
 		}
 
-		~CollisionShape()
+		internal void AllocateUnmanagedHandle()
 		{
-			Dispose(false);
+			GCHandle handle = GCHandle.Alloc(this, GCHandleType.Weak);
+			btCollisionShape_setUserPointer(Native, GCHandle.ToIntPtr(handle));
+		}
+
+		internal void FreeUnmanagedHandle()
+		{
+			IntPtr userPtr = btCollisionShape_getUserPointer(Native);
+			GCHandle.FromIntPtr(userPtr).Free();
 		}
 	}
 

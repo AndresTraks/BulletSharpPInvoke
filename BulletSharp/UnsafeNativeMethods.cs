@@ -6994,6 +6994,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btTypedConstraint_getDbgDrawSize(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btTypedConstraint_getFixedBody();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btTypedConstraint_getInfo1(IntPtr obj, IntPtr info);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btTypedConstraint_getInfo2(IntPtr obj, IntPtr info);

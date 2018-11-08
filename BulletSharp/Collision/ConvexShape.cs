@@ -1,4 +1,3 @@
-using System;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
@@ -6,10 +5,10 @@ namespace BulletSharp
 {
 	public class ConvexShape : CollisionShape
 	{
-		internal ConvexShape(IntPtr native, bool preventDelete = false)
-			: base(native, preventDelete)
+		protected internal ConvexShape()
 		{
 		}
+
 		/*
 		public void BatchedUnitVectorGetSupportingVertexWithoutMargin(Vector3 vectors,
 			Vector3 supportVerticesOut, int numVectors)

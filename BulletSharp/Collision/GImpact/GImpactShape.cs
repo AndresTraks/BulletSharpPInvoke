@@ -16,8 +16,10 @@ namespace BulletSharp
 	public class TetrahedronShapeEx : BuSimplex1To4
 	{
 		public TetrahedronShapeEx()
-			: base(btTetrahedronShapeEx_new())
+			: base(ConstructionInfo.Null)
 		{
+			IntPtr native = btTetrahedronShapeEx_new();
+			InitializeCollisionShape(native);
 		}
 
 		public void SetVertices(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3)
@@ -28,8 +30,7 @@ namespace BulletSharp
 
 	public abstract class GImpactShapeInterface : ConcaveShape
 	{
-		internal GImpactShapeInterface(IntPtr native)
-			: base(native)
+		protected internal GImpactShapeInterface()
 		{
 		}
 
@@ -150,14 +151,10 @@ namespace BulletSharp
 		private CompoundPrimitiveManager _compoundPrimitiveManager;
 		private List<CollisionShape> _childShapes = new List<CollisionShape>();
 
-		internal GImpactCompoundShape(IntPtr native)
-			: base(native)
-		{
-		}
-
 		public GImpactCompoundShape(bool childrenHasTransform = true)
-			: base(btGImpactCompoundShape_new(childrenHasTransform))
 		{
+			IntPtr native = btGImpactCompoundShape_new(childrenHasTransform);
+			InitializeCollisionShape(native);
 		}
 
 		public void AddChildShape(Matrix localTransform, CollisionShape shape)
@@ -343,19 +340,21 @@ namespace BulletSharp
 	{
 		private TrimeshPrimitiveManager _gImpactTrimeshPrimitiveManager;
 
-		internal GImpactMeshShapePart(IntPtr native)
-			: base(native)
+		internal GImpactMeshShapePart(IntPtr native, GImpactMeshShape owner)
 		{
+			InitializeSubObject(native, owner);
 		}
 
 		public GImpactMeshShapePart()
-			: base(btGImpactMeshShapePart_new())
 		{
+			IntPtr native = btGImpactMeshShapePart_new();
+			InitializeCollisionShape(native);
 		}
 
 		public GImpactMeshShapePart(StridingMeshInterface meshInterface, int part)
-			: base(btGImpactMeshShapePart_new2(meshInterface.Native, part))
 		{
+			IntPtr native = btGImpactMeshShapePart_new2(meshInterface.Native, part);
+			InitializeCollisionShape(native);
 		}
 
 		public override CollisionShape GetChildShape(int index)
@@ -395,14 +394,11 @@ namespace BulletSharp
 		private StridingMeshInterface _meshInterface;
 		private bool _disposeMeshInterface;
 
-		internal GImpactMeshShape(IntPtr native)
-			: base(native)
-		{
-		}
-
 		public GImpactMeshShape(StridingMeshInterface meshInterface)
-			: base(btGImpactMeshShape_new(meshInterface.Native))
 		{
+			IntPtr native = btGImpactMeshShape_new(meshInterface.Native);
+			InitializeCollisionShape(native);
+
 			_meshInterface = meshInterface;
 		}
 
@@ -413,7 +409,7 @@ namespace BulletSharp
 
 		public GImpactMeshShapePart GetMeshPart(int index)
 		{
-			return new GImpactMeshShapePart(btGImpactMeshShape_getMeshPart(Native, index));
+			return new GImpactMeshShapePart(btGImpactMeshShape_getMeshPart(Native, index), this);
 		}
 
 		public StridingMeshInterface MeshInterface

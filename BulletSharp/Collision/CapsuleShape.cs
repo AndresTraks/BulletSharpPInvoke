@@ -6,14 +6,14 @@ namespace BulletSharp
 {
 	public class CapsuleShape : ConvexInternalShape
 	{
-		internal CapsuleShape(IntPtr native)
-			: base(native)
+		protected internal CapsuleShape()
 		{
 		}
 
 		public CapsuleShape(float radius, float height)
-			: base(btCapsuleShape_new(radius, height))
 		{
+			IntPtr native = btCapsuleShape_new(radius, height);
+			InitializeCollisionShape(native);
 		}
 
 		public float HalfHeight => btCapsuleShape_getHalfHeight(Native);
@@ -26,16 +26,18 @@ namespace BulletSharp
 	public class CapsuleShapeX : CapsuleShape
 	{
 		public CapsuleShapeX(float radius, float height)
-			: base(btCapsuleShapeX_new(radius, height))
 		{
+			IntPtr native = btCapsuleShapeX_new(radius, height);
+			InitializeCollisionShape(native);
 		}
 	}
 
 	public class CapsuleShapeZ : CapsuleShape
 	{
 		public CapsuleShapeZ(float radius, float height)
-			: base(btCapsuleShapeZ_new(radius, height))
 		{
+			IntPtr native = btCapsuleShapeZ_new(radius, height);
+			InitializeCollisionShape(native);
 		}
 	}
 

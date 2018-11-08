@@ -1,3 +1,4 @@
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -5,8 +6,10 @@ namespace BulletSharp
 	public class UniformScalingShape : ConvexShape
 	{
 		public UniformScalingShape(ConvexShape convexChildShape, float uniformScalingFactor)
-			: base(btUniformScalingShape_new(convexChildShape.Native, uniformScalingFactor))
 		{
+			IntPtr native = btUniformScalingShape_new(convexChildShape.Native, uniformScalingFactor);
+			InitializeCollisionShape(native);
+
 			ChildShape = convexChildShape;
 		}
 

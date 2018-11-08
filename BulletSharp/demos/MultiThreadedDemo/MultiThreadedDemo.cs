@@ -90,8 +90,6 @@ namespace BasicDemo
 
         public void Dispose()
         {
-            this.StandardCleanup();
-
             if (_solverPool != null)
             {
                 _solverPool.Dispose();
@@ -103,6 +101,8 @@ namespace BasicDemo
                 _parallelSolver.Dispose();
                 _parallelSolver = null;
             }
+
+            this.StandardCleanup();
         }
 
         public void NextTaskScheduler()

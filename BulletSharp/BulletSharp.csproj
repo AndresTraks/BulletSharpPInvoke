@@ -37,6 +37,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulletObject.cs" />
+    <Compile Include="BulletObjectTracker.cs" />
     <Compile Include="Collision\ActivatingCollisionAlgorithm.cs" />
     <Compile Include="Collision\Box2DBox2DCollisionAlgorithm.cs" />
     <Compile Include="Collision\Box2DShape.cs" />

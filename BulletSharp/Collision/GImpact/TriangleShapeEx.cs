@@ -172,18 +172,24 @@ namespace BulletSharp
 	public class TriangleShapeEx : TriangleShape
 	{
 		public TriangleShapeEx()
-			: base(btTriangleShapeEx_new())
+			: base(ConstructionInfo.Null)
 		{
+			IntPtr native = btTriangleShapeEx_new();
+			InitializeCollisionShape(native);
 		}
 
-		public TriangleShapeEx(Vector3 p0, Vector3 p1, Vector3 p2)
-			: base(btTriangleShapeEx_new2(ref p0, ref p1, ref p2))
+		public TriangleShapeEx(Vector3 p0, Vector3 p1, Vector3 p2) 
+			: base(ConstructionInfo.Null)
 		{
+			IntPtr native = btTriangleShapeEx_new2(ref p0, ref p1, ref p2);
+			InitializeCollisionShape(native);
 		}
 
-		public TriangleShapeEx(TriangleShapeEx other)
-			: base(btTriangleShapeEx_new3(other.Native))
+		public TriangleShapeEx(TriangleShapeEx other) 
+			: base(ConstructionInfo.Null)
 		{
+			IntPtr native = btTriangleShapeEx_new3(other.Native);
+			InitializeCollisionShape(native);
 		}
 
 		public void ApplyTransform(Matrix transform)

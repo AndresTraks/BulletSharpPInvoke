@@ -63,22 +63,22 @@ namespace BulletSharp
 
 	public class CompoundShape : CollisionShape
 	{
-		private CompoundShapeChildArray _childList;
-
 		public CompoundShape(bool enableDynamicAabbTree = true, int initialChildCapacity = 0)
-			: base(btCompoundShape_new(enableDynamicAabbTree, initialChildCapacity))
 		{
-			_childList = new CompoundShapeChildArray(Native);
+			IntPtr native = btCompoundShape_new(enableDynamicAabbTree, initialChildCapacity);
+			InitializeCollisionShape(native);
+
+			ChildList = new CompoundShapeChildArray(Native);
 		}
 
 		public void AddChildShapeRef(ref Matrix localTransform, CollisionShape shape)
 		{
-			_childList.AddChildShape(ref localTransform, shape);
+			ChildList.AddChildShape(ref localTransform, shape);
 		}
 
 		public void AddChildShape(Matrix localTransform, CollisionShape shape)
 		{
-			_childList.AddChildShape(ref localTransform, shape);
+			ChildList.AddChildShape(ref localTransform, shape);
 		}
 
 	   public void CalculatePrincipalAxisTransform(float[] masses, ref Matrix principal,
@@ -95,7 +95,7 @@ namespace BulletSharp
 
 		public CollisionShape GetChildShape(int index)
 		{
-			return _childList[index].ChildShape;
+			return ChildList[index].ChildShape;
 		}
 
 		public void GetChildTransform(int index, out Matrix value)
@@ -117,12 +117,12 @@ namespace BulletSharp
 
 		public void RemoveChildShape(CollisionShape shape)
 		{
-			_childList.RemoveChildShape(shape);
+			ChildList.RemoveChildShape(shape);
 		}
 
 		public void RemoveChildShapeByIndex(int childShapeIndex)
 		{
-			_childList.RemoveChildShapeByIndex(childShapeIndex);
+			ChildList.RemoveChildShapeByIndex(childShapeIndex);
 		}
 
 		public void UpdateChildTransform(int childIndex, Matrix newChildTransform,
@@ -132,11 +132,11 @@ namespace BulletSharp
 				shouldRecalculateLocalAabb);
 		}
 
-		public CompoundShapeChildArray ChildList => _childList;
+		public CompoundShapeChildArray ChildList { get; }
 
 		public Dbvt DynamicAabbTree => new Dbvt(btCompoundShape_getDynamicAabbTree(Native));
 
-		public int NumChildShapes => _childList.Count;
+		public int NumChildShapes => ChildList.Count;
 
 		public int UpdateRevision => btCompoundShape_getUpdateRevision(Native);
 	}

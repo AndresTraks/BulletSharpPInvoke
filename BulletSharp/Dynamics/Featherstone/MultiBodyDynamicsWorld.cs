@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using static BulletSharp.UnsafeNativeMethods;
 
@@ -10,10 +11,11 @@ namespace BulletSharp
 
 		public MultiBodyDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
 			MultiBodyConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration)
-			: base(btMultiBodyDynamicsWorld_new(dispatcher.Native, pairCache.Native,
-				constraintSolver.Native, collisionConfiguration.Native), dispatcher, pairCache)
 		{
-			_constraintSolver = constraintSolver;
+			IntPtr native = btMultiBodyDynamicsWorld_new(dispatcher.Native, pairCache.Native,
+				constraintSolver.Native, collisionConfiguration.Native);
+			InitializeUserOwned(native);
+			InitializeMembers(dispatcher, pairCache, constraintSolver);
 
 			_bodies = new List<MultiBody>();
 			_constraints = new List<MultiBodyConstraint>();

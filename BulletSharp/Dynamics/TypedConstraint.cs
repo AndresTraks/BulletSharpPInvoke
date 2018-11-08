@@ -292,11 +292,7 @@ namespace BulletSharp
 		{
 			if (_fixedBody == null)
 			{
-				using (var cinfo = new RigidBodyConstructionInfo(0, null, null))
-				{
-					_fixedBody = new RigidBody(cinfo);
-					_fixedBody.SetMassProps(0, Vector3.Zero);
-				}
+				_fixedBody = new RigidBody(btTypedConstraint_getFixedBody());
 			}
 			return _fixedBody;
 		}

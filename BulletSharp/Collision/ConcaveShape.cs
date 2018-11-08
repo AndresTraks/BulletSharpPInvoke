@@ -1,4 +1,3 @@
-using System;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
@@ -16,8 +15,7 @@ namespace BulletSharp
 
 	public abstract class ConcaveShape : CollisionShape
 	{
-		internal ConcaveShape(IntPtr native)
-			: base(native)
+		protected internal ConcaveShape()
 		{
 		}
 

@@ -66,6 +66,8 @@ namespace MotorDemo
                 testRig.Dispose();
             }
             _rigs.Clear();
+
+            this.StandardCleanup();
         }
 
         private void CreateGround()

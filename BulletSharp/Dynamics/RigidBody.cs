@@ -22,9 +22,18 @@ namespace BulletSharp
 		private MotionState _motionState;
 		internal List<TypedConstraint> _constraintRefs;
 
-		public RigidBody(RigidBodyConstructionInfo constructionInfo)
-			: base(btRigidBody_new(constructionInfo.Native))
+		internal RigidBody(IntPtr native)
+			: base(ConstructionInfo.Null)
 		{
+			InitializeSubObject(native, this);
+		}
+
+		public RigidBody(RigidBodyConstructionInfo constructionInfo)
+			: base(ConstructionInfo.Null)
+		{
+			IntPtr native = btRigidBody_new(constructionInfo.Native);
+			InitializeCollisionObject(native);
+
 			_collisionShape = constructionInfo.CollisionShape;
 			_motionState = constructionInfo.MotionState;
 		}
@@ -408,7 +417,7 @@ namespace BulletSharp
 			get => _motionState;
 			set
 			{
-				btRigidBody_setMotionState(Native, (value != null) ? value._native : IntPtr.Zero);
+				btRigidBody_setMotionState(Native, (value != null) ? value.Native : IntPtr.Zero);
 				_motionState = value;
 			}
 		}

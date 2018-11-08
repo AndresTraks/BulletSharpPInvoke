@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.InteropServices;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
@@ -7,8 +6,7 @@ namespace BulletSharp
 {
 	public abstract class ConvexInternalShape : ConvexShape
 	{
-		internal ConvexInternalShape(IntPtr native)
-			: base(native)
+		protected internal ConvexInternalShape()
 		{
 		}
 
@@ -53,8 +51,7 @@ namespace BulletSharp
 
 	public abstract class ConvexInternalAabbCachingShape : ConvexInternalShape
 	{
-		internal ConvexInternalAabbCachingShape(IntPtr native)
-			: base(native)
+		protected internal ConvexInternalAabbCachingShape()
 		{
 		}
 

@@ -8,10 +8,11 @@ namespace BulletSharp
 		public HeightfieldTerrainShape(int heightStickWidth, int heightStickLength,
 			IntPtr heightfieldData, float heightScale, float minHeight, float maxHeight,
 			int upAxis, PhyScalarType heightDataType, bool flipQuadEdges)
-			: base(btHeightfieldTerrainShape_new(heightStickWidth, heightStickLength,
-				heightfieldData, heightScale, minHeight, maxHeight, upAxis, heightDataType,
-				flipQuadEdges))
 		{
+			IntPtr native = btHeightfieldTerrainShape_new(heightStickWidth, heightStickLength,
+				heightfieldData, heightScale, minHeight, maxHeight, upAxis, heightDataType,
+				flipQuadEdges);
+			InitializeCollisionShape(native);
 		}
 
 		public void SetUseDiamondSubdivision()

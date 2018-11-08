@@ -107,6 +107,8 @@ namespace CharacterDemo
 
     internal sealed class CharacterDemoSimulation : ISimulation
     {
+        private GhostPairCallback _ghostPairCallback;
+
         public CharacterDemoSimulation()
         {
             CollisionConfiguration = new DefaultCollisionConfiguration();
@@ -142,6 +144,7 @@ namespace CharacterDemo
 
         public void Dispose()
         {
+            _ghostPairCallback.Dispose();
             CameraSphere.Dispose();
             ConvexResultCallback.Dispose();
 
@@ -150,7 +153,8 @@ namespace CharacterDemo
 
         private void CreateCharacter()
         {
-            Broadphase.OverlappingPairCache.SetInternalGhostPairCallback(new GhostPairCallback());
+            _ghostPairCallback = new GhostPairCallback();
+            Broadphase.OverlappingPairCache.SetInternalGhostPairCallback(_ghostPairCallback);
 
             const float characterHeight = 1.75f;
             const float characterWidth = 1.75f;

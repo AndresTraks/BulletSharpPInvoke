@@ -516,25 +516,25 @@ namespace BulletSharp
 		}
 	}
 
-	public abstract class RayResultCallback : IDisposable
+	public abstract class RayResultCallback : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate float AddSingleResultUnmanagedDelegate(IntPtr rayResult, bool normalInWorldSpace);
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate bool NeedsCollisionUnmanagedDelegate(IntPtr proxy0);
 
-		private AddSingleResultUnmanagedDelegate _addSingleResult;
-		private NeedsCollisionUnmanagedDelegate _needsCollision;
+		private readonly AddSingleResultUnmanagedDelegate _addSingleResult;
+		private readonly NeedsCollisionUnmanagedDelegate _needsCollision;
 
 		protected RayResultCallback()
 		{
 			_addSingleResult = AddSingleResultUnmanaged;
 			_needsCollision = NeedsCollisionUnmanaged;
-			Native = btCollisionWorld_RayResultCallbackWrapper_new(
+
+			IntPtr native = btCollisionWorld_RayResultCallbackWrapper_new(
 				Marshal.GetFunctionPointerForDelegate(_addSingleResult),
 				Marshal.GetFunctionPointerForDelegate(_needsCollision));
+			InitializeUserOwned(native);
 		}
 
 		private float AddSingleResultUnmanaged(IntPtr rayResult, bool normalInWorldSpace)
@@ -586,54 +586,36 @@ namespace BulletSharp
 
 		public bool HasHit => btCollisionWorld_RayResultCallback_hasHit(Native);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btCollisionWorld_RayResultCallback_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~RayResultCallback()
-		{
-			Dispose(false);
+			btCollisionWorld_RayResultCallback_delete(Native);
 		}
 	}
 
-	public class CollisionWorld : IDisposable
+	public class CollisionWorld : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		private DebugDraw _debugDrawer;
 		private BroadphaseInterface _broadphase;
-		private Dispatcher _dispatcher;
 		private DispatcherInfo _dispatchInfo;
 
-		internal CollisionWorld(IntPtr native, Dispatcher dispatcher, BroadphaseInterface broadphase)
+		protected internal CollisionWorld()
 		{
-			_dispatcher = dispatcher;
-			Broadphase = broadphase;
-
-			if (native == IntPtr.Zero)
-			{
-				return;
-			}
-			Native = native;
-			CollisionObjectArray = new AlignedCollisionObjectArray(btCollisionWorld_getCollisionObjectArray(native), this);
 		}
 
 		public CollisionWorld(Dispatcher dispatcher, BroadphaseInterface broadphasePairCache,
 			CollisionConfiguration collisionConfiguration)
-			: this(btCollisionWorld_new(dispatcher.Native, broadphasePairCache.Native,
-				collisionConfiguration.Native), dispatcher, broadphasePairCache)
 		{
+			IntPtr native = btCollisionWorld_new(dispatcher.Native, broadphasePairCache.Native,
+				collisionConfiguration.Native);
+			InitializeUserOwned(native);
+			InitializeMembers(dispatcher, broadphasePairCache);
+		}
+
+		protected internal void InitializeMembers(Dispatcher dispatcher, BroadphaseInterface broadphasePairCache)
+		{
+			Dispatcher = dispatcher;
+			Broadphase = broadphasePairCache;
+			CollisionObjectArray = new AlignedCollisionObjectArray(btCollisionWorld_getCollisionObjectArray(Native), this);
 		}
 
 		public void AddCollisionObject(CollisionObject collisionObject)
@@ -830,17 +812,13 @@ namespace BulletSharp
 			get => _broadphase;
 			set
 			{
-				if (_broadphase != null)
+				if (value == null)
 				{
-					_broadphase._worldRefs.Remove(this);
+					throw new ArgumentNullException(nameof(value));
 				}
-				// Native can be zero from a constructor argument
-				if (Native != IntPtr.Zero)
-				{
-					btCollisionWorld_setBroadphase(Native, value.Native);
-				}
+
+				btCollisionWorld_setBroadphase(Native, value.Native);
 				_broadphase = value;
-				value._worldRefs.Add(this);
 			}
 		}
 
@@ -859,15 +837,7 @@ namespace BulletSharp
 			}
 		}
 
-		public Dispatcher Dispatcher
-		{
-			get => _dispatcher;
-			internal set
-			{
-				_dispatcher = value;
-				_dispatcher._worldRefs.Add(this);
-			}
-		}
+		public Dispatcher Dispatcher { get; private set; }
 
 		public DispatcherInfo DispatchInfo
 		{
@@ -891,36 +861,29 @@ namespace BulletSharp
 
 		public OverlappingPairCache PairCache => Broadphase.OverlappingPairCache;
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			// The btCollisionWorld will try to clean up remaining objects from the
+			// broadphase and the dispatcher. If either of them have been deleted and
+			// there are objects in the world, then deleting the btCollisionWorld or 
+			// removing the objects from the world will cause an AccessViolationException.
+			if (CollisionObjectArray.Count != 0 && (_broadphase.IsDisposed || Dispatcher.IsDisposed))
 			{
-				btCollisionWorld_delete(Native);
-				Native = IntPtr.Zero;
-
-				_broadphase._worldRefs.Remove(this);
-				if (_broadphase._worldDeferredCleanup && _broadphase._worldRefs.Count == 0)
+				if (disposing)
 				{
-					_broadphase.Dispose();
+					throw new Exception(
+						"To ensure proper resource cleanup, " +
+						"remove all objects from the world before disposing the world.");
 				}
-
-				_dispatcher._worldRefs.Remove(this);
-				if (_dispatcher._worldDeferredCleanup && _dispatcher._worldRefs.Count == 0)
+				else
 				{
-					_dispatcher.Dispose();
+					// Do not throw an exception in the GC finalizer thread
 				}
 			}
-		}
-
-		~CollisionWorld()
-		{
-			Dispose(false);
+			else
+			{
+				btCollisionWorld_delete(Native);
+			}
 		}
 	}
 }

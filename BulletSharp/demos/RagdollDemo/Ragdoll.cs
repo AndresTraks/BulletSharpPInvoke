@@ -56,6 +56,7 @@ namespace RagdollDemo
             foreach (var body in _bodies)
             {
                 _world.RemoveRigidBody(body);
+                body.MotionState.Dispose();
                 body.Dispose();
             }
 
