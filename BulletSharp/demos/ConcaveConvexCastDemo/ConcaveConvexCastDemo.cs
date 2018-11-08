@@ -148,6 +148,7 @@ namespace ConcaveConvexCastDemo
                 _vertexWriter.Dispose();
                 _vertexWriter = null;
             }
+            _convexcastBatch.Dispose();
 
             this.StandardCleanup();
         }
@@ -232,7 +233,7 @@ namespace ConcaveConvexCastDemo
     }
 
     // Scrolls back and forth over terrain
-    internal sealed class ConvexcastBatch
+    internal sealed class ConvexcastBatch : IDisposable
     {
         private const int NumRays = 100;
         private Ray[] _rays = new Ray[NumRays];
@@ -361,6 +362,11 @@ namespace ConcaveConvexCastDemo
                 TransformUtil.IntegrateTransform(ref fromTransform, ref linVel, ref angVel, ray.HitFraction, out transform);
                 drawer.DrawBox(ref _boxBoundMin, ref _boxBoundMax, ref transform, ref _cyan);
             }
+        }
+
+        public void Dispose()
+        {
+            _boxShape.Dispose();
         }
 
         private void PrintStats()

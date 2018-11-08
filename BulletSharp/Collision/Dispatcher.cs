@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -50,7 +49,7 @@ namespace BulletSharp
 		}
 
 
-        public DispatchFunc DispatchFunc
+		public DispatchFunc DispatchFunc
 		{
 			get => btDispatcherInfo_getDispatchFunc(Native);
 			set => btDispatcherInfo_setDispatchFunc(Native, value);
@@ -105,16 +104,10 @@ namespace BulletSharp
 		}
 	}
 
-	public abstract class Dispatcher : IDisposable
+	public abstract class Dispatcher : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		internal List<CollisionWorld> _worldRefs = new List<CollisionWorld>(1);
-		internal bool _worldDeferredCleanup;
-
-		internal Dispatcher(IntPtr native)
+		protected internal Dispatcher()
 		{
-			Native = native;
 		}
 
 		public IntPtr AllocateCollisionAlgorithm(int size)
@@ -183,33 +176,9 @@ namespace BulletSharp
 		*/
 		public int NumManifolds => btDispatcher_getNumManifolds(Native);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				if (_worldRefs.Count == 0)
-				{
-					btDispatcher_delete(Native);
-					Native = IntPtr.Zero;
-				}
-				else
-				{
-					// Can't delete dispatcher, because it is referenced by a world,
-					// tell the world to clean up the broadphase later.
-					_worldDeferredCleanup = true;
-				}
-			}
-		}
-
-		~Dispatcher()
-		{
-			Dispose(false);
+			btDispatcher_delete(Native);
 		}
 	}
 }

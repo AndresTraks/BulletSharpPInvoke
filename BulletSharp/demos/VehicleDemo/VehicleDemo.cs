@@ -114,8 +114,8 @@ namespace VehicleDemo
 
         private IntPtr _terrainData;
 
-        //public RaycastVehicle vehicle;
-        public CustomVehicle vehicle;
+        //private RaycastVehicle _vehicle;
+        private CustomVehicle _vehicle;
 
         public VehicleDemoSimulation()
         {
@@ -148,13 +148,13 @@ namespace VehicleDemo
 
         public void OnUpdate()
         {
-            vehicle.ApplyEngineForce(EngineForce, 2);
-            vehicle.SetBrake(BreakingForce, 2);
-            vehicle.ApplyEngineForce(EngineForce, 3);
-            vehicle.SetBrake(BreakingForce, 3);
+            _vehicle.ApplyEngineForce(EngineForce, 2);
+            _vehicle.SetBrake(BreakingForce, 2);
+            _vehicle.ApplyEngineForce(EngineForce, 3);
+            _vehicle.SetBrake(BreakingForce, 3);
 
-            vehicle.SetSteeringValue(VehicleSteering, 0);
-            vehicle.SetSteeringValue(VehicleSteering, 1);
+            _vehicle.SetSteeringValue(VehicleSteering, 0);
+            _vehicle.SetSteeringValue(VehicleSteering, 1);
         }
 
         public void Dispose()
@@ -164,6 +164,8 @@ namespace VehicleDemo
                 Marshal.FreeHGlobal(_terrainData);
             }
 
+            _vehicle.Dispose();
+
             this.StandardCleanup();
         }
 
@@ -171,13 +173,13 @@ namespace VehicleDemo
         {
             EngineForce *= (1.0f - timeStep);
 
-            vehicle.ApplyEngineForce(EngineForce, 2);
-            vehicle.SetBrake(BreakingForce, 2);
-            vehicle.ApplyEngineForce(EngineForce, 3);
-            vehicle.SetBrake(BreakingForce, 3);
+            _vehicle.ApplyEngineForce(EngineForce, 2);
+            _vehicle.SetBrake(BreakingForce, 2);
+            _vehicle.ApplyEngineForce(EngineForce, 3);
+            _vehicle.SetBrake(BreakingForce, 3);
 
-            vehicle.SetSteeringValue(VehicleSteering, 0);
-            vehicle.SetSteeringValue(VehicleSteering, 1);
+            _vehicle.SetSteeringValue(VehicleSteering, 0);
+            _vehicle.SetSteeringValue(VehicleSteering, 1);
         }
 
         private void CreateScene()
@@ -354,16 +356,16 @@ namespace VehicleDemo
             var tuning = new VehicleTuning();
             var vehicleRayCaster = new DefaultVehicleRaycaster(World);
             //vehicle = new RaycastVehicle(tuning, carChassis, vehicleRayCaster);
-            vehicle = new CustomVehicle(tuning, carChassis, vehicleRayCaster);
+            _vehicle = new CustomVehicle(tuning, carChassis, vehicleRayCaster);
 
             carChassis.ActivationState = ActivationState.DisableDeactivation;
-            World.AddAction(vehicle);
+            World.AddAction(_vehicle);
 
 
             const double connectionHeight = 1.2f;
 
             // choose coordinate system
-            vehicle.SetCoordinateSystem(rightIndex, upIndex, forwardIndex);
+            _vehicle.SetCoordinateSystem(rightIndex, upIndex, forwardIndex);
 
             Vector3 wheelDirection = Vector3.Zero;
             Vector3 wheelAxle = Vector3.Zero;
@@ -373,22 +375,22 @@ namespace VehicleDemo
 
             bool isFrontWheel = true;
             var connectionPoint = new Vector3(CUBE_HALF_EXTENTS - (0.3f * wheelWidth), connectionHeight, 2 * CUBE_HALF_EXTENTS - wheelRadius);
-            vehicle.AddWheel(connectionPoint, wheelDirection, wheelAxle, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
+            _vehicle.AddWheel(connectionPoint, wheelDirection, wheelAxle, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
 
             connectionPoint = new Vector3(-CUBE_HALF_EXTENTS + (0.3f * wheelWidth), connectionHeight, 2 * CUBE_HALF_EXTENTS - wheelRadius);
-            vehicle.AddWheel(connectionPoint, wheelDirection, wheelAxle, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
+            _vehicle.AddWheel(connectionPoint, wheelDirection, wheelAxle, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
 
             isFrontWheel = false;
             connectionPoint = new Vector3(-CUBE_HALF_EXTENTS + (0.3f * wheelWidth), connectionHeight, -2 * CUBE_HALF_EXTENTS + wheelRadius);
-            vehicle.AddWheel(connectionPoint, wheelDirection, wheelAxle, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
+            _vehicle.AddWheel(connectionPoint, wheelDirection, wheelAxle, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
 
             connectionPoint = new Vector3(CUBE_HALF_EXTENTS - (0.3f * wheelWidth), connectionHeight, -2 * CUBE_HALF_EXTENTS + wheelRadius);
-            vehicle.AddWheel(connectionPoint, wheelDirection, wheelAxle, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
+            _vehicle.AddWheel(connectionPoint, wheelDirection, wheelAxle, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
 
 
-            for (int i = 0; i < vehicle.NumWheels; i++)
+            for (int i = 0; i < _vehicle.NumWheels; i++)
             {
-                WheelInfo wheel = vehicle.GetWheelInfo(i);
+                WheelInfo wheel = _vehicle.GetWheelInfo(i);
                 wheel.SuspensionStiffness = suspensionStiffness;
                 wheel.WheelsDampingRelaxation = suspensionDamping;
                 wheel.WheelsDampingCompression = suspensionCompression;
@@ -396,7 +398,7 @@ namespace VehicleDemo
                 wheel.RollInfluence = rollInfluence;
             }
 
-            vehicle.RigidBody.WorldTransform = transform;
+            _vehicle.RigidBody.WorldTransform = transform;
         }
     }
 }

@@ -8,17 +8,25 @@ namespace BulletSharp
 	{
 		private SimulationIslandManager _simulationIslandManager;
 
-		internal DiscreteDynamicsWorld(IntPtr native, Dispatcher dispatcher, BroadphaseInterface pairCache)
-			: base(native, dispatcher, pairCache)
+		protected internal DiscreteDynamicsWorld()
 		{
 		}
 
 		public DiscreteDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
 			ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration)
-			: this(btDiscreteDynamicsWorld_new(dispatcher != null ? dispatcher.Native : IntPtr.Zero, pairCache != null ? pairCache.Native : IntPtr.Zero,
-				constraintSolver != null ? constraintSolver.Native : IntPtr.Zero, collisionConfiguration != null ? collisionConfiguration.Native : IntPtr.Zero),
-				  dispatcher, pairCache)
 		{
+			IntPtr native = btDiscreteDynamicsWorld_new(
+				dispatcher != null ? dispatcher.Native : IntPtr.Zero,
+				pairCache != null ? pairCache.Native : IntPtr.Zero,
+				constraintSolver != null ? constraintSolver.Native : IntPtr.Zero,
+				collisionConfiguration != null ? collisionConfiguration.Native : IntPtr.Zero);
+			InitializeUserOwned(native);
+			InitializeMembers(dispatcher, pairCache, constraintSolver);
+		}
+
+		protected internal void InitializeMembers(Dispatcher dispatcher, BroadphaseInterface pairCache, ConstraintSolver constraintSolver)
+		{
+			InitializeMembers(dispatcher, pairCache);
 			_constraintSolver = constraintSolver;
 		}
 

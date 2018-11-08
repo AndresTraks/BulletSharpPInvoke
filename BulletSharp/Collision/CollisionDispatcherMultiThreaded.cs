@@ -1,3 +1,4 @@
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -5,8 +6,10 @@ namespace BulletSharp
 	public class CollisionDispatcherMultiThreaded : CollisionDispatcher
 	{
 		public CollisionDispatcherMultiThreaded(CollisionConfiguration configuration, int grainSize = 40)
-			: base(btCollisionDispatcherMt_new(configuration.Native, grainSize))
 		{
+			IntPtr native = btCollisionDispatcherMt_new(configuration.Native, grainSize);
+			InitializeUserOwned(native);
+
 			_collisionConfiguration = configuration;
 		}
 	}

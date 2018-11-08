@@ -53,10 +53,8 @@ namespace BulletSharp
 		FeatherstoneLink = 64
 	}
 
-	public class CollisionObject : IDisposable
+	public class CollisionObject : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _isDisposed;
 		private BroadphaseProxy _broadphaseHandle;
 		protected CollisionShape _collisionShape;
 
@@ -76,16 +74,22 @@ namespace BulletSharp
 			throw new InvalidOperationException("Unknown collision object!");
 		}
 
-		internal CollisionObject(IntPtr native)
+		internal CollisionObject(ConstructionInfo info)
 		{
-			Native = native;
-			GCHandle handle = GCHandle.Alloc(this, GCHandleType.Weak);
-			btCollisionObject_setUserPointer(Native, GCHandle.ToIntPtr(handle));
 		}
 
 		public CollisionObject()
-			: this(btCollisionObject_new())
 		{
+			IntPtr native = btCollisionObject_new();
+			InitializeCollisionObject(native);
+		}
+
+		protected internal void InitializeCollisionObject(IntPtr native)
+		{
+			InitializeUserOwned(native);
+
+			GCHandle handle = GCHandle.Alloc(this, GCHandleType.Weak);
+			btCollisionObject_setUserPointer(Native, GCHandle.ToIntPtr(handle));
 		}
 
 		public void Activate(bool forceActivation = false)
@@ -392,35 +396,27 @@ namespace BulletSharp
 			return Native.GetHashCode();
 		}
 
-		public void Dispose()
+		protected internal void FreeUnmanagedHandle()
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
+			IntPtr userPtr = btCollisionObject_getUserPointer(Native);
+			GCHandle.FromIntPtr(userPtr).Free();
 		}
 
-		protected virtual void Dispose(bool disposing)
+		protected override void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (Owner == null)
 			{
 				// Is the object added to a world?
 				if (btCollisionObject_getBroadphaseHandle(Native) != IntPtr.Zero)
 				{
 					BroadphaseHandle = null;
-					//System.Diagnostics.Debugger.Break();
 					return;
 				}
 
-				_isDisposed = true;
+				FreeUnmanagedHandle();
 
-				IntPtr userPtr = btCollisionObject_getUserPointer(Native);
-				GCHandle.FromIntPtr(userPtr).Free();
 				btCollisionObject_delete(Native);
 			}
-		}
-
-		~CollisionObject()
-		{
-			Dispose(false);
 		}
 	}
 
@@ -457,7 +453,7 @@ namespace BulletSharp
 		public int CollisionFilterMask;
 		public int UniqueId;
 
-        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CollisionObjectFloatData), fieldName).ToInt32(); }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CollisionObjectFloatData), fieldName).ToInt32(); }
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
@@ -493,6 +489,6 @@ namespace BulletSharp
 		public int CollisionFilterMask;
 		public int UniqueId;
 
-        public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CollisionObjectDoubleData), fieldName).ToInt32(); }
+		public static int Offset(string fieldName) { return Marshal.OffsetOf(typeof(CollisionObjectDoubleData), fieldName).ToInt32(); }
 	}
 }

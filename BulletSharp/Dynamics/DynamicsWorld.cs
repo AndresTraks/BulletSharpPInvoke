@@ -33,8 +33,7 @@ namespace BulletSharp
 		private Dictionary<IAction, ActionInterfaceWrapper> _actions;
 		private List<TypedConstraint> _constraints = new List<TypedConstraint>();
 
-		internal DynamicsWorld(IntPtr native, Dispatcher dispatcher, BroadphaseInterface pairCache)
-			: base(native, dispatcher, pairCache)
+		internal DynamicsWorld()
 		{
 		}
 
@@ -127,7 +126,7 @@ namespace BulletSharp
 
 		public void RemoveConstraint(TypedConstraint constraint)
 		{
-            RigidBody rigidBody = constraint.RigidBodyA;
+			RigidBody rigidBody = constraint.RigidBodyA;
 			if (rigidBody._constraintRefs != null)
 			{
 				rigidBody._constraintRefs.Remove(constraint);
@@ -138,13 +137,13 @@ namespace BulletSharp
 				rigidBody._constraintRefs.Remove(constraint);
 			}
 
-            int itemIndex = _constraints.IndexOf(constraint);
-            if (itemIndex == -1)
-            {
-                return;
-            }
+			int itemIndex = _constraints.IndexOf(constraint);
+			if (itemIndex == -1)
+			{
+				return;
+			}
 
-            int lastIndex = _constraints.Count - 1;
+			int lastIndex = _constraints.Count - 1;
 			_constraints[itemIndex] = _constraints[lastIndex];
 			_constraints.RemoveAt(lastIndex);
 			btDynamicsWorld_removeConstraint(Native, constraint.Native);

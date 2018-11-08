@@ -3,15 +3,10 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public abstract class OverlappingPairCallback : IDisposable
+	public abstract class OverlappingPairCallback : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private readonly bool _preventDelete;
-
-		internal OverlappingPairCallback(IntPtr native, bool preventDelete = false)
+		internal OverlappingPairCallback(ConstructionInfo info)
 		{
-			Native = native;
-			_preventDelete = preventDelete;
 		}
 		/*
 		protected OverlappingPairCallback()
@@ -23,27 +18,12 @@ namespace BulletSharp
 		public abstract IntPtr RemoveOverlappingPair(BroadphaseProxy proxy0, BroadphaseProxy proxy1, Dispatcher dispatcher);
 		public abstract void RemoveOverlappingPairsContainingProxy(BroadphaseProxy proxy0, Dispatcher dispatcher);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (Owner == null)
 			{
-				if (!_preventDelete)
-				{
-					btOverlappingPairCallback_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btOverlappingPairCallback_delete(Native);
 			}
-		}
-
-		~OverlappingPairCallback()
-		{
-			Dispose(false);
 		}
 	}
 }

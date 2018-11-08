@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security;
 using BulletSharp.Math;
@@ -98,17 +97,17 @@ namespace BulletSharp
 		}
 	}
 
-	public abstract class BroadphaseInterface : IDisposable
+	public abstract class BroadphaseInterface : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		protected OverlappingPairCache _overlappingPairCache;
-		internal List<CollisionWorld> _worldRefs = new List<CollisionWorld>(1);
-		internal bool _worldDeferredCleanup;
 
-		internal BroadphaseInterface(IntPtr native)
+		protected internal BroadphaseInterface()
 		{
-			Native = native;
+		}
+
+		protected internal void InitializeMembers(OverlappingPairCache overlappingPairCache)
+		{
+			_overlappingPairCache = overlappingPairCache;
 		}
 
 		public void AabbTestRef(ref Vector3 aabbMin, ref Vector3 aabbMax, BroadphaseAabbCallback callback)
@@ -191,33 +190,9 @@ namespace BulletSharp
 
 		public OverlappingPairCache OverlappingPairCache => _overlappingPairCache;
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				if (_worldRefs.Count == 0)
-				{
-					btBroadphaseInterface_delete(Native);
-					Native = IntPtr.Zero;
-				}
-				else
-				{
-					// Can't delete broadphase, because it is referenced by a world,
-					// tell the world to clean up the broadphase later.
-					_worldDeferredCleanup = true;
-				}
-			}
-		}
-
-		~BroadphaseInterface()
-		{
-			Dispose(false);
+			btBroadphaseInterface_delete(Native);
 		}
 	}
 }

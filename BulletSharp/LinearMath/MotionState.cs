@@ -6,21 +6,18 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public abstract class MotionState : IDisposable
+	public abstract class MotionState : BulletDisposableObject
 	{
-		internal IntPtr _native;
-
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate void GetWorldTransformUnmanagedDelegate(out Matrix worldTrans);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate void SetWorldTransformUnmanagedDelegate(ref Matrix worldTrans);
 
-		private GetWorldTransformUnmanagedDelegate _getWorldTransform;
-		private SetWorldTransformUnmanagedDelegate _setWorldTransform;
+		private readonly GetWorldTransformUnmanagedDelegate _getWorldTransform;
+		private readonly SetWorldTransformUnmanagedDelegate _setWorldTransform;
 
-		internal MotionState(IntPtr native)
+		internal MotionState(ConstructionInfo info)
 		{
-			_native = native;
 		}
 
 		protected MotionState()
@@ -28,9 +25,10 @@ namespace BulletSharp
 			_getWorldTransform = new GetWorldTransformUnmanagedDelegate(GetWorldTransformUnmanaged);
 			_setWorldTransform = new SetWorldTransformUnmanagedDelegate(SetWorldTransformUnmanaged);
 
-			_native = btMotionStateWrapper_new(
+			IntPtr native = btMotionStateWrapper_new(
 				Marshal.GetFunctionPointerForDelegate(_getWorldTransform),
 				Marshal.GetFunctionPointerForDelegate(_setWorldTransform));
+			InitializeUserOwned(native);
 		}
 
 		void GetWorldTransformUnmanaged(out Matrix worldTrans)
@@ -57,24 +55,9 @@ namespace BulletSharp
 			set => SetWorldTransform(ref value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-				btMotionState_delete(_native);
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~MotionState()
-		{
-			Dispose(false);
+			btMotionState_delete(Native);
 		}
 	}
 }

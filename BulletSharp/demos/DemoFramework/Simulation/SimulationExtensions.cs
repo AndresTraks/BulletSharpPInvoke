@@ -1,4 +1,6 @@
 ﻿using BulletSharp;
+using BulletSharp.SoftBody;
+using System;
 using System.Collections.Generic;
 
 namespace DemoFramework
@@ -20,15 +22,38 @@ namespace DemoFramework
             simulation.Broadphase.Dispose();
             simulation.Dispatcher.Dispose();
             simulation.CollisionConfiguration.Dispose();
+            
+            if (BulletObjectTracker.Current != null)
+            {
+                if (BulletObjectTracker.Current.UserOwnedObjects.Count != 0)
+                {
+                    throw new Exception("Bullet has active objects that were not disposed.");
+                }
+            }
         }
 
         private static void CleanupConstraints(DynamicsWorld world)
         {
+            var nonWorldObjects = new HashSet<CollisionObject>();
+
             for (int i = world.NumConstraints - 1; i >= 0; i--)
             {
                 TypedConstraint constraint = world.GetConstraint(i);
                 world.RemoveConstraint(constraint);
+                if (constraint.RigidBodyA.BroadphaseHandle == null)
+                {
+                    nonWorldObjects.Add(constraint.RigidBodyA);
+                }
+                if (constraint.RigidBodyB.BroadphaseHandle == null)
+                {
+                    nonWorldObjects.Add(constraint.RigidBodyB);
+                }
                 constraint.Dispose();
+            }
+
+            foreach (var obj in nonWorldObjects)
+            {
+                obj.Dispose();
             }
         }
 

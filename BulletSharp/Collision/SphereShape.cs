@@ -1,3 +1,4 @@
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -5,8 +6,9 @@ namespace BulletSharp
 	public class SphereShape : ConvexInternalShape
 	{
 		public SphereShape(double radius)
-			: base(btSphereShape_new(radius))
 		{
+			IntPtr native = btSphereShape_new(radius);
+			InitializeCollisionShape(native);
 		}
 
 		public void SetUnscaledRadius(double radius)

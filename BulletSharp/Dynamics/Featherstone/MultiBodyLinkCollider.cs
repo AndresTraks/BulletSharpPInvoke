@@ -1,3 +1,4 @@
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -7,8 +8,11 @@ namespace BulletSharp
 		private MultiBody _multiBody;
 
 		public MultiBodyLinkCollider(MultiBody multiBody, int link)
-			: base(btMultiBodyLinkCollider_new(multiBody.Native, link))
+			: base(ConstructionInfo.Null)
 		{
+			IntPtr native = btMultiBodyLinkCollider_new(multiBody.Native, link);
+			InitializeCollisionObject(native);
+
 			_multiBody = multiBody;
 		}
 

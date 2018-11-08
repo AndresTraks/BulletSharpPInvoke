@@ -3,16 +3,28 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class SoftBodyRigidBodyCollisionConfiguration : DefaultCollisionConfiguration
+	public sealed class SoftBodyRigidBodyCollisionConfiguration : DefaultCollisionConfiguration
 	{
 		public SoftBodyRigidBodyCollisionConfiguration()
-			: base(btSoftBodyRigidBodyCollisionConfiguration_new())
+			: base(ConstructionInfo.Null)
 		{
+			IntPtr native = btSoftBodyRigidBodyCollisionConfiguration_new();
+			InitializeUserOwned(native);
 		}
 
 		public SoftBodyRigidBodyCollisionConfiguration(DefaultCollisionConstructionInfo constructionInfo)
-			: base(btSoftBodyRigidBodyCollisionConfiguration_new2(constructionInfo._native))
+			: base(ConstructionInfo.Null)
 		{
+			if (constructionInfo == null)
+			{
+				throw new ArgumentNullException(nameof(constructionInfo));
+			}
+
+			IntPtr native = btSoftBodyRigidBodyCollisionConfiguration_new2(constructionInfo.Native);
+			InitializeUserOwned(Native);
+
+			_collisionAlgorithmPool = constructionInfo.CollisionAlgorithmPool;
+			_persistentManifoldPool = constructionInfo.PersistentManifoldPool;
 		}
 
 		public override CollisionAlgorithmCreateFunc GetCollisionAlgorithmCreateFunc(BroadphaseNativeType proxyType0,

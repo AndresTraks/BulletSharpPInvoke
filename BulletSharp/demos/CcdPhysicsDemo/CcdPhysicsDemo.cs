@@ -126,6 +126,11 @@ namespace CcdPhysicsDemo
 
         public void Dispose()
         {
+            if (_shootBoxShape == null)
+            {
+                _shootBoxShape.Dispose();
+            }
+
             this.StandardCleanup();
         }
 

@@ -1,4 +1,5 @@
 using BulletSharp.Math;
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -7,18 +8,22 @@ namespace BulletSharp
 	{
 		public MultimaterialTriangleMeshShape(StridingMeshInterface meshInterface,
 			bool useQuantizedAabbCompression, bool buildBvh = true)
-			: base(btMultimaterialTriangleMeshShape_new(meshInterface.Native, useQuantizedAabbCompression,
-				buildBvh))
 		{
+			IntPtr native = btMultimaterialTriangleMeshShape_new(meshInterface.Native, useQuantizedAabbCompression,
+				buildBvh);
+			InitializeCollisionShape(native);
+
 			_meshInterface = meshInterface;
 		}
 
 		public MultimaterialTriangleMeshShape(StridingMeshInterface meshInterface,
 			bool useQuantizedAabbCompression, Vector3 bvhAabbMin, Vector3 bvhAabbMax,
 			bool buildBvh = true)
-			: base(btMultimaterialTriangleMeshShape_new2(meshInterface.Native, useQuantizedAabbCompression,
-				ref bvhAabbMin, ref bvhAabbMax, buildBvh))
 		{
+			IntPtr native = btMultimaterialTriangleMeshShape_new2(meshInterface.Native, useQuantizedAabbCompression,
+				ref bvhAabbMin, ref bvhAabbMax, buildBvh);
+			InitializeCollisionShape(native);
+
 			_meshInterface = meshInterface;
 		}
 		/*

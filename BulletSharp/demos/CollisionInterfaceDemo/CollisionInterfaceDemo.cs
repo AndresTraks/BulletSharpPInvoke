@@ -52,6 +52,8 @@ namespace CollisionInterfaceDemo
         private readonly CollisionShape _staticShape;
         private readonly CollisionObject _staticObject;
 
+        private readonly CollisionShape _movingBox;
+
         public CollisionInterfaceDemoSimulation()
         {
             CollisionConfiguration = new DefaultCollisionConfiguration();
@@ -65,11 +67,11 @@ namespace CollisionInterfaceDemo
 
             RenderCallback = new DrawingResult(World);
 
-            var movingBox = new BoxShape(1.0f) { Margin = 0 };
+            _movingBox = new BoxShape(1.0f) { Margin = 0 };
             var rotation = Quaternion.RotationYawPitchRoll((double)Math.PI * 0.6f, (double)Math.PI * 0.2f, 0);
             MovingObject = new CollisionObject
             {
-                CollisionShape = movingBox,
+                CollisionShape = _movingBox,
                 WorldTransform = Matrix.RotationQuaternion(rotation) * Matrix.Translation(0, 3, 0)
             };
 
@@ -93,6 +95,8 @@ namespace CollisionInterfaceDemo
         public void Dispose()
         {
             RenderCallback.Dispose();
+            MovingObject.Dispose();
+            _movingBox.Dispose();
             _staticObject.Dispose();
             _staticShape.Dispose();
 

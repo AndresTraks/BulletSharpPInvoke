@@ -1,3 +1,4 @@
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -5,8 +6,10 @@ namespace BulletSharp
 	public class Convex2DShape : ConvexShape
 	{
 		public Convex2DShape(ConvexShape convexChildShape)
-			: base(btConvex2dShape_new(convexChildShape.Native))
 		{
+			IntPtr native = btConvex2dShape_new(convexChildShape.Native);
+			InitializeCollisionShape(native);
+
 			ChildShape = convexChildShape;
 		}
 

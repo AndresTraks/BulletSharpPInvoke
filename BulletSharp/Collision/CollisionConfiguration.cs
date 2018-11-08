@@ -1,15 +1,11 @@
-using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public abstract class CollisionConfiguration : IDisposable
+	public abstract class CollisionConfiguration : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		internal CollisionConfiguration(IntPtr native)
+		protected internal CollisionConfiguration()
 		{
-			Native = native;
 		}
 
 		public abstract CollisionAlgorithmCreateFunc GetCollisionAlgorithmCreateFunc(BroadphaseNativeType proxyType0,
@@ -22,24 +18,9 @@ namespace BulletSharp
 
 		public abstract PoolAllocator PersistentManifoldPool { get; }
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btCollisionConfiguration_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~CollisionConfiguration()
-		{
-			Dispose(false);
+			btCollisionConfiguration_delete(Native);
 		}
 	}
 }

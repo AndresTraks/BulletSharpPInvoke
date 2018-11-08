@@ -45,6 +45,10 @@ namespace BulletSharpTest
             const float depth = 0.1f;
             CompoundShape compoundShape = CompoundFromGImpact.Create(_impactMesh, depth);
             Assert.AreEqual(compoundShape.NumChildShapes, 2);
+            foreach (CompoundShapeChild child in compoundShape.ChildList)
+            {
+                child.ChildShape.Dispose();
+            }
             compoundShape.Dispose();
         }
 

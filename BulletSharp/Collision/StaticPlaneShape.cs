@@ -1,5 +1,6 @@
-using System.Runtime.InteropServices;
 using BulletSharp.Math;
+using System;
+using System.Runtime.InteropServices;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -7,8 +8,9 @@ namespace BulletSharp
 	public class StaticPlaneShape : ConcaveShape
 	{
 		public StaticPlaneShape(Vector3 planeNormal, double planeConstant)
-			: base(btStaticPlaneShape_new(ref planeNormal, planeConstant))
 		{
+			IntPtr native = btStaticPlaneShape_new(ref planeNormal, planeConstant);
+			InitializeCollisionShape(native);
 		}
 
 		public double PlaneConstant => btStaticPlaneShape_getPlaneConstant(Native);

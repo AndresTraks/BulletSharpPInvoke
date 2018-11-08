@@ -4,18 +4,18 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class RigidBodyConstructionInfo : IDisposable
+	public class RigidBodyConstructionInfo : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		private CollisionShape _collisionShape;
 		private MotionState _motionState;
 
 		public RigidBodyConstructionInfo(double mass, MotionState motionState,
 			CollisionShape collisionShape)
 		{
-			Native = btRigidBody_btRigidBodyConstructionInfo_new(mass, motionState != null ? motionState._native : IntPtr.Zero,
+			IntPtr native = btRigidBody_btRigidBodyConstructionInfo_new(mass, motionState != null ? motionState.Native : IntPtr.Zero,
 				collisionShape != null ? collisionShape.Native : IntPtr.Zero);
+			InitializeUserOwned(native);
+
 			_collisionShape = collisionShape;
 			_motionState = motionState;
 		}
@@ -23,8 +23,10 @@ namespace BulletSharp
 		public RigidBodyConstructionInfo(double mass, MotionState motionState,
 			CollisionShape collisionShape, Vector3 localInertia)
 		{
-			Native = btRigidBody_btRigidBodyConstructionInfo_new2(mass, motionState != null ? motionState._native : IntPtr.Zero,
+			IntPtr native = btRigidBody_btRigidBodyConstructionInfo_new2(mass, motionState != null ? motionState.Native : IntPtr.Zero,
 				collisionShape != null ? collisionShape.Native : IntPtr.Zero, ref localInertia);
+			InitializeUserOwned(native);
+
 			_collisionShape = collisionShape;
 			_motionState = motionState;
 		}
@@ -121,7 +123,7 @@ namespace BulletSharp
 			get => _motionState;
 			set
 			{
-				btRigidBody_btRigidBodyConstructionInfo_setMotionState(Native, value != null ? value._native : IntPtr.Zero);
+				btRigidBody_btRigidBodyConstructionInfo_setMotionState(Native, value != null ? value.Native : IntPtr.Zero);
 				_motionState = value;
 			}
 		}
@@ -149,24 +151,9 @@ namespace BulletSharp
 			set => btRigidBody_btRigidBodyConstructionInfo_setStartWorldTransform(Native, ref value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btRigidBody_btRigidBodyConstructionInfo_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~RigidBodyConstructionInfo()
-		{
-			Dispose(false);
+			btRigidBody_btRigidBodyConstructionInfo_delete(Native);
 		}
 	}
 }

@@ -8,14 +8,15 @@ namespace BulletSharp
 	{
 		AlignedCollisionObjectArray _overlappingPairs;
 
-		internal GhostObject(IntPtr native)
-			: base(native)
+		internal GhostObject(ConstructionInfo info)
+			: base(info)
 		{
 		}
 
 		public GhostObject()
-			: base(btGhostObject_new())
 		{
+			IntPtr native = btGhostObject_new();
+			InitializeCollisionObject(native);
 		}
 
 		public void AddOverlappingObjectInternal(BroadphaseProxy otherProxy, BroadphaseProxy thisProxy = null)
@@ -86,8 +87,10 @@ namespace BulletSharp
 		HashedOverlappingPairCache _overlappingPairCache;
 
 		public PairCachingGhostObject()
-			: base(btPairCachingGhostObject_new())
+			: base(ConstructionInfo.Null)
 		{
+			IntPtr native = btPairCachingGhostObject_new();
+			InitializeCollisionObject(native);
 		}
 
 		public HashedOverlappingPairCache OverlappingPairCache
@@ -96,7 +99,7 @@ namespace BulletSharp
 			{
 				if (_overlappingPairCache == null)
 				{
-					_overlappingPairCache = new HashedOverlappingPairCache(btPairCachingGhostObject_getOverlappingPairCache(Native), true);
+					_overlappingPairCache = new HashedOverlappingPairCache(btPairCachingGhostObject_getOverlappingPairCache(Native), this);
 				}
 				return _overlappingPairCache;
 			}
@@ -105,14 +108,11 @@ namespace BulletSharp
 
 	public class GhostPairCallback : OverlappingPairCallback
 	{
-		internal GhostPairCallback(IntPtr native)
-			: base(native)
-		{
-		}
-
 		public GhostPairCallback()
-			: base(btGhostPairCallback_new())
+			: base(ConstructionInfo.Null)
 		{
+			IntPtr native = btGhostPairCallback_new();
+			InitializeUserOwned(native);
 		}
 
 		public override BroadphasePair AddOverlappingPair(BroadphaseProxy proxy0, BroadphaseProxy proxy1)

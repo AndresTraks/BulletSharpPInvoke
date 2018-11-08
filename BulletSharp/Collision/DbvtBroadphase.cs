@@ -33,10 +33,12 @@ namespace BulletSharp
 	public class DbvtBroadphase : BroadphaseInterface
 	{
 		public DbvtBroadphase(OverlappingPairCache pairCache = null)
-			: base(btDbvtBroadphase_new((pairCache != null) ? pairCache.Native : IntPtr.Zero))
 		{
-			_overlappingPairCache = (pairCache != null) ? pairCache : new HashedOverlappingPairCache(
-				btBroadphaseInterface_getOverlappingPairCache(Native), true);
+			IntPtr native = btDbvtBroadphase_new(pairCache?.Native ?? IntPtr.Zero);
+			InitializeUserOwned(native);
+
+			InitializeMembers(pairCache ?? new HashedOverlappingPairCache(
+				btBroadphaseInterface_getOverlappingPairCache(Native), this));
 		}
 
 		public static void Benchmark(BroadphaseInterface broadphase)
@@ -168,7 +170,7 @@ namespace BulletSharp
 			set => btDbvtBroadphase_setStageCurrent(Native, value);
 		}
 
-        //public DbvtProxyPtrArray StageRoots => btDbvtBroadphase_getStageRoots(Native);
+		//public DbvtProxyPtrArray StageRoots => btDbvtBroadphase_getStageRoots(Native);
 
 		public uint UpdatesCall
 		{

@@ -9,18 +9,21 @@ namespace BulletSharp
 		private Vector3Array _vertices;
 
 		public Box2DShape(Vector3 boxHalfExtents)
-			: base(btBox2dShape_new(ref boxHalfExtents))
 		{
+			var native = btBox2dShape_new(ref boxHalfExtents);
+			InitializeCollisionShape(native);
 		}
 
 		public Box2DShape(double boxHalfExtent)
-			: base(btBox2dShape_new2(boxHalfExtent))
 		{
+			var native = btBox2dShape_new2(boxHalfExtent);
+			InitializeCollisionShape(native);
 		}
 
 		public Box2DShape(double boxHalfExtentX, double boxHalfExtentY, double boxHalfExtentZ)
-			: base(btBox2dShape_new3(boxHalfExtentX, boxHalfExtentY, boxHalfExtentZ))
 		{
+			var native = btBox2dShape_new3(boxHalfExtentX, boxHalfExtentY, boxHalfExtentZ);
+			InitializeCollisionShape(native);
 		}
 
 		public void GetPlaneEquation(out Vector4 plane, int i)

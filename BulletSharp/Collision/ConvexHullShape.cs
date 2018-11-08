@@ -12,8 +12,9 @@ namespace BulletSharp
 		private Vector3Array _unscaledPoints;
 
 		public ConvexHullShape()
-			: base(btConvexHullShape_new())
 		{
+			IntPtr native = btConvexHullShape_new();
+			InitializeCollisionShape(native);
 		}
 
 		public ConvexHullShape(double[] points)
@@ -22,13 +23,16 @@ namespace BulletSharp
 		}
 
 		public ConvexHullShape(double[] points, int numPoints, int stride = 3 * sizeof(double))
-			: base(btConvexHullShape_new4(points, numPoints, stride))
 		{
+			IntPtr native = btConvexHullShape_new4(points, numPoints, stride);
+			InitializeCollisionShape(native);
 		}
 
 		public ConvexHullShape(IEnumerable<Vector3> points, int numPoints)
-			: base(btConvexHullShape_new())
 		{
+			IntPtr native = btConvexHullShape_new();
+			InitializeCollisionShape(native);
+
 			int i = 0;
 			foreach (Vector3 v in points)
 			{
@@ -44,8 +48,10 @@ namespace BulletSharp
 		}
 
 		public ConvexHullShape(IEnumerable<Vector3> points)
-			: base(btConvexHullShape_new())
 		{
+			IntPtr native = btConvexHullShape_new();
+			InitializeCollisionShape(native);
+
 			foreach (Vector3 v in points)
 			{
 				Vector3 viter = v;

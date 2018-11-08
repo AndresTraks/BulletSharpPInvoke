@@ -6,18 +6,21 @@ namespace BulletSharp
 	public class BoxShape : PolyhedralConvexShape
 	{
 		public BoxShape(Vector3 boxHalfExtents)
-			: base(btBoxShape_new(ref boxHalfExtents))
 		{
+			var native = btBoxShape_new(ref boxHalfExtents);
+			InitializeCollisionShape(native);
 		}
 
 		public BoxShape(double boxHalfExtent)
-			: base(btBoxShape_new2(boxHalfExtent))
 		{
+			var native = btBoxShape_new2(boxHalfExtent);
+			InitializeCollisionShape(native);
 		}
 
 		public BoxShape(double boxHalfExtentX, double boxHalfExtentY, double boxHalfExtentZ)
-			: base(btBoxShape_new3(boxHalfExtentX, boxHalfExtentY, boxHalfExtentZ))
 		{
+			var native = btBoxShape_new3(boxHalfExtentX, boxHalfExtentY, boxHalfExtentZ);
+			InitializeCollisionShape(native);
 		}
 
 		public void GetPlaneEquation(out Vector4 plane, int i)

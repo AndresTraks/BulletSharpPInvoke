@@ -9,24 +9,27 @@ namespace BulletSharp
 		private OptimizedBvh _optimizedBvh;
 		private TriangleInfoMap _triangleInfoMap;
 
-		internal BvhTriangleMeshShape(IntPtr native)
-			: base(native)
+		protected internal BvhTriangleMeshShape()
 		{
 		}
 
 		public BvhTriangleMeshShape(StridingMeshInterface meshInterface, bool useQuantizedAabbCompression,
 			bool buildBvh = true)
-			: base(btBvhTriangleMeshShape_new(meshInterface.Native, useQuantizedAabbCompression,
-				buildBvh))
 		{
+			IntPtr native = btBvhTriangleMeshShape_new(meshInterface.Native, useQuantizedAabbCompression,
+				buildBvh);
+			InitializeCollisionShape(native);
+
 			_meshInterface = meshInterface;
 		}
 
 		public BvhTriangleMeshShape(StridingMeshInterface meshInterface, bool useQuantizedAabbCompression,
 			Vector3 bvhAabbMin, Vector3 bvhAabbMax, bool buildBvh = true)
-			: base(btBvhTriangleMeshShape_new2(meshInterface.Native, useQuantizedAabbCompression,
-				ref bvhAabbMin, ref bvhAabbMax, buildBvh))
 		{
+			IntPtr native = btBvhTriangleMeshShape_new2(meshInterface.Native, useQuantizedAabbCompression,
+				ref bvhAabbMin, ref bvhAabbMax, buildBvh);
+			InitializeCollisionShape(native);
+
 			_meshInterface = meshInterface;
 		}
 

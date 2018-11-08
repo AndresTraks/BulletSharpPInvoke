@@ -28,14 +28,15 @@ namespace BulletSharp
 		private NearCallbackUnmanagedDelegate _nearCallbackUnmanaged;
 		private IntPtr _nearCallbackUnmanagedPtr;
 
-		internal CollisionDispatcher(IntPtr native)
-			: base(native)
+		protected internal CollisionDispatcher()
 		{
 		}
 
 		public CollisionDispatcher(CollisionConfiguration collisionConfiguration)
-			: base(btCollisionDispatcher_new(collisionConfiguration.Native))
 		{
+			IntPtr native = btCollisionDispatcher_new(collisionConfiguration.Native);
+			InitializeUserOwned(native);
+
 			_collisionConfiguration = collisionConfiguration;
 		}
 

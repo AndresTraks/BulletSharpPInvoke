@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 using System.Runtime.InteropServices;
@@ -9,13 +8,15 @@ namespace BulletSharp
 	public class MultiSphereShape : ConvexInternalAabbCachingShape
 	{
 		public MultiSphereShape(Vector3[] positions, double[] radi)
-			: base(btMultiSphereShape_new(positions, radi, (radi.Length < positions.Length) ? radi.Length : positions.Length))
 		{
+			IntPtr native = btMultiSphereShape_new(positions, radi, (radi.Length < positions.Length) ? radi.Length : positions.Length);
+			InitializeCollisionShape(native);
 		}
 
 		public MultiSphereShape(Vector3Array positions, double[] radi)
-			: base(btMultiSphereShape_new2(positions._native, radi, (radi.Length < positions.Count) ? radi.Length : positions.Count))
 		{
+			IntPtr native = btMultiSphereShape_new2(positions._native, radi, (radi.Length < positions.Count) ? radi.Length : positions.Count);
+			InitializeCollisionShape(native);
 		}
 
 		public Vector3 GetSpherePosition(int index)

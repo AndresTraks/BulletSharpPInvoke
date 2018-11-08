@@ -9,8 +9,7 @@ namespace BulletSharp
 	{
 		protected StridingMeshInterface _meshInterface;
 
-		internal TriangleMeshShape(IntPtr native)
-			: base(native)
+		protected internal TriangleMeshShape()
 		{
 		}
 

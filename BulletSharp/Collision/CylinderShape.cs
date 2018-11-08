@@ -7,19 +7,20 @@ namespace BulletSharp
 {
 	public class CylinderShape : ConvexInternalShape
 	{
-		internal CylinderShape(IntPtr native)
-			: base(native)
+		protected internal CylinderShape()
 		{
 		}
 
 		public CylinderShape(Vector3 halfExtents)
-			: base(btCylinderShape_new(ref halfExtents))
 		{
+			IntPtr native = btCylinderShape_new(ref halfExtents);
+			InitializeCollisionShape(native);
 		}
 
 		public CylinderShape(double halfExtentX, double halfExtentY, double halfExtentZ)
-			: base(btCylinderShape_new2(halfExtentX, halfExtentY, halfExtentZ))
 		{
+			IntPtr native = btCylinderShape_new2(halfExtentX, halfExtentY, halfExtentZ);
+			InitializeCollisionShape(native);
 		}
 
 		public Vector3 HalfExtentsWithMargin
@@ -50,26 +51,30 @@ namespace BulletSharp
 	public class CylinderShapeX : CylinderShape
 	{
 		public CylinderShapeX(Vector3 halfExtents)
-			: base(btCylinderShapeX_new(ref halfExtents))
 		{
+			IntPtr native = btCylinderShapeX_new(ref halfExtents);
+			InitializeCollisionShape(native);
 		}
 
 		public CylinderShapeX(double halfExtentX, double halfExtentY, double halfExtentZ)
-			: base(btCylinderShapeX_new2(halfExtentX, halfExtentY, halfExtentZ))
 		{
+			IntPtr native = btCylinderShapeX_new2(halfExtentX, halfExtentY, halfExtentZ);
+			InitializeCollisionShape(native);
 		}
 	}
 
 	public class CylinderShapeZ : CylinderShape
 	{
 		public CylinderShapeZ(Vector3 halfExtents)
-			: base(btCylinderShapeZ_new(ref halfExtents))
 		{
+			IntPtr native = btCylinderShapeZ_new(ref halfExtents);
+			InitializeCollisionShape(native);
 		}
 
 		public CylinderShapeZ(double halfExtentX, double halfExtentY, double halfExtentZ)
-			: base(btCylinderShapeZ_new2(halfExtentX, halfExtentY, halfExtentZ))
 		{
+			IntPtr native = btCylinderShapeZ_new2(halfExtentX, halfExtentY, halfExtentZ);
+			InitializeCollisionShape(native);
 		}
 	}
 

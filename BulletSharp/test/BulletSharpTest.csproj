@@ -68,6 +68,7 @@
     <Compile Include="GhostObjectTests.cs" />
     <Compile Include="GImpactTests.cs" />
     <Compile Include="DebugDrawTests.cs" />
+    <Compile Include="ObjectTrackerTests.cs" />
     <Compile Include="OverlapFilterCallbackTests.cs" />
     <Compile Include="PhysicsContext.cs" />
     <Compile Include="Program.cs" />

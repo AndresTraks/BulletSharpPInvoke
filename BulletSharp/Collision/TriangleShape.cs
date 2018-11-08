@@ -8,19 +8,20 @@ namespace BulletSharp
 	{
 		private Vector3Array _vertices;
 
-		internal TriangleShape(IntPtr native)
-			: base(native)
+		internal TriangleShape(ConstructionInfo info)
 		{
 		}
 
 		public TriangleShape()
-			: base(btTriangleShape_new())
 		{
+			IntPtr native = btTriangleShape_new();
+			InitializeCollisionShape(native);
 		}
 
 		public TriangleShape(Vector3 p0, Vector3 p1, Vector3 p2)
-			: base(btTriangleShape_new2(ref p0, ref p1, ref p2))
 		{
+			IntPtr native = btTriangleShape_new2(ref p0, ref p1, ref p2);
+			InitializeCollisionShape(native);
 		}
 
 		public void CalcNormal(out Vector3 normal)
