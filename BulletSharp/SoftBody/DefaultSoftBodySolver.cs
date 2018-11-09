@@ -1,3 +1,4 @@
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp.SoftBody
@@ -5,13 +6,14 @@ namespace BulletSharp.SoftBody
 	public class DefaultSoftBodySolver : SoftBodySolver
 	{
 		public DefaultSoftBodySolver()
-			: base(btDefaultSoftBodySolver_new())
 		{
+			IntPtr native = btDefaultSoftBodySolver_new();
+			InitializeUserOwned(native);
 		}
 		/*
 		public void CopySoftBodyToVertexBuffer(SoftBody softBody, VertexBufferDescriptor vertexBuffer)
 		{
-			btDefaultSoftBodySolver_copySoftBodyToVertexBuffer(_native, softBody._native,
+			btDefaultSoftBodySolver_copySoftBodyToVertexBuffer(Native, softBody._native,
 				vertexBuffer._native);
 		}
 		*/

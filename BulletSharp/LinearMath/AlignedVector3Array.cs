@@ -8,43 +8,11 @@ namespace BulletSharp
 {
 	[DebuggerDisplay("Count = {Count}")]
 	[DebuggerTypeProxy(typeof(Vector3ListDebugView))]
-	public class AlignedVector3Array : IList<Vector3>, IDisposable
+	public class AlignedVector3Array : BulletObject, IList<Vector3>
 	{
-		internal IntPtr _native;
-		private bool _preventDelete;
-
 		internal AlignedVector3Array(IntPtr native)
 		{
-			_native = native;
-			_preventDelete = true;
-		}
-
-		public AlignedVector3Array()
-		{
-			_native = btAlignedObjectArray_btVector3_new();
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-				if (!_preventDelete)
-				{
-					btAlignedObjectArray_btVector3_delete(_native);
-				}
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~AlignedVector3Array()
-		{
-			Dispose(false);
+			Initialize(native);
 		}
 
 		public int IndexOf(Vector3 item)
@@ -71,7 +39,7 @@ namespace BulletSharp
 					throw new ArgumentOutOfRangeException(nameof(index));
 				}
 				Vector3 value;
-				btAlignedObjectArray_btVector3_at(_native, index, out value);
+				btAlignedObjectArray_btVector3_at(Native, index, out value);
 				return value;
 			}
 			set
@@ -80,13 +48,13 @@ namespace BulletSharp
 				{
 					throw new ArgumentOutOfRangeException(nameof(index));
 				}
-				btAlignedObjectArray_btVector3_set(_native, index, ref value);
+				btAlignedObjectArray_btVector3_set(Native, index, ref value);
 			}
 		}
 
 		public void Add(Vector3 item)
 		{
-			btAlignedObjectArray_btVector3_push_back(_native, ref item);
+			btAlignedObjectArray_btVector3_push_back(Native, ref item);
 		}
 
 		public void Clear()
@@ -117,7 +85,7 @@ namespace BulletSharp
 			}
 		}
 
-		public int Count => btAlignedObjectArray_btVector3_size(_native);
+		public int Count => btAlignedObjectArray_btVector3_size(Native);
 
 		public bool IsReadOnly => false;
 

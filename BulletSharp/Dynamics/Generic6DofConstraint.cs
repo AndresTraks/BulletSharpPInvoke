@@ -403,26 +403,25 @@ namespace BulletSharp
 		private RotationalLimitMotor[] _angularLimits = new RotationalLimitMotor[3];
 		private TranslationalLimitMotor _linearLimits;
 
-		internal Generic6DofConstraint(IntPtr native)
-			: base(native)
+		protected internal Generic6DofConstraint()
 		{
 		}
 
 		public Generic6DofConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
 			Matrix frameInA, Matrix frameInB, bool useLinearReferenceFrameA)
-			: base(btGeneric6DofConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
-				ref frameInA, ref frameInB, useLinearReferenceFrameA))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = rigidBodyB;
+			IntPtr native = btGeneric6DofConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
+				ref frameInA, ref frameInB, useLinearReferenceFrameA);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, rigidBodyB);
 		}
 
 		public Generic6DofConstraint(RigidBody rigidBodyB, Matrix frameInB, bool useLinearReferenceFrameB)
-			: base(btGeneric6DofConstraint_new2(rigidBodyB.Native, ref frameInB,
-				useLinearReferenceFrameB))
 		{
-			_rigidBodyA = GetFixedBody();
-			_rigidBodyB = rigidBodyB;
+			IntPtr native = btGeneric6DofConstraint_new2(rigidBodyB.Native, ref frameInB,
+				useLinearReferenceFrameB);
+			InitializeUserOwned(native);
+			InitializeMembers(GetFixedBody(), rigidBodyB);
 		}
 
 		public void CalcAnchorPos()

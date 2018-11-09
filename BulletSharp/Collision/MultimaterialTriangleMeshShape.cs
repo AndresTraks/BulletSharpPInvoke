@@ -12,8 +12,7 @@ namespace BulletSharp
 			IntPtr native = btMultimaterialTriangleMeshShape_new(meshInterface.Native, useQuantizedAabbCompression,
 				buildBvh);
 			InitializeCollisionShape(native);
-
-			_meshInterface = meshInterface;
+			InitializeMembers(meshInterface);
 		}
 
 		public MultimaterialTriangleMeshShape(StridingMeshInterface meshInterface,
@@ -23,8 +22,7 @@ namespace BulletSharp
 			IntPtr native = btMultimaterialTriangleMeshShape_new2(meshInterface.Native, useQuantizedAabbCompression,
 				ref bvhAabbMin, ref bvhAabbMax, buildBvh);
 			InitializeCollisionShape(native);
-
-			_meshInterface = meshInterface;
+			InitializeMembers(meshInterface);
 		}
 		/*
 		public BulletMaterial GetMaterialProperties(int partID, int triIndex)

@@ -6,13 +6,12 @@ namespace BulletSharp
 {
 	public abstract class DiscreteCollisionDetectorInterface : IDisposable
 	{
-		public class ClosestPointInput : IDisposable
+		public class ClosestPointInput : BulletDisposableObject
 		{
-			internal IntPtr Native;
-
 			public ClosestPointInput()
 			{
-				Native = btDiscreteCollisionDetectorInterface_ClosestPointInput_new();
+				IntPtr native = btDiscreteCollisionDetectorInterface_ClosestPointInput_new();
+				InitializeUserOwned(native);
 			}
 
 			public float MaximumDistanceSquared
@@ -43,34 +42,16 @@ namespace BulletSharp
 				set => btDiscreteCollisionDetectorInterface_ClosestPointInput_setTransformB(Native, ref value);
 			}
 
-			public void Dispose()
+			protected override void Dispose(bool disposing)
 			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
-			{
-				if (Native != IntPtr.Zero)
-				{
-					btDiscreteCollisionDetectorInterface_ClosestPointInput_delete(Native);
-					Native = IntPtr.Zero;
-				}
-			}
-
-			~ClosestPointInput()
-			{
-				Dispose(false);
+				btDiscreteCollisionDetectorInterface_ClosestPointInput_delete(Native);
 			}
 		}
 
-		public abstract class Result : IDisposable
+		public abstract class Result : BulletDisposableObject
 		{
-			internal IntPtr Native;
-
-			internal Result(IntPtr native)
+			protected internal Result()
 			{
-				Native = native;
 			}
 
 			public void AddContactPoint(Vector3 normalOnBInWorld, Vector3 pointInWorld,
@@ -92,24 +73,9 @@ namespace BulletSharp
 					Native, partId1, index1);
 			}
 
-			public void Dispose()
+			protected override void Dispose(bool disposing)
 			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
-			{
-				if (Native != IntPtr.Zero)
-				{
-					btDiscreteCollisionDetectorInterface_Result_delete(Native);
-					Native = IntPtr.Zero;
-				}
-			}
-
-			~Result()
-			{
-				Dispose(false);
+				btDiscreteCollisionDetectorInterface_Result_delete(Native);
 			}
 		}
 
@@ -150,16 +116,12 @@ namespace BulletSharp
 
 	public abstract class StorageResult : DiscreteCollisionDetectorInterface.Result
 	{
-		internal StorageResult(IntPtr native)
-			: base(native)
+		internal StorageResult() // public
 		{
+			//IntPtr native = btStorageResultWrapper_new();
+			//InitializeUserOwned(native);
 		}
-		/*
-		public StorageResult()
-			: base(btStorageResultWrapper_new())
-		{
-		}
-		*/
+
 		public Vector3 ClosestPointInB
 		{
 			get

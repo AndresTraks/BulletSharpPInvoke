@@ -27,18 +27,18 @@ namespace BulletSharp
 	{
 		public SliderConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix frameInA,
 			Matrix frameInB, bool useLinearReferenceFrameA)
-			: base(btSliderConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
-				ref frameInA, ref frameInB, useLinearReferenceFrameA))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = rigidBodyB;
+			IntPtr native = btSliderConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
+				ref frameInA, ref frameInB, useLinearReferenceFrameA);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, rigidBodyB);
 		}
 
 		public SliderConstraint(RigidBody rigidBodyB, Matrix frameInB, bool useLinearReferenceFrameA)
-			: base(btSliderConstraint_new2(rigidBodyB.Native, ref frameInB, useLinearReferenceFrameA))
 		{
-			_rigidBodyA = GetFixedBody();
-			_rigidBodyB = rigidBodyB;
+			IntPtr native = btSliderConstraint_new2(rigidBodyB.Native, ref frameInB, useLinearReferenceFrameA);
+			InitializeUserOwned(native);
+			InitializeMembers(GetFixedBody(), rigidBodyB);
 		}
 
 		public void CalculateTransformsRef(ref Matrix transA, ref Matrix transB)

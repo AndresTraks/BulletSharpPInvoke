@@ -199,19 +199,21 @@ namespace BulletSharp
 		private IndexedMesh _initialMesh;
 		private AlignedIndexedMeshArray _indexedMeshArray;
 
-		internal TriangleIndexVertexArray(IntPtr native)
-			: base(native)
+		internal TriangleIndexVertexArray(ConstructionInfo info)
 		{
 		}
 
 		public TriangleIndexVertexArray()
-			: base(btTriangleIndexVertexArray_new())
 		{
+			IntPtr native = btTriangleIndexVertexArray_new();
+			InitializeUserOwned(native);
 		}
 
 		public TriangleIndexVertexArray(ICollection<int> triangles, ICollection<float> vertices)
-			: base(btTriangleIndexVertexArray_new())
 		{
+			IntPtr native = btTriangleIndexVertexArray_new();
+			InitializeUserOwned(native);
+
 			_initialMesh = new IndexedMesh();
 			_initialMesh.Allocate(triangles.Count / 3, vertices.Count / 3);
 			_initialMesh.SetData(triangles, vertices);
@@ -219,8 +221,10 @@ namespace BulletSharp
 		}
 
 		public TriangleIndexVertexArray(ICollection<int> triangles, ICollection<Vector3> vertices)
-			: base(btTriangleIndexVertexArray_new())
 		{
+			IntPtr native = btTriangleIndexVertexArray_new();
+			InitializeUserOwned(native);
+
 			_initialMesh = new IndexedMesh();
 			_initialMesh.Allocate(triangles.Count / 3, vertices.Count);
 			_initialMesh.SetData(triangles, vertices);
@@ -228,8 +232,9 @@ namespace BulletSharp
 		}
 
 		public TriangleIndexVertexArray(int numTriangles, IntPtr triangleIndexBase, int triangleIndexStride, int numVertices, IntPtr vertexBase, int vertexStride)
-			: base(btTriangleIndexVertexArray_new2(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride))
 		{
+			IntPtr native = btTriangleIndexVertexArray_new2(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride);
+			InitializeUserOwned(native);
 		}
 
 		public void AddIndexedMesh(IndexedMesh mesh, PhyScalarType indexType = PhyScalarType.Int32)

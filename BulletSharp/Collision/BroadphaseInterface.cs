@@ -6,26 +6,24 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public abstract class BroadphaseAabbCallback : IDisposable
+	public abstract class BroadphaseAabbCallback : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		internal delegate bool ProcessUnmanagedDelegate(IntPtr proxy);
 
 		internal ProcessUnmanagedDelegate _process;
 
-		internal BroadphaseAabbCallback(IntPtr native)
+		internal BroadphaseAabbCallback(ConstructionInfo info)
 		{
-			Native = native;
 			_process = ProcessUnmanaged;
 		}
 
 		protected BroadphaseAabbCallback()
 		{
 			_process = ProcessUnmanaged;
-			Native = btBroadphaseAabbCallbackWrapper_new(
+			IntPtr native = btBroadphaseAabbCallbackWrapper_new(
 				Marshal.GetFunctionPointerForDelegate(_process));
+			InitializeUserOwned(native);
 		}
 
 		private bool ProcessUnmanaged(IntPtr proxy)
@@ -35,24 +33,9 @@ namespace BulletSharp
 
 		public abstract bool Process(BroadphaseProxy proxy);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btBroadphaseAabbCallback_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~BroadphaseAabbCallback()
-		{
-			Dispose(false);
+			btBroadphaseAabbCallback_delete(Native);
 		}
 	}
 
@@ -61,10 +44,11 @@ namespace BulletSharp
 		private UIntArray _signs;
 
 		protected BroadphaseRayCallback()
-			: base(IntPtr.Zero)
+			: base(ConstructionInfo.Null)
 		{
-			Native = btBroadphaseRayCallbackWrapper_new(
+			IntPtr native = btBroadphaseRayCallbackWrapper_new(
 				Marshal.GetFunctionPointerForDelegate(_process));
+			InitializeUserOwned(native);
 		}
 
 		public float LambdaMax

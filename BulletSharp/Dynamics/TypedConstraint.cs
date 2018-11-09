@@ -102,7 +102,7 @@ namespace BulletSharp
 		}
 	}
 
-	public abstract class TypedConstraint : IDisposable
+	public abstract class TypedConstraint : BulletDisposableObject
 	{
 		public class ConstraintInfo1 : IDisposable
 		{
@@ -260,17 +260,18 @@ namespace BulletSharp
 			}
 		}
 
-		internal IntPtr Native;
-
 		private JointFeedback _jointFeedback;
-		protected RigidBody _rigidBodyA;
-		protected RigidBody _rigidBodyB;
 
 		private static RigidBody _fixedBody;
 
-		internal TypedConstraint(IntPtr native)
+		protected internal TypedConstraint()
 		{
-			Native = native;
+		}
+
+		protected internal void InitializeMembers(RigidBody rigidBodyA, RigidBody rigidBodyB)
+		{
+			RigidBodyA = rigidBodyA;
+			RigidBodyB = rigidBodyB;
 		}
 
 		public void BuildJacobian()
@@ -396,9 +397,9 @@ namespace BulletSharp
 			set => btTypedConstraint_setOverrideNumSolverIterations(Native, value);
 		}
 
-		public RigidBody RigidBodyA => _rigidBodyA;
+		public RigidBody RigidBodyA { get; private set; }
 
-		public RigidBody RigidBodyB => _rigidBodyB;
+		public RigidBody RigidBodyB { get; private set; }
 
 		public int Uid => btTypedConstraint_getUid(Native);
 
@@ -416,25 +417,9 @@ namespace BulletSharp
 			set => btTypedConstraint_setUserConstraintType(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btTypedConstraint_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~TypedConstraint()
-		{
-			Dispose(false);
+			btTypedConstraint_delete(Native);
 		}
 	}
 

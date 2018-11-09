@@ -34,7 +34,7 @@ namespace BulletSharp
 
         private static bool ContactProcessedUnmanaged(IntPtr cp, IntPtr body0, IntPtr body1)
         {
-            _contactProcessed.Invoke(new ManifoldPoint(cp, true), CollisionObject.GetManaged(body0), CollisionObject.GetManaged(body1));
+            _contactProcessed.Invoke(new ManifoldPoint(cp), CollisionObject.GetManaged(body0), CollisionObject.GetManaged(body1));
             return false;
         }
 
@@ -123,7 +123,7 @@ namespace BulletSharp
 
         public ManifoldPoint GetContactPoint(int index)
         {
-            return new ManifoldPoint(btPersistentManifold_getContactPoint(Native, index), true);
+            return new ManifoldPoint(btPersistentManifold_getContactPoint(Native, index));
         }
 
         public void RefreshContactPointsRef(ref Matrix trA, ref Matrix trB)

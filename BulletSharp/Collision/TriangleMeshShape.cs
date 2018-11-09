@@ -7,10 +7,13 @@ namespace BulletSharp
 {
 	public class TriangleMeshShape : ConcaveShape
 	{
-		protected StridingMeshInterface _meshInterface;
-
 		protected internal TriangleMeshShape()
 		{
+		}
+
+		protected internal void InitializeMembers(StridingMeshInterface meshInterface)
+		{
+			MeshInterface = meshInterface;
 		}
 
 		public void LocalGetSupportingVertex(ref Vector3 vec, out Vector3 value)
@@ -64,17 +67,7 @@ namespace BulletSharp
 			}
 		}
 
-		public StridingMeshInterface MeshInterface
-		{
-			get
-			{
-				if (_meshInterface == null)
-				{
-					_meshInterface = new StridingMeshInterface(btTriangleMeshShape_getMeshInterface(Native));
-				}
-				return _meshInterface;
-			}
-		}
+		public StridingMeshInterface MeshInterface { get; private set; }
 	}
 
 	[StructLayout(LayoutKind.Sequential)]

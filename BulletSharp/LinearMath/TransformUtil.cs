@@ -42,48 +42,32 @@ namespace BulletSharp
 		}
 	}
 
-	public class ConvexSeparatingDistanceUtil : IDisposable
+	public class ConvexSeparatingDistanceUtil : BulletDisposableObject
 	{
-		internal IntPtr _native;
-
 		public ConvexSeparatingDistanceUtil(float boundingRadiusA, float boundingRadiusB)
 		{
-			_native = btConvexSeparatingDistanceUtil_new(boundingRadiusA, boundingRadiusB);
+			IntPtr native = btConvexSeparatingDistanceUtil_new(boundingRadiusA, boundingRadiusB);
+			InitializeUserOwned(native);
 		}
 
 		public void InitSeparatingDistance(ref Vector3 separatingVector, float separatingDistance,
 			ref Matrix transA, ref Matrix transB)
 		{
-			btConvexSeparatingDistanceUtil_initSeparatingDistance(_native, ref separatingVector,
+			btConvexSeparatingDistanceUtil_initSeparatingDistance(Native, ref separatingVector,
 				separatingDistance, ref transA, ref transB);
 		}
 
 		public void UpdateSeparatingDistance(ref Matrix transA, ref Matrix transB)
 		{
-			btConvexSeparatingDistanceUtil_updateSeparatingDistance(_native, ref transA,
+			btConvexSeparatingDistanceUtil_updateSeparatingDistance(Native, ref transA,
 				ref transB);
 		}
 
-		public float ConservativeSeparatingDistance => btConvexSeparatingDistanceUtil_getConservativeSeparatingDistance(_native);
+		public float ConservativeSeparatingDistance => btConvexSeparatingDistanceUtil_getConservativeSeparatingDistance(Native);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-				btConvexSeparatingDistanceUtil_delete(_native);
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~ConvexSeparatingDistanceUtil()
-		{
-			Dispose(false);
+			btConvexSeparatingDistanceUtil_delete(Native);
 		}
 	}
 }

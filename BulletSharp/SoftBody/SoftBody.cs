@@ -84,24 +84,21 @@ namespace BulletSharp.SoftBody
 		Linear
 	}
 
-	public class SoftBodyWorldInfo : IDisposable
+	public class SoftBodyWorldInfo : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
-
 		private BroadphaseInterface _broadphase;
 		private Dispatcher _dispatcher;
 		private SparseSdf _sparseSdf;
 
-		internal SoftBodyWorldInfo(IntPtr native, bool preventDelete)
+		internal SoftBodyWorldInfo(IntPtr native, BulletObject owner)
 		{
-			Native = native;
-			_preventDelete = preventDelete;
+			InitializeSubObject(native, owner);
 		}
 
 		public SoftBodyWorldInfo()
 		{
-			Native = btSoftBodyWorldInfo_new();
+			IntPtr native = btSoftBodyWorldInfo_new();
+			InitializeUserOwned(native);
 		}
 
 		public float AirDensity
@@ -182,27 +179,12 @@ namespace BulletSharp.SoftBody
 			set => btSoftBodyWorldInfo_setWater_offset(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (Owner == null)
 			{
-				if (!_preventDelete)
-				{
-					btSoftBodyWorldInfo_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btSoftBodyWorldInfo_delete(Native);
 			}
-		}
-
-		~SoftBodyWorldInfo()
-		{
-			Dispose(false);
 		}
 	}
 
@@ -3437,7 +3419,7 @@ namespace BulletSharp.SoftBody
 			get => _softBodySolver;
 			set
 			{
-				btSoftBody_setSoftBodySolver(Native, (value != null) ? value._native : IntPtr.Zero);
+				btSoftBody_setSoftBodySolver(Native, (value != null) ? value.Native : IntPtr.Zero);
 				_softBodySolver = value;
 			}
 		}
