@@ -5,6 +5,16 @@ namespace BulletSharp
 	public abstract class BulletObject
 	{
 		internal IntPtr Native;
+
+		protected internal void Initialize(IntPtr native)
+		{
+			if (Native == null)
+			{
+				throw new InvalidOperationException("Bullet object already initialized.");
+			}
+
+			Native = native;
+		}
 	}
 
 	public abstract class BulletDisposableObject : BulletObject, IDisposable
@@ -12,13 +22,7 @@ namespace BulletSharp
 		// Initialize an object that should be disposed by the user.
 		protected internal void InitializeUserOwned(IntPtr native)
 		{
-			if (Native == null)
-			{
-				throw new InvalidOperationException("Bullet object already initialized.");
-			}
-
-			Native = native;
-
+			Initialize(native);
 			BulletObjectTracker.Add(this);
 		}
 
@@ -26,14 +30,8 @@ namespace BulletSharp
 		// These objects should not be deleted in the Dispose method of this wrapper class.
 		protected internal void InitializeSubObject(IntPtr native, BulletObject owner)
 		{
-			if (Native == null)
-			{
-				throw new InvalidOperationException("Bullet object already initialized.");
-			}
-
-			Native = native;
+			Initialize(native);
 			Owner = owner;
-
 			BulletObjectTracker.Add(this);
 		}
 
@@ -68,6 +66,8 @@ namespace BulletSharp
 		}
 	}
 
+	// This class is used to differentiate between a public constructor
+	// without parameters and an internal constructor that initializes a base class.
 	internal sealed class ConstructionInfo
 	{
 		public static ConstructionInfo Null = null;

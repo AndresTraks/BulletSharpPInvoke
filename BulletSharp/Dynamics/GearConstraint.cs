@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
@@ -8,11 +9,11 @@ namespace BulletSharp
 	{
 		public GearConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 axisInA,
 			Vector3 axisInB, double ratio = 1.0f)
-			: base(btGearConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
-				ref axisInA, ref axisInB, ratio))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = rigidBodyB;
+			IntPtr native = btGearConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
+				ref axisInA, ref axisInB, ratio);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, rigidBodyB);
 		}
 
 		public Vector3 AxisA

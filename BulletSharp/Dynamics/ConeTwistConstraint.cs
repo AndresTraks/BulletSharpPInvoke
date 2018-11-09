@@ -18,18 +18,18 @@ namespace BulletSharp
 	{
 		public ConeTwistConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix rigidBodyAFrame,
 			Matrix rigidBodyBFrame)
-			: base(btConeTwistConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
-				ref rigidBodyAFrame, ref rigidBodyBFrame))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = rigidBodyB;
+			IntPtr native = btConeTwistConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
+				ref rigidBodyAFrame, ref rigidBodyBFrame);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, rigidBodyB);
 		}
 
 		public ConeTwistConstraint(RigidBody rigidBodyA, Matrix rigidBodyAFrame)
-			: base(btConeTwistConstraint_new2(rigidBodyA.Native, ref rigidBodyAFrame))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = GetFixedBody();
+			IntPtr native = btConeTwistConstraint_new2(rigidBodyA.Native, ref rigidBodyAFrame);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, GetFixedBody());
 		}
 
 		public void CalcAngleInfo()

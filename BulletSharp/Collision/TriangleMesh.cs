@@ -6,14 +6,11 @@ namespace BulletSharp
 {
 	public class TriangleMesh : TriangleIndexVertexArray
 	{
-		internal TriangleMesh(IntPtr native)
-			: base(native)
-		{
-		}
-
 		public TriangleMesh(bool use32BitIndices = true, bool use4ComponentVertices = true)
-			: base(btTriangleMesh_new(use32BitIndices, use4ComponentVertices))
+			: base(ConstructionInfo.Null)
 		{
+			IntPtr native = btTriangleMesh_new(use32BitIndices, use4ComponentVertices);
+			InitializeUserOwned(native);
 		}
 
 		public void AddIndex(int index)

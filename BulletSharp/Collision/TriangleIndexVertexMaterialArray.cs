@@ -83,25 +83,22 @@ namespace BulletSharp
 
 	public class TriangleIndexVertexMaterialArray : TriangleIndexVertexArray
 	{
-		internal TriangleIndexVertexMaterialArray(IntPtr native)
-			: base(native)
-		{
-		}
-
 		public TriangleIndexVertexMaterialArray()
-			: base(btTriangleIndexVertexMaterialArray_new())
 		{
+			IntPtr native = btTriangleIndexVertexMaterialArray_new();
+			InitializeUserOwned(native);
 		}
 
 		public TriangleIndexVertexMaterialArray(int numTriangles, IntPtr triangleIndexBase,
 			int triangleIndexStride, int numVertices, IntPtr vertexBase, int vertexStride,
 			int numMaterials, IntPtr materialBase, int materialStride, IntPtr triangleMaterialsBase,
 			int materialIndexStride)
-			: base(btTriangleIndexVertexMaterialArray_new2(numTriangles, triangleIndexBase,
+		{
+			IntPtr native = btTriangleIndexVertexMaterialArray_new2(numTriangles, triangleIndexBase,
 				triangleIndexStride, numVertices, vertexBase, vertexStride,
 				numMaterials, materialBase, materialStride, triangleMaterialsBase,
-				materialIndexStride))
-		{
+				materialIndexStride);
+			InitializeUserOwned(native);
 		}
 
 		public void AddMaterialProperties(MaterialProperties mat, PhyScalarType triangleType = PhyScalarType.Int32)

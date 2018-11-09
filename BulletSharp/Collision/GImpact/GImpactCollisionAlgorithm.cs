@@ -67,7 +67,7 @@ namespace BulletSharp
 
 		public ManifoldResult InternalGetResultOut()
 		{
-			return new ManifoldResult(btGImpactCollisionAlgorithm_internalGetResultOut(Native));
+			return new ManifoldResult(btGImpactCollisionAlgorithm_internalGetResultOut(Native), this);
 		}
 
 		public static void RegisterAlgorithm(CollisionDispatcher dispatcher)

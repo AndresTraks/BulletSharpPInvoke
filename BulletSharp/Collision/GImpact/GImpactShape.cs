@@ -391,15 +391,12 @@ namespace BulletSharp
 
 	public class GImpactMeshShape : GImpactShapeInterface
 	{
-		private StridingMeshInterface _meshInterface;
-		private bool _disposeMeshInterface;
-
 		public GImpactMeshShape(StridingMeshInterface meshInterface)
 		{
 			IntPtr native = btGImpactMeshShape_new(meshInterface.Native);
 			InitializeCollisionShape(native);
 
-			_meshInterface = meshInterface;
+			MeshInterface = meshInterface;
 		}
 
 		public override CollisionShape GetChildShape(int index)
@@ -412,34 +409,13 @@ namespace BulletSharp
 			return new GImpactMeshShapePart(btGImpactMeshShape_getMeshPart(Native, index), this);
 		}
 
-		public StridingMeshInterface MeshInterface
-		{
-			get
-			{
-				if (_meshInterface == null)
-				{
-					_meshInterface = new StridingMeshInterface(btGImpactMeshShape_getMeshInterface(Native));
-					_disposeMeshInterface = true;
-				}
-				return _meshInterface;
-			}
-		}
+		public StridingMeshInterface MeshInterface { get; private set; }
 
 		public int MeshPartCount => btGImpactMeshShape_getMeshPartCount(Native);
 
 		public override PrimitiveManagerBase PrimitiveManager => null;
 
 		public override GImpactShapeType GImpactShapeType => GImpactShapeType.TrimeshShape;
-
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && _disposeMeshInterface)
-			{
-				_meshInterface.Dispose();
-				_disposeMeshInterface = false;
-			}
-			base.Dispose(disposing);
-		}
 	}
 
 	[StructLayout(LayoutKind.Sequential)]

@@ -17,44 +17,43 @@ namespace BulletSharp
 
 	public class HingeConstraint : TypedConstraint
 	{
-		internal HingeConstraint(IntPtr native)
-			: base(native)
+		protected internal HingeConstraint()
 		{
 		}
 
 		public HingeConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 pivotInA,
 			Vector3 pivotInB, Vector3 axisInA, Vector3 axisInB, bool useReferenceFrameA = false)
-			: base(btHingeConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
-				ref pivotInA, ref pivotInB, ref axisInA, ref axisInB, useReferenceFrameA))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = rigidBodyB;
+			IntPtr native = btHingeConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
+				ref pivotInA, ref pivotInB, ref axisInA, ref axisInB, useReferenceFrameA);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, rigidBodyB);
 		}
 
 		public HingeConstraint(RigidBody rigidBodyA, Vector3 pivotInA, Vector3 axisInA,
 			bool useReferenceFrameA = false)
-			: base(btHingeConstraint_new2(rigidBodyA.Native, ref pivotInA, ref axisInA,
-				useReferenceFrameA))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = GetFixedBody();
+			IntPtr native = btHingeConstraint_new2(rigidBodyA.Native, ref pivotInA, ref axisInA,
+				useReferenceFrameA);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, GetFixedBody());
 		}
 
 		public HingeConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix rigidBodyAFrame,
 			Matrix rigidBodyBFrame, bool useReferenceFrameA = false)
-			: base(btHingeConstraint_new3(rigidBodyA.Native, rigidBodyB.Native,
-				ref rigidBodyAFrame, ref rigidBodyBFrame, useReferenceFrameA))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = rigidBodyB;
+			IntPtr native = btHingeConstraint_new3(rigidBodyA.Native, rigidBodyB.Native,
+				ref rigidBodyAFrame, ref rigidBodyBFrame, useReferenceFrameA);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, rigidBodyB);
 		}
 
 		public HingeConstraint(RigidBody rigidBodyA, Matrix rigidBodyAFrame, bool useReferenceFrameA = false)
-			: base(btHingeConstraint_new4(rigidBodyA.Native, ref rigidBodyAFrame,
-				useReferenceFrameA))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = GetFixedBody();
+			IntPtr native = btHingeConstraint_new4(rigidBodyA.Native, ref rigidBodyAFrame,
+				useReferenceFrameA);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, GetFixedBody());
 		}
 
 		public void EnableAngularMotor(bool enableMotor, double targetVelocity, double maxMotorImpulse)
@@ -268,38 +267,38 @@ namespace BulletSharp
 	{
 		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
 			Vector3 pivotInA, Vector3 pivotInB, Vector3 axisInA, Vector3 axisInB, bool useReferenceFrameA = false)
-			: base(btHingeAccumulatedAngleConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
-				ref pivotInA, ref pivotInB, ref axisInA, ref axisInB, useReferenceFrameA))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = rigidBodyB;
+			IntPtr native = btHingeAccumulatedAngleConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
+				ref pivotInA, ref pivotInB, ref axisInA, ref axisInB, useReferenceFrameA);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, rigidBodyB);
 		}
 
 		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, Vector3 pivotInA,
 			Vector3 axisInA, bool useReferenceFrameA = false)
-			: base(btHingeAccumulatedAngleConstraint_new2(rigidBodyA.Native, ref pivotInA,
-				ref axisInA, useReferenceFrameA))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = GetFixedBody();
+			IntPtr native = btHingeAccumulatedAngleConstraint_new2(rigidBodyA.Native, ref pivotInA,
+				ref axisInA, useReferenceFrameA);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, GetFixedBody());
 		}
 
 		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
 			Matrix rigidBodyAFrame, Matrix rigidBodyBFrame, bool useReferenceFrameA = false)
-			: base(btHingeAccumulatedAngleConstraint_new3(rigidBodyA.Native, rigidBodyB.Native,
-				ref rigidBodyAFrame, ref rigidBodyBFrame, useReferenceFrameA))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = rigidBodyB;
+			IntPtr native = btHingeAccumulatedAngleConstraint_new3(rigidBodyA.Native, rigidBodyB.Native,
+				ref rigidBodyAFrame, ref rigidBodyBFrame, useReferenceFrameA);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, GetFixedBody());
 		}
 
 		public HingeAccumulatedAngleConstraint(RigidBody rigidBodyA, Matrix rigidBodyAFrame,
 			bool useReferenceFrameA = false)
-			: base(btHingeAccumulatedAngleConstraint_new4(rigidBodyA.Native, ref rigidBodyAFrame,
-				useReferenceFrameA))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = GetFixedBody();
+			IntPtr native = btHingeAccumulatedAngleConstraint_new4(rigidBodyA.Native, ref rigidBodyAFrame,
+				useReferenceFrameA);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, GetFixedBody());
 		}
 
 		public double AccumulatedHingeAngle

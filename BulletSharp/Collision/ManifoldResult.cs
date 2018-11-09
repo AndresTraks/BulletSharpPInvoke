@@ -5,19 +5,21 @@ namespace BulletSharp
 {
 	public class ManifoldResult : DiscreteCollisionDetectorInterface.Result
 	{
-		internal ManifoldResult(IntPtr native)
-			: base(native)
+		internal ManifoldResult(IntPtr native, BulletObject owner)
 		{
+			InitializeSubObject(native, owner);
 		}
 
 		public ManifoldResult()
-			: base(btManifoldResult_new())
 		{
+			IntPtr native = btManifoldResult_new();
+			InitializeUserOwned(native);
 		}
 
 		public ManifoldResult(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
-			: base(btManifoldResult_new2(body0Wrap.Native, body1Wrap.Native))
 		{
+			IntPtr native = btManifoldResult_new2(body0Wrap.Native, body1Wrap.Native);
+			InitializeUserOwned(native);
 		}
 
 		public static double CalculateCombinedContactDamping(CollisionObject body0,

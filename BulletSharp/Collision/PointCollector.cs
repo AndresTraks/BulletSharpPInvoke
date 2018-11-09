@@ -1,4 +1,5 @@
 using BulletSharp.Math;
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -6,8 +7,9 @@ namespace BulletSharp
 	public class PointCollector : DiscreteCollisionDetectorInterface.Result
 	{
 		public PointCollector()
-			: base(btPointCollector_new())
 		{
+			IntPtr native = btPointCollector_new();
+			InitializeUserOwned(native);
 		}
 
 		public double Distance

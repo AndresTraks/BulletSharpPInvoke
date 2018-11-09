@@ -63,9 +63,8 @@ namespace BulletSharp
 		}
 	}
 
-	public class CollisionAlgorithm : IDisposable
+	public class CollisionAlgorithm : BulletObject, IDisposable
 	{
-		internal IntPtr Native;
 		private readonly bool _preventDelete;
 
 		internal CollisionAlgorithm(IntPtr native, bool preventDelete = false)

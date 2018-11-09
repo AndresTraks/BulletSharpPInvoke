@@ -6,13 +6,10 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class StridingMeshInterface : IDisposable // abstract
+	public abstract class StridingMeshInterface : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		internal StridingMeshInterface(IntPtr native)
+		protected internal StridingMeshInterface()
 		{
-			Native = native;
 		}
 
 		public unsafe UnmanagedMemoryStream GetIndexStream(int subpart = 0)
@@ -127,27 +124,12 @@ namespace BulletSharp
 				btStridingMeshInterface_getScaling(Native, out value);
 				return value;
 			}
-            set => btStridingMeshInterface_setScaling(Native, ref value);
-        }
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
+			set => btStridingMeshInterface_setScaling(Native, ref value);
 		}
 
-		protected virtual void Dispose(bool disposing)
+		protected override void Dispose(bool disposing)
 		{
-			if (Native != IntPtr.Zero)
-			{
-				btStridingMeshInterface_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~StridingMeshInterface()
-		{
-			Dispose(false);
+			btStridingMeshInterface_delete(Native);
 		}
 	}
 

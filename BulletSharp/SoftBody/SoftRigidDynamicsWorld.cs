@@ -23,11 +23,11 @@ namespace BulletSharp.SoftBody
 
 			IntPtr native = btSoftRigidDynamicsWorld_new(dispatcher.Native, pairCache.Native,
 				(constraintSolver != null) ? constraintSolver.Native : IntPtr.Zero,
-				collisionConfiguration.Native, _softBodySolver._native);
+				collisionConfiguration.Native, _softBodySolver.Native);
 			InitializeUserOwned(native);
 			InitializeMembers(dispatcher, pairCache, constraintSolver);
 
-			WorldInfo = new SoftBodyWorldInfo(btSoftRigidDynamicsWorld_getWorldInfo(Native), true)
+			WorldInfo = new SoftBodyWorldInfo(btSoftRigidDynamicsWorld_getWorldInfo(Native), this)
 			{
 				Dispatcher = dispatcher,
 				Broadphase = pairCache

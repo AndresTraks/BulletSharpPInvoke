@@ -19,11 +19,8 @@ namespace BulletSharp
 
 	public delegate void ContactAddedEventHandler(ManifoldPoint cp, CollisionObjectWrapper colObj0Wrap, int partId0, int index0, CollisionObjectWrapper colObj1Wrap, int partId1, int index1);
 
-	public class ManifoldPoint : IDisposable
+	public class ManifoldPoint : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
-
 		private static ContactAddedEventHandler _contactAdded;
 		private static ContactAddedUnmanagedDelegate _contactAddedUnmanaged;
 		private static IntPtr _contactAddedUnmanagedPtr;
@@ -33,7 +30,7 @@ namespace BulletSharp
 
 		static bool ContactAddedUnmanaged(IntPtr cp, IntPtr colObj0Wrap, int partId0, int index0, IntPtr colObj1Wrap, int partId1, int index1)
 		{
-			_contactAdded.Invoke(new ManifoldPoint(cp, true), new CollisionObjectWrapper(colObj0Wrap), partId0, index0, new CollisionObjectWrapper(colObj1Wrap), partId1, index1);
+			_contactAdded.Invoke(new ManifoldPoint(cp), new CollisionObjectWrapper(colObj0Wrap), partId0, index0, new CollisionObjectWrapper(colObj1Wrap), partId1, index1);
 			return false;
 		}
 
@@ -59,10 +56,9 @@ namespace BulletSharp
 			}
 		}
 
-		internal ManifoldPoint(IntPtr native, bool preventDelete)
+		internal ManifoldPoint(IntPtr native)
 		{
-			Native = native;
-			_preventDelete = preventDelete;
+			InitializeSubObject(native, this);
 		}
 
 		public ManifoldPoint()
@@ -208,7 +204,7 @@ namespace BulletSharp
 		public int LifeTime
 		{
 			get => btManifoldPoint_getLifeTime(Native);
-            set => btManifoldPoint_setLifeTime(Native, value);
+			set => btManifoldPoint_setLifeTime(Native, value);
 		}
 
 		public Vector3 LocalPointA
@@ -309,27 +305,12 @@ namespace BulletSharp
 			}
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (Owner == null)
 			{
-				if (!_preventDelete)
-				{
-					btManifoldPoint_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btManifoldPoint_delete(Native);
 			}
-		}
-
-		~ManifoldPoint()
-		{
-			Dispose(false);
 		}
 	}
 }

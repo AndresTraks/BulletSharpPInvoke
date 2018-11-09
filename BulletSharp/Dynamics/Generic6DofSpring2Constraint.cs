@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.InteropServices;
-using System.Security;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
@@ -466,27 +465,26 @@ namespace BulletSharp
 		private RotationalLimitMotor2[] _angularLimits = new RotationalLimitMotor2[3];
 		private TranslationalLimitMotor2 _linearLimits;
 
-		internal Generic6DofSpring2Constraint(IntPtr native)
-			: base(native)
+		protected internal Generic6DofSpring2Constraint()
 		{
 		}
 
 		public Generic6DofSpring2Constraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
 			Matrix frameInA, Matrix frameInB, RotateOrder rotOrder = RotateOrder.XYZ)
-			: base(btGeneric6DofSpring2Constraint_new(rigidBodyA.Native, rigidBodyB.Native,
-				ref frameInA, ref frameInB, rotOrder))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = rigidBodyB;
+			IntPtr native = btGeneric6DofSpring2Constraint_new(rigidBodyA.Native, rigidBodyB.Native,
+				ref frameInA, ref frameInB, rotOrder);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, rigidBodyB);
 		}
 
 		public Generic6DofSpring2Constraint(RigidBody rigidBodyB, Matrix frameInB,
 			RotateOrder rotOrder = RotateOrder.XYZ)
-			: base(btGeneric6DofSpring2Constraint_new2(rigidBodyB.Native, ref frameInB,
-				rotOrder))
 		{
-			_rigidBodyA = GetFixedBody();
-			_rigidBodyB = rigidBodyB;
+			IntPtr native = btGeneric6DofSpring2Constraint_new2(rigidBodyB.Native, ref frameInB,
+				rotOrder);
+			InitializeUserOwned(native);
+			InitializeMembers(GetFixedBody(), rigidBodyB);
 		}
 
 		public static double BtGetMatrixElem(Matrix mat, int index)

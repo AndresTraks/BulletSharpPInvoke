@@ -121,30 +121,29 @@ namespace BulletSharp
 		public Vector3 HitPointWorld { get; set; }
 	}
 
-	public abstract class ContactResultCallback : IDisposable
+	public abstract class ContactResultCallback : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate double AddSingleResultUnmanagedDelegate(IntPtr cp, IntPtr colObj0Wrap, int partId0, int index0, IntPtr colObj1Wrap, int partId1, int index1);
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate bool NeedsCollisionUnmanagedDelegate(IntPtr proxy0);
 
-		private AddSingleResultUnmanagedDelegate _addSingleResult;
-		private NeedsCollisionUnmanagedDelegate _needsCollision;
+		private readonly AddSingleResultUnmanagedDelegate _addSingleResult;
+		private readonly NeedsCollisionUnmanagedDelegate _needsCollision;
 
 		public ContactResultCallback()
 		{
 			_addSingleResult = AddSingleResultUnmanaged;
 			_needsCollision = NeedsCollisionUnmanaged;
-			Native = btCollisionWorld_ContactResultCallbackWrapper_new(
+			IntPtr native = btCollisionWorld_ContactResultCallbackWrapper_new(
 				Marshal.GetFunctionPointerForDelegate(_addSingleResult),
 				Marshal.GetFunctionPointerForDelegate(_needsCollision));
+			InitializeUserOwned(native);
 		}
 
 		private double AddSingleResultUnmanaged(IntPtr cp, IntPtr colObj0Wrap, int partId0, int index0, IntPtr colObj1Wrap, int partId1, int index1)
 		{
-			return AddSingleResult(new ManifoldPoint(cp, true),
+			return AddSingleResult(new ManifoldPoint(cp),
 				new CollisionObjectWrapper(colObj0Wrap), partId0, index0,
 				new CollisionObjectWrapper(colObj1Wrap), partId1, index1);
 		}
@@ -179,51 +178,35 @@ namespace BulletSharp
 			set => btCollisionWorld_ContactResultCallback_setCollisionFilterMask(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btCollisionWorld_ContactResultCallback_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~ContactResultCallback()
-		{
-			Dispose(false);
+			btCollisionWorld_ContactResultCallback_delete(Native);
 		}
 	}
 
-	public abstract class ConvexResultCallback : IDisposable
+	public abstract class ConvexResultCallback : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate double AddSingleResultUnmanagedDelegate(IntPtr convexResult, bool normalInWorldSpace);
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate bool NeedsCollisionUnmanagedDelegate(IntPtr proxy0);
 
-		private AddSingleResultUnmanagedDelegate _addSingleResult;
-		private NeedsCollisionUnmanagedDelegate _needsCollision;
+		private readonly AddSingleResultUnmanagedDelegate _addSingleResult;
+		private readonly NeedsCollisionUnmanagedDelegate _needsCollision;
 
 		protected ConvexResultCallback()
 		{
 			_addSingleResult = AddSingleResultUnmanaged;
 			_needsCollision = NeedsCollisionUnmanaged;
-			Native = btCollisionWorld_ConvexResultCallbackWrapper_new(
+			IntPtr native = btCollisionWorld_ConvexResultCallbackWrapper_new(
 				Marshal.GetFunctionPointerForDelegate(_addSingleResult),
 				Marshal.GetFunctionPointerForDelegate(_needsCollision));
+			InitializeUserOwned(native);
 		}
 
 		private double AddSingleResultUnmanaged(IntPtr convexResult, bool normalInWorldSpace)
 		{
-			return AddSingleResult(new LocalConvexResult(convexResult), normalInWorldSpace);
+			return AddSingleResult(new LocalConvexResult(convexResult, this), normalInWorldSpace);
 		}
 
 		public abstract double AddSingleResult(LocalConvexResult convexResult, bool normalInWorldSpace);
@@ -259,49 +242,31 @@ namespace BulletSharp
 
 		public bool HasHit => btCollisionWorld_ConvexResultCallback_hasHit(Native);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btCollisionWorld_ConvexResultCallback_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~ConvexResultCallback()
-		{
-			Dispose(false);
+			btCollisionWorld_ConvexResultCallback_delete(Native);
 		}
 	}
 
-	public class LocalConvexResult : IDisposable
+	public class LocalConvexResult : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
-
 		private CollisionObject _hitCollisionObject;
 		private LocalShapeInfo _localShapeInfo;
 
-		internal LocalConvexResult(IntPtr native)
+		protected internal LocalConvexResult(IntPtr native, BulletObject owner)
 		{
-			Native = native;
-			_preventDelete = true;
+			InitializeSubObject(native, owner);
 			_hitCollisionObject = CollisionObject.GetManaged(btCollisionWorld_LocalConvexResult_getHitCollisionObject(Native));
-			_localShapeInfo = new LocalShapeInfo(btCollisionWorld_LocalConvexResult_getLocalShapeInfo(Native), true);
+			_localShapeInfo = new LocalShapeInfo(btCollisionWorld_LocalConvexResult_getLocalShapeInfo(Native), this);
 		}
 
 		public LocalConvexResult(CollisionObject hitCollisionObject, LocalShapeInfo localShapeInfo,
 			Vector3 hitNormalLocal, Vector3 hitPointLocal, double hitFraction)
 		{
-			Native = btCollisionWorld_LocalConvexResult_new(hitCollisionObject.Native,
+			IntPtr native = btCollisionWorld_LocalConvexResult_new(hitCollisionObject.Native,
 				localShapeInfo.Native, ref hitNormalLocal, ref hitPointLocal,
 				hitFraction);
+			InitializeUserOwned(native);
 			_hitCollisionObject = hitCollisionObject;
 			_localShapeInfo = localShapeInfo;
 		}
@@ -354,51 +319,41 @@ namespace BulletSharp
 			}
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (Owner == null)
 			{
-				if (!_preventDelete)
-				{
-					btCollisionWorld_LocalConvexResult_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btCollisionWorld_LocalConvexResult_delete(Native);
 			}
-		}
-
-		~LocalConvexResult()
-		{
-			Dispose(false);
 		}
 	}
 
-	public class LocalRayResult : IDisposable
+	public class LocalRayResult : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
-
 		private CollisionObject _collisionObject;
 		private LocalShapeInfo _localShapeInfo;
 
-		internal LocalRayResult(IntPtr native)
+		internal LocalRayResult(IntPtr native, RayResultCallback owner)
 		{
-			Native = native;
-			_preventDelete = true;
-			_collisionObject = CollisionObject.GetManaged(btCollisionWorld_LocalRayResult_getCollisionObject(Native));
-			_localShapeInfo = new LocalShapeInfo(btCollisionWorld_LocalRayResult_getLocalShapeInfo(Native), true);
+			InitializeSubObject(native, owner);
+
+			CollisionObject collisionObject = CollisionObject.GetManaged(btCollisionWorld_LocalRayResult_getCollisionObject(Native));
+			var localShapeInfo = new LocalShapeInfo(btCollisionWorld_LocalRayResult_getLocalShapeInfo(Native), this);
+			InitializeMembers(collisionObject, localShapeInfo);
 		}
 
 		public LocalRayResult(CollisionObject collisionObject, LocalShapeInfo localShapeInfo,
 			Vector3 hitNormalLocal, double hitFraction)
 		{
-			Native = btCollisionWorld_LocalRayResult_new(collisionObject.Native,
+
+			IntPtr native = btCollisionWorld_LocalRayResult_new(collisionObject.Native,
 				localShapeInfo.Native, ref hitNormalLocal, hitFraction);
+			InitializeUserOwned(native);
+			InitializeMembers(collisionObject, localShapeInfo);
+		}
+
+		protected void InitializeMembers(CollisionObject collisionObject, LocalShapeInfo localShapeInfo)
+		{
 			_collisionObject = collisionObject;
 			_localShapeInfo = localShapeInfo;
 		}
@@ -440,44 +395,26 @@ namespace BulletSharp
 			}
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (Owner == null)
 			{
-				if (!_preventDelete)
-				{
-					btCollisionWorld_LocalRayResult_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btCollisionWorld_LocalRayResult_delete(Native);
 			}
-		}
-
-		~LocalRayResult()
-		{
-			Dispose(false);
 		}
 	}
 
-	public class LocalShapeInfo : IDisposable
+	public class LocalShapeInfo : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		bool _preventDelete;
-
-		internal LocalShapeInfo(IntPtr native, bool preventDelete)
+		internal LocalShapeInfo(IntPtr native, BulletObject owner)
 		{
-			Native = native;
-			_preventDelete = preventDelete;
+			InitializeSubObject(native, owner);
 		}
 
 		public LocalShapeInfo()
 		{
-			Native = btCollisionWorld_LocalShapeInfo_new();
+			IntPtr native = btCollisionWorld_LocalShapeInfo_new();
+			InitializeUserOwned(native);
 		}
 
 		public int ShapePart
@@ -492,27 +429,12 @@ namespace BulletSharp
 			set => btCollisionWorld_LocalShapeInfo_setTriangleIndex(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (Owner == null)
 			{
-				if (!_preventDelete)
-				{
-					btCollisionWorld_LocalShapeInfo_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btCollisionWorld_LocalShapeInfo_delete(Native);
 			}
-		}
-
-		~LocalShapeInfo()
-		{
-			Dispose(false);
 		}
 	}
 
@@ -539,7 +461,7 @@ namespace BulletSharp
 
 		private double AddSingleResultUnmanaged(IntPtr rayResult, bool normalInWorldSpace)
 		{
-			return AddSingleResult(new LocalRayResult(rayResult), normalInWorldSpace);
+			return AddSingleResult(new LocalRayResult(rayResult, this), normalInWorldSpace);
 		}
 
 		public abstract double AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace);

@@ -1,4 +1,5 @@
 using BulletSharp.Math;
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -7,11 +8,11 @@ namespace BulletSharp
 	{
 		public UniversalConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Vector3 anchor,
 			Vector3 axis1, Vector3 axis2)
-			: base(btUniversalConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
-				ref anchor, ref axis1, ref axis2))
 		{
-			_rigidBodyA = rigidBodyA;
-			_rigidBodyB = rigidBodyB;
+			IntPtr native = btUniversalConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
+				ref anchor, ref axis1, ref axis2);
+			InitializeUserOwned(native);
+			InitializeMembers(rigidBodyA, rigidBodyB);
 		}
 
 		public void SetLowerLimit(double ang1min, double ang2min)
