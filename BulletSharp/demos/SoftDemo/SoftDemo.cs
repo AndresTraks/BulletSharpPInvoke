@@ -889,12 +889,12 @@ namespace SoftDemo
             SoftBody torus = CreateClusterTorus(Vector3.Zero, new Vector3((float)Math.PI / 2, 0, (float)Math.PI / 2));
             RigidBody plate = CreateBigPlate(50, 8);
             torus.Cfg.DynamicFriction = 1;
-            using (var angularJoint = new AngularJoint.Specs
+            using (var angularJointSpecs = new AngularJoint.Specs
             {
                 Axis = new Vector3(0, 0, 1)
             })
             {
-                torus.AppendAngularJoint(angularJoint, new Body(plate));
+                torus.AppendAngularJoint(angularJointSpecs, new Body(plate));
             }
         }
 

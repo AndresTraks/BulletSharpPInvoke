@@ -187,25 +187,22 @@ namespace BulletSharp
 		}
 	}
 
-	public class GImpactQuantizedBvh : IDisposable
+	public class GImpactQuantizedBvh : BulletDisposableObject
 	{
-		internal IntPtr Native;
+		private Aabb _globalBox;
 
 		private PrimitiveManagerBase _primitiveManager;
 
-		internal GImpactQuantizedBvh(IntPtr native)
-		{
-			Native = native;
-		}
-
 		public GImpactQuantizedBvh()
 		{
-			Native = btGImpactQuantizedBvh_new();
+			IntPtr native = btGImpactQuantizedBvh_new();
+			InitializeUserOwned(native);
 		}
 
 		public GImpactQuantizedBvh(PrimitiveManagerBase primitiveManager)
 		{
-			Native = btGImpactQuantizedBvh_new2(primitiveManager.Native);
+			IntPtr native = btGImpactQuantizedBvh_new2(primitiveManager.Native);
+			InitializeUserOwned(native);
 			_primitiveManager = primitiveManager;
 		}
 		/*
@@ -288,7 +285,7 @@ namespace BulletSharp
 			btGImpactQuantizedBvh_update(Native);
 		}
 
-		public Aabb GlobalBox => new Aabb(btGImpactQuantizedBvh_getGlobalBox(Native));
+		public Aabb GlobalBox => _globalBox ?? (_globalBox = new Aabb(btGImpactQuantizedBvh_getGlobalBox(Native), this));
 
 		public bool HasHierarchy => btGImpactQuantizedBvh_hasHierarchy(Native);
 
@@ -306,24 +303,9 @@ namespace BulletSharp
 			}
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btGImpactQuantizedBvh_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~GImpactQuantizedBvh()
-		{
-			Dispose(false);
+			btGImpactQuantizedBvh_delete(Native);
 		}
 	}
 }

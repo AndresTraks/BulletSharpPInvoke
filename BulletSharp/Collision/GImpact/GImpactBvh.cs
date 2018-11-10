@@ -96,26 +96,24 @@ namespace BulletSharp
 		}
 	}
 
-	public sealed class GImpactBvhData : IDisposable
+	public sealed class GImpactBvhData : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
-
-		internal GImpactBvhData(IntPtr native)
-		{
-			Native = native;
-			_preventDelete = true;
-		}
+		private Aabb _bound;
 
 		public GImpactBvhData()
 		{
-			Native = GIM_BVH_DATA_new();
+			IntPtr native = GIM_BVH_DATA_new();
+			InitializeUserOwned(native);
 		}
 
 		public Aabb Bound
 		{
-			get => new Aabb(GIM_BVH_DATA_getBound(Native));
-			set => GIM_BVH_DATA_setBound(Native, value.Native);
+			get => _bound ?? (_bound = new Aabb(GIM_BVH_DATA_getBound(Native), this));
+			set
+			{
+				GIM_BVH_DATA_setBound(Native, value.Native);
+				_bound = value;
+			}
 		}
 
 		public int Data
@@ -124,48 +122,38 @@ namespace BulletSharp
 			set => GIM_BVH_DATA_setData(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		private void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
-				if (!_preventDelete)
-				{
-					GIM_BVH_DATA_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				GIM_BVH_DATA_delete(Native);
 			}
-		}
-
-		~GImpactBvhData()
-		{
-			Dispose(false);
 		}
 	}
 
-	public class GimBvhTreeNode : IDisposable
+	public class GimBvhTreeNode : BulletDisposableObject
 	{
-		internal IntPtr Native;
+		private Aabb _bound;
 
-		internal GimBvhTreeNode(IntPtr native)
+		internal GimBvhTreeNode(IntPtr native, BulletObject owner)
 		{
-			Native = native;
+			InitializeSubObject(native, owner);
 		}
 
 		public GimBvhTreeNode()
 		{
-			Native = GIM_BVH_TREE_NODE_new();
+			IntPtr native = GIM_BVH_TREE_NODE_new();
+			InitializeUserOwned(native);
 		}
 
 		public Aabb Bound
 		{
-			get => new Aabb(GIM_BVH_TREE_NODE_getBound(Native));
-			set => GIM_BVH_TREE_NODE_setBound(Native, value.Native);
+			get => _bound ?? (_bound = new Aabb(GIM_BVH_TREE_NODE_getBound(Native), this));
+			set
+			{
+				GIM_BVH_TREE_NODE_setBound(Native, value.Native);
+				_bound = value;
+			}
 		}
 
 		public int DataIndex
@@ -182,24 +170,9 @@ namespace BulletSharp
 
 		public bool IsLeafNode => GIM_BVH_TREE_NODE_isLeafNode(Native);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				GIM_BVH_TREE_NODE_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~GimBvhTreeNode()
-		{
-			Dispose(false);
+			GIM_BVH_TREE_NODE_delete(Native);
 		}
 	}
 
@@ -235,18 +208,17 @@ namespace BulletSharp
 		*/
 	}
 
-	public class BvhTree : IDisposable
+	public class BvhTree : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		internal BvhTree(IntPtr native)
+		internal BvhTree(IntPtr native, BulletObject owner)
 		{
-			Native = native;
+			InitializeSubObject(native, owner);
 		}
 
 		public BvhTree()
 		{
-			Native = btBvhTree_new();
+			IntPtr native = btBvhTree_new();
+			InitializeUserOwned(native);
 		}
 
 		public void BuildTree(GimBvhDataArray primitiveBoxes)
@@ -261,12 +233,12 @@ namespace BulletSharp
 
 		public GimBvhTreeNode GetNodePointer()
 		{
-			return new GimBvhTreeNode(btBvhTree_get_node_pointer(Native));
+			return new GimBvhTreeNode(btBvhTree_get_node_pointer(Native), this);
 		}
 
 		public GimBvhTreeNode GetNodePointer(int index)
 		{
-			return new GimBvhTreeNode(btBvhTree_get_node_pointer2(Native, index));
+			return new GimBvhTreeNode(btBvhTree_get_node_pointer2(Native, index), this);
 		}
 
 		public int GetEscapeNodeIndex(int nodeIndex)
@@ -306,24 +278,9 @@ namespace BulletSharp
 
 		public int NodeCount => btBvhTree_getNodeCount(Native);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btBvhTree_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~BvhTree()
-		{
-			Dispose(false);
+			btBvhTree_delete(Native);
 		}
 	}
 
@@ -371,25 +328,26 @@ namespace BulletSharp
 		}
 	}
 
-	public class GImpactBvh : IDisposable
+	public class GImpactBvh : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		private PrimitiveManagerBase _primitiveManager;
+		private Aabb _globalBox;
 
-		internal GImpactBvh(IntPtr native)
+		internal GImpactBvh(IntPtr native, BulletObject owner)
 		{
-			Native = native;
+			InitializeSubObject(native, owner);
 		}
 
 		public GImpactBvh()
 		{
-			Native = btGImpactBvh_new();
+			IntPtr native = btGImpactBvh_new();
+			InitializeUserOwned(native);
 		}
 
 		public GImpactBvh(PrimitiveManagerBase primitiveManager)
 		{
-			Native = btGImpactBvh_new2(primitiveManager.Native);
+			IntPtr native = btGImpactBvh_new2(primitiveManager.Native);
+			InitializeUserOwned(native);
 			_primitiveManager = primitiveManager;
 		}
 		/*
@@ -418,7 +376,7 @@ namespace BulletSharp
 
 		public GimBvhTreeNode GetNodePointer(int index = 0)
 		{
-			return new GimBvhTreeNode(btGImpactBvh_get_node_pointer(Native, index));
+			return new GimBvhTreeNode(btGImpactBvh_get_node_pointer(Native, index), this);
 		}
 
 		public int GetEscapeNodeIndex(int nodeIndex)
@@ -471,7 +429,7 @@ namespace BulletSharp
 			btGImpactBvh_update(Native);
 		}
 
-		public Aabb GlobalBox => new Aabb(btGImpactBvh_getGlobalBox(Native));
+		public Aabb GlobalBox => _globalBox ?? (_globalBox = new Aabb(btGImpactBvh_getGlobalBox(Native), this));
 
 		public bool HasHierarchy => btGImpactBvh_hasHierarchy(Native);
 
@@ -485,24 +443,12 @@ namespace BulletSharp
 			set => btGImpactBvh_setPrimitiveManager(Native, value.Native);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
 				btGImpactBvh_delete(Native);
-				Native = IntPtr.Zero;
 			}
-		}
-
-		~GImpactBvh()
-		{
-			Dispose(false);
 		}
 	}
 }

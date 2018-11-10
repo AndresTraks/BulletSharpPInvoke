@@ -87,6 +87,7 @@
     <Compile Include="Collision\TriangleShape.cs" />
     <Compile Include="Collision\UniformScalingShape.cs" />
     <Compile Include="Collision\UnionFind.cs" />
+    <Compile Include="Common\GenericListEnumerator.cs" />
     <Compile Include="Dynamics\ContactConstraint.cs" />
     <Compile Include="Dynamics\DantzigSolver.cs" />
     <Compile Include="Dynamics\DiscreteDynamicsWorldMultiThreaded.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Extras\Chunk.cs" />
     <Compile Include="Extras\Dna.cs" />
     <Compile Include="Extras\Hacd.cs" />
+    <Compile Include="Common\FixedSizeArray.cs" />
     <Compile Include="LinearMath\AlignedManifoldArray.cs" />
     <Compile Include="Collision\AxisSweep3.cs" />
     <Compile Include="Collision\BoxShape.cs" />
@@ -226,6 +228,7 @@
     <Compile Include="SoftBody\AlignedNodeArray.cs" />
     <Compile Include="SoftBody\AlignedClusterArray.cs" />
     <Compile Include="SoftBody\AlignedSoftBodyArray.cs" />
+    <Compile Include="SoftBody\BodyArray.cs" />
     <Compile Include="SoftBody\Collections.cs" />
     <Compile Include="SoftBody\AlignedTetraArray.cs" />
     <Compile Include="SoftBody\AlignedFaceArray.cs" />

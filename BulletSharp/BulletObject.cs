@@ -8,7 +8,12 @@ namespace BulletSharp
 
 		protected internal void Initialize(IntPtr native)
 		{
-			if (Native == null)
+			if (native == IntPtr.Zero)
+			{
+				throw new ArgumentNullException(nameof(native));
+			}
+
+			if (Native != IntPtr.Zero)
 			{
 				throw new InvalidOperationException("Bullet object already initialized.");
 			}
@@ -23,6 +28,9 @@ namespace BulletSharp
 		protected internal void InitializeUserOwned(IntPtr native)
 		{
 			Initialize(native);
+#if !BULLET_OBJECT_TRACKING
+			IsUserOwned = true;
+#endif
 			BulletObjectTracker.Add(this);
 		}
 
@@ -31,13 +39,21 @@ namespace BulletSharp
 		protected internal void InitializeSubObject(IntPtr native, BulletObject owner)
 		{
 			Initialize(native);
+#if BULLET_OBJECT_TRACKING
 			Owner = owner;
+#endif
 			BulletObjectTracker.Add(this);
+			GC.SuppressFinalize(this);
 		}
 
 		public bool IsDisposed { get; private set; }
-
+#if BULLET_OBJECT_TRACKING
 		internal BulletObject Owner { get; private set; }
+
+		internal bool IsUserOwned => Owner == null;
+#else
+		internal bool IsUserOwned { get; private set; }
+#endif
 
 		public void Dispose()
 		{

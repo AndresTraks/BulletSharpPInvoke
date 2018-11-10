@@ -15,7 +15,7 @@ namespace BulletSharp
 
 		public MultiSphereShape(Vector3Array positions, float[] radi)
 		{
-			IntPtr native = btMultiSphereShape_new2(positions._native, radi, (radi.Length < positions.Count) ? radi.Length : positions.Count);
+			IntPtr native = btMultiSphereShape_new2(positions.Native, radi, (radi.Length < positions.Count) ? radi.Length : positions.Count);
 			InitializeCollisionShape(native);
 		}
 

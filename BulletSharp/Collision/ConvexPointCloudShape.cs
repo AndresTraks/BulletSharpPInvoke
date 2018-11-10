@@ -17,7 +17,7 @@ namespace BulletSharp
 		public ConvexPointCloudShape(Vector3Array points, int numPoints, Vector3 localScaling,
 			bool computeAabb = true)
 		{
-			IntPtr native = btConvexPointCloudShape_new2(points._native, numPoints, ref localScaling,
+			IntPtr native = btConvexPointCloudShape_new2(points.Native, numPoints, ref localScaling,
 				computeAabb);
 			InitializeCollisionShape(native);
 
@@ -38,14 +38,14 @@ namespace BulletSharp
 
 		public void SetPoints(Vector3Array points, int numPoints, bool computeAabb = true)
 		{
-			btConvexPointCloudShape_setPoints(Native, points._native, numPoints,
+			btConvexPointCloudShape_setPoints(Native, points.Native, numPoints,
 				computeAabb);
 			_unscaledPoints = points;
 		}
 
 		public void SetPoints(Vector3Array points, int numPoints, bool computeAabb, Vector3 localScaling)
 		{
-			btConvexPointCloudShape_setPoints2(Native, points._native, numPoints,
+			btConvexPointCloudShape_setPoints2(Native, points.Native, numPoints,
 				computeAabb, ref localScaling);
 			_unscaledPoints = points;
 		}

@@ -37,16 +37,11 @@ namespace BulletSharp.SoftBody
 		object System.Collections.IEnumerator.Current => _array[_i];
 	}
 
-	public class NodePtrArray : FixedSizeArray, IList<Node>
+	public class NodePtrArray : FixedSizeArray<Node>, IList<Node>
 	{
 		internal NodePtrArray(IntPtr native, int count)
 			: base(native, count)
 		{
-		}
-
-		public void Add(Node item)
-		{
-			throw new InvalidOperationException();
 		}
 
 		public int IndexOf(Node item)
@@ -62,11 +57,11 @@ namespace BulletSharp.SoftBody
 				{
 					throw new ArgumentOutOfRangeException(nameof(index));
 				}
-				return new Node(btSoftBodyNodePtrArray_at(_native, index));
+				return new Node(btSoftBodyNodePtrArray_at(Native, index));
 			}
 			set
 			{
-				btSoftBodyNodePtrArray_set(_native, value.Native, index);
+				btSoftBodyNodePtrArray_set(Native, value.Native, index);
 			}
 		}
 
@@ -88,16 +83,6 @@ namespace BulletSharp.SoftBody
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
 			return new NodePtrArrayEnumerator(this);
-		}
-
-		public void Insert(int index, Node item)
-		{
-			throw new InvalidOperationException();
-		}
-
-		public bool Remove(Node item)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

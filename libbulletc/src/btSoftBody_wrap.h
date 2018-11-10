@@ -127,6 +127,8 @@ extern "C" {
 	EXPORT void btSoftBody_Body_xform(btSoftBody_Body* obj, btTransform* value);
 	EXPORT void btSoftBody_Body_delete(btSoftBody_Body* obj);
 
+	EXPORT btSoftBody_Body* btSoftBody_Body_array_at(btSoftBody_Body* obj, int index);
+
 	EXPORT btScalar btSoftBody_CJoint_getFriction(btSoftBody_CJoint* obj);
 	EXPORT int btSoftBody_CJoint_getLife(btSoftBody_CJoint* obj);
 	EXPORT int btSoftBody_CJoint_getMaxlife(btSoftBody_CJoint* obj);
