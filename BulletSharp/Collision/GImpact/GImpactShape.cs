@@ -30,6 +30,8 @@ namespace BulletSharp
 
 	public abstract class GImpactShapeInterface : ConcaveShape
 	{
+		private Aabb _localBox;
+
 		protected internal GImpactShapeInterface()
 		{
 		}
@@ -124,7 +126,7 @@ namespace BulletSharp
 
 		public bool HasBoxSet => btGImpactShapeInterface_hasBoxSet(Native);
 
-		public Aabb LocalBox => new Aabb(btGImpactShapeInterface_getLocalBox(Native));
+		public Aabb LocalBox => _localBox ?? (_localBox = new Aabb(btGImpactShapeInterface_getLocalBox(Native), this));
 
 		public bool NeedsRetrieveTetrahedrons => btGImpactShapeInterface_needsRetrieveTetrahedrons(Native);
 

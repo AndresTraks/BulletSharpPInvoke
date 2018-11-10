@@ -20,7 +20,7 @@ namespace BulletSharp
 
 		protected override void Dispose(bool disposing)
 		{
-			if (Owner == null)
+			if (IsUserOwned)
 			{
 				btOverlappingPairCallback_delete(Native);
 			}

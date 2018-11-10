@@ -5603,6 +5603,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_Body_delete(IntPtr obj);
 
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btSoftBody_Body_array_at(IntPtr obj, int index);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern double btSoftBody_CJoint_getFriction(IntPtr obj);

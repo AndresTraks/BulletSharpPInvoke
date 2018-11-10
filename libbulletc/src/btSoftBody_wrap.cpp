@@ -445,6 +445,12 @@ void btSoftBody_Body_delete(btSoftBody_Body* obj)
 }
 
 
+btSoftBody_Body* btSoftBody_Body_array_at(btSoftBody_Body* obj, int index)
+{
+	return &obj[index];
+}
+
+
 btScalar btSoftBody_CJoint_getFriction(btSoftBody_CJoint* obj)
 {
 	return obj->m_friction;

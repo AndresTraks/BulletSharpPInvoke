@@ -46,10 +46,10 @@ extern "C" {
 	EXPORT void btAlignedObjectArray_btSoftBody_Face_resizeNoInitialize(btAlignedObjectArray_btSoftBody_Face* obj, int newSize);
 	EXPORT int btAlignedObjectArray_btSoftBody_Face_size(btAlignedObjectArray_btSoftBody_Face* obj);
 
-	EXPORT btSoftBody_Joint* btAlignedObjectArray_btSoftBody_JointPtr_at(btAlignedObjectArray_btSoftBody_JointPtr** obj, int n);
-	EXPORT void btAlignedObjectArray_btSoftBody_JointPtr_push_back(btAlignedObjectArray_btSoftBody_JointPtr** obj, btSoftBody_Joint* val);
-	EXPORT void btAlignedObjectArray_btSoftBody_JointPtr_resizeNoInitialize(btAlignedObjectArray_btSoftBody_JointPtr** obj, int newSize);
-	EXPORT int btAlignedObjectArray_btSoftBody_JointPtr_size(btAlignedObjectArray_btSoftBody_JointPtr** obj);
+	EXPORT btSoftBody_Joint* btAlignedObjectArray_btSoftBody_JointPtr_at(btAlignedObjectArray_btSoftBody_JointPtr* obj, int n);
+	EXPORT void btAlignedObjectArray_btSoftBody_JointPtr_push_back(btAlignedObjectArray_btSoftBody_JointPtr* obj, btSoftBody_Joint* val);
+	EXPORT void btAlignedObjectArray_btSoftBody_JointPtr_resizeNoInitialize(btAlignedObjectArray_btSoftBody_JointPtr* obj, int newSize);
+	EXPORT int btAlignedObjectArray_btSoftBody_JointPtr_size(btAlignedObjectArray_btSoftBody_JointPtr* obj);
 
 	EXPORT btSoftBody_Link* btAlignedObjectArray_btSoftBody_Link_at(btAlignedObjectArray_btSoftBody_Link* obj, int n);
 	EXPORT void btAlignedObjectArray_btSoftBody_Link_push_back(btAlignedObjectArray_btSoftBody_Link* obj, btSoftBody_Link* val);

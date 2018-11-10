@@ -64,10 +64,21 @@ namespace DemoFramework
             for (int i = world.NumCollisionObjects - 1; i >= 0; i--)
             {
                 CollisionObject obj = world.CollisionObjectArray[i];
-                var body = obj as RigidBody;
-                if (body != null && body.MotionState != null)
+                var rigidBody = obj as RigidBody;
+                if (rigidBody != null && rigidBody.MotionState != null)
                 {
-                    body.MotionState.Dispose();
+                    rigidBody.MotionState.Dispose();
+                }
+                var softBody = obj as SoftBody;
+                if (softBody != null)
+                {
+                    foreach (Joint joint in softBody.Joints)
+                    {
+                        foreach (Body body in joint.Bodies)
+                        {
+                            body.Dispose();
+                        }
+                    }
                 }
                 world.RemoveCollisionObject(obj);
                 GetShapeWithChildShapes(obj.CollisionShape, shapes);

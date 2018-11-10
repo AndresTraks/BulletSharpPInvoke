@@ -181,7 +181,7 @@ namespace BulletSharp.SoftBody
 
 		protected override void Dispose(bool disposing)
 		{
-			if (Owner == null)
+			if (IsUserOwned)
 			{
 				btSoftBodyWorldInfo_delete(Native);
 			}
@@ -190,18 +190,15 @@ namespace BulletSharp.SoftBody
 
 	public class AngularJoint : Joint
 	{
-		public class IControl : IDisposable
+		public class IControl : BulletDisposableObject
 		{
-			internal IntPtr Native;
-			private bool _preventDelete;
-
 			[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 			private delegate void PrepareUnmanagedDelegate(IntPtr angularJoint);
 			[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 			private delegate double SpeedUnmanagedDelegate(IntPtr angularJoint, double current);
 
-			private PrepareUnmanagedDelegate _prepare;
-			private SpeedUnmanagedDelegate _speed;
+			private readonly PrepareUnmanagedDelegate _prepare;
+			private readonly SpeedUnmanagedDelegate _speed;
 
 			internal static IControl GetManaged(IntPtr native)
 			{
@@ -219,10 +216,9 @@ namespace BulletSharp.SoftBody
 				return GCHandle.FromIntPtr(handle).Target as IControl;
 			}
 
-			internal IControl(IntPtr native, bool preventDelete)
+			internal IControl(IntPtr native)
 			{
-				Native = native;
-				_preventDelete = preventDelete;
+				InitializeSubObject(native, this);
 			}
 
 			public IControl()
@@ -230,25 +226,18 @@ namespace BulletSharp.SoftBody
 				_prepare = PrepareUnmanaged;
 				_speed = SpeedUnmanaged;
 
-				Native = btSoftBody_AJoint_IControlWrapper_new(
+				IntPtr native = btSoftBody_AJoint_IControlWrapper_new(
 					Marshal.GetFunctionPointerForDelegate(_prepare),
 					Marshal.GetFunctionPointerForDelegate(_speed));
+				InitializeUserOwned(native);
+
 				GCHandle handle = GCHandle.Alloc(this, GCHandleType.Weak);
 				btSoftBody_AJoint_IControlWrapper_setWrapperData(Native, GCHandle.ToIntPtr(handle));
 			}
 
 			static IControl _default;
-			public static IControl Default
-			{
-				get
-				{
-					if (_default == null)
-					{
-						_default = new IControl(btSoftBody_AJoint_IControl_Default(), true);
-					}
-					return _default;
-				}
-			}
+			public static IControl Default =>
+				_default ?? (_default = new IControl(btSoftBody_AJoint_IControl_Default()));
 
 			private void PrepareUnmanaged(IntPtr angularJoint)
 			{
@@ -269,29 +258,14 @@ namespace BulletSharp.SoftBody
 				return current;
 			}
 
-			public void Dispose()
+			protected override void Dispose(bool disposing)
 			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
-			{
-				if (Native != IntPtr.Zero)
+				if (IsUserOwned)
 				{
-					if (!_preventDelete)
-					{
-						IntPtr handle = btSoftBody_AJoint_IControlWrapper_getWrapperData(Native);
-						GCHandle.FromIntPtr(handle).Free();
-						btSoftBody_AJoint_IControl_delete(Native);
-					}
-					Native = IntPtr.Zero;
+					IntPtr handle = btSoftBody_AJoint_IControlWrapper_getWrapperData(Native);
+					GCHandle.FromIntPtr(handle).Free();
+					btSoftBody_AJoint_IControl_delete(Native);
 				}
-			}
-
-			~IControl()
-			{
-				Dispose(false);
 			}
 		}
 
@@ -300,8 +274,9 @@ namespace BulletSharp.SoftBody
 			private IControl _iControl;
 
 			public Specs()
-				: base(btSoftBody_AJoint_Specs_new())
 			{
+				IntPtr native = btSoftBody_AJoint_Specs_new();
+				InitializeUserOwned(native);
 			}
 
 			public Vector3 Axis
@@ -337,8 +312,8 @@ namespace BulletSharp.SoftBody
 		private Vector3Array _axis;
 
 		internal AngularJoint(IntPtr native)
-			: base(native)
 		{
+			Initialize(native);
 		}
 
 		public Vector3Array Axis
@@ -451,30 +426,31 @@ namespace BulletSharp.SoftBody
 		}
 	}
 
-	public class Body : IDisposable
+	public class Body : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		private Cluster _soft;
 
-		internal Body(IntPtr native)
+		internal Body(IntPtr native, BulletObject owner)
 		{
-			Native = native;
+			InitializeSubObject(native, owner);
 		}
 
 		public Body()
 		{
-			Native = btSoftBody_Body_new();
+			IntPtr native = btSoftBody_Body_new();
+			InitializeUserOwned(native);
 		}
 
 		public Body(CollisionObject colObj)
 		{
-			Native = btSoftBody_Body_new2(colObj.Native);
+			IntPtr native = btSoftBody_Body_new2(colObj.Native);
+			InitializeUserOwned(native);
 		}
 
 		public Body(Cluster p)
 		{
-			Native = btSoftBody_Body_new3(p.Native);
+			IntPtr native = btSoftBody_Body_new3(p.Native);
+			InitializeUserOwned(native);
 		}
 
 		public void Activate()
@@ -602,24 +578,9 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btSoftBody_Body_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~Body()
-		{
-			Dispose(false);
+			btSoftBody_Body_delete(Native);
 		}
 	}
 
@@ -628,8 +589,8 @@ namespace BulletSharp.SoftBody
 		private Vector3Array _rPos;
 
 		internal ContactJoint(IntPtr native)
-			: base(native)
 		{
+			Initialize(native);
 		}
 
 		public double Friction
@@ -1353,15 +1314,12 @@ namespace BulletSharp.SoftBody
 		}
 	}
 
-	public abstract class Joint
+	public abstract class Joint : BulletObject
 	{
-		public class Specs : IDisposable
+		public class Specs : BulletDisposableObject
 		{
-			internal IntPtr Native;
-
-			internal Specs(IntPtr native)
+			protected internal Specs()
 			{
-				Native = native;
 			}
 
 			public double ConstraintForceMixing
@@ -1382,29 +1340,13 @@ namespace BulletSharp.SoftBody
 				set => btSoftBody_Joint_Specs_setSplit(Native, value);
 			}
 
-			public void Dispose()
+			protected override void Dispose(bool disposing)
 			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
-			{
-				if (Native != IntPtr.Zero)
-				{
-					btSoftBody_Joint_Specs_delete(Native);
-					Native = IntPtr.Zero;
-				}
-			}
-
-			~Specs()
-			{
-				Dispose(false);
+				btSoftBody_Joint_Specs_delete(Native);
 			}
 		}
 
-		internal IntPtr Native;
-
+		private BodyArray _bodies;
 		private Vector3Array _refs;
 
 		internal static Joint GetManaged(IntPtr native)
@@ -1427,9 +1369,8 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
-		internal Joint(IntPtr native)
+		protected internal Joint()
 		{
-			Native = native;
 		}
 
 		public void Prepare(double deltaTime, int iterations)
@@ -1446,12 +1387,9 @@ namespace BulletSharp.SoftBody
 		{
 			btSoftBody_Joint_Terminate(Native, deltaTime);
 		}
-		/*
-		public BodyArray Bodies
-		{
-			get { return btSoftBody_Joint_getBodies(Native); }
-		}
-		*/
+
+		public BodyArray Bodies => _bodies ?? (_bodies = new BodyArray(btSoftBody_Joint_getBodies(Native), 2));
+
 		public double ConstraintForceMixing
 		{
 			get => btSoftBody_Joint_getCfm(Native);
@@ -1592,8 +1530,9 @@ namespace BulletSharp.SoftBody
 		public new class Specs : Joint.Specs
 		{
 			public Specs()
-				: base(btSoftBody_LJoint_Specs_new())
 			{
+				IntPtr native = btSoftBody_LJoint_Specs_new();
+				InitializeUserOwned(native);
 			}
 
 			public Vector3 Position
@@ -1611,8 +1550,8 @@ namespace BulletSharp.SoftBody
 		private Vector3Array _rPos;
 
 		internal LinearJoint(IntPtr native)
-			: base(native)
 		{
+			Initialize(native);
 		}
 
 		public Vector3Array RPos

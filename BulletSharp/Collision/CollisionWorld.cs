@@ -321,7 +321,7 @@ namespace BulletSharp
 
 		protected override void Dispose(bool disposing)
 		{
-			if (Owner == null)
+			if (IsUserOwned)
 			{
 				btCollisionWorld_LocalConvexResult_delete(Native);
 			}
@@ -397,7 +397,7 @@ namespace BulletSharp
 
 		protected override void Dispose(bool disposing)
 		{
-			if (Owner == null)
+			if (IsUserOwned)
 			{
 				btCollisionWorld_LocalRayResult_delete(Native);
 			}
@@ -431,7 +431,7 @@ namespace BulletSharp
 
 		protected override void Dispose(bool disposing)
 		{
-			if (Owner == null)
+			if (IsUserOwned)
 			{
 				btCollisionWorld_LocalShapeInfo_delete(Native);
 			}

@@ -29,8 +29,8 @@ namespace BulletSharp.Math
     public class Vector3ArrayEnumerator : IEnumerator<Vector3>
     {
         private int _i;
-        private int _count;
-        private IList<Vector3> _array;
+        private readonly int _count;
+        private readonly IList<Vector3> _array;
 
         public Vector3ArrayEnumerator(IList<Vector3> array)
         {
@@ -61,7 +61,7 @@ namespace BulletSharp.Math
 
     [DebuggerDisplay("Count = {Count}")]
     [DebuggerTypeProxy(typeof(Vector3ListDebugView))]
-    public class Vector3Array : FixedSizeArray, IList<Vector3>
+    public class Vector3Array : FixedSizeArray<Vector3>, IList<Vector3>
     {
         internal Vector3Array(IntPtr native, int count)
             : base(native, count)
@@ -70,12 +70,16 @@ namespace BulletSharp.Math
 
         public int IndexOf(Vector3 item)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Insert(int index, Vector3 item)
-        {
-            throw new NotSupportedException();
+            for (int i = 0; i < Count; i++)
+            {
+                Vector3 value;
+                btVector3_array_at(Native, i, out value);
+                if (value.Equals(item))
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         public Vector3 this[int index]
@@ -87,7 +91,7 @@ namespace BulletSharp.Math
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
                 Vector3 value;
-                btVector3_array_at(_native, index, out value);
+                btVector3_array_at(Native, index, out value);
                 return value;
             }
             set
@@ -96,18 +100,13 @@ namespace BulletSharp.Math
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
-                btVector3_array_set(_native, index, ref value);
+                btVector3_array_set(Native, index, ref value);
             }
-        }
-
-        public void Add(Vector3 item)
-        {
-            throw new NotSupportedException();
         }
 
         public bool Contains(Vector3 item)
         {
-            throw new NotImplementedException();
+            return IndexOf(item) != -1;
         }
 
         public void CopyTo(Vector3[] array, int arrayIndex)
@@ -126,11 +125,6 @@ namespace BulletSharp.Math
             {
                 array[arrayIndex + i] = this[i];
             }
-        }
-
-        public bool Remove(Vector3 item)
-        {
-            throw new NotSupportedException();
         }
 
         public IEnumerator<Vector3> GetEnumerator()

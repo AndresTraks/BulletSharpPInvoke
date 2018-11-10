@@ -404,7 +404,7 @@ namespace BulletSharp
 
 		protected override void Dispose(bool disposing)
 		{
-			if (Owner == null)
+			if (IsUserOwned)
 			{
 				// Is the object added to a world?
 				if (btCollisionObject_getBroadphaseHandle(Native) != IntPtr.Zero)

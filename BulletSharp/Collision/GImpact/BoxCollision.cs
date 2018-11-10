@@ -4,13 +4,12 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class BoxBoxTransformCache : IDisposable
+	public class BoxBoxTransformCache : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		public BoxBoxTransformCache()
 		{
-			Native = BT_BOX_BOX_TRANSFORM_CACHE_new();
+			IntPtr native = BT_BOX_BOX_TRANSFORM_CACHE_new();
+			InitializeUserOwned(native);
 		}
 
 		public void CalculateAbsoluteMatrix()
@@ -83,61 +82,47 @@ namespace BulletSharp
 			set { BT_BOX_BOX_TRANSFORM_CACHE_setT1to0(Native, ref value); }
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				BT_BOX_BOX_TRANSFORM_CACHE_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~BoxBoxTransformCache()
-		{
-			Dispose(false);
+			BT_BOX_BOX_TRANSFORM_CACHE_delete(Native);
 		}
 	}
 
-	public sealed class Aabb : IDisposable
+	public sealed class Aabb : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
-
-		internal Aabb(IntPtr native)
+		internal Aabb(IntPtr native, BulletObject owner)
 		{
-			Native = native;
-			_preventDelete = true;
+			InitializeSubObject(native, owner);
 		}
 
 		public Aabb()
 		{
-			Native = btAABB_new();
+			IntPtr native = btAABB_new();
+			InitializeUserOwned(native);
 		}
 
 		public Aabb(Vector3 v1, Vector3 v2, Vector3 v3)
 		{
-			Native = btAABB_new2(ref v1, ref v2, ref v3);
+			IntPtr native = btAABB_new2(ref v1, ref v2, ref v3);
+			InitializeUserOwned(native);
 		}
 
 		public Aabb(Vector3 v1, Vector3 v2, Vector3 v3, double margin)
 		{
-			Native = btAABB_new3(ref v1, ref v2, ref v3, margin);
+			IntPtr native = btAABB_new3(ref v1, ref v2, ref v3, margin);
+			InitializeUserOwned(native);
 		}
 
 		public Aabb(Aabb other)
 		{
-			Native = btAABB_new4(other.Native);
+			IntPtr native = btAABB_new4(other.Native);
+			InitializeUserOwned(native);
 		}
 
 		public Aabb(Aabb other, double margin)
 		{
-			Native = btAABB_new5(other.Native, margin);
+			IntPtr native = btAABB_new5(other.Native, margin);
+			InitializeUserOwned(native);
 		}
 
 		public void ApplyTransformRef(ref Matrix transform)
@@ -281,27 +266,12 @@ namespace BulletSharp
 			set { btAABB_setMin(Native, ref value); }
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		private void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
-				if (!_preventDelete)
-				{
-					btAABB_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btAABB_delete(Native);
 			}
-		}
-
-		~Aabb()
-		{
-			Dispose(false);
 		}
 	}
 

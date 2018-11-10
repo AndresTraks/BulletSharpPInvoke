@@ -95,34 +95,7 @@ namespace BulletSharp
 		object System.Collections.IEnumerator.Current => _array[_i];
 	}
 
-	public class FixedSizeArray
-	{
-		internal IntPtr _native;
-
-		protected int _count;
-
-		public FixedSizeArray(IntPtr native, int count)
-		{
-			_native = native;
-			_count = count;
-		}
-
-		public void Clear()
-		{
-			throw new InvalidOperationException();
-		}
-
-		public void RemoveAt(int index)
-		{
-			throw new NotSupportedException();
-		}
-
-		public int Count => _count;
-
-		public bool IsReadOnly => false;
-	}
-
-	public class CompoundShapeChildArray : FixedSizeArray, IList<CompoundShapeChild>
+	public class CompoundShapeChildArray : FixedSizeArray<CompoundShapeChild>, IList<CompoundShapeChild>
 	{
 		internal CompoundShapeChild[] _backingArray = new CompoundShapeChild[0];
 
@@ -130,31 +103,26 @@ namespace BulletSharp
 			: base(compoundShape, 0)
 		{
 		}
-		
-		public void Add(CompoundShapeChild item)
-		{
-			throw new NotSupportedException();
-		}
 
 		public void AddChildShape(ref Matrix localTransform, CollisionShape shape)
 		{
-			IntPtr childListOld = (_count != 0) ? btCompoundShape_getChildList(_native) : IntPtr.Zero;
-			btCompoundShape_addChildShape(_native, ref localTransform, shape.Native);
-			IntPtr childList = btCompoundShape_getChildList(_native);
+			IntPtr childListOld = (Count != 0) ? btCompoundShape_getChildList(Native) : IntPtr.Zero;
+			btCompoundShape_addChildShape(Native, ref localTransform, shape.Native);
+			IntPtr childList = btCompoundShape_getChildList(Native);
 
 			// Adjust the native pointer of existing children if the array was reallocated.
 			if (childListOld != childList)
 			{
-				for (int i = 0; i < _count; i++)
+				for (int i = 0; i < Count; i++)
 				{
 					_backingArray[i].Native = btCompoundShapeChild_array_at(childList, i);
 				}
 			}
 
 			// Add the child to the backing store.
-			int childIndex = _count;
-			_count++;
-			Array.Resize(ref _backingArray, _count);
+			int childIndex = Count;
+			Count++;
+			Array.Resize(ref _backingArray, Count);
 			_backingArray[childIndex] = new CompoundShapeChild(btCompoundShapeChild_array_at(childList, childIndex), shape);
 		}
 
@@ -189,20 +157,10 @@ namespace BulletSharp
 			return new CompoundShapeChildArrayEnumerator(this);
 		}
 
-		public void Insert(int index, CompoundShapeChild item)
-		{
-			throw new InvalidOperationException();
-		}
-
-		public bool Remove(CompoundShapeChild item)
-		{
-			throw new NotSupportedException();
-		}
-
 		public void RemoveChildShape(CollisionShape shape)
 		{
 			IntPtr shapePtr = shape.Native;
-			for (int i = 0; i < _count; i++)
+			for (int i = 0; i < Count; i++)
 			{
 				if (_backingArray[i].ChildShape.Native == shapePtr)
 				{
@@ -213,31 +171,26 @@ namespace BulletSharp
 
 		internal void RemoveChildShapeByIndex(int childShapeIndex)
 		{
-			btCompoundShape_removeChildShapeByIndex(_native, childShapeIndex);
-			_count--;
+			btCompoundShape_removeChildShapeByIndex(Native, childShapeIndex);
+			Count--;
 
 			// Swap the last item with the item to be removed like Bullet does.
-			if (childShapeIndex != _count)
+			if (childShapeIndex != Count)
 			{
-				CompoundShapeChild lastItem = _backingArray[_count];
+				CompoundShapeChild lastItem = _backingArray[Count];
 				lastItem.Native = _backingArray[childShapeIndex].Native;
 				_backingArray[childShapeIndex] = lastItem;
 			}
-			_backingArray[_count] = null;
+			_backingArray[Count] = null;
 		}
 	}
 
 	[DebuggerTypeProxy(typeof(ListDebugView))]
-	public class UIntArray : FixedSizeArray, IList<uint>
+	public class UIntArray : FixedSizeArray<uint>, IList<uint>
 	{
 		internal UIntArray(IntPtr native, int count)
 			: base(native, count)
 		{
-		}
-
-		public void Add(uint item)
-		{
-			throw new NotSupportedException();
 		}
 
 		public int IndexOf(uint item)
@@ -253,7 +206,7 @@ namespace BulletSharp
 				{
 					throw new ArgumentOutOfRangeException(nameof(index));
 				}
-				return (uint)Marshal.ReadInt32(_native, index * sizeof(uint));
+				return (uint)Marshal.ReadInt32(Native, index * sizeof(uint));
 			}
 			set
 			{
@@ -261,7 +214,7 @@ namespace BulletSharp
 				{
 					throw new ArgumentOutOfRangeException(nameof(index));
 				}
-				Marshal.WriteInt32(_native, index * sizeof(uint), (int)value);
+				Marshal.WriteInt32(Native, index * sizeof(uint), (int)value);
 			}
 		}
 
@@ -283,16 +236,6 @@ namespace BulletSharp
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
 			return new UIntArrayEnumerator(this);
-		}
-
-		public void Insert(int index, uint item)
-		{
-			throw new InvalidOperationException();
-		}
-
-		public bool Remove(uint item)
-		{
-			throw new NotSupportedException();
 		}
 	}
 }

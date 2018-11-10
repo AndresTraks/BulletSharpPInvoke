@@ -307,7 +307,7 @@ namespace BulletSharp
 
 		protected override void Dispose(bool disposing)
 		{
-			if (Owner == null)
+			if (IsUserOwned)
 			{
 				btManifoldPoint_delete(Native);
 			}
