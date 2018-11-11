@@ -69,17 +69,6 @@ namespace DemoFramework
                 {
                     rigidBody.MotionState.Dispose();
                 }
-                var softBody = obj as SoftBody;
-                if (softBody != null)
-                {
-                    foreach (Joint joint in softBody.Joints)
-                    {
-                        foreach (Body body in joint.Bodies)
-                        {
-                            body.Dispose();
-                        }
-                    }
-                }
                 world.RemoveCollisionObject(obj);
                 GetShapeWithChildShapes(obj.CollisionShape, shapes);
 

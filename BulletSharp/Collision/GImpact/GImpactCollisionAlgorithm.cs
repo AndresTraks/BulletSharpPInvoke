@@ -7,34 +7,38 @@ namespace BulletSharp
 	{
 		public class CreateFunc : CollisionAlgorithmCreateFunc
 		{
-			internal CreateFunc(IntPtr native)
-				: base(native, true)
+			internal CreateFunc(IntPtr native, BulletObject owner)
+				: base(ConstructionInfo.Null)
 			{
+				InitializeSubObject(native, owner);
 			}
 
 			public CreateFunc()
-				: base(btGImpactCollisionAlgorithm_CreateFunc_new(), false)
+				: base(ConstructionInfo.Null)
 			{
+				IntPtr native = btGImpactCollisionAlgorithm_CreateFunc_new();
+				InitializeUserOwned(native);
 			}
 
 			public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0,
 				CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
 			{
 				return new GImpactCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
-					Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native));
+					Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native), __unnamed0.Dispatcher);
 			}
 		}
 
-		internal GImpactCollisionAlgorithm(IntPtr native)
-			: base(native)
+		internal GImpactCollisionAlgorithm(IntPtr native, BulletObject owner)
 		{
+			InitializeSubObject(native, owner);
 		}
 
 		public GImpactCollisionAlgorithm(CollisionAlgorithmConstructionInfo constructionInfo, CollisionObjectWrapper body0Wrap,
 			CollisionObjectWrapper body1Wrap)
-			: base(btGImpactCollisionAlgorithm_new(constructionInfo.Native, body0Wrap.Native,
-				body1Wrap.Native))
 		{
+			IntPtr native = btGImpactCollisionAlgorithm_new(constructionInfo.Native, body0Wrap.Native,
+				body1Wrap.Native);
+			InitializeUserOwned(native);
 		}
 
 		public void GImpactVsCompoundShape(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap,

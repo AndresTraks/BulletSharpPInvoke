@@ -3,16 +3,15 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class CollisionAlgorithmConstructionInfo : IDisposable
+	public class CollisionAlgorithmConstructionInfo : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		private Dispatcher _dispatcher1;
 		private PersistentManifold _manifold;
 
 		public CollisionAlgorithmConstructionInfo()
 		{
-			Native = btCollisionAlgorithmConstructionInfo_new();
+			IntPtr native = btCollisionAlgorithmConstructionInfo_new();
+			InitializeUserOwned(native);
 		}
 
 		public CollisionAlgorithmConstructionInfo(Dispatcher dispatcher, int temp)
@@ -42,35 +41,21 @@ namespace BulletSharp
 			}
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btCollisionAlgorithmConstructionInfo_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~CollisionAlgorithmConstructionInfo()
-		{
-			Dispose(false);
+			btCollisionAlgorithmConstructionInfo_delete(Native);
 		}
 	}
 
-	public class CollisionAlgorithm : BulletObject, IDisposable
+	public class CollisionAlgorithm : BulletDisposableObject
 	{
-		private readonly bool _preventDelete;
-
-		internal CollisionAlgorithm(IntPtr native, bool preventDelete = false)
+		protected internal CollisionAlgorithm()
 		{
-			Native = native;
-			_preventDelete = preventDelete;
+		}
+
+		internal CollisionAlgorithm(IntPtr native, BulletObject owner)
+		{
+			InitializeSubObject(native, owner);
 		}
 
 		public float CalculateTimeOfImpact(CollisionObject body0, CollisionObject body1,
@@ -92,27 +77,12 @@ namespace BulletSharp
 				dispatchInfo.Native, resultOut.Native);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
-				if (!_preventDelete)
-				{
-					btCollisionAlgorithm_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btCollisionAlgorithm_delete(Native);
 			}
-		}
-
-		~CollisionAlgorithm()
-		{
-			Dispose(false);
 		}
 	}
 }

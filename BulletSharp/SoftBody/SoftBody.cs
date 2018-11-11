@@ -451,6 +451,7 @@ namespace BulletSharp.SoftBody
 		{
 			IntPtr native = btSoftBody_Body_new3(p.Native);
 			InitializeUserOwned(native);
+			_soft = p;
 		}
 
 		public void Activate()

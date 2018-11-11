@@ -15,10 +15,8 @@ namespace BulletSharp
 		ClosestPointAlgorithms = 2
 	}
 
-	public class DispatcherInfo
+	public class DispatcherInfo : BulletObject
 	{
-		internal IntPtr Native;
-
 		internal DispatcherInfo(IntPtr native)
 		{
 			Native = native;
@@ -131,7 +129,8 @@ namespace BulletSharp
 			CollisionObjectWrapper body1Wrap, PersistentManifold sharedManifold,
 			DispatcherQueryType queryType)
 		{
-			return new CollisionAlgorithm(btDispatcher_findAlgorithm(Native, body0Wrap.Native, body1Wrap.Native, sharedManifold.Native, queryType));
+			return new CollisionAlgorithm(btDispatcher_findAlgorithm(Native, body0Wrap.Native, body1Wrap.Native,
+				sharedManifold.Native, queryType), this);
 		}
 
 		public void FreeCollisionAlgorithm(IntPtr ptr)
