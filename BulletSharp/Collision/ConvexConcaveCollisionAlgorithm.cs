@@ -94,54 +94,62 @@ namespace BulletSharp
 	{
 		public class CreateFunc : CollisionAlgorithmCreateFunc
 		{
-			internal CreateFunc(IntPtr native)
-				: base(native, true)
+			internal CreateFunc(IntPtr native, BulletObject owner)
+				: base(ConstructionInfo.Null)
 			{
+				InitializeSubObject(native, owner);
 			}
 
 			public CreateFunc()
-				: base(btConvexConcaveCollisionAlgorithm_CreateFunc_new(), false)
+				: base(ConstructionInfo.Null)
 			{
+				IntPtr native = btConvexConcaveCollisionAlgorithm_CreateFunc_new();
+				InitializeUserOwned(native);
 			}
 
 			public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0,
 				CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
 			{
 				return new ConvexConcaveCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
-					Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native));
+					Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native), __unnamed0.Dispatcher);
 			}
 		}
 
 		public class SwappedCreateFunc : CollisionAlgorithmCreateFunc
 		{
-			internal SwappedCreateFunc(IntPtr native)
-				: base(native, true)
+			internal SwappedCreateFunc(IntPtr native, BulletObject owner)
+				: base(ConstructionInfo.Null)
 			{
+				InitializeSubObject(native, owner);
 			}
 
 			public SwappedCreateFunc()
-				: base(btConvexConcaveCollisionAlgorithm_SwappedCreateFunc_new(), false)
+				: base(ConstructionInfo.Null)
 			{
+				IntPtr native = btConvexConcaveCollisionAlgorithm_SwappedCreateFunc_new();
+				InitializeUserOwned(native);
 			}
 
 			public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0,
 				CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
 			{
 				return new ConvexConcaveCollisionAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
-					Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native));
+					Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native), __unnamed0.Dispatcher);
 			}
 		}
 
-		internal ConvexConcaveCollisionAlgorithm(IntPtr native)
-			: base(native)
+		internal ConvexConcaveCollisionAlgorithm(IntPtr native, BulletObject owner)
 		{
+			InitializeSubObject(native, owner);
 		}
 
 		public ConvexConcaveCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci,
 			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, bool isSwapped)
-			: base(btConvexConcaveCollisionAlgorithm_new(ci.Native, body0Wrap.Native,
-				body1Wrap.Native, isSwapped))
+			: base()
 		{
+			IntPtr native = btConvexConcaveCollisionAlgorithm_new(ci.Native, body0Wrap.Native,
+				body1Wrap.Native, isSwapped);
+			InitializeUserOwned(native);
 		}
 
 		public void ClearCache()

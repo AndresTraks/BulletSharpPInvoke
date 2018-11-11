@@ -10,15 +10,18 @@ namespace BulletSharp
 			private ConvexPenetrationDepthSolver _pdSolver;
 			private VoronoiSimplexSolver _simplexSolver;
 
-			internal CreateFunc(IntPtr native)
-				: base(native, true)
+			internal CreateFunc(IntPtr native, BulletObject owner)
+				: base(ConstructionInfo.Null)
 			{
 			}
 
 			public CreateFunc(VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver pdSolver)
-				: base(btConvex2dConvex2dAlgorithm_CreateFunc_new(simplexSolver.Native,
-					pdSolver.Native), false)
+				: base(ConstructionInfo.Null)
 			{
+				IntPtr native = btConvex2dConvex2dAlgorithm_CreateFunc_new(simplexSolver.Native,
+					pdSolver.Native);
+				InitializeUserOwned(native);
+
 				_pdSolver = pdSolver;
 				_simplexSolver = simplexSolver;
 			}
@@ -27,7 +30,7 @@ namespace BulletSharp
 				CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap)
 			{
 				return new Convex2DConvex2DAlgorithm(btCollisionAlgorithmCreateFunc_CreateCollisionAlgorithm(
-					Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native));
+					Native, __unnamed0.Native, body0Wrap.Native, body1Wrap.Native), __unnamed0.Dispatcher);
 			}
 
 			public int MinimumPointsPerturbationThreshold
@@ -63,18 +66,19 @@ namespace BulletSharp
 			}
 		}
 
-		internal Convex2DConvex2DAlgorithm(IntPtr native)
-			: base(native)
+		internal Convex2DConvex2DAlgorithm(IntPtr native, BulletObject owner)
 		{
+			InitializeSubObject(native, owner);
 		}
 
 		public Convex2DConvex2DAlgorithm(PersistentManifold mf, CollisionAlgorithmConstructionInfo ci,
 			CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap, VoronoiSimplexSolver simplexSolver,
 			ConvexPenetrationDepthSolver pdSolver, int numPerturbationIterations, int minimumPointsPerturbationThreshold)
-			: base(btConvex2dConvex2dAlgorithm_new(mf.Native, ci.Native, body0Wrap.Native,
-				body1Wrap.Native, simplexSolver.Native, pdSolver.Native, numPerturbationIterations,
-				minimumPointsPerturbationThreshold))
 		{
+			IntPtr native = btConvex2dConvex2dAlgorithm_new(mf.Native, ci.Native, body0Wrap.Native,
+				body1Wrap.Native, simplexSolver.Native, pdSolver.Native, numPerturbationIterations,
+				minimumPointsPerturbationThreshold);
+			InitializeUserOwned(native);
 		}
 
 		public void SetLowLevelOfDetail(bool useLowLevel)

@@ -194,13 +194,11 @@ namespace BulletSharp
 		}
 	}
 
-	public class BroadphasePair
+	public class BroadphasePair : BulletObject
 	{
-		internal IntPtr Native;
-
 		internal BroadphasePair(IntPtr native)
 		{
-			Native = native;
+			Initialize(native);
 		}
 
 		public CollisionAlgorithm Algorithm
@@ -208,7 +206,7 @@ namespace BulletSharp
 			get
 			{
 				IntPtr valuePtr = btBroadphasePair_getAlgorithm(Native);
-				return (valuePtr == IntPtr.Zero) ? null : new CollisionAlgorithm(valuePtr, true);
+				return (valuePtr == IntPtr.Zero) ? null : new CollisionAlgorithm(valuePtr, this);
 			}
 			set => btBroadphasePair_setAlgorithm(Native, (value.Native == IntPtr.Zero) ? IntPtr.Zero : value.Native);
 		}

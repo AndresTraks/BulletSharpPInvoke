@@ -880,7 +880,10 @@ namespace SoftDemo
                 Position = new Vector3(0, 5, 0)
             })
             {
-                torus.AppendLinearJoint(linearJoint, new Body(plate));
+                using (var body = new Body(plate))
+                {
+                    torus.AppendLinearJoint(linearJoint, body);
+                }
             }
         }
 
@@ -894,7 +897,10 @@ namespace SoftDemo
                 Axis = new Vector3(0, 0, 1)
             })
             {
-                torus.AppendAngularJoint(angularJointSpecs, new Body(plate));
+                using (var body = new Body(plate))
+                {
+                    torus.AppendAngularJoint(angularJointSpecs, body);
+                }
             }
         }
 
@@ -1052,15 +1058,17 @@ namespace SoftDemo
 
             var cylinderShape = new CylinderShape(new Vector3(8, 1, 8));
             RigidBody cylinder = PhysicsHelper.CreateBody(50, Matrix.Translation(center + new Vector3(0, 5, 0)), cylinderShape, World);
-            Body body = new Body(cylinder);
             using (var linearJoint = new LinearJoint.Specs
             {
                 ErrorReductionParameter = 0.5f
             })
             {
-                linearJoint.Position = ball1.ClusterCom(0); ball1.AppendLinearJoint(linearJoint, body);
-                linearJoint.Position = ball2.ClusterCom(0); ball2.AppendLinearJoint(linearJoint, body);
-                linearJoint.Position = ball3.ClusterCom(0); ball3.AppendLinearJoint(linearJoint, body);
+                using (var body = new Body(cylinder))
+                {
+                    linearJoint.Position = ball1.ClusterCom(0); ball1.AppendLinearJoint(linearJoint, body);
+                    linearJoint.Position = ball2.ClusterCom(0); ball2.AppendLinearJoint(linearJoint, body);
+                    linearJoint.Position = ball3.ClusterCom(0); ball3.AppendLinearJoint(linearJoint, body);
+                }
             }
 
             var slope = new BoxShape(20, 1, 40);

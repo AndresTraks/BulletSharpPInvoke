@@ -3,20 +3,16 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class CollisionAlgorithmCreateFunc : IDisposable
+	public class CollisionAlgorithmCreateFunc : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
-
-		internal CollisionAlgorithmCreateFunc(IntPtr native, bool preventDelete)
+		internal CollisionAlgorithmCreateFunc(ConstructionInfo info)
 		{
-			Native = native;
-			_preventDelete = preventDelete;
 		}
 
 		public CollisionAlgorithmCreateFunc()
 		{
-			Native = btCollisionAlgorithmCreateFunc_new();
+			IntPtr native = btCollisionAlgorithmCreateFunc_new();
+			InitializeUserOwned(native);
 		}
 
 		public virtual CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo __unnamed0,
@@ -31,27 +27,12 @@ namespace BulletSharp
 			set => btCollisionAlgorithmCreateFunc_setSwapped(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
-				if (!_preventDelete)
-				{
-					btCollisionAlgorithmCreateFunc_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btCollisionAlgorithmCreateFunc_delete(Native);
 			}
-		}
-
-		~CollisionAlgorithmCreateFunc()
-		{
-			Dispose(false);
 		}
 	}
 }

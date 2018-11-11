@@ -338,7 +338,10 @@ namespace BulletSharp
 			InitializeSubObject(native, owner);
 
 			CollisionObject collisionObject = CollisionObject.GetManaged(btCollisionWorld_LocalRayResult_getCollisionObject(Native));
-			var localShapeInfo = new LocalShapeInfo(btCollisionWorld_LocalRayResult_getLocalShapeInfo(Native), this);
+			IntPtr localShapeInfoPtr = btCollisionWorld_LocalRayResult_getLocalShapeInfo(Native);
+			LocalShapeInfo localShapeInfo = localShapeInfoPtr != IntPtr.Zero
+				? new LocalShapeInfo(localShapeInfoPtr, this)
+				: null;
 			InitializeMembers(collisionObject, localShapeInfo);
 		}
 
