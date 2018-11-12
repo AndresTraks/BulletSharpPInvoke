@@ -224,18 +224,12 @@ namespace BulletSharp
 
 	public class Dbvt
 	{
-		public class IClone : IDisposable
+		public class IClone : BulletDisposableObject
 		{
-			internal IntPtr Native;
-
-			internal IClone(IntPtr native)
-			{
-				Native = native;
-			}
-
 			public IClone()
 			{
-				Native = btDbvt_IClone_new();
+				IntPtr native = btDbvt_IClone_new();
+				InitializeUserOwned(native);
 			}
 
 			public void CloneLeaf(DbvtNode __unnamed0)
@@ -243,13 +237,7 @@ namespace BulletSharp
 				btDbvt_IClone_CloneLeaf(Native, __unnamed0.Native);
 			}
 
-			public void Dispose()
-			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
+			protected override void Dispose(bool disposing)
 			{
 				if (Native != IntPtr.Zero)
 				{
@@ -257,25 +245,18 @@ namespace BulletSharp
 					Native = IntPtr.Zero;
 				}
 			}
-
-			~IClone()
-			{
-				Dispose(false);
-			}
 		}
 
-		public class ICollide : IDisposable
+		public class ICollide : BulletDisposableObject
 		{
-			internal IntPtr Native;
-
-			internal ICollide(IntPtr native)
+			internal ICollide(ConstructionInfo info)
 			{
-				Native = native;
 			}
 
 			public ICollide()
 			{
-				Native = btDbvt_ICollide_new();
+				IntPtr native = btDbvt_ICollide_new();
+				InitializeUserOwned(native);
 			}
 
 			public bool AllLeaves(DbvtNode __unnamed0)
@@ -303,34 +284,18 @@ namespace BulletSharp
 				btDbvt_ICollide_Process3(Native, n.Native, __unnamed1);
 			}
 
-			public void Dispose()
+			protected override void Dispose(bool disposing)
 			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
-			{
-				if (Native != IntPtr.Zero)
-				{
-					btDbvt_ICollide_delete(Native);
-					Native = IntPtr.Zero;
-				}
-			}
-
-			~ICollide()
-			{
-				Dispose(false);
+				btDbvt_ICollide_delete(Native);
 			}
 		}
 
-		public abstract class IWriter : IDisposable
+		public abstract class IWriter : BulletDisposableObject
 		{
-			internal IntPtr Native;
-
-			internal IWriter(IntPtr native)
+			protected internal IWriter()
 			{
-				Native = native;
+				//IntPtr native = wrapper_new();
+				//InitializeUserOwned(native);
 			}
 
 			public void Prepare(DbvtNode root, int numnodes)
@@ -350,154 +315,18 @@ namespace BulletSharp
 					child0, child1);
 			}
 
-			public void Dispose()
+			protected override void Dispose(bool disposing)
 			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
-			{
-				if (Native != IntPtr.Zero)
-				{
-					btDbvt_IWriter_delete(Native);
-					Native = IntPtr.Zero;
-				}
-			}
-
-			~IWriter()
-			{
-				Dispose(false);
+				btDbvt_IWriter_delete(Native);
 			}
 		}
 
-		public class StkCln : IDisposable
+		public class StkNP : BulletDisposableObject
 		{
-			internal IntPtr Native;
-
-			internal StkCln(IntPtr native)
-			{
-				Native = native;
-			}
-
-			public StkCln(DbvtNode n, DbvtNode p)
-			{
-				Native = btDbvt_sStkCLN_new(n.Native, p.Native);
-			}
-
-			public DbvtNode Node
-			{
-				get
-				{
-					IntPtr ptr = btDbvt_sStkCLN_getNode(Native);
-					return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
-				}
-				set => btDbvt_sStkCLN_setNode(Native, (value != null) ? value.Native : IntPtr.Zero);
-			}
-
-			public DbvtNode Parent
-			{
-				get
-				{
-					IntPtr ptr = btDbvt_sStkCLN_getParent(Native);
-					return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
-				}
-				set => btDbvt_sStkCLN_setParent(Native, (value != null) ? value.Native : IntPtr.Zero);
-			}
-
-			public void Dispose()
-			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
-			{
-				if (Native != IntPtr.Zero)
-				{
-					btDbvt_sStkCLN_delete(Native);
-					Native = IntPtr.Zero;
-				}
-			}
-
-			~StkCln()
-			{
-				Dispose(false);
-			}
-		}
-
-		public class StkNN : IDisposable
-		{
-			internal IntPtr Native;
-
-			internal StkNN(IntPtr native)
-			{
-				Native = native;
-			}
-
-			public StkNN()
-			{
-				Native = btDbvt_sStkNN_new();
-			}
-
-			public StkNN(DbvtNode na, DbvtNode nb)
-			{
-				Native = btDbvt_sStkNN_new2(na.Native, nb.Native);
-			}
-
-			public DbvtNode A
-			{
-				get
-				{
-					IntPtr ptr = btDbvt_sStkNN_getA(Native);
-					return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
-				}
-				set => btDbvt_sStkNN_setA(Native, (value != null) ? value.Native : IntPtr.Zero);
-			}
-
-			public DbvtNode B
-			{
-				get
-				{
-					IntPtr ptr = btDbvt_sStkNN_getB(Native);
-					return (ptr != IntPtr.Zero) ? new DbvtNode(ptr) : null;
-				}
-				set => btDbvt_sStkNN_setB(Native, (value != null) ? value.Native : IntPtr.Zero);
-			}
-
-			public void Dispose()
-			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
-			{
-				if (Native != IntPtr.Zero)
-				{
-					btDbvt_sStkNN_delete(Native);
-					Native = IntPtr.Zero;
-				}
-			}
-
-			~StkNN()
-			{
-				Dispose(false);
-			}
-		}
-
-		public class StkNP : IDisposable
-		{
-			internal IntPtr Native;
-
-			internal StkNP(IntPtr native)
-			{
-				Native = native;
-			}
-
 			public StkNP(DbvtNode n, uint m)
 			{
-				Native = btDbvt_sStkNP_new(n.Native, m);
+				IntPtr native = btDbvt_sStkNP_new(n.Native, m);
+				InitializeUserOwned(native);
 			}
 
 			public int Mask
@@ -516,44 +345,24 @@ namespace BulletSharp
 				set => btDbvt_sStkNP_setNode(Native, (value != null) ? value.Native : IntPtr.Zero);
 			}
 
-			public void Dispose()
+			protected override void Dispose(bool disposing)
 			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
-			{
-				if (Native != IntPtr.Zero)
-				{
-					btDbvt_sStkNP_delete(Native);
-					Native = IntPtr.Zero;
-				}
-			}
-
-			~StkNP()
-			{
-				Dispose(false);
+				btDbvt_sStkNP_delete(Native);
 			}
 		}
 
-		public class StkNps : IDisposable
+		public class StkNps : BulletDisposableObject
 		{
-			internal IntPtr Native;
-
-			internal StkNps(IntPtr native)
-			{
-				Native = native;
-			}
-
 			public StkNps()
 			{
-				Native = btDbvt_sStkNPS_new();
+				IntPtr native = btDbvt_sStkNPS_new();
+				Initialize(native);
 			}
 
 			public StkNps(DbvtNode n, uint m, float v)
 			{
-				Native = btDbvt_sStkNPS_new2(n.Native, m, v);
+				IntPtr native = btDbvt_sStkNPS_new2(n.Native, m, v);
+				Initialize(native);
 			}
 
 			public int Mask
@@ -578,24 +387,9 @@ namespace BulletSharp
 				set => btDbvt_sStkNPS_setValue(Native, value);
 			}
 
-			public void Dispose()
+			protected override void Dispose(bool disposing)
 			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
-			{
-				if (Native != IntPtr.Zero)
-				{
-					btDbvt_sStkNPS_delete(Native);
-					Native = IntPtr.Zero;
-				}
-			}
-
-			~StkNps()
-			{
-				Dispose(false);
+				btDbvt_sStkNPS_delete(Native);
 			}
 		}
 
@@ -683,7 +477,7 @@ namespace BulletSharp
 		{
 			return btDbvt_empty(Native);
 		}
-        /*
+		/*
 		public static void EnumLeaves(DbvtNode root, ICollide policy)
 		{
 			btDbvt_enumLeaves(root.Native, policy.Native);
@@ -717,7 +511,7 @@ namespace BulletSharp
 		*/
 		public override int GetHashCode() => (int)Native;
 
-        public DbvtNode Insert(DbvtVolume box, IntPtr data)
+		public DbvtNode Insert(DbvtVolume box, IntPtr data)
 		{
 			return new DbvtNode(btDbvt_insert(Native, box.Native, data));
 		}

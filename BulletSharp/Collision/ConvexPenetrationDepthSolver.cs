@@ -4,13 +4,10 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public abstract class ConvexPenetrationDepthSolver : IDisposable
+	public abstract class ConvexPenetrationDepthSolver : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		internal ConvexPenetrationDepthSolver(IntPtr native)
+		protected internal ConvexPenetrationDepthSolver()
 		{
-			Native = native;
 		}
 
 		public bool CalcPenDepth(VoronoiSimplexSolver simplexSolver, ConvexShape convexA,
@@ -22,24 +19,9 @@ namespace BulletSharp
 				out pb, debugDraw != null ? debugDraw._native : IntPtr.Zero);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btConvexPenetrationDepthSolver_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~ConvexPenetrationDepthSolver()
-		{
-			Dispose(false);
+			btConvexPenetrationDepthSolver_delete(Native);
 		}
 	}
 }

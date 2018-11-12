@@ -1,3 +1,4 @@
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -6,14 +7,16 @@ namespace BulletSharp
 	{
 		public ContinuousConvexCollision(ConvexShape shapeA, ConvexShape shapeB,
 			VoronoiSimplexSolver simplexSolver, ConvexPenetrationDepthSolver penetrationDepthSolver)
-			: base(btContinuousConvexCollision_new(shapeA.Native, shapeB.Native,
-				simplexSolver.Native, penetrationDepthSolver.Native))
 		{
+			IntPtr native = btContinuousConvexCollision_new(shapeA.Native, shapeB.Native,
+				simplexSolver.Native, penetrationDepthSolver.Native);
+			InitializeUserOwned(native);
 		}
 
 		public ContinuousConvexCollision(ConvexShape shapeA, StaticPlaneShape plane)
-			: base(btContinuousConvexCollision_new2(shapeA.Native, plane.Native))
 		{
+			IntPtr native = btContinuousConvexCollision_new2(shapeA.Native, plane.Native);
+			InitializeUserOwned(native);
 		}
 	}
 }

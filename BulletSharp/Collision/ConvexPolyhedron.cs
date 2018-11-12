@@ -4,18 +4,17 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class Face : IDisposable
+	public class Face : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		internal Face(IntPtr native)
+		internal Face(IntPtr native, BulletObject owner)
 		{
-			Native = native;
+			InitializeSubObject(native, owner);
 		}
 
 		public Face()
 		{
-			Native = btFace_new();
+			IntPtr native = btFace_new();
+			InitializeUserOwned(native);
 		}
 		/*
 		public AlignedIntArray Indices
@@ -28,43 +27,28 @@ namespace BulletSharp
 			get { return new ScalarArray(btFace_getPlane(Native)); }
 		}
 		*/
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
 
-		protected virtual void Dispose(bool disposing)
+		protected override void Dispose(bool disposing)
 		{
-			if (Native != IntPtr.Zero)
-			{
-				btFace_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~Face()
-		{
-			Dispose(false);
+			btFace_delete(Native);
 		}
 	}
 
-	public class ConvexPolyhedron : IDisposable
+	public class ConvexPolyhedron : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		//AlignedFaceArray _faces;
 		AlignedVector3Array _uniqueEdges;
 		AlignedVector3Array _vertices;
 
-		internal ConvexPolyhedron(IntPtr native)
+		internal ConvexPolyhedron(IntPtr native, BulletObject owner)
 		{
-			Native = native;
+			InitializeSubObject(native, owner);
 		}
 
 		public ConvexPolyhedron()
 		{
-			Native = btConvexPolyhedron_new();
+			IntPtr native = btConvexPolyhedron_new();
+			InitializeUserOwned(native);
 		}
 
 		public void Initialize()
@@ -175,24 +159,9 @@ namespace BulletSharp
 			}
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btConvexPolyhedron_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~ConvexPolyhedron()
-		{
-			Dispose(false);
+			btConvexPolyhedron_delete(Native);
 		}
 	}
 }

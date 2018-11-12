@@ -3,13 +3,11 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class Element
+	public class Element : BulletObject
 	{
-		internal IntPtr Native;
-
 		internal Element(IntPtr native)
 		{
-			Native = native;
+			Initialize(native);
 		}
 
 		public int Id
@@ -25,13 +23,11 @@ namespace BulletSharp
 		}
 	}
 
-	public class UnionFind
+	public class UnionFind : BulletObject
 	{
-		internal IntPtr Native;
-
 		internal UnionFind(IntPtr native)
 		{
-			Native = native;
+			Initialize(native);
 		}
 
 		public void Allocate(int n)

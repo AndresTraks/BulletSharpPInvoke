@@ -6,53 +6,61 @@ namespace BulletSharp
 {
 	public class OptimizedBvh : QuantizedBvh
 	{
-		internal OptimizedBvh(IntPtr native, bool preventDelete)
-            : base(native, preventDelete)
+		internal OptimizedBvh(IntPtr native)
+			: base(ConstructionInfo.Null)
 		{
+			InitializeSubObject(native, this);
+		}
+
+		internal OptimizedBvh(IntPtr native, BulletObject owner)
+			: base(ConstructionInfo.Null)
+		{
+			InitializeSubObject(native, owner);
 		}
 
 		public OptimizedBvh()
-			: base(btOptimizedBvh_new(), false)
 		{
+			IntPtr native = btOptimizedBvh_new();
+			InitializeUserOwned(native);
 		}
 
 		public void Build(StridingMeshInterface triangles, bool useQuantizedAabbCompression,
 			Vector3 bvhAabbMin, Vector3 bvhAabbMax)
 		{
-			btOptimizedBvh_build(_native, triangles.Native, useQuantizedAabbCompression,
+			btOptimizedBvh_build(Native, triangles.Native, useQuantizedAabbCompression,
 				ref bvhAabbMin, ref bvhAabbMax);
 		}
 
 		public static OptimizedBvh DeSerializeInPlace(IntPtr alignedDataBuffer, uint dataBufferSize,
 			bool swapEndian)
 		{
-            return new OptimizedBvh(btOptimizedBvh_deSerializeInPlace(alignedDataBuffer, dataBufferSize,
-                swapEndian), true);
+			return new OptimizedBvh(btOptimizedBvh_deSerializeInPlace(alignedDataBuffer, dataBufferSize,
+				swapEndian));
 		}
 
 		public void Refit(StridingMeshInterface triangles, Vector3 aabbMin, Vector3 aabbMax)
 		{
-			btOptimizedBvh_refit(_native, triangles.Native, ref aabbMin, ref aabbMax);
+			btOptimizedBvh_refit(Native, triangles.Native, ref aabbMin, ref aabbMax);
 		}
 
 		public void RefitPartial(StridingMeshInterface triangles, Vector3 aabbMin,
 			Vector3 aabbMax)
 		{
-			btOptimizedBvh_refitPartial(_native, triangles.Native, ref aabbMin,
+			btOptimizedBvh_refitPartial(Native, triangles.Native, ref aabbMin,
 				ref aabbMax);
 		}
 
 		public bool SerializeInPlace(IntPtr alignedDataBuffer, uint dataBufferSize,
 			bool swapEndian)
 		{
-			return btOptimizedBvh_serializeInPlace(_native, alignedDataBuffer, dataBufferSize,
+			return btOptimizedBvh_serializeInPlace(Native, alignedDataBuffer, dataBufferSize,
 				swapEndian);
 		}
 
 		public void UpdateBvhNodes(StridingMeshInterface meshInterface, int firstNode,
 			int endNode, int index)
 		{
-			btOptimizedBvh_updateBvhNodes(_native, meshInterface.Native, firstNode,
+			btOptimizedBvh_updateBvhNodes(Native, meshInterface.Native, firstNode,
 				endNode, index);
 		}
 	}

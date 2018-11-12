@@ -163,20 +163,12 @@ namespace BulletSharp
 		}
 	}
 
-	public class VoronoiSimplexSolver : IDisposable
+	public class VoronoiSimplexSolver : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
-
-		internal VoronoiSimplexSolver(IntPtr native, bool preventDelete)
-		{
-			Native = native;
-			_preventDelete = preventDelete;
-		}
-
 		public VoronoiSimplexSolver()
 		{
-			Native = btVoronoiSimplexSolver_new();
+			IntPtr native = btVoronoiSimplexSolver_new();
+			InitializeUserOwned(native);
 		}
 
 		public void AddVertexRef(ref Vector3 w, ref Vector3 p, ref Vector3 q)
@@ -374,27 +366,10 @@ namespace BulletSharp
 			get { return btVoronoiSimplexSolver_getSimplexVectorW(Native); }
 		}
 		*/
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
 
-		protected virtual void Dispose(bool disposing)
+		protected override void Dispose(bool disposing)
 		{
-			if (Native != IntPtr.Zero)
-			{
-				if (!_preventDelete)
-				{
-					btVoronoiSimplexSolver_delete(Native);
-				}
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~VoronoiSimplexSolver()
-		{
-			Dispose(false);
+			btVoronoiSimplexSolver_delete(Native);
 		}
 	}
 }

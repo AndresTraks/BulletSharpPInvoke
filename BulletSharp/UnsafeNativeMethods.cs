@@ -2029,34 +2029,6 @@ namespace BulletSharp
 		public static extern void btDbvt_IWriter_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btDbvt_sStkCLN_new(IntPtr n, IntPtr p);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btDbvt_sStkCLN_getNode(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btDbvt_sStkCLN_getParent(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btDbvt_sStkCLN_setNode(IntPtr obj, IntPtr value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btDbvt_sStkCLN_setParent(IntPtr obj, IntPtr value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btDbvt_sStkCLN_delete(IntPtr obj);
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btDbvt_sStkNN_new();
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btDbvt_sStkNN_new2(IntPtr na, IntPtr nb);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btDbvt_sStkNN_getA(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btDbvt_sStkNN_getB(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btDbvt_sStkNN_setA(IntPtr obj, IntPtr value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btDbvt_sStkNN_setB(IntPtr obj, IntPtr value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btDbvt_sStkNN_delete(IntPtr obj);
-
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btDbvt_sStkNP_new(IntPtr n, uint m);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern int btDbvt_sStkNP_getMask(IntPtr obj);
@@ -4970,8 +4942,6 @@ namespace BulletSharp
 		public static extern void btShapeHull_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btSimulationIslandManager_new();
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSimulationIslandManager_buildAndProcessIslands(IntPtr obj, IntPtr dispatcher, IntPtr collisionWorld, IntPtr callback);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSimulationIslandManager_buildIslands(IntPtr obj, IntPtr dispatcher, IntPtr colWorld);
@@ -4990,8 +4960,6 @@ namespace BulletSharp
 		public static extern void btSimulationIslandManager_storeIslandActivationState(IntPtr obj, IntPtr world);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSimulationIslandManager_updateActivationState(IntPtr obj, IntPtr colWorld, IntPtr dispatcher);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btSimulationIslandManager_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSimulationIslandManager_IslandCallback_delete(IntPtr obj);

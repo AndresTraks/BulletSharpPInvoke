@@ -67,7 +67,7 @@ namespace BulletSharp
 
 		public void GetAllContactManifolds(AlignedManifoldArray manifoldArray)
 		{
-			btCollisionAlgorithm_getAllContactManifolds(Native, manifoldArray._native);
+			btCollisionAlgorithm_getAllContactManifolds(Native, manifoldArray.Native);
 		}
 
 		public void ProcessCollision(CollisionObjectWrapper body0Wrap, CollisionObjectWrapper body1Wrap,

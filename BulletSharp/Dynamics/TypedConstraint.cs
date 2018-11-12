@@ -330,7 +330,7 @@ namespace BulletSharp
 
 		public string Serialize(IntPtr dataBuffer, Serializer serializer)
 		{
-			return Marshal.PtrToStringAnsi(btTypedConstraint_serialize(Native, dataBuffer, serializer._native));
+			return Marshal.PtrToStringAnsi(btTypedConstraint_serialize(Native, dataBuffer, serializer.Native));
 		}
 
 		public void SetParam(ConstraintParam num, float value)

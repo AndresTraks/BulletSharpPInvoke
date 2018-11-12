@@ -49,8 +49,7 @@ namespace BenchmarkDemo
             var worldAabbMin = new Vector3(-1000, -1000, -1000);
             var worldAabbMax = new Vector3(1000, 1000, 1000);
 
-            var pairCache = new HashedOverlappingPairCache();
-            Broadphase = new AxisSweep3(worldAabbMin, worldAabbMax, 3500, pairCache);
+            Broadphase = new AxisSweep3(worldAabbMin, worldAabbMax, 3500);
             //Broadphase = new DbvtBroadphase();
 
             World = new DiscreteDynamicsWorld(Dispatcher, Broadphase, null, CollisionConfiguration);

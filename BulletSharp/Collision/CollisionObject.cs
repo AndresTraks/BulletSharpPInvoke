@@ -154,12 +154,12 @@ namespace BulletSharp
 
 		public string Serialize(IntPtr dataBuffer, Serializer serializer)
 		{
-			return Marshal.PtrToStringAnsi(btCollisionObject_serialize(Native, dataBuffer, serializer._native));
+			return Marshal.PtrToStringAnsi(btCollisionObject_serialize(Native, dataBuffer, serializer.Native));
 		}
 
 		public void SerializeSingleObject(Serializer serializer)
 		{
-			btCollisionObject_serializeSingleObject(Native, serializer._native);
+			btCollisionObject_serializeSingleObject(Native, serializer.Native);
 		}
 
 		public void SetAnisotropicFrictionRef(ref Vector3 anisotropicFriction,

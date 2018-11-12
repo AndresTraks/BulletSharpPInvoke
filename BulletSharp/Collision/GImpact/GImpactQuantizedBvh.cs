@@ -4,18 +4,17 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class GImpactQuantizedBvhNode : IDisposable
+	public class GImpactQuantizedBvhNode : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		internal GImpactQuantizedBvhNode(IntPtr native)
+		internal GImpactQuantizedBvhNode(IntPtr native, BulletObject owner)
 		{
-			Native = native;
+			InitializeSubObject(native, owner);
 		}
 
 		public GImpactQuantizedBvhNode()
 		{
-			Native = BT_QUANTIZED_BVH_NODE_new();
+			IntPtr native = BT_QUANTIZED_BVH_NODE_new();
+			InitializeUserOwned(native);
 		}
 
 		public bool TestQuantizedBoxOverlapp(ushort[] quantizedMin, ushort[] quantizedMax)
@@ -53,34 +52,18 @@ namespace BulletSharp
 			get => BT_QUANTIZED_BVH_NODE_getQuantizedAabbMin(Native);
 		}
 		*/
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
 
-		protected virtual void Dispose(bool disposing)
+		protected override void Dispose(bool disposing)
 		{
-			if (Native != IntPtr.Zero)
-			{
-				BT_QUANTIZED_BVH_NODE_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~GImpactQuantizedBvhNode()
-		{
-			Dispose(false);
+			BT_QUANTIZED_BVH_NODE_delete(Native);
 		}
 	}
 
-	public class GImpactQuantizedBvhNodeArray
+	public class GImpactQuantizedBvhNodeArray : BulletObject
 	{
-		internal IntPtr Native;
-
 		internal GImpactQuantizedBvhNodeArray(IntPtr native)
 		{
-			Native = native;
+			Initialize(native);
 		}
 		/*
 		public GimGImpactQuantizedBvhNodeArray()
@@ -90,18 +73,17 @@ namespace BulletSharp
 		*/
 	}
 
-	public class QuantizedBvhTree : IDisposable
+	public class QuantizedBvhTree : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		internal QuantizedBvhTree(IntPtr native)
+		internal QuantizedBvhTree(IntPtr native, BulletObject owner)
 		{
-			Native = native;
+			InitializeSubObject(native, owner);
 		}
 
 		public QuantizedBvhTree()
 		{
-			Native = btQuantizedBvhTree_new();
+			IntPtr native = btQuantizedBvhTree_new();
+			InitializeUserOwned(native);
 		}
 
 		public void BuildTree(GimBvhDataArray primitiveBoxes)
@@ -166,24 +148,9 @@ namespace BulletSharp
 
 		public int NodeCount => btQuantizedBvhTree_getNodeCount(Native);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btQuantizedBvhTree_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~QuantizedBvhTree()
-		{
-			Dispose(false);
+			btQuantizedBvhTree_delete(Native);
 		}
 	}
 

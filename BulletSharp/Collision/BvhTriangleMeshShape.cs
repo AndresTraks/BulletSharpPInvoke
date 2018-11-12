@@ -73,18 +73,18 @@ namespace BulletSharp
 
 		public void SerializeSingleBvh(Serializer serializer)
 		{
-			btBvhTriangleMeshShape_serializeSingleBvh(Native, serializer._native);
+			btBvhTriangleMeshShape_serializeSingleBvh(Native, serializer.Native);
 		}
 
 		public void SerializeSingleTriangleInfoMap(Serializer serializer)
 		{
-			btBvhTriangleMeshShape_serializeSingleTriangleInfoMap(Native, serializer._native);
+			btBvhTriangleMeshShape_serializeSingleTriangleInfoMap(Native, serializer.Native);
 		}
 
 		public void SetOptimizedBvh(OptimizedBvh bvh, Vector3 localScaling)
 		{
 			System.Diagnostics.Debug.Assert(!OwnsBvh);
-			btBvhTriangleMeshShape_setOptimizedBvh2(Native, (bvh != null) ? bvh._native : IntPtr.Zero, ref localScaling);
+			btBvhTriangleMeshShape_setOptimizedBvh2(Native, (bvh != null) ? bvh.Native : IntPtr.Zero, ref localScaling);
 			_optimizedBvh = bvh;
 		}
 
@@ -95,14 +95,14 @@ namespace BulletSharp
 				if (_optimizedBvh == null && OwnsBvh)
 				{
 					IntPtr optimizedBvhPtr = btBvhTriangleMeshShape_getOptimizedBvh(Native);
-					_optimizedBvh = new OptimizedBvh(optimizedBvhPtr, true);
+					_optimizedBvh = new OptimizedBvh(optimizedBvhPtr, this);
 				}
 				return _optimizedBvh;
 			}
 			set
 			{
 				System.Diagnostics.Debug.Assert(!OwnsBvh);
-				btBvhTriangleMeshShape_setOptimizedBvh(Native, (value != null) ? value._native : IntPtr.Zero);
+				btBvhTriangleMeshShape_setOptimizedBvh(Native, (value != null) ? value.Native : IntPtr.Zero);
 				_optimizedBvh = value;
 			}
 		}

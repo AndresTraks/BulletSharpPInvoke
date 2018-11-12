@@ -4,23 +4,18 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class GimTriangleContact : IDisposable
+	public class GimTriangleContact : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		internal GimTriangleContact(IntPtr native)
-		{
-			Native = native;
-		}
-
 		public GimTriangleContact()
 		{
-			Native = GIM_TRIANGLE_CONTACT_new();
+			IntPtr native = GIM_TRIANGLE_CONTACT_new();
+			InitializeUserOwned(native);
 		}
 
 		public GimTriangleContact(GimTriangleContact other)
 		{
-			Native = GIM_TRIANGLE_CONTACT_new2(other.Native);
+			IntPtr native = GIM_TRIANGLE_CONTACT_new2(other.Native);
+			InitializeUserOwned(native);
 		}
 
 		public void CopyFrom(GimTriangleContact other)
@@ -58,39 +53,23 @@ namespace BulletSharp
 			set => GIM_TRIANGLE_CONTACT_setSeparating_normal(Native, ref value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				GIM_TRIANGLE_CONTACT_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~GimTriangleContact()
-		{
-			Dispose(false);
+			GIM_TRIANGLE_CONTACT_delete(Native);
 		}
 	}
 
-	public class PrimitiveTriangle : IDisposable
+	public class PrimitiveTriangle : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		internal PrimitiveTriangle(IntPtr native)
+		internal PrimitiveTriangle(IntPtr native, BulletObject owner)
 		{
-			Native = native;
+			InitializeSubObject(native, owner);
 		}
 
 		public PrimitiveTriangle()
 		{
-			Native = btPrimitiveTriangle_new();
+			IntPtr native = btPrimitiveTriangle_new();
+			InitializeUserOwned(native);
 		}
 
 		public void ApplyTransform(Matrix t)
@@ -148,24 +127,9 @@ namespace BulletSharp
 
 		public Vector3Array Vertices => new Vector3Array(btPrimitiveTriangle_getVertices(Native), 3);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btPrimitiveTriangle_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~PrimitiveTriangle()
-		{
-			Dispose(false);
+			btPrimitiveTriangle_delete(Native);
 		}
 	}
 

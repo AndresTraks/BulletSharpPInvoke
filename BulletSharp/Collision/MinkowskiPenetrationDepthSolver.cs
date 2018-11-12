@@ -1,3 +1,4 @@
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -5,8 +6,9 @@ namespace BulletSharp
 	public class MinkowskiPenetrationDepthSolver : ConvexPenetrationDepthSolver
 	{
 		public MinkowskiPenetrationDepthSolver()
-			: base(btMinkowskiPenetrationDepthSolver_new())
 		{
+			IntPtr native = btMinkowskiPenetrationDepthSolver_new();
+			InitializeUserOwned(native);
 		}
 	}
 }

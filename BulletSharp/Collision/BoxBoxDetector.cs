@@ -1,3 +1,4 @@
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -8,8 +9,10 @@ namespace BulletSharp
 		private BoxShape _box2;
 
 		public BoxBoxDetector(BoxShape box1, BoxShape box2)
-			: base(btBoxBoxDetector_new(box1.Native, box2.Native))
 		{
+			IntPtr native = btBoxBoxDetector_new(box1.Native, box2.Native);
+			InitializeUserOwned(native);
+
 			_box1 = box1;
 			_box2 = box2;
 		}

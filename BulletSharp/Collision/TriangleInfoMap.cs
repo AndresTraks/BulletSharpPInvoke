@@ -91,7 +91,7 @@ namespace BulletSharp
 		*/
 		public string Serialize(IntPtr dataBuffer, Serializer serializer)
 		{
-			return Marshal.PtrToStringAnsi(btTriangleInfoMap_serialize(Native, dataBuffer, serializer._native));
+			return Marshal.PtrToStringAnsi(btTriangleInfoMap_serialize(Native, dataBuffer, serializer.Native));
 		}
 
 		public float ConvexEpsilon

@@ -4,23 +4,24 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class GImpactPair : IDisposable
+	public class GImpactPair : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		public GImpactPair()
 		{
-			Native = GIM_PAIR_new();
+			IntPtr native = GIM_PAIR_new();
+			InitializeUserOwned(native);
 		}
 
 		public GImpactPair(GImpactPair pair)
 		{
-			Native = GIM_PAIR_new2(pair.Native);
+			IntPtr native = GIM_PAIR_new2(pair.Native);
+			InitializeUserOwned(native);
 		}
 
 		public GImpactPair(int index1, int index2)
 		{
-			Native = GIM_PAIR_new3(index1, index2);
+			IntPtr native = GIM_PAIR_new3(index1, index2);
+			InitializeUserOwned(native);
 		}
 
 		public int Index1
@@ -35,34 +36,18 @@ namespace BulletSharp
 			set => GIM_PAIR_setIndex2(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				GIM_PAIR_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~GImpactPair()
-		{
-			Dispose(false);
+			GIM_PAIR_delete(Native);
 		}
 	}
 
-	public class PairSet : IDisposable
+	public class PairSet : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		public PairSet()
 		{
-			Native = btPairSet_new();
+			IntPtr native = btPairSet_new();
+			InitializeUserOwned(native);
 		}
 
 		public void PushPair(int index1, int index2)
@@ -75,24 +60,9 @@ namespace BulletSharp
 			btPairSet_push_pair_inv(Native, index1, index2);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btPairSet_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~PairSet()
-		{
-			Dispose(false);
+			btPairSet_delete(Native);
 		}
 	}
 
@@ -284,13 +254,15 @@ namespace BulletSharp
 		}
 	}
 
-	public class PrimitiveManagerBase : IDisposable
+	public class PrimitiveManagerBase : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		internal PrimitiveManagerBase(IntPtr native)
+		protected internal PrimitiveManagerBase(IntPtr native, BulletObject owner)
 		{
-			Native = native;
+			InitializeSubObject(native, owner);
+		}
+
+		protected internal PrimitiveManagerBase()
+		{
 		}
 
 		public void GetPrimitiveBox(int primitiveIndex, Aabb primitiveBox)
@@ -307,24 +279,9 @@ namespace BulletSharp
 
 		public int PrimitiveCount => btPrimitiveManagerBase_get_primitive_count(Native);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btPrimitiveManagerBase_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~PrimitiveManagerBase()
-		{
-			Dispose(false);
+			btPrimitiveManagerBase_delete(Native);
 		}
 	}
 
@@ -439,7 +396,7 @@ namespace BulletSharp
 
 		public PrimitiveManagerBase PrimitiveManager
 		{
-			get => new PrimitiveManagerBase(btGImpactBvh_getPrimitiveManager(Native));
+			get => _primitiveManager ?? (_primitiveManager = new PrimitiveManagerBase(btGImpactBvh_getPrimitiveManager(Native), this));
 			set => btGImpactBvh_setPrimitiveManager(Native, value.Native);
 		}
 

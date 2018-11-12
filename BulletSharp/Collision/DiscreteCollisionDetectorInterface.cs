@@ -4,7 +4,7 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public abstract class DiscreteCollisionDetectorInterface : IDisposable
+	public abstract class DiscreteCollisionDetectorInterface : BulletDisposableObject
 	{
 		public class ClosestPointInput : BulletDisposableObject
 		{
@@ -79,11 +79,8 @@ namespace BulletSharp
 			}
 		}
 
-		internal IntPtr Native;
-
-		internal DiscreteCollisionDetectorInterface(IntPtr native)
+		protected internal DiscreteCollisionDetectorInterface()
 		{
-			Native = native;
 		}
 
 		public void GetClosestPoints(ClosestPointInput input, Result output, DebugDraw debugDraw,
@@ -93,24 +90,9 @@ namespace BulletSharp
 				output.Native, debugDraw != null ? debugDraw._native : IntPtr.Zero, swapResults);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btDiscreteCollisionDetectorInterface_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~DiscreteCollisionDetectorInterface()
-		{
-			Dispose(false);
+			btDiscreteCollisionDetectorInterface_delete(Native);
 		}
 	}
 
