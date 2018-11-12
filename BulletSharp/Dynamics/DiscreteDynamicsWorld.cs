@@ -148,7 +148,7 @@ namespace BulletSharp
 			{
 				if (_simulationIslandManager == null)
 				{
-					_simulationIslandManager = new SimulationIslandManager(btDiscreteDynamicsWorld_getSimulationIslandManager(Native), true);
+					_simulationIslandManager = new SimulationIslandManager(btDiscreteDynamicsWorld_getSimulationIslandManager(Native));
 				}
 				return _simulationIslandManager;
 			}

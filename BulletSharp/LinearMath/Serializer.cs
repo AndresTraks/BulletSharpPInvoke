@@ -87,37 +87,37 @@ namespace BulletSharp
 		NoDuplicateAssert = 4
 	}
 
-	public abstract class Serializer : IDisposable
+	public abstract class Serializer : BulletDisposableObject
 	{
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate IntPtr AllocateUnmanagedDelegate(uint size, int numElements);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate void FinalizeChunkUnmanagedDelegate(IntPtr chunk, string structType, DnaID chunkCode, IntPtr oldPtr);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate IntPtr FindNameForPointerUnmanagedDelegate(IntPtr ptr);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate IntPtr FindPointerUnmanagedDelegate(IntPtr ptr);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate void FinishSerializationUnmanagedDelegate();
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate IntPtr GetBufferPointerUnmanagedDelegate();
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate IntPtr GetChunkUnmanagedDelegate(int chunkIndex);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate int GetCurrentBufferSizeUnmanagedDelegate();
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate int GetNumChunksUnmanagedDelegate();
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate int GetSerializationFlagsUnmanagedDelegate();
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate IntPtr GetUniquePointerUnmanagedDelegate(IntPtr oldPtr);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate void RegisterNameForPointerUnmanagedDelegate(IntPtr ptr, string name);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate void SerializeNameUnmanagedDelegate(IntPtr ptr);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate void SetSerializationFlagsUnmanagedDelegate(int flags);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate void StartSerializationUnmanagedDelegate();
 
 		private AllocateUnmanagedDelegate _allocate;
@@ -139,8 +139,6 @@ namespace BulletSharp
 		private static byte[] dna;
 		private static byte[] dna64;
 
-		internal IntPtr _native;
-
 		public Serializer()
 		{
 			_allocate = new AllocateUnmanagedDelegate(AllocateUnmanaged);
@@ -159,7 +157,7 @@ namespace BulletSharp
 			_setSerializationFlags = new SetSerializationFlagsUnmanagedDelegate(SetSerializationFlags);
 			_startSerialization = new StartSerializationUnmanagedDelegate(StartSerialization);
 
-			_native = btSerializerWrapper_new(
+			IntPtr native = btSerializerWrapper_new(
 				Marshal.GetFunctionPointerForDelegate(_allocate),
 				Marshal.GetFunctionPointerForDelegate(_finalizeChunk),
 				Marshal.GetFunctionPointerForDelegate(_findNameForPointer),
@@ -175,6 +173,7 @@ namespace BulletSharp
 				Marshal.GetFunctionPointerForDelegate(_serializeName),
 				Marshal.GetFunctionPointerForDelegate(_setSerializationFlags),
 				Marshal.GetFunctionPointerForDelegate(_startSerialization));
+			InitializeUserOwned(native);
 		}
 
 		private IntPtr AllocateUnmanaged(uint size, int numElements)
@@ -228,24 +227,9 @@ namespace BulletSharp
 		public abstract int CurrentBufferSize { get; }
 		public abstract SerializationFlags SerializationFlags { get; set; }
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-				btSerializer_delete(_native);
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~Serializer()
-		{
-			Dispose(false);
+			btSerializer_delete(Native);
 		}
 
 		public static byte[] GetBulletDna()

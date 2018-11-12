@@ -89,7 +89,7 @@ namespace BulletSharp
 
 		public string Serialize(IntPtr dataBuffer, Serializer serializer)
 		{
-			return Marshal.PtrToStringAnsi(btStridingMeshInterface_serialize(Native, dataBuffer, serializer._native));
+			return Marshal.PtrToStringAnsi(btStridingMeshInterface_serialize(Native, dataBuffer, serializer.Native));
 		}
 
 		public void SetPremadeAabb(ref Vector3 aabbMin, ref Vector3 aabbMax)

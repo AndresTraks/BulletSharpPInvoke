@@ -93,7 +93,7 @@ namespace BulletSharp
 
 		public virtual string Serialize(IntPtr dataBuffer, Serializer serializer)
 		{
-			return Marshal.PtrToStringAnsi(btCollisionShape_serialize(Native, dataBuffer, serializer._native));
+			return Marshal.PtrToStringAnsi(btCollisionShape_serialize(Native, dataBuffer, serializer.Native));
 			/*
 			IntPtr name = serializer.FindNameForPointer(_native);
 			IntPtr namePtr = serializer.GetUniquePointer(name);

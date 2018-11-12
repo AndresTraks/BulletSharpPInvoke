@@ -1,82 +1,54 @@
 using System;
 using System.Runtime.InteropServices;
-using System.Security;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class QuantizedBvhNode : IDisposable
+	public class QuantizedBvhNode : BulletDisposableObject
 	{
-		internal IntPtr _native;
-
-		internal QuantizedBvhNode(IntPtr native)
-		{
-			_native = native;
-		}
-
 		public QuantizedBvhNode()
 		{
-			_native = btQuantizedBvhNode_new();
+			IntPtr native = btQuantizedBvhNode_new();
+			InitializeUserOwned(native);
 		}
 
-		public int EscapeIndex => btQuantizedBvhNode_getEscapeIndex(_native);
+		public int EscapeIndex => btQuantizedBvhNode_getEscapeIndex(Native);
 
 		public int EscapeIndexOrTriangleIndex
 		{
-			get => btQuantizedBvhNode_getEscapeIndexOrTriangleIndex(_native);
-			set => btQuantizedBvhNode_setEscapeIndexOrTriangleIndex(_native, value);
+			get => btQuantizedBvhNode_getEscapeIndexOrTriangleIndex(Native);
+			set => btQuantizedBvhNode_setEscapeIndexOrTriangleIndex(Native, value);
 		}
 
-		public bool IsLeafNode => btQuantizedBvhNode_isLeafNode(_native);
+		public bool IsLeafNode => btQuantizedBvhNode_isLeafNode(Native);
 
-		public int PartId => btQuantizedBvhNode_getPartId(_native);
+		public int PartId => btQuantizedBvhNode_getPartId(Native);
 		/*
 		public UShortArray QuantizedAabbMax
 		{
-			get { return btQuantizedBvhNode_getQuantizedAabbMax(_native); }
+			get { return btQuantizedBvhNode_getQuantizedAabbMax(Native); }
 		}
 
 		public UShortArray QuantizedAabbMin
 		{
-			get { return btQuantizedBvhNode_getQuantizedAabbMin(_native); }
+			get { return btQuantizedBvhNode_getQuantizedAabbMin(Native); }
 		}
 		*/
-		public int TriangleIndex => btQuantizedBvhNode_getTriangleIndex(_native);
+		public int TriangleIndex => btQuantizedBvhNode_getTriangleIndex(Native);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-				btQuantizedBvhNode_delete(_native);
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~QuantizedBvhNode()
-		{
-			Dispose(false);
+			btQuantizedBvhNode_delete(Native);
 		}
 	}
 
-	public class OptimizedBvhNode : IDisposable
+	public class OptimizedBvhNode : BulletDisposableObject
 	{
-		internal IntPtr _native;
-
-		internal OptimizedBvhNode(IntPtr native)
-		{
-			_native = native;
-		}
-
 		public OptimizedBvhNode()
 		{
-			_native = btOptimizedBvhNode_new();
+			IntPtr native = btOptimizedBvhNode_new();
+			InitializeUserOwned(native);
 		}
 
 		public Vector3 AabbMaxOrg
@@ -84,10 +56,10 @@ namespace BulletSharp
 			get
 			{
 				Vector3 value;
-				btOptimizedBvhNode_getAabbMaxOrg(_native, out value);
+				btOptimizedBvhNode_getAabbMaxOrg(Native, out value);
 				return value;
 			}
-			set => btOptimizedBvhNode_setAabbMaxOrg(_native, ref value);
+			set => btOptimizedBvhNode_setAabbMaxOrg(Native, ref value);
 		}
 
 		public Vector3 AabbMinOrg
@@ -95,87 +67,54 @@ namespace BulletSharp
 			get
 			{
 				Vector3 value;
-				btOptimizedBvhNode_getAabbMinOrg(_native, out value);
+				btOptimizedBvhNode_getAabbMinOrg(Native, out value);
 				return value;
 			}
-			set => btOptimizedBvhNode_setAabbMinOrg(_native, ref value);
+			set => btOptimizedBvhNode_setAabbMinOrg(Native, ref value);
 		}
 
 		public int EscapeIndex
 		{
-			get => btOptimizedBvhNode_getEscapeIndex(_native);
-			set => btOptimizedBvhNode_setEscapeIndex(_native, value);
+			get => btOptimizedBvhNode_getEscapeIndex(Native);
+			set => btOptimizedBvhNode_setEscapeIndex(Native, value);
 		}
 
 		public int SubPart
 		{
-			get => btOptimizedBvhNode_getSubPart(_native);
-			set => btOptimizedBvhNode_setSubPart(_native, value);
+			get => btOptimizedBvhNode_getSubPart(Native);
+			set => btOptimizedBvhNode_setSubPart(Native, value);
 		}
 
 		public int TriangleIndex
 		{
-			get => btOptimizedBvhNode_getTriangleIndex(_native);
-			set => btOptimizedBvhNode_setTriangleIndex(_native, value);
+			get => btOptimizedBvhNode_getTriangleIndex(Native);
+			set => btOptimizedBvhNode_setTriangleIndex(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-				btOptimizedBvhNode_delete(_native);
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~OptimizedBvhNode()
-		{
-			Dispose(false);
+			btOptimizedBvhNode_delete(Native);
 		}
 	}
 
-	public abstract class NodeOverlapCallback : IDisposable
+	public abstract class NodeOverlapCallback : BulletDisposableObject
 	{
-		internal IntPtr _native;
-
-		internal NodeOverlapCallback(IntPtr native)
+		internal NodeOverlapCallback(IntPtr native) // public
 		{
-			_native = native;
 		}
 
 		public void ProcessNode(int subPart, int triangleIndex)
 		{
-			btNodeOverlapCallback_processNode(_native, subPart, triangleIndex);
+			btNodeOverlapCallback_processNode(Native, subPart, triangleIndex);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-				btNodeOverlapCallback_delete(_native);
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~NodeOverlapCallback()
-		{
-			Dispose(false);
+			btNodeOverlapCallback_delete(Native);
 		}
 	}
 
-	public class QuantizedBvh : IDisposable
+	public class QuantizedBvh : BulletDisposableObject
 	{
 		public enum TraversalMode
 		{
@@ -184,43 +123,39 @@ namespace BulletSharp
 			Recursive
 		}
 
-		internal IntPtr _native;
-		bool _preventDelete;
-
-		internal QuantizedBvh(IntPtr native, bool preventDelete)
+		internal QuantizedBvh(ConstructionInfo info)
 		{
-			_native = native;
-			_preventDelete = preventDelete;
 		}
 
 		public QuantizedBvh()
 		{
-			_native = btQuantizedBvh_new();
+			IntPtr native = btQuantizedBvh_new();
+			InitializeUserOwned(native);
 		}
 
 		public void BuildInternal()
 		{
-			btQuantizedBvh_buildInternal(_native);
+			btQuantizedBvh_buildInternal(Native);
 		}
 
 		public uint CalculateSerializeBufferSize()
 		{
-			return btQuantizedBvh_calculateSerializeBufferSize(_native);
+			return btQuantizedBvh_calculateSerializeBufferSize(Native);
 		}
 
 		public int CalculateSerializeBufferSizeNew()
 		{
-			return btQuantizedBvh_calculateSerializeBufferSizeNew(_native);
+			return btQuantizedBvh_calculateSerializeBufferSizeNew(Native);
 		}
 
 		public void DeSerializeDouble(IntPtr quantizedBvhDoubleData)
 		{
-			btQuantizedBvh_deSerializeDouble(_native, quantizedBvhDoubleData);
+			btQuantizedBvh_deSerializeDouble(Native, quantizedBvhDoubleData);
 		}
 
 		public void DeSerializeFloat(IntPtr quantizedBvhFloatData)
 		{
-			btQuantizedBvh_deSerializeFloat(_native, quantizedBvhFloatData);
+			btQuantizedBvh_deSerializeFloat(Native, quantizedBvhFloatData);
 		}
 		/*
 		public static QuantizedBvh DeSerializeInPlace(IntPtr alignedDataBuffer, uint dataBufferSize,
@@ -232,105 +167,90 @@ namespace BulletSharp
 
 		public void Quantize(unsigned short out, Vector3 point, int isMax)
 		{
-			btQuantizedBvh_quantize(_native, out._native, ref point, isMax);
+			btQuantizedBvh_quantize(Native, out._native, ref point, isMax);
 		}
 
 		public void QuantizeWithClamp(unsigned short out, Vector3 point2, int isMax)
 		{
-			btQuantizedBvh_quantizeWithClamp(_native, out._native, ref point2, isMax);
+			btQuantizedBvh_quantizeWithClamp(Native, out._native, ref point2, isMax);
 		}
 		*/
 		public void ReportAabbOverlappingNodex(NodeOverlapCallback nodeCallback,
 			Vector3 aabbMin, Vector3 aabbMax)
 		{
-			btQuantizedBvh_reportAabbOverlappingNodex(_native, nodeCallback._native,
+			btQuantizedBvh_reportAabbOverlappingNodex(Native, nodeCallback.Native,
 				ref aabbMin, ref aabbMax);
 		}
 
 		public void ReportBoxCastOverlappingNodex(NodeOverlapCallback nodeCallback,
 			Vector3 raySource, Vector3 rayTarget, Vector3 aabbMin, Vector3 aabbMax)
 		{
-			btQuantizedBvh_reportBoxCastOverlappingNodex(_native, nodeCallback._native,
+			btQuantizedBvh_reportBoxCastOverlappingNodex(Native, nodeCallback.Native,
 				ref raySource, ref rayTarget, ref aabbMin, ref aabbMax);
 		}
 
 		public void ReportRayOverlappingNodex(NodeOverlapCallback nodeCallback, Vector3 raySource,
 			Vector3 rayTarget)
 		{
-			btQuantizedBvh_reportRayOverlappingNodex(_native, nodeCallback._native,
+			btQuantizedBvh_reportRayOverlappingNodex(Native, nodeCallback.Native,
 				ref raySource, ref rayTarget);
 		}
 
 		public bool Serialize(IntPtr alignedDataBuffer, uint dataBufferSize, bool swapEndian)
 		{
-			return btQuantizedBvh_serialize(_native, alignedDataBuffer, dataBufferSize,
+			return btQuantizedBvh_serialize(Native, alignedDataBuffer, dataBufferSize,
 				swapEndian);
 		}
 
 		public string Serialize(IntPtr dataBuffer, Serializer serializer)
 		{
-			return Marshal.PtrToStringAnsi(btQuantizedBvh_serialize2(_native, dataBuffer, serializer._native));
+			return Marshal.PtrToStringAnsi(btQuantizedBvh_serialize2(Native, dataBuffer, serializer.Native));
 		}
 
 		public void SetQuantizationValues(Vector3 bvhAabbMin, Vector3 bvhAabbMax,
 			double quantizationMargin = 1.0f)
 		{
-			btQuantizedBvh_setQuantizationValues(_native, ref bvhAabbMin, ref bvhAabbMax,
+			btQuantizedBvh_setQuantizationValues(Native, ref bvhAabbMin, ref bvhAabbMax,
 				quantizationMargin);
 		}
 
 		public void SetTraversalMode(TraversalMode traversalMode)
 		{
-			btQuantizedBvh_setTraversalMode(_native, traversalMode);
+			btQuantizedBvh_setTraversalMode(Native, traversalMode);
 		}
 		/*
 		public Vector3 UnQuantize(unsigned short vecIn)
 		{
 			Vector3 value;
-			btQuantizedBvh_unQuantize(_native, vecIn._native, out value);
+			btQuantizedBvh_unQuantize(Native, vecIn._native, out value);
 			return value;
 		}
 		*/
 		public static uint AlignmentSerializationPadding => btQuantizedBvh_getAlignmentSerializationPadding();
 
-		public bool IsQuantized => btQuantizedBvh_isQuantized(_native);
+		public bool IsQuantized => btQuantizedBvh_isQuantized(Native);
 		/*
 		public QuantizedNodeArray LeafNodeArray
 		{
-			get { return btQuantizedBvh_getLeafNodeArray(_native); }
+			get { return btQuantizedBvh_getLeafNodeArray(Native); }
 		}
 
 		public QuantizedNodeArray QuantizedNodeArray
 		{
-			get { return btQuantizedBvh_getQuantizedNodeArray(_native); }
+			get { return btQuantizedBvh_getQuantizedNodeArray(Native); }
 		}
 
 		public BvhSubtreeInfoArray SubtreeInfoArray
 		{
-			get { return btQuantizedBvh_getSubtreeInfoArray(_native); }
+			get { return btQuantizedBvh_getSubtreeInfoArray(Native); }
 		}
 		*/
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
-				if (!_preventDelete)
-				{
-					btQuantizedBvh_delete(_native);
-				}
-				_native = IntPtr.Zero;
+				btQuantizedBvh_delete(Native);
 			}
-		}
-
-		~QuantizedBvh()
-		{
-			Dispose(false);
 		}
 	}
 

@@ -140,8 +140,9 @@ namespace BulletSharp
 	public sealed class CompoundPrimitiveManager : PrimitiveManagerBase
 	{
 		internal CompoundPrimitiveManager(IntPtr native, GImpactCompoundShape compoundShape)
-			: base(native)
 		{
+			InitializeSubObject(native, compoundShape);
+
 			CompoundShape = compoundShape;
 		}
 
@@ -198,26 +199,30 @@ namespace BulletSharp
 	{
 		private StridingMeshInterface _meshInterface;
 
-		internal TrimeshPrimitiveManager(IntPtr native)
-			: base(native)
+		internal TrimeshPrimitiveManager(IntPtr native, BulletObject owner)
 		{
+			InitializeSubObject(native, owner);
 		}
 
 		public TrimeshPrimitiveManager(StridingMeshInterface meshInterface, int part)
-			: base(btGImpactMeshShapePart_TrimeshPrimitiveManager_new(meshInterface.Native,
-				part))
 		{
+			IntPtr native = btGImpactMeshShapePart_TrimeshPrimitiveManager_new(meshInterface.Native,
+				part);
+			InitializeUserOwned(native);
+
 			_meshInterface = meshInterface;
 		}
 
 		public TrimeshPrimitiveManager(TrimeshPrimitiveManager manager)
-			: base(btGImpactMeshShapePart_TrimeshPrimitiveManager_new2(manager.Native))
 		{
+			IntPtr native = btGImpactMeshShapePart_TrimeshPrimitiveManager_new2(manager.Native);
+			InitializeUserOwned(native);
 		}
 
 		public TrimeshPrimitiveManager()
-			: base(btGImpactMeshShapePart_TrimeshPrimitiveManager_new3())
 		{
+			IntPtr native = btGImpactMeshShapePart_TrimeshPrimitiveManager_new3();
+			InitializeUserOwned(native);
 		}
 
 		public void GetBulletTriangle(int primIndex, TriangleShapeEx triangle)
@@ -378,7 +383,7 @@ namespace BulletSharp
 				if (_gImpactTrimeshPrimitiveManager == null)
 				{
 					_gImpactTrimeshPrimitiveManager = new TrimeshPrimitiveManager(
-						btGImpactMeshShapePart_getTrimeshPrimitiveManager(Native));
+						btGImpactMeshShapePart_getTrimeshPrimitiveManager(Native), this);
 				}
 				return _gImpactTrimeshPrimitiveManager;
 			}

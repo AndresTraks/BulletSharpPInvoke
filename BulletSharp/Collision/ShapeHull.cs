@@ -4,17 +4,16 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-    public class ShapeHull : IDisposable
+	public class ShapeHull : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		private ConvexShape _shape;
+		private readonly ConvexShape _shape;
 		private UIntArray _indices;
 		private Vector3Array _vertices;
 
 		public ShapeHull(ConvexShape shape)
 		{
-			Native = btShapeHull_new(shape.Native);
+			IntPtr native = btShapeHull_new(shape.Native);
+			InitializeUserOwned(native);
 			_shape = shape;
 		}
 
@@ -57,24 +56,9 @@ namespace BulletSharp
 			}
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btShapeHull_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~ShapeHull()
-		{
-			Dispose(false);
+			btShapeHull_delete(Native);
 		}
 	}
 }

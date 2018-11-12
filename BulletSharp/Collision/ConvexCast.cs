@@ -4,22 +4,16 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class ConvexCast : IDisposable
+	public class ConvexCast : BulletDisposableObject
 	{
-		public class CastResult : IDisposable
+		public class CastResult : BulletDisposableObject
 		{
-			internal IntPtr Native;
-
 			private DebugDraw _debugDrawer;
-
-			internal CastResult(IntPtr native)
-			{
-				Native = native;
-			}
 
 			public CastResult()
 			{
-				Native = btConvexCast_CastResult_new();
+				IntPtr native = btConvexCast_CastResult_new();
+				InitializeUserOwned(native);
 			}
 
 			public void DebugDraw(double fraction)
@@ -103,32 +97,14 @@ namespace BulletSharp
 				set => btConvexCast_CastResult_setNormal(Native, ref value);
 			}
 
-			public void Dispose()
+			protected override void Dispose(bool disposing)
 			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
-			{
-				if (Native != IntPtr.Zero)
-				{
-					btConvexCast_CastResult_delete(Native);
-					Native = IntPtr.Zero;
-				}
-			}
-
-			~CastResult()
-			{
-				Dispose(false);
+				btConvexCast_CastResult_delete(Native);
 			}
 		}
 
-		internal IntPtr Native;
-
-		internal ConvexCast(IntPtr native)
+		protected internal ConvexCast()
 		{
-			Native = native;
 		}
 
 		public bool CalcTimeOfImpact(Matrix fromA, Matrix toA, Matrix fromB, Matrix toB,
@@ -138,24 +114,9 @@ namespace BulletSharp
 				ref toB, result.Native);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btConvexCast_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~ConvexCast()
-		{
-			Dispose(false);
+			btConvexCast_delete(Native);
 		}
 	}
 }

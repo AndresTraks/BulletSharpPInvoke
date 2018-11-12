@@ -86,6 +86,6 @@ namespace BulletSharp
 			btConvex2dConvex2dAlgorithm_setLowLevelOfDetail(Native, useLowLevel);
 		}
 
-		public PersistentManifold Manifold => new PersistentManifold(btConvex2dConvex2dAlgorithm_getManifold(Native), true);
+		public PersistentManifold Manifold => new PersistentManifold(btConvex2dConvex2dAlgorithm_getManifold(Native), this);
 	}
 }

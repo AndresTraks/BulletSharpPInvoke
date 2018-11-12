@@ -30,6 +30,9 @@ namespace Box2DDemo
         private const int NumObjectsX = 5, NumObjectsY = 5;
         private const double Depth = 0.04f;
 
+        private readonly Convex2DConvex2DAlgorithm.CreateFunc _convexAlgo2D;
+        private readonly Box2DBox2DCollisionAlgorithm.CreateFunc _boxAlgo2D;
+
         public Box2DDemoSimulation()
         {
             CollisionConfiguration = new DefaultCollisionConfiguration();
@@ -40,12 +43,13 @@ namespace Box2DDemo
             var simplex = new VoronoiSimplexSolver();
             var pdSolver = new MinkowskiPenetrationDepthSolver();
 
-            var convexAlgo2D = new Convex2DConvex2DAlgorithm.CreateFunc(simplex, pdSolver);
+            _convexAlgo2D = new Convex2DConvex2DAlgorithm.CreateFunc(simplex, pdSolver);
+            _boxAlgo2D = new Box2DBox2DCollisionAlgorithm.CreateFunc();
 
-            Dispatcher.RegisterCollisionCreateFunc(BroadphaseNativeType.Convex2DShape, BroadphaseNativeType.Convex2DShape, convexAlgo2D);
-            Dispatcher.RegisterCollisionCreateFunc(BroadphaseNativeType.Box2DShape, BroadphaseNativeType.Convex2DShape, convexAlgo2D);
-            Dispatcher.RegisterCollisionCreateFunc(BroadphaseNativeType.Convex2DShape, BroadphaseNativeType.Box2DShape, convexAlgo2D);
-            Dispatcher.RegisterCollisionCreateFunc(BroadphaseNativeType.Box2DShape, BroadphaseNativeType.Box2DShape, new Box2DBox2DCollisionAlgorithm.CreateFunc());
+            Dispatcher.RegisterCollisionCreateFunc(BroadphaseNativeType.Convex2DShape, BroadphaseNativeType.Convex2DShape, _convexAlgo2D);
+            Dispatcher.RegisterCollisionCreateFunc(BroadphaseNativeType.Box2DShape, BroadphaseNativeType.Convex2DShape, _convexAlgo2D);
+            Dispatcher.RegisterCollisionCreateFunc(BroadphaseNativeType.Convex2DShape, BroadphaseNativeType.Box2DShape, _convexAlgo2D);
+            Dispatcher.RegisterCollisionCreateFunc(BroadphaseNativeType.Box2DShape, BroadphaseNativeType.Box2DShape, _boxAlgo2D);
 
             Broadphase = new DbvtBroadphase();
 
@@ -62,6 +66,8 @@ namespace Box2DDemo
 
         public void Dispose()
         {
+            _convexAlgo2D.Dispose();
+            _boxAlgo2D.Dispose();
             this.StandardCleanup();
         }
 

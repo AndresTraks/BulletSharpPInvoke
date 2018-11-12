@@ -279,7 +279,7 @@ namespace BulletSharp
 
 		public string Serialize(IntPtr dataBuffer, Serializer serializer)
 		{
-			return Marshal.PtrToStringAnsi(btMultiBody_serialize(Native, dataBuffer, serializer._native));
+			return Marshal.PtrToStringAnsi(btMultiBody_serialize(Native, dataBuffer, serializer.Native));
 		}
 
 		public void SetJointPos(int i, double q)

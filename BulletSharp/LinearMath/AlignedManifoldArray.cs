@@ -63,13 +63,12 @@ namespace BulletSharp
 	}
 
 	[Serializable, DebuggerTypeProxy(typeof(AlignedManifoldArrayDebugView)), DebuggerDisplay("Count = {Count}")]
-	public class AlignedManifoldArray : IList<PersistentManifold>, IDisposable
+	public class AlignedManifoldArray : BulletDisposableObject, IList<PersistentManifold>
 	{
-		internal IntPtr _native;
-
 		public AlignedManifoldArray()
 		{
-			_native = btAlignedObjectArray_btPersistentManifoldPtr_new();
+			IntPtr native = btAlignedObjectArray_btPersistentManifoldPtr_new();
+			InitializeUserOwned(native);
 		}
 
 		public int IndexOf(PersistentManifold item)
@@ -95,7 +94,7 @@ namespace BulletSharp
 				{
 					throw new ArgumentOutOfRangeException(nameof(index));
 				}
-				return new PersistentManifold(btAlignedObjectArray_btPersistentManifoldPtr_at(_native, index), true);
+				return new PersistentManifold(btAlignedObjectArray_btPersistentManifoldPtr_at(Native, index), this);
 			}
 			set
 			{
@@ -105,12 +104,12 @@ namespace BulletSharp
 
 		public void Add(PersistentManifold item)
 		{
-			btAlignedObjectArray_btPersistentManifoldPtr_push_back(_native, item.Native);
+			btAlignedObjectArray_btPersistentManifoldPtr_push_back(Native, item.Native);
 		}
 
 		public void Clear()
 		{
-			btAlignedObjectArray_btPersistentManifoldPtr_resizeNoInitialize(_native, 0);
+			btAlignedObjectArray_btPersistentManifoldPtr_resizeNoInitialize(Native, 0);
 		}
 
 		public bool Contains(PersistentManifold item)
@@ -136,7 +135,7 @@ namespace BulletSharp
 			}
 		}
 
-		public int Count => btAlignedObjectArray_btPersistentManifoldPtr_size(_native);
+		public int Count => btAlignedObjectArray_btPersistentManifoldPtr_size(Native);
 
 		public bool IsReadOnly => false;
 
@@ -155,24 +154,9 @@ namespace BulletSharp
 			return new AlignedManifoldArrayEnumerator(this);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-				btAlignedObjectArray_btPersistentManifoldPtr_delete(_native);
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~AlignedManifoldArray()
-		{
-			Dispose(false);
+			btAlignedObjectArray_btPersistentManifoldPtr_delete(Native);
 		}
 	}
 }

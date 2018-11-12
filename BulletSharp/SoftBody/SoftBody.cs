@@ -1854,14 +1854,11 @@ namespace BulletSharp.SoftBody
 	{
 		private Face _face;
 
-		internal RayFromToCaster(IntPtr native)
-			: base(native)
-		{
-		}
-
 		public RayFromToCaster(Vector3 rayFrom, Vector3 rayTo, double mxt)
-			: base(btSoftBody_RayFromToCaster_new(ref rayFrom, ref rayTo, mxt))
+			: base(ConstructionInfo.Null)
 		{
+			IntPtr native = btSoftBody_RayFromToCaster_new(ref rayFrom, ref rayTo, mxt);
+			InitializeUserOwned(native);
 		}
 
 		public static double RayFromToTriangle(Vector3 rayFrom, Vector3 rayTo,

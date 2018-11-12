@@ -3,15 +3,12 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class SimulationIslandManager : IDisposable
+	public class SimulationIslandManager : BulletObject
 	{
-		public abstract class IslandCallback : IDisposable
+		public abstract class IslandCallback : BulletDisposableObject
 		{
-			internal IntPtr Native;
-
-			internal IslandCallback(IntPtr native)
+			internal IslandCallback(IntPtr native) // public
 			{
-				Native = native;
 			}
 			/*
 			public void ProcessIsland(CollisionObject bodies, int numBodies, PersistentManifold manifolds,
@@ -21,39 +18,15 @@ namespace BulletSharp
 					numBodies, manifolds.Native, numManifolds, islandId);
 			}
 			*/
-			public void Dispose()
+			protected override void Dispose(bool disposing)
 			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
-			{
-				if (Native != IntPtr.Zero)
-				{
-					btSimulationIslandManager_IslandCallback_delete(Native);
-					Native = IntPtr.Zero;
-				}
-			}
-
-			~IslandCallback()
-			{
-				Dispose(false);
+				btSimulationIslandManager_IslandCallback_delete(Native);
 			}
 		}
 
-		internal IntPtr Native;
-		bool _preventDelete;
-
-		internal SimulationIslandManager(IntPtr native, bool preventDelete)
+		internal SimulationIslandManager(IntPtr native)
 		{
-			Native = native;
-			_preventDelete = preventDelete;
-		}
-
-		public SimulationIslandManager()
-		{
-			Native = btSimulationIslandManager_new();
+			Initialize(native);
 		}
 
 		public void BuildAndProcessIslands(Dispatcher dispatcher, CollisionWorld collisionWorld,
@@ -96,28 +69,5 @@ namespace BulletSharp
 		}
 
 		public UnionFind UnionFind => new UnionFind(btSimulationIslandManager_getUnionFind(Native));
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				if (!_preventDelete)
-				{
-					btSimulationIslandManager_delete(Native);
-				}
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~SimulationIslandManager()
-		{
-			Dispose(false);
-		}
 	}
 }

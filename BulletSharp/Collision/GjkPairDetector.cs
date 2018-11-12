@@ -6,24 +6,22 @@ namespace BulletSharp
 {
 	public class GjkPairDetector : DiscreteCollisionDetectorInterface
 	{
-		internal GjkPairDetector(IntPtr native)
-			: base(native)
-		{
-		}
-
 		public GjkPairDetector(ConvexShape objectA, ConvexShape objectB, VoronoiSimplexSolver simplexSolver,
 			ConvexPenetrationDepthSolver penetrationDepthSolver)
-			: base(btGjkPairDetector_new(objectA.Native, objectB.Native, simplexSolver.Native,
-				(penetrationDepthSolver != null) ? penetrationDepthSolver.Native : IntPtr.Zero))
 		{
+			IntPtr native = btGjkPairDetector_new(objectA.Native, objectB.Native, simplexSolver.Native,
+				(penetrationDepthSolver != null) ? penetrationDepthSolver.Native : IntPtr.Zero);
+			InitializeUserOwned(native);
 		}
 
 		public GjkPairDetector(ConvexShape objectA, ConvexShape objectB, int shapeTypeA,
 			int shapeTypeB, double marginA, double marginB, VoronoiSimplexSolver simplexSolver,
 			ConvexPenetrationDepthSolver penetrationDepthSolver)
-			: base(btGjkPairDetector_new2(objectA.Native, objectB.Native, shapeTypeA,
-				shapeTypeB, marginA, marginB, simplexSolver.Native, (penetrationDepthSolver != null) ? penetrationDepthSolver.Native : IntPtr.Zero))
 		{
+			IntPtr native = btGjkPairDetector_new2(objectA.Native, objectB.Native, shapeTypeA,
+				shapeTypeB, marginA, marginB, simplexSolver.Native,
+				(penetrationDepthSolver != null) ? penetrationDepthSolver.Native : IntPtr.Zero);
+			InitializeUserOwned(native);
 		}
 
 		public void GetClosestPointsNonVirtual(ClosestPointInput input, Result output,

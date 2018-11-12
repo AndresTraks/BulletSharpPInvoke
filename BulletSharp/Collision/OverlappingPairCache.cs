@@ -5,53 +5,35 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public abstract class OverlapCallback : IDisposable
+	public abstract class OverlapCallback : BulletDisposableObject
 	{
-		internal IntPtr Native;
+		internal OverlapCallback() // public
+		{
+		}
 
 		public bool ProcessOverlap(BroadphasePair pair)
 		{
 			return btOverlapCallback_processOverlap(Native, pair.Native);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btOverlapCallback_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~OverlapCallback()
-		{
-			Dispose(false);
+			btOverlapCallback_delete(Native);
 		}
 	}
 
-	public abstract class OverlapFilterCallback : IDisposable
+	public abstract class OverlapFilterCallback : BulletDisposableObject
 	{
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate bool NeedBroadphaseCollisionUnmanagedDelegate(IntPtr proxy0, IntPtr proxy1);
 
-		internal IntPtr Native;
 		private NeedBroadphaseCollisionUnmanagedDelegate _needBroadphaseCollision;
-
-		internal OverlapFilterCallback(IntPtr native)
-		{
-			Native = native;
-		}
 
 		public OverlapFilterCallback()
 		{
 			_needBroadphaseCollision = NeedBroadphaseCollisionUnmanaged;
-			Native = btOverlapFilterCallbackWrapper_new(Marshal.GetFunctionPointerForDelegate(_needBroadphaseCollision));
+			IntPtr native = btOverlapFilterCallbackWrapper_new(Marshal.GetFunctionPointerForDelegate(_needBroadphaseCollision));
+			InitializeUserOwned(native);
 		}
 
 		private bool NeedBroadphaseCollisionUnmanaged(IntPtr proxy0, IntPtr proxy1)
@@ -61,24 +43,9 @@ namespace BulletSharp
 
 		public abstract bool NeedBroadphaseCollision(BroadphaseProxy proxy0, BroadphaseProxy proxy1);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btOverlapFilterCallback_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~OverlapFilterCallback()
-		{
-			Dispose(false);
+			btOverlapFilterCallback_delete(Native);
 		}
 	}
 
