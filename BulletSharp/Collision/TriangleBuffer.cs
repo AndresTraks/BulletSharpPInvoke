@@ -1,25 +1,20 @@
 using System;
-using System.Runtime.InteropServices;
-using System.Security;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class Triangle : IDisposable
+	public class Triangle : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
-
-		internal Triangle(IntPtr native, bool preventDelete)
+		internal Triangle(IntPtr native, BulletObject owner)
 		{
-			Native = native;
-			_preventDelete = preventDelete;
+			InitializeSubObject(native, owner);
 		}
 
 		public Triangle()
 		{
-			Native = btTriangle_new();
+			IntPtr native = btTriangle_new();
+			InitializeUserOwned(native);
 		}
 
 		public int PartId
@@ -67,27 +62,12 @@ namespace BulletSharp
 			set => btTriangle_setVertex2(Native, ref value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
-				if (!_preventDelete)
-				{
-					btTriangle_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btTriangle_delete(Native);
 			}
-		}
-
-		~Triangle()
-		{
-			Dispose(false);
 		}
 	}
 
@@ -110,7 +90,7 @@ namespace BulletSharp
 
 		public Triangle GetTriangle(int index)
 		{
-			return new Triangle(btTriangleBuffer_getTriangle(Native, index), true);
+			return new Triangle(btTriangleBuffer_getTriangle(Native, index), this);
 		}
 
 		public override void ProcessTriangle(ref Vector3 vector0, ref Vector3 vector1, ref Vector3 vector2, int partId, int triangleIndex)

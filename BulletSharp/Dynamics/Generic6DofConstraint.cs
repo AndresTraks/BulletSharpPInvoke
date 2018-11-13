@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.InteropServices;
-using System.Security;
 using BulletSharp.Math;
 using static BulletSharp.UnsafeNativeMethods;
 
@@ -15,25 +14,23 @@ namespace BulletSharp
 		ErpStop = 4
 	}
 
-	public class RotationalLimitMotor : IDisposable
+	public class RotationalLimitMotor : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		bool _preventDelete;
-
-		internal RotationalLimitMotor(IntPtr native, bool preventDelete)
+		internal RotationalLimitMotor(IntPtr native, BulletObject owner)
 		{
-			Native = native;
-			_preventDelete = preventDelete;
+			InitializeSubObject(native, owner);
 		}
 
 		public RotationalLimitMotor()
 		{
-			Native = btRotationalLimitMotor_new();
+			IntPtr native = btRotationalLimitMotor_new();
+			InitializeUserOwned(native);
 		}
 
 		public RotationalLimitMotor(RotationalLimitMotor limitMotor)
 		{
-			Native = btRotationalLimitMotor_new2(limitMotor.Native);
+			IntPtr native = btRotationalLimitMotor_new2(limitMotor.Native);
+			InitializeUserOwned(native);
 		}
 
 		public bool NeedApplyTorques()
@@ -157,49 +154,32 @@ namespace BulletSharp
 			set => btRotationalLimitMotor_setTargetVelocity(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
-				if (!_preventDelete)
-				{
-					btRotationalLimitMotor_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btRotationalLimitMotor_delete(Native);
 			}
-		}
-
-		~RotationalLimitMotor()
-		{
-			Dispose(false);
 		}
 	}
 
-	public class TranslationalLimitMotor : IDisposable
+	public class TranslationalLimitMotor : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
-
-		internal TranslationalLimitMotor(IntPtr native, bool preventDelete)
+		internal TranslationalLimitMotor(IntPtr native, BulletObject owner)
 		{
-			Native = native;
-			_preventDelete = preventDelete;
+			InitializeSubObject(native, owner);
 		}
 
 		public TranslationalLimitMotor()
 		{
-			Native = btTranslationalLimitMotor_new();
+			IntPtr native = btTranslationalLimitMotor_new();
+			InitializeUserOwned(native);
 		}
 
 		public TranslationalLimitMotor(TranslationalLimitMotor other)
 		{
-			Native = btTranslationalLimitMotor_new2(other.Native);
+			IntPtr native = btTranslationalLimitMotor_new2(other.Native);
+			InitializeUserOwned(native);
 		}
 
 		public bool IsLimited(int limitIndex)
@@ -374,27 +354,12 @@ namespace BulletSharp
 			set => btTranslationalLimitMotor_setUpperLimit(Native, ref value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
-				if (!_preventDelete)
-				{
-					btTranslationalLimitMotor_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btTranslationalLimitMotor_delete(Native);
 			}
-		}
-
-		~TranslationalLimitMotor()
-		{
-			Dispose(false);
 		}
 	}
 
@@ -486,7 +451,7 @@ namespace BulletSharp
 		{
 			if (_angularLimits[index] == null)
 			{
-				_angularLimits[index] = new RotationalLimitMotor(btGeneric6DofConstraint_getRotationalLimitMotor(Native, index), true);
+				_angularLimits[index] = new RotationalLimitMotor(btGeneric6DofConstraint_getRotationalLimitMotor(Native, index), this);
 			}
 			return _angularLimits[index];
 		}
@@ -623,7 +588,7 @@ namespace BulletSharp
 			{
 				if (_linearLimits == null)
 				{
-					_linearLimits = new TranslationalLimitMotor(btGeneric6DofConstraint_getTranslationalLimitMotor(Native), true);
+					_linearLimits = new TranslationalLimitMotor(btGeneric6DofConstraint_getTranslationalLimitMotor(Native), this);
 				}
 				return _linearLimits;
 			}

@@ -19,7 +19,7 @@ namespace BulletSharp
 	{
 		internal DispatcherInfo(IntPtr native)
 		{
-			Native = native;
+			Initialize(native);
 		}
 
 		public double AllowedCcdPenetration

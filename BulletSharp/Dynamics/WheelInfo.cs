@@ -23,7 +23,7 @@ namespace BulletSharp
     {
         public Vector3 ContactNormalWS;
         public Vector3 ContactPointWS;
-        public Object GroundObject;
+        public BulletObject GroundObject;
         public Vector3 HardPointWS;
         public bool IsInContact;
         public double SuspensionLength;

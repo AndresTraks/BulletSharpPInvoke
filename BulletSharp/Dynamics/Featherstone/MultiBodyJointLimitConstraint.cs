@@ -1,3 +1,4 @@
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -6,9 +7,11 @@ namespace BulletSharp
 	{
 		public MultiBodyJointLimitConstraint(MultiBody body, int link, double lower,
 			double upper)
-			: base(btMultiBodyJointLimitConstraint_new(body.Native, link, lower,
-				upper), body, body)
 		{
+			IntPtr native = btMultiBodyJointLimitConstraint_new(body.Native, link, lower,
+				upper);
+			InitializeUserOwned(native);
+			InitializeMembers(body, body);
 		}
 	}
 }

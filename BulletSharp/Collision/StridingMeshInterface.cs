@@ -73,7 +73,7 @@ namespace BulletSharp
 		public void InternalProcessAllTriangles(InternalTriangleIndexCallback callback,
 			Vector3 aabbMin, Vector3 aabbMax)
 		{
-			btStridingMeshInterface_InternalProcessAllTriangles(Native, callback._native,
+			btStridingMeshInterface_InternalProcessAllTriangles(Native, callback.Native,
 				ref aabbMin, ref aabbMax);
 		}
 

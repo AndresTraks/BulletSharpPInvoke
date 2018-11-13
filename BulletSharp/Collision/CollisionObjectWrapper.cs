@@ -4,13 +4,11 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class CollisionObjectWrapper
+	public class CollisionObjectWrapper : BulletObject
 	{
-		internal IntPtr Native;
-
 		internal CollisionObjectWrapper(IntPtr native)
 		{
-			Native = native;
+			Initialize(native);
 		}
 
 		public CollisionObject CollisionObject

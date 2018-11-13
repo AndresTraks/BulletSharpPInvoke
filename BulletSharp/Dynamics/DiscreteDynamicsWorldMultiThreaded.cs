@@ -6,8 +6,9 @@ namespace BulletSharp
 	public class ConstraintSolverPoolMultiThreaded : ConstraintSolver
 	{
 		public ConstraintSolverPoolMultiThreaded(int numSolvers)
-			: base(btConstraintSolverPoolMt_new(numSolvers), false)
 		{
+			IntPtr native = btConstraintSolverPoolMt_new(numSolvers);
+			InitializeUserOwned(native);
 		}
 	}
 

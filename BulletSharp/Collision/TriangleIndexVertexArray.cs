@@ -7,21 +7,19 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class IndexedMesh : IDisposable
+	public class IndexedMesh : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
 		private bool _ownsData;
 
-		internal IndexedMesh(IntPtr native, bool preventDelete)
+		internal IndexedMesh(IntPtr native, BulletObject owner)
 		{
-			Native = native;
-			_preventDelete = preventDelete;
+			InitializeSubObject(native, owner);
 		}
 
 		public IndexedMesh()
 		{
-			Native = btIndexedMesh_new();
+			IntPtr native = btIndexedMesh_new();
+			InitializeUserOwned(native);
 		}
 
 		public void Allocate(int numTriangles, int numVertices, int triangleIndexStride = sizeof(int) * 3, int vertexStride = sizeof(double) * 3)
@@ -168,28 +166,13 @@ namespace BulletSharp
 			set => btIndexedMesh_setVertexType(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			Free();
+			if (IsUserOwned)
 			{
-				Free();
-				if (!_preventDelete)
-				{
-					btIndexedMesh_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btIndexedMesh_delete(Native);
 			}
-		}
-
-		~IndexedMesh()
-		{
-			Dispose(false);
 		}
 	}
 

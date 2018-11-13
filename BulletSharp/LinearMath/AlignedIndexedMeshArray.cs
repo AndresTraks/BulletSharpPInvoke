@@ -63,13 +63,11 @@ namespace BulletSharp
 	}
 
 	[Serializable, DebuggerTypeProxy(typeof(AlignedIndexedMeshArrayDebugView)), DebuggerDisplay("Count = {Count}")]
-	public class AlignedIndexedMeshArray : IList<IndexedMesh>
+	public class AlignedIndexedMeshArray : BulletObject, IList<IndexedMesh>
 	{
-		private IntPtr _native;
-
 		internal AlignedIndexedMeshArray(IntPtr native)
 		{
-			_native = native;
+			Initialize(native);
 		}
 
 		public int IndexOf(IndexedMesh item)
@@ -95,7 +93,7 @@ namespace BulletSharp
 				{
 					throw new ArgumentOutOfRangeException(nameof(index));
 				}
-				return new IndexedMesh(btAlignedObjectArray_btIndexedMesh_at(_native, index), true);
+				return new IndexedMesh(btAlignedObjectArray_btIndexedMesh_at(Native, index), this);
 			}
 			set
 			{
@@ -105,12 +103,12 @@ namespace BulletSharp
 
 		public void Add(IndexedMesh item)
 		{
-			btAlignedObjectArray_btIndexedMesh_push_back(_native, item.Native);
+			btAlignedObjectArray_btIndexedMesh_push_back(Native, item.Native);
 		}
 
 		public void Clear()
 		{
-			btAlignedObjectArray_btIndexedMesh_resizeNoInitialize(_native, 0);
+			btAlignedObjectArray_btIndexedMesh_resizeNoInitialize(Native, 0);
 		}
 
 		public bool Contains(IndexedMesh item)
@@ -136,7 +134,7 @@ namespace BulletSharp
 			}
 		}
 
-		public int Count => btAlignedObjectArray_btIndexedMesh_size(_native);
+		public int Count => btAlignedObjectArray_btIndexedMesh_size(Native);
 
 		public bool IsReadOnly => false;
 

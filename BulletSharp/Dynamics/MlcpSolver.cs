@@ -1,3 +1,4 @@
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -7,8 +8,10 @@ namespace BulletSharp
 		private MlcpSolverInterface _mlcpSolver;
 
 		public MlcpSolver(MlcpSolverInterface solver)
-			: base(btMLCPSolver_new(solver.Native), false)
+			: base(ConstructionInfo.Null)
 		{
+			IntPtr native = btMLCPSolver_new(solver.Native);
+			InitializeUserOwned(native);
 			_mlcpSolver = solver;
 		}
 

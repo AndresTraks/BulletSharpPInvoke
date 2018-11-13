@@ -27,7 +27,7 @@ namespace BulletSharp
 		private InternalTickCallback _postTickCallback;
 		private InternalTickCallbackUnmanaged _preTickCallbackUnmanaged;
 		private InternalTickCallbackUnmanaged _postTickCallbackUnmanaged;
-		protected ConstraintSolver _constraintSolver;
+		private ConstraintSolver _constraintSolver;
 		private ContactSolverInfo _solverInfo;
 
 		private Dictionary<IAction, ActionInterfaceWrapper> _actions;
@@ -35,6 +35,12 @@ namespace BulletSharp
 
 		internal DynamicsWorld()
 		{
+		}
+
+		protected internal void InitializeMembers(Dispatcher dispatcher, BroadphaseInterface pairCache, ConstraintSolver constraintSolver)
+		{
+			InitializeMembers(dispatcher, pairCache);
+			_constraintSolver = constraintSolver;
 		}
 
 		public void AddAction(IAction action)
@@ -169,7 +175,7 @@ namespace BulletSharp
 			_postTickCallback(this, timeStep);
 		}
 
-		public void SetInternalTickCallback(InternalTickCallback callback, Object worldUserInfo = null,
+		public void SetInternalTickCallback(InternalTickCallback callback, object worldUserInfo = null,
 			bool isPreTick = false)
 		{
 			if (isPreTick)
@@ -244,7 +250,7 @@ namespace BulletSharp
 			{
 				if (_constraintSolver == null)
 				{
-					_constraintSolver = new SequentialImpulseConstraintSolver(btDynamicsWorld_getConstraintSolver(Native), true);
+					_constraintSolver = new SequentialImpulseConstraintSolver(btDynamicsWorld_getConstraintSolver(Native), this);
 				}
 				return _constraintSolver;
 			}
@@ -274,7 +280,7 @@ namespace BulletSharp
 			{
 				if (_solverInfo == null)
 				{
-					_solverInfo = new ContactSolverInfo(btDynamicsWorld_getSolverInfo(Native), true);
+					_solverInfo = new ContactSolverInfo(btDynamicsWorld_getSolverInfo(Native), this);
 				}
 				return _solverInfo;
 			}
@@ -282,7 +288,7 @@ namespace BulletSharp
 
 		public DynamicsWorldType WorldType => btDynamicsWorld_getWorldType(Native);
 
-		public Object WorldUserInfo { get; set; }
+		public object WorldUserInfo { get; set; }
 
 		protected override void Dispose(bool disposing)
 		{

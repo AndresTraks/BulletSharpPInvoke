@@ -58,14 +58,13 @@ namespace BulletSharp
 		AllFilter = -1
 	}
 
-	public class BroadphaseProxy
+	public class BroadphaseProxy : BulletObject
 	{
-		internal readonly IntPtr Native;
-		private Object _clientObject;
+		private BulletObject _clientObject;
 
 		internal BroadphaseProxy(IntPtr native)
 		{
-			Native = native;
+			Initialize(native);
 		}
 
 		internal static BroadphaseProxy GetManaged(IntPtr native)
@@ -147,7 +146,7 @@ namespace BulletSharp
 			set => btBroadphaseProxy_setAabbMin(Native, ref value);
 		}
 
-		public Object ClientObject
+		public BulletObject ClientObject
 		{
 			get
 			{
@@ -160,7 +159,7 @@ namespace BulletSharp
 			}
 			set
 			{
-				CollisionObject collisionObject = value as CollisionObject;
+				var collisionObject = value as CollisionObject;
 				if (collisionObject != null)
 				{
 					btBroadphaseProxy_setClientObject(Native, collisionObject.Native);

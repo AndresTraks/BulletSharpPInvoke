@@ -3,13 +3,12 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class MaterialProperties : IDisposable
+	public class MaterialProperties : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		public MaterialProperties()
 		{
-			Native = btMaterialProperties_new();
+			IntPtr native = btMaterialProperties_new();
+			InitializeUserOwned(native);
 		}
 
 		public IntPtr MaterialBase
@@ -60,24 +59,9 @@ namespace BulletSharp
 			set => btMaterialProperties_setTriangleType(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btMaterialProperties_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~MaterialProperties()
-		{
-			Dispose(false);
+			btMaterialProperties_delete(Native);
 		}
 	}
 

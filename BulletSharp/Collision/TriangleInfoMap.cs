@@ -4,79 +4,55 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class TriangleInfo : IDisposable
+	public class TriangleInfo : BulletDisposableObject
 	{
-		internal IntPtr _native;
-
-		internal TriangleInfo(IntPtr native)
-		{
-			_native = native;
-		}
-
 		public TriangleInfo()
 		{
-			_native = btTriangleInfo_new();
+			IntPtr native = btTriangleInfo_new();
+			InitializeUserOwned(native);
 		}
 
 		public double EdgeV0V1Angle
 		{
-			get => btTriangleInfo_getEdgeV0V1Angle(_native);
-			set => btTriangleInfo_setEdgeV0V1Angle(_native, value);
+			get => btTriangleInfo_getEdgeV0V1Angle(Native);
+			set => btTriangleInfo_setEdgeV0V1Angle(Native, value);
 		}
 
 		public double EdgeV1V2Angle
 		{
-			get => btTriangleInfo_getEdgeV1V2Angle(_native);
-			set => btTriangleInfo_setEdgeV1V2Angle(_native, value);
+			get => btTriangleInfo_getEdgeV1V2Angle(Native);
+			set => btTriangleInfo_setEdgeV1V2Angle(Native, value);
 		}
 
 		public double EdgeV2V0Angle
 		{
-			get => btTriangleInfo_getEdgeV2V0Angle(_native);
-			set => btTriangleInfo_setEdgeV2V0Angle(_native, value);
+			get => btTriangleInfo_getEdgeV2V0Angle(Native);
+			set => btTriangleInfo_setEdgeV2V0Angle(Native, value);
 		}
 
 		public int Flags
 		{
-			get => btTriangleInfo_getFlags(_native);
-			set => btTriangleInfo_setFlags(_native, value);
+			get => btTriangleInfo_getFlags(Native);
+			set => btTriangleInfo_setFlags(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-				btTriangleInfo_delete(_native);
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~TriangleInfo()
-		{
-			Dispose(false);
+			btTriangleInfo_delete(Native);
 		}
 	}
 
-	public class TriangleInfoMap : IDisposable
+	public class TriangleInfoMap : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		bool _preventDelete;
-
-		internal TriangleInfoMap(IntPtr native, bool preventDelete)
+		internal TriangleInfoMap(IntPtr native, BulletObject owner)
 		{
-			Native = native;
-			_preventDelete = preventDelete;
+			InitializeSubObject(native, owner);
 		}
 
 		public TriangleInfoMap()
 		{
-			Native = btTriangleInfoMap_new();
+			IntPtr native = btTriangleInfoMap_new();
+			InitializeUserOwned(native);
 		}
 
 		public int CalculateSerializeBufferSize()
@@ -130,27 +106,12 @@ namespace BulletSharp
 			set => btTriangleInfoMap_setZeroAreaThreshold(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
-				if (!_preventDelete)
-				{
-					btTriangleInfoMap_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btTriangleInfoMap_delete(Native);
 			}
-		}
-
-		~TriangleInfoMap()
-		{
-			Dispose(false);
 		}
 	}
 }

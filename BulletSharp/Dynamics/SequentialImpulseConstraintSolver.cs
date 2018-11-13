@@ -5,14 +5,19 @@ namespace BulletSharp
 {
 	public class SequentialImpulseConstraintSolver : ConstraintSolver
 	{
-		internal SequentialImpulseConstraintSolver(IntPtr native, bool preventDelete)
-			: base(native, preventDelete)
+		internal SequentialImpulseConstraintSolver(IntPtr native, BulletObject owner)
+		{
+			InitializeSubObject(native, owner);
+		}
+
+		internal SequentialImpulseConstraintSolver(ConstructionInfo info)
 		{
 		}
 
 		public SequentialImpulseConstraintSolver()
-			: base(btSequentialImpulseConstraintSolver_new(), false)
 		{
+			IntPtr native = btSequentialImpulseConstraintSolver_new();
+			InitializeUserOwned(native);
 		}
 
 		public ulong BtRand2()

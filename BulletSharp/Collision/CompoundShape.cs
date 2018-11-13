@@ -5,15 +5,13 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class CompoundShapeChild
+	public class CompoundShapeChild : BulletObject
 	{
-		internal IntPtr Native;
-
 		private CollisionShape _childShape;
 
 		internal CompoundShapeChild(IntPtr native, CollisionShape childShape)
 		{
-			Native = native;
+			Initialize(native);
 			_childShape = childShape;
 		}
 

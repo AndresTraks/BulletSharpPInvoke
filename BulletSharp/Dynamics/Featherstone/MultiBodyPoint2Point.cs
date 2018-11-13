@@ -8,16 +8,20 @@ namespace BulletSharp
 	{
 		public MultiBodyPoint2Point(MultiBody body, int link, RigidBody bodyB, Vector3 pivotInA,
 			Vector3 pivotInB)
-			: base(btMultiBodyPoint2Point_new(body.Native, link, bodyB != null ? bodyB.Native : IntPtr.Zero,
-				ref pivotInA, ref pivotInB), body, null)
 		{
+			IntPtr native = btMultiBodyPoint2Point_new(body.Native, link, bodyB != null ? bodyB.Native : IntPtr.Zero,
+				ref pivotInA, ref pivotInB);
+			InitializeUserOwned(native);
+			InitializeMembers(body, null);
 		}
 
 		public MultiBodyPoint2Point(MultiBody bodyA, int linkA, MultiBody bodyB,
 			int linkB, Vector3 pivotInA, Vector3 pivotInB)
-			: base(btMultiBodyPoint2Point_new2(bodyA.Native, linkA, bodyB.Native,
-				linkB, ref pivotInA, ref pivotInB), bodyA, bodyB)
 		{
+			IntPtr native = btMultiBodyPoint2Point_new2(bodyA.Native, linkA, bodyB.Native,
+				linkB, ref pivotInA, ref pivotInB);
+			InitializeUserOwned(native);
+			InitializeMembers(bodyA, bodyB);
 		}
 
 		public Vector3 PivotInB

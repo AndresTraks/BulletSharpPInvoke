@@ -1,4 +1,5 @@
 using BulletSharp.Math;
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -7,16 +8,20 @@ namespace BulletSharp
 	{
 		public MultiBodyFixedConstraint(MultiBody body, int link, RigidBody bodyB,
 			Vector3 pivotInA, Vector3 pivotInB, Matrix frameInA, Matrix frameInB)
-			: base(btMultiBodyFixedConstraint_new(body.Native, link, bodyB.Native,
-				ref pivotInA, ref pivotInB, ref frameInA, ref frameInB), body, null)
 		{
+			IntPtr native = btMultiBodyFixedConstraint_new(body.Native, link, bodyB.Native,
+				ref pivotInA, ref pivotInB, ref frameInA, ref frameInB);
+			InitializeUserOwned(native);
+			InitializeMembers(body, null);
 		}
 
 		public MultiBodyFixedConstraint(MultiBody bodyA, int linkA, MultiBody bodyB,
 			int linkB, Vector3 pivotInA, Vector3 pivotInB, Matrix frameInA, Matrix frameInB)
-			: base(btMultiBodyFixedConstraint_new2(bodyA.Native, linkA, bodyB.Native,
-				linkB, ref pivotInA, ref pivotInB, ref frameInA, ref frameInB), bodyA, bodyB)
 		{
+			IntPtr native = btMultiBodyFixedConstraint_new2(bodyA.Native, linkA, bodyB.Native,
+				linkB, ref pivotInA, ref pivotInB, ref frameInA, ref frameInB);
+			InitializeUserOwned(native);
+			InitializeMembers(bodyA, bodyB);
 		}
 
 		public Matrix FrameInA

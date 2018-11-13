@@ -4,16 +4,15 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class MultiBodySolverConstraint : IDisposable
+	public class MultiBodySolverConstraint : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		protected MultiBody _multiBodyA;
 		protected MultiBody _multiBodyB;
 
 		public MultiBodySolverConstraint()
 		{
-			Native = btMultiBodySolverConstraint_new();
+			IntPtr native = btMultiBodySolverConstraint_new();
+			InitializeUserOwned(native);
 		}
 
 		public Vector3 AngularComponentA
@@ -144,7 +143,7 @@ namespace BulletSharp
 			{
 				if (_multiBodyA == null)
 				{
-					_multiBodyA = new MultiBody(btMultiBodySolverConstraint_getMultiBodyA(Native));
+					_multiBodyA = new MultiBody(btMultiBodySolverConstraint_getMultiBodyA(Native), this);
 				}
 				return _multiBodyA;
 			}
@@ -161,7 +160,7 @@ namespace BulletSharp
 			{
 				if (_multiBodyB == null)
 				{
-					_multiBodyB = new MultiBody(btMultiBodySolverConstraint_getMultiBodyB(Native));
+					_multiBodyB = new MultiBody(btMultiBodySolverConstraint_getMultiBodyB(Native), this);
 				}
 				return _multiBodyB;
 			}
@@ -254,24 +253,9 @@ namespace BulletSharp
 			set => btMultiBodySolverConstraint_setUpperLimit(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btMultiBodySolverConstraint_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~MultiBodySolverConstraint()
-		{
-			Dispose(false);
+			btMultiBodySolverConstraint_delete(Native);
 		}
 	}
 }

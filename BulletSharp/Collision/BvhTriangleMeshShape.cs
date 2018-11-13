@@ -118,7 +118,7 @@ namespace BulletSharp
 					IntPtr triangleInfoMap = btBvhTriangleMeshShape_getTriangleInfoMap(Native);
 					if (triangleInfoMap != IntPtr.Zero)
 					{
-						_triangleInfoMap = new TriangleInfoMap(triangleInfoMap, true);
+						_triangleInfoMap = new TriangleInfoMap(triangleInfoMap, this);
 					}
 				}
 				return _triangleInfoMap;

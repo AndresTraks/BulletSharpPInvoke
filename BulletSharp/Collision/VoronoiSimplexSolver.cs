@@ -4,13 +4,11 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class UsageBitfield
+	public class UsageBitfield : BulletObject
 	{
-		internal IntPtr Native;
-
 		internal UsageBitfield(IntPtr native)
 		{
-			Native = native;
+			Initialize(native);
 		}
 
 		public void Reset()
@@ -67,18 +65,17 @@ namespace BulletSharp
 		}
 	}
 
-	public class SubSimplexClosestResult : IDisposable
+	public class SubSimplexClosestResult : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		internal SubSimplexClosestResult(IntPtr native)
+		internal SubSimplexClosestResult(IntPtr native, BulletObject owner)
 		{
-			Native = native;
+			InitializeSubObject(native, owner);
 		}
 
 		public SubSimplexClosestResult()
 		{
-			Native = btSubSimplexClosestResult_new();
+			IntPtr native = btSubSimplexClosestResult_new();
+			InitializeUserOwned(native);
 		}
 
 		public void Reset()
@@ -142,24 +139,9 @@ namespace BulletSharp
 			set => btSubSimplexClosestResult_setUsedVertices(Native, value.Native);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btSubSimplexClosestResult_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~SubSimplexClosestResult()
-		{
-			Dispose(false);
+			btSubSimplexClosestResult_delete(Native);
 		}
 	}
 
@@ -279,7 +261,7 @@ namespace BulletSharp
 
 		public SubSimplexClosestResult CachedBC
 		{
-			get => new SubSimplexClosestResult(btVoronoiSimplexSolver_getCachedBC(Native));
+			get => new SubSimplexClosestResult(btVoronoiSimplexSolver_getCachedBC(Native), this);
 			set => btVoronoiSimplexSolver_setCachedBC(Native, value.Native);
 		}
 

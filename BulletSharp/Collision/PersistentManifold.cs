@@ -6,7 +6,7 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public delegate void ContactDestroyedEventHandler(Object userPersistantData);
+	public delegate void ContactDestroyedEventHandler(object userPersistantData);
 	public delegate void ContactProcessedEventHandler(ManifoldPoint cp, CollisionObject body0, CollisionObject body1);
 
 	public class PersistentManifold : BulletDisposableObject //: TypedObject
