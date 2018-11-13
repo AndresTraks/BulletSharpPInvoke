@@ -63,12 +63,14 @@ namespace BulletSharp
 
 		public ManifoldPoint()
 		{
-			Native = btManifoldPoint_new();
+			IntPtr native = btManifoldPoint_new();
+			InitializeUserOwned(native);
 		}
 
 		public ManifoldPoint(Vector3 pointA, Vector3 pointB, Vector3 normal, float distance)
 		{
-			Native = btManifoldPoint_new2(ref pointA, ref pointB, ref normal, distance);
+			IntPtr native = btManifoldPoint_new2(ref pointA, ref pointB, ref normal, distance);
+			InitializeUserOwned(native);
 		}
 
 		public float AppliedImpulse
@@ -274,7 +276,7 @@ namespace BulletSharp
 			set => btManifoldPoint_setPositionWorldOnB(Native, ref value);
 		}
 
-		public Object UserPersistentData
+		public object UserPersistentData
 		{
 			get
 			{

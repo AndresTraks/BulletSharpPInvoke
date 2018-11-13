@@ -1,3 +1,4 @@
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -6,16 +7,20 @@ namespace BulletSharp
 	{
 		public MultiBodyJointMotor(MultiBody body, int link, float desiredVelocity,
 			float maxMotorImpulse)
-			: base(btMultiBodyJointMotor_new(body.Native, link, desiredVelocity,
-				maxMotorImpulse), body, body)
 		{
+			IntPtr native = btMultiBodyJointMotor_new(body.Native, link, desiredVelocity,
+				maxMotorImpulse);
+			InitializeUserOwned(native);
+			InitializeMembers(body, body);
 		}
 
 		public MultiBodyJointMotor(MultiBody body, int link, int linkDoF, float desiredVelocity,
 			float maxMotorImpulse)
-			: base(btMultiBodyJointMotor_new2(body.Native, link, linkDoF, desiredVelocity,
-				maxMotorImpulse), body, body)
 		{
+			IntPtr native = btMultiBodyJointMotor_new2(body.Native, link, linkDoF, desiredVelocity,
+				maxMotorImpulse);
+			InitializeUserOwned(native);
+			InitializeMembers(body, body);
 		}
 
 		public void SetVelocityTarget(float velTarget)

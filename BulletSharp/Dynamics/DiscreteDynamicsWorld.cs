@@ -24,12 +24,6 @@ namespace BulletSharp
 			InitializeMembers(dispatcher, pairCache, constraintSolver);
 		}
 
-		protected internal void InitializeMembers(Dispatcher dispatcher, BroadphaseInterface pairCache, ConstraintSolver constraintSolver)
-		{
-			InitializeMembers(dispatcher, pairCache);
-			_constraintSolver = constraintSolver;
-		}
-
 		public void ApplyGravity()
 		{
 			btDiscreteDynamicsWorld_applyGravity(Native);

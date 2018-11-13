@@ -1128,7 +1128,7 @@ namespace BulletSharp
             return constraint;
 		}
 
-		public string GetNameForObject(Object obj)
+		public string GetNameForObject(object obj)
 		{
             string name;
             _objectNameMap.TryGetValue(obj, out name);

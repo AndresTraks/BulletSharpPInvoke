@@ -1,3 +1,4 @@
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -5,8 +6,10 @@ namespace BulletSharp
 	public class NncgConstraintSolver : SequentialImpulseConstraintSolver
 	{
 		public NncgConstraintSolver()
-			: base(btNNCGConstraintSolver_new(), false)
+			: base(ConstructionInfo.Null)
 		{
+			IntPtr native = btNNCGConstraintSolver_new();
+			InitializeUserOwned(native);
 		}
 
 		public bool OnlyForNoneContact

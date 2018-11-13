@@ -1,4 +1,5 @@
 using BulletSharp.Math;
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -7,17 +8,21 @@ namespace BulletSharp
 	{
 		public MultiBodySliderConstraint(MultiBody body, int link, RigidBody bodyB,
 			Vector3 pivotInA, Vector3 pivotInB, Matrix frameInA, Matrix frameInB, Vector3 jointAxis)
-			: base(btMultiBodySliderConstraint_new(body.Native, link, bodyB.Native,
-				ref pivotInA, ref pivotInB, ref frameInA, ref frameInB, ref jointAxis), body, null)
 		{
+			IntPtr native = btMultiBodySliderConstraint_new(body.Native, link, bodyB.Native,
+				ref pivotInA, ref pivotInB, ref frameInA, ref frameInB, ref jointAxis);
+			InitializeUserOwned(native);
+			InitializeMembers(body, null);
 		}
 
 		public MultiBodySliderConstraint(MultiBody bodyA, int linkA, MultiBody bodyB,
 			int linkB, Vector3 pivotInA, Vector3 pivotInB, Matrix frameInA, Matrix frameInB,
 			Vector3 jointAxis)
-			: base(btMultiBodySliderConstraint_new2(bodyA.Native, linkA, bodyB.Native,
-				linkB, ref pivotInA, ref pivotInB, ref frameInA, ref frameInB, ref jointAxis), bodyA, bodyB)
 		{
+			IntPtr native = btMultiBodySliderConstraint_new2(bodyA.Native, linkA, bodyB.Native,
+				linkB, ref pivotInA, ref pivotInB, ref frameInA, ref frameInB, ref jointAxis);
+			InitializeUserOwned(native);
+			InitializeMembers(bodyA, bodyB);
 		}
 
 		public Matrix FrameInA

@@ -20,20 +20,16 @@ namespace BulletSharp
 		DisableImplicitConeFriction = 2048
 	}
 
-	public class ContactSolverInfoData : IDisposable
+	public class ContactSolverInfoData : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
-
-		internal ContactSolverInfoData(IntPtr native, bool preventDelete)
+		internal ContactSolverInfoData(ConstructionInfo info)
 		{
-			Native = native;
-			_preventDelete = preventDelete;
 		}
 
 		public ContactSolverInfoData()
 		{
-			Native = btContactSolverInfoData_new();
+			IntPtr native = btContactSolverInfoData_new();
+			InitializeUserOwned(native);
 		}
 
 		public float Damping
@@ -174,40 +170,27 @@ namespace BulletSharp
 			set => btContactSolverInfoData_setWarmstartingFactor(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
-				if (!_preventDelete)
-				{
-					btContactSolverInfoData_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btContactSolverInfoData_delete(Native);
 			}
-		}
-
-		~ContactSolverInfoData()
-		{
-			Dispose(false);
 		}
 	}
 
 	public class ContactSolverInfo : ContactSolverInfoData
 	{
-		internal ContactSolverInfo(IntPtr native, bool preventDelete)
-			: base(native, preventDelete)
+		internal ContactSolverInfo(IntPtr native, BulletObject owner)
+			: base(ConstructionInfo.Null)
 		{
 		}
 
 		public ContactSolverInfo()
-			: base(btContactSolverInfo_new(), false)
+			: base(ConstructionInfo.Null)
 		{
+			IntPtr native = btContactSolverInfo_new();
+			InitializeUserOwned(native);
 		}
 	}
 }

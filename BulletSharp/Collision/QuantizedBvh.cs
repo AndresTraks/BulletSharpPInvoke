@@ -247,7 +247,7 @@ namespace BulletSharp
 		*/
 		protected override void Dispose(bool disposing)
 		{
-			if (Owner == null)
+			if (IsUserOwned)
 			{
 				btQuantizedBvh_delete(Native);
 			}

@@ -5,20 +5,20 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class MultiBody : IDisposable
+	public class MultiBody : BulletDisposableObject
 	{
-		internal IntPtr Native;
 		private MultiBodyLink[] _links;
 
-		internal MultiBody(IntPtr native)
+		internal MultiBody(IntPtr native, BulletObject owner)
 		{
-			Native = native;
+			InitializeSubObject(native, owner);
 		}
 
 		public MultiBody(int nLinks, float mass, Vector3 inertia, bool fixedBase,
 			bool canSleep)
 		{
-			Native = btMultiBody_new(nLinks, mass, ref inertia, fixedBase, canSleep);
+			IntPtr native = btMultiBody_new(nLinks, mass, ref inertia, fixedBase, canSleep);
+			InitializeUserOwned(native);
 		}
 
 		public void AddBaseConstraintForce(Vector3 f)
@@ -610,24 +610,9 @@ namespace BulletSharp
 			set => btMultiBody_setWorldToBaseRot(Native, ref value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btMultiBody_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~MultiBody()
-		{
-			Dispose(false);
+			btMultiBody_delete(Native);
 		}
 	}
 }

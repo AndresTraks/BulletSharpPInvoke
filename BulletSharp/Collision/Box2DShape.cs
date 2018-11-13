@@ -1,4 +1,5 @@
 using BulletSharp.Math;
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -10,19 +11,19 @@ namespace BulletSharp
 
 		public Box2DShape(Vector3 boxHalfExtents)
 		{
-			var native = btBox2dShape_new(ref boxHalfExtents);
+			IntPtr native = btBox2dShape_new(ref boxHalfExtents);
 			InitializeCollisionShape(native);
 		}
 
 		public Box2DShape(float boxHalfExtent)
 		{
-			var native = btBox2dShape_new2(boxHalfExtent);
+			IntPtr native = btBox2dShape_new2(boxHalfExtent);
 			InitializeCollisionShape(native);
 		}
 
 		public Box2DShape(float boxHalfExtentX, float boxHalfExtentY, float boxHalfExtentZ)
 		{
-			var native = btBox2dShape_new3(boxHalfExtentX, boxHalfExtentY, boxHalfExtentZ);
+			IntPtr native = btBox2dShape_new3(boxHalfExtentX, boxHalfExtentY, boxHalfExtentZ);
 			InitializeCollisionShape(native);
 		}
 

@@ -1,3 +1,4 @@
+using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -5,8 +6,10 @@ namespace BulletSharp
 	public class MultiBodyConstraintSolver : SequentialImpulseConstraintSolver
 	{
 		public MultiBodyConstraintSolver()
-			: base(btMultiBodyConstraintSolver_new(), false)
+			: base(ConstructionInfo.Null)
 		{
+			IntPtr native = btMultiBodyConstraintSolver_new();
+			InitializeUserOwned(native);
 		}
 		/*
 		public float SolveGroupCacheFriendlyFinish(CollisionObject bodies, int numBodies,

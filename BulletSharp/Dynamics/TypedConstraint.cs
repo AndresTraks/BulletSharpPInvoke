@@ -409,7 +409,7 @@ namespace BulletSharp
 			set => btTypedConstraint_setUserConstraintId(Native, value);
 		}
 
-		public Object Userobject { get; set; }
+		public object Userobject { get; set; }
 
 		public int UserConstraintType
 		{

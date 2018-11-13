@@ -10,15 +10,10 @@ namespace BulletSharp
 		Nncg = 4
 	}
 
-	public abstract class ConstraintSolver : IDisposable
+	public abstract class ConstraintSolver : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
-
-		internal ConstraintSolver(IntPtr native, bool preventDelete)
+		protected internal ConstraintSolver()
 		{
-			Native = native;
-			_preventDelete = preventDelete;
 		}
 
 		public void AllSolved(ContactSolverInfo __unnamed0, DebugDraw __unnamed1)
@@ -47,27 +42,12 @@ namespace BulletSharp
 		*/
 		public ConstraintSolverType SolverType => btConstraintSolver_getSolverType(Native);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
-				if (!_preventDelete)
-				{
-					btConstraintSolver_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btConstraintSolver_delete(Native);
 			}
-		}
-
-		~ConstraintSolver()
-		{
-			Dispose(false);
 		}
 	}
 }

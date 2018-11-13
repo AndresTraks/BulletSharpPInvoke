@@ -3373,7 +3373,7 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
-		public Object Tag { get; set; }
+		public object Tag { get; set; }
 
 		public AlignedTetraArray Tetras
 		{

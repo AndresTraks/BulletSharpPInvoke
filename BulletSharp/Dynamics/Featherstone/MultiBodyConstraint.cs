@@ -1,15 +1,15 @@
-using System;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public abstract class MultiBodyConstraint : IDisposable
+	public abstract class MultiBodyConstraint : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		internal MultiBodyConstraint(IntPtr native, MultiBody bodyA, MultiBody bodyB)
+		protected internal MultiBodyConstraint()
 		{
-			Native = native;
+		}
+
+		protected internal void InitializeMembers(MultiBody bodyA, MultiBody bodyB)
+		{
 			MultiBodyA = bodyA;
 			MultiBodyB = bodyB;
 		}
@@ -83,30 +83,15 @@ namespace BulletSharp
 			set => btMultiBodyConstraint_setMaxAppliedImpulse(Native, value);
 		}
 
-		public MultiBody MultiBodyA { get; }
+		public MultiBody MultiBodyA { get; private set; }
 
-		public MultiBody MultiBodyB { get; }
+		public MultiBody MultiBodyB { get; private set; }
 
 		public int NumRows => btMultiBodyConstraint_getNumRows(Native);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btMultiBodyConstraint_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~MultiBodyConstraint()
-		{
-			Dispose(false);
+			btMultiBodyConstraint_delete(Native);
 		}
 	}
 }
