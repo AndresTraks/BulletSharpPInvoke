@@ -61,12 +61,12 @@ namespace BulletSharp
 
 		public void GetInfo1NonVirtual(ConstraintInfo1 info)
 		{
-			btPoint2PointConstraint_getInfo1NonVirtual(Native, info._native);
+			btPoint2PointConstraint_getInfo1NonVirtual(Native, info.Native);
 		}
 
 		public void GetInfo2NonVirtual(ConstraintInfo2 info, Matrix body0Trans, Matrix body1Trans)
 		{
-			btPoint2PointConstraint_getInfo2NonVirtual(Native, info._native, ref body0Trans,
+			btPoint2PointConstraint_getInfo2NonVirtual(Native, info.Native, ref body0Trans,
 				ref body1Trans);
 		}
 

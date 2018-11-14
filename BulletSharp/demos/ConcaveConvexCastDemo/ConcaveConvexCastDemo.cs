@@ -73,6 +73,7 @@ namespace ConcaveConvexCastDemo
         private Vector3 _worldMax = new Vector3(1000, 1000, 1000);
 
         private TriangleIndexVertexArray _indexVertexArrays;
+        private IndexedMesh _groundMesh;
         private ConvexcastBatch _convexcastBatch;
         private RigidBody _groundObject;
         private ClosestConvexResultCallback _callback;
@@ -143,6 +144,7 @@ namespace ConcaveConvexCastDemo
             _callback.Dispose();
             _indexVertexArrays.IndexedMeshArray[0].Dispose();
             _indexVertexArrays.Dispose();
+            _groundMesh.Dispose();
             if (_vertexWriter != null)
             {
                 _vertexWriter.Dispose();
@@ -160,10 +162,10 @@ namespace ConcaveConvexCastDemo
             const int triangleIndexStride = 3 * sizeof(int);
             const int vertexStride = Vector3.SizeInBytes;
 
-            var mesh = new IndexedMesh();
-            mesh.Allocate(totalTriangles, totalVerts, triangleIndexStride, vertexStride);
+            _groundMesh = new IndexedMesh();
+            _groundMesh.Allocate(totalTriangles, totalVerts, triangleIndexStride, vertexStride);
 
-            var indicesStream = mesh.GetTriangleStream();
+            var indicesStream = _groundMesh.GetTriangleStream();
             using (var indices = new BinaryWriter(indicesStream))
             {
                 for (int x = 0; x < NumVertsX - 1; x++)
@@ -184,7 +186,7 @@ namespace ConcaveConvexCastDemo
             }
 
             _indexVertexArrays = new TriangleIndexVertexArray();
-            _indexVertexArrays.AddIndexedMesh(mesh);
+            _indexVertexArrays.AddIndexedMesh(_groundMesh);
 
             SetVertexPositions(WaveHeight, 0.0f);
 

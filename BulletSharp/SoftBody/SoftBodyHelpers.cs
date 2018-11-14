@@ -354,26 +354,26 @@ namespace BulletSharp.SoftBody
 
 		public static void Draw(SoftBody psb, DebugDraw iDraw, DrawFlags drawFlags = DrawFlags.Std)
 		{
-			btSoftBodyHelpers_Draw(psb.Native, iDraw._native, drawFlags);
+			btSoftBodyHelpers_Draw(psb.Native, iDraw.Native, drawFlags);
 		}
 
 		public static void DrawClusterTree(SoftBody psb, DebugDraw iDraw, int minDepth = 0,
 			int maxDepth = -1)
 		{
-			btSoftBodyHelpers_DrawClusterTree(psb.Native, iDraw._native,
+			btSoftBodyHelpers_DrawClusterTree(psb.Native, iDraw.Native,
 				minDepth, maxDepth);
 		}
 
 		public static void DrawFaceTree(SoftBody psb, DebugDraw iDraw, int minDepth = 0,
 			int maxDepth = -1)
 		{
-			btSoftBodyHelpers_DrawFaceTree(psb.Native, iDraw._native,
+			btSoftBodyHelpers_DrawFaceTree(psb.Native, iDraw.Native,
 				minDepth, maxDepth);
 		}
 
 		public static void DrawFrame(SoftBody psb, DebugDraw iDraw)
 		{
-			btSoftBodyHelpers_DrawFrame(psb.Native, iDraw._native);
+			btSoftBodyHelpers_DrawFrame(psb.Native, iDraw.Native);
 		}
 
 		public static void DrawInfos(SoftBody psb, DebugDraw iDraw, bool masses,
@@ -401,7 +401,7 @@ namespace BulletSharp.SoftBody
 		public static void DrawNodeTree(SoftBody psb, DebugDraw iDraw, int minDepth = 0,
 			int maxDepth = -1)
 		{
-			btSoftBodyHelpers_DrawNodeTree(psb.Native, iDraw._native,
+			btSoftBodyHelpers_DrawNodeTree(psb.Native, iDraw.Native,
 				minDepth, maxDepth);
 		}
 

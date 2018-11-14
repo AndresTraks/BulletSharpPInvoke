@@ -59,14 +59,14 @@ namespace BulletSharp
 		public void GetInfo2NonVirtualRef(ConstraintInfo2 info, ref Matrix transA, ref Matrix transB,
 			Matrix invInertiaWorldA, Matrix invInertiaWorldB)
 		{
-			btConeTwistConstraint_getInfo2NonVirtual(Native, info._native, ref transA,
+			btConeTwistConstraint_getInfo2NonVirtual(Native, info.Native, ref transA,
 				ref transB, ref invInertiaWorldA, ref invInertiaWorldB);
 		}
 
 		public void GetInfo2NonVirtual(ConstraintInfo2 info, Matrix transA, Matrix transB,
 			Matrix invInertiaWorldA, Matrix invInertiaWorldB)
 		{
-			btConeTwistConstraint_getInfo2NonVirtual(Native, info._native, ref transA,
+			btConeTwistConstraint_getInfo2NonVirtual(Native, info.Native, ref transA,
 				ref transB, ref invInertiaWorldA, ref invInertiaWorldB);
 		}
 

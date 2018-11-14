@@ -64,13 +64,11 @@ namespace BulletSharp.SoftBody
 	}
 
 	[Serializable, DebuggerTypeProxy(typeof(AlignedLinkArrayDebugView)), DebuggerDisplay("Count = {Count}")]
-	public class AlignedLinkArray : IList<Link>
+	public class AlignedLinkArray : BulletObject, IList<Link>
 	{
-		private IntPtr _native;
-
 		internal AlignedLinkArray(IntPtr native)
 		{
-			_native = native;
+			Initialize(native);
 		}
 
 		public int IndexOf(Link item)
@@ -96,22 +94,22 @@ namespace BulletSharp.SoftBody
 				{
 					throw new ArgumentOutOfRangeException(nameof(index));
 				}
-				return new Link(btAlignedObjectArray_btSoftBody_Link_at(_native, index));
+				return new Link(btAlignedObjectArray_btSoftBody_Link_at(Native, index));
 			}
 			set
 			{
-				btAlignedObjectArray_btSoftBody_Link_set(_native, value.Native, index);
+				btAlignedObjectArray_btSoftBody_Link_set(Native, value.Native, index);
 			}
 		}
 
 		public void Add(Link item)
 		{
-			btAlignedObjectArray_btSoftBody_Link_push_back(_native, item.Native);
+			btAlignedObjectArray_btSoftBody_Link_push_back(Native, item.Native);
 		}
 
 		public void Clear()
 		{
-			btAlignedObjectArray_btSoftBody_Link_resizeNoInitialize(_native, 0);
+			btAlignedObjectArray_btSoftBody_Link_resizeNoInitialize(Native, 0);
 		}
 
 		public bool Contains(Link item)
@@ -137,11 +135,11 @@ namespace BulletSharp.SoftBody
 
 			for (int i = 0; i < count; i++)
 			{
-				array.SetValue(new Link(btAlignedObjectArray_btSoftBody_Link_at(_native, i)), i + arrayIndex);
+				array.SetValue(new Link(btAlignedObjectArray_btSoftBody_Link_at(Native, i)), i + arrayIndex);
 			}
 		}
 
-		public int Count => btAlignedObjectArray_btSoftBody_Link_size(_native);
+		public int Count => btAlignedObjectArray_btSoftBody_Link_size(Native);
 
 		public bool IsReadOnly => false;
 

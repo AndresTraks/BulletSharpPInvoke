@@ -18,7 +18,7 @@ namespace BulletSharp
 
 		public void AllSolved(ContactSolverInfo __unnamed0, DebugDraw __unnamed1)
 		{
-			btConstraintSolver_allSolved(Native, __unnamed0.Native, __unnamed1 != null ? __unnamed1._native : IntPtr.Zero);
+			btConstraintSolver_allSolved(Native, __unnamed0.Native, __unnamed1 != null ? __unnamed1.Native : IntPtr.Zero);
 		}
 
 		public void PrepareSolve(int __unnamed0, int __unnamed1)

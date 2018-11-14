@@ -64,18 +64,16 @@ namespace BulletSharp.SoftBody
 	}
 
 	[Serializable, DebuggerTypeProxy(typeof(AlignedNodeArrayDebugView)), DebuggerDisplay("Count = {Count}")]
-	public class AlignedNodeArray : IList<Node>
+	public class AlignedNodeArray : BulletObject, IList<Node>
 	{
-		private IntPtr _native;
-
 		internal AlignedNodeArray(IntPtr native)
 		{
-			_native = native;
+			Initialize(native);
 		}
 
 		public int IndexOf(Node item)
 		{
-			return btAlignedObjectArray_btSoftBody_Node_index_of(_native, item.Native);
+			return btAlignedObjectArray_btSoftBody_Node_index_of(Native, item.Native);
 		}
 
 		public void Insert(int index, Node item)
@@ -96,7 +94,7 @@ namespace BulletSharp.SoftBody
 				{
 					throw new ArgumentOutOfRangeException(nameof(index));
 				}
-				return new Node(btAlignedObjectArray_btSoftBody_Node_at(_native, index));
+				return new Node(btAlignedObjectArray_btSoftBody_Node_at(Native, index));
 			}
 			set
 			{
@@ -106,12 +104,12 @@ namespace BulletSharp.SoftBody
 
 		public void Add(Node item)
 		{
-			btAlignedObjectArray_btSoftBody_Node_push_back(_native, item.Native);
+			btAlignedObjectArray_btSoftBody_Node_push_back(Native, item.Native);
 		}
 
 		public void Clear()
 		{
-			btAlignedObjectArray_btSoftBody_Node_resizeNoInitialize(_native, 0);
+			btAlignedObjectArray_btSoftBody_Node_resizeNoInitialize(Native, 0);
 		}
 
 		public bool Contains(Node item)
@@ -124,7 +122,7 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public int Count => btAlignedObjectArray_btSoftBody_Node_size(_native);
+		public int Count => btAlignedObjectArray_btSoftBody_Node_size(Native);
 
 		public bool IsReadOnly => false;
 

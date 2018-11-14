@@ -37,7 +37,7 @@ namespace BulletSharp
 		public DebugDraw DebugDraw
 		{
 			get => DebugDraw.GetManaged(btDispatcherInfo_getDebugDraw(Native));
-			set => btDispatcherInfo_setDebugDraw(Native, value != null ? value._native : IntPtr.Zero);
+			set => btDispatcherInfo_setDebugDraw(Native, value != null ? value.Native : IntPtr.Zero);
 		}
 
 		public bool DeterministicOverlappingPairs

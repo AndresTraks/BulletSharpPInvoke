@@ -73,18 +73,16 @@ namespace BulletSharp.SoftBody
 		}
 	}
 	/*
-	public class SoftBodySolverOutput : IDisposable
+	public class SoftBodySolverOutput : BulletObject
 	{
-		internal IntPtr _native;
-
 		internal SoftBodySolverOutput(IntPtr native)
 		{
-			_native = native;
+			Initialize(native);
 		}
 
 		public void CopySoftBodyToVertexBuffer(SoftBody softBody, VertexBufferDescriptor vertexBuffer)
 		{
-			btSoftBodySolverOutput_copySoftBodyToVertexBuffer(_native, softBody._native, vertexBuffer._native);
+			btSoftBodySolverOutput_copySoftBodyToVertexBuffer(Native, softBody.Native, vertexBuffer.Native);
 		}
 
 		public void Dispose()
@@ -97,7 +95,7 @@ namespace BulletSharp.SoftBody
 		{
 			if (_native != IntPtr.Zero)
 			{
-				btSoftBodySolverOutput_delete(_native);
+				btSoftBodySolverOutput_delete(Native);
 				_native = IntPtr.Zero;
 			}
 		}

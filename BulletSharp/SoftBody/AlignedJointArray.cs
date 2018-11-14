@@ -64,13 +64,11 @@ namespace BulletSharp.SoftBody
 	}
 
 	[Serializable, DebuggerTypeProxy(typeof(AlignedJointArrayDebugView)), DebuggerDisplay("Count = {Count}")]
-	public class AlignedJointArray : IList<Joint>
+	public class AlignedJointArray : BulletObject, IList<Joint>
 	{
-		private IntPtr _native;
-
 		internal AlignedJointArray(IntPtr native)
 		{
-			_native = native;
+			Initialize(native);
 		}
 
 		public int IndexOf(Joint item)
@@ -96,7 +94,7 @@ namespace BulletSharp.SoftBody
 				{
 					throw new ArgumentOutOfRangeException(nameof(index));
 				}
-				return Joint.GetManaged(btAlignedObjectArray_btSoftBody_JointPtr_at(_native, index));
+				return Joint.GetManaged(btAlignedObjectArray_btSoftBody_JointPtr_at(Native, index));
 			}
 			set
 			{
@@ -106,12 +104,12 @@ namespace BulletSharp.SoftBody
 
 		public void Add(Joint item)
 		{
-			btAlignedObjectArray_btSoftBody_JointPtr_push_back(_native, item.Native);
+			btAlignedObjectArray_btSoftBody_JointPtr_push_back(Native, item.Native);
 		}
 
 		public void Clear()
 		{
-			btAlignedObjectArray_btSoftBody_JointPtr_resizeNoInitialize(_native, 0);
+			btAlignedObjectArray_btSoftBody_JointPtr_resizeNoInitialize(Native, 0);
 		}
 
 		public bool Contains(Joint item)
@@ -124,7 +122,7 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public int Count => btAlignedObjectArray_btSoftBody_JointPtr_size(_native);
+		public int Count => btAlignedObjectArray_btSoftBody_JointPtr_size(Native);
 
 		public bool IsReadOnly => false;
 

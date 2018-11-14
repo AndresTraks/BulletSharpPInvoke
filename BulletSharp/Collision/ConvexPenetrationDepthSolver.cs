@@ -16,7 +16,7 @@ namespace BulletSharp
 		{
 			return btConvexPenetrationDepthSolver_calcPenDepth(Native, simplexSolver.Native,
 				convexA.Native, convexB.Native, ref transA, ref transB, out v, out pa,
-				out pb, debugDraw != null ? debugDraw._native : IntPtr.Zero);
+				out pb, debugDraw != null ? debugDraw.Native : IntPtr.Zero);
 		}
 
 		protected override void Dispose(bool disposing)

@@ -62,20 +62,19 @@ namespace BulletSharp
 	}
 
 	[Serializable, DebuggerTypeProxy(typeof(AlignedCollisionObjectArrayDebugView)), DebuggerDisplay("Count = {Count}")]
-	public class AlignedCollisionObjectArray : IList<CollisionObject>
+	public class AlignedCollisionObjectArray : BulletObject, IList<CollisionObject>
 	{
-		private IntPtr _native;
 		private CollisionWorld _collisionWorld;
 		private List<CollisionObject> _backingList;
 
 		internal AlignedCollisionObjectArray(IntPtr native)
 		{
-			_native = native;
+			Initialize(native);
 		}
 
 		internal AlignedCollisionObjectArray(IntPtr native, CollisionWorld collisionWorld)
 		{
-			_native = native;
+			Initialize(native);
 			if (collisionWorld != null)
 			{
 				_collisionWorld = collisionWorld;
@@ -108,7 +107,7 @@ namespace BulletSharp
 			}
 			else
 			{
-				btAlignedObjectArray_btCollisionObjectPtr_push_back(_native, item.Native);
+				btAlignedObjectArray_btCollisionObjectPtr_push_back(Native, item.Native);
 			}
 		}
 
@@ -172,7 +171,7 @@ namespace BulletSharp
 			{
 				return -1;
 			}
-			return btAlignedObjectArray_btCollisionObjectPtr_findLinearSearch2(_native, item.Native);
+			return btAlignedObjectArray_btCollisionObjectPtr_findLinearSearch2(Native, item.Native);
 		}
 
 		public void Insert(int index, CollisionObject item)
@@ -286,7 +285,7 @@ namespace BulletSharp
 				{
 					throw new ArgumentOutOfRangeException(nameof(index));
 				}
-				return CollisionObject.GetManaged(btAlignedObjectArray_btCollisionObjectPtr_at(_native, index));
+				return CollisionObject.GetManaged(btAlignedObjectArray_btCollisionObjectPtr_at(Native, index));
 			}
 			set
 			{
@@ -294,7 +293,7 @@ namespace BulletSharp
 			}
 		}
 
-		public int Count => btAlignedObjectArray_btCollisionObjectPtr_size(_native);
+		public int Count => btAlignedObjectArray_btCollisionObjectPtr_size(Native);
 
 		public bool IsReadOnly => false;
 	}

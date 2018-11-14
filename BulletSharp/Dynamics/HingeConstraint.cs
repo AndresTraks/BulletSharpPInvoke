@@ -74,27 +74,27 @@ namespace BulletSharp
 
 		public void GetInfo1NonVirtual(ConstraintInfo1 info)
 		{
-			btHingeConstraint_getInfo1NonVirtual(Native, info._native);
+			btHingeConstraint_getInfo1NonVirtual(Native, info.Native);
 		}
 
 		public void GetInfo2Internal(ConstraintInfo2 info, Matrix transA, Matrix transB,
 			Vector3 angVelA, Vector3 angVelB)
 		{
-			btHingeConstraint_getInfo2Internal(Native, info._native, ref transA,
+			btHingeConstraint_getInfo2Internal(Native, info.Native, ref transA,
 				ref transB, ref angVelA, ref angVelB);
 		}
 
 		public void GetInfo2InternalUsingFrameOffset(ConstraintInfo2 info, Matrix transA,
 			Matrix transB, Vector3 angVelA, Vector3 angVelB)
 		{
-			btHingeConstraint_getInfo2InternalUsingFrameOffset(Native, info._native,
+			btHingeConstraint_getInfo2InternalUsingFrameOffset(Native, info.Native,
 				ref transA, ref transB, ref angVelA, ref angVelB);
 		}
 
 		public void GetInfo2NonVirtual(ConstraintInfo2 info, Matrix transA, Matrix transB,
 			Vector3 angVelA, Vector3 angVelB)
 		{
-			btHingeConstraint_getInfo2NonVirtual(Native, info._native, ref transA,
+			btHingeConstraint_getInfo2NonVirtual(Native, info.Native, ref transA,
 				ref transB, ref angVelA, ref angVelB);
 		}
 

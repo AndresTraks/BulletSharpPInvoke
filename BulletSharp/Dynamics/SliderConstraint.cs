@@ -53,13 +53,13 @@ namespace BulletSharp
 
 		public void GetInfo1NonVirtual(ConstraintInfo1 info)
 		{
-			btSliderConstraint_getInfo1NonVirtual(Native, info._native);
+			btSliderConstraint_getInfo1NonVirtual(Native, info.Native);
 		}
 
 		public void GetInfo2NonVirtual(ConstraintInfo2 info, Matrix transA, Matrix transB,
 			Vector3 linVelA, Vector3 linVelB, double rbAinvMass, double rbBinvMass)
 		{
-			btSliderConstraint_getInfo2NonVirtual(Native, info._native, ref transA,
+			btSliderConstraint_getInfo2NonVirtual(Native, info.Native, ref transA,
 				ref transB, ref linVelA, ref linVelB, rbAinvMass, rbBinvMass);
 		}
 

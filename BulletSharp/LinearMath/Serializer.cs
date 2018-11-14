@@ -9,73 +9,55 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class Chunk
+	public class Chunk : BulletDisposableObject
 	{
-		internal IntPtr _native;
-		private bool _preventDelete;
-
-		internal Chunk(IntPtr native)
+		internal Chunk(IntPtr native, BulletObject owner)
 		{
-			_native = native;
-			_preventDelete = true;
+			InitializeSubObject(native, owner);
 		}
 
 		public Chunk()
 		{
-			_native = btChunk_new();
+			IntPtr native = btChunk_new();
+			InitializeUserOwned(native);
 		}
 
 		public int ChunkCode
 		{
-			get => btChunk_getChunkCode(_native);
-			set => btChunk_setChunkCode(_native, value);
+			get => btChunk_getChunkCode(Native);
+			set => btChunk_setChunkCode(Native, value);
 		}
 
 		public int DnaNr
 		{
-			get => btChunk_getDna_nr(_native);
-			set => btChunk_setDna_nr(_native, value);
+			get => btChunk_getDna_nr(Native);
+			set => btChunk_setDna_nr(Native, value);
 		}
 
 		public int Length
 		{
-			get => btChunk_getLength(_native);
-			set => btChunk_setLength(_native, value);
+			get => btChunk_getLength(Native);
+			set => btChunk_setLength(Native, value);
 		}
 
 		public int Number
 		{
-			get => btChunk_getNumber(_native);
-			set => btChunk_setNumber(_native, value);
+			get => btChunk_getNumber(Native);
+			set => btChunk_setNumber(Native, value);
 		}
 
 		public IntPtr OldPtr
 		{
-			get => btChunk_getOldPtr(_native);
-			set => btChunk_setOldPtr(_native, value);
+			get => btChunk_getOldPtr(Native);
+			set => btChunk_setOldPtr(Native, value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
-				if (!_preventDelete)
-				{
-					btChunk_delete(_native);
-				}
-				_native = IntPtr.Zero;
+				btChunk_delete(Native);
 			}
-		}
-
-		~Chunk()
-		{
-			Dispose(false);
 		}
 	}
 
@@ -178,12 +160,12 @@ namespace BulletSharp
 
 		private IntPtr AllocateUnmanaged(uint size, int numElements)
 		{
-			return Allocate(size, numElements)._native;
+			return Allocate(size, numElements).Native;
 		}
 
 		private void FinalizeChunk(IntPtr chunkPtr, string structType, DnaID chunkCode, IntPtr oldPtr)
 		{
-			FinalizeChunk(new Chunk(chunkPtr), structType, chunkCode, oldPtr);
+			FinalizeChunk(new Chunk(chunkPtr, this), structType, chunkCode, oldPtr);
 		}
 
 		private IntPtr GetBufferPointer()
@@ -319,7 +301,7 @@ namespace BulletSharp
 			int length = (int)size * numElements;
 			IntPtr ptr = InternalAlloc(length + ChunkInd.Size);
 			IntPtr data = ptr + ChunkInd.Size;
-			var chunk = new Chunk(ptr)
+			var chunk = new Chunk(ptr, this)
 			{
 				ChunkCode = 0,
 				OldPtr = data,
@@ -391,13 +373,13 @@ namespace BulletSharp
 					if (IntPtr.Size == 8)
 					{
 						var chunkPtr = new Chunk8();
-						Marshal.PtrToStructure(chunk._native, chunkPtr);
+						Marshal.PtrToStructure(chunk.Native, chunkPtr);
 						Marshal.StructureToPtr(chunkPtr, currentPtr, false);
 					}
 					else
 					{
 						var chunkPtr = new Chunk4();
-						Marshal.PtrToStructure(chunk._native, chunkPtr);
+						Marshal.PtrToStructure(chunk.Native, chunkPtr);
 						Marshal.StructureToPtr(chunkPtr, currentPtr, false);
 					}
 					currentPtr += ChunkInd.Size + chunk.Length;
@@ -417,7 +399,7 @@ namespace BulletSharp
 
 		public override IntPtr GetChunk(int chunkIndex)
 		{
-			return _chunks[chunkIndex]._native;
+			return _chunks[chunkIndex].Native;
 		}
 
 		public override int GetNumChunks()

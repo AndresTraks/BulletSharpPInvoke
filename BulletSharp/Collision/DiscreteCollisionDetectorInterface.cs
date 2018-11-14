@@ -87,7 +87,7 @@ namespace BulletSharp
 			bool swapResults = false)
 		{
 			btDiscreteCollisionDetectorInterface_getClosestPoints(Native, input.Native,
-				output.Native, debugDraw != null ? debugDraw._native : IntPtr.Zero, swapResults);
+				output.Native, debugDraw != null ? debugDraw.Native : IntPtr.Zero, swapResults);
 		}
 
 		protected override void Dispose(bool disposing)

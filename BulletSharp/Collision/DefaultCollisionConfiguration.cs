@@ -19,7 +19,7 @@ namespace BulletSharp
 			get => _collisionAlgorithmPool;
 			set
 			{
-				btDefaultCollisionConstructionInfo_setCollisionAlgorithmPool(Native, value._native);
+				btDefaultCollisionConstructionInfo_setCollisionAlgorithmPool(Native, value.Native);
 				_collisionAlgorithmPool = value;
 			}
 		}
@@ -47,7 +47,7 @@ namespace BulletSharp
 			get => _persistentManifoldPool;
 			set
 			{
-				btDefaultCollisionConstructionInfo_setPersistentManifoldPool(Native, value._native);
+				btDefaultCollisionConstructionInfo_setPersistentManifoldPool(Native, value.Native);
 				_persistentManifoldPool = value;
 			}
 		}
@@ -216,7 +216,7 @@ namespace BulletSharp
 			{
 				if (_collisionAlgorithmPool == null)
 				{
-					_collisionAlgorithmPool = new PoolAllocator(btCollisionConfiguration_getCollisionAlgorithmPool(Native));
+					_collisionAlgorithmPool = new PoolAllocator(btCollisionConfiguration_getCollisionAlgorithmPool(Native), this);
 				}
 				return _collisionAlgorithmPool;
 			}
@@ -228,7 +228,7 @@ namespace BulletSharp
 			{
 				if (_persistentManifoldPool == null)
 				{
-					_persistentManifoldPool = new PoolAllocator(btCollisionConfiguration_getPersistentManifoldPool(Native));
+					_persistentManifoldPool = new PoolAllocator(btCollisionConfiguration_getPersistentManifoldPool(Native), this);
 				}
 				return _persistentManifoldPool;
 			}

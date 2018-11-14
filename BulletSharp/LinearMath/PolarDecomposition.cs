@@ -4,43 +4,27 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class PolarDecomposition : IDisposable
+	public class PolarDecomposition : BulletDisposableObject
 	{
-		internal IntPtr _native;
-
 		public PolarDecomposition(double tolerance = 0.0001f, int maxIterations = 16)
 		{
-			_native = btPolarDecomposition_new(tolerance, (uint)maxIterations);
+			IntPtr native = btPolarDecomposition_new(tolerance, (uint)maxIterations);
+			InitializeUserOwned(native);
 		}
 
 		public uint Decompose(ref Matrix a, out Matrix u, out Matrix h)
 		{
-			return btPolarDecomposition_decompose(_native, ref a, out u, out h);
+			return btPolarDecomposition_decompose(Native, ref a, out u, out h);
 		}
 
 		public uint MaxIterations()
 		{
-			return btPolarDecomposition_maxIterations(_native);
+			return btPolarDecomposition_maxIterations(Native);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-				btPolarDecomposition_delete(_native);
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~PolarDecomposition()
-		{
-			Dispose(false);
+			btPolarDecomposition_delete(Native);
 		}
 	}
 }
