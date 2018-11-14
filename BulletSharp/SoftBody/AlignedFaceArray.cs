@@ -64,13 +64,11 @@ namespace BulletSharp.SoftBody
 	}
 
 	[Serializable, DebuggerTypeProxy(typeof(AlignedFaceArrayDebugView)), DebuggerDisplay("Count = {Count}")]
-	public class AlignedFaceArray : IList<Face>
+	public class AlignedFaceArray : BulletObject, IList<Face>
 	{
-		private IntPtr _native;
-
 		internal AlignedFaceArray(IntPtr native)
 		{
-			_native = native;
+			Initialize(native);
 		}
 
 		public int IndexOf(Face item)
@@ -96,7 +94,7 @@ namespace BulletSharp.SoftBody
 				{
 					throw new ArgumentOutOfRangeException(nameof(index));
 				}
-				return new Face(btAlignedObjectArray_btSoftBody_Face_at(_native, index));
+				return new Face(btAlignedObjectArray_btSoftBody_Face_at(Native, index));
 			}
 			set
 			{
@@ -106,12 +104,12 @@ namespace BulletSharp.SoftBody
 
 		public void Add(Face item)
 		{
-			btAlignedObjectArray_btSoftBody_Face_push_back(_native, item.Native);
+			btAlignedObjectArray_btSoftBody_Face_push_back(Native, item.Native);
 		}
 
 		public void Clear()
 		{
-			btAlignedObjectArray_btSoftBody_Face_resizeNoInitialize(_native, 0);
+			btAlignedObjectArray_btSoftBody_Face_resizeNoInitialize(Native, 0);
 		}
 
 		public bool Contains(Face item)
@@ -124,7 +122,7 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public int Count => btAlignedObjectArray_btSoftBody_Face_size(_native);
+		public int Count => btAlignedObjectArray_btSoftBody_Face_size(Native);
 
 		public bool IsReadOnly => false;
 

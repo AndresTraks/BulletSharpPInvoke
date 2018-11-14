@@ -28,7 +28,7 @@ namespace BulletSharp
 		*/
 		public void DebugDraw(DebugDraw drawer)
 		{
-			btMultiBodyConstraint_debugDraw(Native, drawer._native);
+			btMultiBodyConstraint_debugDraw(Native, drawer.Native);
 		}
 
 		public void FinalizeMultiDof()

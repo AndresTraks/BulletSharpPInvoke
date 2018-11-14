@@ -54,9 +54,9 @@ namespace BulletSharp
 				return;
 			}
 
-			ActionInterfaceWrapper wrapper = new ActionInterfaceWrapper(action, this);
+			var wrapper = new ActionInterfaceWrapper(action, this);
 			_actions.Add(action, wrapper);
-			btDynamicsWorld_addAction(Native, wrapper._native);
+			btDynamicsWorld_addAction(Native, wrapper.Native);
 		}
 
 		public void AddConstraint(TypedConstraint constraint, bool disableCollisionsBetweenLinkedBodies = false)
@@ -124,7 +124,7 @@ namespace BulletSharp
 			ActionInterfaceWrapper wrapper;
 			if (_actions.TryGetValue(action, out wrapper))
 			{
-				btDynamicsWorld_removeAction(Native, wrapper._native);
+				btDynamicsWorld_removeAction(Native, wrapper.Native);
 				_actions.Remove(action);
 				wrapper.Dispose();
 			}

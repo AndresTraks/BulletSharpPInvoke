@@ -11,31 +11,31 @@ namespace BulletSharp
 		void UpdateAction(CollisionWorld collisionWorld, float deltaTimeStep);
 	}
 
-	internal class ActionInterfaceWrapper : IDisposable
+	internal class ActionInterfaceWrapper : BulletDisposableObject
 	{
-		internal IntPtr _native;
 		private IAction _actionInterface;
-		private DynamicsWorld _world;
+		private readonly DynamicsWorld _world;
 
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate void DebugDrawUnmanagedDelegate(IntPtr debugDrawer);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		private delegate void UpdateActionUnmanagedDelegate(IntPtr collisionWorld, float deltaTimeStep);
 
-		private DebugDrawUnmanagedDelegate _debugDraw;
-		private UpdateActionUnmanagedDelegate _updateAction;
+		private readonly DebugDrawUnmanagedDelegate _debugDraw;
+		private readonly UpdateActionUnmanagedDelegate _updateAction;
 
 		public ActionInterfaceWrapper(IAction actionInterface, DynamicsWorld world)
 		{
-			_actionInterface = actionInterface;
-			_world = world;
-
 			_debugDraw = new DebugDrawUnmanagedDelegate(DebugDrawUnmanaged);
 			_updateAction = new UpdateActionUnmanagedDelegate(UpdateActionUnmanaged);
 
-			_native = btActionInterfaceWrapper_new(
+			IntPtr native = btActionInterfaceWrapper_new(
 				Marshal.GetFunctionPointerForDelegate(_debugDraw),
 				Marshal.GetFunctionPointerForDelegate(_updateAction));
+			InitializeUserOwned(native);
+
+			_actionInterface = actionInterface;
+			_world = world;
 		}
 
 		private void DebugDrawUnmanaged(IntPtr debugDrawer)
@@ -48,24 +48,9 @@ namespace BulletSharp
 			_actionInterface.UpdateAction(_world, deltaTimeStep);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
-			{
-				btActionInterface_delete(_native);
-				_native = IntPtr.Zero;
-			}
-		}
-
-		~ActionInterfaceWrapper()
-		{
-			Dispose(false);
+			btActionInterface_delete(Native);
 		}
 	}
 }

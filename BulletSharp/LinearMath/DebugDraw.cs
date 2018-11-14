@@ -29,59 +29,56 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public abstract class DebugDraw : IDisposable
+	public abstract class DebugDraw : BulletDisposableObject
 	{
-		internal IntPtr _native;
-		private bool _isDisposed = false;
-
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawAabbUnmanagedDelegate([In] ref Vector3 from, [In] ref Vector3 to, [In] ref Vector3 color);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawArcUnmanagedDelegate([In] ref Vector3 center, [In] ref Vector3 normal, [In] ref Vector3 axis, float radiusA, float radiusB,
 			float minAngle, float maxAngle, ref Vector3 color, bool drawSect, float stepDegrees);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawBoxUnmanagedDelegate([In] ref Vector3 bbMin, [In] ref Vector3 bbMax, [In] ref Matrix trans, [In] ref Vector3 color);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawCapsuleUnmanagedDelegate(float radius, float halfHeight, int upAxis, [In] ref Matrix transform, [In] ref Vector3 color);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawConeUnmanagedDelegate(float radius, float height, int upAxis, [In] ref Matrix transform, [In] ref Vector3 color);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawContactPointUnmanagedDelegate([In] ref Vector3 pointOnB, [In] ref Vector3 normalOnB, float distance, int lifeTime, [In] ref Vector3 color);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawCylinderUnmanagedDelegate(float radius, float halfHeight, int upAxis, [In] ref Matrix transform, [In] ref Vector3 color);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawLineUnmanagedDelegate([In] ref Vector3 from, [In] ref Vector3 to, [In] ref Vector3 color);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawPlaneUnmanagedDelegate([In] ref Vector3 planeNormal, float planeConst, [In] ref Matrix transform, [In] ref Vector3 color);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawSphereUnmanagedDelegate(float radius, [In] ref Matrix transform, [In] ref Vector3 color);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawSpherePatchUnmanagedDelegate([In] ref Vector3 center, [In] ref Vector3 up, [In] ref Vector3 axis, float radius,
 			float minTh, float maxTh, float minPs, float maxPs, [In] ref Vector3 color, float stepDegrees);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawTransformUnmanagedDelegate([In] ref Matrix transform, float orthoLen);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void DrawTriangleUnmanagedDelegate([In] ref Vector3 v0, [In] ref Vector3 v1, [In] ref Vector3 v2, [In] ref Vector3 color, float alpha);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate void SimpleCallback(int x);
-		[UnmanagedFunctionPointer(Native.Conv), SuppressUnmanagedCodeSecurity]
+		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
 		delegate DebugDrawModes GetDebugModeUnmanagedDelegate();
 
-		DrawAabbUnmanagedDelegate _drawAabb;
-		DrawArcUnmanagedDelegate _drawArc;
-		DrawBoxUnmanagedDelegate _drawBox;
-		DrawCapsuleUnmanagedDelegate _drawCapsule;
-		DrawConeUnmanagedDelegate _drawCone;
-		DrawContactPointUnmanagedDelegate _drawContactPoint;
-		DrawCylinderUnmanagedDelegate _drawCylinder;
-		DrawLineUnmanagedDelegate _drawLine;
-		DrawPlaneUnmanagedDelegate _drawPlane;
-		DrawSphereUnmanagedDelegate _drawSphere;
-		DrawSpherePatchUnmanagedDelegate _drawSpherePatch;
-		DrawTransformUnmanagedDelegate _drawTransform;
-		DrawTriangleUnmanagedDelegate _drawTriangle;
-		GetDebugModeUnmanagedDelegate _getDebugMode;
-		SimpleCallback _cb;
+		private readonly DrawAabbUnmanagedDelegate _drawAabb;
+		private readonly DrawArcUnmanagedDelegate _drawArc;
+		private readonly DrawBoxUnmanagedDelegate _drawBox;
+		private readonly DrawCapsuleUnmanagedDelegate _drawCapsule;
+		private readonly DrawConeUnmanagedDelegate _drawCone;
+		private readonly DrawContactPointUnmanagedDelegate _drawContactPoint;
+		private readonly DrawCylinderUnmanagedDelegate _drawCylinder;
+		private readonly DrawLineUnmanagedDelegate _drawLine;
+		private readonly DrawPlaneUnmanagedDelegate _drawPlane;
+		private readonly DrawSphereUnmanagedDelegate _drawSphere;
+		private readonly DrawSpherePatchUnmanagedDelegate _drawSpherePatch;
+		private readonly DrawTransformUnmanagedDelegate _drawTransform;
+		private readonly DrawTriangleUnmanagedDelegate _drawTriangle;
+		private readonly GetDebugModeUnmanagedDelegate _getDebugMode;
+		private readonly SimpleCallback _cb;
 
 		internal static DebugDraw GetManaged(IntPtr debugDrawer)
 		{
@@ -122,7 +119,7 @@ namespace BulletSharp
 			_getDebugMode = new GetDebugModeUnmanagedDelegate(GetDebugModeUnmanaged);
 			_cb = new SimpleCallback(SimpleCallbackUnmanaged);
 
-			_native = btIDebugDrawWrapper_new(
+			IntPtr native = btIDebugDrawWrapper_new(
 				GCHandle.ToIntPtr(GCHandle.Alloc(this)),
 				Marshal.GetFunctionPointerForDelegate(_drawAabb),
 				Marshal.GetFunctionPointerForDelegate(_drawArc),
@@ -139,6 +136,7 @@ namespace BulletSharp
 				Marshal.GetFunctionPointerForDelegate(_drawTriangle),
 				Marshal.GetFunctionPointerForDelegate(_getDebugMode),
 				Marshal.GetFunctionPointerForDelegate(_cb));
+			InitializeUserOwned(native);
 		}
 
 		public abstract void DrawLine(ref Vector3 from, ref Vector3 to, ref Vector3 color);
@@ -593,24 +591,9 @@ namespace BulletSharp
 			}
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!_isDisposed)
-			{
-				btIDebugDraw_delete(_native);
-				_isDisposed = true;
-			}
-		}
-
-		~DebugDraw()
-		{
-			Dispose(false);
+			btIDebugDraw_delete(Native);
 		}
 	}
 }

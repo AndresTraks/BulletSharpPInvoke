@@ -346,15 +346,13 @@ namespace BulletSharp.SoftBody
 		}
 	}
 
-	public class Anchor
+	public class Anchor : BulletObject
 	{
-		internal IntPtr Native;
-
 		private Node _node;
 
 		internal Anchor(IntPtr native)
 		{
-			Native = native;
+			Initialize(native);
 		}
 
 		public RigidBody Body
@@ -2907,7 +2905,7 @@ namespace BulletSharp.SoftBody
 
 		public static void SolveClusters(AlignedSoftBodyArray bodies)
 		{
-			btSoftBody_solveClusters(bodies._native);
+			btSoftBody_solveClusters(bodies.Native);
 		}
 
 		public void SolveClusters(float sor)
@@ -3279,7 +3277,7 @@ namespace BulletSharp.SoftBody
 			{
 				if (_materials == null)
 				{
-					_materials = new AlignedMaterialArray(btSoftBody_getMaterials(Native), true);
+					_materials = new AlignedMaterialArray(btSoftBody_getMaterials(Native));
 				}
 				return _materials;
 			}

@@ -415,7 +415,7 @@ namespace BulletSharp
 		{
 			return btGeneric6DofConstraint_get_limit_motor_info2(Native, limitMotor.Native,
 				ref transA, ref transB, ref linVelA, ref linVelB, ref angVelA, ref angVelB,
-				info._native, row, ref ax1, rotational, rotAllowed);
+				info.Native, row, ref ax1, rotational, rotAllowed);
 		}
 
 		public float GetAngle(int axisIndex)
@@ -432,13 +432,13 @@ namespace BulletSharp
 
 		public void GetInfo1NonVirtual(ConstraintInfo1 info)
 		{
-			btGeneric6DofConstraint_getInfo1NonVirtual(Native, info._native);
+			btGeneric6DofConstraint_getInfo1NonVirtual(Native, info.Native);
 		}
 
 		public void GetInfo2NonVirtual(ConstraintInfo2 info, Matrix transA, Matrix transB,
 			Vector3 linVelA, Vector3 linVelB, Vector3 angVelA, Vector3 angVelB)
 		{
-			btGeneric6DofConstraint_getInfo2NonVirtual(Native, info._native, ref transA,
+			btGeneric6DofConstraint_getInfo2NonVirtual(Native, info.Native, ref transA,
 				ref transB, ref linVelA, ref linVelB, ref angVelA, ref angVelB);
 		}
 

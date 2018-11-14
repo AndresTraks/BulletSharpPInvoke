@@ -43,7 +43,7 @@ namespace BulletSharp
 				set
 				{
 					_debugDrawer = value;
-					btConvexCast_CastResult_setDebugDrawer(Native, value != null ? value._native : IntPtr.Zero);
+					btConvexCast_CastResult_setDebugDrawer(Native, value != null ? value.Native : IntPtr.Zero);
 				}
 			}
 

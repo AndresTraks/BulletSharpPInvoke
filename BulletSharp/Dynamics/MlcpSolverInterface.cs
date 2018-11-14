@@ -3,13 +3,10 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public abstract class MlcpSolverInterface : IDisposable
+	public abstract class MlcpSolverInterface : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
-		internal MlcpSolverInterface(IntPtr native)
+		protected internal MlcpSolverInterface()
 		{
-			Native = native;
 		}
 		/*
 		public bool SolveMLCP(btMatrixX<float> a, btVectorX<float> b, btVectorX<float> x,
@@ -21,24 +18,10 @@ namespace BulletSharp
 				useSparsity);
 		}
 		*/
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
 
-		protected virtual void Dispose(bool disposing)
+		protected override void Dispose(bool disposing)
 		{
-			if (Native != IntPtr.Zero)
-			{
-				btMLCPSolverInterface_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~MlcpSolverInterface()
-		{
-			Dispose(false);
+			btMLCPSolverInterface_delete(Native);
 		}
 	}
 }

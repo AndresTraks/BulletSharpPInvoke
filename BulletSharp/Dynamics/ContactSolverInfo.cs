@@ -184,6 +184,7 @@ namespace BulletSharp
 		internal ContactSolverInfo(IntPtr native, BulletObject owner)
 			: base(ConstructionInfo.Null)
 		{
+			InitializeSubObject(native, owner);
 		}
 
 		public ContactSolverInfo()

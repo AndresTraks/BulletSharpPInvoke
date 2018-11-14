@@ -28,7 +28,7 @@ namespace BulletSharp
 			DebugDraw debugDraw)
 		{
 			btGjkPairDetector_getClosestPointsNonVirtual(Native, input.Native,
-				output.Native, debugDraw != null ? debugDraw._native : IntPtr.Zero);
+				output.Native, debugDraw != null ? debugDraw.Native : IntPtr.Zero);
 		}
 
 		public void SetIgnoreMargin(bool ignoreMargin)

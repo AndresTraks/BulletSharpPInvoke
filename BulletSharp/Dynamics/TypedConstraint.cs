@@ -28,13 +28,12 @@ namespace BulletSharp
 		Max
 	}
 
-	public class JointFeedback : IDisposable
+	public class JointFeedback : BulletDisposableObject
 	{
-		internal IntPtr Native;
-
 		public JointFeedback()
 		{
-			Native = btJointFeedback_new();
+			IntPtr native = btJointFeedback_new();
+			InitializeUserOwned(native);
 		}
 
 		public Vector3 AppliedForceBodyA
@@ -81,182 +80,135 @@ namespace BulletSharp
 			set => btJointFeedback_setAppliedTorqueBodyB(Native, ref value);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
-			{
-				btJointFeedback_delete(Native);
-				Native = IntPtr.Zero;
-			}
-		}
-
-		~JointFeedback()
-		{
-			Dispose(false);
+			btJointFeedback_delete(Native);
 		}
 	}
 
 	public abstract class TypedConstraint : BulletDisposableObject
 	{
-		public class ConstraintInfo1 : IDisposable
+		public class ConstraintInfo1 : BulletDisposableObject
 		{
-			internal IntPtr _native;
-
 			public ConstraintInfo1()
 			{
-				_native = btTypedConstraint_btConstraintInfo1_new();
+				IntPtr native = btTypedConstraint_btConstraintInfo1_new();
+				InitializeUserOwned(native);
 			}
 
 			public int Nub
 			{
-				get => btTypedConstraint_btConstraintInfo1_getNub(_native);
-				set => btTypedConstraint_btConstraintInfo1_setNub(_native, value);
+				get => btTypedConstraint_btConstraintInfo1_getNub(Native);
+				set => btTypedConstraint_btConstraintInfo1_setNub(Native, value);
 			}
 
 			public int NumConstraintRows
 			{
-				get => btTypedConstraint_btConstraintInfo1_getNumConstraintRows(_native);
-				set => btTypedConstraint_btConstraintInfo1_setNumConstraintRows(_native, value);
+				get => btTypedConstraint_btConstraintInfo1_getNumConstraintRows(Native);
+				set => btTypedConstraint_btConstraintInfo1_setNumConstraintRows(Native, value);
 			}
 
-			public void Dispose()
+			protected override void Dispose(bool disposing)
 			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
-			{
-				if (_native != IntPtr.Zero)
-				{
-					btTypedConstraint_btConstraintInfo1_delete(_native);
-					_native = IntPtr.Zero;
-				}
-			}
-
-			~ConstraintInfo1()
-			{
-				Dispose(false);
+				btTypedConstraint_btConstraintInfo1_delete(Native);
 			}
 		}
 
-		public class ConstraintInfo2 : IDisposable
+		public class ConstraintInfo2 : BulletDisposableObject
 		{
-			internal IntPtr _native;
-
 			public ConstraintInfo2()
 			{
-				_native = btTypedConstraint_btConstraintInfo2_new();
+				IntPtr native = btTypedConstraint_btConstraintInfo2_new();
+				InitializeUserOwned(native);
 			}
 			/*
 			public float Cfm
 			{
-				get { return btTypedConstraint_btConstraintInfo2_getCfm(_native); }
-				set { btTypedConstraint_btConstraintInfo2_setCfm(_native, value._native); }
+				get { return btTypedConstraint_btConstraintInfo2_getCfm(Native); }
+				set { btTypedConstraint_btConstraintInfo2_setCfm(Native, value.Native); }
 			}
 
 			public float ConstraintError
 			{
-				get { return btTypedConstraint_btConstraintInfo2_getConstraintError(_native); }
-				set { btTypedConstraint_btConstraintInfo2_setConstraintError(_native, value._native); }
+				get { return btTypedConstraint_btConstraintInfo2_getConstraintError(Native); }
+				set { btTypedConstraint_btConstraintInfo2_setConstraintError(Native, value.Native); }
 			}
 			*/
 			public float Damping
 			{
-				get => btTypedConstraint_btConstraintInfo2_getDamping(_native);
-				set => btTypedConstraint_btConstraintInfo2_setDamping(_native, value);
+				get => btTypedConstraint_btConstraintInfo2_getDamping(Native);
+				set => btTypedConstraint_btConstraintInfo2_setDamping(Native, value);
 			}
 
 			public float Erp
 			{
-				get => btTypedConstraint_btConstraintInfo2_getErp(_native);
-				set => btTypedConstraint_btConstraintInfo2_setErp(_native, value);
+				get => btTypedConstraint_btConstraintInfo2_getErp(Native);
+				set => btTypedConstraint_btConstraintInfo2_setErp(Native, value);
 			}
 			/*
 			public int Findex
 			{
-				get { return btTypedConstraint_btConstraintInfo2_getFindex(_native); }
-				set { btTypedConstraint_btConstraintInfo2_setFindex(_native, value._native); }
+				get { return btTypedConstraint_btConstraintInfo2_getFindex(Native); }
+				set { btTypedConstraint_btConstraintInfo2_setFindex(Native, value.Native); }
 			}
 			*/
 			public float Fps
 			{
-				get => btTypedConstraint_btConstraintInfo2_getFps(_native);
-				set => btTypedConstraint_btConstraintInfo2_setFps(_native, value);
+				get => btTypedConstraint_btConstraintInfo2_getFps(Native);
+				set => btTypedConstraint_btConstraintInfo2_setFps(Native, value);
 			}
 			/*
 			public float J1angularAxis
 			{
-				get { return btTypedConstraint_btConstraintInfo2_getJ1angularAxis(_native); }
-				set { btTypedConstraint_btConstraintInfo2_setJ1angularAxis(_native, value._native); }
+				get { return btTypedConstraint_btConstraintInfo2_getJ1angularAxis(Native); }
+				set { btTypedConstraint_btConstraintInfo2_setJ1angularAxis(Native, value.Native); }
 			}
 
 			public float J1linearAxis
 			{
-				get { return btTypedConstraint_btConstraintInfo2_getJ1linearAxis(_native); }
-				set { btTypedConstraint_btConstraintInfo2_setJ1linearAxis(_native, value._native); }
+				get { return btTypedConstraint_btConstraintInfo2_getJ1linearAxis(Native); }
+				set { btTypedConstraint_btConstraintInfo2_setJ1linearAxis(Native, value.Native); }
 			}
 
 			public float J2angularAxis
 			{
-				get { return btTypedConstraint_btConstraintInfo2_getJ2angularAxis(_native); }
-				set { btTypedConstraint_btConstraintInfo2_setJ2angularAxis(_native, value._native); }
+				get { return btTypedConstraint_btConstraintInfo2_getJ2angularAxis(Native); }
+				set { btTypedConstraint_btConstraintInfo2_setJ2angularAxis(Native, value.Native); }
 			}
 
 			public float J2linearAxis
 			{
-				get { return btTypedConstraint_btConstraintInfo2_getJ2linearAxis(_native); }
-				set { btTypedConstraint_btConstraintInfo2_setJ2linearAxis(_native, value._native); }
+				get { return btTypedConstraint_btConstraintInfo2_getJ2linearAxis(Native); }
+				set { btTypedConstraint_btConstraintInfo2_setJ2linearAxis(Native, value.Native); }
 			}
 
 			public float LowerLimit
 			{
-				get { return btTypedConstraint_btConstraintInfo2_getLowerLimit(_native); }
-				set { btTypedConstraint_btConstraintInfo2_setLowerLimit(_native, value._native); }
+				get { return btTypedConstraint_btConstraintInfo2_getLowerLimit(Native); }
+				set { btTypedConstraint_btConstraintInfo2_setLowerLimit(Native, value.Native); }
 			}
 			*/
 			public int NumIterations
 			{
-				get => btTypedConstraint_btConstraintInfo2_getNumIterations(_native);
-				set => btTypedConstraint_btConstraintInfo2_setNumIterations(_native, value);
+				get => btTypedConstraint_btConstraintInfo2_getNumIterations(Native);
+				set => btTypedConstraint_btConstraintInfo2_setNumIterations(Native, value);
 			}
 
 			public int Rowskip
 			{
-				get => btTypedConstraint_btConstraintInfo2_getRowskip(_native);
-				set => btTypedConstraint_btConstraintInfo2_setRowskip(_native, value);
+				get => btTypedConstraint_btConstraintInfo2_getRowskip(Native);
+				set => btTypedConstraint_btConstraintInfo2_setRowskip(Native, value);
 			}
 			/*
 			public float UpperLimit
 			{
-				get { return btTypedConstraint_btConstraintInfo2_getUpperLimit(_native); }
-				set { btTypedConstraint_btConstraintInfo2_setUpperLimit(_native, value._native); }
+				get { return btTypedConstraint_btConstraintInfo2_getUpperLimit(Native); }
+				set { btTypedConstraint_btConstraintInfo2_setUpperLimit(Native, value.Native); }
 			}
 			*/
-			public void Dispose()
+			protected override void Dispose(bool disposing)
 			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			protected virtual void Dispose(bool disposing)
-			{
-				if (_native != IntPtr.Zero)
-				{
-					btTypedConstraint_btConstraintInfo2_delete(_native);
-					_native = IntPtr.Zero;
-				}
-			}
-
-			~ConstraintInfo2()
-			{
-				Dispose(false);
+				btTypedConstraint_btConstraintInfo2_delete(Native);
 			}
 		}
 
@@ -300,12 +252,12 @@ namespace BulletSharp
 
 		public void GetInfo1(ConstraintInfo1 info)
 		{
-			btTypedConstraint_getInfo1(Native, info._native);
+			btTypedConstraint_getInfo1(Native, info.Native);
 		}
 
 		public void GetInfo2(ConstraintInfo2 info)
 		{
-			btTypedConstraint_getInfo2(Native, info._native);
+			btTypedConstraint_getInfo2(Native, info.Native);
 		}
 
 		public float GetParam(ConstraintParam num)
@@ -384,7 +336,7 @@ namespace BulletSharp
 			get => _jointFeedback;
 			set
 			{
-				btTypedConstraint_setJointFeedback(Native, (value == null) ? value.Native : IntPtr.Zero);
+				btTypedConstraint_setJointFeedback(Native, value != null ? value.Native : IntPtr.Zero);
 				_jointFeedback = value;
 			}
 		}
@@ -423,20 +375,12 @@ namespace BulletSharp
 		}
 	}
 
-	public class AngularLimit : IDisposable
+	public class AngularLimit : BulletDisposableObject
 	{
-		internal IntPtr Native;
-		private bool _preventDelete;
-
-		internal AngularLimit(IntPtr native, bool preventDelete)
-		{
-			Native = native;
-			_preventDelete = preventDelete;
-		}
-
 		public AngularLimit()
 		{
-			Native = btAngularLimit_new();
+			IntPtr native = btAngularLimit_new();
+			InitializeUserOwned(native);
 		}
 
 		public void Fit(ref float angle)
@@ -475,27 +419,12 @@ namespace BulletSharp
 
 		public float Softness => btAngularLimit_getSoftness(Native);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (Native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
-				if (!_preventDelete)
-				{
-					btAngularLimit_delete(Native);
-				}
-				Native = IntPtr.Zero;
+				btAngularLimit_delete(Native);
 			}
-		}
-
-		~AngularLimit()
-		{
-			Dispose(false);
 		}
 	}
 

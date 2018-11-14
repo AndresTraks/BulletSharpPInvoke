@@ -4,13 +4,11 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class DbvtAabbMm
+	public class DbvtAabbMm : BulletObject
 	{
-		internal readonly IntPtr Native;
-
 		internal DbvtAabbMm(IntPtr native)
 		{
-			Native = native;
+			Initialize(native);
 		}
 
 		public int Classify(Vector3 n, float o, int s)
@@ -134,13 +132,11 @@ namespace BulletSharp
 		}
 	}
 
-	public class DbvtNode
+	public class DbvtNode : BulletObject
 	{
-		internal readonly IntPtr Native;
-
 		internal DbvtNode(IntPtr native)
 		{
-			Native = native;
+			Initialize(native);
 		}
 
 		public override bool Equals(object obj)
@@ -222,7 +218,7 @@ namespace BulletSharp
 		}
 	}
 
-	public class Dbvt
+	public class Dbvt : BulletObject
 	{
 		public class IClone : BulletDisposableObject
 		{
@@ -393,11 +389,9 @@ namespace BulletSharp
 			}
 		}
 
-		internal readonly IntPtr Native;
-
 		internal Dbvt(IntPtr native)
 		{
-			Native = native;
+			Initialize(native);
 		}
 		/*
 		public static int Allocate(AlignedIntArray ifree, AlignedStkNpsArray stock,

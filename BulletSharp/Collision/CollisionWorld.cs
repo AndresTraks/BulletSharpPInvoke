@@ -256,8 +256,12 @@ namespace BulletSharp
 		protected internal LocalConvexResult(IntPtr native, BulletObject owner)
 		{
 			InitializeSubObject(native, owner);
-			_hitCollisionObject = CollisionObject.GetManaged(btCollisionWorld_LocalConvexResult_getHitCollisionObject(Native));
-			_localShapeInfo = new LocalShapeInfo(btCollisionWorld_LocalConvexResult_getLocalShapeInfo(Native), this);
+			CollisionObject hitCollisionObject = CollisionObject.GetManaged(btCollisionWorld_LocalConvexResult_getHitCollisionObject(Native));
+			IntPtr localShapeInfoPtr = btCollisionWorld_LocalConvexResult_getLocalShapeInfo(Native);
+			LocalShapeInfo localShapeInfo = localShapeInfoPtr != IntPtr.Zero
+				? new LocalShapeInfo(localShapeInfoPtr, this)
+				: null;
+			InitializeMembers(hitCollisionObject, localShapeInfo);
 		}
 
 		public LocalConvexResult(CollisionObject hitCollisionObject, LocalShapeInfo localShapeInfo,
@@ -267,6 +271,11 @@ namespace BulletSharp
 				localShapeInfo.Native, ref hitNormalLocal, ref hitPointLocal,
 				hitFraction);
 			InitializeUserOwned(native);
+			InitializeMembers(hitCollisionObject, localShapeInfo);
+		}
+
+		protected internal void InitializeMembers(CollisionObject hitCollisionObject, LocalShapeInfo localShapeInfo)
+		{
 			_hitCollisionObject = hitCollisionObject;
 			_localShapeInfo = localShapeInfo;
 		}
@@ -355,7 +364,7 @@ namespace BulletSharp
 			InitializeMembers(collisionObject, localShapeInfo);
 		}
 
-		protected void InitializeMembers(CollisionObject collisionObject, LocalShapeInfo localShapeInfo)
+		protected internal void InitializeMembers(CollisionObject collisionObject, LocalShapeInfo localShapeInfo)
 		{
 			_collisionObject = collisionObject;
 			_localShapeInfo = localShapeInfo;
@@ -757,7 +766,7 @@ namespace BulletSharp
 				if (_debugDrawer != value)
 				{
 					_debugDrawer = value;
-					btCollisionWorld_setDebugDrawer(Native, value != null ? value._native : IntPtr.Zero);
+					btCollisionWorld_setDebugDrawer(Native, value != null ? value.Native : IntPtr.Zero);
 				}
 			}
 		}

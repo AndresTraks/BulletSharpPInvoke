@@ -3,68 +3,50 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class PoolAllocator : IDisposable
+	public class PoolAllocator : BulletDisposableObject
 	{
-		internal IntPtr _native;
-		private bool _preventDelete;
-
-		internal PoolAllocator(IntPtr native)
+		internal PoolAllocator(IntPtr native, BulletObject owner)
 		{
-			_native = native;
-			_preventDelete = true;
+			InitializeSubObject(native, owner);
 		}
 
 		public PoolAllocator(int elemSize, int maxElements)
 		{
-			_native = btPoolAllocator_new(elemSize, maxElements);
+			IntPtr native = btPoolAllocator_new(elemSize, maxElements);
+			InitializeUserOwned(native);
 		}
 
 		public IntPtr Allocate(int size)
 		{
-			return btPoolAllocator_allocate(_native, size);
+			return btPoolAllocator_allocate(Native, size);
 		}
 
 		public void FreeMemory(IntPtr ptr)
 		{
-			btPoolAllocator_freeMemory(_native, ptr);
+			btPoolAllocator_freeMemory(Native, ptr);
 		}
 
 		public bool ValidPtr(IntPtr ptr)
 		{
-			return btPoolAllocator_validPtr(_native, ptr);
+			return btPoolAllocator_validPtr(Native, ptr);
 		}
 
-		public int ElementSize => btPoolAllocator_getElementSize(_native);
+		public int ElementSize => btPoolAllocator_getElementSize(Native);
 
-		public int FreeCount => btPoolAllocator_getFreeCount(_native);
+		public int FreeCount => btPoolAllocator_getFreeCount(Native);
 
-		public int MaxCount => btPoolAllocator_getMaxCount(_native);
+		public int MaxCount => btPoolAllocator_getMaxCount(Native);
 
-		public IntPtr PoolAddress => btPoolAllocator_getPoolAddress(_native);
+		public IntPtr PoolAddress => btPoolAllocator_getPoolAddress(Native);
 
-		public int UsedCount => btPoolAllocator_getUsedCount(_native);
+		public int UsedCount => btPoolAllocator_getUsedCount(Native);
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_native != IntPtr.Zero)
+			if (IsUserOwned)
 			{
-				if (!_preventDelete)
-				{
-					btPoolAllocator_delete(_native);
-				}
-				_native = IntPtr.Zero;
+				btPoolAllocator_delete(Native);
 			}
-		}
-
-		~PoolAllocator()
-		{
-			Dispose(false);
 		}
 	}
 }

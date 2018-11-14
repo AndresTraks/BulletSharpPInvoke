@@ -64,13 +64,11 @@ namespace BulletSharp.SoftBody
 	}
 
 	[Serializable, DebuggerTypeProxy(typeof(AlignedClusterArrayDebugView)), DebuggerDisplay("Count = {Count}")]
-	public class AlignedClusterArray : IList<Cluster>
+	public class AlignedClusterArray : BulletObject, IList<Cluster>
 	{
-		private IntPtr _native;
-
 		internal AlignedClusterArray(IntPtr native)
 		{
-			_native = native;
+			Initialize(native);
 		}
 
 		public int IndexOf(Cluster item)
@@ -96,7 +94,7 @@ namespace BulletSharp.SoftBody
 				{
 					throw new ArgumentOutOfRangeException(nameof(index));
 				}
-				return new Cluster(btAlignedObjectArray_btSoftBody_ClusterPtr_at(_native, index));
+				return new Cluster(btAlignedObjectArray_btSoftBody_ClusterPtr_at(Native, index));
 			}
 			set
 			{
@@ -106,12 +104,12 @@ namespace BulletSharp.SoftBody
 
 		public void Add(Cluster item)
 		{
-			btAlignedObjectArray_btSoftBody_ClusterPtr_push_back(_native, item.Native);
+			btAlignedObjectArray_btSoftBody_ClusterPtr_push_back(Native, item.Native);
 		}
 
 		public void Clear()
 		{
-			btAlignedObjectArray_btSoftBody_ClusterPtr_resizeNoInitialize(_native, 0);
+			btAlignedObjectArray_btSoftBody_ClusterPtr_resizeNoInitialize(Native, 0);
 		}
 
 		public bool Contains(Cluster item)
@@ -124,7 +122,7 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public int Count => btAlignedObjectArray_btSoftBody_ClusterPtr_size(_native);
+		public int Count => btAlignedObjectArray_btSoftBody_ClusterPtr_size(Native);
 
 		public bool IsReadOnly => false;
 
