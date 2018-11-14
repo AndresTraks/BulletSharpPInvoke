@@ -83,7 +83,8 @@
     <Compile Include="VehicleDemo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="BulletSharp">
+    <Reference Include="BulletSharp, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Release\BulletSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />

@@ -178,9 +178,7 @@ namespace BulletSharp
 
 	public class TriangleIndexVertexArray : StridingMeshInterface
 	{
-		private List<IndexedMesh> _meshes = new List<IndexedMesh>();
 		private IndexedMesh _initialMesh;
-		private AlignedIndexedMeshArray _indexedMeshArray;
 
 		internal TriangleIndexVertexArray(ConstructionInfo info)
 		{
@@ -190,12 +188,14 @@ namespace BulletSharp
 		{
 			IntPtr native = btTriangleIndexVertexArray_new();
 			InitializeUserOwned(native);
+			InitializeMembers();
 		}
 
 		public TriangleIndexVertexArray(ICollection<int> triangles, ICollection<double> vertices)
 		{
 			IntPtr native = btTriangleIndexVertexArray_new();
 			InitializeUserOwned(native);
+			InitializeMembers();
 
 			_initialMesh = new IndexedMesh();
 			_initialMesh.Allocate(triangles.Count / 3, vertices.Count / 3);
@@ -207,6 +207,7 @@ namespace BulletSharp
 		{
 			IntPtr native = btTriangleIndexVertexArray_new();
 			InitializeUserOwned(native);
+			InitializeMembers();
 
 			_initialMesh = new IndexedMesh();
 			_initialMesh.Allocate(triangles.Count / 3, vertices.Count);
@@ -218,26 +219,21 @@ namespace BulletSharp
 		{
 			IntPtr native = btTriangleIndexVertexArray_new2(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride);
 			InitializeUserOwned(native);
+			InitializeMembers();
+		}
+
+		protected internal void InitializeMembers()
+		{
+			IndexedMeshArray = new AlignedIndexedMeshArray(btTriangleIndexVertexArray_getIndexedMeshArray(Native), this);
 		}
 
 		public void AddIndexedMesh(IndexedMesh mesh, PhyScalarType indexType = PhyScalarType.Int32)
 		{
-			_meshes.Add(mesh);
-			btTriangleIndexVertexArray_addIndexedMesh(Native, mesh.Native, indexType);
+			mesh.IndexType = indexType;
+			IndexedMeshArray.Add(mesh);
 		}
 
-		public AlignedIndexedMeshArray IndexedMeshArray
-		{
-			get
-			{
-				// TODO: link _indexedMeshArray to _meshes
-				if (_indexedMeshArray == null)
-				{
-					_indexedMeshArray = new AlignedIndexedMeshArray(btTriangleIndexVertexArray_getIndexedMeshArray(Native));
-				}
-				return _indexedMeshArray;
-			}
-		}
+		public AlignedIndexedMeshArray IndexedMeshArray { get; private set; }
 
 		protected override void Dispose(bool disposing)
 		{

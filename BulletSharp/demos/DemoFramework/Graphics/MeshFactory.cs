@@ -534,6 +534,7 @@ namespace DemoFramework
                 vertices[v++] = normal;
             }
 
+            hull.Dispose();
             return vertices;
         }
 

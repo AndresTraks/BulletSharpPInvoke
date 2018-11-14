@@ -181,8 +181,6 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btAlignedObjectArray_btIndexedMesh_at(IntPtr obj, int n);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btAlignedObjectArray_btIndexedMesh_push_back(IntPtr obj, IntPtr val);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btAlignedObjectArray_btIndexedMesh_resizeNoInitialize(IntPtr obj, int newSize);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern int btAlignedObjectArray_btIndexedMesh_size(IntPtr obj);
