@@ -65,14 +65,29 @@ namespace BulletSharp
 	[Serializable, DebuggerTypeProxy(typeof(AlignedIndexedMeshArrayDebugView)), DebuggerDisplay("Count = {Count}")]
 	public class AlignedIndexedMeshArray : BulletObject, IList<IndexedMesh>
 	{
-		internal AlignedIndexedMeshArray(IntPtr native)
+		private List<IndexedMesh> _backingList = new List<IndexedMesh>();
+		private readonly TriangleIndexVertexArray _triangleIndexVertexArray;
+
+		internal AlignedIndexedMeshArray(IntPtr native, TriangleIndexVertexArray triangleIndexVertexArray)
 		{
 			Initialize(native);
+			_triangleIndexVertexArray = triangleIndexVertexArray;
+
+			int count = btAlignedObjectArray_btIndexedMesh_size(Native);
+			for (int i = 0; i < count; i++)
+			{
+				var mesh = new IndexedMesh(btAlignedObjectArray_btIndexedMesh_at(native, i), this);
+				_backingList.Add(mesh);
+			}
 		}
 
 		public int IndexOf(IndexedMesh item)
 		{
-			throw new NotImplementedException();
+			if (item == null)
+			{
+				return -1;
+			}
+			return _backingList.IndexOf(item);
 		}
 
 		public void Insert(int index, IndexedMesh item)
@@ -87,14 +102,7 @@ namespace BulletSharp
 
 		public IndexedMesh this[int index]
 		{
-			get
-			{
-				if ((uint)index >= (uint)Count)
-				{
-					throw new ArgumentOutOfRangeException(nameof(index));
-				}
-				return new IndexedMesh(btAlignedObjectArray_btIndexedMesh_at(Native, index), this);
-			}
+			get => _backingList[index];
 			set
 			{
 				throw new NotImplementedException();
@@ -103,17 +111,20 @@ namespace BulletSharp
 
 		public void Add(IndexedMesh item)
 		{
-			btAlignedObjectArray_btIndexedMesh_push_back(Native, item.Native);
+			btTriangleIndexVertexArray_addIndexedMesh(_triangleIndexVertexArray.Native, item.Native, item.IndexType);
+			_backingList.Add(item);
 		}
 
 		public void Clear()
 		{
 			btAlignedObjectArray_btIndexedMesh_resizeNoInitialize(Native, 0);
+			_backingList.Clear();
+
 		}
 
 		public bool Contains(IndexedMesh item)
 		{
-			throw new NotImplementedException();
+			return _backingList.Contains(item);
 		}
 
 		public void CopyTo(IndexedMesh[] array, int arrayIndex)
@@ -126,15 +137,15 @@ namespace BulletSharp
 
 			int count = Count;
 			if (arrayIndex + count > array.Length)
-				throw new ArgumentException("Array too small.", "array");
+				throw new ArgumentException("Array too small.", nameof(array));
 
 			for (int i = 0; i < count; i++)
 			{
-				array[arrayIndex + i] = this[i];
+				array[arrayIndex + i] = _backingList[i];
 			}
 		}
 
-		public int Count => btAlignedObjectArray_btIndexedMesh_size(Native);
+		public int Count => _backingList.Count;
 
 		public bool IsReadOnly => false;
 
@@ -145,12 +156,12 @@ namespace BulletSharp
 
 		public IEnumerator<IndexedMesh> GetEnumerator()
 		{
-			return new AlignedIndexedMeshArrayEnumerator(this);
+			return _backingList.GetEnumerator();
 		}
 
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
-			return new AlignedIndexedMeshArrayEnumerator(this);
+			return _backingList.GetEnumerator();
 		}
 	}
 }

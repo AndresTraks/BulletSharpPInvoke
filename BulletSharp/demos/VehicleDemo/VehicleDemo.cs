@@ -112,6 +112,8 @@ namespace VehicleDemo
         private const float suspensionRestLength = 0.6f;
         private const float CUBE_HALF_EXTENTS = 1;
 
+        private TriangleIndexVertexArray _groundVertexArray;
+        private IndexedMesh _groundMesh;
         private IntPtr _terrainData;
 
         //private RaycastVehicle _vehicle;
@@ -159,6 +161,15 @@ namespace VehicleDemo
 
         public void Dispose()
         {
+            if (_groundVertexArray != null)
+            {
+                _groundVertexArray.Dispose();
+            }
+            if (_groundMesh != null)
+            {
+                _groundMesh.Dispose();
+            }
+
             if (_terrainData != IntPtr.Zero)
             {
                 Marshal.FreeHGlobal(_terrainData);
@@ -200,14 +211,14 @@ namespace VehicleDemo
 
             const int totalTriangles = 2 * (NumVertsX - 1) * (NumVertsY - 1);
 
-            var vertexArray = new TriangleIndexVertexArray();
-            var mesh = new IndexedMesh();
-            mesh.Allocate(totalTriangles, totalVerts);
-            mesh.NumTriangles = totalTriangles;
-            mesh.NumVertices = totalVerts;
-            mesh.TriangleIndexStride = 3 * sizeof(int);
-            mesh.VertexStride = Vector3.SizeInBytes;
-            using (var indicesStream = mesh.GetTriangleStream())
+            _groundVertexArray = new TriangleIndexVertexArray();
+            _groundMesh = new IndexedMesh();
+            _groundMesh.Allocate(totalTriangles, totalVerts);
+            _groundMesh.NumTriangles = totalTriangles;
+            _groundMesh.NumVertices = totalVerts;
+            _groundMesh.TriangleIndexStride = 3 * sizeof(int);
+            _groundMesh.VertexStride = Vector3.SizeInBytes;
+            using (var indicesStream = _groundMesh.GetTriangleStream())
             {
                 var indices = new BinaryWriter(indicesStream);
                 for (int i = 0; i < NumVertsX - 1; i++)
@@ -226,7 +237,7 @@ namespace VehicleDemo
                 indices.Dispose();
             }
 
-            using (var vertexStream = mesh.GetVertexStream())
+            using (var vertexStream = _groundMesh.GetVertexStream())
             {
                 var vertices = new BinaryWriter(vertexStream);
                 for (int i = 0; i < NumVertsX; i++)
@@ -244,8 +255,8 @@ namespace VehicleDemo
                 vertices.Dispose();
             }
 
-            vertexArray.AddIndexedMesh(mesh);
-            var groundShape = new BvhTriangleMeshShape(vertexArray, true);
+            _groundVertexArray.AddIndexedMesh(_groundMesh);
+            var groundShape = new BvhTriangleMeshShape(_groundVertexArray, true);
             var groundScaled = new ScaledBvhTriangleMeshShape(groundShape, new Vector3(scale));
 
             RigidBody ground = PhysicsHelper.CreateStaticBody(Matrix.Identity, groundScaled, World);

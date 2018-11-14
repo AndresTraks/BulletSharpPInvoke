@@ -11,6 +11,7 @@ namespace BulletSharp
 		{
 			IntPtr native = btTriangleMesh_new(use32BitIndices, use4ComponentVertices);
 			InitializeUserOwned(native);
+			InitializeMembers();
 		}
 
 		public void AddIndex(int index)
@@ -18,12 +19,12 @@ namespace BulletSharp
 			btTriangleMesh_addIndex(Native, index);
 		}
 
-	   public void AddTriangleRef(ref Vector3 vertex0, ref Vector3 vertex1, ref Vector3 vertex2,
-		   bool removeDuplicateVertices = false)
-	   {
-		   btTriangleMesh_addTriangle(Native, ref vertex0, ref vertex1, ref vertex2,
-			   removeDuplicateVertices);
-	   }
+		public void AddTriangleRef(ref Vector3 vertex0, ref Vector3 vertex1, ref Vector3 vertex2,
+			bool removeDuplicateVertices = false)
+		{
+			btTriangleMesh_addTriangle(Native, ref vertex0, ref vertex1, ref vertex2,
+			removeDuplicateVertices);
+		}
 
 		public void AddTriangle(Vector3 vertex0, Vector3 vertex1, Vector3 vertex2,
 			bool removeDuplicateVertices = false)

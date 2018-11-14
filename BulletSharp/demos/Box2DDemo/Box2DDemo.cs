@@ -30,6 +30,9 @@ namespace Box2DDemo
         private const int NumObjectsX = 5, NumObjectsY = 5;
         private const float Depth = 0.04f;
 
+        private readonly VoronoiSimplexSolver _simplexSolver;
+        private readonly MinkowskiPenetrationDepthSolver _penetrationDepthSolver;
+
         private readonly Convex2DConvex2DAlgorithm.CreateFunc _convexAlgo2D;
         private readonly Box2DBox2DCollisionAlgorithm.CreateFunc _boxAlgo2D;
 
@@ -40,10 +43,10 @@ namespace Box2DDemo
             // Use the default collision dispatcher. For parallel processing you can use a diffent dispatcher.
             Dispatcher = new CollisionDispatcher(CollisionConfiguration);
 
-            var simplex = new VoronoiSimplexSolver();
-            var pdSolver = new MinkowskiPenetrationDepthSolver();
+            _simplexSolver = new VoronoiSimplexSolver();
+            _penetrationDepthSolver = new MinkowskiPenetrationDepthSolver();
 
-            _convexAlgo2D = new Convex2DConvex2DAlgorithm.CreateFunc(simplex, pdSolver);
+            _convexAlgo2D = new Convex2DConvex2DAlgorithm.CreateFunc(_simplexSolver, _penetrationDepthSolver);
             _boxAlgo2D = new Box2DBox2DCollisionAlgorithm.CreateFunc();
 
             Dispatcher.RegisterCollisionCreateFunc(BroadphaseNativeType.Convex2DShape, BroadphaseNativeType.Convex2DShape, _convexAlgo2D);
@@ -68,6 +71,8 @@ namespace Box2DDemo
         {
             _convexAlgo2D.Dispose();
             _boxAlgo2D.Dispose();
+            _simplexSolver.Dispose();
+            _penetrationDepthSolver.Dispose();
             this.StandardCleanup();
         }
 

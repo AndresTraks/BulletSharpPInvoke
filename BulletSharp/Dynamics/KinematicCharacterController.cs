@@ -103,9 +103,11 @@ namespace BulletSharp
             start = Matrix.Translation(m_currentPosition + upAxisDirection[m_upAxis] * (m_convexShape.Margin + m_addedMargin));
             end = Matrix.Translation(m_targetPosition);
 
-            KinematicClosestNotMeConvexResultCallback callback = new KinematicClosestNotMeConvexResultCallback(m_ghostObject, -upAxisDirection[m_upAxis], 0.7071f);
-            callback.CollisionFilterGroup = GhostObject.BroadphaseHandle.CollisionFilterGroup;
-            callback.CollisionFilterMask = GhostObject.BroadphaseHandle.CollisionFilterMask;
+            var callback = new KinematicClosestNotMeConvexResultCallback(m_ghostObject, -upAxisDirection[m_upAxis], 0.7071f)
+            {
+                CollisionFilterGroup = GhostObject.BroadphaseHandle.CollisionFilterGroup,
+                CollisionFilterMask = GhostObject.BroadphaseHandle.CollisionFilterMask
+            };
 
             if (m_useGhostObjectSweepTest)
             {
@@ -141,6 +143,7 @@ namespace BulletSharp
                 m_currentPosition = m_targetPosition;
             }
 
+            callback.Dispose();
         }
         protected void UpdateTargetPositionBasedOnCollision(ref Vector3 hitNormal, float tangentMag, float normalMag)
         {
@@ -758,6 +761,10 @@ namespace BulletSharp
     {
         static Vector3 zero = new Vector3();
 
+        protected CollisionObject _me;
+        protected Vector3 _up;
+        protected float _minSlopeDot;
+
         public KinematicClosestNotMeConvexResultCallback(CollisionObject me, Vector3 up, float minSlopeDot)
             : base(ref zero, ref zero)
         {
@@ -798,9 +805,5 @@ namespace BulletSharp
 
             return base.AddSingleResult(convexResult, normalInWorldSpace);
         }
-
-        protected CollisionObject _me;
-        protected Vector3 _up;
-        protected float _minSlopeDot;
     }
 }
