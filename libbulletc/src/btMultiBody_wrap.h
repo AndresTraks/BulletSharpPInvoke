@@ -114,7 +114,6 @@ extern "C" {
 	EXPORT void btMultiBody_setUserPointer(btMultiBody* obj, void* userPointer);
 	EXPORT void btMultiBody_setWorldToBaseRot(btMultiBody* obj, const btQuaternion* rot);
 	EXPORT void btMultiBody_stepPositionsMultiDof(btMultiBody* obj, btScalar dt, btScalar* pq, btScalar* pqd);
-	EXPORT void btMultiBody_stepVelocitiesMultiDof(btMultiBody* obj, btScalar dt, btAlignedObjectArray_btScalar* scratch_r, btAlignedObjectArray_btVector3* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m, bool isConstraintPass);
 	EXPORT void btMultiBody_updateCollisionObjectWorldTransforms(btMultiBody* obj, btAlignedObjectArray_btQuaternion* scratch_q, btAlignedObjectArray_btVector3* scratch_m);
 	EXPORT void btMultiBody_useGlobalVelocities(btMultiBody* obj, bool use);
 	EXPORT void btMultiBody_useRK4Integration(btMultiBody* obj, bool use);

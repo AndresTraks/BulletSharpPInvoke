@@ -3842,7 +3842,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBody_clearVelocities(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof(IntPtr obj, double dt, IntPtr scratch_r, IntPtr scratch_v, IntPtr scratch_m, bool isConstraintPass);
+		public static extern void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof(IntPtr obj, double dt, IntPtr scratch_r, IntPtr scratch_v, IntPtr scratch_m, bool isConstraintPass, bool jointFeedbackInWorldSpace, bool jointFeedbackInJointFrame);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBody_fillConstraintJacobianMultiDof(IntPtr obj, int link, [In] ref Vector3 contact_point, [In] ref Vector3 normal_ang, [In] ref Vector3 normal_lin, double[] jac, IntPtr scratch_r, IntPtr scratch_v, IntPtr scratch_m);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -4032,8 +4032,6 @@ namespace BulletSharp
 		public static extern void btMultiBody_setWorldToBaseRot(IntPtr obj, [In] ref Quaternion rot);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBody_stepPositionsMultiDof(IntPtr obj, double dt, double[] pq, double[] pqd);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btMultiBody_stepVelocitiesMultiDof(IntPtr obj, double dt, IntPtr scratch_r, IntPtr scratch_v, IntPtr scratch_m, bool isConstraintPass);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBody_updateCollisionObjectWorldTransforms(IntPtr obj, IntPtr scratch_q, IntPtr scratch_m);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
