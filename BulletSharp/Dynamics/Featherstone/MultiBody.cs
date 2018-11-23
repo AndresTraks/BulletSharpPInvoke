@@ -355,14 +355,6 @@ namespace BulletSharp
 			btMultiBody_stepPositionsMultiDof(Native, deltaTime, pq, pqd);
 		}
 		/*
-		public void StepVelocitiesMultiDof(float deltaTime, AlignedObjectArray<float> scratchR,
-			AlignedObjectArray<btVector3> scratchV, AlignedObjectArray<btMatrix3x3> scratchM,
-			bool isConstraintPass = false)
-		{
-			btMultiBody_stepVelocitiesMultiDof(Native, deltaTime, scratchR.Native,
-				scratchV.Native, scratchM.Native, isConstraintPass);
-		}
-
 		public void UpdateCollisionObjectWorldTransforms(btAlignedObjectArray<btQuaternion> scratchQ,
 			AlignedObjectArray<btVector3> scratchM)
 		{

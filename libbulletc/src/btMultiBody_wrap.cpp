@@ -128,10 +128,11 @@ void btMultiBody_clearVelocities(btMultiBody* obj)
 
 void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof(btMultiBody* obj,
 	btScalar dt, btAlignedObjectArray_btScalar* scratch_r, btAlignedObjectArray_btVector3* scratch_v,
-	btAlignedObjectArray_btMatrix3x3* scratch_m, bool isConstraintPass)
+	btAlignedObjectArray_btMatrix3x3* scratch_m, bool isConstraintPass, bool jointFeedbackInWorldSpace,
+	bool jointFeedbackInJointFrame)
 {
 	obj->computeAccelerationsArticulatedBodyAlgorithmMultiDof(dt, *scratch_r, *scratch_v,
-		*scratch_m, isConstraintPass);
+		*scratch_m, isConstraintPass, jointFeedbackInWorldSpace, jointFeedbackInJointFrame);
 }
 
 void btMultiBody_fillConstraintJacobianMultiDof(btMultiBody* obj, int link, const btVector3* contact_point,
@@ -658,13 +659,6 @@ void btMultiBody_stepPositionsMultiDof(btMultiBody* obj, btScalar dt, btScalar* 
 	btScalar* pqd)
 {
 	obj->stepPositionsMultiDof(dt, pq, pqd);
-}
-
-void btMultiBody_stepVelocitiesMultiDof(btMultiBody* obj, btScalar dt, btAlignedObjectArray_btScalar* scratch_r,
-	btAlignedObjectArray_btVector3* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m,
-	bool isConstraintPass)
-{
-	obj->stepVelocitiesMultiDof(dt, *scratch_r, *scratch_v, *scratch_m, isConstraintPass);
 }
 
 void btMultiBody_updateCollisionObjectWorldTransforms(btMultiBody* obj, btAlignedObjectArray_btQuaternion* scratch_q,
