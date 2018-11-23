@@ -19,6 +19,7 @@ namespace BulletSharp
 		}
 
 		public OptimizedBvh()
+			: base(ConstructionInfo.Null)
 		{
 			IntPtr native = btOptimizedBvh_new();
 			InitializeUserOwned(native);
