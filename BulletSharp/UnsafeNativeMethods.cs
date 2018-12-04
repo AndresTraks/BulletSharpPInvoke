@@ -4923,7 +4923,7 @@ namespace BulletSharp
 		public static extern IntPtr btShapeHull_new(IntPtr shape);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		[return: MarshalAs(UnmanagedType.I1)]
-		public static extern bool btShapeHull_buildHull(IntPtr obj, double margin);
+		public static extern bool btShapeHull_buildHull(IntPtr obj, double margin, int highRes);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btShapeHull_getIndexPointer(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]

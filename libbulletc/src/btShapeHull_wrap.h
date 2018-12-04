@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 	EXPORT btShapeHull* btShapeHull_new(const btConvexShape* shape);
-	EXPORT bool btShapeHull_buildHull(btShapeHull* obj, btScalar margin);
+	EXPORT bool btShapeHull_buildHull(btShapeHull* obj, btScalar margin, int highRes);
 	EXPORT const unsigned int* btShapeHull_getIndexPointer(btShapeHull* obj);
 	EXPORT const btVector3* btShapeHull_getVertexPointer(btShapeHull* obj);
 	EXPORT int btShapeHull_numIndices(btShapeHull* obj);

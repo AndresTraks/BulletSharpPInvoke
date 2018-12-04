@@ -17,9 +17,9 @@ namespace BulletSharp
 			_shape = shape;
 		}
 
-		public bool BuildHull(double margin)
+		public bool BuildHull(double margin, int highRes)
 		{
-			return btShapeHull_buildHull(Native, margin);
+			return btShapeHull_buildHull(Native, margin, highRes);
 		}
 
 		public IntPtr IndexPointer => btShapeHull_getIndexPointer(Native);
