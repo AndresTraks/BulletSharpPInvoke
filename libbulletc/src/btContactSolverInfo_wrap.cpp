@@ -42,6 +42,11 @@ btScalar btContactSolverInfoData_getGlobalCfm(btContactSolverInfoData* obj)
 	return obj->m_globalCfm;
 }
 
+btScalar btContactSolverInfoData_getLeastSquaresResidualThreshold(btContactSolverInfoData* obj)
+{
+	return obj->m_leastSquaresResidualThreshold;
+}
+
 btScalar btContactSolverInfoData_getLinearSlop(btContactSolverInfoData* obj)
 {
 	return obj->m_linearSlop;
@@ -75,6 +80,11 @@ int btContactSolverInfoData_getRestingContactRestitutionThreshold(btContactSolve
 btScalar btContactSolverInfoData_getRestitution(btContactSolverInfoData* obj)
 {
 	return obj->m_restitution;
+}
+
+btScalar btContactSolverInfoData_getRestitutionVelocityThreshold(btContactSolverInfoData* obj)
+{
+	return obj->m_restitutionVelocityThreshold;
 }
 
 btScalar btContactSolverInfoData_getSingleAxisRollingFrictionThreshold(btContactSolverInfoData* obj)
@@ -157,6 +167,11 @@ void btContactSolverInfoData_setGlobalCfm(btContactSolverInfoData* obj, btScalar
 	obj->m_globalCfm = value;
 }
 
+void btContactSolverInfoData_setLeastSquaresResidualThreshold(btContactSolverInfoData* obj, btScalar value)
+{
+	obj->m_leastSquaresResidualThreshold = value;
+}
+
 void btContactSolverInfoData_setLinearSlop(btContactSolverInfoData* obj, btScalar value)
 {
 	obj->m_linearSlop = value;
@@ -193,6 +208,11 @@ void btContactSolverInfoData_setRestingContactRestitutionThreshold(btContactSolv
 void btContactSolverInfoData_setRestitution(btContactSolverInfoData* obj, btScalar value)
 {
 	obj->m_restitution = value;
+}
+
+void btContactSolverInfoData_setRestitutionVelocityThreshold(btContactSolverInfoData* obj, btScalar value)
+{
+	obj->m_restitutionVelocityThreshold = value;
 }
 
 void btContactSolverInfoData_setSingleAxisRollingFrictionThreshold(btContactSolverInfoData* obj,

@@ -11,6 +11,7 @@ extern "C" {
 	EXPORT btScalar btContactSolverInfoData_getFrictionCfm(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getFrictionErp(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getGlobalCfm(btContactSolverInfoData* obj);
+	EXPORT btScalar btContactSolverInfoData_getLeastSquaresResidualThreshold(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getLinearSlop(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getMaxErrorReduction(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getMaxGyroscopicForce(btContactSolverInfoData* obj);
@@ -18,6 +19,7 @@ extern "C" {
 	EXPORT int btContactSolverInfoData_getNumIterations(btContactSolverInfoData* obj);
 	EXPORT int btContactSolverInfoData_getRestingContactRestitutionThreshold(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getRestitution(btContactSolverInfoData* obj);
+	EXPORT btScalar btContactSolverInfoData_getRestitutionVelocityThreshold(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getSingleAxisRollingFrictionThreshold(btContactSolverInfoData* obj);
 	EXPORT int btContactSolverInfoData_getSolverMode(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getSor(btContactSolverInfoData* obj);
@@ -34,6 +36,7 @@ extern "C" {
 	EXPORT void btContactSolverInfoData_setFrictionCfm(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setFrictionErp(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setGlobalCfm(btContactSolverInfoData* obj, btScalar value);
+	EXPORT void btContactSolverInfoData_setLeastSquaresResidualThreshold(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setLinearSlop(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setMaxErrorReduction(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setMaxGyroscopicForce(btContactSolverInfoData* obj, btScalar value);
@@ -41,6 +44,7 @@ extern "C" {
 	EXPORT void btContactSolverInfoData_setNumIterations(btContactSolverInfoData* obj, int value);
 	EXPORT void btContactSolverInfoData_setRestingContactRestitutionThreshold(btContactSolverInfoData* obj, int value);
 	EXPORT void btContactSolverInfoData_setRestitution(btContactSolverInfoData* obj, btScalar value);
+	EXPORT void btContactSolverInfoData_setRestitutionVelocityThreshold(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setSingleAxisRollingFrictionThreshold(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setSolverMode(btContactSolverInfoData* obj, int value);
 	EXPORT void btContactSolverInfoData_setSor(btContactSolverInfoData* obj, btScalar value);
