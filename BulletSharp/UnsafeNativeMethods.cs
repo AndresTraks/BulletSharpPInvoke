@@ -1386,6 +1386,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern double btContactSolverInfoData_getGlobalCfm(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern double btContactSolverInfoData_getLeastSquaresResidualThreshold(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern double btContactSolverInfoData_getLinearSlop(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern double btContactSolverInfoData_getMaxErrorReduction(IntPtr obj);
@@ -1399,6 +1401,8 @@ namespace BulletSharp
 		public static extern int btContactSolverInfoData_getRestingContactRestitutionThreshold(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern double btContactSolverInfoData_getRestitution(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern double btContactSolverInfoData_getRestitutionVelocityThreshold(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern double btContactSolverInfoData_getSingleAxisRollingFrictionThreshold(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -1432,6 +1436,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btContactSolverInfoData_setGlobalCfm(IntPtr obj, double value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setLeastSquaresResidualThreshold(IntPtr obj, double value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btContactSolverInfoData_setLinearSlop(IntPtr obj, double value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btContactSolverInfoData_setMaxErrorReduction(IntPtr obj, double value);
@@ -1445,6 +1451,8 @@ namespace BulletSharp
 		public static extern void btContactSolverInfoData_setRestingContactRestitutionThreshold(IntPtr obj, int value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btContactSolverInfoData_setRestitution(IntPtr obj, double value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setRestitutionVelocityThreshold(IntPtr obj, double value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btContactSolverInfoData_setSingleAxisRollingFrictionThreshold(IntPtr obj, double value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]

@@ -74,6 +74,12 @@ namespace BulletSharp
 			set => btContactSolverInfoData_setGlobalCfm(Native, value);
 		}
 
+		public double LeastSquaresResidualThreshold
+		{
+			get => btContactSolverInfoData_getLeastSquaresResidualThreshold(Native);
+			set => btContactSolverInfoData_setLeastSquaresResidualThreshold(Native, value);
+		}
+
 		public double LinearSlop
 		{
 			get => btContactSolverInfoData_getLinearSlop(Native);
@@ -114,6 +120,12 @@ namespace BulletSharp
 		{
 			get => btContactSolverInfoData_getRestitution(Native);
 			set => btContactSolverInfoData_setRestitution(Native, value);
+		}
+
+		public double RestitutionVelocityThreshold
+		{
+			get => btContactSolverInfoData_getRestitutionVelocityThreshold(Native);
+			set => btContactSolverInfoData_setRestitutionVelocityThreshold(Native, value);
 		}
 
 		public double SingleAxisRollingFrictionThreshold
