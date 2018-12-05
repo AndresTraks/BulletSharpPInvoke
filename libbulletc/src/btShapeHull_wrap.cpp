@@ -7,9 +7,9 @@ btShapeHull* btShapeHull_new(const btConvexShape* shape)
 	return ALIGNED_NEW(btShapeHull)(shape);
 }
 
-bool btShapeHull_buildHull(btShapeHull* obj, btScalar margin)
+bool btShapeHull_buildHull(btShapeHull* obj, btScalar margin, int highRes)
 {
-	return obj->buildHull(margin);
+	return obj->buildHull(margin, highRes);
 }
 
 const unsigned int* btShapeHull_getIndexPointer(btShapeHull* obj)

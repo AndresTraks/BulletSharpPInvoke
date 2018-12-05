@@ -24,6 +24,11 @@ btIDebugDraw* btDispatcherInfo_getDebugDraw(btDispatcherInfo* obj)
 	return obj->m_debugDraw;
 }
 
+bool btDispatcherInfo_getDeterministicOverlappingPairs(btDispatcherInfo* obj)
+{
+	return obj->m_deterministicOverlappingPairs;
+}
+
 int btDispatcherInfo_getDispatchFunc(btDispatcherInfo* obj)
 {
 	return obj->m_dispatchFunc;
@@ -83,6 +88,11 @@ void btDispatcherInfo_setConvexConservativeDistanceThreshold(btDispatcherInfo* o
 void btDispatcherInfo_setDebugDraw(btDispatcherInfo* obj, btIDebugDraw* value)
 {
 	obj->m_debugDraw = value;
+}
+
+void btDispatcherInfo_setDeterministicOverlappingPairs(btDispatcherInfo* obj, bool value)
+{
+	obj->m_deterministicOverlappingPairs = value;
 }
 
 void btDispatcherInfo_setDispatchFunc(btDispatcherInfo* obj, int value)

@@ -6,6 +6,7 @@ extern "C" {
 	EXPORT btScalar btDispatcherInfo_getAllowedCcdPenetration(btDispatcherInfo* obj);
 	EXPORT btScalar btDispatcherInfo_getConvexConservativeDistanceThreshold(btDispatcherInfo* obj);
 	EXPORT btIDebugDraw* btDispatcherInfo_getDebugDraw(btDispatcherInfo* obj);
+	EXPORT bool btDispatcherInfo_getDeterministicOverlappingPairs(btDispatcherInfo* obj);
 	EXPORT int btDispatcherInfo_getDispatchFunc(btDispatcherInfo* obj);
 	EXPORT bool btDispatcherInfo_getEnableSatConvex(btDispatcherInfo* obj);
 	EXPORT bool btDispatcherInfo_getEnableSPU(btDispatcherInfo* obj);
@@ -18,6 +19,7 @@ extern "C" {
 	EXPORT void btDispatcherInfo_setAllowedCcdPenetration(btDispatcherInfo* obj, btScalar value);
 	EXPORT void btDispatcherInfo_setConvexConservativeDistanceThreshold(btDispatcherInfo* obj, btScalar value);
 	EXPORT void btDispatcherInfo_setDebugDraw(btDispatcherInfo* obj, btIDebugDraw* value);
+	EXPORT void btDispatcherInfo_setDeterministicOverlappingPairs(btDispatcherInfo* obj, bool value);
 	EXPORT void btDispatcherInfo_setDispatchFunc(btDispatcherInfo* obj, int value);
 	EXPORT void btDispatcherInfo_setEnableSatConvex(btDispatcherInfo* obj, bool value);
 	EXPORT void btDispatcherInfo_setEnableSPU(btDispatcherInfo* obj, bool value);
