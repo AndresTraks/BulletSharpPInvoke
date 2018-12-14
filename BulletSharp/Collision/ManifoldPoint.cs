@@ -19,7 +19,7 @@ namespace BulletSharp
 
 	public delegate void ContactAddedEventHandler(ManifoldPoint cp, CollisionObjectWrapper colObj0Wrap, int partId0, int index0, CollisionObjectWrapper colObj1Wrap, int partId1, int index1);
 
-	public class ManifoldPoint : BulletDisposableObject
+	public struct ManifoldPoint : IDisposable
 	{
 		private static ContactAddedEventHandler _contactAdded;
 		private static ContactAddedUnmanagedDelegate _contactAddedUnmanaged;
@@ -30,7 +30,10 @@ namespace BulletSharp
 
 		static bool ContactAddedUnmanaged(IntPtr cp, IntPtr colObj0Wrap, int partId0, int index0, IntPtr colObj1Wrap, int partId1, int index1)
 		{
-			_contactAdded.Invoke(new ManifoldPoint(cp), new CollisionObjectWrapper(colObj0Wrap), partId0, index0, new CollisionObjectWrapper(colObj1Wrap), partId1, index1);
+			using (ManifoldPoint p = new ManifoldPoint(cp))
+			{
+				_contactAdded.Invoke(p, new CollisionObjectWrapper(colObj0Wrap), partId0, index0, new CollisionObjectWrapper(colObj1Wrap), partId1, index1);
+			}
 			return false;
 		}
 
@@ -56,21 +59,16 @@ namespace BulletSharp
 			}
 		}
 
+		internal NonZeroIntPtr Native;
+
 		internal ManifoldPoint(IntPtr native)
 		{
-			InitializeSubObject(native, this);
-		}
-
-		public ManifoldPoint()
-		{
-			IntPtr native = btManifoldPoint_new();
-			InitializeUserOwned(native);
+			Native = native;
 		}
 
 		public ManifoldPoint(Vector3 pointA, Vector3 pointB, Vector3 normal, float distance)
 		{
-			IntPtr native = btManifoldPoint_new2(ref pointA, ref pointB, ref normal, distance);
-			InitializeUserOwned(native);
+			Native = btManifoldPoint_new2(ref pointA, ref pointB, ref normal, distance);
 		}
 
 		public float AppliedImpulse
@@ -307,12 +305,10 @@ namespace BulletSharp
 			}
 		}
 
-		protected override void Dispose(bool disposing)
+		public void Dispose()
 		{
-			if (IsUserOwned)
-			{
-				btManifoldPoint_delete(Native);
-			}
+			if(Native.Clear(out IntPtr _ptr))
+				btManifoldPoint_delete(_ptr);
 		}
 	}
 }

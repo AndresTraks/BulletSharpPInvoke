@@ -220,6 +220,7 @@
     <Compile Include="Native.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="NonZeroIntPtr.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SoftBody\AlignedAnchorArray.cs" />
     <Compile Include="SoftBody\AlignedJointArray.cs" />

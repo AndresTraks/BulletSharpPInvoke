@@ -31,7 +31,10 @@ namespace BulletSharp
 
 		private static bool ContactProcessedUnmanaged(IntPtr cp, IntPtr body0, IntPtr body1)
 		{
-			_contactProcessed.Invoke(new ManifoldPoint(cp), CollisionObject.GetManaged(body0), CollisionObject.GetManaged(body1));
+			using (ManifoldPoint p = new ManifoldPoint(cp))
+			{
+				_contactProcessed.Invoke(p, CollisionObject.GetManaged(body0), CollisionObject.GetManaged(body1));
+			}
 			return false;
 		}
 
