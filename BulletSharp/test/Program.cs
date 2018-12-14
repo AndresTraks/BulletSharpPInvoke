@@ -353,12 +353,16 @@ namespace BulletSharpTest
 
         public override float AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace)
         {
-            if (rayResult.LocalShapeInfo != null)
-            {
-                Success = true;
-                TriangleIndex = rayResult.LocalShapeInfo.TriangleIndex;
-            }
-            return base.AddSingleResult(rayResult, normalInWorldSpace);
+			try
+			{
+				TriangleIndex = rayResult.LocalShapeInfo.TriangleIndex;
+				Success = true;
+			}
+			catch(Exception e)
+			{
+				Success = false;
+			}
+			return base.AddSingleResult(rayResult, normalInWorldSpace);
         }
     }
 }
