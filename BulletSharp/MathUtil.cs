@@ -1148,6 +1148,18 @@ namespace BulletSharp
             Vector3 ya = new Vector3(y.X, 0, y.Z);
             return (xa - ya).LengthSquared;
         }
+        
+        public static void SetRotation(this Matrix matrix, Quaternion newRotation, out Matrix result)
+        {
+            matrix.Decompose(out Vector3 scale, out _, out Vector3 translation);
+            result = Matrix.Scaling(scale) * Matrix.RotationQuaternion(newRotation) * Matrix.Translation(translation);
+        }
+        
+        public static Quaternion GetRotation(this Matrix matrix)
+        {
+            matrix.Decompose(out _, out Quaternion rot, out _);
+            return rot;
+        }
 
         public static T Clamp<T>(T value, T min, T max)
          where T : System.IComparable<T>
