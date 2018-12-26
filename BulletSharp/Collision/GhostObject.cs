@@ -106,7 +106,7 @@ namespace BulletSharp
 		}
 	}
 
-	public class GhostPairCallback : OverlappingPairCallback
+	public sealed class GhostPairCallback : OverlappingPairCallback
 	{
 		public GhostPairCallback()
 			: base(ConstructionInfo.Null)

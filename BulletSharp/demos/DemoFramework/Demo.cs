@@ -154,6 +154,14 @@ namespace DemoFramework
             _bodyPicker.RemovePickingConstraint();
             Simulation.Dispose();
             _boxShooter.Dispose();
+
+            if (BulletObjectTracker.Current != null)
+            {
+                if (BulletObjectTracker.Current.UserOwnedObjects.Count != 0)
+                {
+                    throw new Exception("Bullet has active objects that were not disposed.");
+                }
+            }
         }
 
         public void Run()

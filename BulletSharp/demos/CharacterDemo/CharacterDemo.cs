@@ -144,11 +144,13 @@ namespace CharacterDemo
 
         public void Dispose()
         {
-            _ghostPairCallback.Dispose();
             CameraSphere.Dispose();
             ConvexResultCallback.Dispose();
+            Character.Dispose();
 
             this.StandardCleanup();
+
+            _ghostPairCallback.Dispose();
         }
 
         private void CreateCharacter()
@@ -162,13 +164,14 @@ namespace CharacterDemo
             GhostObject = new PairCachingGhostObject()
             {
                 CollisionShape = capsule,
-                CollisionFlags = CollisionFlags.CharacterObject,
                 WorldTransform = Matrix.Translation(10.210098f, -1.6433364f, 16.453260f)
             };
+            GhostObject.CollisionFlags |= CollisionFlags.CharacterObject;
             World.AddCollisionObject(GhostObject, CollisionFilterGroups.CharacterFilter, CollisionFilterGroups.StaticFilter | CollisionFilterGroups.DefaultFilter);
 
             const double stepHeight = 0.35f;
-            Character = new KinematicCharacterController(GhostObject, capsule, stepHeight);
+            Vector3 up = Vector3.UnitY;
+            Character = new KinematicCharacterController(GhostObject, capsule, stepHeight, ref up);
             World.AddAction(Character);
         }
     }

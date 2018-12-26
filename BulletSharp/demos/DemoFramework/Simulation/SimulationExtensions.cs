@@ -21,14 +21,6 @@ namespace DemoFramework
             simulation.Broadphase.Dispose();
             simulation.Dispatcher.Dispose();
             simulation.CollisionConfiguration.Dispose();
-            
-            if (BulletObjectTracker.Current != null)
-            {
-                if (BulletObjectTracker.Current.UserOwnedObjects.Count != 0)
-                {
-                    throw new Exception("Bullet has active objects that were not disposed.");
-                }
-            }
         }
 
         private static void CleanupConstraints(DynamicsWorld world)
