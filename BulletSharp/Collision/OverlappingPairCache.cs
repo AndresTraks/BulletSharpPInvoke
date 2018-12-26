@@ -90,7 +90,7 @@ namespace BulletSharp
 		public void SetInternalGhostPairCallback(OverlappingPairCallback ghostPairCallback)
 		{
 			_ghostPairCallback = ghostPairCallback;
-			btOverlappingPairCache_setInternalGhostPairCallback(Native, ghostPairCallback.Native);
+			btOverlappingPairCache_setInternalGhostPairCallback(Native, ghostPairCallback?.Native ?? IntPtr.Zero);
 		}
 
 		public void SetOverlapFilterCallback(OverlapFilterCallback callback)
