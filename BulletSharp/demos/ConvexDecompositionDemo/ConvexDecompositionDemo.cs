@@ -93,11 +93,13 @@ namespace ConvexDecompositionDemo
             var concaveShape = new BvhTriangleMeshShape(_triangleMesh, useQuantization);
             PhysicsHelper.CreateStaticBody(Matrix.Translation(objectOffset), concaveShape, World);
 
+            CompoundShape compoundShape;
+            using (Hacd hacd = ComputeHacd(wavefrontModel))
+            {
+                hacd.Save("output.wrl", false);
 
-            Hacd hacd = ComputeHacd(wavefrontModel);
-            hacd.Save("output.wrl", false);
-
-            var compoundShape = CreateCompoundShape(hacd, localScaling);
+                compoundShape = CreateCompoundShape(hacd, localScaling);
+            }
 
             mass = 10.0f;
             objectOffset = new Vector3(-10, 0, -6);
@@ -121,6 +123,8 @@ namespace ConvexDecompositionDemo
         public void Dispose()
         {
             _triangleMesh.Dispose();
+
+            this.StandardCleanup();
         }
 
         private bool MyCompoundChildShapeCallback(CollisionShape shape0, CollisionShape shape1)

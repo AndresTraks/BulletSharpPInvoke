@@ -502,7 +502,12 @@ namespace BulletSharp
 			set => btMultiBody_setCompanionId(Native, value);
 		}
 
-		public bool HasFixedBase => btMultiBody_hasFixedBase(Native);
+		public bool HasFixedBase
+		{
+			get => btMultiBody_hasFixedBase(Native);
+			set => btMultiBody_setFixedBase(Native, value);
+		}
+
 		public bool HasSelfCollision
 		{
 			get => btMultiBody_hasSelfCollision(Native);

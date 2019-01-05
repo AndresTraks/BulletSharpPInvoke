@@ -512,6 +512,11 @@ void btMultiBody_setCompanionId(btMultiBody* obj, int id)
 	obj->setCompanionId(id);
 }
 
+void btMultiBody_setFixedBase(btMultiBody* obj, bool fixedBase)
+{
+	return obj->setFixedBase(fixedBase);
+}
+
 void btMultiBody_setHasSelfCollision(btMultiBody* obj, bool hasSelfCollision)
 {
 	obj->setHasSelfCollision(hasSelfCollision);

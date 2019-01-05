@@ -92,12 +92,12 @@ namespace GImpactTestDemo
 
         public void Dispose()
         {
+            this.StandardCleanup();
+
             _bunnyShape.Dispose();
 
             _torusShapeData.Dispose();
             _bunnyShapeData.Dispose();
-
-            this.StandardCleanup();
         }
 
         private GImpactMeshShape CreateGImpactShape(TriangleIndexVertexArray shapeData)

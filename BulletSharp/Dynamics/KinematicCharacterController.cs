@@ -753,7 +753,7 @@ namespace BulletSharp
             }
 
             // quick check...
-            if (!m_useWalkDirection && (m_velocityTimeInterval <= 0.0))
+            if (!m_useWalkDirection && (m_velocityTimeInterval <= 0.0 || MathUtil.FuzzyZero(m_walkDirection)))
             {
                 //System.Console.WriteLine();
                 return;  // no motion

@@ -93,6 +93,7 @@ extern "C" {
 	EXPORT void btMultiBody_setBaseWorldTransform(btMultiBody* obj, const btTransform* tr);
 	EXPORT void btMultiBody_setCanSleep(btMultiBody* obj, bool canSleep);
 	EXPORT void btMultiBody_setCompanionId(btMultiBody* obj, int id);
+	EXPORT void btMultiBody_setFixedBase(btMultiBody* obj, bool fixedBase);
 	EXPORT void btMultiBody_setHasSelfCollision(btMultiBody* obj, bool hasSelfCollision);
 	EXPORT void btMultiBody_setJointPos(btMultiBody* obj, int i, btScalar q);
 	EXPORT void btMultiBody_setJointPosMultiDof(btMultiBody* obj, int i, btScalar* q);
