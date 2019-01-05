@@ -3999,6 +3999,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBody_setCompanionId(IntPtr obj, int id);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_setFixedBase(IntPtr obj, bool fixedBase);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBody_setHasSelfCollision(IntPtr obj, bool hasSelfCollision);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBody_setJointPos(IntPtr obj, int i, float q);
