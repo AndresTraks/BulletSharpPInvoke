@@ -41,21 +41,40 @@ namespace DemoFramework.FileLoaders
             return new UrdfLink
             {
                 Name = element.GetAttribute("name"),
-                Collision = ParseCollision(element["collision"]),
+                Collisions = ParseCollisions(element),
                 Inertial = ParseInertial(element["inertial"]),
             };
         }
 
-        private static UrdfCollision ParseCollision(XmlElement element)
+        private static UrdfCollision[] ParseCollisions(XmlElement element)
         {
-            if (element == null)
+            XmlNodeList collisionNodes = element.GetElementsByTagName("collision");
+            if (collisionNodes.Count == 0)
+            {
+                return Array.Empty<UrdfCollision>();
+            }
+
+            var collisions = new UrdfCollision[collisionNodes.Count];
+            for (int i = 0; i < collisionNodes.Count; i++)
+            {
+                collisions[i] = ParseCollision(collisionNodes[i]);
+            }
+
+            return collisions;
+        }
+
+        private static UrdfCollision ParseCollision(XmlNode node)
+        {
+            if (node == null)
             {
                 return null;
             }
             return new UrdfCollision
             {
-                Geometry = ParseGeometry(element["geometry"]),
-                Origin = ParseOrigin(element["origin"])
+                Geometry = ParseGeometry(node["geometry"]),
+                Origin = ParseOrigin(node["origin"]),
+                Group = ParseInt(node.Attributes.GetNamedItem("group")?.Value),
+                Mask = ParseInt(node.Attributes.GetNamedItem("group")?.Value)
             };
         }
 
@@ -67,6 +86,7 @@ namespace DemoFramework.FileLoaders
             }
             return new UrdfInertial
             {
+                Origin = ParseOrigin(element["origin"]),
                 Mass = ParseMass(element["mass"]),
                 Inertia = ParseInertia(element["inertia"])
             };
@@ -92,7 +112,7 @@ namespace DemoFramework.FileLoaders
 
         private static UrdfGeometry ParseGeometry(XmlElement element)
         {
-            var shapeElement = element.SelectSingleNode("box|capsule|cylinder|mesh|sphere");
+            var shapeElement = element.SelectSingleNode("box|capsule|cylinder|mesh|sphere|plane|cdf");
             switch (shapeElement.Name)
             {
                 case "box":
@@ -101,6 +121,7 @@ namespace DemoFramework.FileLoaders
                         Size = shapeElement.Attributes["size"].Value
                     };
                 case "capsule":
+                    // Not in URDF specification
                     return new UrdfCapsule
                     {
                         Radius = ParseDouble(shapeElement.Attributes["radius"].Value),
@@ -118,11 +139,19 @@ namespace DemoFramework.FileLoaders
                         FileName = shapeElement.Attributes["filename"].Value,
                         Scale = shapeElement.Attributes["scale"]?.Value
                     };
+                case "plane":
+                    return new UrdfPlane
+                    {
+                        Normal = shapeElement.Attributes["normal"].Value
+                    };
                 case "sphere":
                     return new UrdfSphere
                     {
                         Radius = ParseDouble(shapeElement.Attributes["radius"].Value)
                     };
+                case "cdf":
+                    // Not in URDF specification
+                    break;
             }
             throw new NotSupportedException();
         }
@@ -131,6 +160,7 @@ namespace DemoFramework.FileLoaders
         {
             XmlNode parentNode = jointElement.SelectSingleNode("parent");
             XmlNode childNode = jointElement.SelectSingleNode("child");
+            XmlNode originNode = jointElement.SelectSingleNode("origin");
 
             string parentId = parentNode.Attributes["link"].Value;
             string childId = childNode.Attributes["link"].Value;
@@ -152,32 +182,46 @@ namespace DemoFramework.FileLoaders
                 case "revolute":
                     joint = new UrdfRevoluteJoint();
                     break;
+                case "spherical":
+                    // Not in URDF specification
+                case "floating":
                 default:
                     throw new NotSupportedException();
             }
 
+            joint.Origin = ParseOrigin(originNode);
             joint.Parent = robot.Links[parentId];
             joint.Child = robot.Links[childId];
 
             return joint;
         }
 
-        private static UrdfPose ParseOrigin(XmlElement element)
+        private static UrdfPose ParseOrigin(XmlNode node)
         {
-            if (element == null)
+            if (node == null)
             {
                 return null;
             }
             return new UrdfPose
             {
-                Position = element.Attributes["xyz"]?.Value,
-                RollPitchYaw = element.Attributes["rpy"]?.Value
+                Position = node.Attributes["xyz"]?.Value,
+                RollPitchYaw = node.Attributes["rpy"]?.Value
             };
         }
 
         private static double ParseDouble(string value)
         {
             return double.Parse(value, CultureInfo.InvariantCulture);
+        }
+
+        private static int? ParseInt(string value)
+        {
+            int result;
+            if (int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out result))
+            {
+                return result;
+            }
+            return null;
         }
     }
 
@@ -196,7 +240,8 @@ namespace DemoFramework.FileLoaders
     public class UrdfLink
     {
         public string Name { get; set; }
-        public UrdfCollision Collision { get; set; }
+        // Only one collision described in URDF specification
+        public UrdfCollision[] Collisions { get; set; } = Array.Empty<UrdfCollision>();
         public UrdfInertial Inertial { get; set; }
 
         public override string ToString()
@@ -209,6 +254,10 @@ namespace DemoFramework.FileLoaders
     {
         public UrdfGeometry Geometry { get; set; }
         public UrdfPose Origin { get; set; }
+
+        // Not in URDF specification
+        public int? Group { get; set; }
+        public int? Mask { get; set; }
     }
 
     public class UrdfInertia
@@ -219,10 +268,16 @@ namespace DemoFramework.FileLoaders
         public double YY { get; set; }
         public double YZ { get; set; }
         public double ZZ { get; set; }
+
+        public override string ToString()
+        {
+            return $"xx={XX} xy={XY} xz={XZ} yy={YY} yz={YZ}, zz={ZZ}";
+        }
     }
 
     public class UrdfInertial
     {
+        public UrdfPose Origin { get; set; }
         public double Mass { get; set; }
         public UrdfInertia Inertia { get; set; }
     }
@@ -233,6 +288,7 @@ namespace DemoFramework.FileLoaders
         Capsule,
         Cylinder,
         Mesh,
+        Plane,
         Sphere
     }
 
@@ -272,6 +328,13 @@ namespace DemoFramework.FileLoaders
         public string Scale { get; set; }
     }
 
+    public class UrdfPlane : UrdfGeometry
+    {
+        public override UrdfGeometryType Type => UrdfGeometryType.Plane;
+
+        public string Normal { get; set; }
+    }
+
     public class UrdfSphere : UrdfGeometry
     {
         public override UrdfGeometryType Type => UrdfGeometryType.Sphere;
@@ -293,6 +356,7 @@ namespace DemoFramework.FileLoaders
 
         public UrdfLink Parent { get; set; }
         public UrdfLink Child { get; set; }
+        public UrdfPose Origin { get; set; }
 
         public override string ToString()
         {
