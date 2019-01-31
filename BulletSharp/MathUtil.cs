@@ -682,6 +682,11 @@ namespace BulletSharp
             return System.Math.Abs(val) <= SIMD_EPSILON;
         }
 
+        public static bool FuzzyZero(Vector3 val)
+        {
+            return val.LengthSquared < SIMD_EPSILON * SIMD_EPSILON;
+        }
+
         public static uint Select(uint condition, uint valueIfConditionNonZero, uint valueIfConditionZero)
         {
             // Set testNz to 0xFFFFFFFF if condition is nonzero, 0x00000000 if condition is zero
