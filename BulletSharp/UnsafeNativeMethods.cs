@@ -997,8 +997,6 @@ namespace BulletSharp
 		public static extern bool btCollisionWorld_ConvexResultCallbackWrapper_needsCollision(IntPtr obj, IntPtr proxy0);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btCollisionWorld_LocalConvexResult_new(IntPtr hitCollisionObject, IntPtr localShapeInfo, [In] ref Vector3 hitNormalLocal, [In] ref Vector3 hitPointLocal, float hitFraction);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btCollisionWorld_LocalConvexResult_getHitCollisionObject(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btCollisionWorld_LocalConvexResult_getHitFraction(IntPtr obj);
@@ -1016,13 +1014,7 @@ namespace BulletSharp
 		public static extern void btCollisionWorld_LocalConvexResult_setHitNormalLocal(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btCollisionWorld_LocalConvexResult_setHitPointLocal(IntPtr obj, [In] ref Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btCollisionWorld_LocalConvexResult_setLocalShapeInfo(IntPtr obj, IntPtr value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btCollisionWorld_LocalConvexResult_delete(IntPtr obj);
 
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btCollisionWorld_LocalRayResult_new(IntPtr collisionObject, IntPtr localShapeInfo, [In] ref Vector3 hitNormalLocal, float hitFraction);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btCollisionWorld_LocalRayResult_getCollisionObject(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -1037,23 +1029,11 @@ namespace BulletSharp
 		public static extern void btCollisionWorld_LocalRayResult_setHitFraction(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btCollisionWorld_LocalRayResult_setHitNormalLocal(IntPtr obj, [In] ref Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btCollisionWorld_LocalRayResult_setLocalShapeInfo(IntPtr obj, IntPtr value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btCollisionWorld_LocalRayResult_delete(IntPtr obj);
 
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btCollisionWorld_LocalShapeInfo_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern int btCollisionWorld_LocalShapeInfo_getShapePart(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern int btCollisionWorld_LocalShapeInfo_getTriangleIndex(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btCollisionWorld_LocalShapeInfo_setShapePart(IntPtr obj, int value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btCollisionWorld_LocalShapeInfo_setTriangleIndex(IntPtr obj, int value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btCollisionWorld_LocalShapeInfo_delete(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btCollisionWorld_RayResultCallback_getClosestHitFraction(IntPtr obj);

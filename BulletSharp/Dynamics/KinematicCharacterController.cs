@@ -1007,12 +1007,12 @@ namespace BulletSharp
             _me = me;
         }
 
-        public override float AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace)
+        public override float AddSingleResult(ref LocalRayResult rayResult, bool normalInWorldSpace)
         {
             if (rayResult.CollisionObject == _me)
                 return 1.0f;
 
-            return base.AddSingleResult(rayResult, normalInWorldSpace);
+            return base.AddSingleResult(ref rayResult, normalInWorldSpace);
         }
 
         protected CollisionObject _me;
@@ -1034,7 +1034,7 @@ namespace BulletSharp
             _minSlopeDot = minSlopeDot;
         }
 
-        public override float AddSingleResult(LocalConvexResult convexResult, bool normalInWorldSpace)
+        public override float AddSingleResult(ref LocalConvexResult convexResult, bool normalInWorldSpace)
         {
             if (convexResult.HitCollisionObject == _me)
             {
@@ -1064,7 +1064,7 @@ namespace BulletSharp
                 return 1.0f;
             }
 
-            return base.AddSingleResult(convexResult, normalInWorldSpace);
+            return base.AddSingleResult(ref convexResult, normalInWorldSpace);
         }
     }
 }
