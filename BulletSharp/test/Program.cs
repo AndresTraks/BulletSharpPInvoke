@@ -297,9 +297,9 @@ namespace BulletSharpTest
         {
         }
 
-        public override double AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace)
+        public override double AddSingleResult(ref LocalRayResult rayResult, bool normalInWorldSpace)
         {
-            return base.AddSingleResult(rayResult, normalInWorldSpace);
+            return base.AddSingleResult(ref rayResult, normalInWorldSpace);
         }
     }
     /*
@@ -351,14 +351,14 @@ namespace BulletSharpTest
         {
         }
 
-        public override double AddSingleResult(LocalRayResult rayResult, bool normalInWorldSpace)
+        public override double AddSingleResult(ref LocalRayResult rayResult, bool normalInWorldSpace)
         {
             if (rayResult.LocalShapeInfo != null)
             {
                 Success = true;
-                TriangleIndex = rayResult.LocalShapeInfo.TriangleIndex;
+                TriangleIndex = rayResult.LocalShapeInfo.Value.TriangleIndex;
             }
-            return base.AddSingleResult(rayResult, normalInWorldSpace);
+            return base.AddSingleResult(ref rayResult, normalInWorldSpace);
         }
     }
 }
