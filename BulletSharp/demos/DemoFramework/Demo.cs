@@ -157,7 +157,7 @@ namespace DemoFramework
 
             if (BulletObjectTracker.Current != null)
             {
-                if (BulletObjectTracker.Current.UserOwnedObjects.Count != 0)
+                if (BulletObjectTracker.Current.GetUserOwnedObjects().Count != 0)
                 {
                     throw new Exception("Bullet has active objects that were not disposed.");
                 }
