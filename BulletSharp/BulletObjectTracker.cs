@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 #if !BULLET_OBJECT_TRACKING
 using System.Diagnostics;
 #endif
@@ -8,10 +9,16 @@ namespace BulletSharp
 {
 	public sealed class BulletObjectTracker
 	{
-		public HashSet<BulletObject> UserOwnedObjects { get; set; } = new HashSet<BulletObject>();
+		private readonly object _userOwnedObjectsLock = new object();
+		private HashSet<BulletObject> _userOwnedObjects { get; set; } = new HashSet<BulletObject>();
 
 		private BulletObjectTracker()
 		{
+		}
+
+		public IList<BulletObject> GetUserOwnedObjects()
+		{
+			return _userOwnedObjects.ToList();
 		}
 
 #if BULLET_OBJECT_TRACKING
@@ -36,12 +43,15 @@ namespace BulletSharp
 
 			if (obj.Owner == null)
 			{
-				if (UserOwnedObjects.Contains(obj))
+				lock (_userOwnedObjectsLock)
 				{
-					throw new Exception("Adding an object that is already being tracked. " +
-						"Object info: " + obj.GetType());
+					if (_userOwnedObjects.Contains(obj))
+					{
+						throw new Exception("Adding an object that is already being tracked. " +
+							"Object info: " + obj.GetType());
+					}
+					_userOwnedObjects.Add(obj);
 				}
-				UserOwnedObjects.Add(obj);
 			}
 		}
 
@@ -54,12 +64,15 @@ namespace BulletSharp
 
 			if (obj.Owner == null)
 			{
-				if (UserOwnedObjects.Contains(obj) == false)
+				lock (_userOwnedObjectsLock)
 				{
-					throw new Exception("Removing object that is not being tracked. " +
-						"Object info: " + obj.GetType());
+					if (_userOwnedObjects.Contains(obj) == false)
+					{
+						throw new Exception("Removing object that is not being tracked. " +
+							"Object info: " + obj.GetType());
+					}
+					_userOwnedObjects.Remove(obj);
 				}
-				UserOwnedObjects.Remove(obj);
 			}
 		}
 #else
