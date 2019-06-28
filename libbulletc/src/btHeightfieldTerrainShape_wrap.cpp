@@ -1,5 +1,6 @@
 #include <BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h>
 
+#include "conversion.h"
 #include "btHeightfieldTerrainShape_wrap.h"
 
 btHeightfieldTerrainShape* btHeightfieldTerrainShape_new(int heightStickWidth, int heightStickLength,
@@ -16,6 +17,33 @@ btHeightfieldTerrainShape* btHeightfieldTerrainShape_new2(int heightStickWidth, 
 {
 	return new btHeightfieldTerrainShape(heightStickWidth, heightStickLength, heightfieldData,
 		maxHeight, upAxis, useFloatData, flipQuadEdges);
+}
+
+void btHeightfieldTerrainShape_performRaycast(btHeightfieldTerrainShape* obj, btTriangleCallback* callback, const btVector3* raySource, const btVector3* rayTarget)
+{
+	BTVECTOR3_IN(raySource);
+	BTVECTOR3_IN(rayTarget);
+	obj->performRaycast(callback, BTVECTOR3_USE(raySource), BTVECTOR3_USE(rayTarget));
+}
+
+void btHeightfieldTerrainShape_buildAccelerator(btHeightfieldTerrainShape* obj, int chunkSize)
+{
+	obj->buildAccelerator(chunkSize);
+}
+
+void btHeightfieldTerrainShape_clearAccelerator(btHeightfieldTerrainShape* obj)
+{
+	obj->clearAccelerator();
+}
+
+int btHeightfieldTerrainShape_getUpAxis(btHeightfieldTerrainShape* obj)
+{
+	return obj->getUpAxis();
+}
+
+void btHeightfieldTerrainShape_setFlipTriangleWinding(btHeightfieldTerrainShape* obj, bool flipTriangleWinding)
+{
+	obj->setFlipTriangleWinding(flipTriangleWinding);
 }
 
 void btHeightfieldTerrainShape_setUseDiamondSubdivision(btHeightfieldTerrainShape* obj)
