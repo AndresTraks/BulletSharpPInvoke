@@ -13,6 +13,7 @@ namespace BulletSharp
             KeepUnflippedNormal = 2,
             UseSubSimplexConvexCastRaytest = 4,
             UseGjkConvexCastRaytest = 8,
+            DisableHeightfieldAccelerator = 16,
             Terminator = -1
 		}
 

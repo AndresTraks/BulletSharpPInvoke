@@ -2942,6 +2942,16 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btHeightfieldTerrainShape_new2(int heightStickWidth, int heightStickLength, IntPtr heightfieldData, double maxHeight, int upAxis, bool useFloatData, bool flipQuadEdges);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHeightfieldTerrainShape_performRaycast(IntPtr obj, IntPtr callback, [In] ref Vector3 raySource, [In] ref Vector3 rayTarget);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHeightfieldTerrainShape_buildAccelerator(IntPtr obj, int chunkSize);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHeightfieldTerrainShape_clearAccelerator(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btHeightfieldTerrainShape_getUpAxis(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btHeightfieldTerrainShape_setFlipTriangleWinding(IntPtr obj, bool flipTriangleWinding);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btHeightfieldTerrainShape_setUseDiamondSubdivision(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btHeightfieldTerrainShape_setUseDiamondSubdivision2(IntPtr obj, bool useDiamondSubdivision);
