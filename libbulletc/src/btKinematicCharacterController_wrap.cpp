@@ -2,6 +2,7 @@
 #include <BulletCollision/CollisionShapes/btConvexShape.h>
 #include <BulletDynamics/Character/btKinematicCharacterController.h>
 
+#include "conversion.h"
 #include "btKinematicCharacterController_wrap.h"
 
 #ifndef BULLETC_DISABLE_IACTION_CLASSES

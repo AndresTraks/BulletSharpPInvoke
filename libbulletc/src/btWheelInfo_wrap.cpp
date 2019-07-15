@@ -193,7 +193,7 @@ void btWheelInfo_RaycastInfo_getWheelDirectionWS(btWheelInfo_RaycastInfo* obj, b
 	BTVECTOR3_SET(value, obj->m_wheelDirectionWS);
 }
 
-bool btWheelInfo_RaycastInfo_IsInContact(btWheelInfo_RaycastInfo* obj)
+bool btWheelInfo_RaycastInfo_getIsInContact(btWheelInfo_RaycastInfo* obj)
 {
 	return obj->m_isInContact;
 }
@@ -218,7 +218,7 @@ void btWheelInfo_RaycastInfo_setHardPointWS(btWheelInfo_RaycastInfo* obj, const 
 	BTVECTOR3_COPY(&obj->m_hardPointWS, value);
 }
 
-void btWheelInfo_RaycastInfo_setInContact(btWheelInfo_RaycastInfo* obj, bool value)
+void btWheelInfo_RaycastInfo_setIsInContact(btWheelInfo_RaycastInfo* obj, bool value)
 {
 	obj->m_isInContact = value;
 }
