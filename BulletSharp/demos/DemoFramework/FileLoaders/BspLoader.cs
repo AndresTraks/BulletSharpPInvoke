@@ -61,10 +61,10 @@ namespace DemoFramework.FileLoaders
 
     public struct BspPlane
     {
-        public float NormalX;
-        public float NormalY;
-        public float NormalZ;
-        public float Distance;
+        public double NormalX;
+        public double NormalY;
+        public double NormalZ;
+        public double Distance;
     }
 
     [Flags]
@@ -298,9 +298,9 @@ namespace DemoFramework.FileLoaders
                             case "origin":
                                 string[] originStrings = keyValue[1].Split(' ');
                                 bspEntity.Origin = new Vector3(
-                                    float.Parse(originStrings[0], CultureInfo.InvariantCulture),
-                                    float.Parse(originStrings[1], CultureInfo.InvariantCulture),
-                                    float.Parse(originStrings[2], CultureInfo.InvariantCulture));
+                                    double.Parse(originStrings[0], CultureInfo.InvariantCulture),
+                                    double.Parse(originStrings[1], CultureInfo.InvariantCulture),
+                                    double.Parse(originStrings[2], CultureInfo.InvariantCulture));
                                 break;
                             default:
                                 if (!bspEntity.KeyValues.ContainsKey(keyValue[0]))
@@ -409,10 +409,10 @@ namespace DemoFramework.FileLoaders
 
             for (int i = 0; i < length; i++)
             {
-                Planes[i].NormalX = reader.ReadSingle();
-                Planes[i].NormalY = reader.ReadSingle();
-                Planes[i].NormalZ = reader.ReadSingle();
-                Planes[i].Distance = reader.ReadSingle();
+                Planes[i].NormalX = reader.ReadDouble();
+                Planes[i].NormalY = reader.ReadDouble();
+                Planes[i].NormalZ = reader.ReadDouble();
+                Planes[i].Distance = reader.ReadDouble();
                 if (IsVbsp)
                 {
                     reader.ReadInt32(); // type

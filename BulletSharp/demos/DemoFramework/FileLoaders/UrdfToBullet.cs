@@ -75,8 +75,8 @@ namespace DemoFramework.FileLoaders
             }
 
             UrdfInertial inertial = link.Inertial;
-            float mass = inertial != null
-                ? (float)inertial.Mass
+            double mass = inertial != null
+                ? inertial.Mass
                 : 0;
 
             Matrix origin = ParsePose(link.Inertial.Origin);
@@ -110,7 +110,7 @@ namespace DemoFramework.FileLoaders
             _linkToRigidBody[link.Name] = body;
         }
 
-        private CompoundShape LoadCompoundCollisionShape(UrdfCollision[] collisions, string baseDirectory, float mass, Matrix parentTransform)
+        private CompoundShape LoadCompoundCollisionShape(UrdfCollision[] collisions, string baseDirectory, double mass, Matrix parentTransform)
         {
             var compoundShape = new CompoundShape(true, collisions.Length);
             foreach (UrdfCollision collision in collisions)
@@ -191,36 +191,36 @@ namespace DemoFramework.FileLoaders
         private static CollisionShape CreateBoxShape(UrdfBox box)
         {
             Vector3 size = ParseVector3(box.Size);
-            var halfExtents = size * 0.5f;
+            var halfExtents = size * 0.5;
             return new BoxShape(halfExtents);
         }
 
         private static CollisionShape CreateCapsuleShape(UrdfCapsule capsule)
         {
-            float radius = (float)capsule.Radius * 0.5f;
-            float length = (float)capsule.Length * 0.5f;
+            double radius = capsule.Radius * 0.5;
+            double length = capsule.Length * 0.5;
             return new CapsuleShape(radius, length);
         }
 
         private static CollisionShape CreateCylinderShape(UrdfCylinder cylinder)
         {
-            float radius = (float)cylinder.Radius * 0.5f;
-            float length = (float)cylinder.Length * 0.5f;
+            double radius = cylinder.Radius * 0.5;
+            double length = cylinder.Length * 0.5;
             return new CylinderShape(radius, length, radius);
         }
 
         private static CollisionShape CreatePlaneShape(UrdfPlane plane)
         {
-            const float planeConstant = 0;
+            const double planeConstant = 0;
             return new StaticPlaneShape(ParseVector3(plane.Normal), planeConstant);
         }
 
         private static CollisionShape CreateSphereShape(UrdfSphere sphere)
         {
-            return new SphereShape((float)sphere.Radius);
+            return new SphereShape(sphere.Radius);
         }
 
-        private CollisionShape LoadShapeFromFile(string fileName, float mass, Vector3 scale, string baseDirectory)
+        private CollisionShape LoadShapeFromFile(string fileName, double mass, Vector3 scale, string baseDirectory)
         {
             string fullPath = Path.Combine(baseDirectory, fileName);
             string extension = Path.GetExtension(fullPath);
@@ -338,9 +338,9 @@ namespace DemoFramework.FileLoaders
             }
 
             return new Matrix(
-                (float)inertia.XX, (float)inertia.XY, (float)inertia.XZ, 0,
-                (float)inertia.XY, (float)inertia.YY, (float)inertia.YZ, 0,
-                (float)inertia.XZ, (float)inertia.YZ, (float)inertia.ZZ, 0,
+                inertia.XX, inertia.XY, inertia.XZ, 0,
+                inertia.XY, inertia.YY, inertia.YZ, 0,
+                inertia.XZ, inertia.YZ, inertia.ZZ, 0,
                 0, 0, 0, 1);
         }
     }
