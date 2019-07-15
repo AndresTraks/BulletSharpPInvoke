@@ -38,6 +38,7 @@ ELSE()
     SET(BULLETC_LIB libbulletc)
 ENDIF()
 
+OPTION(USE_DOUBLE_PRECISION "" ON)
 IF (USE_DOUBLE_PRECISION)
     ADD_DEFINITIONS( -DBT_USE_DOUBLE_PRECISION)
 ENDIF (USE_DOUBLE_PRECISION)
@@ -375,6 +376,8 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btTriangleIndexVertexArray_wrap.h
     src/btTriangleIndexVertexMaterialArray_wrap.cpp
     src/btTriangleIndexVertexMaterialArray_wrap.h
+    src/btTriangleInfoMap_wrap.cpp
+    src/btTriangleInfoMap_wrap.h
     src/btTriangleMesh_wrap.cpp
     src/btTriangleMesh_wrap.h
     src/btTriangleMeshShape_wrap.cpp

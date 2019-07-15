@@ -9,7 +9,7 @@ extern "C" {
 	EXPORT void btGeometryUtil_getVerticesFromPlaneEquations(const btAlignedObjectArray_btVector3* planeEquations, btAlignedObjectArray_btVector3* verticesOut);
 	//EXPORT bool btGeometryUtil_isInside(const btAlignedObjectArray_btVector3* vertices, const btVector3* planeNormal, btScalar margin);
 	EXPORT bool btGeometryUtil_isPointInsidePlanes(const btAlignedObjectArray_btVector3* planeEquations, const btVector3* point, btScalar margin);
-}
 #ifdef __cplusplus
+}
 #endif
 #endif
