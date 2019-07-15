@@ -23,7 +23,7 @@ extern "C" {
 	EXPORT void btMultiBody_clearConstraintForces(btMultiBody* obj);
 	EXPORT void btMultiBody_clearForcesAndTorques(btMultiBody* obj);
 	EXPORT void btMultiBody_clearVelocities(btMultiBody* obj);
-	EXPORT void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof(btMultiBody* obj, btScalar dt, btAlignedObjectArray_btScalar* scratch_r, btAlignedObjectArray_btVector3* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m, bool isConstraintPass);
+	EXPORT void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof(btMultiBody* obj, btScalar dt, btAlignedObjectArray_btScalar* scratch_r, btAlignedObjectArray_btVector3* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m, bool isConstraintPass, bool jointFeedbackInWorldSpace, bool jointFeedbackInJointFrame);
 	EXPORT void btMultiBody_fillConstraintJacobianMultiDof(btMultiBody* obj, int link, const btVector3* contact_point, const btVector3* normal_ang, const btVector3* normal_lin, btScalar* jac, btAlignedObjectArray_btScalar* scratch_r, btAlignedObjectArray_btVector3* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m);
 	EXPORT void btMultiBody_fillContactJacobianMultiDof(btMultiBody* obj, int link, const btVector3* contact_point, const btVector3* normal, btScalar* jac, btAlignedObjectArray_btScalar* scratch_r, btAlignedObjectArray_btVector3* scratch_v, btAlignedObjectArray_btMatrix3x3* scratch_m);
 	EXPORT void btMultiBody_finalizeMultiDof(btMultiBody* obj);

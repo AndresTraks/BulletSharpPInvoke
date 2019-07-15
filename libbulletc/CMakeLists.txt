@@ -375,6 +375,8 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btTriangleIndexVertexArray_wrap.h
     src/btTriangleIndexVertexMaterialArray_wrap.cpp
     src/btTriangleIndexVertexMaterialArray_wrap.h
+    src/btTriangleInfoMap_wrap.cpp
+    src/btTriangleInfoMap_wrap.h
     src/btTriangleMesh_wrap.cpp
     src/btTriangleMesh_wrap.h
     src/btTriangleMeshShape_wrap.cpp
