@@ -281,39 +281,42 @@ namespace BulletSharp
 
 		public virtual void DrawCapsule(float radius, float halfHeight, int upAxis, ref Matrix transform, ref Vector3 color)
 		{
+			const int stepDegrees = 30;
+
+			void DrawCapsuleCap(ref Vector3 capOffset, ref Matrix capTransform, ref Vector3 capColor, float axisDirection)
+			{
+				Matrix childTransform = capTransform;
+				childTransform.Origin = Vector3.TransformCoordinate(capOffset, capTransform);
+				Matrix childBasis = childTransform.Basis;
+				Vector3 center = childTransform.Origin;
+				Vector3 up = childBasis.GetColumn((upAxis + 1) % 3);
+				Vector3 axis = axisDirection * childBasis.GetColumn(upAxis);
+				float minTh = -MathUtil.SIMD_HALF_PI;
+				float maxTh = MathUtil.SIMD_HALF_PI;
+				float minPs = -MathUtil.SIMD_HALF_PI;
+				float maxPs = MathUtil.SIMD_HALF_PI;
+
+				DrawSpherePatch(ref center, ref up, ref axis, radius, minTh, maxTh, minPs, maxPs, ref capColor, stepDegrees);
+			}
+
 			Vector3 capStart = Vector3.Zero;
 			capStart[upAxis] = -halfHeight;
 
 			Vector3 capEnd = Vector3.Zero;
 			capEnd[upAxis] = halfHeight;
 
-			// Draw the ends
-			Matrix childTransform = transform;
-			childTransform.Origin = Vector3.TransformCoordinate(capStart, transform);
-			DrawSphere(radius, ref childTransform, ref color);
-
-			childTransform.Origin = Vector3.TransformCoordinate(capEnd, transform);
-			DrawSphere(radius, ref childTransform, ref color);
+			DrawCapsuleCap(ref capStart, ref transform, ref color, -1);
+			DrawCapsuleCap(ref capEnd, ref transform, ref color, 1);
 
 			// Draw some additional lines
 			Vector3 start = transform.Origin;
 			Matrix basis = transform.Basis;
-
-			capStart[(upAxis + 1) % 3] = radius;
-			capEnd[(upAxis + 1) % 3] = radius;
-			DrawLine(start + Vector3.TransformCoordinate(capStart, basis), start + Vector3.TransformCoordinate(capEnd, basis), color);
-
-			capStart[(upAxis + 1) % 3] = -radius;
-			capEnd[(upAxis + 1) % 3] = -radius;
-			DrawLine(start + Vector3.TransformCoordinate(capStart, basis), start + Vector3.TransformCoordinate(capEnd, basis), color);
-
-			capStart[(upAxis + 2) % 3] = radius;
-			capEnd[(upAxis + 2) % 3] = radius;
-			DrawLine(start + Vector3.TransformCoordinate(capStart, basis), start + Vector3.TransformCoordinate(capEnd, basis), color);
-
-			capStart[(upAxis + 2) % 3] = -radius;
-			capEnd[(upAxis + 2) % 3] = -radius;
-			DrawLine(start + Vector3.TransformCoordinate(capStart, basis), start + Vector3.TransformCoordinate(capEnd, basis), color);
+			for (int i = 0; i < 360; i += stepDegrees)
+			{
+				capEnd[(upAxis + 1) % 3] = capStart[(upAxis + 1) % 3] = (float) System.Math.Sin(i * MathUtil.SIMD_RADS_PER_DEG) * radius;
+				capEnd[(upAxis + 2) % 3] = capStart[(upAxis + 2) % 3] = (float) System.Math.Cos(i * MathUtil.SIMD_RADS_PER_DEG) * radius;
+				DrawLine(start + Vector3.TransformCoordinate(capStart, basis), start + Vector3.TransformCoordinate(capEnd, basis), color);
+			}
 		}
 
 		public virtual void DrawCone(float radius, float height, int upAxis, ref Matrix transform, ref Vector3 color)
