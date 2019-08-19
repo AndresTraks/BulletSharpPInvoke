@@ -42,6 +42,10 @@ extern "C" {
 	EXPORT void btMultiBody_getBaseWorldTransform(btMultiBody* obj, btTransform* value);
 	EXPORT bool btMultiBody_getCanSleep(btMultiBody* obj);
 	EXPORT int btMultiBody_getCompanionId(btMultiBody* obj);
+	EXPORT void btMultiBody_getInterpolateBasePos(btMultiBody* obj, btVector3* value);
+	EXPORT void btMultiBody_getInterpolateParentToLocalRot(btMultiBody* obj, int i, btQuaternion* value);
+	EXPORT void btMultiBody_getInterpolateRVector(btMultiBody* obj, int i, btVector3* value);
+	EXPORT void btMultiBody_getInterpolateWorldToBaseRot(btMultiBody* obj, btQuaternion* value);
 	EXPORT btScalar btMultiBody_getJointPos(btMultiBody* obj, int i);
 	EXPORT btScalar* btMultiBody_getJointPosMultiDof(btMultiBody* obj, int i);
 	EXPORT btScalar btMultiBody_getJointTorque(btMultiBody* obj, int i);
@@ -80,6 +84,7 @@ extern "C" {
 	EXPORT void btMultiBody_localDirToWorld(btMultiBody* obj, int i, const btVector3* vec, btVector3* value);
 	EXPORT void btMultiBody_localFrameToWorld(btMultiBody* obj, int i, const btMatrix3x3* mat, btMatrix3x3* value);
 	EXPORT void btMultiBody_localPosToWorld(btMultiBody* obj, int i, const btVector3* vec, btVector3* value);
+	EXPORT void btMultiBody_predictPositionsMultiDof(btMultiBody* obj, btScalar dt);
 	EXPORT void btMultiBody_processDeltaVeeMultiDof2(btMultiBody* obj);
 	EXPORT const char* btMultiBody_serialize(btMultiBody* obj, void* dataBuffer, btSerializer* serializer);
 	EXPORT void btMultiBody_setAngularDamping(btMultiBody* obj, btScalar damp);
@@ -116,6 +121,7 @@ extern "C" {
 	EXPORT void btMultiBody_setWorldToBaseRot(btMultiBody* obj, const btQuaternion* rot);
 	EXPORT void btMultiBody_stepPositionsMultiDof(btMultiBody* obj, btScalar dt, btScalar* pq, btScalar* pqd);
 	EXPORT void btMultiBody_updateCollisionObjectWorldTransforms(btMultiBody* obj, btAlignedObjectArray_btQuaternion* scratch_q, btAlignedObjectArray_btVector3* scratch_m);
+	EXPORT void btMultiBody_updateCollisionObjectWorldTransforms2(btMultiBody* obj, btAlignedObjectArray_btQuaternion* world_to_local, btAlignedObjectArray_btVector3* local_origin);
 	EXPORT void btMultiBody_useGlobalVelocities(btMultiBody* obj, bool use);
 	EXPORT void btMultiBody_useRK4Integration(btMultiBody* obj, bool use);
 	EXPORT void btMultiBody_wakeUp(btMultiBody* obj);

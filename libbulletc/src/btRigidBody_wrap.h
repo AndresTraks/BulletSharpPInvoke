@@ -78,6 +78,7 @@ extern "C" {
 	EXPORT btScalar btRigidBody_getLinearSleepingThreshold(btRigidBody* obj);
 	EXPORT void btRigidBody_getLinearVelocity(btRigidBody* obj, btVector3* value);
 	EXPORT void btRigidBody_getLocalInertia(btRigidBody* obj, btVector3* value);
+	EXPORT btScalar btRigidBody_getMass(btRigidBody* obj);
 	EXPORT btMotionState* btRigidBody_getMotionState(btRigidBody* obj);
 	EXPORT int btRigidBody_getNumConstraintRefs(btRigidBody* obj);
 	EXPORT void btRigidBody_getOrientation(btRigidBody* obj, btQuaternion* value);

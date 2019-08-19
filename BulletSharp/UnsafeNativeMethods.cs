@@ -2170,6 +2170,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btDiscreteDynamicsWorld_setSynchronizeAllMotionStates(IntPtr obj, bool synchronizeAll);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btDiscreteDynamicsWorld_solveConstraints(IntPtr obj, IntPtr solverInfo);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btDiscreteDynamicsWorld_synchronizeSingleMotionState(IntPtr obj, IntPtr body);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btDiscreteDynamicsWorld_updateVehicles(IntPtr obj, float timeStep);
@@ -3447,6 +3449,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBodyDynamicsWorld_addMultiBodyConstraint(IntPtr obj, IntPtr constraint);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyDynamicsWorld_buildIslands(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBodyDynamicsWorld_clearMultiBodyConstraintForces(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBodyDynamicsWorld_clearMultiBodyForces(IntPtr obj);
@@ -3457,11 +3461,21 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern int btMultiBodyDynamicsWorld_getNumMultiBodyConstraints(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyDynamicsWorld_integrateMultiBodyTransforms(IntPtr obj, float timeStep);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBodyDynamicsWorld_integrateTransforms(IntPtr obj, float timeStep);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyDynamicsWorld_predictMultiBodyTransforms(IntPtr obj, float timeStep);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyDynamicsWorld_predictUnconstraintMotion(IntPtr obj, float timeStep);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBodyDynamicsWorld_removeMultiBody(IntPtr obj, IntPtr body);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBodyDynamicsWorld_removeMultiBodyConstraint(IntPtr obj, IntPtr constraint);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyDynamicsWorld_solveExternalForces(IntPtr obj, IntPtr solverInfo);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBodyDynamicsWorld_solveInternalConstraints(IntPtr obj, IntPtr solverInfo);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btMultiBodyFixedConstraint_new(IntPtr body, int link, IntPtr bodyB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB, [In] ref Matrix frameInA, [In] ref Matrix frameInB);
@@ -3528,7 +3542,11 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultibodyLink_getCachedRotParentToThis(IntPtr obj, out Quaternion value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getCachedRotParentToThisInterpolate(IntPtr obj, out Quaternion value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultibodyLink_getCachedRVector(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_getCachedRVectorInterpolate(IntPtr obj, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultibodyLink_getCachedWorldTransform(IntPtr obj, out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -3557,6 +3575,8 @@ namespace BulletSharp
 		public static extern IntPtr btMultibodyLink_getJointName(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btMultibodyLink_getJointPos(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btMultibodyLink_getJointPosInterpolate(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btMultibodyLink_getJointTorque(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -3592,7 +3612,11 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultibodyLink_setCachedRotParentToThis(IntPtr obj, [In] ref Quaternion value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setCachedRotParentToThisInterpolate(IntPtr obj, [In] ref Quaternion value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultibodyLink_setCachedRVector(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_setCachedRVectorInterpolate(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultibodyLink_setCachedWorldTransform(IntPtr obj, [In] ref Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -3635,6 +3659,8 @@ namespace BulletSharp
 		public static extern void btMultibodyLink_setUserPtr(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultibodyLink_updateCacheMultiDof(IntPtr obj, float[] pq);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultibodyLink_updateInterpolationCacheMultiDof(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btMultiBodyPoint2Point_new(IntPtr body, int link, IntPtr bodyB, [In] ref Vector3 pivotInA, [In] ref Vector3 pivotInB);
@@ -3879,6 +3905,14 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern int btMultiBody_getCompanionId(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getInterpolateBasePos(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getInterpolateParentToLocalRot(IntPtr obj, int i, out Quaternion value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getInterpolateRVector(IntPtr obj, int i, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_getInterpolateWorldToBaseRot(IntPtr obj, out Quaternion value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btMultiBody_getJointPos(IntPtr obj, int i);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btMultiBody_getJointPosMultiDof(IntPtr obj, int i);
@@ -3963,6 +3997,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBody_localPosToWorld(IntPtr obj, int i, [In] ref Vector3 vec, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_predictPositionsMultiDof(float dt);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBody_processDeltaVeeMultiDof2(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btMultiBody_serialize(IntPtr obj, IntPtr dataBuffer, IntPtr serializer);
@@ -4034,6 +4070,8 @@ namespace BulletSharp
 		public static extern void btMultiBody_stepPositionsMultiDof(IntPtr obj, float dt, float[] pq, float[] pqd);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBody_updateCollisionObjectWorldTransforms(IntPtr obj, IntPtr scratch_q, IntPtr scratch_m);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btMultiBody_updateCollisionObjectWorldTransforms2(IntPtr obj, IntPtr world_to_local, IntPtr local_origin);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBody_useGlobalVelocities(IntPtr obj, bool use);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -5200,6 +5238,9 @@ namespace BulletSharp
 		public static extern bool btSoftBody_checkContact(IntPtr obj, IntPtr colObjWrap, [In] ref Vector3 x, float margin, IntPtr cti);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btSoftBody_checkDeformableContact(IntPtr obj, IntPtr colObjWrap, [In] ref Vector3 x, float margin, IntPtr cti, bool predict);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
 		public static extern bool btSoftBody_checkFace(IntPtr obj, int node0, int node1, int node2);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		[return: MarshalAs(UnmanagedType.I1)]
@@ -5270,6 +5311,8 @@ namespace BulletSharp
 		public static extern IntPtr btSoftBody_getClusters(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_getCollisionDisabledObjects(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSoftBody_getDampingCoefficient(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btSoftBody_getFaces(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -5361,6 +5404,8 @@ namespace BulletSharp
 		public static extern void btSoftBody_scale(IntPtr obj, [In] ref Vector3 scl);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_setBUpdateRtCst(IntPtr obj, bool value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSoftBody_setDampingCoefficient(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_setInitialWorldTransform(IntPtr obj, [In] ref Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -6201,6 +6246,10 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btSoftBody_RContact_getNode(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSoftBody_RContact_getT1(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSoftBody_RContact_getT2(IntPtr obj, out Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_RContact_setC0(IntPtr obj, [In] ref Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_RContact_setC1(IntPtr obj, [In] ref Vector3 value);
@@ -6212,6 +6261,10 @@ namespace BulletSharp
 		public static extern void btSoftBody_RContact_setC4(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_RContact_setNode(IntPtr obj, IntPtr value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSoftBody_RContact_setT1(IntPtr obj, [In] ref Vector3 value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSoftBody_RContact_setT2(IntPtr obj, [In] ref Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_RContact_delete(IntPtr obj);
 

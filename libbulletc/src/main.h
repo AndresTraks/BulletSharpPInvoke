@@ -694,9 +694,11 @@
 #endif
 
 #ifndef BT_RIGIDBODY_H
+#define btAlignedObjectArray_btRigidBodyPtr void
 #define btRigidBody void
 #define btRigidBody_btRigidBodyConstructionInfo void
 #else
+#define btAlignedObjectArray_btRigidBodyPtr btAlignedObjectArray<btRigidBody*>
 #define btRigidBody_btRigidBodyConstructionInfo btRigidBody::btRigidBodyConstructionInfo
 #endif
 

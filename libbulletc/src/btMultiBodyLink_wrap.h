@@ -13,7 +13,9 @@ extern "C" {
 	EXPORT void btMultibodyLink_getAxisBottom(btMultibodyLink* obj, int dof, btVector3* value);
 	EXPORT void btMultibodyLink_getAxisTop(btMultibodyLink* obj, int dof, btVector3* value);
 	EXPORT void btMultibodyLink_getCachedRotParentToThis(btMultibodyLink* obj, btQuaternion* value);
+	EXPORT void btMultibodyLink_getCachedRotParentToThisInterpolate(btMultibodyLink* obj, btQuaternion* value);
 	EXPORT void btMultibodyLink_getCachedRVector(btMultibodyLink* obj, btVector3* value);
+	EXPORT void btMultibodyLink_getCachedRVectorInterpolate(btMultibodyLink* obj, btVector3* value);
 	EXPORT void btMultibodyLink_getCachedWorldTransform(btMultibodyLink* obj, btTransform* value);
 	EXPORT int btMultibodyLink_getCfgOffset(btMultibodyLink* obj);
 	EXPORT btMultiBodyLinkCollider* btMultibodyLink_getCollider(btMultibodyLink* obj);
@@ -28,6 +30,7 @@ extern "C" {
 	EXPORT btScalar btMultibodyLink_getJointFriction(btMultibodyLink* obj);
 	EXPORT const char* btMultibodyLink_getJointName(btMultibodyLink* obj);
 	EXPORT btScalar* btMultibodyLink_getJointPos(btMultibodyLink* obj);
+	EXPORT btScalar* btMultibodyLink_getJointPosInterpolate(btMultibodyLink* obj);
 	EXPORT btScalar* btMultibodyLink_getJointTorque(btMultibodyLink* obj);
 	EXPORT btMultibodyLink_eFeatherstoneJointType btMultibodyLink_getJointType(btMultibodyLink* obj);
 	EXPORT const char* btMultibodyLink_getLinkName(btMultibodyLink* obj);
@@ -67,6 +70,7 @@ extern "C" {
 	EXPORT void btMultibodyLink_setZeroRotParentToThis(btMultibodyLink* obj, const btQuaternion* value);
 	EXPORT void btMultibodyLink_setUserPtr(btMultibodyLink* obj, const void* value);
 	EXPORT void btMultibodyLink_updateCacheMultiDof(btMultibodyLink* obj, btScalar* pq);
+	EXPORT void btMultibodyLink_updateInterpolationCacheMultiDof(btMultibodyLink* obj);
 #ifdef __cplusplus
 }
 #endif

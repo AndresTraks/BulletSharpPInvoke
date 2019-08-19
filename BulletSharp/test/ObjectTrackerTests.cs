@@ -11,7 +11,7 @@ namespace BulletSharpTest
 		{
 			AssertObjectTrackerEnabled();
 
-			Assert.That(BulletObjectTracker.Current.UserOwnedObjects, Is.Empty);
+			Assert.That(BulletObjectTracker.Current.GetUserOwnedObjects(), Is.Empty);
 		}
 
 		private void AssertObjectTrackerEnabled()

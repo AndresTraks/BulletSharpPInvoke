@@ -9,6 +9,7 @@ extern "C" {
 	EXPORT bool btDiscreteDynamicsWorld_getApplySpeculativeContactRestitution(btDiscreteDynamicsWorld* obj);
 	EXPORT btCollisionWorld* btDiscreteDynamicsWorld_getCollisionWorld(btDiscreteDynamicsWorld* obj);
 	EXPORT bool btDiscreteDynamicsWorld_getLatencyMotionStateInterpolation(btDiscreteDynamicsWorld* obj);
+	EXPORT btAlignedObjectArray_btRigidBodyPtr* btDiscreteDynamicsWorld_getNonStaticRigidBodies(btDiscreteDynamicsWorld* obj);
 	EXPORT btSimulationIslandManager* btDiscreteDynamicsWorld_getSimulationIslandManager(btDiscreteDynamicsWorld* obj);
 	EXPORT bool btDiscreteDynamicsWorld_getSynchronizeAllMotionStates(btDiscreteDynamicsWorld* obj);
 	EXPORT void btDiscreteDynamicsWorld_setApplySpeculativeContactRestitution(btDiscreteDynamicsWorld* obj, bool enable);

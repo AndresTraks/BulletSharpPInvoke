@@ -39,6 +39,11 @@ bool btDiscreteDynamicsWorld_getLatencyMotionStateInterpolation(btDiscreteDynami
 	return obj->getLatencyMotionStateInterpolation();
 }
 
+btAlignedObjectArray_btRigidBodyPtr* btDiscreteDynamicsWorld_getNonStaticRigidBodies(btDiscreteDynamicsWorld* obj)
+{
+	return &obj->getNonStaticRigidBodies();
+}
+
 btSimulationIslandManager* btDiscreteDynamicsWorld_getSimulationIslandManager(btDiscreteDynamicsWorld* obj)
 {
 	return obj->getSimulationIslandManager();

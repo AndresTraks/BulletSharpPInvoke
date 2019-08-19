@@ -6,6 +6,8 @@
 #include <LinearMath/btQuickprof.h>
 #include "LinearMath/btTransform.h"
 
+#include <cstring>
+
 #define BTTRANSFORM_TRANSPOSE
 #define BTTRANSFORM_TO4X4
 
@@ -147,23 +149,19 @@ inline void btTransformToMatrix(const btTransform* t, btScalar* m)
 	m[2] = t->getBasis().getRow(2).getX();
 	m[6] = t->getBasis().getRow(2).getY();
 	m[10] = t->getBasis().getRow(2).getZ();
-#else
-	m[0] = t->getBasis().getRow(0).getX();
-	m[1] = t->getBasis().getRow(0).getY();
-	m[2] = t->getBasis().getRow(0).getZ();
-	m[4] = t->getBasis().getRow(1).getX();
-	m[5] = t->getBasis().getRow(1).getY();
-	m[6] = t->getBasis().getRow(1).getZ();
-	m[8] = t->getBasis().getRow(2).getX();
-	m[9] = t->getBasis().getRow(2).getY();
-	m[10] = t->getBasis().getRow(2).getZ();
-#endif
-	m[3] = 0;
-	m[7] = 0;
-	m[11] = 0;
 	m[12] = t->getOrigin().getX();
 	m[13] = t->getOrigin().getY();
 	m[14] = t->getOrigin().getZ();
+#else
+	// MSVC translates memcpy into four movups instructions.
+	// Movaps cannot be used, because C# does not guarantee 16-byte alignment of the argument.
+	memcpy(m, t, sizeof(btTransform));
+#endif
+	// Bullet leaves the following members uninitialized and only uses them for alignment,
+	// but graphics APIs that support scaling and shearing will consider these.
+	m[3] = 0;
+	m[7] = 0;
+	m[11] = 0;
 	m[15] = 1;
 #else
 #ifdef BTTRANSFORM_TRANSPOSE
@@ -203,12 +201,12 @@ inline void MatrixTobtTransform(const btScalar* m, btTransform* t)
 #ifdef BTTRANSFORM_TO4X4
 #ifdef BTTRANSFORM_TRANSPOSE
 	t->getBasis().setValue(m[0],m[4],m[8],m[1],m[5],m[9],m[2],m[6],m[10]);
-#else
-	t->getBasis().setValue(m[0],m[1],m[2],m[4],m[5],m[6],m[8],m[9],m[10]);
-#endif
 	t->getOrigin().setX(m[12]);
 	t->getOrigin().setY(m[13]);
 	t->getOrigin().setZ(m[14]);
+#else
+	memcpy(t, m, sizeof(btTransform));
+#endif
 #else
 #ifdef BTTRANSFORM_TRANSPOSE
 	t->getBasis().setValue(m[0],m[3],m[6],m[1],m[4],m[7],m[2],m[5],m[8]);

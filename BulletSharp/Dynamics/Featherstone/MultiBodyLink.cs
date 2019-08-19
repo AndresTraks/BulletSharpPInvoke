@@ -68,6 +68,11 @@ namespace BulletSharp
 		{
 			btMultibodyLink_updateCacheMultiDof(Native, pq);
 		}
+
+		public void UpdateInterpolationCacheMultiDof()
+		{
+			btMultibodyLink_updateInterpolationCacheMultiDof(Native);
+		}
 /*
 		public SpatialMotionVector AbsFrameLocVelocity
 		{
@@ -141,6 +146,17 @@ namespace BulletSharp
 			set => btMultibodyLink_setCachedRotParentToThis(Native, ref value);
 		}
 
+		public Quaternion CachedRotParentToThisInterpolate
+		{
+			get
+			{
+				Quaternion value;
+				btMultibodyLink_getCachedRotParentToThisInterpolate(Native, out value);
+				return value;
+			}
+			set => btMultibodyLink_setCachedRotParentToThisInterpolate(Native, ref value);
+		}
+
 		public Vector3 CachedRVector
 		{
 			get
@@ -150,6 +166,17 @@ namespace BulletSharp
 				return value;
 			}
 			set => btMultibodyLink_setCachedRVector(Native, ref value);
+		}
+
+		public Vector3 CachedRVectorInterpolate
+		{
+			get
+			{
+				Vector3 value;
+				btMultibodyLink_getCachedRVectorInterpolate(Native, out value);
+				return value;
+			}
+			set => btMultibodyLink_setCachedRVectorInterpolate(Native, ref value);
 		}
 
 		public Matrix CachedWorldTransform

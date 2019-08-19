@@ -13,7 +13,9 @@ namespace BulletSharp
 		Discrete = 2,
 		Continuous = 3,
 		SoftRigid = 4,
-		Gpu = 5
+		Gpu = 5,
+		SoftMultiBody = 6,
+		DeformableMultiBody = 7
 	}
 
 	public abstract class DynamicsWorld : CollisionWorld

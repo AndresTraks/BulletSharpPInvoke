@@ -425,6 +425,11 @@ void btRigidBody_getLocalInertia(btRigidBody* obj, btVector3* value)
 	BTVECTOR3_SET(value, temp);
 }
 
+btScalar btRigidBody_getMass(btRigidBody* obj)
+{
+	return obj->getMass();
+}
+
 btMotionState* btRigidBody_getMotionState(btRigidBody* obj)
 {
 	return obj->getMotionState();

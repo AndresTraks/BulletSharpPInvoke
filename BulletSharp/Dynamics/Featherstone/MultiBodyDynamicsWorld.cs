@@ -35,6 +35,11 @@ namespace BulletSharp
 			_constraints.Add(constraint);
 		}
 
+		public void BuildIslands()
+		{
+			btMultiBodyDynamicsWorld_buildIslands(Native);
+		}
+
 		public void ClearMultiBodyConstraintForces()
 		{
 			btMultiBodyDynamicsWorld_clearMultiBodyConstraintForces(Native);
@@ -65,9 +70,24 @@ namespace BulletSharp
 			return _constraints[constraintIndex];
 		}
 
+		public void IntegrateMultiBodyTransforms(float timeStep)
+		{
+			btMultiBodyDynamicsWorld_integrateMultiBodyTransforms(Native, timeStep);
+		}
+
 		public void IntegrateTransforms(float timeStep)
 		{
 			btMultiBodyDynamicsWorld_integrateTransforms(Native, timeStep);
+		}
+
+		public void PredictMultiBodyTransforms(float timeStep)
+		{
+			btMultiBodyDynamicsWorld_predictMultiBodyTransforms(Native, timeStep);
+		}
+
+		public void PredictUnconstraintMotion(float timeStep)
+		{
+			btMultiBodyDynamicsWorld_predictUnconstraintMotion(Native, timeStep);
 		}
 
 		public void RemoveMultiBody(MultiBody body)
@@ -80,6 +100,16 @@ namespace BulletSharp
 		{
 			btMultiBodyDynamicsWorld_removeMultiBodyConstraint(Native, constraint.Native);
 			_constraints.Remove(constraint);
+		}
+
+		public void SolveExternalForces(ContactSolverInfo solverInfo)
+		{
+			btMultiBodyDynamicsWorld_solveExternalForces(Native, solverInfo.Native);
+		}
+
+		public void SolveInternalConstraints(ContactSolverInfo solverInfo)
+		{
+			btMultiBodyDynamicsWorld_solveInternalConstraints(Native, solverInfo.Native);
 		}
 
 		public int NumMultibodies => _bodies.Count;

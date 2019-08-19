@@ -55,9 +55,19 @@ void btMultibodyLink_getCachedRotParentToThis(btMultibodyLink* obj, btQuaternion
 	BTQUATERNION_SET(value, obj->m_cachedRotParentToThis);
 }
 
+void btMultibodyLink_getCachedRotParentToThisInterpolate(btMultibodyLink* obj, btQuaternion* value)
+{
+	BTQUATERNION_SET(value, obj->m_cachedRotParentToThis_interpolate);
+}
+
 void btMultibodyLink_getCachedRVector(btMultibodyLink* obj, btVector3* value)
 {
 	BTVECTOR3_SET(value, obj->m_cachedRVector);
+}
+
+void btMultibodyLink_getCachedRVectorInterpolate(btMultibodyLink* obj, btVector3* value)
+{
+	BTVECTOR3_SET(value, obj->m_cachedRVector_interpolate);
 }
 
 void btMultibodyLink_getCachedWorldTransform(btMultibodyLink* obj, btTransform* value)
@@ -128,6 +138,11 @@ const char* btMultibodyLink_getJointName(btMultibodyLink* obj)
 btScalar* btMultibodyLink_getJointPos(btMultibodyLink* obj)
 {
 	return obj->m_jointPos;
+}
+
+btScalar* btMultibodyLink_getJointPosInterpolate(btMultibodyLink* obj)
+{
+	return obj->m_jointPos_interpolate;
 }
 
 btScalar* btMultibodyLink_getJointTorque(btMultibodyLink* obj)
@@ -327,4 +342,9 @@ void btMultibodyLink_setUserPtr(btMultibodyLink* obj, const void* value)
 void btMultibodyLink_updateCacheMultiDof(btMultibodyLink* obj, btScalar* pq)
 {
 	obj->updateCacheMultiDof(pq);
+}
+
+void btMultibodyLink_updateInterpolationCacheMultiDof(btMultibodyLink* obj)
+{
+	obj->updateInterpolationCacheMultiDof();
 }

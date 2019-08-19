@@ -33,6 +33,7 @@ namespace BulletSharp.SoftBody
 		RigidSoftMask = 0x000f,
 		SdfRigidSoft = 0x0001,
 		ClusterConvexRigidSoft = 0x0002,
+		RigidDeformable = 0x0003,
 		SoftSoftMask = 0x0030,
 		VertexFaceSoftSoft = 0x0010,
 		ClusterClusterSoftSoft = 0x0020,
@@ -2019,6 +2020,28 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
+		public Vector3 T1
+		{
+			get
+			{
+				Vector3 value;
+				btSoftBody_RContact_getT1(Native, out value);
+				return value;
+			}
+			set => btSoftBody_RContact_setT1(Native, ref value);
+		}
+
+		public Vector3 T2
+		{
+			get
+			{
+				Vector3 value;
+				btSoftBody_RContact_getT2(Native, out value);
+				return value;
+			}
+			set => btSoftBody_RContact_setT2(Native, ref value);
+		}
+
 		public void Dispose()
 		{
 			Dispose(true);
@@ -2586,6 +2609,13 @@ namespace BulletSharp.SoftBody
 		{
 			return btSoftBody_checkContact(Native, colObjWrap.Native, ref x, margin,
 				cti.Native);
+		}
+
+		public bool CheckDeformableContact(CollisionObjectWrapper colObjWrap, Vector3 x, float margin,
+			ContactInfo cti, bool predict = false)
+		{
+			return btSoftBody_checkDeformableContact(Native, colObjWrap.Native, ref x, margin,
+				cti.Native, predict);
 		}
 
 		public bool CheckFace(int node0, int node1, int node2)
@@ -3212,6 +3242,12 @@ namespace BulletSharp.SoftBody
 			set { btSoftBody_setCollisionDisabledObjects(_native, value._native); }
 		}
 		*/
+		public float DampingCoefficient
+		{
+			get { return btSoftBody_getDampingCoefficient(Native); }
+			set { btSoftBody_setDampingCoefficient(Native, value); }
+		}
+
 		public AlignedFaceArray Faces
 		{
 			get
