@@ -346,6 +346,7 @@ extern "C" {
 	EXPORT void btSoftBody_Node_getN(btSoftBody_Node* obj, btVector3* value);
 	EXPORT void btSoftBody_Node_getQ(btSoftBody_Node* obj, btVector3* value);
 	EXPORT void btSoftBody_Node_getV(btSoftBody_Node* obj, btVector3* value);
+	EXPORT void btSoftBody_Node_getVN(btSoftBody_Node* obj, btVector3* value);
 	EXPORT void btSoftBody_Node_getX(btSoftBody_Node* obj, btVector3* value);
 	EXPORT void btSoftBody_Node_setArea(btSoftBody_Node* obj, btScalar value);
 	EXPORT void btSoftBody_Node_setBattach(btSoftBody_Node* obj, int value);
@@ -356,6 +357,7 @@ extern "C" {
 	EXPORT void btSoftBody_Node_setN(btSoftBody_Node* obj, const btVector3* value);
 	EXPORT void btSoftBody_Node_setQ(btSoftBody_Node* obj, const btVector3* value);
 	EXPORT void btSoftBody_Node_setV(btSoftBody_Node* obj, const btVector3* value);
+	EXPORT void btSoftBody_Node_setVN(btSoftBody_Node* obj, const btVector3* value);
 	EXPORT void btSoftBody_Node_setX(btSoftBody_Node* obj, const btVector3* value);
 
 	EXPORT btScalar* btSoftBody_Note_getCoords(btSoftBody_Note* obj);

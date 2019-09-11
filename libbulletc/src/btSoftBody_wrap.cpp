@@ -1481,6 +1481,11 @@ void btSoftBody_Node_getV(btSoftBody_Node* obj, btVector3* value)
 	BTVECTOR3_SET(value, obj->m_v);
 }
 
+void btSoftBody_Node_getVN(btSoftBody_Node* obj, btVector3* value)
+{
+	BTVECTOR3_SET(value, obj->m_vn);
+}
+
 void btSoftBody_Node_getX(btSoftBody_Node* obj, btVector3* value)
 {
 	BTVECTOR3_SET(value, obj->m_x);
@@ -1529,6 +1534,11 @@ void btSoftBody_Node_setQ(btSoftBody_Node* obj, const btVector3* value)
 void btSoftBody_Node_setV(btSoftBody_Node* obj, const btVector3* value)
 {
 	BTVECTOR3_COPY(&obj->m_v, value);
+}
+
+void btSoftBody_Node_setVN(btSoftBody_Node* obj, const btVector3* value)
+{
+	BTVECTOR3_COPY(&obj->m_vn, value);
 }
 
 void btSoftBody_Node_setX(btSoftBody_Node* obj, const btVector3* value)

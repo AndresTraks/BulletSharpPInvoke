@@ -1697,6 +1697,17 @@ namespace BulletSharp.SoftBody
 			}
 			set => btSoftBody_Node_setV(Native, ref value);
 		}
+
+		public Vector3 VelocityPrevious
+		{
+			get
+			{
+				Vector3 value;
+				btSoftBody_Node_getVN(Native, out value);
+				return value;
+			}
+			set => btSoftBody_Node_setVN(Native, ref value);
+		}
 	}
 
 	public class Note : Element
