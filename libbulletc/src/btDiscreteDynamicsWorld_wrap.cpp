@@ -77,6 +77,11 @@ void btDiscreteDynamicsWorld_setSynchronizeAllMotionStates(btDiscreteDynamicsWor
 	obj->setSynchronizeAllMotionStates(synchronizeAll);
 }
 
+void btDiscreteDynamicsWorld_solveConstraints(btDiscreteDynamicsWorld* obj, btContactSolverInfo* solverInfo)
+{
+	obj->solveConstraints(*solverInfo);
+}
+
 void btDiscreteDynamicsWorld_synchronizeSingleMotionState(btDiscreteDynamicsWorld* obj,
 	btRigidBody* body)
 {

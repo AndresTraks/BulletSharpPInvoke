@@ -1354,6 +1354,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btContactSolverInfoData_getDamping(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btContactSolverInfoData_getDeformableErp(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btContactSolverInfoData_getErp(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btContactSolverInfoData_getErp2(IntPtr obj);
@@ -1403,6 +1405,8 @@ namespace BulletSharp
 		public static extern float btContactSolverInfoData_getWarmstartingFactor(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btContactSolverInfoData_setDamping(IntPtr obj, float value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btContactSolverInfoData_setDeformableErp(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btContactSolverInfoData_setErp(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -4625,6 +4629,8 @@ namespace BulletSharp
 		public static extern void btRigidBody_applyTorqueImpulse(IntPtr obj, [In] ref Vector3 torque);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btRigidBody_clearForces(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btRigidBody_clearGravity(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btRigidBody_computeAngularImpulseDenominator(IntPtr obj, [In] ref Vector3 axis);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]

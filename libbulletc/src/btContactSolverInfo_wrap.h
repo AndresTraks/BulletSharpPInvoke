@@ -5,6 +5,7 @@ extern "C" {
 #endif
 	EXPORT btContactSolverInfoData* btContactSolverInfoData_new();
 	EXPORT btScalar btContactSolverInfoData_getDamping(btContactSolverInfoData* obj);
+	EXPORT btScalar btContactSolverInfoData_getDeformableErp(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getErp(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getErp2(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getFriction(btContactSolverInfoData* obj);
@@ -30,6 +31,7 @@ extern "C" {
 	EXPORT btScalar btContactSolverInfoData_getTimeStep(btContactSolverInfoData* obj);
 	EXPORT btScalar btContactSolverInfoData_getWarmstartingFactor(btContactSolverInfoData* obj);
 	EXPORT void btContactSolverInfoData_setDamping(btContactSolverInfoData* obj, btScalar value);
+	EXPORT void btContactSolverInfoData_setDeformableErp(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setErp(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setErp2(btContactSolverInfoData* obj, btScalar value);
 	EXPORT void btContactSolverInfoData_setFriction(btContactSolverInfoData* obj, btScalar value);

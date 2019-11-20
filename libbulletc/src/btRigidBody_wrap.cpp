@@ -280,6 +280,11 @@ void btRigidBody_clearForces(btRigidBody* obj)
 	obj->clearForces();
 }
 
+void btRigidBody_clearGravity(btRigidBody* obj)
+{
+	obj->clearGravity();
+}
+
 btScalar btRigidBody_computeAngularImpulseDenominator(btRigidBody* obj, const btVector3* axis)
 {
 	BTVECTOR3_IN(axis);

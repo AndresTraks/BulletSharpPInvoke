@@ -38,6 +38,12 @@ namespace BulletSharp
 			set => btContactSolverInfoData_setDamping(Native, value);
 		}
 
+		public float DeformableErp
+		{
+			get => btContactSolverInfoData_getDeformableErp(Native);
+			set => btContactSolverInfoData_setDeformableErp(Native, value);
+		}
+
 		public float Erp
 		{
 			get => btContactSolverInfoData_getErp(Native);
