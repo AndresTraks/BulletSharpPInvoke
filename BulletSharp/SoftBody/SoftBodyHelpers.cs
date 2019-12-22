@@ -39,13 +39,13 @@ namespace BulletSharp.SoftBody
 			switch (id)
 			{
 				case 0:
-					return 1.0f / ((resx - 1)) * ix;
+					return 1.0f / (resx - 1) * ix;
 				case 1:
-					return 1.0f / ((resy - 1)) * (resy - 1 - iy);
+					return 1.0f / (resy - 1) * (resy - 1 - iy);
 				case 2:
-					return 1.0f / ((resy - 1)) * (resy - 1 - iy - 1);
+					return 1.0f / (resy - 1) * (resy - 1 - iy - 1);
 				case 3:
-					return 1.0f / ((resx - 1)) * (ix + 1);
+					return 1.0f / (resx - 1) * (ix + 1);
 				default:
 					return 0;
 			}
@@ -225,6 +225,162 @@ namespace BulletSharp.SoftBody
 				psb.RandomizeConstraints();
 			}
 			return psb;
+		}
+
+		public static SoftBody CreateFromVtkFile(SoftBodyWorldInfo worldInfo, string fileName)
+		{
+			List<Vector3> points = new List<Vector3>(0);
+			List<int[]> cells = new List<int[]>(0);
+
+			using (var reader = new StreamReader(fileName))
+			{
+				bool readingPoints = false;
+				bool readingCells = false;
+				string line;
+				while ((line = reader.ReadLine()) != null)
+				{
+					if (line.Length == 0) continue;
+
+					string[] lineParts = line.Split(' ');
+					if (lineParts[0] == "POINTS")
+					{
+						readingPoints = true;
+						readingCells = false;
+						points.Capacity = int.Parse(lineParts[1]);
+					}
+					else if (lineParts[0] == "CELLS")
+					{
+						readingPoints = false;
+						readingCells = true;
+						cells.Capacity = int.Parse(lineParts[1]);
+					}
+					else if (lineParts[0] == "CELL_TYPES")
+					{
+						readingPoints = false;
+						readingCells = false;
+					}
+					else if (readingPoints)
+					{
+						Vector3 point = new Vector3(
+							(float)ParseDouble(lineParts[0]),
+							(float)ParseDouble(lineParts[1]),
+							(float)ParseDouble(lineParts[2]));
+						points.Add(point);
+					}
+					else if (readingCells)
+					{
+						int numPoints = int.Parse(lineParts[0]);
+						int[] cell = new int[numPoints];
+						for (int i = 0; i < numPoints; i++)
+						{
+							cell[i] = int.Parse(lineParts[i + 1]);
+						}
+						cells.Add(cell);
+					}
+				}
+			}
+			SoftBody body = new SoftBody(worldInfo, points.Count, points.ToArray(), null);
+
+			foreach (int[] cell in cells)
+			{
+				body.AppendTetra(cell[0], cell[1], cell[2], cell[3]);
+				body.AppendLink(cell[0], cell[1], null, true);
+				body.AppendLink(cell[1], cell[2], null, true);
+				body.AppendLink(cell[2], cell[0], null, true);
+				body.AppendLink(cell[0], cell[3], null, true);
+				body.AppendLink(cell[1], cell[3], null, true);
+				body.AppendLink(cell[2], cell[3], null, true);
+			}
+
+			GenerateBoundaryFaces(body);
+			body.InitializeDmInverse();
+			//body.TetraScratches.Resize(body.Tetras.Count);
+			//body.TetraScratchesTn.Resize(body.Tetras.Count);
+			//Console.WriteLine($"Nodes:  {body.Nodes.Count}");
+			//Console.WriteLine($"Links:  {body.Links.Count}");
+			//Console.WriteLine($"Faces:  {body.Faces.Count}");
+			//Console.WriteLine($"Tetras: {body.Tetras.Count}");
+
+			return body;
+
+		}
+
+		private static double ParseDouble(string value)
+		{
+			return double.Parse(value, CultureInfo.InvariantCulture);
+		}
+
+		private static void GenerateBoundaryFaces(SoftBody body)
+		{
+			int counter = 0;
+			foreach (Node node in body.Nodes)
+			{
+				node.Index = counter++;
+			}
+
+			List<int[]> indices = new List<int[]>(body.Tetras.Count);
+			foreach (Tetra tetra in body.Tetras)
+			{
+				NodePtrArray nodes = tetra.Nodes;
+				int[] index = new int[] {
+					nodes[0].Index,
+					nodes[1].Index,
+					nodes[2].Index,
+					nodes[3].Index
+				};
+				indices.Add(index);
+			}
+
+			var faceMap = new List<KeyValuePair<int[], int[]>>();
+			foreach (int[] tetraIndices in indices)
+			{
+				for (int i = 0; i < 4;  i++)
+				{
+					int[] face;
+					switch (i)
+					{
+						case 0:
+							face = new int[] { tetraIndices[1], tetraIndices[0], tetraIndices[2] };
+							break;
+						case 1:
+							face = new int[] { tetraIndices[3], tetraIndices[0], tetraIndices[1] };
+							break;
+						case 2:
+							face = new int[] { tetraIndices[3], tetraIndices[1], tetraIndices[2] };
+							break;
+						default:
+							face = new int[] { tetraIndices[2], tetraIndices[0], tetraIndices[3] };
+							break;
+					}
+
+					List<int> faceSorted = new List<int>(face);
+					faceSorted.Sort();
+
+					bool removed = false;
+					for (int j = 0; j < faceMap.Count; j++)
+					{
+						KeyValuePair<int[], int[]> f = faceMap[j];
+						int[] faceInMap = f.Key;
+						if (faceInMap[0] == faceSorted[0] && faceInMap[1] == faceSorted[1] && faceInMap[2] == faceSorted[2])
+						{
+							faceMap.RemoveAt(j);
+							j--;
+							removed = true;
+							break;
+						}
+					}
+					if (!removed)
+					{
+						faceMap.Add(new KeyValuePair<int[], int[]>(faceSorted.ToArray(), face));
+					}
+				}
+			}
+
+			foreach (var faceInMap in faceMap)
+			{
+				int[] face = faceInMap.Value;
+				body.AppendFace(face[0], face[1], face[2]);
+			}
 		}
 
 		public static SoftBody CreatePatch(SoftBodyWorldInfo worldInfo, Vector3 corner00,

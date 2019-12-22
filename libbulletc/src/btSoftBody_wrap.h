@@ -575,6 +575,7 @@ extern "C" {
 	EXPORT void btSoftBody_initDefaults(btSoftBody* obj);
 	EXPORT void btSoftBody_initializeClusters(btSoftBody* obj);
 	EXPORT void btSoftBody_initializeFaceTree(btSoftBody* obj);
+	EXPORT void btSoftBody_initializeDmInverse(btSoftBody* obj);
 	EXPORT void btSoftBody_integrateMotion(btSoftBody* obj);
 	EXPORT void btSoftBody_pointersToIndices(btSoftBody* obj);
 	EXPORT void btSoftBody_predictMotion(btSoftBody* obj, btScalar dt);

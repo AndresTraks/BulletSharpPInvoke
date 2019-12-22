@@ -1625,6 +1625,12 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_Node_setF(Native, ref value);
 		}
 
+		public int Index
+		{
+			get => btSoftBody_Node_getIndex(Native);
+			set => btSoftBody_Node_setIndex(Native, value);
+		}
+
 		public float InverseMass
 		{
 			get => btSoftBody_Node_getIm(Native);
@@ -2796,6 +2802,11 @@ namespace BulletSharp.SoftBody
 		public void InitializeFaceTree()
 		{
 			btSoftBody_initializeFaceTree(Native);
+		}
+
+		public void InitializeDmInverse()
+		{
+			btSoftBody_initializeDmInverse(Native);
 		}
 
 		public void IntegrateMotion()

@@ -314,31 +314,24 @@ namespace VehicleDemo
             const float heightScale = maxHeight / 256.0f;
             const int width = 64, length = 64;
             const int dataLength = width * length * sizeof(float);
-            const PhyScalarType scalarType = PhyScalarType.Single;
 
             var scale = new Vector3(15.0f, maxHeight, 15.0f);
 
-            _terrainData = Marshal.AllocHGlobal(dataLength);
-            var terrain = new byte[dataLength];
-
-            using (var file = new MemoryStream(terrain))
+            var terrain = new float[width * length];
+            for (int i = 0; i < width; i++)
             {
-                using (var writer = new BinaryWriter(file))
+                for (int j = 0; j < length; j++)
                 {
-                    for (int i = 0; i < width; i++)
-                    {
-                        for (int j = 0; j < length; j++)
-                        {
-                            writer.Write((float)((maxHeight / 2) + 4 * Math.Sin(j * 0.5f) * Math.Cos(i)));
-                        }
-                    }
+                    float value = (float)((maxHeight / 2) + 4 * Math.Sin(j * 0.5f) * Math.Cos(i));
+                    terrain[i * length + j] = value;
                 }
             }
 
+            _terrainData = Marshal.AllocHGlobal(dataLength);
             Marshal.Copy(terrain, 0, _terrainData, terrain.Length);
 
             var groundShape = new HeightfieldTerrainShape(width, length,
-                _terrainData, heightScale, minHeight, maxHeight, upIndex, scalarType, false);
+                _terrainData, heightScale, minHeight, maxHeight, upIndex, PhyScalarType.Single, false);
             groundShape.SetUseDiamondSubdivision(true);
             groundShape.LocalScaling = new Vector3(scale.X, 1, scale.Z);
 

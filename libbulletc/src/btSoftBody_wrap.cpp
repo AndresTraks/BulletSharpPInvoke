@@ -2696,6 +2696,11 @@ void btSoftBody_initializeFaceTree(btSoftBody* obj)
 	obj->initializeFaceTree();
 }
 
+void btSoftBody_initializeDmInverse(btSoftBody* obj)
+{
+	obj->initializeDmInverse();
+}
+
 void btSoftBody_integrateMotion(btSoftBody* obj)
 {
 	obj->integrateMotion();
