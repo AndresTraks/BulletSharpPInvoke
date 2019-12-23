@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp.SoftBody
@@ -6,6 +7,7 @@ namespace BulletSharp.SoftBody
 	public class DeformableMultiBodyDynamicsWorld : MultiBodyDynamicsWorld
 	{
 		private DeformableBodySolver _deformableBodySolver; // private ref passed to bodies during AddSoftBody
+		private HashSet<DeformableLagrangianForce> _forces = new HashSet<DeformableLagrangianForce>();
 
 		public DeformableMultiBodyDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
 			DeformableMultiBodyConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration,
@@ -26,6 +28,12 @@ namespace BulletSharp.SoftBody
 		}
 
 		public SoftBodyWorldInfo WorldInfo { get; }
+
+		public void AddForce(SoftBody psb, DeformableLagrangianForce force)
+		{
+			btDeformableMultiBodyDynamicsWorld_addForce(Native, psb.Native, force.Native);
+			_forces.Add(force);
+		}
 
 		public void AddSoftBody(SoftBody body)
 		{

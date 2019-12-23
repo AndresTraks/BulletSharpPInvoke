@@ -255,6 +255,10 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btIDebugDraw_wrap.h
     src/btKinematicCharacterController_wrap.cpp
     src/btKinematicCharacterController_wrap.h
+    src/btDeformableGravityForce_wrap.cpp
+    src/btDeformableGravityForce_wrap.h
+    src/btDeformableLagrangianForce_wrap.cpp
+    src/btDeformableLagrangianForce_wrap.h
     src/btLemkeSolver_wrap.cpp
     src/btLemkeSolver_wrap.h
     src/btManifoldPoint_wrap.cpp

@@ -336,6 +336,14 @@
 #define btDeformableBodySolver void
 #endif
 
+#ifndef BT_DEFORMABLE_GRAVITY_FORCE_H
+#define btDeformableGravityForce void
+#endif
+
+#ifndef BT_DEFORMABLE_LAGRANGIAN_FORCE_H
+#define btDeformableLagrangianForce void
+#endif
+
 #ifndef BT_DEFORMABLE_MULTIBODY_CONSTRAINT_SOLVER_H
 #define btDeformableMultiBodyConstraintSolver void
 #endif

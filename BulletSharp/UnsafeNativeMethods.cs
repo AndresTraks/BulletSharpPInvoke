@@ -2131,12 +2131,20 @@ namespace BulletSharp
 		public static extern IntPtr btDeformableBodySolver_new();
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btDeformableGravityForce_new([In] ref Vector3 gravity);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btDeformableLagrangianForce_delete(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btDeformableMultiBodyConstraintSolver_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btDeformableMultiBodyConstraintSolver_setDeformableSolver(IntPtr obj, IntPtr deformableSolver);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btDeformableMultiBodyDynamicsWorld_new(IntPtr dispatcher, IntPtr pairCache, IntPtr constraintSolver, IntPtr collisionConfiguration, IntPtr deformableBodySolver);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btDeformableMultiBodyDynamicsWorld_addForce(IntPtr obj, IntPtr psb, IntPtr force);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btDeformableMultiBodyDynamicsWorld_addSoftBody(IntPtr obj, IntPtr body, int collisionFilterGroup, int collisionFilterMask);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]

@@ -11,6 +11,12 @@ btDeformableMultiBodyDynamicsWorld* btDeformableMultiBodyDynamicsWorld_new(btDis
 		collisionCOnfiguration, deformableBodySolver);
 }
 
+void btDeformableMultiBodyDynamicsWorld_addForce(btDeformableMultiBodyDynamicsWorld* obj, btSoftBody* psb,
+	btDeformableLagrangianForce* force)
+{
+	obj->addForce(psb, force);
+}
+
 void btDeformableMultiBodyDynamicsWorld_addSoftBody(btDeformableMultiBodyDynamicsWorld* obj, btSoftBody* body,
 	int collisionFilterGroup, int collisionFilterMask)
 {
