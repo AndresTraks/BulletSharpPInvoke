@@ -6,8 +6,12 @@ namespace BulletSharp
 {
 	public class MultiBodyDynamicsWorld : DiscreteDynamicsWorld
 	{
-		private List<MultiBody> _bodies;
-		private List<MultiBodyConstraint> _constraints;
+		private List<MultiBody> _bodies = new List<MultiBody>();
+		private List<MultiBodyConstraint> _constraints = new List<MultiBodyConstraint>();
+
+		protected internal MultiBodyDynamicsWorld()
+		{
+		}
 
 		public MultiBodyDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
 			MultiBodyConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration)
@@ -16,9 +20,6 @@ namespace BulletSharp
 				constraintSolver.Native, collisionConfiguration.Native);
 			InitializeUserOwned(native);
 			InitializeMembers(dispatcher, pairCache, constraintSolver);
-
-			_bodies = new List<MultiBody>();
-			_constraints = new List<MultiBodyConstraint>();
 		}
 
 		public void AddMultiBody(MultiBody body, int group = (int)CollisionFilterGroups.DefaultFilter,

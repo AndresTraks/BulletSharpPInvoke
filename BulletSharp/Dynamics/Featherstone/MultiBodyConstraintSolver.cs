@@ -5,6 +5,11 @@ namespace BulletSharp
 {
 	public class MultiBodyConstraintSolver : SequentialImpulseConstraintSolver
 	{
+		internal MultiBodyConstraintSolver(ConstructionInfo info)
+			: base(info)
+		{
+		}
+
 		public MultiBodyConstraintSolver()
 			: base(ConstructionInfo.Null)
 		{

@@ -332,6 +332,18 @@
 #define btDefaultMotionState void
 #endif
 
+#ifndef BT_DEFORMABLE_BODY_SOLVERS_H
+#define btDeformableBodySolver void
+#endif
+
+#ifndef BT_DEFORMABLE_MULTIBODY_CONSTRAINT_SOLVER_H
+#define btDeformableMultiBodyConstraintSolver void
+#endif
+
+#ifndef BT_DEFORMABLE_MULTIBODY_DYNAMICS_WORLD_H
+#define btDeformableMultiBodyDynamicsWorld void
+#endif
+
 #ifndef BT_DISCRETE_COLLISION_DETECTOR1_INTERFACE_H
 #define btDiscreteCollisionDetectorInterface void
 #define btDiscreteCollisionDetectorInterface_ClosestPointInput void

@@ -2117,6 +2117,17 @@ namespace BulletSharp
 		public static extern void btDefaultSoftBodySolver_copySoftBodyToVertexBuffer(IntPtr obj, IntPtr softBody, IntPtr vertexBuffer);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btDeformableBodySolver_new();
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btDeformableMultiBodyConstraintSolver_new();
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btDeformableMultiBodyConstraintSolver_setDeformableSolver(IntPtr obj, IntPtr deformableSolver);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btDeformableMultiBodyDynamicsWorld_new(IntPtr dispatcher, IntPtr pairCache, IntPtr constraintSolver, IntPtr collisionConfiguration, IntPtr deformableBodySolver);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btDiscreteCollisionDetectorInterface_ClosestPointInput_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btDiscreteCollisionDetectorInterface_ClosestPointInput_getMaximumDistanceSquared(IntPtr obj);

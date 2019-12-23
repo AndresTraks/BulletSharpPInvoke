@@ -197,6 +197,12 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btDefaultMotionState_wrap.h
     src/btDefaultSoftBodySolver_wrap.cpp
     src/btDefaultSoftBodySolver_wrap.h
+    src/btDeformableBodySolver_wrap.cpp
+    src/btDeformableBodySolver_wrap.h
+    src/btDeformableMultiBodyConstraintSolver_wrap.cpp
+    src/btDeformableMultiBodyConstraintSolver_wrap.h
+    src/btDeformableMultiBodyDynamicsWorld_wrap.cpp
+    src/btDeformableMultiBodyDynamicsWorld_wrap.h
     src/btDiscreteCollisionDetectorInterface_wrap.cpp
     src/btDiscreteCollisionDetectorInterface_wrap.h
     src/btDiscreteDynamicsWorld_wrap.cpp
