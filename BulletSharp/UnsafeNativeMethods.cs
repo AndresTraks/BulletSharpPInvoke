@@ -295,6 +295,17 @@ namespace BulletSharp
 		public static extern int btAlignedObjectArray_btSoftBody_Tetra_size(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btAlignedObjectArray_btSoftBody_TetraScratch_at(IntPtr obj, int n);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btAlignedObjectArray_btSoftBody_TetraScratch_push_back(IntPtr obj, IntPtr val);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btAlignedObjectArray_btSoftBody_TetraScratch_resize(IntPtr obj, int newSize);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btAlignedObjectArray_btSoftBody_TetraScratch_resizeNoInitialize(IntPtr obj, int newSize);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btAlignedObjectArray_btSoftBody_TetraScratch_size(IntPtr obj);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btSoftBodyNodePtrArray_at(IntPtr obj, int index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btSoftBodyNodePtrArray_set(IntPtr obj, IntPtr value, int index);
@@ -2126,6 +2137,10 @@ namespace BulletSharp
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btDeformableMultiBodyDynamicsWorld_new(IntPtr dispatcher, IntPtr pairCache, IntPtr constraintSolver, IntPtr collisionConfiguration, IntPtr deformableBodySolver);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btDeformableMultiBodyDynamicsWorld_addSoftBody(IntPtr obj, IntPtr body, int collisionFilterGroup, int collisionFilterMask);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btDeformableMultiBodyDynamicsWorld_getWorldInfo(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btDiscreteCollisionDetectorInterface_ClosestPointInput_new();
@@ -5365,6 +5380,10 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btSoftBody_getTetras(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btSoftBody_getTetraScratches(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btSoftBody_getTetraScratchesTn(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btSoftBody_getTimeacc(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btSoftBody_getTotalMass(IntPtr obj);
@@ -6207,6 +6226,11 @@ namespace BulletSharp
 		public static extern void btSoftBody_Tetra_setLeaf(IntPtr obj, IntPtr value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_Tetra_setRv(IntPtr obj, float value);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btSoftBody_TetraScratch_getF(IntPtr obj, out Matrix value);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSoftBody_TetraScratch_setF(IntPtr obj, [In] ref Matrix value);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btSoftBody_SContact_new();

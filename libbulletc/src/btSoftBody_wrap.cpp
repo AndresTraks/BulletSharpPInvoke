@@ -2646,6 +2646,16 @@ btAlignedObjectArray_btSoftBody_Tetra* btSoftBody_getTetras(btSoftBody* obj)
 	return &obj->m_tetras;
 }
 
+btAlignedObjectArray_btSoftBody_TetraScratch* btSoftBody_getTetraScratches(btSoftBody* obj)
+{
+	return &obj->m_tetraScratches;
+}
+
+btAlignedObjectArray_btSoftBody_TetraScratch* btSoftBody_getTetraScratchesTn(btSoftBody* obj)
+{
+	return &obj->m_tetraScratchesTn;
+}
+
 btScalar btSoftBody_getTimeacc(btSoftBody* obj)
 {
 	return obj->m_timeacc;

@@ -565,6 +565,8 @@ extern "C" {
 	EXPORT btSoftBody_SolverState* btSoftBody_getSst(btSoftBody* obj);
 	EXPORT void* btSoftBody_getTag(btSoftBody* obj);
 	EXPORT btAlignedObjectArray_btSoftBody_Tetra* btSoftBody_getTetras(btSoftBody* obj);
+	EXPORT btAlignedObjectArray_btSoftBody_TetraScratch* btSoftBody_getTetraScratches(btSoftBody* obj);
+	EXPORT btAlignedObjectArray_btSoftBody_TetraScratch* btSoftBody_getTetraScratchesTn(btSoftBody* obj);
 	EXPORT btScalar btSoftBody_getTimeacc(btSoftBody* obj);
 	EXPORT btScalar btSoftBody_getTotalMass(btSoftBody* obj);
 	EXPORT btAlignedObjectArray_int* btSoftBody_getUserIndexMapping(btSoftBody* obj);

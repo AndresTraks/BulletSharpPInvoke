@@ -294,8 +294,8 @@ namespace BulletSharp.SoftBody
 
 			GenerateBoundaryFaces(body);
 			body.InitializeDmInverse();
-			//body.TetraScratches.Resize(body.Tetras.Count);
-			//body.TetraScratchesTn.Resize(body.Tetras.Count);
+			body.TetraScratches.Resize(body.Tetras.Count);
+			body.TetraScratchesTn.Resize(body.Tetras.Count);
 			//Console.WriteLine($"Nodes:  {body.Nodes.Count}");
 			//Console.WriteLine($"Links:  {body.Links.Count}");
 			//Console.WriteLine($"Faces:  {body.Faces.Count}");

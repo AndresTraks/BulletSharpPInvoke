@@ -2380,6 +2380,27 @@ namespace BulletSharp.SoftBody
 		}
 	}
 
+	public class TetraScratch
+	{
+		internal IntPtr Native;
+
+		internal TetraScratch(IntPtr native)
+		{
+			Native = native;
+		}
+
+		public Matrix F
+		{
+			get
+			{
+				Matrix value;
+				btSoftBody_TetraScratch_getF(Native, out value);
+				return value;
+			}
+			set => btSoftBody_TetraScratch_setF(Native, ref value);
+		}
+	}
+
 	public class SoftBody : CollisionObject
 	{
 		private AlignedAnchorArray _anchors;
@@ -2403,6 +2424,8 @@ namespace BulletSharp.SoftBody
 		private SoftBodySolver _softBodySolver;
 		private SolverState _solverState;
 		private AlignedTetraArray _tetras;
+		private AlignedTetraScratchArray _tetraScratches;
+		private AlignedTetraScratchArray _tetraScratchesTn;
 		//private AlignedIntArray _userIndexMapping;
 		private SoftBodyWorldInfo _worldInfo;
 
@@ -3440,6 +3463,30 @@ namespace BulletSharp.SoftBody
 					_tetras = new AlignedTetraArray(btSoftBody_getTetras(Native));
 				}
 				return _tetras;
+			}
+		}
+
+		public AlignedTetraScratchArray TetraScratches
+		{
+			get
+			{
+				if (_tetraScratches == null)
+				{
+					_tetraScratches = new AlignedTetraScratchArray(btSoftBody_getTetraScratches(Native));
+				}
+				return _tetraScratches;
+			}
+		}
+
+		public AlignedTetraScratchArray TetraScratchesTn
+		{
+			get
+			{
+				if (_tetraScratchesTn == null)
+				{
+					_tetraScratchesTn = new AlignedTetraScratchArray(btSoftBody_getTetraScratchesTn(Native));
+				}
+				return _tetraScratchesTn;
 			}
 		}
 

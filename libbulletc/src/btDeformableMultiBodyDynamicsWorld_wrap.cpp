@@ -10,3 +10,14 @@ btDeformableMultiBodyDynamicsWorld* btDeformableMultiBodyDynamicsWorld_new(btDis
 	return new btDeformableMultiBodyDynamicsWorld(dispatcher, pairCache, constraintSolver,
 		collisionCOnfiguration, deformableBodySolver);
 }
+
+void btDeformableMultiBodyDynamicsWorld_addSoftBody(btDeformableMultiBodyDynamicsWorld* obj, btSoftBody* body,
+	int collisionFilterGroup, int collisionFilterMask)
+{
+	obj->addSoftBody(body, collisionFilterGroup, collisionFilterMask);
+}
+
+btSoftBodyWorldInfo* btDeformableMultiBodyDynamicsWorld_getWorldInfo(btDeformableMultiBodyDynamicsWorld* obj)
+{
+	return &obj->getWorldInfo();
+}
