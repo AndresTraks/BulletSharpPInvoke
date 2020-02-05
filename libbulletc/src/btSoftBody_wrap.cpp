@@ -2811,6 +2811,11 @@ void btSoftBody_setBUpdateRtCst(btSoftBody* obj, bool value)
 	obj->m_bUpdateRtCst = value;
 }
 
+void btSoftBody_setInitialWorldTransform(btSoftBody* obj, const btTransform* value)
+{
+	BTTRANSFORM_COPY(&obj->m_initialWorldTransform, value);
+}
+
 void btSoftBody_setMass(btSoftBody* obj, int node, btScalar mass)
 {
 	obj->setMass(node, mass);
@@ -2824,6 +2829,11 @@ void btSoftBody_setPose(btSoftBody* obj, bool bvolume, bool bframe)
 void btSoftBody_setRestLengthScale(btSoftBody* obj, btScalar restLength)
 {
 	obj->setRestLengthScale(restLength);
+}
+
+void btSoftBody_setSelfCollision(btSoftBody* obj, bool useSelfCollision)
+{
+	obj->setSelfCollision(useSelfCollision);
 }
 
 void btSoftBody_setSoftBodySolver(btSoftBody* obj, btSoftBodySolver* softBodySolver)
@@ -2958,6 +2968,11 @@ void btSoftBody_updateNormals(btSoftBody* obj)
 void btSoftBody_updatePose(btSoftBody* obj)
 {
 	obj->updatePose();
+}
+
+bool btSoftBody_useSelfCollision(btSoftBody* obj)
+{
+	return obj->useSelfCollision();
 }
 
 void btSoftBody_VSolve_Links(btSoftBody* psb, btScalar kst)

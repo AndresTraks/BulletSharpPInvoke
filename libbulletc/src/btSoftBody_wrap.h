@@ -600,6 +600,7 @@ extern "C" {
 	EXPORT void btSoftBody_setMass(btSoftBody* obj, int node, btScalar mass);
 	EXPORT void btSoftBody_setPose(btSoftBody* obj, bool bvolume, bool bframe);
 	EXPORT void btSoftBody_setRestLengthScale(btSoftBody* obj, btScalar restLength);
+	EXPORT void btSoftBody_setSelfCollision(btSoftBody* obj, bool useSelfCollision);
 	EXPORT void btSoftBody_setSoftBodySolver(btSoftBody* obj, btSoftBodySolver* softBodySolver);
 	EXPORT void btSoftBody_setSolver(btSoftBody* obj, btSoftBody_eSolverPresets preset);
 	EXPORT void btSoftBody_setTag(btSoftBody* obj, void* value);
@@ -626,6 +627,7 @@ extern "C" {
 	EXPORT void btSoftBody_updateLinkConstants(btSoftBody* obj);
 	EXPORT void btSoftBody_updateNormals(btSoftBody* obj);
 	EXPORT void btSoftBody_updatePose(btSoftBody* obj);
+	EXPORT bool btSoftBody_useSelfCollision(btSoftBody* obj);
 	EXPORT void btSoftBody_VSolve_Links(btSoftBody* psb, btScalar kst);
 
 	EXPORT int btSoftBody_getFaceVertexData(btSoftBody* obj, btScalar* vertices);

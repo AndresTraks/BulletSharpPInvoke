@@ -2151,6 +2151,9 @@ namespace BulletSharp
 		public static extern IntPtr btDeformableMultiBodyDynamicsWorld_getWorldInfo(IntPtr obj);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern IntPtr btDeformableNeoHookeanForce_new(float mu, float lambda, float damping);
+
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btDiscreteCollisionDetectorInterface_ClosestPointInput_new();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btDiscreteCollisionDetectorInterface_ClosestPointInput_getMaximumDistanceSquared(IntPtr obj);
@@ -5461,6 +5464,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_setRestLengthScale(IntPtr obj, float restLength);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSoftBody_setSelfCollision(IntPtr obj, bool useSelfCollision);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_setSoftBodySolver(IntPtr obj, IntPtr softBodySolver);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_setTag(IntPtr obj, IntPtr value);
@@ -5510,6 +5515,9 @@ namespace BulletSharp
 		public static extern void btSoftBody_updateNormals(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_updatePose(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool btSoftBody_useSelfCollision(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_VSolve_Links(IntPtr psb, float kst);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -6463,11 +6471,15 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSparseSdf3_GarbageCollect(IntPtr obj, int lifetime);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern float btSparseSdf3_getDefaultVoxelsz(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSparseSdf3_Initialize(IntPtr obj, int hashsize, int clampCells);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern int btSparseSdf3_RemoveReferences(IntPtr obj, IntPtr pcs);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSparseSdf3_Reset(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern void btSparseSdf3_setDefaultVoxelsz(IntPtr obj, float value);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btSphereBoxCollisionAlgorithm_CreateFunc_new();

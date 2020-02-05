@@ -10,6 +10,12 @@ namespace BulletSharp.SoftBody
 			Initialize(native);
 		}
 
+		public float DefaultVoxelSize
+		{
+			get => btSparseSdf3_getDefaultVoxelsz(Native);
+			set => btSparseSdf3_setDefaultVoxelsz(Native, value);
+		}
+
 		public void GarbageCollect(int lifetime = 256)
 		{
 			btSparseSdf3_GarbageCollect(Native, lifetime);

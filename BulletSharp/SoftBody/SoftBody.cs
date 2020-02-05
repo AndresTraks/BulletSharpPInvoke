@@ -34,10 +34,12 @@ namespace BulletSharp.SoftBody
 		SdfRigidSoft = 0x0001,
 		ClusterConvexRigidSoft = 0x0002,
 		RigidDeformable = 0x0003,
-		SoftSoftMask = 0x0030,
+		RigidDeformableFaces = 0x0004,
+		SoftSoftMask = 0x00F0,
 		VertexFaceSoftSoft = 0x0010,
 		ClusterClusterSoftSoft = 0x0020,
 		ClusterSelf = 0x0040,
+		VertexFaceDeformable = 0x0050,
 		Default = SdfRigidSoft
 	}
 
@@ -3514,6 +3516,13 @@ namespace BulletSharp.SoftBody
 			set { btSoftBody_setUserIndexMapping(_native, value._native); }
 		}
 		*/
+
+		public bool UseSelfCollision
+		{
+			get => btSoftBody_useSelfCollision(Native);
+			set => btSoftBody_setSelfCollision(Native, value);
+		}
+
 		public Vector3 WindVelocity
 		{
 			get

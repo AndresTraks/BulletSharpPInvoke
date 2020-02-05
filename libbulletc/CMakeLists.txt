@@ -199,10 +199,16 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btDefaultSoftBodySolver_wrap.h
     src/btDeformableBodySolver_wrap.cpp
     src/btDeformableBodySolver_wrap.h
+    src/btDeformableGravityForce_wrap.cpp
+    src/btDeformableGravityForce_wrap.h
+    src/btDeformableLagrangianForce_wrap.cpp
+    src/btDeformableLagrangianForce_wrap.h
     src/btDeformableMultiBodyConstraintSolver_wrap.cpp
     src/btDeformableMultiBodyConstraintSolver_wrap.h
     src/btDeformableMultiBodyDynamicsWorld_wrap.cpp
     src/btDeformableMultiBodyDynamicsWorld_wrap.h
+    src/btDeformableNeoHookeanForce_wrap.cpp
+    src/btDeformableNeoHookeanForce_wrap.h
     src/btDiscreteCollisionDetectorInterface_wrap.cpp
     src/btDiscreteCollisionDetectorInterface_wrap.h
     src/btDiscreteDynamicsWorld_wrap.cpp
@@ -255,10 +261,6 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btIDebugDraw_wrap.h
     src/btKinematicCharacterController_wrap.cpp
     src/btKinematicCharacterController_wrap.h
-    src/btDeformableGravityForce_wrap.cpp
-    src/btDeformableGravityForce_wrap.h
-    src/btDeformableLagrangianForce_wrap.cpp
-    src/btDeformableLagrangianForce_wrap.h
     src/btLemkeSolver_wrap.cpp
     src/btLemkeSolver_wrap.h
     src/btManifoldPoint_wrap.cpp
