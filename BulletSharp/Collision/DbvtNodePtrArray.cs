@@ -30,7 +30,7 @@ namespace BulletSharp
 
 		public void Reset()
 		{
-			_i = 0;
+			_i = -1;
 		}
 
 		public DbvtNode Current => _array[_i];

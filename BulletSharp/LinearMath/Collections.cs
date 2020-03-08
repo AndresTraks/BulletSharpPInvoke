@@ -54,7 +54,7 @@ namespace BulletSharp
 
 		public void Reset()
 		{
-			_i = 0;
+			_i = -1;
 		}
 
 		public CompoundShapeChild Current => _array[_i];
@@ -87,7 +87,7 @@ namespace BulletSharp
 
 		public void Reset()
 		{
-			_i = 0;
+			_i = -1;
 		}
 
 		public uint Current => _array[_i];
