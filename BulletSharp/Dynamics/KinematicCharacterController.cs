@@ -702,7 +702,8 @@ namespace BulletSharp
             HashedOverlappingPairCache cache = m_ghostObject.OverlappingPairCache;
             while (cache.OverlappingPairArray.Count > 0)
             {
-                cache.RemoveOverlappingPair(cache.OverlappingPairArray[0].Proxy0, cache.OverlappingPairArray[0].Proxy1, collisionWorld.Dispatcher);
+                BroadphasePair collisionPair = cache.OverlappingPairArray[0];
+                cache.RemoveOverlappingPair(collisionPair.Proxy0, collisionPair.Proxy1, collisionWorld.Dispatcher);
             }
         }
 
