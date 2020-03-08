@@ -154,7 +154,7 @@ namespace BulletSharp
                             //  m_touchingNormal = pt.m_normalWorldOnB * directionSign;//??
 
                             //}
-                            m_currentPosition += pt.NormalWorldOnB * directionSign * dist * 0.2f;
+                            m_currentPosition += pt.NormalWorldOnB * (directionSign * dist * 0.2f);
                             penetration = true;
                         }
                         else
