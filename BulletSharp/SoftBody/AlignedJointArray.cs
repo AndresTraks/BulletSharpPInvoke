@@ -30,7 +30,7 @@ namespace BulletSharp.SoftBody
 		}
 	}
 
-	public class AlignedJointArrayEnumerator : IEnumerator<Joint>
+	public struct AlignedJointArrayEnumerator : IEnumerator<Joint>
 	{
 		private int _i;
 		private int _count;
@@ -131,7 +131,12 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<Joint> GetEnumerator()
+		public AlignedJointArrayEnumerator GetEnumerator()
+		{
+			return new AlignedJointArrayEnumerator(this);
+		}
+
+		IEnumerator<Joint> IEnumerable<Joint>.GetEnumerator()
 		{
 			return new AlignedJointArrayEnumerator(this);
 		}

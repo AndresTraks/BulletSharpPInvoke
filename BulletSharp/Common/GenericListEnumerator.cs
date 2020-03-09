@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BulletSharp
 {
-	public sealed class GenericListEnumerator<T> : IEnumerator<T>
+	public struct GenericListEnumerator<T> : IEnumerator<T>
 	{
 		private int _i;
 		private readonly int _count;

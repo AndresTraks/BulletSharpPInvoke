@@ -30,7 +30,7 @@ namespace BulletSharp.SoftBody
 		}
 	}
 
-	public class AlignedLinkArrayEnumerator : IEnumerator<Link>
+	public struct AlignedLinkArrayEnumerator : IEnumerator<Link>
 	{
 		private int _i;
 		private int _count;
@@ -148,7 +148,12 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<Link> GetEnumerator()
+		public AlignedLinkArrayEnumerator GetEnumerator()
+		{
+			return new AlignedLinkArrayEnumerator(this);
+		}
+
+		IEnumerator<Link> IEnumerable<Link>.GetEnumerator()
 		{
 			return new AlignedLinkArrayEnumerator(this);
 		}

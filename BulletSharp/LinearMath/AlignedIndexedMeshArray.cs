@@ -29,7 +29,7 @@ namespace BulletSharp
 		}
 	}
 
-	public class AlignedIndexedMeshArrayEnumerator : IEnumerator<IndexedMesh>
+	public struct AlignedIndexedMeshArrayEnumerator : IEnumerator<IndexedMesh>
 	{
 		private int _i;
 		private readonly int _count;
@@ -154,7 +154,12 @@ namespace BulletSharp
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<IndexedMesh> GetEnumerator()
+		public AlignedIndexedMeshArrayEnumerator GetEnumerator()
+		{
+			return new AlignedIndexedMeshArrayEnumerator(this);
+		}
+
+		IEnumerator<IndexedMesh> IEnumerable<IndexedMesh>.GetEnumerator()
 		{
 			return _backingList.GetEnumerator();
 		}

@@ -47,7 +47,12 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<Body> GetEnumerator()
+		public GenericListEnumerator<Body> GetEnumerator()
+		{
+			return new GenericListEnumerator<Body>(this);
+		}
+
+		IEnumerator<Body> IEnumerable<Body>.GetEnumerator()
 		{
 			return new GenericListEnumerator<Body>(this);
 		}

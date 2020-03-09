@@ -30,7 +30,7 @@ namespace BulletSharp.SoftBody
 		}
 	}
 
-	public class AlignedNoteArrayEnumerator : IEnumerator<Note>
+	public struct AlignedNoteArrayEnumerator : IEnumerator<Note>
 	{
 		private int _i;
 		private int _count;
@@ -131,7 +131,12 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<Note> GetEnumerator()
+		public AlignedNoteArrayEnumerator GetEnumerator()
+		{
+			return new AlignedNoteArrayEnumerator(this);
+		}
+
+		IEnumerator<Note> IEnumerable<Note>.GetEnumerator()
 		{
 			return new AlignedNoteArrayEnumerator(this);
 		}

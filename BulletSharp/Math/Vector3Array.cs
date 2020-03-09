@@ -26,7 +26,7 @@ namespace BulletSharp.Math
         }
     };
 
-    public class Vector3ArrayEnumerator : IEnumerator<Vector3>
+    public struct Vector3ArrayEnumerator : IEnumerator<Vector3>
     {
         private int _i;
         private readonly int _count;
@@ -127,7 +127,12 @@ namespace BulletSharp.Math
             }
         }
 
-        public IEnumerator<Vector3> GetEnumerator()
+        public Vector3ArrayEnumerator GetEnumerator()
+        {
+            return new Vector3ArrayEnumerator(this);
+        }
+
+        IEnumerator<Vector3> IEnumerable<Vector3>.GetEnumerator()
         {
             return new Vector3ArrayEnumerator(this);
         }

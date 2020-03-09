@@ -30,7 +30,7 @@ namespace BulletSharp.SoftBody
 		}
 	}
 
-	public class AlignedMaterialArrayEnumerator : IEnumerator<Material>
+	public struct AlignedMaterialArrayEnumerator : IEnumerator<Material>
 	{
 		private int _i;
 		private int _count;
@@ -131,7 +131,12 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<Material> GetEnumerator()
+		public AlignedMaterialArrayEnumerator GetEnumerator()
+		{
+			return new AlignedMaterialArrayEnumerator(this);
+		}
+
+		IEnumerator<Material> IEnumerable<Material>.GetEnumerator()
 		{
 			return new AlignedMaterialArrayEnumerator(this);
 		}

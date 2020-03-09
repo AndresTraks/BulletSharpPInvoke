@@ -29,9 +29,9 @@ namespace BulletSharp
 		}
 	}
 
-	public class AlignedBroadphasePairArrayEnumerator : IEnumerator<BroadphasePair>
+	public struct AlignedBroadphasePairArrayEnumerator : IEnumerator<BroadphasePair>
 	{
-		private int _i = -1;
+		private int _i;
 		private readonly int _count;
 		private readonly AlignedBroadphasePairArray _array;
 
@@ -39,6 +39,7 @@ namespace BulletSharp
 		{
 			_array = array;
 			_count = array.Count;
+			_i = -1;
 		}
 
 		public BroadphasePair Current => _array[_i];
@@ -144,7 +145,12 @@ namespace BulletSharp
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<BroadphasePair> GetEnumerator()
+		public AlignedBroadphasePairArrayEnumerator GetEnumerator()
+		{
+			return new AlignedBroadphasePairArrayEnumerator(this);
+		}
+
+		IEnumerator<BroadphasePair> IEnumerable<BroadphasePair>.GetEnumerator()
 		{
 			return new AlignedBroadphasePairArrayEnumerator(this);
 		}

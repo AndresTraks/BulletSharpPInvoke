@@ -5,7 +5,7 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
-	public class DbvtArrayEnumerator : IEnumerator<Dbvt>
+	public struct DbvtArrayEnumerator : IEnumerator<Dbvt>
 	{
 		private int _i;
 		private int _count;
@@ -92,7 +92,12 @@ namespace BulletSharp
 			}
 		}
 
-		public IEnumerator<Dbvt> GetEnumerator()
+		public DbvtArrayEnumerator GetEnumerator()
+		{
+			return new DbvtArrayEnumerator(this);
+		}
+
+		IEnumerator<Dbvt> IEnumerable<Dbvt>.GetEnumerator()
 		{
 			return new DbvtArrayEnumerator(this);
 		}

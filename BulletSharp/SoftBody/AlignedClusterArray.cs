@@ -30,7 +30,7 @@ namespace BulletSharp.SoftBody
 		}
 	}
 
-	public class AlignedClusterArrayEnumerator : IEnumerator<Cluster>
+	public struct AlignedClusterArrayEnumerator : IEnumerator<Cluster>
 	{
 		private int _i;
 		private int _count;
@@ -131,7 +131,12 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<Cluster> GetEnumerator()
+		public AlignedClusterArrayEnumerator GetEnumerator()
+		{
+			return new AlignedClusterArrayEnumerator(this);
+		}
+
+		IEnumerator<Cluster> IEnumerable<Cluster>.GetEnumerator()
 		{
 			return new AlignedClusterArrayEnumerator(this);
 		}
