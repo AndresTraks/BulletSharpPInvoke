@@ -131,8 +131,9 @@ namespace BulletSharp
                 if (!NeedsCollision(obj0, obj1))
                     continue;
 
-                if (collisionPair.Algorithm != null)
-                    collisionPair.Algorithm.GetAllContactManifolds(m_manifoldArray);
+                var collisionAlgorithm = collisionPair.Algorithm;
+                if (collisionAlgorithm != null)
+                    collisionAlgorithm.GetAllContactManifolds(m_manifoldArray);
 
                 for (int j = 0; j < m_manifoldArray.Count; j++)
                 {
@@ -153,7 +154,7 @@ namespace BulletSharp
                             //  m_touchingNormal = pt.m_normalWorldOnB * directionSign;//??
 
                             //}
-                            m_currentPosition += pt.NormalWorldOnB * directionSign * dist * 0.2f;
+                            m_currentPosition += pt.NormalWorldOnB * (directionSign * dist * 0.2f);
                             penetration = true;
                         }
                         else
@@ -279,7 +280,7 @@ namespace BulletSharp
                     //System.Console.WriteLine("parComponent=" + parComponent);
                     //m_targetPosition += parComponent;
                 }
-                
+
                 if (normalMag != 0.0f)
                 {
                     Vector3 perpComponent = perpindicularDir * (normalMag * movementLength);
@@ -381,7 +382,7 @@ namespace BulletSharp
             /*float additionalDownStep = (m_wasOnGround && !OnGround) ? m_stepHeight : 0;
             Vector3 step_drop = m_up * (m_currentStepOffset + additionalDownStep);
             float downVelocity = (additionalDownStep == 0.0 && m_verticalVelocity < 0 ? -m_verticalVelocity : 0) * dt;
-            Vector3 gravity_drop = m_up * downVelocity; 
+            Vector3 gravity_drop = m_up * downVelocity;
             m_targetPosition -= (step_drop + gravity_drop);*/
 
             Vector3 orig_position = m_targetPosition;
@@ -701,7 +702,8 @@ namespace BulletSharp
             HashedOverlappingPairCache cache = m_ghostObject.OverlappingPairCache;
             while (cache.OverlappingPairArray.Count > 0)
             {
-                cache.RemoveOverlappingPair(cache.OverlappingPairArray[0].Proxy0, cache.OverlappingPairArray[0].Proxy1, collisionWorld.Dispatcher);
+                BroadphasePair collisionPair = cache.OverlappingPairArray[0];
+                cache.RemoveOverlappingPair(collisionPair.Proxy0, collisionPair.Proxy1, collisionWorld.Dispatcher);
             }
         }
 
