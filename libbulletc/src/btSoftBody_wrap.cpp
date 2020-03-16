@@ -2556,9 +2556,9 @@ btDbvt* btSoftBody_getFdbvt(btSoftBody* obj)
 	return &obj->m_fdbvt;
 }
 
-void btSoftBody_getInitialWorldTransform(btSoftBody* obj, btTransform* value)
+void btSoftBody_getWorldTransform(btSoftBody* obj, btTransform* value)
 {
-	BTTRANSFORM_SET(value, obj->m_initialWorldTransform);
+	BTTRANSFORM_SET(value, obj->m_worldTransform);
 }
 
 btAlignedObjectArray_btSoftBody_JointPtr* btSoftBody_getJoints(btSoftBody* obj)
@@ -2811,9 +2811,9 @@ void btSoftBody_setBUpdateRtCst(btSoftBody* obj, bool value)
 	obj->m_bUpdateRtCst = value;
 }
 
-void btSoftBody_setInitialWorldTransform(btSoftBody* obj, const btTransform* value)
+void btSoftBody_setWorldTransform(btSoftBody* obj, const btTransform* value)
 {
-	BTTRANSFORM_COPY(&obj->m_initialWorldTransform, value);
+	BTTRANSFORM_COPY(&obj->m_worldTransform, value);
 }
 
 void btSoftBody_setMass(btSoftBody* obj, int node, btScalar mass)

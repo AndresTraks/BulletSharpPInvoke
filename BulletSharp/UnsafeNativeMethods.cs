@@ -5361,7 +5361,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btSoftBody_getFdbvt(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btSoftBody_getInitialWorldTransform(IntPtr obj, [Out] out Matrix value);
+		public static extern void btSoftBody_getWorldTransform(IntPtr obj, [Out] out Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btSoftBody_getJoints(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -5456,7 +5456,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_setDampingCoefficient(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btSoftBody_setInitialWorldTransform(IntPtr obj, [In] ref Matrix value);
+		public static extern void btSoftBody_setWorldTransform(IntPtr obj, [In] ref Matrix value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_setMass(IntPtr obj, int node, float mass);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]

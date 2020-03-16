@@ -547,7 +547,7 @@ extern "C" {
 	EXPORT btAlignedObjectArray_const_btCollisionObjectPtr* btSoftBody_getCollisionDisabledObjects(btSoftBody* obj);
 	EXPORT btAlignedObjectArray_btSoftBody_Face* btSoftBody_getFaces(btSoftBody* obj);
 	EXPORT btDbvt* btSoftBody_getFdbvt(btSoftBody* obj);
-	EXPORT void btSoftBody_getInitialWorldTransform(btSoftBody* obj, btTransform* value);
+	EXPORT void btSoftBody_getWorldTransform(btSoftBody* obj, btTransform* value);
 	EXPORT btAlignedObjectArray_btSoftBody_JointPtr* btSoftBody_getJoints(btSoftBody* obj);
 	EXPORT btAlignedObjectArray_btSoftBody_Link* btSoftBody_getLinks(btSoftBody* obj);
 	EXPORT btScalar btSoftBody_getMass(btSoftBody* obj, int node);

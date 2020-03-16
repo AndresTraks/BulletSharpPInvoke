@@ -3319,15 +3319,14 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
-		public Matrix InitialWorldTransform
+		public new Matrix WorldTransform
 		{
 			get
 			{
-				Matrix value;
-				btSoftBody_getInitialWorldTransform(Native, out value);
+				btSoftBody_getWorldTransform(Native, out Matrix value);
 				return value;
 			}
-			set => btSoftBody_setInitialWorldTransform(Native, ref value);
+			set => btSoftBody_setWorldTransform(Native, ref value);
 		}
 
 		public AlignedJointArray Joints
