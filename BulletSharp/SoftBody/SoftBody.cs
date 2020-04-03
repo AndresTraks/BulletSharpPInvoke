@@ -33,13 +33,15 @@ namespace BulletSharp.SoftBody
 		RigidSoftMask = 0x000f,
 		SdfRigidSoft = 0x0001,
 		ClusterConvexRigidSoft = 0x0002,
-		RigidDeformable = 0x0003,
-		RigidDeformableFaces = 0x0004,
+		SdfRigidDeformable = 0x0004,
 		SoftSoftMask = 0x00F0,
 		VertexFaceSoftSoft = 0x0010,
 		ClusterClusterSoftSoft = 0x0020,
 		ClusterSelf = 0x0040,
-		VertexFaceDeformable = 0x0050,
+		VertexFaceDeformable = 0x0080,
+		RigidDeformableFaceMask = 0x0F00,
+		SdfRigidDeformableFace = 0x0100,
+		SdfMultibodyDeformableFace = 0x0200,
 		Default = SdfRigidSoft
 	}
 
@@ -3317,16 +3319,6 @@ namespace BulletSharp.SoftBody
 				}
 				return _faceDbvt;
 			}
-		}
-
-		public new Matrix WorldTransform
-		{
-			get
-			{
-				btSoftBody_getWorldTransform(Native, out Matrix value);
-				return value;
-			}
-			set => btSoftBody_setWorldTransform(Native, ref value);
 		}
 
 		public AlignedJointArray Joints

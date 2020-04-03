@@ -547,7 +547,6 @@ extern "C" {
 	EXPORT btAlignedObjectArray_const_btCollisionObjectPtr* btSoftBody_getCollisionDisabledObjects(btSoftBody* obj);
 	EXPORT btAlignedObjectArray_btSoftBody_Face* btSoftBody_getFaces(btSoftBody* obj);
 	EXPORT btDbvt* btSoftBody_getFdbvt(btSoftBody* obj);
-	EXPORT void btSoftBody_getWorldTransform(btSoftBody* obj, btTransform* value);
 	EXPORT btAlignedObjectArray_btSoftBody_JointPtr* btSoftBody_getJoints(btSoftBody* obj);
 	EXPORT btAlignedObjectArray_btSoftBody_Link* btSoftBody_getLinks(btSoftBody* obj);
 	EXPORT btScalar btSoftBody_getMass(btSoftBody* obj, int node);
@@ -596,7 +595,6 @@ extern "C" {
 	EXPORT void btSoftBody_rotate(btSoftBody* obj, const btQuaternion* rot);
 	EXPORT void btSoftBody_scale(btSoftBody* obj, const btVector3* scl);
 	EXPORT void btSoftBody_setBUpdateRtCst(btSoftBody* obj, bool value);
-	EXPORT void btSoftBody_setInitialWorldTransform(btSoftBody* obj, const btTransform* value);
 	EXPORT void btSoftBody_setMass(btSoftBody* obj, int node, btScalar mass);
 	EXPORT void btSoftBody_setPose(btSoftBody* obj, bool bvolume, bool bframe);
 	EXPORT void btSoftBody_setRestLengthScale(btSoftBody* obj, btScalar restLength);

@@ -37,7 +37,7 @@ namespace BulletSharpTest
         [Test]
         public void GhostObjectPairsTest()
         {
-            DiscreteDynamicsWorld world = _context.World;
+            var world = _context.DiscreteDynamicsWorld;
             world.StepSimulation(1.0f / 60.0f);
 
             AlignedManifoldArray manifoldArray = new AlignedManifoldArray();
