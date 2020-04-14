@@ -3919,8 +3919,6 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btMultiBody_getAngularDamping(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btMultiBody_getAngularMomentum(IntPtr obj, out Vector3 value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btMultiBody_getBaseCollider(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBody_getBaseForce(IntPtr obj, out Vector3 value);
@@ -3965,8 +3963,6 @@ namespace BulletSharp
 		public static extern float btMultiBody_getJointVel(IntPtr obj, int i);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btMultiBody_getJointVelMultiDof(IntPtr obj, int i);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern float btMultiBody_getKineticEnergy(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btMultiBody_getLinearDamping(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]

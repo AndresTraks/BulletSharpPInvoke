@@ -172,12 +172,6 @@ btScalar btMultiBody_getAngularDamping(btMultiBody* obj)
 	return obj->getAngularDamping();
 }
 
-void btMultiBody_getAngularMomentum(btMultiBody* obj, btVector3* value)
-{
-	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getAngularMomentum();
-	BTVECTOR3_SET(value, temp);
-}
-
 btMultiBodyLinkCollider* btMultiBody_getBaseCollider(btMultiBody* obj)
 {
 	return obj->getBaseCollider();
@@ -295,11 +289,6 @@ btScalar btMultiBody_getJointVel(btMultiBody* obj, int i)
 btScalar* btMultiBody_getJointVelMultiDof(btMultiBody* obj, int i)
 {
 	return obj->getJointVelMultiDof(i);
-}
-
-btScalar btMultiBody_getKineticEnergy(btMultiBody* obj)
-{
-	return obj->getKineticEnergy();
 }
 
 btScalar btMultiBody_getLinearDamping(btMultiBody* obj)

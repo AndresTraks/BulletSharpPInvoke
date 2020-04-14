@@ -29,7 +29,6 @@ extern "C" {
 	EXPORT void btMultiBody_finalizeMultiDof(btMultiBody* obj);
 	EXPORT void btMultiBody_forwardKinematics(btMultiBody* obj, btAlignedObjectArray_btQuaternion* scratch_q, btAlignedObjectArray_btVector3* scratch_m);
 	EXPORT btScalar btMultiBody_getAngularDamping(btMultiBody* obj);
-	EXPORT void btMultiBody_getAngularMomentum(btMultiBody* obj, btVector3* value);
 	EXPORT btMultiBodyLinkCollider* btMultiBody_getBaseCollider(btMultiBody* obj);
 	EXPORT void btMultiBody_getBaseForce(btMultiBody* obj, btVector3* value);
 	EXPORT void btMultiBody_getBaseInertia(btMultiBody* obj, btVector3* value);
@@ -52,7 +51,6 @@ extern "C" {
 	EXPORT btScalar* btMultiBody_getJointTorqueMultiDof(btMultiBody* obj, int i);
 	EXPORT btScalar btMultiBody_getJointVel(btMultiBody* obj, int i);
 	EXPORT btScalar* btMultiBody_getJointVelMultiDof(btMultiBody* obj, int i);
-	EXPORT btScalar btMultiBody_getKineticEnergy(btMultiBody* obj);
 	EXPORT btScalar btMultiBody_getLinearDamping(btMultiBody* obj);
 	EXPORT btMultibodyLink* btMultiBody_getLink(btMultiBody* obj, int index);
 	EXPORT void btMultiBody_getLinkForce(btMultiBody* obj, int i, btVector3* value);

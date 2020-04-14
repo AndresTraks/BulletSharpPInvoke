@@ -413,16 +413,6 @@ namespace BulletSharp
 			set => btMultiBody_setAngularDamping(Native, value);
 		}
 
-		public Vector3 AngularMomentum
-		{
-			get
-			{
-				Vector3 value;
-				btMultiBody_getAngularMomentum(Native, out value);
-				return value;
-			}
-		}
-
 		public MultiBodyLinkCollider BaseCollider
 		{
 			get => CollisionObject.GetManaged(btMultiBody_getBaseCollider(Native)) as MultiBodyLinkCollider;
@@ -565,8 +555,6 @@ namespace BulletSharp
 			get => btMultiBody_isUsingRK4Integration(Native);
 			set => btMultiBody_useRK4Integration(Native, value);
 		}
-
-		public float KineticEnergy => btMultiBody_getKineticEnergy(Native);
 
 		public float LinearDamping
 		{
