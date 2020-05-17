@@ -18,8 +18,8 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Install dependencies
-      run: dotnet restore BulletSharp.DotNetCore.csproj
+      run: dotnet restore BulletSharp\BulletSharp.DotNetCore.csproj
     - name: Build
-      run: dotnet build --configuration Release --no-restore BulletSharp.DotNetCore.csproj
+      run: dotnet build --configuration Release --no-restore BulletSharp\BulletSharp.DotNetCore.csproj
     - name: Test
-      run: dotnet test --no-restore --verbosity normal BulletSharp.DotNetCore.csproj
+      run: dotnet test --no-restore --verbosity normal BulletSharp\BulletSharp.DotNetCore.csproj
