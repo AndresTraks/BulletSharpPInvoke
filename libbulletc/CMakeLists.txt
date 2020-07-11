@@ -18,6 +18,9 @@ FIND_PATH(BULLET_INCLUDE_DIR NAMES btBulletCollisionCommon.h
     /opt/local/include
     NO_DEFAULT_PATH
 )
+IF (NOT BULLET_INCLUDE_DIR)
+    MESSAGE(FATAL_ERROR "bullet3 source directory not found, please specify bullet3/src/ location in BULLET_INCLUDE_DIR")
+ENDIF()
 
 OPTION(BUILD_BULLET2_DEMOS "" OFF)
 OPTION(BUILD_BULLET3 "" OFF)
