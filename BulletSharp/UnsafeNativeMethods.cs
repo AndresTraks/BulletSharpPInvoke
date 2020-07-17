@@ -3456,6 +3456,8 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btMultiBodyConstraint_getAppliedImpulse(IntPtr obj, int dof);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+		public static extern int btMultiBodyConstraint_getConstraintType(IntPtr obj);
+		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern int btMultiBodyConstraint_getIslandIdA(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern int btMultiBodyConstraint_getIslandIdB(IntPtr obj);

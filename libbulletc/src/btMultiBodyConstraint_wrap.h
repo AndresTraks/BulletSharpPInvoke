@@ -8,6 +8,7 @@ extern "C" {
 	EXPORT void btMultiBodyConstraint_debugDraw(btMultiBodyConstraint* obj, btIDebugDraw* drawer);
 	EXPORT void btMultiBodyConstraint_finalizeMultiDof(btMultiBodyConstraint* obj);
 	EXPORT btScalar btMultiBodyConstraint_getAppliedImpulse(btMultiBodyConstraint* obj, int dof);
+	EXPORT int btMultiBodyConstraint_getConstraintType(btMultiBodyConstraint* obj);
 	EXPORT int btMultiBodyConstraint_getIslandIdA(btMultiBodyConstraint* obj);
 	EXPORT int btMultiBodyConstraint_getIslandIdB(btMultiBodyConstraint* obj);
 	EXPORT btScalar btMultiBodyConstraint_getMaxAppliedImpulse(btMultiBodyConstraint* obj);

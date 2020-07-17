@@ -29,6 +29,11 @@ btScalar btMultiBodyConstraint_getAppliedImpulse(btMultiBodyConstraint* obj, int
 	return obj->getAppliedImpulse(dof);
 }
 
+int btMultiBodyConstraint_getConstraintType(btMultiBodyConstraint* obj)
+{
+	return obj->getConstraintType();
+}
+
 int btMultiBodyConstraint_getIslandIdA(btMultiBodyConstraint* obj)
 {
 	return obj->getIslandIdA();
