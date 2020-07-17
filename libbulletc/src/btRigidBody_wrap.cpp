@@ -280,6 +280,11 @@ void btRigidBody_clearForces(btRigidBody* obj)
 	obj->clearForces();
 }
 
+void btRigidBody_clearGravity(btRigidBody* obj)
+{
+	obj->clearGravity();
+}
+
 btScalar btRigidBody_computeAngularImpulseDenominator(btRigidBody* obj, const btVector3* axis)
 {
 	BTVECTOR3_IN(axis);
@@ -423,6 +428,11 @@ void btRigidBody_getLocalInertia(btRigidBody* obj, btVector3* value)
 {
 	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getLocalInertia();
 	BTVECTOR3_SET(value, temp);
+}
+
+btScalar btRigidBody_getMass(btRigidBody* obj)
+{
+	return obj->getMass();
 }
 
 btMotionState* btRigidBody_getMotionState(btRigidBody* obj)

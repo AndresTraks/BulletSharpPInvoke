@@ -33,10 +33,15 @@ namespace BulletSharp.SoftBody
 		RigidSoftMask = 0x000f,
 		SdfRigidSoft = 0x0001,
 		ClusterConvexRigidSoft = 0x0002,
-		SoftSoftMask = 0x0030,
+		SdfRigidDeformable = 0x0004,
+		SoftSoftMask = 0x00F0,
 		VertexFaceSoftSoft = 0x0010,
 		ClusterClusterSoftSoft = 0x0020,
 		ClusterSelf = 0x0040,
+		VertexFaceDeformable = 0x0080,
+		RigidDeformableFaceMask = 0x0F00,
+		SdfRigidDeformableFace = 0x0100,
+		SdfMultibodyDeformableFace = 0x0200,
 		Default = SdfRigidSoft
 	}
 
@@ -1624,6 +1629,12 @@ namespace BulletSharp.SoftBody
 			set => btSoftBody_Node_setF(Native, ref value);
 		}
 
+		public int Index
+		{
+			get => btSoftBody_Node_getIndex(Native);
+			set => btSoftBody_Node_setIndex(Native, value);
+		}
+
 		public double InverseMass
 		{
 			get => btSoftBody_Node_getIm(Native);
@@ -1695,6 +1706,17 @@ namespace BulletSharp.SoftBody
 				return value;
 			}
 			set => btSoftBody_Node_setV(Native, ref value);
+		}
+
+		public Vector3 VelocityPrevious
+		{
+			get
+			{
+				Vector3 value;
+				btSoftBody_Node_getVN(Native, out value);
+				return value;
+			}
+			set => btSoftBody_Node_setVN(Native, ref value);
 		}
 	}
 
@@ -2019,6 +2041,28 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
+		public Vector3 T1
+		{
+			get
+			{
+				Vector3 value;
+				btSoftBody_RContact_getT1(Native, out value);
+				return value;
+			}
+			set => btSoftBody_RContact_setT1(Native, ref value);
+		}
+
+		public Vector3 T2
+		{
+			get
+			{
+				Vector3 value;
+				btSoftBody_RContact_getT2(Native, out value);
+				return value;
+			}
+			set => btSoftBody_RContact_setT2(Native, ref value);
+		}
+
 		public void Dispose()
 		{
 			Dispose(true);
@@ -2340,6 +2384,27 @@ namespace BulletSharp.SoftBody
 		}
 	}
 
+	public class TetraScratch
+	{
+		internal IntPtr Native;
+
+		internal TetraScratch(IntPtr native)
+		{
+			Native = native;
+		}
+
+		public Matrix F
+		{
+			get
+			{
+				Matrix value;
+				btSoftBody_TetraScratch_getF(Native, out value);
+				return value;
+			}
+			set => btSoftBody_TetraScratch_setF(Native, ref value);
+		}
+	}
+
 	public class SoftBody : CollisionObject
 	{
 		private AlignedAnchorArray _anchors;
@@ -2363,6 +2428,8 @@ namespace BulletSharp.SoftBody
 		private SoftBodySolver _softBodySolver;
 		private SolverState _solverState;
 		private AlignedTetraArray _tetras;
+		private AlignedTetraScratchArray _tetraScratches;
+		private AlignedTetraScratchArray _tetraScratchesTn;
 		//private AlignedIntArray _userIndexMapping;
 		private SoftBodyWorldInfo _worldInfo;
 
@@ -2588,6 +2655,13 @@ namespace BulletSharp.SoftBody
 				cti.Native);
 		}
 
+		public bool CheckDeformableContact(CollisionObjectWrapper colObjWrap, Vector3 x, float margin,
+			ContactInfo cti, bool predict = false)
+		{
+			return btSoftBody_checkDeformableContact(Native, colObjWrap.Native, ref x, margin,
+				cti.Native, predict);
+		}
+
 		public bool CheckFace(int node0, int node1, int node2)
 		{
 			return btSoftBody_checkFace(Native, node0, node1, node2);
@@ -2755,6 +2829,11 @@ namespace BulletSharp.SoftBody
 		public void InitializeFaceTree()
 		{
 			btSoftBody_initializeFaceTree(Native);
+		}
+
+		public void InitializeDmInverse()
+		{
+			btSoftBody_initializeDmInverse(Native);
 		}
 
 		public void IntegrateMotion()
@@ -3212,6 +3291,12 @@ namespace BulletSharp.SoftBody
 			set { btSoftBody_setCollisionDisabledObjects(_native, value._native); }
 		}
 		*/
+		public double DampingCoefficient
+		{
+			get { return btSoftBody_getDampingCoefficient(Native); }
+			set { btSoftBody_setDampingCoefficient(Native, value); }
+		}
+
 		public AlignedFaceArray Faces
 		{
 			get
@@ -3234,17 +3319,6 @@ namespace BulletSharp.SoftBody
 				}
 				return _faceDbvt;
 			}
-		}
-
-		public Matrix InitialWorldTransform
-		{
-			get
-			{
-				Matrix value;
-				btSoftBody_getInitialWorldTransform(Native, out value);
-				return value;
-			}
-			set => btSoftBody_setInitialWorldTransform(Native, ref value);
 		}
 
 		public AlignedJointArray Joints
@@ -3385,6 +3459,30 @@ namespace BulletSharp.SoftBody
 			}
 		}
 
+		public AlignedTetraScratchArray TetraScratches
+		{
+			get
+			{
+				if (_tetraScratches == null)
+				{
+					_tetraScratches = new AlignedTetraScratchArray(btSoftBody_getTetraScratches(Native));
+				}
+				return _tetraScratches;
+			}
+		}
+
+		public AlignedTetraScratchArray TetraScratchesTn
+		{
+			get
+			{
+				if (_tetraScratchesTn == null)
+				{
+					_tetraScratchesTn = new AlignedTetraScratchArray(btSoftBody_getTetraScratchesTn(Native));
+				}
+				return _tetraScratchesTn;
+			}
+		}
+
 		public double Timeacc
 		{
 			get => btSoftBody_getTimeacc(Native);
@@ -3409,6 +3507,13 @@ namespace BulletSharp.SoftBody
 			set { btSoftBody_setUserIndexMapping(_native, value._native); }
 		}
 		*/
+
+		public bool UseSelfCollision
+		{
+			get => btSoftBody_useSelfCollision(Native);
+			set => btSoftBody_setSelfCollision(Native, value);
+		}
+
 		public Vector3 WindVelocity
 		{
 			get

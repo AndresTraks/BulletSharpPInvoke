@@ -91,18 +91,11 @@ namespace BulletSharp
 		}
 
 		public PersistentManifold(CollisionObject body0, CollisionObject body1, int __unnamed2,
-			float contactBreakingThreshold, float contactProcessingThreshold)
+			double contactBreakingThreshold, double contactProcessingThreshold)
 		{
 			IntPtr native = btPersistentManifold_new2(body0.Native, body1.Native, __unnamed2,
 				contactBreakingThreshold, contactProcessingThreshold);
 			InitializeUserOwned(native);
-		}
-
-		public PersistentManifold(CollisionObject body0, CollisionObject body1, int __unnamed2,
-			double contactBreakingThreshold, double contactProcessingThreshold)
-		{
-			Native = btPersistentManifold_new2(body0.Native, body1.Native, __unnamed2,
-				contactBreakingThreshold, contactProcessingThreshold);
 		}
 
 		public int AddManifoldPoint(ManifoldPoint newPoint, bool isPredictive = false)

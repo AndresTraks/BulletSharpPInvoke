@@ -2,6 +2,17 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
+	public enum TypedMultiBodyConstraintType
+	{
+		Limit = 3,
+		OneDofJointMotor,
+		Gear,
+		PointToPoint,
+		Slider,
+		SphericalMotor,
+		Fixed
+	}
+
 	public abstract class MultiBodyConstraint : BulletDisposableObject
 	{
 		protected internal MultiBodyConstraint()
@@ -70,6 +81,8 @@ namespace BulletSharp
 		{
 			btMultiBodyConstraint_updateJacobianSizes(Native);
 		}
+
+		public TypedMultiBodyConstraintType ConstraintType => (TypedMultiBodyConstraintType)btMultiBodyConstraint_getConstraintType(Native);
 
 		public int IslandIdA => btMultiBodyConstraint_getIslandIdA(Native);
 

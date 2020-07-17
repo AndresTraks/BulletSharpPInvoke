@@ -1,7 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletSharp", "BulletSharp.csproj", "{76FDED5B-2C12-453E-B499-CB669E55AD5B}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.779
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletSharp", "BulletSharp.csproj", "{F67952FF-7997-49C8-BCE9-334F0D771FBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,12 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{76FDED5B-2C12-453E-B499-CB669E55AD5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76FDED5B-2C12-453E-B499-CB669E55AD5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76FDED5B-2C12-453E-B499-CB669E55AD5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76FDED5B-2C12-453E-B499-CB669E55AD5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F67952FF-7997-49C8-BCE9-334F0D771FBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F67952FF-7997-49C8-BCE9-334F0D771FBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F67952FF-7997-49C8-BCE9-334F0D771FBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F67952FF-7997-49C8-BCE9-334F0D771FBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FAFAA4A6-590F-4A6F-9B52-32ADD70D6447}
 	EndGlobalSection
 EndGlobal

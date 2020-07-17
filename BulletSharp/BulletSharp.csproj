@@ -1,259 +1,40 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{76FDED5B-2C12-453E-B499-CB669E55AD5B}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BulletSharp</RootNamespace>
-    <AssemblyName>BulletSharp</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.12.0.0</Version>
+    <Authors>Andres Traks</Authors>
+    <Company />
+    <PackageLicenseUrl>https://github.com/AndresTraks/BulletSharpPInvoke/blob/master/BulletSharp/license.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://andrestraks.github.io/BulletSharp/</PackageProjectUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageIconUrl>https://raw.githubusercontent.com/AndresTraks/BulletSharp/gh-pages/images/bullet_logo_64x64.png</PackageIconUrl>
+    <Description>.NET wrapper for the Bullet physics engine</Description>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;BULLET_OBJECT_TRACKING</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Xml" />
+    <Compile Remove="demos\**" />
+    <Compile Remove="test\**" />
+    <EmbeddedResource Remove="demos\**" />
+    <EmbeddedResource Remove="test\**" />
+    <None Remove="demos\**" />
+    <None Remove="test\**" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="BulletObject.cs" />
-    <Compile Include="BulletObjectTracker.cs" />
-    <Compile Include="Collision\ActivatingCollisionAlgorithm.cs" />
-    <Compile Include="Collision\Box2DBox2DCollisionAlgorithm.cs" />
-    <Compile Include="Collision\Box2DShape.cs" />
-    <Compile Include="Collision\BoxBoxCollisionAlgorithm.cs" />
-    <Compile Include="Collision\BoxBoxDetector.cs" />
-    <Compile Include="Collision\CollisionConfiguration.cs" />
-    <Compile Include="Collision\CollisionCreateFunc.cs" />
-    <Compile Include="Collision\CollisionDispatcherMultiThreaded.cs" />
-    <Compile Include="Collision\CollisionDispatcher.cs" />
-    <Compile Include="Collision\CollisionObject.cs" />
-    <Compile Include="Collision\CompoundCollisionAlgorithm.cs" />
-    <Compile Include="Collision\CompoundCompoundCollisionAlgorithm.cs" />
-    <Compile Include="Collision\ContinuousConvexCollision.cs" />
-    <Compile Include="Collision\Convex2DConvex2DAlgorithm.cs" />
-    <Compile Include="Collision\ConvexCast.cs" />
-    <Compile Include="Collision\ConvexConcaveCollisionAlgorithm.cs" />
-    <Compile Include="Collision\ConvexConvexAlgorithm.cs" />
-    <Compile Include="Collision\ConvexPlaneCollisionAlgorithm.cs" />
-    <Compile Include="Collision\ConvexPointCloudShape.cs" />
-    <Compile Include="Collision\ConvexTriangleMeshShape.cs" />
-    <Compile Include="Collision\Dbvt.cs" />
-    <Compile Include="Collision\DbvtArray.cs" />
-    <Compile Include="Collision\DbvtNodePtrArray.cs" />
-    <Compile Include="Collision\EmptyCollisionAlgorithm.cs" />
-    <Compile Include="Collision\EmptyShape.cs" />
-    <Compile Include="Collision\GImpact\CompoundFromGImpact.cs" />
-    <Compile Include="Collision\GImpact\GImpactQuantizedBvh.cs" />
-    <Compile Include="Collision\GImpact\TriangleShapeEx.cs" />
-    <Compile Include="Collision\GjkConvexCast.cs" />
-    <Compile Include="Collision\GjkEpaPenetrationDepthSolver.cs" />
-    <Compile Include="Collision\HeightfieldTerrainShape.cs" />
-    <Compile Include="Collision\ManifoldResult.cs" />
-    <Compile Include="Collision\MinkowskiSumShape.cs" />
-    <Compile Include="Collision\MultimaterialTriangleMeshShape.cs" />
-    <Compile Include="Collision\OptimizedBvh.cs" />
-    <Compile Include="Collision\QuantizedBvh.cs" />
-    <Compile Include="Collision\RaycastCallback.cs" />
-    <Compile Include="Collision\SphereBoxCollisionAlgorithm.cs" />
-    <Compile Include="Collision\SphereSphereCollisionAlgorithm.cs" />
-    <Compile Include="Collision\SphereTriangleCollisionAlgorithm.cs" />
-    <Compile Include="Collision\SphereTriangleDetector.cs" />
-    <Compile Include="Collision\TriangleBuffer.cs" />
-    <Compile Include="Collision\TriangleCallback.cs" />
-    <Compile Include="Collision\TriangleIndexVertexMaterialArray.cs" />
-    <Compile Include="Collision\TriangleInfoMap.cs" />
-    <Compile Include="Collision\TriangleShape.cs" />
-    <Compile Include="Collision\UniformScalingShape.cs" />
-    <Compile Include="Collision\UnionFind.cs" />
-    <Compile Include="Common\GenericListEnumerator.cs" />
-    <Compile Include="Dynamics\ContactConstraint.cs" />
-    <Compile Include="Dynamics\DantzigSolver.cs" />
-    <Compile Include="Dynamics\DiscreteDynamicsWorldMultiThreaded.cs" />
-    <Compile Include="Dynamics\Featherstone\MultiBody.cs" />
-    <Compile Include="Dynamics\Featherstone\MultiBodyConstraint.cs" />
-    <Compile Include="Dynamics\Featherstone\MultiBodyConstraintSolver.cs" />
-    <Compile Include="Dynamics\Featherstone\MultiBodyDynamicsWorld.cs" />
-    <Compile Include="Dynamics\Featherstone\MultiBodyFixedConstraint.cs" />
-    <Compile Include="Dynamics\Featherstone\MultiBodyJointLimitConstraint.cs" />
-    <Compile Include="Dynamics\Featherstone\MultiBodyJointMotor.cs" />
-    <Compile Include="Dynamics\Featherstone\MultiBodyLink.cs" />
-    <Compile Include="Dynamics\Featherstone\MultiBodyLinkCollider.cs" />
-    <Compile Include="Dynamics\Featherstone\MultiBodyPoint2Point.cs" />
-    <Compile Include="Dynamics\Featherstone\MultiBodySliderConstraint.cs" />
-    <Compile Include="Dynamics\Featherstone\MultiBodySolverConstraint.cs" />
-    <Compile Include="Dynamics\FixedConstraint.cs" />
-    <Compile Include="Dynamics\IAction.cs" />
-    <Compile Include="Dynamics\ICharacterController.cs" />
-    <Compile Include="Dynamics\MlcpSolver.cs" />
-    <Compile Include="Dynamics\MlcpSolverInterface.cs" />
-    <Compile Include="Dynamics\NncgConstraintSolver.cs" />
-    <Compile Include="Dynamics\SequentialImpulseConstraintSolverMultiThreaded.cs" />
-    <Compile Include="Extras\BulletReader.cs" />
-    <Compile Include="Extras\BulletWriter.cs" />
-    <Compile Include="Extras\Chunk.cs" />
-    <Compile Include="Extras\Dna.cs" />
-    <Compile Include="Extras\Hacd.cs" />
-    <Compile Include="Common\FixedSizeArray.cs" />
-    <Compile Include="LinearMath\AlignedManifoldArray.cs" />
-    <Compile Include="Collision\AxisSweep3.cs" />
-    <Compile Include="Collision\BoxShape.cs" />
-    <Compile Include="Collision\BroadphaseInterface.cs" />
-    <Compile Include="Collision\BroadphaseProxy.cs" />
-    <Compile Include="Collision\BvhTriangleMeshShape.cs" />
-    <Compile Include="Collision\CollisionAlgorithm.cs" />
-    <Compile Include="Collision\CollisionObjectWrapper.cs" />
-    <Compile Include="Collision\CollisionShape.cs" />
-    <Compile Include="Collision\CollisionWorld.cs" />
-    <Compile Include="Collision\CapsuleShape.cs" />
-    <Compile Include="Collision\CompoundShape.cs" />
-    <Compile Include="Collision\ConcaveShape.cs" />
-    <Compile Include="Collision\ConeShape.cs" />
-    <Compile Include="Collision\Convex2DShape.cs" />
-    <Compile Include="Collision\ConvexHullShape.cs" />
-    <Compile Include="Collision\ConvexInternalShape.cs" />
-    <Compile Include="Collision\ConvexPenetrationDepthSolver.cs" />
-    <Compile Include="Collision\ConvexPolyhedron.cs" />
-    <Compile Include="Collision\ConvexShape.cs" />
-    <Compile Include="Collision\CylinderShape.cs" />
-    <Compile Include="Collision\DefaultCollisionConfiguration.cs" />
-    <Compile Include="Collision\DiscreteCollisionDetectorInterface.cs" />
-    <Compile Include="Collision\GhostObject.cs" />
-    <Compile Include="Collision\GImpact\BoxCollision.cs" />
-    <Compile Include="Collision\GImpact\GImpactBvh.cs" />
-    <Compile Include="Collision\GImpact\GImpactCollisionAlgorithm.cs" />
-    <Compile Include="Collision\GImpact\GImpactShape.cs" />
-    <Compile Include="Collision\GjkPairDetector.cs" />
-    <Compile Include="Collision\ManifoldPoint.cs" />
-    <Compile Include="Collision\MinkowskiPenetrationDepthSolver.cs" />
-    <Compile Include="Collision\MultiSphereShape.cs" />
-    <Compile Include="Collision\OverlappingPairCache.cs" />
-    <Compile Include="Collision\OverlappingPairCallback.cs" />
-    <Compile Include="Collision\PersistentManifold.cs" />
-    <Compile Include="Collision\PointCollector.cs" />
-    <Compile Include="Collision\ScaledBvhTriangleMeshShape.cs" />
-    <Compile Include="Collision\ShapeHull.cs" />
-    <Compile Include="Collision\SimulationIslandManager.cs" />
-    <Compile Include="Collision\SphereShape.cs" />
-    <Compile Include="Collision\DbvtBroadphase.cs" />
-    <Compile Include="Collision\Dispatcher.cs" />
-    <Compile Include="Collision\PolyhedralConvexShape.cs" />
-    <Compile Include="Collision\StaticPlaneShape.cs" />
-    <Compile Include="Collision\StridingMeshInterface.cs" />
-    <Compile Include="Collision\TetrahedronShape.cs" />
-    <Compile Include="Collision\TriangleIndexVertexArray.cs" />
-    <Compile Include="Collision\TriangleMesh.cs" />
-    <Compile Include="Collision\TriangleMeshShape.cs" />
-    <Compile Include="Collision\VoronoiSimplexSolver.cs" />
-    <Compile Include="Dynamics\ConeTwistConstraint.cs" />
-    <Compile Include="Dynamics\ConstraintSolver.cs" />
-    <Compile Include="Dynamics\ContactSolverInfo.cs" />
-    <Compile Include="Dynamics\DiscreteDynamicsWorld.cs" />
-    <Compile Include="Dynamics\DynamicsWorld.cs" />
-    <Compile Include="Dynamics\GearConstraint.cs" />
-    <Compile Include="Dynamics\Generic6DofConstraint.cs" />
-    <Compile Include="Dynamics\Generic6DofSpring2Constraint.cs" />
-    <Compile Include="Dynamics\Generic6DofSpringConstraint.cs" />
-    <Compile Include="Dynamics\Hinge2Constraint.cs" />
-    <Compile Include="Dynamics\HingeConstraint.cs" />
-    <Compile Include="Dynamics\KinematicCharacterController.cs" />
-    <Compile Include="Dynamics\Point2PointConstraint.cs" />
-    <Compile Include="Dynamics\RaycastVehicle.cs" />
-    <Compile Include="Dynamics\RigidBody.cs" />
-    <Compile Include="Dynamics\RigidBodyConstructionInfo.cs" />
-    <Compile Include="Dynamics\SequentialImpulseConstraintSolver.cs" />
-    <Compile Include="Dynamics\SliderConstraint.cs" />
-    <Compile Include="Dynamics\TypedConstraint.cs" />
-    <Compile Include="Dynamics\UniversalConstraint.cs" />
-    <Compile Include="Dynamics\VehicleRaycaster.cs" />
-    <Compile Include="Dynamics\WheelInfo.cs" />
-    <Compile Include="Extras\bFile.cs" />
-    <Compile Include="Extras\BulletFile.cs" />
-    <Compile Include="Extras\BulletWorldImporter.cs" />
-    <Compile Include="Extras\BulletXmlWorldImporter.cs" />
-    <Compile Include="Extras\WorldImporter.cs" />
-    <Compile Include="LinearMath\AlignedBroadphasePairArray.cs" />
-    <Compile Include="LinearMath\AlignedCollisionObjectArray.cs" />
-    <Compile Include="LinearMath\AlignedVector3Array.cs" />
-    <Compile Include="LinearMath\Collections.cs" />
-    <Compile Include="LinearMath\AlignedIndexedMeshArray.cs" />
-    <Compile Include="LinearMath\CpuFeatureUtility.cs" />
-    <Compile Include="LinearMath\DebugDraw.cs" />
-    <Compile Include="LinearMath\DefaultMotionState.cs" />
-    <Compile Include="LinearMath\GeometryUtil.cs" />
-    <Compile Include="LinearMath\IDebugDraw.cs" />
-    <Compile Include="LinearMath\MotionState.cs" />
-    <Compile Include="LinearMath\PolarDecomposition.cs" />
-    <Compile Include="LinearMath\PoolAllocator.cs" />
-    <Compile Include="LinearMath\Serializer.cs" />
-    <Compile Include="LinearMath\Threads.cs" />
-    <Compile Include="LinearMath\TransformUtil.cs" />
-    <Compile Include="MathUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Math\Matrix.cs" />
-    <Compile Include="Math\Quaternion.cs" />
-    <Compile Include="Math\Vector3.cs" />
-    <Compile Include="Math\Vector3Array.cs" />
-    <Compile Include="Math\Vector4.cs" />
-    <Compile Include="Native.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SoftBody\AlignedAnchorArray.cs" />
-    <Compile Include="SoftBody\AlignedJointArray.cs" />
-    <Compile Include="SoftBody\AlignedMaterialArray.cs" />
-    <Compile Include="SoftBody\AlignedNoteArray.cs" />
-    <Compile Include="SoftBody\AlignedNodeArray.cs" />
-    <Compile Include="SoftBody\AlignedClusterArray.cs" />
-    <Compile Include="SoftBody\AlignedSoftBodyArray.cs" />
-    <Compile Include="SoftBody\BodyArray.cs" />
-    <Compile Include="SoftBody\Collections.cs" />
-    <Compile Include="SoftBody\AlignedTetraArray.cs" />
-    <Compile Include="SoftBody\AlignedFaceArray.cs" />
-    <Compile Include="SoftBody\AlignedLinkArray.cs" />
-    <Compile Include="SoftBody\DefaultSoftBodySolver.cs" />
-    <Compile Include="SoftBody\SoftBody.cs" />
-    <Compile Include="SoftBody\SoftBodyHelpers.cs" />
-    <Compile Include="SoftBody\SoftBodyConcaveCollisionAlgorithm.cs" />
-    <Compile Include="SoftBody\SoftBodyRigidBodyCollisionConfiguration.cs" />
-    <Compile Include="SoftBody\SoftBodySolver.cs" />
-    <Compile Include="SoftBody\SoftRigidCollisionAlgorithm.cs" />
-    <Compile Include="SoftBody\SoftRigidDynamicsWorld.cs" />
-    <Compile Include="SoftBody\SoftSoftCollisionAlgorithm.cs" />
-    <Compile Include="SoftBody\SparseSdf.cs" />
-    <Compile Include="UnsafeNativeMethods.cs" />
-    <Compile Include="Utilities.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Remove="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
 </Project>

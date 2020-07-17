@@ -39,6 +39,11 @@ bool btDiscreteDynamicsWorld_getLatencyMotionStateInterpolation(btDiscreteDynami
 	return obj->getLatencyMotionStateInterpolation();
 }
 
+btAlignedObjectArray_btRigidBodyPtr* btDiscreteDynamicsWorld_getNonStaticRigidBodies(btDiscreteDynamicsWorld* obj)
+{
+	return &obj->getNonStaticRigidBodies();
+}
+
 btSimulationIslandManager* btDiscreteDynamicsWorld_getSimulationIslandManager(btDiscreteDynamicsWorld* obj)
 {
 	return obj->getSimulationIslandManager();
@@ -70,6 +75,11 @@ void btDiscreteDynamicsWorld_setSynchronizeAllMotionStates(btDiscreteDynamicsWor
 	bool synchronizeAll)
 {
 	obj->setSynchronizeAllMotionStates(synchronizeAll);
+}
+
+void btDiscreteDynamicsWorld_solveConstraints(btDiscreteDynamicsWorld* obj, btContactSolverInfo* solverInfo)
+{
+	obj->solveConstraints(*solverInfo);
 }
 
 void btDiscreteDynamicsWorld_synchronizeSingleMotionState(btDiscreteDynamicsWorld* obj,

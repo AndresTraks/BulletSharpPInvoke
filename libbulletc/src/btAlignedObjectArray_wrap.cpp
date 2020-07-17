@@ -316,3 +316,29 @@ int btAlignedObjectArray_btSoftBody_Tetra_size(btAlignedObjectArray_btSoftBody_T
 {
 	return obj->size();
 }
+
+
+btSoftBody::TetraScratch* btAlignedObjectArray_btSoftBody_TetraScratch_at(btAlignedObjectArray_btSoftBody_TetraScratch* obj, int n)
+{
+	return &obj->at(n);
+}
+
+void btAlignedObjectArray_btSoftBody_TetraScratch_push_back(btAlignedObjectArray_btSoftBody_TetraScratch* obj, btSoftBody::TetraScratch* val)
+{
+	obj->push_back(*val);
+}
+
+void btAlignedObjectArray_btSoftBody_TetraScratch_resize(btAlignedObjectArray_btSoftBody_TetraScratch* obj, int newSize)
+{
+	return obj->resize(newSize);
+}
+
+void btAlignedObjectArray_btSoftBody_TetraScratch_resizeNoInitialize(btAlignedObjectArray_btSoftBody_TetraScratch* obj, int newSize)
+{
+	return obj->resizeNoInitialize(newSize);
+}
+
+int btAlignedObjectArray_btSoftBody_TetraScratch_size(btAlignedObjectArray_btSoftBody_TetraScratch* obj)
+{
+	return obj->size();
+}

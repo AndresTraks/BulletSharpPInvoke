@@ -1166,6 +1166,11 @@ namespace BulletSharp
             return rot;
         }
 
+        public static Vector3 GetColumn(this Matrix matrix, int column)
+        {
+            return new Vector3(matrix[0, column], matrix[1, column], matrix[2, column]);
+        }
+
         public static T Clamp<T>(T value, T min, T max)
          where T : System.IComparable<T>
         {

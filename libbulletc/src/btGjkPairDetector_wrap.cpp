@@ -64,7 +64,7 @@ int btGjkPairDetector_getLastUsedMethod(btGjkPairDetector* obj)
 void btGjkPairDetector_setCachedSeparatingAxis(btGjkPairDetector* obj, const btVector3* seperatingAxis)
 {
 	BTVECTOR3_IN(seperatingAxis);
-	obj->setCachedSeperatingAxis(BTVECTOR3_USE(seperatingAxis));
+	obj->setCachedSeparatingAxis(BTVECTOR3_USE(seperatingAxis));
 }
 
 void btGjkPairDetector_setCatchDegeneracies(btGjkPairDetector* obj, int value)

@@ -123,7 +123,14 @@ namespace BulletSharp
 			}
 			else if (item is SoftBody.SoftBody)
 			{
-				btSoftRigidDynamicsWorld_addSoftBody3(_collisionWorld.Native, item.Native, group, mask);
+				if (_collisionWorld is SoftBody.DeformableMultiBodyDynamicsWorld)
+				{
+					btDeformableMultiBodyDynamicsWorld_addSoftBody(_collisionWorld.Native, item.Native, group, mask);
+				}
+				else
+				{
+					btSoftRigidDynamicsWorld_addSoftBody3(_collisionWorld.Native, item.Native, group, mask);
+				}
 			}
 			else
 			{

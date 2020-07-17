@@ -172,12 +172,6 @@ btScalar btMultiBody_getAngularDamping(btMultiBody* obj)
 	return obj->getAngularDamping();
 }
 
-void btMultiBody_getAngularMomentum(btMultiBody* obj, btVector3* value)
-{
-	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getAngularMomentum();
-	BTVECTOR3_SET(value, temp);
-}
-
 btMultiBodyLinkCollider* btMultiBody_getBaseCollider(btMultiBody* obj)
 {
 	return obj->getBaseCollider();
@@ -245,6 +239,28 @@ int btMultiBody_getCompanionId(btMultiBody* obj)
 	return obj->getCompanionId();
 }
 
+void btMultiBody_getInterpolateBasePos(btMultiBody* obj, btVector3* value)
+{
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getInterpolateBasePos();
+	BTVECTOR3_SET(value, temp);
+}
+
+void btMultiBody_getInterpolateParentToLocalRot(btMultiBody* obj, int i, btQuaternion* value)
+{
+	BTQUATERNION_COPY(value, &obj->getInterpolateParentToLocalRot(i));
+}
+
+void btMultiBody_getInterpolateRVector(btMultiBody* obj, int i, btVector3* value)
+{
+	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->getInterpolateRVector(i);
+	BTVECTOR3_SET(value, temp);
+}
+
+void btMultiBody_getInterpolateWorldToBaseRot(btMultiBody* obj, btQuaternion* value)
+{
+	BTQUATERNION_COPY(value, &obj->getInterpolateWorldToBaseRot());
+}
+
 btScalar btMultiBody_getJointPos(btMultiBody* obj, int i)
 {
 	return obj->getJointPos(i);
@@ -273,11 +289,6 @@ btScalar btMultiBody_getJointVel(btMultiBody* obj, int i)
 btScalar* btMultiBody_getJointVelMultiDof(btMultiBody* obj, int i)
 {
 	return obj->getJointVelMultiDof(i);
-}
-
-btScalar btMultiBody_getKineticEnergy(btMultiBody* obj)
-{
-	return obj->getKineticEnergy();
 }
 
 btScalar btMultiBody_getLinearDamping(btMultiBody* obj)
@@ -440,6 +451,11 @@ void btMultiBody_localPosToWorld(btMultiBody* obj, int i, const btVector3* vec, 
 	BTVECTOR3_IN(vec);
 	ATTRIBUTE_ALIGNED16(btVector3) temp = obj->localPosToWorld(i, BTVECTOR3_USE(vec));
 	BTVECTOR3_SET(value, temp);
+}
+
+void btMultiBody_predictPositionsMultiDof(btMultiBody* obj, btScalar dt)
+{
+	obj->predictPositionsMultiDof(dt);
 }
 
 void btMultiBody_processDeltaVeeMultiDof2(btMultiBody* obj)
@@ -670,6 +686,12 @@ void btMultiBody_updateCollisionObjectWorldTransforms(btMultiBody* obj, btAligne
 	btAlignedObjectArray_btVector3* scratch_m)
 {
 	obj->updateCollisionObjectWorldTransforms(*scratch_q, *scratch_m);
+}
+
+void btMultiBody_updateCollisionObjectInterpolationWorldTransforms2(btMultiBody* obj, btAlignedObjectArray_btQuaternion* world_to_local,
+	btAlignedObjectArray_btVector3* local_origin)
+{
+	obj->updateCollisionObjectInterpolationWorldTransforms(*world_to_local, *local_origin);
 }
 
 void btMultiBody_useGlobalVelocities(btMultiBody* obj, bool use)

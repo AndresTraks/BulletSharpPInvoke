@@ -18,7 +18,10 @@ namespace BulletSharp
 
 		public IList<BulletObject> GetUserOwnedObjects()
 		{
-			return _userOwnedObjects.ToList();
+			lock (_userOwnedObjectsLock)
+			{
+				return _userOwnedObjects.ToList();
+			}
 		}
 
 #if BULLET_OBJECT_TRACKING

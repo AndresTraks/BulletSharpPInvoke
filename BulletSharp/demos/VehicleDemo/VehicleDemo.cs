@@ -318,23 +318,17 @@ namespace VehicleDemo
 
             var scale = new Vector3(15.0f, maxHeight, 15.0f);
 
-            _terrainData = Marshal.AllocHGlobal(dataLength);
-            var terrain = new byte[dataLength];
-
-            using (var file = new MemoryStream(terrain))
+            var terrain = new float[width * length];
+            for (int i = 0; i < width; i++)
             {
-                using (var writer = new BinaryWriter(file))
+                for (int j = 0; j < length; j++)
                 {
-                    for (int i = 0; i < width; i++)
-                    {
-                        for (int j = 0; j < length; j++)
-                        {
-                            writer.Write((maxHeight / 2) + 4 * Math.Sin(j * 0.5f) * Math.Cos(i));
-                        }
-                    }
+                    float value = (float)((maxHeight / 2) + 4 * Math.Sin(j * 0.5f) * Math.Cos(i));
+                    terrain[i * length + j] = value;
                 }
             }
 
+            _terrainData = Marshal.AllocHGlobal(dataLength);
             Marshal.Copy(terrain, 0, _terrainData, terrain.Length);
 
             var groundShape = new HeightfieldTerrainShape(width, length,

@@ -8,3 +8,5 @@ libbulletc is a C interface to Bullet. It compiles into a .dll or .so file that 
 BulletSharpPInvoke is a .NET library that proxies calls from .NET to libbulletc.
 
 The benefit of P/Invoke over C++/CLI is that it runs on all platforms that support P/Invoke into shared user-mode libraries (Windows, Unix, Mac OS). See also [Supported platforms](https://github.com/AndresTraks/BulletSharp/wiki/Supported-platforms).
+
+![.NET Core](https://github.com/AndresTraks/BulletSharpPInvoke/workflows/.NET%20Core/badge.svg)

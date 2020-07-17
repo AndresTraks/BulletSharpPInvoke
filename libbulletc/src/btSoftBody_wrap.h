@@ -341,19 +341,23 @@ extern "C" {
 	EXPORT int btSoftBody_Node_getBattach(btSoftBody_Node* obj);
 	EXPORT void btSoftBody_Node_getF(btSoftBody_Node* obj, btVector3* value);
 	EXPORT btScalar btSoftBody_Node_getIm(btSoftBody_Node* obj);
+	EXPORT int btSoftBody_Node_getIndex(btSoftBody_Node* obj);
 	EXPORT btDbvtNode* btSoftBody_Node_getLeaf(btSoftBody_Node* obj);
 	EXPORT void btSoftBody_Node_getN(btSoftBody_Node* obj, btVector3* value);
 	EXPORT void btSoftBody_Node_getQ(btSoftBody_Node* obj, btVector3* value);
 	EXPORT void btSoftBody_Node_getV(btSoftBody_Node* obj, btVector3* value);
+	EXPORT void btSoftBody_Node_getVN(btSoftBody_Node* obj, btVector3* value);
 	EXPORT void btSoftBody_Node_getX(btSoftBody_Node* obj, btVector3* value);
 	EXPORT void btSoftBody_Node_setArea(btSoftBody_Node* obj, btScalar value);
 	EXPORT void btSoftBody_Node_setBattach(btSoftBody_Node* obj, int value);
 	EXPORT void btSoftBody_Node_setF(btSoftBody_Node* obj, const btVector3* value);
 	EXPORT void btSoftBody_Node_setIm(btSoftBody_Node* obj, btScalar value);
+	EXPORT void btSoftBody_Node_setIndex(btSoftBody_Node* obj, int value);
 	EXPORT void btSoftBody_Node_setLeaf(btSoftBody_Node* obj, btDbvtNode* value);
 	EXPORT void btSoftBody_Node_setN(btSoftBody_Node* obj, const btVector3* value);
 	EXPORT void btSoftBody_Node_setQ(btSoftBody_Node* obj, const btVector3* value);
 	EXPORT void btSoftBody_Node_setV(btSoftBody_Node* obj, const btVector3* value);
+	EXPORT void btSoftBody_Node_setVN(btSoftBody_Node* obj, const btVector3* value);
 	EXPORT void btSoftBody_Node_setX(btSoftBody_Node* obj, const btVector3* value);
 
 	EXPORT btScalar* btSoftBody_Note_getCoords(btSoftBody_Note* obj);
@@ -507,6 +511,7 @@ extern "C" {
 	EXPORT void btSoftBody_applyClusters(btSoftBody* obj, bool drift);
 	EXPORT void btSoftBody_applyForces(btSoftBody* obj);
 	EXPORT bool btSoftBody_checkContact(btSoftBody* obj, const btCollisionObjectWrapper* colObjWrap, const btVector3* x, btScalar margin, btSoftBody_sCti* cti);
+	EXPORT bool btSoftBody_checkDeformableContact(btSoftBody* obj, const btCollisionObjectWrapper* colObjWrap, const btVector3* x, btScalar margin, btSoftBody_sCti* cti, bool predict);
 	EXPORT bool btSoftBody_checkFace(btSoftBody* obj, int node0, int node1, int node2);
 	EXPORT bool btSoftBody_checkLink(btSoftBody* obj, const btSoftBody_Node* node0, const btSoftBody_Node* node1);
 	EXPORT bool btSoftBody_checkLink2(btSoftBody* obj, int node0, int node1);
@@ -542,7 +547,6 @@ extern "C" {
 	EXPORT btAlignedObjectArray_const_btCollisionObjectPtr* btSoftBody_getCollisionDisabledObjects(btSoftBody* obj);
 	EXPORT btAlignedObjectArray_btSoftBody_Face* btSoftBody_getFaces(btSoftBody* obj);
 	EXPORT btDbvt* btSoftBody_getFdbvt(btSoftBody* obj);
-	EXPORT void btSoftBody_getInitialWorldTransform(btSoftBody* obj, btTransform* value);
 	EXPORT btAlignedObjectArray_btSoftBody_JointPtr* btSoftBody_getJoints(btSoftBody* obj);
 	EXPORT btAlignedObjectArray_btSoftBody_Link* btSoftBody_getLinks(btSoftBody* obj);
 	EXPORT btScalar btSoftBody_getMass(btSoftBody* obj, int node);
@@ -560,6 +564,8 @@ extern "C" {
 	EXPORT btSoftBody_SolverState* btSoftBody_getSst(btSoftBody* obj);
 	EXPORT void* btSoftBody_getTag(btSoftBody* obj);
 	EXPORT btAlignedObjectArray_btSoftBody_Tetra* btSoftBody_getTetras(btSoftBody* obj);
+	EXPORT btAlignedObjectArray_btSoftBody_TetraScratch* btSoftBody_getTetraScratches(btSoftBody* obj);
+	EXPORT btAlignedObjectArray_btSoftBody_TetraScratch* btSoftBody_getTetraScratchesTn(btSoftBody* obj);
 	EXPORT btScalar btSoftBody_getTimeacc(btSoftBody* obj);
 	EXPORT btScalar btSoftBody_getTotalMass(btSoftBody* obj);
 	EXPORT btAlignedObjectArray_int* btSoftBody_getUserIndexMapping(btSoftBody* obj);
@@ -570,6 +576,7 @@ extern "C" {
 	EXPORT void btSoftBody_initDefaults(btSoftBody* obj);
 	EXPORT void btSoftBody_initializeClusters(btSoftBody* obj);
 	EXPORT void btSoftBody_initializeFaceTree(btSoftBody* obj);
+	EXPORT void btSoftBody_initializeDmInverse(btSoftBody* obj);
 	EXPORT void btSoftBody_integrateMotion(btSoftBody* obj);
 	EXPORT void btSoftBody_pointersToIndices(btSoftBody* obj);
 	EXPORT void btSoftBody_predictMotion(btSoftBody* obj, btScalar dt);
@@ -588,10 +595,10 @@ extern "C" {
 	EXPORT void btSoftBody_rotate(btSoftBody* obj, const btQuaternion* rot);
 	EXPORT void btSoftBody_scale(btSoftBody* obj, const btVector3* scl);
 	EXPORT void btSoftBody_setBUpdateRtCst(btSoftBody* obj, bool value);
-	EXPORT void btSoftBody_setInitialWorldTransform(btSoftBody* obj, const btTransform* value);
 	EXPORT void btSoftBody_setMass(btSoftBody* obj, int node, btScalar mass);
 	EXPORT void btSoftBody_setPose(btSoftBody* obj, bool bvolume, bool bframe);
 	EXPORT void btSoftBody_setRestLengthScale(btSoftBody* obj, btScalar restLength);
+	EXPORT void btSoftBody_setSelfCollision(btSoftBody* obj, bool useSelfCollision);
 	EXPORT void btSoftBody_setSoftBodySolver(btSoftBody* obj, btSoftBodySolver* softBodySolver);
 	EXPORT void btSoftBody_setSolver(btSoftBody* obj, btSoftBody_eSolverPresets preset);
 	EXPORT void btSoftBody_setTag(btSoftBody* obj, void* value);
@@ -618,6 +625,7 @@ extern "C" {
 	EXPORT void btSoftBody_updateLinkConstants(btSoftBody* obj);
 	EXPORT void btSoftBody_updateNormals(btSoftBody* obj);
 	EXPORT void btSoftBody_updatePose(btSoftBody* obj);
+	EXPORT bool btSoftBody_useSelfCollision(btSoftBody* obj);
 	EXPORT void btSoftBody_VSolve_Links(btSoftBody* psb, btScalar kst);
 
 	EXPORT int btSoftBody_getFaceVertexData(btSoftBody* obj, btScalar* vertices);

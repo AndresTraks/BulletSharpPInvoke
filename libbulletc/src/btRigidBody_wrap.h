@@ -52,6 +52,7 @@ extern "C" {
 	EXPORT void btRigidBody_applyTorque(btRigidBody* obj, const btVector3* torque);
 	EXPORT void btRigidBody_applyTorqueImpulse(btRigidBody* obj, const btVector3* torque);
 	EXPORT void btRigidBody_clearForces(btRigidBody* obj);
+	EXPORT void btRigidBody_clearGravity(btRigidBody* obj);
 	EXPORT btScalar btRigidBody_computeAngularImpulseDenominator(btRigidBody* obj, const btVector3* axis);
 	EXPORT void btRigidBody_computeGyroscopicForceExplicit(btRigidBody* obj, btScalar maxGyroscopicForce, btVector3* value);
 	EXPORT void btRigidBody_computeGyroscopicImpulseImplicit_Body(btRigidBody* obj, btScalar step, btVector3* value);
@@ -78,6 +79,7 @@ extern "C" {
 	EXPORT btScalar btRigidBody_getLinearSleepingThreshold(btRigidBody* obj);
 	EXPORT void btRigidBody_getLinearVelocity(btRigidBody* obj, btVector3* value);
 	EXPORT void btRigidBody_getLocalInertia(btRigidBody* obj, btVector3* value);
+	EXPORT btScalar btRigidBody_getMass(btRigidBody* obj);
 	EXPORT btMotionState* btRigidBody_getMotionState(btRigidBody* obj);
 	EXPORT int btRigidBody_getNumConstraintRefs(btRigidBody* obj);
 	EXPORT void btRigidBody_getOrientation(btRigidBody* obj, btQuaternion* value);

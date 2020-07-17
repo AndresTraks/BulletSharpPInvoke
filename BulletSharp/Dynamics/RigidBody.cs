@@ -123,6 +123,11 @@ namespace BulletSharp
 			btRigidBody_clearForces(Native);
 		}
 
+		public void ClearGravity()
+		{
+			btRigidBody_clearGravity(Native);
+		}
+
 		public void ComputeAngularImpulseDenominator(ref Vector3 axis, out double result)
 		{
 			result = btRigidBody_computeAngularImpulseDenominator(Native, ref axis);

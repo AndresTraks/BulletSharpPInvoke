@@ -6,8 +6,12 @@ namespace BulletSharp
 {
 	public class MultiBodyDynamicsWorld : DiscreteDynamicsWorld
 	{
-		private List<MultiBody> _bodies;
-		private List<MultiBodyConstraint> _constraints;
+		private List<MultiBody> _bodies = new List<MultiBody>();
+		private List<MultiBodyConstraint> _constraints = new List<MultiBodyConstraint>();
+
+		protected internal MultiBodyDynamicsWorld()
+		{
+		}
 
 		public MultiBodyDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache,
 			MultiBodyConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration)
@@ -16,9 +20,6 @@ namespace BulletSharp
 				constraintSolver.Native, collisionConfiguration.Native);
 			InitializeUserOwned(native);
 			InitializeMembers(dispatcher, pairCache, constraintSolver);
-
-			_bodies = new List<MultiBody>();
-			_constraints = new List<MultiBodyConstraint>();
 		}
 
 		public void AddMultiBody(MultiBody body, int group = (int)CollisionFilterGroups.DefaultFilter,
@@ -33,6 +34,11 @@ namespace BulletSharp
 		{
 			btMultiBodyDynamicsWorld_addMultiBodyConstraint(Native, constraint.Native);
 			_constraints.Add(constraint);
+		}
+
+		public void BuildIslands()
+		{
+			btMultiBodyDynamicsWorld_buildIslands(Native);
 		}
 
 		public void ClearMultiBodyConstraintForces()
@@ -65,9 +71,24 @@ namespace BulletSharp
 			return _constraints[constraintIndex];
 		}
 
+		public void IntegrateMultiBodyTransforms(double timeStep)
+		{
+			btMultiBodyDynamicsWorld_integrateMultiBodyTransforms(Native, timeStep);
+		}
+
 		public void IntegrateTransforms(double timeStep)
 		{
 			btMultiBodyDynamicsWorld_integrateTransforms(Native, timeStep);
+		}
+
+		public void PredictMultiBodyTransforms(double timeStep)
+		{
+			btMultiBodyDynamicsWorld_predictMultiBodyTransforms(Native, timeStep);
+		}
+
+		public void PredictUnconstraintMotion(double timeStep)
+		{
+			btMultiBodyDynamicsWorld_predictUnconstraintMotion(Native, timeStep);
 		}
 
 		public void RemoveMultiBody(MultiBody body)
@@ -80,6 +101,16 @@ namespace BulletSharp
 		{
 			btMultiBodyDynamicsWorld_removeMultiBodyConstraint(Native, constraint.Native);
 			_constraints.Remove(constraint);
+		}
+
+		public void SolveExternalForces(ContactSolverInfo solverInfo)
+		{
+			btMultiBodyDynamicsWorld_solveExternalForces(Native, solverInfo.Native);
+		}
+
+		public void SolveInternalConstraints(ContactSolverInfo solverInfo)
+		{
+			btMultiBodyDynamicsWorld_solveInternalConstraints(Native, solverInfo.Native);
 		}
 
 		public int NumMultibodies => _bodies.Count;

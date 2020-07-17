@@ -12,6 +12,11 @@ btScalar btContactSolverInfoData_getDamping(btContactSolverInfoData* obj)
 	return obj->m_damping;
 }
 
+btScalar btContactSolverInfoData_getDeformableErp(btContactSolverInfoData* obj)
+{
+	return obj->m_deformable_erp;
+}
+
 btScalar btContactSolverInfoData_getErp(btContactSolverInfoData* obj)
 {
 	return obj->m_erp;
@@ -135,6 +140,11 @@ btScalar btContactSolverInfoData_getWarmstartingFactor(btContactSolverInfoData* 
 void btContactSolverInfoData_setDamping(btContactSolverInfoData* obj, btScalar value)
 {
 	obj->m_damping = value;
+}
+
+void btContactSolverInfoData_setDeformableErp(btContactSolverInfoData* obj, btScalar value)
+{
+	obj->m_deformable_erp = value;
 }
 
 void btContactSolverInfoData_setErp(btContactSolverInfoData* obj, btScalar value)

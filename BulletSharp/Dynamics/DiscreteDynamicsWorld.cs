@@ -114,6 +114,11 @@ namespace BulletSharp
 			btDiscreteDynamicsWorld_setNumTasks(Native, numTasks);
 		}
 
+		public void SolveConstraints(ContactSolverInfo solverInfo)
+		{
+			btDiscreteDynamicsWorld_solveConstraints(Native, solverInfo.Native);
+		}
+
 		public void SynchronizeSingleMotionState(RigidBody body)
 		{
 			btDiscreteDynamicsWorld_synchronizeSingleMotionState(Native, body.Native);

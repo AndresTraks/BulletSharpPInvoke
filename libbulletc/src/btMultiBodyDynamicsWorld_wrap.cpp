@@ -26,6 +26,11 @@ void btMultiBodyDynamicsWorld_addMultiBodyConstraint(btMultiBodyDynamicsWorld* o
 	obj->addMultiBodyConstraint(constraint);
 }
 
+void btMultiBodyDynamicsWorld_buildIslands(btMultiBodyDynamicsWorld* obj)
+{
+	obj->buildIslands();
+}
+
 void btMultiBodyDynamicsWorld_clearMultiBodyConstraintForces(btMultiBodyDynamicsWorld* obj)
 {
 	obj->clearMultiBodyConstraintForces();
@@ -69,10 +74,25 @@ int btMultiBodyDynamicsWorld_getNumMultiBodyConstraints(btMultiBodyDynamicsWorld
 	return obj->getNumMultiBodyConstraints();
 }
 
+void btMultiBodyDynamicsWorld_integrateMultiBodyTransforms(btMultiBodyDynamicsWorld* obj, btScalar timeStep)
+{
+	obj->integrateMultiBodyTransforms(timeStep);
+}
+
 void btMultiBodyDynamicsWorld_integrateTransforms(btMultiBodyDynamicsWorld* obj,
 	btScalar timeStep)
 {
 	obj->integrateTransforms(timeStep);
+}
+
+void btMultiBodyDynamicsWorld_predictMultiBodyTransforms(btMultiBodyDynamicsWorld* obj, btScalar timeStep)
+{
+	obj->predictMultiBodyTransforms(timeStep);
+}
+
+void btMultiBodyDynamicsWorld_predictUnconstraintMotion(btMultiBodyDynamicsWorld* obj, btScalar timeStep)
+{
+	obj->predictUnconstraintMotion(timeStep);
 }
 
 void btMultiBodyDynamicsWorld_removeMultiBody(btMultiBodyDynamicsWorld* obj, btMultiBody* body)
@@ -84,4 +104,14 @@ void btMultiBodyDynamicsWorld_removeMultiBodyConstraint(btMultiBodyDynamicsWorld
 	btMultiBodyConstraint* constraint)
 {
 	obj->removeMultiBodyConstraint(constraint);
+}
+
+void btMultiBodyDynamicsWorld_solveExternalForces(btMultiBodyDynamicsWorld* obj, btContactSolverInfo* solverInfo)
+{
+	obj->solveExternalForces(*solverInfo);
+}
+
+void btMultiBodyDynamicsWorld_solveInternalConstraints(btMultiBodyDynamicsWorld* obj, btContactSolverInfo* solverInfo)
+{
+	obj->solveInternalConstraints(*solverInfo);
 }

@@ -18,10 +18,15 @@ FIND_PATH(BULLET_INCLUDE_DIR NAMES btBulletCollisionCommon.h
     /opt/local/include
     NO_DEFAULT_PATH
 )
+IF (NOT BULLET_INCLUDE_DIR)
+    MESSAGE(FATAL_ERROR "bullet3 source directory not found, please specify bullet3/src/ location in BULLET_INCLUDE_DIR")
+ENDIF()
 
 OPTION(BUILD_BULLET2_DEMOS "" OFF)
 OPTION(BUILD_BULLET3 "" OFF)
+OPTION(BUILD_CLSOCKET "" OFF)
 OPTION(BUILD_CPU_DEMOS "" OFF)
+OPTION(BUILD_ENET "" OFF)
 OPTION(BUILD_UNIT_TESTS "" OFF)
 SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
@@ -198,6 +203,18 @@ ADD_LIBRARY(${BULLETC_LIB} SHARED
     src/btDefaultMotionState_wrap.h
     src/btDefaultSoftBodySolver_wrap.cpp
     src/btDefaultSoftBodySolver_wrap.h
+    src/btDeformableBodySolver_wrap.cpp
+    src/btDeformableBodySolver_wrap.h
+    src/btDeformableGravityForce_wrap.cpp
+    src/btDeformableGravityForce_wrap.h
+    src/btDeformableLagrangianForce_wrap.cpp
+    src/btDeformableLagrangianForce_wrap.h
+    src/btDeformableMultiBodyConstraintSolver_wrap.cpp
+    src/btDeformableMultiBodyConstraintSolver_wrap.h
+    src/btDeformableMultiBodyDynamicsWorld_wrap.cpp
+    src/btDeformableMultiBodyDynamicsWorld_wrap.h
+    src/btDeformableNeoHookeanForce_wrap.cpp
+    src/btDeformableNeoHookeanForce_wrap.h
     src/btDiscreteCollisionDetectorInterface_wrap.cpp
     src/btDiscreteCollisionDetectorInterface_wrap.h
     src/btDiscreteDynamicsWorld_wrap.cpp

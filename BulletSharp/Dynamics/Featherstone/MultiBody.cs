@@ -155,6 +155,20 @@ namespace BulletSharp
 			btMultiBody_forwardKinematics(Native, scratchQ.Native, scratchM.Native);
 		}
 		*/
+		public Quaternion GetInterpolateParentToLocalRot(int i)
+		{
+			Quaternion value;
+			btMultiBody_getInterpolateParentToLocalRot(Native, i, out value);
+			return value;
+		}
+
+		public Vector3 GetInterpolateRVector(int i)
+		{
+			Vector3 value;
+			btMultiBody_getInterpolateRVector(Native, i, out value);
+			return value;
+		}
+
 		public double GetJointPos(int i)
 		{
 			return btMultiBody_getJointPos(Native, i);
@@ -272,6 +286,11 @@ namespace BulletSharp
 			return value;
 		}
 
+		public void PredictPositionsMultiDof(float deltaTime)
+		{
+			btMultiBody_predictPositionsMultiDof(deltaTime);
+		}
+
 		public void ProcessDeltaVeeMultiDof2()
 		{
 			btMultiBody_processDeltaVeeMultiDof2(Native);
@@ -361,6 +380,13 @@ namespace BulletSharp
 			btMultiBody_updateCollisionObjectWorldTransforms(Native, scratchQ.Native,
 				scratchM.Native);
 		}
+
+		public void btMultiBody_updateCollisionObjectWorldTransforms(MultiBody obj, btAlignedObjectArray<btQuaternion> worldToLocal,
+			AlignedVector3Array localOrigin)
+		{
+			btMultiBody_updateCollisionObjectWorldTransforms(Native, worldToLocal.Native,
+				localOrigin.Native);
+		}
 		*/
 		public void WakeUp()
 		{
@@ -385,16 +411,6 @@ namespace BulletSharp
 		{
 			get => btMultiBody_getAngularDamping(Native);
 			set => btMultiBody_setAngularDamping(Native, value);
-		}
-
-		public Vector3 AngularMomentum
-		{
-			get
-			{
-				Vector3 value;
-				btMultiBody_getAngularMomentum(Native, out value);
-				return value;
-			}
 		}
 
 		public MultiBodyLinkCollider BaseCollider
@@ -514,6 +530,16 @@ namespace BulletSharp
 			set => btMultiBody_setHasSelfCollision(Native, value);
 		}
 
+		public Vector3 InterpolateBasePosition
+		{
+			get
+			{
+				Vector3 value;
+				btMultiBody_getInterpolateBasePos(Native, out value);
+				return value;
+			}
+		}
+
 		public bool IsAwake => btMultiBody_isAwake(Native);
 
 		public bool IsPosUpdated => btMultiBody_isPosUpdated(Native);
@@ -529,8 +555,6 @@ namespace BulletSharp
 			get => btMultiBody_isUsingRK4Integration(Native);
 			set => btMultiBody_useRK4Integration(Native, value);
 		}
-
-		public double KineticEnergy => btMultiBody_getKineticEnergy(Native);
 
 		public double LinearDamping
 		{

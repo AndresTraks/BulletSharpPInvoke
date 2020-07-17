@@ -332,6 +332,26 @@
 #define btDefaultMotionState void
 #endif
 
+#ifndef BT_DEFORMABLE_BODY_SOLVERS_H
+#define btDeformableBodySolver void
+#endif
+
+#ifndef BT_DEFORMABLE_GRAVITY_FORCE_H
+#define btDeformableGravityForce void
+#endif
+
+#ifndef BT_DEFORMABLE_LAGRANGIAN_FORCE_H
+#define btDeformableLagrangianForce void
+#endif
+
+#ifndef BT_DEFORMABLE_MULTIBODY_CONSTRAINT_SOLVER_H
+#define btDeformableMultiBodyConstraintSolver void
+#endif
+
+#ifndef BT_DEFORMABLE_MULTIBODY_DYNAMICS_WORLD_H
+#define btDeformableMultiBodyDynamicsWorld void
+#endif
+
 #ifndef BT_DISCRETE_COLLISION_DETECTOR1_INTERFACE_H
 #define btDiscreteCollisionDetectorInterface void
 #define btDiscreteCollisionDetectorInterface_ClosestPointInput void
@@ -694,9 +714,11 @@
 #endif
 
 #ifndef BT_RIGIDBODY_H
+#define btAlignedObjectArray_btRigidBodyPtr void
 #define btRigidBody void
 #define btRigidBody_btRigidBodyConstructionInfo void
 #else
+#define btAlignedObjectArray_btRigidBodyPtr btAlignedObjectArray<btRigidBody*>
 #define btRigidBody_btRigidBodyConstructionInfo btRigidBody::btRigidBodyConstructionInfo
 #endif
 
@@ -753,6 +775,7 @@
 #define btAlignedObjectArray_btSoftBody_RContact void
 #define btAlignedObjectArray_btSoftBody_SContact void
 #define btAlignedObjectArray_btSoftBody_Tetra void
+#define btAlignedObjectArray_btSoftBody_TetraScratch void
 #define btAlignedObjectArray_btSoftBody_eVSolver__ void
 #define btSoftBodyNodePtrArray void
 #define btSoftBody void
@@ -795,6 +818,7 @@
 #define btSoftBody_SolverState void
 #define btSoftBody_sRayCast void
 #define btSoftBody_Tetra void
+#define btSoftBody_TetraScratch void
 #else
 #define btAlignedObjectArray_btSoftBodyPtr btAlignedObjectArray<btSoftBody*>
 #define btAlignedObjectArray_btSoftBody_Anchor btAlignedObjectArray<btSoftBody::Anchor>
@@ -810,6 +834,7 @@
 #define btAlignedObjectArray_btSoftBody_RContact btAlignedObjectArray<btSoftBody::RContact>
 #define btAlignedObjectArray_btSoftBody_SContact btAlignedObjectArray<btSoftBody::SContact>
 #define btAlignedObjectArray_btSoftBody_Tetra btAlignedObjectArray<btSoftBody::Tetra>
+#define btAlignedObjectArray_btSoftBody_TetraScratch btAlignedObjectArray<btSoftBody::TetraScratch>
 #define btAlignedObjectArray_btSoftBody_eVSolver__ btAlignedObjectArray<btSoftBody::eVSolver::_>
 #define btSoftBodyNodePtrArray btSoftBody::Node*
 #define btSoftBody_eAeroModel btSoftBody::eAeroModel::_
@@ -850,6 +875,7 @@
 #define btSoftBody_SolverState btSoftBody::SolverState
 #define btSoftBody_sRayCast btSoftBody::sRayCast
 #define btSoftBody_Tetra btSoftBody::Tetra
+#define btSoftBody_TetraScratch btSoftBody::TetraScratch
 #endif
 
 #ifndef BT_SOFT_BODY_CONCAVE_COLLISION_ALGORITHM_H

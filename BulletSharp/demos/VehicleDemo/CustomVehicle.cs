@@ -63,6 +63,11 @@ namespace VehicleDemo
 
         public void SetBrake(double brake, int wheelIndex)
         {
+            _fixedBody.Dispose();
+        }
+
+        public void SetBrake(double brake, int wheelIndex)
+        {
             Debug.Assert((wheelIndex >= 0) && (wheelIndex < NumWheels));
             GetWheelInfo(wheelIndex).Brake = brake;
         }
