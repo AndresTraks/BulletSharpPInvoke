@@ -410,12 +410,16 @@ extern "C" {
 	EXPORT btScalar btSoftBody_RContact_getC4(btSoftBody_RContact* obj);
 	EXPORT btSoftBody_sCti* btSoftBody_RContact_getCti(btSoftBody_RContact* obj);
 	EXPORT btSoftBody_Node* btSoftBody_RContact_getNode(btSoftBody_RContact* obj);
+	EXPORT void btSoftBody_RContact_getT1(btSoftBody_RContact* obj, btVector3* value);
+	EXPORT void btSoftBody_RContact_getT2(btSoftBody_RContact* obj, btVector3* value);
 	EXPORT void btSoftBody_RContact_setC0(btSoftBody_RContact* obj, const btMatrix3x3* value);
 	EXPORT void btSoftBody_RContact_setC1(btSoftBody_RContact* obj, const btVector3* value);
 	EXPORT void btSoftBody_RContact_setC2(btSoftBody_RContact* obj, btScalar value);
 	EXPORT void btSoftBody_RContact_setC3(btSoftBody_RContact* obj, btScalar value);
 	EXPORT void btSoftBody_RContact_setC4(btSoftBody_RContact* obj, btScalar value);
 	EXPORT void btSoftBody_RContact_setNode(btSoftBody_RContact* obj, btSoftBody_Node* value);
+	EXPORT void btSoftBody_RContact_setT1(btSoftBody_RContact* obj, const btVector3* value);
+	EXPORT void btSoftBody_RContact_setT2(btSoftBody_RContact* obj, const btVector3* value);
 	EXPORT void btSoftBody_RContact_delete(btSoftBody_RContact* obj);
 
 	EXPORT btSoftBody_SContact* btSoftBody_SContact_new();

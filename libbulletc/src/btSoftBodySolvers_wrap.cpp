@@ -1,4 +1,5 @@
 #include <BulletSoftBody/btSoftBodySolvers.h>
+#include <BulletSoftBody/btSoftBody.h>
 
 #include "btSoftBodySolvers_wrap.h"
 
@@ -31,13 +32,13 @@ float btSoftBodySolver_getTimeScale(btSoftBodySolver* obj)
 {
 	return obj->getTimeScale();
 }
-/*
+
 void btSoftBodySolver_optimize(btSoftBodySolver* obj, btAlignedObjectArray_btSoftBodyPtr* softBodies,
 	bool forceUpdate)
 {
 	obj->optimize(*softBodies, forceUpdate);
 }
-*/
+
 void btSoftBodySolver_predictMotion(btSoftBodySolver* obj, float solverdt)
 {
 	obj->predictMotion(solverdt);

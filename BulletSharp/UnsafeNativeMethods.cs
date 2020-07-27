@@ -7041,8 +7041,6 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btTypedConstraint_btConstraintInfo2_setErp(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btTypedConstraint_btConstraintInfo2_setFindex(IntPtr obj, IntPtr value);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btTypedConstraint_btConstraintInfo2_setFps(IntPtr obj, float value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btTypedConstraint_btConstraintInfo2_setJ1angularAxis(IntPtr obj, IntPtr value);
