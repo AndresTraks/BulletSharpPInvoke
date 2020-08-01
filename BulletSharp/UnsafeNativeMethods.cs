@@ -1582,8 +1582,6 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern int btConvexHullShape_getNumPoints(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btConvexHullShape_getPoints(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btConvexHullShape_getScaledPoint(IntPtr obj, int i, out Vector3 value);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btConvexHullShape_getUnscaledPoints(IntPtr obj);
@@ -4110,7 +4108,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBody_updateCollisionObjectWorldTransforms(IntPtr obj, IntPtr scratch_q, IntPtr scratch_m);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern void btMultiBody_updateCollisionObjectWorldTransforms2(IntPtr obj, IntPtr world_to_local, IntPtr local_origin);
+		public static extern void btMultiBody_updateCollisionObjectInterpolationWorldTransforms2(IntPtr obj, IntPtr world_to_local, IntPtr local_origin);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btMultiBody_useGlobalVelocities(IntPtr obj, bool use);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -5352,8 +5350,6 @@ namespace BulletSharp
 		public static extern IntPtr btSoftBody_getClusters(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btSoftBody_getCollisionDisabledObjects(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern float btSoftBody_getDampingCoefficient(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btSoftBody_getFaces(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
@@ -7012,8 +7008,6 @@ namespace BulletSharp
 		public static extern float btTypedConstraint_btConstraintInfo2_getDamping(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btTypedConstraint_btConstraintInfo2_getErp(IntPtr obj);
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btTypedConstraint_btConstraintInfo2_getFindex(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern float btTypedConstraint_btConstraintInfo2_getFps(IntPtr obj);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]

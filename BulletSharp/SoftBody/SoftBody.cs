@@ -2942,6 +2942,11 @@ namespace BulletSharp.SoftBody
 			btSoftBody_scale(Native, ref scl);
 		}
 
+		public void SetDampingCoefficient(float dampingCoeff)
+		{
+			btSoftBody_setDampingCoefficient(Native, dampingCoeff);
+		}
+
 		public void SetMass(int node, float mass)
 		{
 			btSoftBody_setMass(Native, node, mass);
@@ -3291,12 +3296,6 @@ namespace BulletSharp.SoftBody
 			set { btSoftBody_setCollisionDisabledObjects(_native, value._native); }
 		}
 		*/
-		public float DampingCoefficient
-		{
-			get { return btSoftBody_getDampingCoefficient(Native); }
-			set { btSoftBody_setDampingCoefficient(Native, value); }
-		}
-
 		public AlignedFaceArray Faces
 		{
 			get

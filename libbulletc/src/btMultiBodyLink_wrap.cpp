@@ -234,9 +234,19 @@ void btMultibodyLink_setCachedRotParentToThis(btMultibodyLink* obj, const btQuat
 	BTQUATERNION_COPY(&obj->m_cachedRotParentToThis, value);
 }
 
+void btMultibodyLink_setCachedRotParentToThisInterpolate(btMultibodyLink* obj, const btQuaternion* value)
+{
+	BTQUATERNION_COPY(&obj->m_cachedRotParentToThis_interpolate, value);
+}
+
 void btMultibodyLink_setCachedRVector(btMultibodyLink* obj, const btVector3* value)
 {
 	BTVECTOR3_COPY(&obj->m_cachedRVector, value);
+}
+
+void btMultibodyLink_setCachedRVectorInterpolate(btMultibodyLink* obj, const btVector3* value)
+{
+	BTVECTOR3_COPY(&obj->m_cachedRVector_interpolate, value);
 }
 
 void btMultibodyLink_setCachedWorldTransform(btMultibodyLink* obj, const btTransform* value)
