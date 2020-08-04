@@ -126,9 +126,7 @@
 #endif
 
 #ifndef BT_COLLISION_CONFIGURATION
-#ifndef btCollisionConfiguration
 #define btCollisionConfiguration void
-#endif
 #endif
 
 #ifndef BT_COLLISION_CREATE_FUNC

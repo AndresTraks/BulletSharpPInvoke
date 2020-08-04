@@ -291,6 +291,24 @@ btSoftBody::Note* btAlignedObjectArray_btSoftBody_Note_at(btAlignedObjectArray_b
 	return &obj->at(n);
 }
 
+int btAlignedObjectArray_btSoftBody_Note_index_of(btAlignedObjectArray_btSoftBody_Note* obj, btSoftBody::Note* val)
+{
+	if (val < &obj->at(0) || val > &obj->at(obj->size() - 1)) {
+		return -1;
+	}
+	return static_cast<int>(val - &obj->at(0));
+}
+
+void btAlignedObjectArray_btSoftBody_Note_push_back(btAlignedObjectArray_btSoftBody_Note* obj, btSoftBody::Note* val)
+{
+	obj->push_back(*val);
+}
+
+void btAlignedObjectArray_btSoftBody_Note_resizeNoInitialize(btAlignedObjectArray_btSoftBody_Note* obj, int newSize)
+{
+	return obj->resizeNoInitialize(newSize);
+}
+
 int btAlignedObjectArray_btSoftBody_Note_size(btAlignedObjectArray_btSoftBody_Note* obj)
 {
 	return obj->size();
