@@ -30,7 +30,7 @@ namespace BulletSharp.SoftBody
 		}
 	}
 
-	public class AlignedAnchorArrayEnumerator : IEnumerator<Anchor>
+	public struct AlignedAnchorArrayEnumerator : IEnumerator<Anchor>
 	{
 		private int _i;
 		private int _count;
@@ -59,7 +59,7 @@ namespace BulletSharp.SoftBody
 
 		public void Reset()
 		{
-			_i = 0;
+			_i = -1;
 		}
 	}
 
@@ -131,7 +131,12 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<Anchor> GetEnumerator()
+		public AlignedAnchorArrayEnumerator GetEnumerator()
+		{
+			return new AlignedAnchorArrayEnumerator(this);
+		}
+
+		IEnumerator<Anchor> IEnumerable<Anchor>.GetEnumerator()
 		{
 			return new AlignedAnchorArrayEnumerator(this);
 		}

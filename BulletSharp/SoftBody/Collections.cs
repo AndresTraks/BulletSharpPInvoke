@@ -4,7 +4,7 @@ using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp.SoftBody
 {
-	public class NodePtrArrayEnumerator : IEnumerator<Node>
+	public struct NodePtrArrayEnumerator : IEnumerator<Node>
 	{
 		private int _i;
 		private int _count;
@@ -29,7 +29,7 @@ namespace BulletSharp.SoftBody
 
 		public void Reset()
 		{
-			_i = 0;
+			_i = -1;
 		}
 
 		public Node Current => _array[_i];
@@ -75,7 +75,12 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<Node> GetEnumerator()
+		public NodePtrArrayEnumerator GetEnumerator()
+		{
+			return new NodePtrArrayEnumerator(this);
+		}
+
+		IEnumerator<Node> IEnumerable<Node>.GetEnumerator()
 		{
 			return new NodePtrArrayEnumerator(this);
 		}

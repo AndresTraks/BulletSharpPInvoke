@@ -30,7 +30,7 @@ namespace BulletSharp.SoftBody
 		}
 	}
 
-	public class AlignedTetraArrayEnumerator : IEnumerator<Tetra>
+	public struct AlignedTetraArrayEnumerator : IEnumerator<Tetra>
 	{
 		private int _i;
 		private int _count;
@@ -59,7 +59,7 @@ namespace BulletSharp.SoftBody
 
 		public void Reset()
 		{
-			_i = 0;
+			_i = -1;
 		}
 	}
 
@@ -131,7 +131,12 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<Tetra> GetEnumerator()
+		public AlignedTetraArrayEnumerator GetEnumerator()
+		{
+			return new AlignedTetraArrayEnumerator(this);
+		}
+
+		IEnumerator<Tetra> IEnumerable<Tetra>.GetEnumerator()
 		{
 			return new AlignedTetraArrayEnumerator(this);
 		}

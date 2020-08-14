@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BulletSharp
 {
-	public sealed class GenericListEnumerator<T> : IEnumerator<T>
+	public struct GenericListEnumerator<T> : IEnumerator<T>
 	{
 		private int _i;
 		private readonly int _count;
@@ -28,7 +28,7 @@ namespace BulletSharp
 
 		public void Reset()
 		{
-			_i = 0;
+			_i = -1;
 		}
 
 		public void Dispose()

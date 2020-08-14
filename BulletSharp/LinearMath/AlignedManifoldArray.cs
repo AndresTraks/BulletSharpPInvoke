@@ -29,7 +29,7 @@ namespace BulletSharp
 		}
 	}
 
-	public class AlignedManifoldArrayEnumerator : IEnumerator<PersistentManifold>
+	public struct AlignedManifoldArrayEnumerator : IEnumerator<PersistentManifold>
 	{
 		private int _i;
 		private readonly int _count;
@@ -58,7 +58,7 @@ namespace BulletSharp
 
 		public void Reset()
 		{
-			_i = 0;
+			_i = -1;
 		}
 	}
 
@@ -144,7 +144,12 @@ namespace BulletSharp
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<PersistentManifold> GetEnumerator()
+		public AlignedManifoldArrayEnumerator GetEnumerator()
+		{
+			return new AlignedManifoldArrayEnumerator(this);
+		}
+
+		IEnumerator<PersistentManifold> IEnumerable<PersistentManifold>.GetEnumerator()
 		{
 			return new AlignedManifoldArrayEnumerator(this);
 		}
