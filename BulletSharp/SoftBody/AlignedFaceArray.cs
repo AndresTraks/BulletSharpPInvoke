@@ -30,7 +30,7 @@ namespace BulletSharp.SoftBody
 		}
 	}
 
-	public class AlignedFaceArrayEnumerator : IEnumerator<Face>
+	public struct AlignedFaceArrayEnumerator : IEnumerator<Face>
 	{
 		private int _i;
 		private int _count;
@@ -59,7 +59,7 @@ namespace BulletSharp.SoftBody
 
 		public void Reset()
 		{
-			_i = 0;
+			_i = -1;
 		}
 	}
 
@@ -131,7 +131,12 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<Face> GetEnumerator()
+		public AlignedFaceArrayEnumerator GetEnumerator()
+		{
+			return new AlignedFaceArrayEnumerator(this);
+		}
+
+		IEnumerator<Face> IEnumerable<Face>.GetEnumerator()
 		{
 			return new AlignedFaceArrayEnumerator(this);
 		}

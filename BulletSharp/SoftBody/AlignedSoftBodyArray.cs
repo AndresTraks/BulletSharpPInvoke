@@ -30,7 +30,7 @@ namespace BulletSharp.SoftBody
 		}
 	}
 
-	public class AlignedSoftBodyArrayEnumerator : IEnumerator<SoftBody>
+	public struct AlignedSoftBodyArrayEnumerator : IEnumerator<SoftBody>
 	{
 		private int _i;
 		private int _count;
@@ -59,7 +59,7 @@ namespace BulletSharp.SoftBody
 
 		public void Reset()
 		{
-			_i = 0;
+			_i = -1;
 		}
 	}
 
@@ -131,7 +131,12 @@ namespace BulletSharp.SoftBody
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<SoftBody> GetEnumerator()
+		public AlignedSoftBodyArrayEnumerator GetEnumerator()
+		{
+			return new AlignedSoftBodyArrayEnumerator(this);
+		}
+
+		IEnumerator<SoftBody> IEnumerable<SoftBody>.GetEnumerator()
 		{
 			return new AlignedSoftBodyArrayEnumerator(this);
 		}

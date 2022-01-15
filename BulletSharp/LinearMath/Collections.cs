@@ -29,7 +29,7 @@ namespace BulletSharp
 		}
 	};
 
-	public class CompoundShapeChildArrayEnumerator : IEnumerator<CompoundShapeChild>
+	public struct CompoundShapeChildArrayEnumerator : IEnumerator<CompoundShapeChild>
 	{
 		private int _i;
 		private int _count;
@@ -54,7 +54,7 @@ namespace BulletSharp
 
 		public void Reset()
 		{
-			_i = 0;
+			_i = -1;
 		}
 
 		public CompoundShapeChild Current => _array[_i];
@@ -62,7 +62,7 @@ namespace BulletSharp
 		object System.Collections.IEnumerator.Current => _array[_i];
 	}
 
-	public class UIntArrayEnumerator : IEnumerator<uint>
+	public struct UIntArrayEnumerator : IEnumerator<uint>
 	{
 		private int _i;
 		private int _count;
@@ -87,7 +87,7 @@ namespace BulletSharp
 
 		public void Reset()
 		{
-			_i = 0;
+			_i = -1;
 		}
 
 		public uint Current => _array[_i];
@@ -147,7 +147,12 @@ namespace BulletSharp
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<CompoundShapeChild> GetEnumerator()
+		public CompoundShapeChildArrayEnumerator GetEnumerator()
+		{
+			return new CompoundShapeChildArrayEnumerator(this);
+		}
+
+		IEnumerator<CompoundShapeChild> IEnumerable<CompoundShapeChild>.GetEnumerator()
 		{
 			return new CompoundShapeChildArrayEnumerator(this);
 		}
@@ -228,7 +233,12 @@ namespace BulletSharp
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator<uint> GetEnumerator()
+		public UIntArrayEnumerator GetEnumerator()
+		{
+			return new UIntArrayEnumerator(this);
+		}
+
+		IEnumerator<uint> IEnumerable<uint>.GetEnumerator()
 		{
 			return new UIntArrayEnumerator(this);
 		}

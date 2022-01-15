@@ -29,9 +29,9 @@ namespace BulletSharp
 		}
 	}
 
-	public class AlignedCollisionObjectArrayEnumerator : IEnumerator<CollisionObject>
+	public struct AlignedCollisionObjectArrayEnumerator : IEnumerator<CollisionObject>
 	{
-		private int _i = -1;
+		private int _i;
 		private readonly int _count;
 		private readonly IList<CollisionObject> _array;
 
@@ -39,6 +39,7 @@ namespace BulletSharp
 		{
 			_array = array;
 			_count = array.Count;
+			_i = -1;
 		}
 
 		public CollisionObject Current => _array[_i];
@@ -57,7 +58,7 @@ namespace BulletSharp
 
 		public void Reset()
 		{
-			_i = 0;
+			_i = -1;
 		}
 	}
 
@@ -256,7 +257,12 @@ namespace BulletSharp
 			}
 		}
 
-		public IEnumerator<CollisionObject> GetEnumerator()
+		public AlignedCollisionObjectArrayEnumerator GetEnumerator()
+		{
+			return new AlignedCollisionObjectArrayEnumerator(_backingList ?? this as IList<CollisionObject>);
+		}
+
+		IEnumerator<CollisionObject> IEnumerable<CollisionObject>.GetEnumerator()
 		{
 			if (_backingList != null)
 			{
