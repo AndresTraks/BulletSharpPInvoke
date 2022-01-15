@@ -14,6 +14,7 @@ namespace BulletSharp
 		}
 
 		public GhostObject()
+			: base(ConstructionInfo.Null)
 		{
 			IntPtr native = btGhostObject_new();
 			InitializeCollisionObject(native);
