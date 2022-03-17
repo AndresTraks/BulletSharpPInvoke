@@ -1,5 +1,5 @@
 using System;
-using BulletSharp.Math;
+using System.Numerics;
 
 namespace BulletSharp
 {
@@ -32,12 +32,11 @@ namespace BulletSharp
             Vector3 v10 = point1 - point0;
             Vector3 v20 = point2 - point0;
 
-            Vector3 triangleNormal = v10.Cross(v20);
+            Vector3 triangleNormal = Vector3.Cross(v10, v20);
 
-            float dist;
-            point0.Dot(ref triangleNormal, out dist);
-            float distA = triangleNormal.Dot(From) - dist;
-            float distB = triangleNormal.Dot(To) - dist;
+            float dist = Vector3.Dot(point0, triangleNormal);
+            float distA = Vector3.Dot(triangleNormal, From) - dist;
+            float distB = Vector3.Dot(triangleNormal, To) - dist;
 
             if (distA * distB >= 0.0f)
             {
@@ -60,33 +59,30 @@ namespace BulletSharp
 
             if (distance < HitFraction)
             {
-                float edgeTolerance = triangleNormal.LengthSquared;
+                float edgeTolerance = triangleNormal.LengthSquared();
                 edgeTolerance *= -0.0001f;
                 Vector3 point = Vector3.Lerp(From, To, distance);
                 {
-                    Vector3 v0p; v0p = point0 - point;
-                    Vector3 v1p; v1p = point1 - point;
-                    Vector3 cp0; cp0 = v0p.Cross(v1p);
+                    Vector3 v0p = point0 - point;
+                    Vector3 v1p = point1 - point;
+                    Vector3 cp0 = Vector3.Cross(v0p, v1p);
 
-                    float dot;
-                    cp0.Dot(ref triangleNormal, out dot);
+                    float dot = Vector3.Dot(cp0, triangleNormal);
                     if (dot >= edgeTolerance)
                     {
                         Vector3 v2p; v2p = point2 - point;
-                        Vector3 cp1;
-                        cp1 = v1p.Cross(v2p);
-                        cp1.Dot(ref triangleNormal, out dot);
+                        Vector3 cp1 = Vector3.Cross(v1p, v2p);
+                        dot = Vector3.Dot(cp1, triangleNormal);
                         if (dot >= edgeTolerance)
                         {
-                            Vector3 cp2;
-                            cp2 = v2p.Cross(v0p);
+                            Vector3 cp2 = Vector3.Cross(v2p, v0p);
 
-                            cp2.Dot(ref triangleNormal, out dot);
+                            dot = Vector3.Dot(cp2, triangleNormal);
                             if (dot >= edgeTolerance)
                             {
                                 //@BP Mod
                                 // Triangle normal isn't normalized
-                                triangleNormal.Normalize();
+                                triangleNormal = Vector3.Normalize(triangleNormal);
 
                                 //@BP Mod - Allow for unflipped normal when raycasting against backfaces
                                 if (((Flags & EFlags.KeepUnflippedNormal) == 0) && (distA <= 0.0f))
@@ -111,7 +107,7 @@ namespace BulletSharp
 
 	public abstract class TriangleConvexcastCallback : TriangleCallback
 	{
-        public TriangleConvexcastCallback(ConvexShape convexShape, ref Matrix convexShapeFrom, ref Matrix convexShapeTo, ref Matrix triangleToWorld, float triangleCollisionMargin)
+        public TriangleConvexcastCallback(ConvexShape convexShape, ref Matrix4x4 convexShapeFrom, ref Matrix4x4 convexShapeTo, ref Matrix4x4 triangleToWorld, float triangleCollisionMargin)
         {
             ConvexShape = convexShape;
             ConvexShapeFrom = convexShapeFrom;
@@ -132,10 +128,10 @@ namespace BulletSharp
 
         public float AllowedPenetration { get; set; }
         public ConvexShape ConvexShape { get; set; }
-        public Matrix ConvexShapeFrom { get; set; }
-        public Matrix ConvexShapeTo { get; set; }
+        public Matrix4x4 ConvexShapeFrom { get; set; }
+        public Matrix4x4 ConvexShapeTo { get; set; }
         public float HitFraction { get; set; }
         public float TriangleCollisionMargin { get; set; }
-        public Matrix TriangleToWorld { get; set; }
+        public Matrix4x4 TriangleToWorld { get; set; }
 	}
 }

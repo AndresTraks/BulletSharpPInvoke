@@ -1,5 +1,5 @@
 using System;
-using BulletSharp.Math;
+using System.Numerics;
 
 namespace BulletSharp
 {
@@ -57,7 +57,7 @@ namespace BulletSharp
 
             //ClientInfo = IntPtr.Zero;
             //ClippedInvContactDotSuspension = 0;
-            WorldTransform = Matrix.Identity;
+            WorldTransform = Matrix4x4.Identity;
             //WheelsSuspensionForce = 0;
             //SuspensionRelativeVelocity = 0;
             //SkidInfo = 0;
@@ -125,6 +125,6 @@ namespace BulletSharp
         public float WheelsDampingRelaxation;
         public float WheelsRadius;
         public float WheelsSuspensionForce;
-        public Matrix WorldTransform;
+        public Matrix4x4 WorldTransform;
     }
 }

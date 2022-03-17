@@ -1,6 +1,6 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
-using System;
+﻿using System;
+using System.Numerics;
+using BulletSharp;
 
 namespace BulletSharpTest
 {
@@ -22,7 +22,7 @@ namespace BulletSharpTest
             World = new DiscreteDynamicsWorld(_dispatcher, Broadphase, null, _conf);
         }
 
-        public RigidBody AddBody(CollisionShape shape, Matrix transform, float mass)
+        public RigidBody AddBody(CollisionShape shape, Matrix4x4 transform, float mass)
         {
             using (var info = new RigidBodyConstructionInfo(mass, null, shape, Vector3.Zero))
             {
@@ -37,7 +37,7 @@ namespace BulletSharpTest
             }
         }
 
-        public RigidBody AddStaticBody(CollisionShape shape, Matrix transform)
+        public RigidBody AddStaticBody(CollisionShape shape, Matrix4x4 transform)
         {
             const float mass = 0;
             using (var info = new RigidBodyConstructionInfo(mass, null, shape, Vector3.Zero))

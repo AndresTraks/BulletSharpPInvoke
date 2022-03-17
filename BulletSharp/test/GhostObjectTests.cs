@@ -1,5 +1,5 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+﻿using System.Numerics;
+using BulletSharp;
 using NUnit.Framework;
 
 namespace BulletSharpTest
@@ -23,13 +23,13 @@ namespace BulletSharpTest
             _context.Broadphase.OverlappingPairCache.SetInternalGhostPairCallback(_ghostPairCallback);
 
             _shape = new BoxShape(2);
-            RigidBody staticBox = _context.AddStaticBody(_shape, Matrix.Translation(0, 0, 0));
-            RigidBody dynamicBox = _context.AddBody(_shape, Matrix.Translation(0, 1, 0), 1);
+            RigidBody staticBox = _context.AddStaticBody(_shape, Matrix4x4.CreateTranslation(0, 0, 0));
+            RigidBody dynamicBox = _context.AddBody(_shape, Matrix4x4.CreateTranslation(0, 1, 0), 1);
 
             _ghostObject = new PairCachingGhostObject
             {
                 CollisionShape = _shape,
-                WorldTransform = Matrix.Translation(2, 2, 0)
+                WorldTransform = Matrix4x4.CreateTranslation(2, 2, 0)
             };
             _context.World.AddCollisionObject(_ghostObject);
         }
@@ -37,7 +37,7 @@ namespace BulletSharpTest
         [Test]
         public void GhostObjectPairsTest()
         {
-            var world = _context.DiscreteDynamicsWorld;
+            var world = _context.World;
             world.StepSimulation(1.0f / 60.0f);
 
             AlignedManifoldArray manifoldArray = new AlignedManifoldArray();

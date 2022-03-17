@@ -1,5 +1,5 @@
 using System;
-using BulletSharp.Math;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -179,11 +179,11 @@ namespace BulletSharp
 			set => btMultibodyLink_setCachedRVectorInterpolate(Native, ref value);
 		}
 
-		public Matrix CachedWorldTransform
+		public Matrix4x4 CachedWorldTransform
 		{
 			get
 			{
-				Matrix value;
+				Matrix4x4 value;
 				btMultibodyLink_getCachedWorldTransform(Native, out value);
 				return value;
 			}

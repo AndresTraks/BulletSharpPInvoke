@@ -1,7 +1,7 @@
 using System;
-using BulletSharp.Math;
-using static BulletSharp.UnsafeNativeMethods;
+using System.Numerics;
 using System.Runtime.InteropServices;
+using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {

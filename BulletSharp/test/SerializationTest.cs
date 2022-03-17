@@ -1,8 +1,8 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
+using System.Reflection;
 using BulletSharp;
 using NUnit.Framework;
-using System.Reflection;
-using System.IO;
 
 namespace BulletSharpTest
 {

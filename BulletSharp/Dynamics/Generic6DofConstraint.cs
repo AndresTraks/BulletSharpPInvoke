@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using BulletSharp.Math;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -373,7 +373,7 @@ namespace BulletSharp
 		}
 
 		public Generic6DofConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
-			Matrix frameInA, Matrix frameInB, bool useLinearReferenceFrameA)
+			Matrix4x4 frameInA, Matrix4x4 frameInB, bool useLinearReferenceFrameA)
 		{
 			IntPtr native = btGeneric6DofConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
 				ref frameInA, ref frameInB, useLinearReferenceFrameA);
@@ -381,7 +381,7 @@ namespace BulletSharp
 			InitializeMembers(rigidBodyA, rigidBodyB);
 		}
 
-		public Generic6DofConstraint(RigidBody rigidBodyB, Matrix frameInB, bool useLinearReferenceFrameB)
+		public Generic6DofConstraint(RigidBody rigidBodyB, Matrix4x4 frameInB, bool useLinearReferenceFrameB)
 		{
 			IntPtr native = btGeneric6DofConstraint_new2(rigidBodyB.Native, ref frameInB,
 				useLinearReferenceFrameB);
@@ -394,12 +394,12 @@ namespace BulletSharp
 			btGeneric6DofConstraint_calcAnchorPos(Native);
 		}
 
-		public void CalculateTransformsRef(ref Matrix transA, ref Matrix transB)
+		public void CalculateTransformsRef(ref Matrix4x4 transA, ref Matrix4x4 transB)
 		{
 			btGeneric6DofConstraint_calculateTransforms(Native, ref transA, ref transB);
 		}
 
-		public void CalculateTransforms(Matrix transA, Matrix transB)
+		public void CalculateTransforms(Matrix4x4 transA, Matrix4x4 transB)
 		{
 			btGeneric6DofConstraint_calculateTransforms(Native, ref transA, ref transB);
 		}
@@ -409,8 +409,8 @@ namespace BulletSharp
 			btGeneric6DofConstraint_calculateTransforms2(Native);
 		}
 
-		public int GetLimitMotorInfo2(RotationalLimitMotor limitMotor, Matrix transA,
-			Matrix transB, Vector3 linVelA, Vector3 linVelB, Vector3 angVelA, Vector3 angVelB,
+		public int GetLimitMotorInfo2(RotationalLimitMotor limitMotor, Matrix4x4 transA,
+			Matrix4x4 transB, Vector3 linVelA, Vector3 linVelB, Vector3 angVelA, Vector3 angVelB,
 			ConstraintInfo2 info, int row, ref Vector3 ax1, int rotational, int rotAllowed = 0)
 		{
 			return btGeneric6DofConstraint_get_limit_motor_info2(Native, limitMotor.Native,
@@ -435,7 +435,7 @@ namespace BulletSharp
 			btGeneric6DofConstraint_getInfo1NonVirtual(Native, info.Native);
 		}
 
-		public void GetInfo2NonVirtual(ConstraintInfo2 info, Matrix transA, Matrix transB,
+		public void GetInfo2NonVirtual(ConstraintInfo2 info, Matrix4x4 transA, Matrix4x4 transB,
 			Vector3 linVelA, Vector3 linVelB, Vector3 angVelA, Vector3 angVelB)
 		{
 			btGeneric6DofConstraint_getInfo2NonVirtual(Native, info.Native, ref transA,
@@ -471,12 +471,12 @@ namespace BulletSharp
 			btGeneric6DofConstraint_setAxis(Native, ref axis1, ref axis2);
 		}
 
-		public void SetFramesRef(ref Matrix frameA, ref Matrix frameB)
+		public void SetFramesRef(ref Matrix4x4 frameA, ref Matrix4x4 frameB)
 		{
 			btGeneric6DofConstraint_setFrames(Native, ref frameA, ref frameB);
 		}
 
-		public void SetFrames(Matrix frameA, Matrix frameB)
+		public void SetFrames(Matrix4x4 frameA, Matrix4x4 frameB)
 		{
 			btGeneric6DofConstraint_setFrames(Native, ref frameA, ref frameB);
 		}
@@ -518,21 +518,21 @@ namespace BulletSharp
 			set => btGeneric6DofConstraint_setAngularUpperLimit(Native, ref value);
 		}
 
-		public Matrix CalculatedTransformA
+		public Matrix4x4 CalculatedTransformA
 		{
 			get
 			{
-				Matrix value;
+				Matrix4x4 value;
 				btGeneric6DofConstraint_getCalculatedTransformA(Native, out value);
 				return value;
 			}
 		}
 
-		public Matrix CalculatedTransformB
+		public Matrix4x4 CalculatedTransformB
 		{
 			get
 			{
-				Matrix value;
+				Matrix4x4 value;
 				btGeneric6DofConstraint_getCalculatedTransformB(Native, out value);
 				return value;
 			}
@@ -540,21 +540,21 @@ namespace BulletSharp
 
 		public SixDofFlags Flags => btGeneric6DofConstraint_getFlags(Native);
 
-		public Matrix FrameOffsetA
+		public Matrix4x4 FrameOffsetA
 		{
 			get
 			{
-				Matrix value;
+				Matrix4x4 value;
 				btGeneric6DofConstraint_getFrameOffsetA(Native, out value);
 				return value;
 			}
 		}
 
-		public Matrix FrameOffsetB
+		public Matrix4x4 FrameOffsetB
 		{
 			get
 			{
-				Matrix value;
+				Matrix4x4 value;
 				btGeneric6DofConstraint_getFrameOffsetB(Native, out value);
 				return value;
 			}

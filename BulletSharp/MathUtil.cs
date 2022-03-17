@@ -21,9 +21,10 @@
 // * 3. This notice may not be removed or altered from any source distribution.
 // */
 
-using BulletSharp.Math;
 using System;
 using System.Diagnostics;
+using System.Numerics;
+using System.Runtime.InteropServices;
 
 namespace BulletSharp
 {
@@ -684,7 +685,7 @@ namespace BulletSharp
 
         public static bool FuzzyZero(Vector3 val)
         {
-            return val.LengthSquared < SIMD_EPSILON * SIMD_EPSILON;
+            return val.LengthSquared() < SIMD_EPSILON * SIMD_EPSILON;
         }
 
         public static uint Select(uint condition, uint valueIfConditionNonZero, uint valueIfConditionZero)
@@ -728,8 +729,7 @@ namespace BulletSharp
         public static Quaternion ShortestArcQuat(ref Vector3 axisInA, ref Vector3 axisInB)
         {
             Vector3 c = Vector3.Cross(axisInA, axisInB);
-            float d;
-            Vector3.Dot(ref axisInA, ref axisInB, out d);
+            float d = Vector3.Dot(axisInA, axisInB);
 
             if (d < -1.0 + SIMD_EPSILON)
             {
@@ -881,7 +881,7 @@ namespace BulletSharp
         [Conditional("DEBUG")]
         public static void ZeroCheckVector(ref Vector3 v)
         {
-            if (FuzzyZero(v.LengthSquared))
+            if (FuzzyZero(v.LengthSquared()))
             {
                 //Debug.Assert(false);
             }
@@ -1151,24 +1151,179 @@ namespace BulletSharp
         {
             Vector3 xa = new Vector3(x.X, 0, x.Z);
             Vector3 ya = new Vector3(y.X, 0, y.Z);
-            return (xa - ya).LengthSquared;
+            return (xa - ya).LengthSquared();
         }
 
-        public static void SetRotation(this Matrix matrix, Quaternion newRotation, out Matrix result)
+        public static void SetRotation(this Matrix4x4 matrix, Quaternion newRotation, out Matrix4x4 result)
         {
-            matrix.Decompose(out Vector3 scale, out _, out Vector3 translation);
-            result = Matrix.Scaling(scale) * Matrix.RotationQuaternion(newRotation) * Matrix.Translation(translation);
+            Matrix4x4.Decompose(matrix, out Vector3 scale, out _, out Vector3 translation);
+            result = Matrix4x4.CreateScale(scale) * Matrix4x4.CreateFromQuaternion(newRotation) * Matrix4x4.CreateTranslation(translation);
         }
 
-        public static Quaternion GetRotation(this Matrix matrix)
+        public static Quaternion GetRotation(this Matrix4x4 matrix)
         {
-            matrix.Decompose(out _, out Quaternion rot, out _);
+            Matrix4x4.Decompose(matrix, out _, out Quaternion rot, out _);
             return rot;
         }
 
-        public static Vector3 GetColumn(this Matrix matrix, int column)
+        public static Vector3 GetColumn(this Matrix4x4 matrix, int column)
         {
-            return new Vector3(matrix[0, column], matrix[1, column], matrix[2, column]);
+            return new Vector3(matrix.GetComponent(0, column), matrix.GetComponent(1, column), matrix.GetComponent(2, column));
+        }
+
+        public static Vector3 GetRow(this Matrix4x4 matrix, int row)
+        {
+            return new Vector3(matrix.GetComponent(row, 0), matrix.GetComponent(row, 1), matrix.GetComponent(row, 2));
+        }
+
+        /// <summary>
+        /// Gets the component at the specified index.
+        /// </summary>
+        /// <value>The value of the X, Y, or Z component, depending on the index.</value>
+        /// <param name="index">The index of the component to access. Use 0 for the X component, 1 for the Y component, and 2 for the Z component.</param>
+        /// <returns>The value of the component at the specified index.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of the range [0, 2].</exception>
+        public static float GetComponent(ref this Vector3 vector, int index)
+        {
+            switch (index)
+            {
+                case 0: return vector.X;
+                case 1: return vector.Y;
+                case 2: return vector.Z;
+            }
+
+            throw new ArgumentOutOfRangeException("index", "Indices for Vector3 run from 0 to 2, inclusive.");
+        }
+
+        /// <summary>
+        /// Sets the component at the specified index.
+        /// </summary>
+        /// <value>The value of the X, Y, or Z component, depending on the index.</value>
+        /// <param name="index">The index of the component to access. Use 0 for the X component, 1 for the Y component, and 2 for the Z component.</param>
+        /// <param name="value">The new value of the component.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of the range [0, 2].</exception>
+        public static void SetComponent(ref this Vector3 vector, int index, float value)
+        {
+            switch (index)
+            {
+                case 0: vector.X = value; break;
+                case 1: vector.Y = value; break;
+                case 2: vector.Z = value; break;
+                default: throw new ArgumentOutOfRangeException("index", "Indices for Vector3 run from 0 to 2, inclusive.");
+            }
+        }
+
+        public static Vector3 MakeVector3(float[] values)
+        {
+            if (values == null)
+                throw new ArgumentNullException(nameof(values));
+            if (values.Length != 3)
+                throw new ArgumentOutOfRangeException(nameof(values), "There must be three and only three input values for a Vector3.");
+
+            return new Vector3(values[0], values[1], values[2]);
+        }
+
+        public static Matrix4x4 GetBasis(ref this Matrix4x4 matrix)
+        {
+            return new Matrix4x4(matrix.M11, matrix.M12, matrix.M13, 0,
+                                 matrix.M21, matrix.M22, matrix.M23, 0,
+                                 matrix.M31, matrix.M32, matrix.M33, 0,
+                                 0, 0, 0, 1);
+        }
+
+        public static void SetBasis(ref this Matrix4x4 matrix, Matrix4x4 basis)
+        {
+            matrix.M11 = basis.M11;
+            matrix.M12 = basis.M12;
+            matrix.M13 = basis.M13;
+            matrix.M21 = basis.M21;
+            matrix.M22 = basis.M22;
+            matrix.M23 = basis.M23;
+            matrix.M31 = basis.M31;
+            matrix.M32 = basis.M32;
+            matrix.M33 = basis.M33;
+        }
+
+        public static float GetComponent(ref this Matrix4x4 matrix, int index)
+        {
+            switch (index)
+            {
+                case 0: return matrix.M11;
+                case 1: return matrix.M12;
+                case 2: return matrix.M13;
+                case 3: return matrix.M14;
+                case 4: return matrix.M21;
+                case 5: return matrix.M22;
+                case 6: return matrix.M23;
+                case 7: return matrix.M24;
+                case 8: return matrix.M31;
+                case 9: return matrix.M32;
+                case 10: return matrix.M33;
+                case 11: return matrix.M34;
+                case 12: return matrix.M41;
+                case 13: return matrix.M42;
+                case 14: return matrix.M43;
+                case 15: return matrix.M44;
+            }
+
+            throw new ArgumentOutOfRangeException("index", "Indices for Matrix run from 0 to 15, inclusive.");
+        }
+
+        public static void SetComponent(ref this Matrix4x4 matrix, int index, float value)
+        {
+            switch (index)
+            {
+                case 0: matrix.M11 = value; break;
+                case 1: matrix.M12 = value; break;
+                case 2: matrix.M13 = value; break;
+                case 3: matrix.M14 = value; break;
+                case 4: matrix.M21 = value; break;
+                case 5: matrix.M22 = value; break;
+                case 6: matrix.M23 = value; break;
+                case 7: matrix.M24 = value; break;
+                case 8: matrix.M31 = value; break;
+                case 9: matrix.M32 = value; break;
+                case 10: matrix.M33 = value; break;
+                case 11: matrix.M34 = value; break;
+                case 12: matrix.M41 = value; break;
+                case 13: matrix.M42 = value; break;
+                case 14: matrix.M43 = value; break;
+                case 15: matrix.M44 = value; break;
+                default: throw new ArgumentOutOfRangeException("index", "Indices for Matrix run from 0 to 15, inclusive.");
+            }
+        }
+
+        public static float GetComponent(ref this Matrix4x4 matrix, int row, int column)
+        {
+            if (row < 0 || row > 3)
+                throw new ArgumentOutOfRangeException("row", "Rows and columns for matrices run from 0 to 3, inclusive.");
+            if (column < 0 || column > 3)
+                throw new ArgumentOutOfRangeException("column", "Rows and columns for matrices run from 0 to 3, inclusive.");
+
+            return matrix.GetComponent((row * 4) + column);
+        }
+
+        public static void SetComponent(ref this Matrix4x4 matrix, int row, int column, float value)
+        {
+            if (row < 0 || row > 3)
+                throw new ArgumentOutOfRangeException("row", "Rows and columns for matrices run from 0 to 3, inclusive.");
+            if (column < 0 || column > 3)
+                throw new ArgumentOutOfRangeException("column", "Rows and columns for matrices run from 0 to 3, inclusive.");
+
+            matrix.SetComponent((row * 4) + column, value);
+        }
+
+        public static Matrix4x4 MakeMatrix4x4(float[] values)
+        {
+            if (values == null)
+                throw new ArgumentNullException(nameof(values));
+            if (values.Length != 16)
+                throw new ArgumentOutOfRangeException(nameof(values), "There must be sixteen and only sixteen input values for a Matrix4x4.");
+
+            return new Matrix4x4(values[0], values[1], values[2], values[3],
+                                 values[4], values[5], values[6], values[7],
+                                 values[8], values[9], values[10], values[11],
+                                 values[12], values[13], values[14], values[15]);
         }
 
         public static T Clamp<T>(T value, T min, T max)
@@ -1197,7 +1352,53 @@ namespace BulletSharp
         public const float SIMD_INFINITY = float.MaxValue;
         public const float SIMD_RADS_PER_DEG = (SIMD_2_PI / 360.0f);
         public const float SIMD_DEGS_PER_RAD = (360.0f / SIMD_2_PI);
+    }
 
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct Matrix3x3FloatData
+    {
+        public Vector3FloatData Element0;
+        public Vector3FloatData Element1;
+        public Vector3FloatData Element2;
+    }
 
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct Matrix3x3DoubleData
+    {
+        public Vector3DoubleData Element0;
+        public Vector3DoubleData Element1;
+        public Vector3DoubleData Element2;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct TransformFloatData
+    {
+        public Matrix3x3FloatData Basis;
+        public Vector3FloatData Origin;
+
+        public const int OriginOffset = 48;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct TransformDoubleData
+    {
+        public Matrix3x3DoubleData Basis;
+        public Vector3DoubleData Origin;
+
+        public const int OriginOffset = 96;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal unsafe struct Vector3FloatData
+    {
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        public float[] floats;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal unsafe struct Vector3DoubleData
+    {
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        public double[] floats;
     }
 }

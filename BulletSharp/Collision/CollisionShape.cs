@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using BulletSharp.Math;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -58,27 +58,27 @@ namespace BulletSharp
 			return btCollisionShape_calculateSerializeBufferSize(Native);
 		}
 
-		public void CalculateTemporalAabbRef(ref Matrix curTrans, ref Vector3 linvel, ref Vector3 angvel,
+		public void CalculateTemporalAabbRef(ref Matrix4x4 curTrans, ref Vector3 linvel, ref Vector3 angvel,
 			float timeStep, out Vector3 temporalAabbMin, out Vector3 temporalAabbMax)
 		{
 			btCollisionShape_calculateTemporalAabb(Native, ref curTrans, ref linvel, ref angvel, timeStep, out temporalAabbMin, out temporalAabbMax);
 		}
 
-		public void CalculateTemporalAabb(Matrix curTrans, Vector3 linvel, Vector3 angvel,
+		public void CalculateTemporalAabb(Matrix4x4 curTrans, Vector3 linvel, Vector3 angvel,
 			float timeStep, out Vector3 temporalAabbMin, out Vector3 temporalAabbMax)
 		{
 			btCollisionShape_calculateTemporalAabb(Native, ref curTrans, ref linvel,
 				ref angvel, timeStep, out temporalAabbMin, out temporalAabbMax);
 		}
 
-		public void GetAabbRef(ref Matrix t, out Vector3 aabbMin, out Vector3 aabbMax)
+		public void GetAabbRef(ref Matrix4x4 transformation, out Vector3 aabbMin, out Vector3 aabbMax)
 		{
-			btCollisionShape_getAabb(Native, ref t, out aabbMin, out aabbMax);
+			btCollisionShape_getAabb(Native, ref transformation, out aabbMin, out aabbMax);
 		}
 
-		public void GetAabb(Matrix t, out Vector3 aabbMin, out Vector3 aabbMax)
+		public void GetAabb(Matrix4x4 transformation, out Vector3 aabbMin, out Vector3 aabbMax)
 		{
-			btCollisionShape_getAabb(Native, ref t, out aabbMin, out aabbMax);
+			btCollisionShape_getAabb(Native, ref transformation, out aabbMin, out aabbMax);
 		}
 
 		public void GetBoundingSphere(out Vector3 center, out float radius)

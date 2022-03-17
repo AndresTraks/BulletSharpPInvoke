@@ -1,5 +1,5 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+﻿using System.Numerics;
+using BulletSharp;
 using BulletSharp.SoftBody;
 using NUnit.Framework;
 
@@ -20,8 +20,8 @@ namespace BulletSharpTest
             _context.InitializeWorld();
 
             _shape = new BoxShape(2);
-            RigidBody staticSphere = _context.AddStaticBody(_shape, Matrix.Translation(0, 0, 0));
-            RigidBody dynamicSphere = _context.AddBody(_shape, Matrix.Translation(0, 1, 0), 1);
+            RigidBody staticSphere = _context.AddStaticBody(_shape, Matrix4x4.CreateTranslation(0, 0, 0));
+            RigidBody dynamicSphere = _context.AddBody(_shape, Matrix4x4.CreateTranslation(0, 1, 0), 1);
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace BulletSharpTest
             using (var debugDrawer = new DebugDrawer())
             {
                 world.DebugDrawer = debugDrawer;
-                world.DebugDrawObject(Matrix.Identity, _shape, new Vector3(1, 0, 0));
+                world.DebugDrawObject(Matrix4x4.Identity, _shape, new Vector3(1, 0, 0));
                 Assert.That(debugDrawer.DrawBoxCalled, Is.True);
                 Assert.That(debugDrawer.DrawLineCalled, Is.True);
                 world.DebugDrawer = null;
@@ -106,7 +106,7 @@ namespace BulletSharpTest
                 Draw3DTextCalled = true;
             }
 
-            public override void DrawBox(ref Vector3 bbMin, ref Vector3 bbMax, ref Matrix trans, ref Vector3 color)
+            public override void DrawBox(ref Vector3 bbMin, ref Vector3 bbMax, ref Matrix4x4 trans, ref Vector3 color)
             {
                 DrawBoxCalled = true;
                 base.DrawBox(ref bbMin, ref bbMax, ref trans, ref color);

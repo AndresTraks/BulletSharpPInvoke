@@ -1,5 +1,5 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+﻿using System.Numerics;
+using BulletSharp;
 using NUnit.Framework;
 
 namespace BulletSharpTest
@@ -19,8 +19,8 @@ namespace BulletSharpTest
             _context.InitializeWorld();
 
             _shape = new BoxShape(2);
-            RigidBody staticSphere = _context.AddStaticBody(_shape, Matrix.Translation(0, 0, 0));
-            RigidBody dynamicSphere = _context.AddBody(_shape, Matrix.Translation(0, 1, 0), 1);
+            RigidBody staticSphere = _context.AddStaticBody(_shape, Matrix4x4.CreateTranslation(0, 0, 0));
+            RigidBody dynamicSphere = _context.AddBody(_shape, Matrix4x4.CreateTranslation(0, 1, 0), 1);
 
             _callback = new CustomOverlapFilterCallback(staticSphere, dynamicSphere);
         }
