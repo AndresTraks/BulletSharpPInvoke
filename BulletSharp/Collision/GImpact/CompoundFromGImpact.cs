@@ -1,4 +1,4 @@
-using BulletSharp.Math;
+using System.Numerics;
 
 namespace BulletSharp
 {
@@ -48,8 +48,8 @@ namespace BulletSharp
 			Vector3 v2 = vertex2 * scale;
 
 			Vector3 centroid = (v0 + v1 + v2) / 3;
-			Vector3 normal = (v1 - v0).Cross(v2 - v0);
-			normal.Normalize();
+			Vector3 normal = Vector3.Cross(v1 - v0, v2 - v0);
+			normal = Vector3.Normalize(normal);
 			Vector3 rayFrom = centroid;
 			Vector3 rayTo = centroid - normal * _depth;
 
@@ -66,7 +66,7 @@ namespace BulletSharp
 			}
 
 			var triangle = new BuSimplex1To4(v0, v1, v2, rayTo);
-			_collisionShape.AddChildShape(Matrix.Identity, triangle);
+			_collisionShape.AddChildShape(Matrix4x4.Identity, triangle);
 		}
 	}
 
@@ -78,7 +78,7 @@ namespace BulletSharp
 			using (var callback = new MyInternalTriangleIndexCallback(shape, impactMesh, depth))
 			{
 				Vector3 aabbMin, aabbMax;
-				impactMesh.GetAabb(Matrix.Identity, out aabbMin, out aabbMax);
+				impactMesh.GetAabb(Matrix4x4.Identity, out aabbMin, out aabbMax);
 				impactMesh.MeshInterface.InternalProcessAllTriangles(callback, aabbMin, aabbMax);
 			}
 			return shape;

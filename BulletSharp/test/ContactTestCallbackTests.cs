@@ -1,5 +1,5 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+﻿using System.Numerics;
+using BulletSharp;
 using NUnit.Framework;
 
 namespace BulletSharpTest
@@ -22,8 +22,8 @@ namespace BulletSharpTest
 
             _shape = new BoxShape(2);
 
-            _sphere1 = _context.AddBody(_shape, Matrix.Translation(2, 2, 0), 10);
-            _sphere2 = _context.AddBody(_shape, Matrix.Translation(0, 2, 0), 1);
+            _sphere1 = _context.AddBody(_shape, Matrix4x4.CreateTranslation(2, 2, 0), 10);
+            _sphere2 = _context.AddBody(_shape, Matrix4x4.CreateTranslation(0, 2, 0), 1);
         }
 
         [Test]

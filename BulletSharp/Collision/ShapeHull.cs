@@ -1,4 +1,3 @@
-using BulletSharp.Math;
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 

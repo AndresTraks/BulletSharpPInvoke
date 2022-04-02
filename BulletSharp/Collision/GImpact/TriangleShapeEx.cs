@@ -1,5 +1,5 @@
-using BulletSharp.Math;
 using System;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -72,9 +72,9 @@ namespace BulletSharp
 			InitializeUserOwned(native);
 		}
 
-		public void ApplyTransform(Matrix t)
+		public void ApplyTransform(Matrix4x4 transform)
 		{
-			btPrimitiveTriangle_applyTransform(Native, ref t);
+			btPrimitiveTriangle_applyTransform(Native, ref transform);
 		}
 
 		public void BuildTriPlane()
@@ -156,7 +156,7 @@ namespace BulletSharp
 			InitializeCollisionShape(native);
 		}
 
-		public void ApplyTransform(Matrix transform)
+		public void ApplyTransform(Matrix4x4 transform)
 		{
 			btTriangleShapeEx_applyTransform(Native, ref transform);
 		}

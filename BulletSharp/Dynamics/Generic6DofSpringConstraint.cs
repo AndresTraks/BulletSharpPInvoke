@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using BulletSharp.Math;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -8,7 +8,7 @@ namespace BulletSharp
 	public class Generic6DofSpringConstraint : Generic6DofConstraint
 	{
 		public Generic6DofSpringConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB,
-			Matrix frameInA, Matrix frameInB, bool useLinearReferenceFrameA)
+			Matrix4x4 frameInA, Matrix4x4 frameInB, bool useLinearReferenceFrameA)
 		{
 			IntPtr native = btGeneric6DofSpringConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
 				ref frameInA, ref frameInB, useLinearReferenceFrameA);
@@ -16,7 +16,7 @@ namespace BulletSharp
 			InitializeMembers(rigidBodyA, rigidBodyB);
 		}
 
-		public Generic6DofSpringConstraint(RigidBody rigidBodyB, Matrix frameInB,
+		public Generic6DofSpringConstraint(RigidBody rigidBodyB, Matrix4x4 frameInB,
 			bool useLinearReferenceFrameB)
 		{
 			IntPtr native = btGeneric6DofSpringConstraint_new2(rigidBodyB.Native, ref frameInB,

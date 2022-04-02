@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using BulletSharp.Math;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp

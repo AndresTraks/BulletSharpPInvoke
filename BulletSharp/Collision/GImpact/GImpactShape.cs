@@ -1,7 +1,7 @@
-using BulletSharp.Math;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -46,7 +46,7 @@ namespace BulletSharp
 			btGImpactShapeInterface_getBulletTriangle(Native, primitiveIndex, triangle.Native);
 		}
 
-		public void GetChildAabb(int childIndex, Matrix transform, out Vector3 aabbMin, out Vector3 aabbMax)
+		public void GetChildAabb(int childIndex, Matrix4x4 transform, out Vector3 aabbMin, out Vector3 aabbMax)
 		{
 			btGImpactShapeInterface_getChildAabb(Native, childIndex, ref transform,
 				out aabbMin, out aabbMax);
@@ -54,9 +54,9 @@ namespace BulletSharp
 
 		public abstract CollisionShape GetChildShape(int index);
 
-		public Matrix GetChildTransform(int index)
+		public Matrix4x4 GetChildTransform(int index)
 		{
-			Matrix value;
+			Matrix4x4 value;
 			btGImpactShapeInterface_getChildTransform(Native, index, out value);
 			return value;
 		}
@@ -100,7 +100,7 @@ namespace BulletSharp
 			btGImpactShapeInterface_rayTest(Native, ref rayFrom, ref rayTo, resultCallback.Native);
 		}
 
-		public void SetChildTransform(int index, Matrix transform)
+		public void SetChildTransform(int index, Matrix4x4 transform)
 		{
 			btGImpactShapeInterface_setChildTransform(Native, index, ref transform);
 		}
@@ -160,7 +160,7 @@ namespace BulletSharp
 			InitializeCollisionShape(native);
 		}
 
-		public void AddChildShape(Matrix localTransform, CollisionShape shape)
+		public void AddChildShape(Matrix4x4 localTransform, CollisionShape shape)
 		{
 			_childShapes.Add(shape);
 			btGImpactCompoundShape_addChildShape(Native, ref localTransform, shape.Native);

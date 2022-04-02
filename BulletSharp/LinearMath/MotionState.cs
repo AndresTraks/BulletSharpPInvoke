@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
-using BulletSharp.Math;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -9,9 +9,9 @@ namespace BulletSharp
 	public abstract class MotionState : BulletDisposableObject
 	{
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		private delegate void GetWorldTransformUnmanagedDelegate(out Matrix worldTrans);
+		private delegate void GetWorldTransformUnmanagedDelegate(out Matrix4x4 worldTrans);
 		[UnmanagedFunctionPointer(BulletSharp.Native.Conv), SuppressUnmanagedCodeSecurity]
-		private delegate void SetWorldTransformUnmanagedDelegate(ref Matrix worldTrans);
+		private delegate void SetWorldTransformUnmanagedDelegate(ref Matrix4x4 worldTrans);
 
 		private readonly GetWorldTransformUnmanagedDelegate _getWorldTransform;
 		private readonly SetWorldTransformUnmanagedDelegate _setWorldTransform;
@@ -31,24 +31,24 @@ namespace BulletSharp
 			InitializeUserOwned(native);
 		}
 
-		void GetWorldTransformUnmanaged(out Matrix worldTrans)
+		void GetWorldTransformUnmanaged(out Matrix4x4 worldTrans)
 		{
 			GetWorldTransform(out worldTrans);
 		}
 
-		void SetWorldTransformUnmanaged(ref Matrix worldTrans)
+		void SetWorldTransformUnmanaged(ref Matrix4x4 worldTrans)
 		{
 			SetWorldTransform(ref worldTrans);
 		}
 
-		public abstract void GetWorldTransform(out Matrix worldTrans);
-		public abstract void SetWorldTransform(ref Matrix worldTrans);
+		public abstract void GetWorldTransform(out Matrix4x4 worldTrans);
+		public abstract void SetWorldTransform(ref Matrix4x4 worldTrans);
 
-		public Matrix WorldTransform
+		public Matrix4x4 WorldTransform
 		{
 			get
 			{
-				Matrix transform;
+				Matrix4x4 transform;
 				GetWorldTransform(out transform);
 				return transform;
 			}

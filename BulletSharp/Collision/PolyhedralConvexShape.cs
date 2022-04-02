@@ -1,5 +1,5 @@
 using System;
-using BulletSharp.Math;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -79,14 +79,14 @@ namespace BulletSharp
 		{
 		}
 
-		public void GetNonvirtualAabbRef(ref Matrix trans, out Vector3 aabbMin, out Vector3 aabbMax,
+		public void GetNonvirtualAabbRef(ref Matrix4x4 trans, out Vector3 aabbMin, out Vector3 aabbMax,
 			float margin)
 		{
 			btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(Native, ref trans,
 				out aabbMin, out aabbMax, margin);
 		}
 
-		public void GetNonvirtualAabb(Matrix trans, out Vector3 aabbMin, out Vector3 aabbMax,
+		public void GetNonvirtualAabb(Matrix4x4 trans, out Vector3 aabbMin, out Vector3 aabbMax,
 			float margin)
 		{
 			btPolyhedralConvexAabbCachingShape_getNonvirtualAabb(Native, ref trans,

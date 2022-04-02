@@ -1,5 +1,5 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+﻿using System.Numerics;
+using BulletSharp;
 using NUnit.Framework;
 
 namespace BulletSharpTest

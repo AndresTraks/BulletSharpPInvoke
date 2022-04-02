@@ -1,4 +1,4 @@
-using BulletSharp.Math;
+using System.Numerics;
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
@@ -17,22 +17,22 @@ namespace BulletSharp
 			BT_BOX_BOX_TRANSFORM_CACHE_calc_absolute_matrix(Native);
 		}
 
-		public void CalculateFromFullInvertRef(ref Matrix transform0, ref Matrix transform1)
+		public void CalculateFromFullInvertRef(ref Matrix4x4 transform0, ref Matrix4x4 transform1)
 		{
 			BT_BOX_BOX_TRANSFORM_CACHE_calc_from_full_invert(Native, ref transform0, ref transform1);
 		}
 
-		public void CalculateFromFullInvert(Matrix transform0, Matrix transform1)
+		public void CalculateFromFullInvert(Matrix4x4 transform0, Matrix4x4 transform1)
 		{
 			BT_BOX_BOX_TRANSFORM_CACHE_calc_from_full_invert(Native, ref transform0, ref transform1);
 		}
 
-		public void CalculateFromFullHomogenicRef(ref Matrix transform0, ref Matrix transform1)
+		public void CalculateFromFullHomogenicRef(ref Matrix4x4 transform0, ref Matrix4x4 transform1)
 		{
 			BT_BOX_BOX_TRANSFORM_CACHE_calc_from_homogenic(Native, ref transform0, ref transform1);
 		}
 
-		public void CalculateFromFullHomogenic(Matrix transform0, Matrix transform1)
+		public void CalculateFromFullHomogenic(Matrix4x4 transform0, Matrix4x4 transform1)
 		{
 			BT_BOX_BOX_TRANSFORM_CACHE_calc_from_homogenic(Native, ref transform0, ref transform1);
 		}
@@ -49,22 +49,22 @@ namespace BulletSharp
 			return value;
 		}
 
-		public Matrix AbsoluteRotation
+		public Matrix4x4 AbsoluteRotation
 		{
 			get
 			{
-				Matrix value;
+				Matrix4x4 value;
 				BT_BOX_BOX_TRANSFORM_CACHE_getAR(Native, out value);
 				return value;
 			}
 			set { BT_BOX_BOX_TRANSFORM_CACHE_setAR(Native, ref value); }
 		}
 
-		public Matrix Rotation1To0
+		public Matrix4x4 Rotation1To0
 		{
 			get
 			{
-				Matrix value;
+				Matrix4x4 value;
 				BT_BOX_BOX_TRANSFORM_CACHE_getR1to0(Native, out value);
 				return value;
 			}
@@ -125,12 +125,12 @@ namespace BulletSharp
 			InitializeUserOwned(native);
 		}
 
-		public void ApplyTransformRef(ref Matrix transform)
+		public void ApplyTransformRef(ref Matrix4x4 transform)
 		{
 			btAABB_appy_transform(Native, ref transform);
 		}
 
-		public void ApplyTransform(Matrix transform)
+		public void ApplyTransform(Matrix4x4 transform)
 		{
 			btAABB_appy_transform(Native, ref transform);
 		}
@@ -214,12 +214,12 @@ namespace BulletSharp
 				fullTest);
 		}
 
-		public bool OverlappingTransConservativeRef(Aabb box, ref Matrix transform1To0)
+		public bool OverlappingTransConservativeRef(Aabb box, ref Matrix4x4 transform1To0)
 		{
 			return btAABB_overlapping_trans_conservative(Native, box.Native, ref transform1To0);
 		}
 
-		public bool OverlappingTransConservative(Aabb box, Matrix transform1To0)
+		public bool OverlappingTransConservative(Aabb box, Matrix4x4 transform1To0)
 		{
 			return btAABB_overlapping_trans_conservative(Native, box.Native, ref transform1To0);
 		}

@@ -1,5 +1,5 @@
 using System;
-using BulletSharp.Math;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -11,7 +11,7 @@ namespace BulletSharp
 		}
 
 		public bool CalcPenDepth(VoronoiSimplexSolver simplexSolver, ConvexShape convexA,
-			ConvexShape convexB, Matrix transA, Matrix transB, out Vector3 v, out Vector3 pa,
+			ConvexShape convexB, Matrix4x4 transA, Matrix4x4 transB, out Vector3 v, out Vector3 pa,
 			out Vector3 pb, DebugDraw debugDraw)
 		{
 			return btConvexPenetrationDepthSolver_calcPenDepth(Native, simplexSolver.Native,

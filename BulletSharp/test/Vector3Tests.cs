@@ -1,7 +1,7 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
-using NUnit.Framework;
+﻿using System.Numerics;
 using System.Runtime.InteropServices;
+using BulletSharp;
+using NUnit.Framework;
 
 namespace BulletSharpTest
 {

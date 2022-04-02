@@ -1,4 +1,4 @@
-using BulletSharp.Math;
+using System.Numerics;
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
@@ -189,8 +189,8 @@ namespace BulletSharp
 			btGImpactQuantizedBvh_buildSet(Native);
 		}
 
-		public static void FindCollision(GImpactQuantizedBvh boxset1, Matrix trans1,
-			GImpactQuantizedBvh boxset2, Matrix trans2, PairSet collisionPairs)
+		public static void FindCollision(GImpactQuantizedBvh boxset1, Matrix4x4 trans1,
+			GImpactQuantizedBvh boxset2, Matrix4x4 trans2, PairSet collisionPairs)
 		{
 			btGImpactQuantizedBvh_find_collision(boxset1.Native, ref trans1, boxset2.Native,
 				ref trans2, collisionPairs.Native);
