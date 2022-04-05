@@ -1,6 +1,6 @@
 ﻿using BulletSharp;
-using BulletSharp.Math;
 using OpenTK.Graphics.OpenGL;
+using System.Numerics;
 
 namespace DemoFramework.OpenTK
 {

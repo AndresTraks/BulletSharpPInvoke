@@ -1,9 +1,10 @@
 ﻿using BulletSharp;
-using BulletSharp.Math;
 using DemoFramework.DebugInfo;
 using System;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -176,7 +177,7 @@ namespace DemoFramework
                 Graphics.Initialize();
                 Graphics.CullingEnabled = true;
 
-                Input = new Input(Graphics.Form);
+                Input = new Input(Graphics.Form, Graphics.InputControl);
                 FreeLook = new FreeLook(Input);
 
                 InitializePhysics();
@@ -288,7 +289,7 @@ namespace DemoFramework
                 case Keys.F11:
                     Graphics.IsFullScreen = !Graphics.IsFullScreen;
                     break;
-                case (Keys.Control | Keys.F):
+                case Keys.Control | Keys.F:
                     const int maxSerializeBufferSize = 1024 * 1024 * 5;
                     using (var serializer = new DefaultSerializer(maxSerializeBufferSize))
                     {
@@ -296,7 +297,7 @@ namespace DemoFramework
                         var dataBytes = new byte[serializer.CurrentBufferSize];
                         Marshal.Copy(serializer.BufferPointer, dataBytes, 0,
                             dataBytes.Length);
-                        using (var file = new System.IO.FileStream("world.bullet", System.IO.FileMode.Create))
+                        using (var file = new FileStream("world.bullet", FileMode.Create))
                         {
                             file.Write(dataBytes, 0, dataBytes.Length);
                         }
@@ -306,7 +307,6 @@ namespace DemoFramework
                     //shadowsEnabled = !shadowsEnabled;
                     break;
                 case Keys.Space:
-                    Vector3 destination = GetCameraRayTo();
                     _boxShooter.Shoot(FreeLook.Eye, GetCameraRayTo());
                     break;
                 case Keys.Return:
@@ -322,15 +322,12 @@ namespace DemoFramework
 
         public Vector3 GetRayTo(Point point, Vector3 eye, Vector3 target, float fieldOfView)
         {
-            Vector3 rayForward = target - eye;
-            rayForward.Normalize();
+            Vector3 rayForward = Vector3.Normalize(target - eye);
             const float farPlane = 10000.0f;
             rayForward *= farPlane;
 
-            Vector3 horizontal = Vector3.Cross(rayForward, FreeLook.Up);
-            horizontal.Normalize();
-            Vector3 vertical = Vector3.Cross(horizontal, rayForward);
-            vertical.Normalize();
+            Vector3 horizontal = Vector3.Normalize(Vector3.Cross(rayForward, FreeLook.Up));
+            Vector3 vertical = Vector3.Normalize(Vector3.Cross(horizontal, rayForward));
 
             float tanFov = (float)Math.Tan(fieldOfView / 2);
             horizontal *= 2.0f * farPlane * tanFov;

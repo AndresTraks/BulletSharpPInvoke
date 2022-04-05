@@ -1,7 +1,7 @@
 ﻿using BulletSharp;
-using BulletSharp.Math;
 using DemoFramework;
 using System;
+using System.Numerics;
 
 namespace BasicDemo
 {
@@ -57,7 +57,7 @@ namespace BasicDemo
             var groundShape = new BoxShape(Scale * new Vector3(50, 1, 50));
             //var groundShape = new StaticPlaneShape(Vector3.UnitY, Scale);
 
-            CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix.Identity, groundShape, World);
+            CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix4x4.Identity, groundShape, World);
             ground.UserObject = "Ground";
         }
 
@@ -81,7 +81,7 @@ namespace BasicDemo
 
                         // using MotionState is recommended, it provides interpolation capabilities
                         // and only synchronizes 'active' objects
-                        bodyInfo.MotionState = new DefaultMotionState(Matrix.Translation(position));
+                        bodyInfo.MotionState = new DefaultMotionState(Matrix4x4.CreateTranslation(position));
                         var body = new RigidBody(bodyInfo);
 
                         World.AddRigidBody(body);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using BulletSharp;
-using BulletSharp.Math;
+using System.Numerics;
 
 namespace DemoFramework
 {
@@ -349,8 +349,7 @@ namespace DemoFramework
 
 
             // Side
-            normal = RotateYAxisUp(0, 0, radius, up);
-            normal.Normalize();
+            normal = Vector3.Normalize(RotateYAxisUp(0, 0, radius, up));
 
             baseIndex = index;
             vertices[v++] = RotateYAxisUp(0, halfHeight, 0, up);
@@ -365,8 +364,7 @@ namespace DemoFramework
                 float x = radius * (float)Math.Sin(j * angleStep);
                 float z = radius * (float)Math.Cos(j * angleStep);
 
-                normal = RotateYAxisUp(x, 0, z, up);
-                normal.Normalize();
+                normal = Vector3.Normalize(RotateYAxisUp(x, 0, z, up));
 
                 vertices[v++] = RotateYAxisUp(0, halfHeight, 0, up);
                 vertices[v++] = normal;
@@ -396,7 +394,7 @@ namespace DemoFramework
         {
             int up = shape.UpAxis;
             float radius = shape.Radius;
-            float halfHeight = shape.HalfExtentsWithoutMargin[up] + shape.Margin;
+            float halfHeight = shape.HalfExtentsWithoutMargin.GetComponent(up) + shape.Margin;
 
             const int numSteps = 10;
             const float angleStep = (2 * (float)Math.PI) / numSteps;
@@ -460,8 +458,7 @@ namespace DemoFramework
             }
 
 
-            normal = RotateYAxisUp(0, 0, radius, up);
-            normal.Normalize();
+            normal = Vector3.Normalize(RotateYAxisUp(0, 0, radius, up));
 
             baseIndex = index;
             vertices[v++] = RotateYAxisUp(0, halfHeight, radius, up);
@@ -476,8 +473,7 @@ namespace DemoFramework
                 float x = radius * (float)Math.Sin(j * angleStep);
                 float z = radius * (float)Math.Cos(j * angleStep);
 
-                normal = RotateYAxisUp(x, 0, z, up);
-                normal.Normalize();
+                normal = Vector3.Normalize(RotateYAxisUp(x, 0, z, up));
 
                 vertices[v++] = RotateYAxisUp(x, halfHeight, z, up);
                 vertices[v++] = normal;
@@ -523,8 +519,7 @@ namespace DemoFramework
 
                 Vector3 v01 = v0 - v1;
                 Vector3 v02 = v0 - v2;
-                Vector3 normal = Vector3.Cross(v01, v02);
-                normal.Normalize();
+                Vector3 normal = Vector3.Normalize(Vector3.Cross(v01, v02));
 
                 vertices[v++] = v0;
                 vertices[v++] = normal;
@@ -730,21 +725,21 @@ namespace DemoFramework
 
         private static void PlaneSpace1(Vector3 n, out Vector3 p, out Vector3 q)
         {
-            if (Math.Abs(n[2]) > (Math.Sqrt(2) / 2))
+            if (Math.Abs(n.Z) > (Math.Sqrt(2) / 2))
             {
                 // choose p in y-z plane
-                float a = n[1] * n[1] + n[2] * n[2];
+                float a = n.Y * n.Y + n.Z * n.Z;
                 float k = 1.0f / (float)Math.Sqrt(a);
-                p = new Vector3(0, -n[2] * k, n[1] * k);
+                p = new Vector3(0, -n.Z * k, n.Y * k);
                 // set q = n x p
                 q = Vector3.Cross(n, p);
             }
             else
             {
                 // choose p in x-y plane
-                float a = n[0] * n[0] + n[1] * n[1];
+                float a = n.X * n.X + n.Y * n.Y;
                 float k = 1.0f / (float)Math.Sqrt(a);
-                p = new Vector3(-n[1] * k, n[0] * k, 0);
+                p = new Vector3(-n.Y * k, n.X * k, 0);
                 // set q = n x p
                 q = Vector3.Cross(n, p);
             }
@@ -821,8 +816,7 @@ namespace DemoFramework
 
                     Vector3 v01 = v0 - v1;
                     Vector3 v02 = v0 - v2;
-                    Vector3 normal = Vector3.Cross(v01, v02);
-                    normal.Normalize();
+                    Vector3 normal = Vector3.Normalize(Vector3.Cross(v01, v02));
 
                     var scaling = meshInterface.Scaling;
 

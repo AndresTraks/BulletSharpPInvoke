@@ -10,6 +10,8 @@ namespace DemoFramework
         public Demo Demo { get; }
         public Form Form { get; protected set; }
 
+        public virtual Control InputControl => Form;
+
         public virtual float FarPlane { get; set; }
         public float FieldOfView { get; protected set; }
 

@@ -3,8 +3,9 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
+using OpenTK.WinForms;
 
 namespace DemoFramework.OpenTK
 {
@@ -53,6 +54,8 @@ namespace DemoFramework.OpenTK
             }
         }
 
+        public override Control InputControl => glControl;
+
         public override BulletSharp.DebugDraw GetPhysicsDebugDrawer()
         {
             return new PhysicsDebugDraw();
@@ -61,8 +64,9 @@ namespace DemoFramework.OpenTK
         public OpenTKGraphics(Demo demo)
             : base(demo)
         {
-            Form = new GLForm(this);
-            glControl = (Form as GLForm).GLControl;
+            var form = new GLForm(this);
+            Form = form;
+            glControl = form.GLControl;
         }
 
         public static bool CheckGLError(string caller)
@@ -84,7 +88,8 @@ namespace DemoFramework.OpenTK
             StreamReader reader;
             try
             {
-                reader = new StreamReader(assembly.GetManifestResourceStream("DemoFramework.OpenTK." + resourceName));
+                Stream stream = assembly.GetManifestResourceStream("DemoFramework.OpenTK." + resourceName);
+                reader = new StreamReader(stream);
                 shaderSource = reader.ReadToEnd();
                 reader.Close();
             }
@@ -125,7 +130,6 @@ namespace DemoFramework.OpenTK
             if (success == 0)
             {
                 string programInfoLog = GL.GetShaderInfoLog(shaderHandle);
-                GL.GetShaderInfoLog(shaderHandle, out programInfoLog);
                 if (CheckGLError("GetShaderInfoLog"))
                     return 0;
 
@@ -138,8 +142,8 @@ namespace DemoFramework.OpenTK
 
         public void InitializeDevice()
         {
-            Version ver = new Version(GL.GetString(StringName.Version).Split(' ')[0]);
-            Version req = new Version(2, 1);
+            var ver = new Version(GL.GetString(StringName.Version).Split(' ')[0]);
+            var req = new Version(2, 1);
 
             if (ver < req)
                 MessageBox.Show(string.Format("Need OpenGL {0} or newer to run. Have {1}.", req, ver));
@@ -214,51 +218,23 @@ namespace DemoFramework.OpenTK
 
         public void Render()
         {
-            GL.UseProgram(shaderProgram);
-            GL.Enable(EnableCap.DepthTest);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            
+
+            GL.UseProgram(shaderProgram);
             if (viewChanged)
             {
-                GL.Viewport(0, 0, glControl.Width, glControl.Height);
-
-                FreeLook freelook = Demo.FreeLook;
-                lookat = Matrix4.LookAt(MathHelper.Convert(freelook.Eye), MathHelper.Convert(freelook.Target), MathHelper.Convert(freelook.Up));
-                GL.UniformMatrix4(viewMatrixLocation, false, ref lookat);
-
-                Matrix4.CreatePerspectiveFieldOfView(FieldOfView, AspectRatio, 0.1f, FarPlane, out perspective);
-                perspective *= Matrix4.CreateScale(-1.0f, 1.0f, 1.0f);
-                GL.UniformMatrix4(projectionMatrixLocation, false, ref perspective);
-
-                Vector3 lightPosition = new Vector3(30, 20, 10);
-                GL.Uniform3(lightPositionVectorLocation, lightPosition);
-                GL.Uniform3(eyePositionVectorLocation, MathHelper.Convert(freelook.Eye));
-
-                if (CullingEnabled)
-                {
-                    GL.Enable(EnableCap.CullFace);
-                }
-                else
-                {
-                    GL.Disable(EnableCap.CullFace);
-                }
-
-                viewChanged = false;
+                SetView();
             }
 
+            GL.Enable(EnableCap.DepthTest);
             _meshFactory.InitInstancedRender();
             _meshFactory.RenderInstanced();
 
             GL.UseProgram(0);
             if (Demo.IsDebugDrawEnabled)
             {
-                GL.MatrixMode(MatrixMode.Modelview);
-                GL.LoadMatrix(ref lookat);
-                GL.MatrixMode(MatrixMode.Projection);
-                GL.LoadMatrix(ref perspective);
-                (Demo.Simulation.World.DebugDrawer as PhysicsDebugDraw).DrawDebugWorld((BulletSharp.DynamicsWorld)Demo.Simulation.World);
+                DrawDebugWorld();
             }
-
             info.OnRender();
 
             glControl.SwapBuffers();
@@ -274,6 +250,42 @@ namespace DemoFramework.OpenTK
         public override void SetInfoText(string text)
         {
             info.Text = text;
+        }
+
+        private void SetView()
+        {
+            GL.Viewport(0, 0, glControl.Width, glControl.Height);
+
+            FreeLook freelook = Demo.FreeLook;
+            lookat = Matrix4.LookAt(MathHelper.Convert(freelook.Eye), MathHelper.Convert(freelook.Target), MathHelper.Convert(freelook.Up));
+            GL.UniformMatrix4(viewMatrixLocation, false, ref lookat);
+
+            Matrix4.CreatePerspectiveFieldOfView(FieldOfView, AspectRatio, 0.1f, FarPlane, out perspective);
+            perspective *= Matrix4.CreateScale(-1.0f, 1.0f, 1.0f);
+            GL.UniformMatrix4(projectionMatrixLocation, false, ref perspective);
+
+            Vector3 lightPosition = new Vector3(30, 20, 10);
+            GL.Uniform3(lightPositionVectorLocation, lightPosition);
+            GL.Uniform3(eyePositionVectorLocation, MathHelper.Convert(freelook.Eye));
+
+            if (CullingEnabled)
+            {
+                GL.Enable(EnableCap.CullFace);
+            }
+            else
+            {
+                GL.Disable(EnableCap.CullFace);
+            }
+            viewChanged = false;
+        }
+
+        private void DrawDebugWorld()
+        {
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadMatrix(ref lookat);
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadMatrix(ref perspective);
+            (Demo.Simulation.World.DebugDrawer as PhysicsDebugDraw).DrawDebugWorld(Demo.Simulation.World);
         }
 
         protected override void Dispose(bool disposing)

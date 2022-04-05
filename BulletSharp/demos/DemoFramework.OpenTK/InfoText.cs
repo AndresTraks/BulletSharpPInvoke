@@ -1,10 +1,8 @@
-﻿using System;
+﻿using OpenTK.Graphics.OpenGL;
+using OpenTK.WinForms;
+using System;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
 
 namespace DemoFramework.OpenTK
 {
@@ -45,9 +43,6 @@ namespace DemoFramework.OpenTK
 
         void InitializeGraphics()
         {
-            if (GraphicsContext.CurrentContext == null)
-                throw new InvalidOperationException("No GraphicsContext is current on the calling thread.");
-
             bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             gfx = System.Drawing.Graphics.FromImage(bmp);
             gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
@@ -148,8 +143,7 @@ namespace DemoFramework.OpenTK
                     gfx.Dispose();
                     gfx = null;
                 }
-                if (GraphicsContext.CurrentContext != null)
-                    GL.DeleteTexture(texture);
+                GL.DeleteTexture(texture);
             }
         }
 

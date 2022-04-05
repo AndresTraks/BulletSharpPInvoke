@@ -1,5 +1,5 @@
-﻿using BulletSharp.Math;
-using System;
+﻿using System;
+using System.Numerics;
 using System.Windows.Forms;
 
 namespace DemoFramework
@@ -9,7 +9,7 @@ namespace DemoFramework
         private Input _input;
         private MouseController _mouseController;
         private bool _doUpdate;
-        private Matrix _yToUpTransform, _upToYTransform;
+        private Matrix4x4 _yToUpTransform, _upToYTransform;
         private Vector3 _eye, _target, _up;
 
         public FreeLook(Input input)
@@ -49,8 +49,8 @@ namespace DemoFramework
 
                 // MouseController uses UnitY as the up-vector,
                 // create transforms for converting between UnitY-up and Up-up
-                _yToUpTransform = Matrix.RotationAxis(Vector3.Cross(Vector3.UnitY, _up), Angle(_up, Vector3.UnitY));
-                Matrix.Invert(ref _yToUpTransform, out _upToYTransform);
+                _yToUpTransform = Matrix4x4.CreateFromAxisAngle(Vector3.Cross(Vector3.UnitY, _up), Angle(_up, Vector3.UnitY));
+                Matrix4x4.Invert(_yToUpTransform, out _upToYTransform);
                 UpdateMouseController();
             }
         }
@@ -64,7 +64,7 @@ namespace DemoFramework
                 _doUpdate = false;
             }
 
-            Vector3 direction = Vector3.TransformCoordinate(-_mouseController.Vector, _yToUpTransform);
+            Vector3 direction = Vector3.Transform(-_mouseController.Vector, _yToUpTransform);
 
             if (_input.KeysDown.Count != 0)
             {
@@ -89,16 +89,15 @@ namespace DemoFramework
                     _eye -= Vector3.Cross(relDirection, _up);
                 }
             }
-            _target = _eye + (_eye - _target).Length * direction;
+            _target = _eye + (_eye - _target).Length() * direction;
 
             return true;
         }
 
         private void UpdateMouseController()
         {
-            Vector3 direction = _eye - _target;
-            direction.Normalize();
-            _mouseController.Vector = Vector3.TransformCoordinate(direction, _upToYTransform);
+            Vector3 direction = Vector3.Normalize(_eye - _target);
+            _mouseController.Vector = Vector3.Transform(direction, _upToYTransform);
             _doUpdate = true;
         }
 

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using BulletSharp;
 using BulletSharp.SoftBody;
-using OpenTK;
+using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL;
 //using Vector3 = OpenTK.Vector3;
-using Vector3 = BulletSharp.Math.Vector3;
+using Vector3 = System.Numerics.Vector3;
 
 namespace DemoFramework.OpenTK
 {
@@ -69,23 +69,20 @@ namespace DemoFramework.OpenTK
 
         static void SetBuffer<T>(T[] vertices, out int bufferId, BufferUsageHint usage = BufferUsageHint.StaticDraw) where T : struct
         {
-            // Generate Array Buffer Id
             GL.GenBuffers(1, out bufferId);
             OpenTKGraphics.CheckGLError("GenBuffers");
 
-            // Bind current context to Array Buffer ID
             GL.BindBuffer(BufferTarget.ArrayBuffer, bufferId);
             OpenTKGraphics.CheckGLError("BindBuffer");
 
-            // Send data to buffer
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * Vector3.SizeInBytes), vertices, usage);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * 3 * sizeof(float)), vertices, usage);
             OpenTKGraphics.CheckGLError("BufferData");
 
             // Validate that the buffer is the correct size
             int bufferSize;
             GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out bufferSize);
             OpenTKGraphics.CheckGLError("GetBufferParameter");
-            if (vertices.Length * Vector3.SizeInBytes != bufferSize)
+            if (vertices.Length * 3 * sizeof(float) != bufferSize)
                 throw new ApplicationException("Buffer data not uploaded correctly");
 
             // Clear the buffer Binding
@@ -95,13 +92,10 @@ namespace DemoFramework.OpenTK
 
         static void UpdateBuffer<T>(T[] vertices, int bufferId) where T : struct
         {
-            // Bind current context to Array Buffer ID
             GL.BindBuffer(BufferTarget.ArrayBuffer, bufferId);
 
-            // Send data to buffer
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * Vector3.SizeInBytes), vertices, BufferUsageHint.DynamicDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * 3 * sizeof(float)), vertices, BufferUsageHint.DynamicDraw);
 
-            // Clear the buffer Binding
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
@@ -111,13 +105,9 @@ namespace DemoFramework.OpenTK
 
             ElementsType = DrawElementsType.UnsignedInt;
 
-            // Generate Array Buffer Id
             GL.GenBuffers(1, out ElementBufferID);
-
-            // Bind current context to Array Buffer ID
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ElementBufferID);
 
-            // Send data to buffer
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(uint)), indices, BufferUsageHint.StaticDraw);
 
             // Validate that the buffer is the correct size
@@ -125,7 +115,6 @@ namespace DemoFramework.OpenTK
             if (indices.Length * sizeof(uint) != bufferSize)
                 throw new ApplicationException("Element array not uploaded correctly");
 
-            // Clear the buffer Binding
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
@@ -133,13 +122,9 @@ namespace DemoFramework.OpenTK
         {
             ElementsType = DrawElementsType.UnsignedShort;
 
-            // Generate Array Buffer Id
             GL.GenBuffers(1, out ElementBufferID);
-
-            // Bind current context to Array Buffer ID
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ElementBufferID);
 
-            // Send data to buffer
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(ushort)), indices, BufferUsageHint.StaticDraw);
 
             // Validate that the buffer is the correct size
@@ -148,7 +133,6 @@ namespace DemoFramework.OpenTK
             if (indices.Length * sizeof(ushort) != bufferSize)
                 throw new ApplicationException("Element array not uploaded correctly");
 
-            // Clear the buffer Binding
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
@@ -156,13 +140,9 @@ namespace DemoFramework.OpenTK
         {
             ElementsType = DrawElementsType.UnsignedByte;
 
-            // Generate Array Buffer Id
             GL.GenBuffers(1, out ElementBufferID);
-
-            // Bind current context to Array Buffer ID
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ElementBufferID);
 
-            // Send data to buffer
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)indices.Length, indices, BufferUsageHint.StaticDraw);
 
             // Validate that the buffer is the correct size
@@ -171,7 +151,6 @@ namespace DemoFramework.OpenTK
             if (indices.Length != bufferSize)
                 throw new ApplicationException("Element array not uploaded correctly");
 
-            // Clear the buffer Binding
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
@@ -223,7 +202,7 @@ namespace DemoFramework.OpenTK
         {
             ShapeData shapeData = new ShapeData();
             uint[] indices;
-            BulletSharp.Math.Vector3[] vertexBuffer = CreateShape(shape, out indices);
+            System.Numerics.Vector3[] vertexBuffer = CreateShape(shape, out indices);
 
             if (vertexBuffer != null)
             {
@@ -295,13 +274,13 @@ namespace DemoFramework.OpenTK
             return shapeData;
         }
 
-        void InitRigidBodyInstance(CollisionObject colObj, CollisionShape shape, ref BulletSharp.Math.Matrix transform)
+        void InitRigidBodyInstance(CollisionObject colObj, CollisionShape shape, ref System.Numerics.Matrix4x4 transform)
         {
             if (shape.ShapeType == BroadphaseNativeType.CompoundShape)
             {
                 foreach (CompoundShapeChild child in (shape as CompoundShape).ChildList)
                 {
-                    BulletSharp.Math.Matrix childTransform = child.Transform * transform;
+                    System.Numerics.Matrix4x4 childTransform = child.Transform * transform;
                     InitRigidBodyInstance(colObj, child.ChildShape, ref childTransform);
                 }
             }
@@ -350,7 +329,7 @@ namespace DemoFramework.OpenTK
                 }
                 else
                 {
-                    BulletSharp.Math.Matrix transform;
+                    System.Numerics.Matrix4x4 transform;
                     colObj.GetWorldTransform(out transform);
                     InitRigidBodyInstance(colObj, shape, ref transform);
                 }
@@ -417,12 +396,12 @@ namespace DemoFramework.OpenTK
                 {
                     GL.EnableVertexAttribArray(vertexNormalLocation);
                     GL.BindBuffer(BufferTarget.ArrayBuffer, shapeData.NormalBufferID);
-                    GL.VertexAttribPointer(vertexNormalLocation, 3, VertexAttribPointerType.Float, false, Vector3.SizeInBytes, IntPtr.Zero);
+                    GL.VertexAttribPointer(vertexNormalLocation, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), IntPtr.Zero);
                 }
 
                 // Vertex buffer
                 GL.BindBuffer(BufferTarget.ArrayBuffer, shapeData.VertexBufferID);
-                GL.VertexAttribPointer(vertexPositionLocation, 3, VertexAttribPointerType.Float, false, Vector3.SizeInBytes, IntPtr.Zero);
+                GL.VertexAttribPointer(vertexPositionLocation, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), IntPtr.Zero);
 
                 Matrix4 worldMatrix;
 

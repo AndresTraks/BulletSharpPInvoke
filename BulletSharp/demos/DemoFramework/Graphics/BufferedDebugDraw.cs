@@ -1,14 +1,15 @@
 ﻿using BulletSharp;
-using BulletSharp.Math;
 using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace DemoFramework
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct PositionColored
     {
-        public const int Stride = Vector3.SizeInBytes + sizeof(int);
+        public const int Stride = 3 * sizeof(float) + sizeof(int);
 
         public Vector3 Position;
         public int Color;
@@ -28,7 +29,7 @@ namespace DemoFramework
 
     public abstract class BufferedDebugDraw : DebugDraw
     {
-        PositionColored[] _lines = new PositionColored[0];
+        PositionColored[] _lines = Array.Empty<PositionColored>();
         protected PositionColored[] Lines
         {
             get { return _lines; }
@@ -68,7 +69,7 @@ namespace DemoFramework
 
         public override void ReportErrorWarning(string warningString)
         {
-            System.Windows.Forms.MessageBox.Show(warningString);
+            MessageBox.Show(warningString);
         }
     }
 };
