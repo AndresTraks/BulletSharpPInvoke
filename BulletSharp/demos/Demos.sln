@@ -5,11 +5,19 @@ VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BulletSharp", "..\BulletSharp.csproj", "{375D3596-3DC9-4034-813C-6A27DC701D8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoFramework", "DemoFramework\DemoFramework.csproj", "{11221859-ED6E-48AB-A306-7077853677C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoFramework", "DemoFramework\DemoFramework.csproj", "{11221859-ED6E-48AB-A306-7077853677C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicDemo", "BasicDemo\BasicDemo.csproj", "{47ECF793-83EF-4ADF-ACE7-3057309DD94D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicDemo", "BasicDemo\BasicDemo.csproj", "{47ECF793-83EF-4ADF-ACE7-3057309DD94D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoFramework.OpenTK", "DemoFramework.OpenTK\DemoFramework.OpenTK.csproj", "{31F40BD4-7E6C-4C4E-B1EB-DC09AE7D59D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoFramework.OpenTK", "DemoFramework.OpenTK\DemoFramework.OpenTK.csproj", "{31F40BD4-7E6C-4C4E-B1EB-DC09AE7D59D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkDemo", "BenchmarkDemo\BenchmarkDemo.csproj", "{C5EF8BF8-F1C0-4698-93DE-3603A798AED6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Box2DDemo", "Box2DDemo\Box2DDemo.csproj", "{2CD90B01-55A0-49E1-8C97-3E305E41AA98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BspDemo", "BspDemo\BspDemo.csproj", "{45644C23-0E2D-4A71-8EA2-4EBEB60741A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftDemo", "SoftDemo\SoftDemo.csproj", "{924B776F-6B48-43FA-AEA5-6BD8FF8A332B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +41,22 @@ Global
 		{31F40BD4-7E6C-4C4E-B1EB-DC09AE7D59D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31F40BD4-7E6C-4C4E-B1EB-DC09AE7D59D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31F40BD4-7E6C-4C4E-B1EB-DC09AE7D59D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5EF8BF8-F1C0-4698-93DE-3603A798AED6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5EF8BF8-F1C0-4698-93DE-3603A798AED6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5EF8BF8-F1C0-4698-93DE-3603A798AED6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5EF8BF8-F1C0-4698-93DE-3603A798AED6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CD90B01-55A0-49E1-8C97-3E305E41AA98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CD90B01-55A0-49E1-8C97-3E305E41AA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CD90B01-55A0-49E1-8C97-3E305E41AA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CD90B01-55A0-49E1-8C97-3E305E41AA98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45644C23-0E2D-4A71-8EA2-4EBEB60741A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45644C23-0E2D-4A71-8EA2-4EBEB60741A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45644C23-0E2D-4A71-8EA2-4EBEB60741A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45644C23-0E2D-4A71-8EA2-4EBEB60741A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{924B776F-6B48-43FA-AEA5-6BD8FF8A332B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{924B776F-6B48-43FA-AEA5-6BD8FF8A332B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{924B776F-6B48-43FA-AEA5-6BD8FF8A332B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{924B776F-6B48-43FA-AEA5-6BD8FF8A332B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

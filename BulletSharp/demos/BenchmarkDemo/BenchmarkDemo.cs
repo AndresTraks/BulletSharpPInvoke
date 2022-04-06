@@ -1,8 +1,8 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using DemoFramework.Meshes;
 using System;
+using System.Numerics;
 
 namespace BenchmarkDemo
 {
@@ -70,7 +70,7 @@ namespace BenchmarkDemo
         private void CreateGround()
         {
             var groundShape = new BoxShape(250, 50, 250);
-            var ground = PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -50, 0), groundShape, World);
+            var ground = PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(0, -50, 0), groundShape, World);
             ground.UserObject = "Ground";
         }
 
@@ -159,7 +159,7 @@ namespace BenchmarkDemo
                         position.X = offset + i * (cubeWidth + spacing);
                         Vector3 bpos = new Vector3(0, 25, 0) + new Vector3(5.0f * position.X, position.Y, 5.0f * position.Z);
                         int idx = random.Next(10);
-                        Matrix trans = Matrix.Translation(bpos);
+                        Matrix4x4 trans = Matrix4x4.CreateTranslation(bpos);
 
                         switch (idx)
                         {
@@ -244,7 +244,7 @@ namespace BenchmarkDemo
                     for (int i = 0; i < stackSize; i++)
                     {
                         position.X = offset.X + i * (diff.X * 2.0f + space);
-                        LocalCreateRigidBody(mass, Matrix.Translation(offsetPosition + position), blockShape);
+                        LocalCreateRigidBody(mass, Matrix4x4.CreateTranslation(offsetPosition + position), blockShape);
                     }
                 }
                 offset += diff;
@@ -258,7 +258,7 @@ namespace BenchmarkDemo
             var blockShape = new BoxShape(boxSize);
 
             const float mass = 1.0f;
-            var transform = Matrix.Identity;
+            var transform = Matrix4x4.Identity;
 
             for (int y = 0; y < stackSize; y++)
             {
@@ -266,7 +266,7 @@ namespace BenchmarkDemo
                 float height = ((stackSize - y) * 2 - 1) * boxSize.Y;
                 for (int i = 0; i < y; i++)
                 {
-                    transform.Origin = offsetPosition +
+                    transform.Translation = offsetPosition +
                         new Vector3(0, height, (offset + i * 2) * boxSize.Z);
                     LocalCreateRigidBody(mass, transform, blockShape);
                 }
@@ -288,9 +288,9 @@ namespace BenchmarkDemo
             {
                 for (int j = 0; j < rotSize; j++)
                 {
-                    Matrix trans = Matrix.Translation(0, positionY, radius);
-                    trans *= Matrix.RotationY(rotation);
-                    trans.Origin += offsetPosition;
+                    Matrix4x4 trans = Matrix4x4.CreateTranslation(0, positionY, radius);
+                    trans *= Matrix4x4.CreateRotationY(rotation);
+                    trans.Translation += offsetPosition;
                     LocalCreateRigidBody(mass, trans, blockShape);
 
                     rotation += (2.0f * (float)Math.PI) / rotSize;
@@ -312,14 +312,14 @@ namespace BenchmarkDemo
                     for (int x = 0; x < widthX; x++)
                     {
                         Vector3 position = startPosition + offset * new Vector3(x * widthSpacing, y, z * widthSpacing);
-                        LocalCreateRigidBody(mass, Matrix.Translation(position), shape);
+                        LocalCreateRigidBody(mass, Matrix4x4.CreateTranslation(position), shape);
                     }
                 }
                 widthSpacing *= widthSpacingFactor;
             }
         }
 
-        private RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape)
+        private RigidBody LocalCreateRigidBody(float mass, Matrix4x4 startTransform, CollisionShape shape)
         {
             RigidBody body = PhysicsHelper.CreateBody(mass, startTransform, shape, World);
             body.ContactProcessingThreshold = defaultContactProcessingThreshold;
