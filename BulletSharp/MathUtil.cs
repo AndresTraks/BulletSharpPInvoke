@@ -1183,7 +1183,7 @@ namespace BulletSharp
         /// <param name="index">The index of the component to access. Use 0 for the X component, 1 for the Y component, and 2 for the Z component.</param>
         /// <returns>The value of the component at the specified index.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of the range [0, 2].</exception>
-        public static float GetComponent(ref this Vector3 vector, int index)
+        public static float GetComponent(this Vector3 vector, int index)
         {
             switch (index)
             {
@@ -1223,7 +1223,7 @@ namespace BulletSharp
             return new Vector3(values[0], values[1], values[2]);
         }
 
-        public static Matrix4x4 GetBasis(ref this Matrix4x4 matrix)
+        public static Matrix4x4 GetBasis(this Matrix4x4 matrix)
         {
             return new Matrix4x4(matrix.M11, matrix.M12, matrix.M13, 0,
                                  matrix.M21, matrix.M22, matrix.M23, 0,
@@ -1293,7 +1293,7 @@ namespace BulletSharp
             }
         }
 
-        public static float GetComponent(ref this Matrix4x4 matrix, int row, int column)
+        public static float GetComponent(this Matrix4x4 matrix, int row, int column)
         {
             if (row < 0 || row > 3)
                 throw new ArgumentOutOfRangeException("row", "Rows and columns for matrices run from 0 to 3, inclusive.");

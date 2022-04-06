@@ -1,7 +1,7 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using System;
+using System.Numerics;
 using System.Windows.Forms;
 
 namespace CcdPhysicsDemo
@@ -106,12 +106,11 @@ namespace CcdPhysicsDemo
                 _shootBoxShape.InitializePolyhedralFeatures();
             }
 
-            RigidBody body = PhysicsHelper.CreateBody(mass, Matrix.Translation(camPos), _shootBoxShape, World);
+            RigidBody body = PhysicsHelper.CreateBody(mass, Matrix4x4.CreateTranslation(camPos), _shootBoxShape, World);
             body.LinearFactor = new Vector3(0.5f);
             //body.Restitution = 1;
 
-            Vector3 linVel = destination - camPos;
-            linVel.Normalize();
+            Vector3 linVel = Vector3.Normalize(destination - camPos);
             body.LinearVelocity = linVel * ShootBoxInitialSpeed;
             body.AngularVelocity = Vector3.Zero;
             body.ContactProcessingThreshold = 1e30f;
@@ -138,7 +137,7 @@ namespace CcdPhysicsDemo
         {
             var ground = new BoxShape(100, 0.5f, 100);
             ground.InitializePolyhedralFeatures();
-            RigidBody body = PhysicsHelper.CreateStaticBody(Matrix.Identity, ground, World);
+            RigidBody body = PhysicsHelper.CreateStaticBody(Matrix4x4.Identity, ground, World);
             body.Friction = 0.5f;
             //body.RollingFriction = 0.3f;
             body.UserObject = "Ground";
@@ -164,7 +163,7 @@ namespace CcdPhysicsDemo
                     row2 |= 1;
                 }
 
-                Matrix trans = Matrix.Translation(col * 2 * CubeHalfExtents + (row2 % 2) * CubeHalfExtents,
+                Matrix4x4 trans = Matrix4x4.CreateTranslation(col * 2 * CubeHalfExtents + (row2 % 2) * CubeHalfExtents,
                     row * 2 * CubeHalfExtents + CubeHalfExtents + ExtraHeight, 0);
 
                 RigidBody body = PhysicsHelper.CreateBody(1, trans, shape, World);

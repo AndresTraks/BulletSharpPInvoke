@@ -1,9 +1,9 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using System;
 using System.Globalization;
 using System.IO;
+using System.Numerics;
 using System.Windows.Forms;
 
 namespace ConcaveConvexCastDemo
@@ -160,7 +160,7 @@ namespace ConcaveConvexCastDemo
             const int totalVerts = NumVertsX * NumVertsY;
             const int totalTriangles = 2 * (NumVertsX - 1) * (NumVertsY - 1);
             const int triangleIndexStride = 3 * sizeof(int);
-            const int vertexStride = Vector3.SizeInBytes;
+            const int vertexStride = 3 * sizeof(float);
 
             _groundMesh = new IndexedMesh();
             _groundMesh.Allocate(totalTriangles, totalVerts, triangleIndexStride, vertexStride);
@@ -193,7 +193,7 @@ namespace ConcaveConvexCastDemo
             const bool useQuantizedAabbCompression = true;
             GroundShape = new BvhTriangleMeshShape(_indexVertexArrays, useQuantizedAabbCompression);
 
-            _groundObject = PhysicsHelper.CreateStaticBody(Matrix.Identity, GroundShape, World);
+            _groundObject = PhysicsHelper.CreateStaticBody(Matrix4x4.Identity, GroundShape, World);
             _groundObject.CollisionFlags |= CollisionFlags.StaticObject;
             _groundObject.UserObject = "Ground";
         }
@@ -208,7 +208,7 @@ namespace ConcaveConvexCastDemo
             {
                 for (int i = 0; i < NumDynamicBoxesY; i++)
                 {
-                    Matrix startTransform = Matrix.Translation(5 * (i - NumDynamicBoxesX / 2), 10, 5 * (j - NumDynamicBoxesY / 2));
+                    Matrix4x4 startTransform = Matrix4x4.CreateTranslation(5 * (i - NumDynamicBoxesX / 2), 10, 5 * (j - NumDynamicBoxesY / 2));
                     PhysicsHelper.CreateBody(1.0f, startTransform, shape, World);
                 }
             }
@@ -257,8 +257,8 @@ namespace ConcaveConvexCastDemo
 
         private const float NormalScale = 10.0f; // easier to see if this is big
 
-        private Matrix _fromRotation = Matrix.Identity; //Matrix.RotationX(0.7f);
-        private Matrix _toRotation = Matrix.RotationX(0.7f);
+        private Matrix4x4 _fromRotation = Matrix4x4.Identity; //Matrix.RotationX(0.7f);
+        private Matrix4x4 _toRotation = Matrix4x4.CreateRotationX(0.7f);
 
         private static Vector3 _green = new Vector3(0.0f, 1.0f, 0.0f);
         private static Vector3 _white = new Vector3(1.0f, 1.0f, 1.0f);
@@ -273,8 +273,8 @@ namespace ConcaveConvexCastDemo
             const float alpha = 4 * (float)Math.PI / NumRays;
             for (int i = 0; i < NumRays; i++)
             {
-                Matrix transform = Matrix.RotationY(alpha * i);
-                var direction = Vector3.TransformCoordinate(Vector3.UnitX, transform);
+                Matrix4x4 transform = Matrix4x4.CreateRotationY(alpha * i);
+                var direction = Vector3.Transform(Vector3.UnitX, transform);
 
                 _rays[i] = new Ray
                 {
@@ -313,16 +313,15 @@ namespace ConcaveConvexCastDemo
                 callback.ConvexFromWorld = ray.Source;
                 callback.ConvexToWorld = ray.Destination;
 
-                Matrix from = _fromRotation * Matrix.Translation(ray.Source);
-                Matrix to = _toRotation * Matrix.Translation(ray.Destination);
+                Matrix4x4 from = _fromRotation * Matrix4x4.CreateTranslation(ray.Source);
+                Matrix4x4 to = _toRotation * Matrix4x4.CreateTranslation(ray.Destination);
                 cw.ConvexSweepTestRef(_boxShape, ref from, ref to, callback);
                 if (callback.HasHit)
                 {
                     ray.HitPoint = callback.HitPointWorld;
-                    Vector3.Lerp(ref ray.Source, ref ray.Destination, callback.ClosestHitFraction, out ray.HitCenterOfMass);
+                    ray.HitCenterOfMass = Vector3.Lerp(ray.Source, ray.Destination, callback.ClosestHitFraction);
                     ray.HitFraction = callback.ClosestHitFraction;
-                    ray.Normal = callback.HitNormalWorld;
-                    ray.Normal.Normalize();
+                    ray.Normal = Vector3.Normalize(callback.HitNormalWorld);
                 }
                 else
                 {
@@ -356,11 +355,11 @@ namespace ConcaveConvexCastDemo
                 Vector3 to = ray.HitPoint + NormalScale * ray.Normal;
                 drawer.DrawLine(ref ray.HitPoint, ref to, ref _white);
 
-                Matrix fromTransform = _fromRotation * Matrix.Translation(ray.Source);
-                Matrix toTransform = _toRotation * Matrix.Translation(ray.Destination);
+                Matrix4x4 fromTransform = _fromRotation * Matrix4x4.CreateTranslation(ray.Source);
+                Matrix4x4 toTransform = _toRotation * Matrix4x4.CreateTranslation(ray.Destination);
                 Vector3 linVel, angVel;
                 TransformUtil.CalculateVelocity(ref fromTransform, ref toTransform, 1.0f, out linVel, out angVel);
-                Matrix transform;
+                Matrix4x4 transform;
                 TransformUtil.IntegrateTransform(ref fromTransform, ref linVel, ref angVel, ray.HitFraction, out transform);
                 drawer.DrawBox(ref _boxBoundMin, ref _boxBoundMax, ref transform, ref _cyan);
             }

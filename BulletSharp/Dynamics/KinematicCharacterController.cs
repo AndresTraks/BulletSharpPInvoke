@@ -546,8 +546,7 @@ namespace BulletSharp
         {
             if (v0.LengthSquared() == 0.0f || v1.LengthSquared() == 0.0f)
             {
-                Quaternion q = new Quaternion();
-                return q;
+                return Quaternion.Identity;
             }
 
             return MathUtil.ShortestArcQuat(ref v0, ref v1);

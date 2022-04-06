@@ -1,10 +1,10 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using DemoFramework.FileLoaders;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using System.Windows.Forms;
 
 namespace ConvexDecompositionDemo
@@ -85,13 +85,13 @@ namespace ConvexDecompositionDemo
             // Convex hull approximation
             ConvexHullShape convexShape = CreateHullApproximation(_triangleMesh);
             float mass = 1.0f;
-            PhysicsHelper.CreateBody(mass, Matrix.Translation(0, 2, 14), convexShape, World);
+            PhysicsHelper.CreateBody(mass, Matrix4x4.CreateTranslation(0, 2, 14), convexShape, World);
 
             // Non-moving body
             var objectOffset = new Vector3(10, 0, 0);
             const bool useQuantization = true;
             var concaveShape = new BvhTriangleMeshShape(_triangleMesh, useQuantization);
-            PhysicsHelper.CreateStaticBody(Matrix.Translation(objectOffset), concaveShape, World);
+            PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(objectOffset), concaveShape, World);
 
             CompoundShape compoundShape;
             using (Hacd hacd = ComputeHacd(wavefrontModel))
@@ -103,15 +103,15 @@ namespace ConvexDecompositionDemo
 
             mass = 10.0f;
             objectOffset = new Vector3(-10, 0, -6);
-            var body2 = PhysicsHelper.CreateBody(mass, Matrix.Translation(objectOffset), compoundShape, World);
+            var body2 = PhysicsHelper.CreateBody(mass, Matrix4x4.CreateTranslation(objectOffset), compoundShape, World);
             body2.CollisionFlags |= CollisionFlags.CustomMaterialCallback;
 
             objectOffset.Z += 6;
-            body2 = PhysicsHelper.CreateBody(mass, Matrix.Translation(objectOffset), compoundShape, World);
+            body2 = PhysicsHelper.CreateBody(mass, Matrix4x4.CreateTranslation(objectOffset), compoundShape, World);
             body2.CollisionFlags |= CollisionFlags.CustomMaterialCallback;
 
             objectOffset.Z += 6;
-            body2 = PhysicsHelper.CreateBody(mass, Matrix.Translation(objectOffset), compoundShape, World);
+            body2 = PhysicsHelper.CreateBody(mass, Matrix4x4.CreateTranslation(objectOffset), compoundShape, World);
             body2.CollisionFlags |= CollisionFlags.CustomMaterialCallback;
         }
 
@@ -151,7 +151,7 @@ namespace ConvexDecompositionDemo
         private void CreateGround()
         {
             var groundShape = new BoxShape(30, 2, 30);
-            CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -4.5f, 0), groundShape, World);
+            CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(0, -4.5f, 0), groundShape, World);
             ground.UserObject = "Ground";
         }
 
@@ -257,7 +257,7 @@ namespace ConvexDecompositionDemo
             {
                 Vector3 centroid = convexDecomposition.ConvexCentroids[i];
                 var convexShape = convexDecomposition.ConvexShapes[i];
-                Matrix trans = Matrix.Translation(centroid);
+                Matrix4x4 trans = Matrix4x4.CreateTranslation(centroid);
                 if (_enableSat)
                 {
                     convexShape.InitializePolyhedralFeatures();

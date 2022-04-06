@@ -1,8 +1,8 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using System;
 using System.IO;
+using System.Numerics;
 
 namespace BulletXmlImportDemo
 {

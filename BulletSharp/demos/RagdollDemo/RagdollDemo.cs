@@ -1,8 +1,8 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace RagdollDemo
 {
@@ -64,7 +64,7 @@ namespace RagdollDemo
         private void CreateGround()
         {
             var groundShape = new BoxShape(100, 10, 100);
-            Matrix groundTransform = Matrix.Translation(0, -10, 0);
+            Matrix4x4 groundTransform = Matrix4x4.CreateTranslation(0, -10, 0);
             RigidBody ground = PhysicsHelper.CreateStaticBody(groundTransform, groundShape, World);
             ground.UserObject = "Ground";
         }

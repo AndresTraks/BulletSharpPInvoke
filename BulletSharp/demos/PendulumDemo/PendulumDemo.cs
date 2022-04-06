@@ -1,9 +1,9 @@
-﻿#define PENDULUM_DAMPING
+#define PENDULUM_DAMPING
 
 using BulletSharp;
-using BulletSharp.Math;
 using DemoFramework;
 using System;
+using System.Numerics;
 
 namespace PendulumDemo
 {
@@ -74,8 +74,8 @@ namespace PendulumDemo
             var hingeJointAxis = new Vector3(1, 0, 0);
 
             //y-axis assumed up
-            Vector3 parentComToCurrentCom = new Vector3(0, -linkHalfExtents[1], 0);
-            Vector3 currentPivotToCurrentCom = new Vector3(0, -linkHalfExtents[1], 0);
+            Vector3 parentComToCurrentCom = new Vector3(0, -linkHalfExtents.Y, 0);
+            Vector3 currentPivotToCurrentCom = new Vector3(0, -linkHalfExtents.Y, 0);
             Vector3 parentComToCurrentPivot = parentComToCurrentCom - currentPivotToCurrentCom;
 
             for(int i = 0; i < numLinks; i++)
@@ -130,8 +130,8 @@ namespace PendulumDemo
 
         public void DrawPendulum()
         {
-            Vector3 from = MultiBody.BaseWorldTransform.Origin;
-            Vector3 to = MultiBody.GetLink(0).Collider.WorldTransform.Origin;
+            Vector3 from = MultiBody.BaseWorldTransform.Translation;
+            Vector3 to = MultiBody.GetLink(0).Collider.WorldTransform.Translation;
             Vector3 color = new Vector3(1, 0, 0);
             World.DebugDrawer.DrawLine(ref from, ref to, ref color);
         }

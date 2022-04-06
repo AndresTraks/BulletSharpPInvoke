@@ -1,9 +1,9 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using System;
 using System.Globalization;
 using System.IO;
+using System.Numerics;
 using System.Windows.Forms;
 
 namespace ConcaveRaycastDemo
@@ -146,7 +146,7 @@ namespace ConcaveRaycastDemo
             const int totalVerts = NumVertsX * NumVertsY;
             const int totalTriangles = 2 * (NumVertsX - 1) * (NumVertsY - 1);
             const int triangleIndexStride = 3 * sizeof(int);
-            const int vertexStride = Vector3.SizeInBytes;
+            const int vertexStride = 3 * sizeof(float);
 
             var mesh = new IndexedMesh();
             mesh.Allocate(totalTriangles, totalVerts, triangleIndexStride, vertexStride);
@@ -179,7 +179,7 @@ namespace ConcaveRaycastDemo
             const bool useQuantizedAabbCompression = true;
             GroundShape = new BvhTriangleMeshShape(_indexVertexArrays, useQuantizedAabbCompression);
 
-            _groundObject = PhysicsHelper.CreateStaticBody(Matrix.Identity, GroundShape, World);
+            _groundObject = PhysicsHelper.CreateStaticBody(Matrix4x4.Identity, GroundShape, World);
             _groundObject.CollisionFlags |= CollisionFlags.StaticObject;
             _groundObject.UserObject = "Ground";
         }
@@ -192,7 +192,7 @@ namespace ConcaveRaycastDemo
 
             for (int i = 0; i < 10; i++)
             {
-                Matrix startTransform = Matrix.Translation(2 * i, 10, 1);
+                Matrix4x4 startTransform = Matrix4x4.CreateTranslation(2 * i, 10, 1);
                 PhysicsHelper.CreateBody(1.0f, startTransform, shape, World);
             }
         }
@@ -241,8 +241,8 @@ namespace ConcaveRaycastDemo
             const float alpha = 4 * (float)Math.PI / NumRays;
             for (int i = 0; i < NumRays; i++)
             {
-                Matrix transform = Matrix.RotationY(alpha * i);
-                var direction = Vector3.TransformCoordinate(Vector3.UnitX, transform);
+                Matrix4x4 transform = Matrix4x4.CreateRotationY(alpha * i);
+                var direction = Vector3.Transform(Vector3.UnitX, transform);
 
                 _rays[i] = new Ray
                 {
@@ -289,8 +289,7 @@ namespace ConcaveRaycastDemo
             {
                 const SpuRaycastTaskWorkUnitOut& out = (*batchRaycaster)[i];
                 _rays[i].HitPoint.SetInterpolate3(_source[i], _destination[i], out.HitFraction);
-                _rays[i].Normal = out.hitNormal;
-                _rays[i].Normal.Normalize();
+                _rays[i].Normal = Vector3.Normalize(out.hitNormal);
 		    }
 #else
             foreach (var ray in _rays)
@@ -301,8 +300,7 @@ namespace ConcaveRaycastDemo
                     if (cb.HasHit)
                     {
                         ray.HitPoint = cb.HitPointWorld;
-                        ray.Normal = cb.HitNormalWorld;
-                        ray.Normal.Normalize();
+                        ray.Normal = Vector3.Normalize(cb.HitNormalWorld);
                     }
                     else
                     {
