@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="fp.cg" />
+    <None Remove="vp.cg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="fp.cg" />
+    <EmbeddedResource Include="vp.cg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OpenTK" Version="4.7.1" />
+    <PackageReference Include="OpenTK.WinForms" Version="4.0.0-pre.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DemoFramework\DemoFramework.csproj" />
+  </ItemGroup>
+
+</Project>

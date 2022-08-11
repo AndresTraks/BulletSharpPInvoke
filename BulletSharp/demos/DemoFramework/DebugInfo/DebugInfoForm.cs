@@ -287,7 +287,7 @@ namespace DemoFramework.DebugInfo
             debugDrawFlags.SetItemChecked(index, isChecked);
         }
 
-        private void DebugDrawFlags_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void DebugDrawFlags_ItemCheck(object? sender, ItemCheckEventArgs e)
         {
             DebugDrawModes drawModes = _demo.DebugDrawMode;
             if (e.NewValue == CheckState.Checked)

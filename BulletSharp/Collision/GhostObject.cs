@@ -1,5 +1,5 @@
-using BulletSharp.Math;
 using System;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -26,15 +26,15 @@ namespace BulletSharp
 				(thisProxy != null) ? thisProxy.Native : IntPtr.Zero);
 		}
 
-		public void ConvexSweepTestRef(ConvexShape castShape, ref Matrix convexFromWorld,
-			ref Matrix convexToWorld, ConvexResultCallback resultCallback, float allowedCcdPenetration = 0)
+		public void ConvexSweepTestRef(ConvexShape castShape, ref Matrix4x4 convexFromWorld,
+			ref Matrix4x4 convexToWorld, ConvexResultCallback resultCallback, float allowedCcdPenetration = 0)
 		{
 			btGhostObject_convexSweepTest(Native, castShape.Native, ref convexFromWorld,
 				ref convexToWorld, resultCallback.Native, allowedCcdPenetration);
 		}
 
-		public void ConvexSweepTest(ConvexShape castShape, Matrix convexFromWorld,
-			Matrix convexToWorld, ConvexResultCallback resultCallback, float allowedCcdPenetration = 0)
+		public void ConvexSweepTest(ConvexShape castShape, Matrix4x4 convexFromWorld,
+			Matrix4x4 convexToWorld, ConvexResultCallback resultCallback, float allowedCcdPenetration = 0)
 		{
 			btGhostObject_convexSweepTest(Native, castShape.Native, ref convexFromWorld,
 				ref convexToWorld, resultCallback.Native, allowedCcdPenetration);

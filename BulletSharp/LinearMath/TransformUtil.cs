@@ -1,12 +1,12 @@
 using System;
-using BulletSharp.Math;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
 {
 	public static class TransformUtil
 	{
-		public static void CalculateDiffAxisAngle(ref Matrix transform0, ref Matrix transform1,
+		public static void CalculateDiffAxisAngle(ref Matrix4x4 transform0, ref Matrix4x4 transform1,
 			out Vector3 axis, out float angle)
 		{
 			btTransformUtil_calculateDiffAxisAngle(ref transform0, ref transform1,
@@ -20,7 +20,7 @@ namespace BulletSharp
 				out axis, out angle);
 		}
 
-		public static void CalculateVelocity(ref Matrix transform0, ref Matrix transform1,
+		public static void CalculateVelocity(ref Matrix4x4 transform0, ref Matrix4x4 transform1,
 			float timeStep, out Vector3 linVel, out Vector3 angVel)
 		{
 			btTransformUtil_calculateVelocity(ref transform0, ref transform1, timeStep,
@@ -34,8 +34,8 @@ namespace BulletSharp
 				ref orn1, timeStep, out linVel, out angVel);
 		}
 
-		public static void IntegrateTransform(ref Matrix curTrans, ref Vector3 linvel, ref Vector3 angvel,
-			float timeStep, out Matrix predictedTransform)
+		public static void IntegrateTransform(ref Matrix4x4 curTrans, ref Vector3 linvel, ref Vector3 angvel,
+			float timeStep, out Matrix4x4 predictedTransform)
 		{
 			btTransformUtil_integrateTransform(ref curTrans, ref linvel, ref angvel,
 				timeStep, out predictedTransform);
@@ -51,13 +51,13 @@ namespace BulletSharp
 		}
 
 		public void InitSeparatingDistance(ref Vector3 separatingVector, float separatingDistance,
-			ref Matrix transA, ref Matrix transB)
+			ref Matrix4x4 transA, ref Matrix4x4 transB)
 		{
 			btConvexSeparatingDistanceUtil_initSeparatingDistance(Native, ref separatingVector,
 				separatingDistance, ref transA, ref transB);
 		}
 
-		public void UpdateSeparatingDistance(ref Matrix transA, ref Matrix transB)
+		public void UpdateSeparatingDistance(ref Matrix4x4 transA, ref Matrix4x4 transB)
 		{
 			btConvexSeparatingDistanceUtil_updateSeparatingDistance(Native, ref transA,
 				ref transB);

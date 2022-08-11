@@ -1,5 +1,5 @@
 using System;
-using BulletSharp.Math;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -12,7 +12,7 @@ namespace BulletSharp
 			InitializeUserOwned(native);
 		}
 
-		public uint Decompose(ref Matrix a, out Matrix u, out Matrix h)
+		public uint Decompose(ref Matrix4x4 a, out Matrix4x4 u, out Matrix4x4 h)
 		{
 			return btPolarDecomposition_decompose(Native, ref a, out u, out h);
 		}

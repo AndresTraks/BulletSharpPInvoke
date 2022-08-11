@@ -1,7 +1,7 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using System;
+using System.Numerics;
 
 namespace CollisionInterfaceDemo
 {
@@ -32,11 +32,11 @@ namespace CollisionInterfaceDemo
             var simulation = demo.Simulation as CollisionInterfaceDemoSimulation;
             CollisionObject movingObject = simulation.MovingObject;
 
-            Matrix transform = movingObject.WorldTransform;
-            Vector3 position = transform.Origin;
-            transform.Origin = Vector3.Zero;
-            transform *= Matrix.RotationYawPitchRoll(0.1f * demo.FrameDelta, 0.05f * demo.FrameDelta, 0);
-            transform.Origin = position;
+            Matrix4x4 transform = movingObject.WorldTransform;
+            Vector3 position = transform.Translation;
+            transform.Translation = Vector3.Zero;
+            transform *= Matrix4x4.CreateFromYawPitchRoll(0.1f * demo.FrameDelta, 0.05f * demo.FrameDelta, 0);
+            transform.Translation = position;
             movingObject.WorldTransform = transform;
 
             if (demo.IsDebugDrawEnabled)
@@ -68,18 +68,18 @@ namespace CollisionInterfaceDemo
             RenderCallback = new DrawingResult(World);
 
             _movingBox = new BoxShape(1.0f) { Margin = 0 };
-            var rotation = Quaternion.RotationYawPitchRoll((float)Math.PI * 0.6f, (float)Math.PI * 0.2f, 0);
+            var rotation = Quaternion.CreateFromYawPitchRoll((float)Math.PI * 0.6f, (float)Math.PI * 0.2f, 0);
             MovingObject = new CollisionObject
             {
                 CollisionShape = _movingBox,
-                WorldTransform = Matrix.RotationQuaternion(rotation) * Matrix.Translation(0, 3, 0)
+                WorldTransform = Matrix4x4.CreateFromQuaternion(rotation) * Matrix4x4.CreateTranslation(0, 3, 0)
             };
 
             _staticShape = new BoxShape(0.5f) { Margin = 0 };
             _staticObject = new CollisionObject
             {
                 CollisionShape = _staticShape,
-                WorldTransform = Matrix.Translation(0, 4.248f, 0)
+                WorldTransform = Matrix4x4.CreateTranslation(0, 4.248f, 0)
             };
             World.AddCollisionObject(_staticObject);
         }

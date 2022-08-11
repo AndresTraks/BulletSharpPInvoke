@@ -1,10 +1,10 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using DemoFramework.FileLoaders;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 
 namespace BspDemo
 {
@@ -88,7 +88,7 @@ namespace BspDemo
             if (vertices.Count == 0) return;
 
             const float mass = 0.0f;
-            Matrix startTransform = Matrix.Translation(0, 0, -10.0f); // shift
+            Matrix4x4 startTransform = Matrix4x4.CreateTranslation(0, 0, -10.0f); // shift
             var shape = new ConvexHullShape(vertices);
 
             PhysicsHelper.CreateBody(mass, startTransform, shape, _world);

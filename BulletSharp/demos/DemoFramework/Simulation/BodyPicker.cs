@@ -1,6 +1,6 @@
 ﻿using BulletSharp;
+using System.Numerics;
 using System.Windows.Forms;
-using BulletSharp.Math;
 
 namespace DemoFramework
 {
@@ -85,7 +85,7 @@ namespace DemoFramework
                             PickMultiBody(collider, ref pickPosition);
                         }
                     }
-                    _oldPickingDist = (pickPosition - rayFrom).Length;
+                    _oldPickingDist = (pickPosition - rayFrom).Length();
                 }
             }
         }
@@ -102,11 +102,13 @@ namespace DemoFramework
 
             DiscreteDynamicsWorld world = _demo.Simulation.World;
 
-            Vector3 localPivot = Vector3.TransformCoordinate(pickPosition, Matrix.Invert(body.CenterOfMassTransform));
+            Matrix4x4 invertedCenterOfMass;
+            Matrix4x4.Invert(body.CenterOfMassTransform, out invertedCenterOfMass);
+            Vector3 localPivot = Vector3.Transform(pickPosition, invertedCenterOfMass);
 
             if (_demo.Input.KeysDown.Contains(Keys.ShiftKey))
             {
-                var dof6 = new Generic6DofConstraint(body, Matrix.Translation(localPivot), false)
+                var dof6 = new Generic6DofConstraint(body, Matrix4x4.CreateTranslation(localPivot), false)
                 {
                     LinearLowerLimit = Vector3.Zero,
                     LinearUpperLimit = Vector3.Zero,
@@ -180,8 +182,7 @@ namespace DemoFramework
                 Vector3 newRayTo = _demo.GetCameraRayTo();
 
                 //keep it at the same picking distance
-                Vector3 direction = newRayTo - rayFrom;
-                direction.Normalize();
+                Vector3 direction = Vector3.Normalize(newRayTo - rayFrom);
                 direction *= _oldPickingDist;
 
                 if (_rigidBodyPickConstraint.ConstraintType == TypedConstraintType.D6)
@@ -189,8 +190,8 @@ namespace DemoFramework
                     var dof6 = _rigidBodyPickConstraint as Generic6DofConstraint;
 
                     //keep it at the same picking distance
-                    Matrix tempFrameOffsetA = dof6.FrameOffsetA;
-                    tempFrameOffsetA.Origin = rayFrom + direction;
+                    Matrix4x4 tempFrameOffsetA = dof6.FrameOffsetA;
+                    tempFrameOffsetA.Translation = rayFrom + direction;
                     dof6.SetFrames(tempFrameOffsetA, dof6.FrameOffsetB);
                 }
                 else
@@ -206,8 +207,7 @@ namespace DemoFramework
                 Vector3 rayFrom = _demo.FreeLook.Eye;
                 Vector3 newRayTo = _demo.GetCameraRayTo();
 
-                Vector3 dir = (newRayTo - rayFrom);
-                dir.Normalize();
+                Vector3 dir = Vector3.Normalize(newRayTo - rayFrom);
                 dir *= _oldPickingDist;
                 _multiBodyPickConstraint.PivotInB = rayFrom + dir;
             }

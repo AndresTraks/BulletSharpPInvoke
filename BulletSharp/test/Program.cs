@@ -1,8 +1,8 @@
-using BulletSharp;
-using BulletSharp.Math;
-using BulletSharp.SoftBody;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
+using BulletSharp;
+using BulletSharp.SoftBody;
 
 namespace BulletSharpTest
 {
@@ -155,8 +155,8 @@ namespace BulletSharpTest
 
         static void TestRayCast(CollisionObject testObject)
         {
-            Vector3 rayFromWorld = testObject.WorldTransform.Origin + new Vector3(0, 0, -2);
-            Vector3 rayToWorld = testObject.WorldTransform.Origin + new Vector3(0, 0, 2);
+            Vector3 rayFromWorld = testObject.WorldTransform.Translation + new Vector3(0, 0, -2);
+            Vector3 rayToWorld = testObject.WorldTransform.Translation + new Vector3(0, 0, 2);
             var rayCallback = new CustomRayCallback(ref rayFromWorld, ref rayToWorld);
             world.RayTestRef(ref rayFromWorld, ref rayToWorld, rayCallback);
             if (rayCallback.CollisionObject != testObject)
@@ -169,8 +169,8 @@ namespace BulletSharpTest
 
         static void TestTriangleMeshRayCast(RigidBody triMeshObject)
         {
-            Vector3 rayFromWorld = triMeshObject.WorldTransform.Origin + new Vector3(0, 0, -2);
-            Vector3 rayToWorld = triMeshObject.WorldTransform.Origin + new Vector3(0, 0, 2);
+            Vector3 rayFromWorld = triMeshObject.WorldTransform.Translation + new Vector3(0, 0, -2);
+            Vector3 rayToWorld = triMeshObject.WorldTransform.Translation + new Vector3(0, 0, 2);
             var cb = new TriangleMeshRayCastCallback(ref rayFromWorld, ref rayToWorld);
             world.RayTestRef(ref rayFromWorld, ref rayToWorld, cb);
             if (!cb.Success)

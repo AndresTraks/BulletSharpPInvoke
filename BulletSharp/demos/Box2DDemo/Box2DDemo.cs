@@ -1,7 +1,7 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using System;
+using System.Numerics;
 
 namespace Box2DDemo
 {
@@ -79,7 +79,7 @@ namespace Box2DDemo
         private void CreateGround()
         {
             var groundShape = new BoxShape(150, 7, 150);
-            var ground = PhysicsHelper.CreateStaticBody(Matrix.Identity, groundShape, World);
+            var ground = PhysicsHelper.CreateStaticBody(Matrix4x4.Identity, groundShape, World);
             ground.UserObject = "Ground";
         }
 
@@ -113,7 +113,7 @@ namespace Box2DDemo
                 y = x;
                 for (int j = 0; j < NumObjectsX; j++)
                 {
-                    Matrix startTransform = Matrix.Translation(y - new Vector3(-10, 0, 0));
+                    Matrix4x4 startTransform = Matrix4x4.CreateTranslation(y - new Vector3(-10, 0, 0));
 
                     //using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
                     rbInfo.MotionState = new DefaultMotionState(startTransform);

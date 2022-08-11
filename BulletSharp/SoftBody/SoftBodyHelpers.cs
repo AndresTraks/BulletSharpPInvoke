@@ -1,9 +1,9 @@
-using BulletSharp.Math;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp.SoftBody
@@ -400,14 +400,13 @@ namespace BulletSharp.SoftBody
 			for (int y = 0; y < ry; y++)
 			{
 				float ty = y / (float)(ry - 1);
-				Vector3 py0, py1;
-				Vector3.Lerp(ref corner00, ref corner01, ty, out py0);
-				Vector3.Lerp(ref corner10, ref corner11, ty, out py1);
+				Vector3 py0 = Vector3.Lerp(corner00, corner01, ty);
+				Vector3 py1 = Vector3.Lerp(corner10, corner11, ty);
 				for (int ix = 0; ix < rx; ix++)
 				{
 					float tx = ix / (float)(rx - 1);
 					int index = rx * y + ix;
-					Vector3.Lerp(ref py0, ref py1, tx, out positions[index]);
+					positions[index] = Vector3.Lerp(py0,  py1, tx);
 					masses[index] = 1;
 				}
 			}
@@ -489,7 +488,7 @@ namespace BulletSharp.SoftBody
 
 			for (int i = 0; i < numLinks; i++)
 			{
-				Vector3.Lerp(ref from, ref to, i / (float)(numLinks - 1), out positions[i]);
+				positions[i] = Vector3.Lerp(from, to, i / (float)(numLinks - 1));
 				masses[i] = 1;
 			}
 

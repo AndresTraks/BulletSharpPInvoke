@@ -32,7 +32,7 @@ namespace DemoFramework
                     assemblyNames = new[] { "DemoFramework.SlimDX", "SlimDX, Version=4.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9" };
                     break;
                 case "OpenTK (OpenGL)":
-                    assemblyNames = new[] { "DemoFramework.OpenTK", "OpenTK" };
+                    assemblyNames = new[] { "DemoFramework.OpenTK" };
                     break;
                 case "MonoGame (OpenGL)":
                     assemblyNames = new[] { "DemoFramework.MonoGame" };

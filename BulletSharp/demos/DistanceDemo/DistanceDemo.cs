@@ -1,8 +1,8 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using System;
 using System.Drawing;
+using System.Numerics;
 
 namespace DistanceDemo
 {
@@ -45,7 +45,7 @@ namespace DistanceDemo
 
     internal sealed class DistanceDemoSimulation : ISimulation
     {
-        private readonly Matrix _rotBodyPosition = Matrix.Translation(0, 10, 0);
+        private readonly Matrix4x4 _rotBodyPosition = Matrix4x4.CreateTranslation(0, 10, 0);
         private RigidBody _rotatingBody, _staticBody;
         private ConvexShape _rotatingShape, _staticShape;
 
@@ -74,7 +74,7 @@ namespace DistanceDemo
                 new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(0,0,-1), new Vector3(-1,-1,0)
             };
             _staticShape = new ConvexHullShape(staticPoints);
-            Matrix staticBodyPosition = Matrix.Translation(0, 5, 0);
+            Matrix4x4 staticBodyPosition = Matrix4x4.CreateTranslation(0, 5, 0);
             _staticBody = PhysicsHelper.CreateStaticBody(staticBodyPosition, _staticShape, World);
         }
 
@@ -85,7 +85,7 @@ namespace DistanceDemo
 
         internal void SetRotation(float rotation)
         {
-            _rotatingBody.CenterOfMassTransform = Matrix.RotationX(rotation) * _rotBodyPosition;
+            _rotatingBody.CenterOfMassTransform = Matrix4x4.CreateRotationX(rotation) * _rotBodyPosition;
             _rotatingBody.WorldTransform = _rotatingBody.CenterOfMassTransform;
         }
 
@@ -126,7 +126,7 @@ namespace DistanceDemo
         private void CreateGround()
         {
             var groundShape = new BoxShape(50, 1, 50);
-            CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix.Identity, groundShape, World);
+            CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix4x4.Identity, groundShape, World);
             ground.UserObject = "Ground";
         }
     }

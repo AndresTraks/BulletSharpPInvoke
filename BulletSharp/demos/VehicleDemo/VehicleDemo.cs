@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.IO;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BulletSharp;
-using BulletSharp.Math;
 using DemoFramework;
 
 namespace VehicleDemo
@@ -217,7 +217,7 @@ namespace VehicleDemo
             _groundMesh.NumTriangles = totalTriangles;
             _groundMesh.NumVertices = totalVerts;
             _groundMesh.TriangleIndexStride = 3 * sizeof(int);
-            _groundMesh.VertexStride = Vector3.SizeInBytes;
+            _groundMesh.VertexStride = 3 * sizeof(float);
             using (var indicesStream = _groundMesh.GetTriangleStream())
             {
                 var indices = new BinaryWriter(indicesStream);
@@ -259,10 +259,10 @@ namespace VehicleDemo
             var groundShape = new BvhTriangleMeshShape(_groundVertexArray, true);
             var groundScaled = new ScaledBvhTriangleMeshShape(groundShape, new Vector3(scale));
 
-            RigidBody ground = PhysicsHelper.CreateStaticBody(Matrix.Identity, groundScaled, World);
+            RigidBody ground = PhysicsHelper.CreateStaticBody(Matrix4x4.Identity, groundScaled, World);
             ground.UserObject = "Ground";
 
-            Matrix vehicleTransform = Matrix.Translation(0, -2, 0);
+            Matrix4x4 vehicleTransform = Matrix4x4.CreateTranslation(0, -2, 0);
             CreateVehicle(vehicleTransform);
         }
 
@@ -298,12 +298,12 @@ namespace VehicleDemo
             shape.SetUseDiamondSubdivision(true);
             shape.LocalScaling = new Vector3(scale.X, 1, scale.Z);
 
-            Matrix transform = Matrix.Translation(-scale.X / 2, scale.Y / 2, -scale.Z / 2);
+            Matrix4x4 transform = Matrix4x4.CreateTranslation(-scale.X / 2, scale.Y / 2, -scale.Z / 2);
 
             RigidBody ground = PhysicsHelper.CreateStaticBody(transform, shape, World);
             ground.UserObject = "Ground";
 
-            Matrix vehicleTransform = Matrix.Translation(new Vector3(20, 3, -3));
+            Matrix4x4 vehicleTransform = Matrix4x4.CreateTranslation(new Vector3(20, 3, -3));
             CreateVehicle(vehicleTransform);
         }
 
@@ -335,25 +335,25 @@ namespace VehicleDemo
             groundShape.SetUseDiamondSubdivision(true);
             groundShape.LocalScaling = new Vector3(scale.X, 1, scale.Z);
 
-            Matrix transform = Matrix.Translation(-scale.X / 2, scale.Y / 2, -scale.Z / 2);
+            Matrix4x4 transform = Matrix4x4.CreateTranslation(-scale.X / 2, scale.Y / 2, -scale.Z / 2);
 
             RigidBody ground = PhysicsHelper.CreateStaticBody(transform, groundShape, World);
             ground.UserObject = "Ground";
 
-            Matrix vehicleTransform = Matrix.Translation(new Vector3(20, 3, -3));
+            Matrix4x4 vehicleTransform = Matrix4x4.CreateTranslation(new Vector3(20, 3, -3));
             CreateVehicle(vehicleTransform);
         }
 
-        private void CreateVehicle(Matrix transform)
+        private void CreateVehicle(Matrix4x4 transform)
         {
             var chassisShape = new BoxShape(1.0f, 0.5f, 2.0f);
 
             var compound = new CompoundShape();
 
             //localTrans effectively shifts the center of mass with respect to the chassis
-            Matrix localTrans = Matrix.Translation(Vector3.UnitY);
+            Matrix4x4 localTrans = Matrix4x4.CreateTranslation(Vector3.UnitY);
             compound.AddChildShape(localTrans, chassisShape);
-            RigidBody carChassis = PhysicsHelper.CreateBody(800, Matrix.Identity, compound, World);
+            RigidBody carChassis = PhysicsHelper.CreateBody(800, Matrix4x4.Identity, compound, World);
             carChassis.UserObject = "Chassis";
             //carChassis.SetDamping(0.2f, 0.2f);
 
@@ -374,8 +374,8 @@ namespace VehicleDemo
             Vector3 wheelDirection = Vector3.Zero;
             Vector3 wheelAxle = Vector3.Zero;
 
-            wheelDirection[upIndex] = -1;
-            wheelAxle[rightIndex] = -1;
+            wheelDirection.SetComponent(upIndex, -1);
+            wheelAxle.SetComponent(rightIndex, -1);
 
             bool isFrontWheel = true;
             var connectionPoint = new Vector3(CUBE_HALF_EXTENTS - (0.3f * wheelWidth), connectionHeight, 2 * CUBE_HALF_EXTENTS - wheelRadius);

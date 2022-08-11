@@ -1,5 +1,5 @@
 using System;
-using BulletSharp.Math;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -140,11 +140,11 @@ namespace BulletSharp
 			set => btRigidBody_btRigidBodyConstructionInfo_setRollingFriction(Native, value);
 		}
 
-		public Matrix StartWorldTransform
+		public Matrix4x4 StartWorldTransform
 		{
 			get
 			{
-				Matrix value;
+				Matrix4x4 value;
 				btRigidBody_btRigidBodyConstructionInfo_getStartWorldTransform(Native, out value);
 				return value;
 			}

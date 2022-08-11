@@ -1,4 +1,4 @@
-using BulletSharp.Math;
+using System.Numerics;
 using System;
 using static BulletSharp.UnsafeNativeMethods;
 
@@ -324,8 +324,8 @@ namespace BulletSharp
 			btGImpactBvh_buildSet(Native);
 		}
 
-		public static void FindCollision(GImpactBvh boxSet1, ref Matrix transform1, GImpactBvh boxSet2,
-			ref Matrix transform2, PairSet collisionPairs)
+		public static void FindCollision(GImpactBvh boxSet1, ref Matrix4x4 transform1, GImpactBvh boxSet2,
+			ref Matrix4x4 transform2, PairSet collisionPairs)
 		{
 			btGImpactBvh_find_collision(boxSet1.Native, ref transform1, boxSet2.Native,
 				ref transform2, collisionPairs.Native);

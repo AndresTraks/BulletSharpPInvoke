@@ -1,7 +1,7 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using System;
+using System.Numerics;
 
 namespace ConstraintDemo
 {
@@ -72,7 +72,7 @@ namespace ConstraintDemo
         {
             var groundShape = new BoxShape(50, 1, 50);
             //var groundShape = new StaticPlaneShape(Vector3.UnitY, 1);
-            RigidBody body = PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -16, 0), groundShape, World);
+            RigidBody body = PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(0, -16, 0), groundShape, World);
             body.UserObject = "Ground";
         }
 
@@ -83,12 +83,12 @@ namespace ConstraintDemo
             float radiusB = 1 / (float)Math.Cos(theta);
             float ratio = radiusB / radiusA;
 
-            Matrix transform = Matrix.Translation(-8, 1, -8);
+            Matrix4x4 transform = Matrix4x4.CreateTranslation(-8, 1, -8);
             RigidBody gearA = CreateGear(radiusA, transform);
             gearA.AngularFactor = new Vector3(0, 1, 0);
 
-            var orientation = Quaternion.RotationAxis(new Vector3(0, 0, 1), -theta);
-            transform = Matrix.RotationQuaternion(orientation) * Matrix.Translation(-10, 2, -8);
+            var orientation = Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), -theta);
+            transform = Matrix4x4.CreateFromQuaternion(orientation) * Matrix4x4.CreateTranslation(-10, 2, -8);
             RigidBody gearB = CreateGear(radiusB, transform);
             gearB.AngularVelocity = new Vector3(0, 3, 0);
 
@@ -97,23 +97,23 @@ namespace ConstraintDemo
 
             var axisA = new Vector3(0, 1, 0);
             var axisB = new Vector3(0, 1, 0);
-            orientation = Quaternion.RotationAxis(new Vector3(0, 0, 1), -theta);
-            Matrix mat = Matrix.RotationQuaternion(orientation);
+            orientation = Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), -theta);
+            Matrix4x4 mat = Matrix4x4.CreateFromQuaternion(orientation);
             axisB = new Vector3(mat.M21, mat.M22, mat.M23);
 
             var gear = new GearConstraint(gearA, gearB, axisA, axisB, ratio);
             World.AddConstraint(gear, true);
         }
 
-        private RigidBody CreateGear(float radius, Matrix transform)
+        private RigidBody CreateGear(float radius, Matrix4x4 transform)
         {
             const float mass = 6.28f;
 
             var shape = new CompoundShape();
             var axle = new CylinderShape(0.2f, 0.25f, 0.2f);
             var wheel = new CylinderShape(radius, 0.025f, radius);
-            shape.AddChildShape(Matrix.Identity, axle);
-            shape.AddChildShape(Matrix.Identity, wheel);
+            shape.AddChildShape(Matrix4x4.Identity, axle);
+            shape.AddChildShape(Matrix4x4.Identity, wheel);
 
             RigidBody body = PhysicsHelper.CreateBody(mass, transform, shape, World);
             body.LinearFactor = Vector3.Zero;
@@ -124,17 +124,20 @@ namespace ConstraintDemo
         {
             const float mass = 1.0f;
 
-            RigidBody body0 = PhysicsHelper.CreateBody(mass, Matrix.Translation(0, 24, 0), _cubeShape, World);
-            RigidBody body1 = PhysicsHelper.CreateBody(mass, Matrix.Translation(2 * CubeHalfExtent, 24, 0), _cubeShape, World);
+            RigidBody body0 = PhysicsHelper.CreateBody(mass, Matrix4x4.CreateTranslation(0, 24, 0), _cubeShape, World);
+            RigidBody body1 = PhysicsHelper.CreateBody(mass, Matrix4x4.CreateTranslation(2 * CubeHalfExtent, 24, 0), _cubeShape, World);
 
             Vector3 pivotInA = new Vector3(CubeHalfExtent, -CubeHalfExtent, -CubeHalfExtent);
             Vector3 axisInA = new Vector3(0, 0, 1);
 
-            Matrix transform = Matrix.Invert(body1.CenterOfMassTransform) * body0.CenterOfMassTransform;
-            Vector3 pivotInB = Vector3.TransformCoordinate(pivotInA, transform);
+            Matrix4x4 transform;
+            Matrix4x4.Invert(body1.CenterOfMassTransform, out transform);
+            transform *= body0.CenterOfMassTransform;
+            Vector3 pivotInB = Vector3.Transform(pivotInA, transform);
 
-            transform = Matrix.Invert(body1.CenterOfMassTransform) * body1.CenterOfMassTransform;
-            Vector3 axisInB = Vector3.TransformCoordinate(axisInA, transform);
+            Matrix4x4.Invert(body1.CenterOfMassTransform, out transform);
+            transform *= body1.CenterOfMassTransform;
+            Vector3 axisInB = Vector3.Transform(axisInA, transform);
 
             //var pointToPoint = new Point2PointConstraint(body0, body1, pivotInA, pivotInB);
             //pointToPoint.DebugDrawSize = 5;
@@ -148,7 +151,7 @@ namespace ConstraintDemo
         private void CreateMotorHinge()
         {
             const float mass = 1.0f;
-            RigidBody body = PhysicsHelper.CreateBody(mass, Matrix.Translation(0, 20, 0), _cubeShape, World);
+            RigidBody body = PhysicsHelper.CreateBody(mass, Matrix4x4.CreateTranslation(0, 20, 0), _cubeShape, World);
 
             Vector3 pivotInA = new Vector3(CubeHalfExtent, -CubeHalfExtent, -CubeHalfExtent);
             Vector3 axisInA = new Vector3(0, 0, 1);
@@ -167,7 +170,7 @@ namespace ConstraintDemo
 
         private void CreateMotorHinge2()
         {
-            RigidBody body = PhysicsHelper.CreateBody(1.0f, Matrix.Identity, _cubeShape, World);
+            RigidBody body = PhysicsHelper.CreateBody(1.0f, Matrix4x4.Identity, _cubeShape, World);
             body.ActivationState = ActivationState.DisableDeactivation;
 
             Vector3 pivotInA = new Vector3(10.0f, 0.0f, 0.0f);
@@ -185,16 +188,16 @@ namespace ConstraintDemo
         {
             const float mass = 1.0f;
 
-            RigidBody bodyA = PhysicsHelper.CreateBody(mass, Matrix.Translation(-20, 0, 15), _cubeShape, World);
+            RigidBody bodyA = PhysicsHelper.CreateBody(mass, Matrix4x4.CreateTranslation(-20, 0, 15), _cubeShape, World);
             bodyA.ActivationState = ActivationState.DisableDeactivation;
 
             // add dynamic rigid body B1
-            RigidBody bodyB = PhysicsHelper.CreateBody(0, Matrix.Translation(-30, 0, 15), _cubeShape, World);
+            RigidBody bodyB = PhysicsHelper.CreateBody(0, Matrix4x4.CreateTranslation(-30, 0, 15), _cubeShape, World);
             //RigidBody bodyB = PhysicsHelper.CreateBody(mass, Matrix.Translation(-20, 0, 15), cubeShape, World);
             bodyB.ActivationState = ActivationState.DisableDeactivation;
 
             // create slider constraint between A1 and B1 and add it to world
-            var slider = new SliderConstraint(bodyA, bodyB, Matrix.Identity, Matrix.Identity, true)
+            var slider = new SliderConstraint(bodyA, bodyB, Matrix4x4.Identity, Matrix4x4.Identity, true)
             {
                 LowerLinearLimit = -15.0f,
                 UpperLinearLimit = -5.0f,
@@ -214,14 +217,14 @@ namespace ConstraintDemo
 
             Vector3 sliderAxis = Vector3.UnitX;
             const float angle = (float)Math.PI / 4;
-            Matrix trans = Matrix.RotationAxis(sliderAxis, angle) * Matrix.Translation(0, 10, 0);
+            Matrix4x4 trans = Matrix4x4.CreateFromAxisAngle(sliderAxis, angle) * Matrix4x4.CreateTranslation(0, 10, 0);
             RigidBody body = PhysicsHelper.CreateBody(mass, trans, _cubeShape, World);
             body.ActivationState = ActivationState.DisableDeactivation;
 
             RigidBody fixedBody = PhysicsHelper.CreateStaticBody(trans, null, World);
 
-            Matrix frameInA = Matrix.Translation(0, 5, 0);
-            Matrix frameInB = Matrix.Translation(0, 5, 0);
+            Matrix4x4 frameInA = Matrix4x4.CreateTranslation(0, 5, 0);
+            Matrix4x4 frameInB = Matrix4x4.CreateTranslation(0, 5, 0);
 
             Vector3 lowerSliderLimit = new Vector3(-10, 0, 0);
             Vector3 hiSliderLimit = new Vector3(10, 0, 0);
@@ -256,7 +259,7 @@ namespace ConstraintDemo
             const float mass = 1.0f;
 
             var doorShape = new BoxShape(2.0f, 5.0f, 0.2f);
-            RigidBody doorBody = PhysicsHelper.CreateBody(mass, Matrix.Translation(-5.0f, -2.0f, 0.0f), doorShape, World);
+            RigidBody doorBody = PhysicsHelper.CreateBody(mass, Matrix4x4.CreateTranslation(-5.0f, -2.0f, 0.0f), doorShape, World);
             doorBody.ActivationState = ActivationState.DisableDeactivation;
 
             var pivotA = new Vector3(10.0f + 2.1f, -2.0f, 0.0f); // right next to the door slightly outside
@@ -281,14 +284,14 @@ namespace ConstraintDemo
         {
             const float mass = 1.0f;
 
-            RigidBody fixedBody = PhysicsHelper.CreateBody(0, Matrix.Translation(10, 6, 0), _cubeShape, World);
+            RigidBody fixedBody = PhysicsHelper.CreateBody(0, Matrix4x4.CreateTranslation(10, 6, 0), _cubeShape, World);
             fixedBody.ActivationState = ActivationState.DisableDeactivation;
 
-            RigidBody dynamicbody = PhysicsHelper.CreateBody(mass, Matrix.Translation(0, 6, 0), _cubeShape, World);
+            RigidBody dynamicbody = PhysicsHelper.CreateBody(mass, Matrix4x4.CreateTranslation(0, 6, 0), _cubeShape, World);
             dynamicbody.ActivationState = ActivationState.DisableDeactivation;
 
-            Matrix frameInA = Matrix.Translation(-5, 0, 0);
-            Matrix frameInB = Matrix.Translation(5, 0, 0);
+            Matrix4x4 frameInA = Matrix4x4.CreateTranslation(-5, 0, 0);
+            Matrix4x4 frameInB = Matrix4x4.CreateTranslation(5, 0, 0);
 
             bool useLinearReferenceFrameA = true;
             var generic6Dof = new Generic6DofConstraint(fixedBody, dynamicbody, frameInA, frameInB, useLinearReferenceFrameA)
@@ -329,17 +332,17 @@ namespace ConstraintDemo
 
         private void CreateConeTwist()
         {
-            RigidBody bodyA = PhysicsHelper.CreateBody(1.0f, Matrix.Translation(-10, 5, 0), _cubeShape, World);
+            RigidBody bodyA = PhysicsHelper.CreateBody(1.0f, Matrix4x4.CreateTranslation(-10, 5, 0), _cubeShape, World);
             //bodyA = PhysicsHelper.CreateStaticBody(Matrix.Translation(-10, 5, 0), cubeShape, World);
             bodyA.ActivationState = ActivationState.DisableDeactivation;
 
-            RigidBody bodyB = PhysicsHelper.CreateStaticBody(Matrix.Translation(-10, -5, 0), _cubeShape, World);
+            RigidBody bodyB = PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(-10, -5, 0), _cubeShape, World);
             //bodyB = PhysicsHelper.CreateBody(1.0f, Matrix.Translation(-10, -5, 0), cubeShape, World);
 
-            Matrix frameInA = Matrix.RotationYawPitchRoll(0, 0, (float)Math.PI / 2);
-            frameInA *= Matrix.Translation(0, -5, 0);
-            Matrix frameInB = Matrix.RotationYawPitchRoll(0, 0, (float)Math.PI / 2);
-            frameInB *= Matrix.Translation(0, 5, 0);
+            Matrix4x4 frameInA = Matrix4x4.CreateFromYawPitchRoll(0, 0, (float)Math.PI / 2);
+            frameInA *= Matrix4x4.CreateTranslation(0, -5, 0);
+            Matrix4x4 frameInB = Matrix4x4.CreateFromYawPitchRoll(0, 0, (float)Math.PI / 2);
+            frameInB *= Matrix4x4.CreateTranslation(0, 5, 0);
 
             var coneTwist = new ConeTwistConstraint(bodyA, bodyB, frameInA, frameInB);
             //coneTwist.SetLimit((float)Math.PI / 4, (float)Math.PI / 4, (float)Math.PI * 0.8f);
@@ -353,10 +356,10 @@ namespace ConstraintDemo
         {
             // create two rigid bodies
             // static body A (parent) on top:
-            RigidBody bodyA = PhysicsHelper.CreateStaticBody(Matrix.Translation(20, 4, 0), _cubeShape, World);
+            RigidBody bodyA = PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(20, 4, 0), _cubeShape, World);
             bodyA.ActivationState = ActivationState.DisableDeactivation;
             // dynamic bodyB (child) below it :
-            RigidBody bodyB = PhysicsHelper.CreateBody(1.0f, Matrix.Translation(20, 0, 0), _cubeShape, World);
+            RigidBody bodyB = PhysicsHelper.CreateBody(1.0f, Matrix4x4.CreateTranslation(20, 0, 0), _cubeShape, World);
             bodyB.ActivationState = ActivationState.DisableDeactivation;
 
             // add some (arbitrary) data to build constraint frames
@@ -376,14 +379,14 @@ namespace ConstraintDemo
 
         private void CreateGeneric6DofSpringConstraint()
         {
-            RigidBody bodyA = PhysicsHelper.CreateStaticBody(Matrix.Translation(-20, 16, 0), _cubeShape, World);
+            RigidBody bodyA = PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(-20, 16, 0), _cubeShape, World);
             bodyA.ActivationState = ActivationState.DisableDeactivation;
 
-            RigidBody bodyB = PhysicsHelper.CreateBody(1.0f, Matrix.Translation(-10, 16, 0), _cubeShape, World);
+            RigidBody bodyB = PhysicsHelper.CreateBody(1.0f, Matrix4x4.CreateTranslation(-10, 16, 0), _cubeShape, World);
             bodyB.ActivationState = ActivationState.DisableDeactivation;
 
-            Matrix frameInA = Matrix.Translation(10, 0, 0);
-            Matrix frameInB = Matrix.Identity;
+            Matrix4x4 frameInA = Matrix4x4.CreateTranslation(10, 0, 0);
+            Matrix4x4 frameInB = Matrix4x4.Identity;
 
             var generic6DofSpring = new Generic6DofSpringConstraint(bodyA, bodyB, frameInA, frameInB, true)
             {
@@ -409,10 +412,10 @@ namespace ConstraintDemo
         private void CreateHinge()
         {
             // static body (parent) on top
-            RigidBody bodyA = PhysicsHelper.CreateBody(1.0f, Matrix.Translation(-20, -2, 0), _cubeShape, World);
+            RigidBody bodyA = PhysicsHelper.CreateBody(1.0f, Matrix4x4.CreateTranslation(-20, -2, 0), _cubeShape, World);
             bodyA.ActivationState = ActivationState.DisableDeactivation;
             // dynamic body
-            RigidBody bodyB = PhysicsHelper.CreateBody(10.0f, Matrix.Translation(-30, -2, 0), _cubeShape, World);
+            RigidBody bodyB = PhysicsHelper.CreateBody(10.0f, Matrix4x4.CreateTranslation(-30, -2, 0), _cubeShape, World);
             bodyB.ActivationState = ActivationState.DisableDeactivation;
 
             // add some data to build constraint frames
@@ -432,10 +435,10 @@ namespace ConstraintDemo
         private void CreateHinge2()
         {
             // static bodyA (parent) on top
-            RigidBody bodyA = PhysicsHelper.CreateStaticBody(Matrix.Translation(-20, 4, 0), _cubeShape, World);
+            RigidBody bodyA = PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(-20, 4, 0), _cubeShape, World);
             bodyA.ActivationState = ActivationState.DisableDeactivation;
             // dynamic bodyB (child) below it
-            RigidBody bodyB = PhysicsHelper.CreateBody(1.0f, Matrix.Translation(-20, 0, 0), _cubeShape, World);
+            RigidBody bodyB = PhysicsHelper.CreateBody(1.0f, Matrix4x4.CreateTranslation(-20, 0, 0), _cubeShape, World);
             bodyB.ActivationState = ActivationState.DisableDeactivation;
 
             // add some data to build constraint frames

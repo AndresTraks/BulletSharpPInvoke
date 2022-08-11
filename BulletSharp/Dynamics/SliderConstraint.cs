@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using BulletSharp.Math;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -25,8 +25,8 @@ namespace BulletSharp
 
 	public class SliderConstraint : TypedConstraint
 	{
-		public SliderConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix frameInA,
-			Matrix frameInB, bool useLinearReferenceFrameA)
+		public SliderConstraint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix4x4 frameInA,
+			Matrix4x4 frameInB, bool useLinearReferenceFrameA)
 		{
 			IntPtr native = btSliderConstraint_new(rigidBodyA.Native, rigidBodyB.Native,
 				ref frameInA, ref frameInB, useLinearReferenceFrameA);
@@ -34,19 +34,19 @@ namespace BulletSharp
 			InitializeMembers(rigidBodyA, rigidBodyB);
 		}
 
-		public SliderConstraint(RigidBody rigidBodyB, Matrix frameInB, bool useLinearReferenceFrameA)
+		public SliderConstraint(RigidBody rigidBodyB, Matrix4x4 frameInB, bool useLinearReferenceFrameA)
 		{
 			IntPtr native = btSliderConstraint_new2(rigidBodyB.Native, ref frameInB, useLinearReferenceFrameA);
 			InitializeUserOwned(native);
 			InitializeMembers(GetFixedBody(), rigidBodyB);
 		}
 
-		public void CalculateTransformsRef(ref Matrix transA, ref Matrix transB)
+		public void CalculateTransformsRef(ref Matrix4x4 transA, ref Matrix4x4 transB)
 		{
 			btSliderConstraint_calculateTransforms(Native, ref transA, ref transB);
 		}
 
-		public void CalculateTransforms(Matrix transA, Matrix transB)
+		public void CalculateTransforms(Matrix4x4 transA, Matrix4x4 transB)
 		{
 			btSliderConstraint_calculateTransforms(Native, ref transA, ref transB);
 		}
@@ -56,19 +56,19 @@ namespace BulletSharp
 			btSliderConstraint_getInfo1NonVirtual(Native, info.Native);
 		}
 
-		public void GetInfo2NonVirtual(ConstraintInfo2 info, Matrix transA, Matrix transB,
+		public void GetInfo2NonVirtual(ConstraintInfo2 info, Matrix4x4 transA, Matrix4x4 transB,
 			Vector3 linVelA, Vector3 linVelB, float rbAinvMass, float rbBinvMass)
 		{
 			btSliderConstraint_getInfo2NonVirtual(Native, info.Native, ref transA,
 				ref transB, ref linVelA, ref linVelB, rbAinvMass, rbBinvMass);
 		}
 
-		public void SetFramesRef(ref Matrix frameA, ref Matrix frameB)
+		public void SetFramesRef(ref Matrix4x4 frameA, ref Matrix4x4 frameB)
 		{
 			btSliderConstraint_setFrames(Native, ref frameA, ref frameB);
 		}
 
-		public void SetFrames(Matrix frameA, Matrix frameB)
+		public void SetFrames(Matrix4x4 frameA, Matrix4x4 frameB)
 		{
 			btSliderConstraint_setFrames(Native, ref frameA, ref frameB);
 		}
@@ -107,21 +107,21 @@ namespace BulletSharp
 
 		public float AngularPosition => btSliderConstraint_getAngularPos(Native);
 
-		public Matrix CalculatedTransformA
+		public Matrix4x4 CalculatedTransformA
 		{
 			get
 			{
-				Matrix value;
+				Matrix4x4 value;
 				btSliderConstraint_getCalculatedTransformA(Native, out value);
 				return value;
 			}
 		}
 
-		public Matrix CalculatedTransformB
+		public Matrix4x4 CalculatedTransformB
 		{
 			get
 			{
-				Matrix value;
+				Matrix4x4 value;
 				btSliderConstraint_getCalculatedTransformB(Native, out value);
 				return value;
 			}
@@ -164,21 +164,21 @@ namespace BulletSharp
 		}
 
 		public SliderFlags Flags => btSliderConstraint_getFlags(Native);
-		public Matrix FrameOffsetA
+		public Matrix4x4 FrameOffsetA
 		{
 			get
 			{
-				Matrix value;
+				Matrix4x4 value;
 				btSliderConstraint_getFrameOffsetA(Native, out value);
 				return value;
 			}
 		}
 
-		public Matrix FrameOffsetB
+		public Matrix4x4 FrameOffsetB
 		{
 			get
 			{
-				Matrix value;
+				Matrix4x4 value;
 				btSliderConstraint_getFrameOffsetB(Native, out value);
 				return value;
 			}

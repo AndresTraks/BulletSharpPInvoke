@@ -1,8 +1,8 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace MotorDemo
 {
@@ -73,7 +73,7 @@ namespace MotorDemo
         private void CreateGround()
         {
             var groundShape = new BoxShape(200, 10, 200);
-            CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -10, 0), groundShape, World);
+            CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(0, -10, 0), groundShape, World);
             ground.UserObject = "Ground";
         }
 
@@ -194,11 +194,11 @@ namespace MotorDemo
         private void SetupRigidBodies(Vector3 position, bool isFixed)
         {
             const float heightFromGround = 0.5f;
-            Matrix offset = Matrix.Translation(position);
+            Matrix4x4 offset = Matrix4x4.CreateTranslation(position);
 
             // body
             Vector3 rootPosition = new Vector3(0, heightFromGround, 0);
-            Matrix transform = Matrix.Translation(rootPosition);
+            Matrix4x4 transform = Matrix4x4.CreateTranslation(rootPosition);
             float mass = isFixed ? 0 : 1;
             _bodyObject = PhysicsHelper.CreateBody(mass, transform * offset, _bodyShape, _world);
 
@@ -213,15 +213,14 @@ namespace MotorDemo
 
                 Vector3 boneOrigin = new Vector3(fCos * (BodyRadius + 0.5f * ThighLength), heightFromGround, fSin * (BodyRadius + 0.5f * ThighLength));
 
-                Vector3 vToBone = boneOrigin - rootPosition;
-                vToBone.Normalize();
+                Vector3 vToBone = Vector3.Normalize(boneOrigin - rootPosition);
                 Vector3 vUp = Vector3.UnitY;
                 Vector3 vAxis = Vector3.Cross(vToBone, vUp);
                 
-                transform = Matrix.RotationAxis(vAxis, PI_2) * Matrix.Translation(boneOrigin);
+                transform = Matrix4x4.CreateFromAxisAngle(vAxis, PI_2) * Matrix4x4.CreateTranslation(boneOrigin);
                 leg.Thigh = PhysicsHelper.CreateBody(1, transform * offset, _thighShape, _world);
 
-                transform = Matrix.Translation(fCos * (BodyRadius + ThighLength), heightFromGround - 0.5f * ShinLength, fSin * (BodyRadius + ThighLength));
+                transform = Matrix4x4.CreateTranslation(fCos * (BodyRadius + ThighLength), heightFromGround - 0.5f * ShinLength, fSin * (BodyRadius + ThighLength));
                 leg.Shin = PhysicsHelper.CreateBody(1, transform * offset, _shinShape, _world);
 
                 SetBodyDamping(leg.Thigh);
@@ -239,7 +238,7 @@ namespace MotorDemo
 
         private void SetupConstraints()
         {
-            Matrix localA, localB, localC;
+            Matrix4x4 localA, localB, localC;
 
             for (int i = 0; i < Legs.Length; i++)
             {
@@ -249,16 +248,20 @@ namespace MotorDemo
                 float fSin = (float)Math.Sin(legAngle);
                 float fCos = (float)Math.Cos(legAngle);
 
-                localA = Matrix.RotationYawPitchRoll(-legAngle, 0, 0) * Matrix.Translation(fCos * BodyRadius, 0, fSin * BodyRadius);
-                localB = localA * _bodyObject.WorldTransform * Matrix.Invert(leg.Thigh.WorldTransform);
+                localA = Matrix4x4.CreateFromYawPitchRoll(-legAngle, 0, 0) * Matrix4x4.CreateTranslation(fCos * BodyRadius, 0, fSin * BodyRadius);
+                Matrix4x4 inverseLegThighTransform;
+                Matrix4x4.Invert(leg.Thigh.WorldTransform, out inverseLegThighTransform);
+                localB = localA * _bodyObject.WorldTransform * inverseLegThighTransform;
                 leg.Hip = new HingeConstraint(_bodyObject, leg.Thigh, localA, localB);
                 leg.Hip.SetLimit(-0.75f * PI_4, PI_8);
                 //leg.Hip.SetLimit(-0.1f, 0.1f);
                 _world.AddConstraint(leg.Hip, true);
 
-                localA = Matrix.RotationYawPitchRoll(-legAngle, 0, 0) * Matrix.Translation(fCos * (BodyRadius + ThighLength), 0, fSin * (BodyRadius + ThighLength));
-                localB = localA * _bodyObject.WorldTransform * Matrix.Invert(leg.Thigh.WorldTransform);
-                localC = localA * _bodyObject.WorldTransform * Matrix.Invert(leg.Shin.WorldTransform);
+                localA = Matrix4x4.CreateFromYawPitchRoll(-legAngle, 0, 0) * Matrix4x4.CreateTranslation(fCos * (BodyRadius + ThighLength), 0, fSin * (BodyRadius + ThighLength));
+                localB = localA * _bodyObject.WorldTransform * inverseLegThighTransform;
+                Matrix4x4 inverseLegShinTransform;
+                Matrix4x4.Invert(leg.Shin.WorldTransform, out inverseLegShinTransform);
+                localC = localA * _bodyObject.WorldTransform * inverseLegShinTransform;
                 leg.Knee = new HingeConstraint(leg.Thigh, leg.Shin, localB, localC);
                 //leg.Knee.SetLimit(-0.01f, 0.01f);
                 leg.Knee.SetLimit(-PI_8, 0.2f);

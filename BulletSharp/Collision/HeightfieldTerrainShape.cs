@@ -1,5 +1,5 @@
-using BulletSharp.Math;
 using System;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp

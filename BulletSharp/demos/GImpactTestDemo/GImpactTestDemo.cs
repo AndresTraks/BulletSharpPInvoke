@@ -1,8 +1,8 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using DemoFramework.Meshes;
 using System;
+using System.Numerics;
 using System.Windows.Forms;
 
 namespace GImpactTestDemo
@@ -79,14 +79,10 @@ namespace GImpactTestDemo
         public void ShootTrimesh(Vector3 cameraPosition, Vector3 destination)
         {
             const float mass = 4.0f;
-            Matrix startTransform = Matrix.Translation(cameraPosition);
+            Matrix4x4 startTransform = Matrix4x4.CreateTranslation(cameraPosition);
             RigidBody body = PhysicsHelper.CreateBody(mass, startTransform, _bunnyShape, World);
 
-            Vector3 linearVelocity = destination - cameraPosition;
-            linearVelocity.Normalize();
-            linearVelocity *= ShootBoxInitialSpeed;
-            body.LinearVelocity = linearVelocity;
-
+            body.LinearVelocity = Vector3.Normalize(destination - cameraPosition) * ShootBoxInitialSpeed;
             body.AngularVelocity = Vector3.Zero;
         }
 
@@ -121,30 +117,28 @@ namespace GImpactTestDemo
         private void CreateStaticScene()
         {
             var boxShape1 = new BoxShape(200, 1, 200); //floor
-            PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -10, 0), boxShape1, World);
+            PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(0, -10, 0), boxShape1, World);
 
             var boxShape2 = new BoxShape(1, 50, 200); //left wall
-            PhysicsHelper.CreateStaticBody(Matrix.Translation(-200, 15, 0), boxShape2, World);
+            PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(-200, 15, 0), boxShape2, World);
 
             var boxShape3 = new BoxShape(1, 50, 200); //right wall
-            PhysicsHelper.CreateStaticBody(Matrix.Translation(200, 15, 0), boxShape3, World);
+            PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(200, 15, 0), boxShape3, World);
 
             var boxShape4 = new BoxShape(200, 50, 1); //front wall
-            PhysicsHelper.CreateStaticBody(Matrix.Translation(0, 15, 200), boxShape4, World);
+            PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(0, 15, 200), boxShape4, World);
 
             var boxShape5 = new BoxShape(200, 50, 1); //back wall
-            PhysicsHelper.CreateStaticBody(Matrix.Translation(0, 15, -200), boxShape5, World);
+            PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(0, 15, -200), boxShape5, World);
 
 
-            Vector3 normal = new Vector3(-0.5f, 0.5f, 0.0f);
-            normal.Normalize();
+            Vector3 normal = Vector3.Normalize(new Vector3(-0.5f, 0.5f, 0.0f));
             var planeShape1 = new StaticPlaneShape(normal, 0.5f);
-            PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -9, 0), planeShape1, World);
+            PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(0, -9, 0), planeShape1, World);
 
-            normal = new Vector3(0.5f, 0.7f, 0.0f);
-            normal.Normalize();
+            normal = Vector3.Normalize(new Vector3(0.5f, 0.7f, 0.0f));
             var planeShape2 = new StaticPlaneShape(normal, 0.0f);
-            PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -10, 0), planeShape2, World);
+            PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(0, -10, 0), planeShape2, World);
         }
 
         private void CreateTorusChain()
@@ -156,9 +150,9 @@ namespace GImpactTestDemo
             float angle = quarterTurn;
             float height = 28;
 
-            Matrix startTransform =
-                Matrix.RotationYawPitchRoll(angle, 0, quarterTurn) *
-                Matrix.Translation(0, height, -5);
+            Matrix4x4 startTransform =
+                Matrix4x4.CreateFromYawPitchRoll(angle, 0, quarterTurn) *
+                Matrix4x4.CreateTranslation(0, height, -5);
             var kinematicTorus = PhysicsHelper.CreateStaticBody(startTransform, _torusShape, World);
             //kinematicTorus.CollisionFlags |= CollisionFlags.StaticObject;
             //kinematicTorus.ActivationState = ActivationState.IslandSleeping;
@@ -170,8 +164,8 @@ namespace GImpactTestDemo
                 angle += quarterTurn;
                 height -= step;
                 startTransform =
-                    Matrix.RotationYawPitchRoll(angle, 0, quarterTurn) *
-                    Matrix.Translation(0, height, -5);
+                    Matrix4x4.CreateFromYawPitchRoll(angle, 0, quarterTurn) *
+                    Matrix4x4.CreateTranslation(0, height, -5);
                 PhysicsHelper.CreateBody(mass, startTransform, _torusShape, World);
             }
         }
@@ -182,7 +176,7 @@ namespace GImpactTestDemo
 
             for (int i = 0; i < 16; i++)
             {
-                PhysicsHelper.CreateBody(1, Matrix.Translation(i - 5, 2, -3), boxShape, World);
+                PhysicsHelper.CreateBody(1, Matrix4x4.CreateTranslation(i - 5, 2, -3), boxShape, World);
             }
         }
     }

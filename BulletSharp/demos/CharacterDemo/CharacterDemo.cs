@@ -1,11 +1,11 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using DemoFramework.FileLoaders;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Windows.Forms;
 
 namespace CharacterDemo
@@ -34,35 +34,33 @@ namespace CharacterDemo
         {
             var simulation = demo.Simulation as CharacterDemoSimulation;
 
-            Matrix transform = simulation.GhostObject.WorldTransform;
+            Matrix4x4 transform = simulation.GhostObject.WorldTransform;
 
-            Vector3 forwardDir = new Vector3(transform.M31, transform.M32, transform.M33);
-            forwardDir.Normalize();
+            Vector3 forwardDir = Vector3.Normalize(new Vector3(transform.M31, transform.M32, transform.M33));
 
-            Vector3 upDir = new Vector3(transform.M21, transform.M22, transform.M23);
-            upDir.Normalize();
+            Vector3 upDir = Vector3.Normalize(new Vector3(transform.M21, transform.M22, transform.M23));
 
             Vector3 walkDirection = Vector3.Zero;
             const float walkVelocity = 1.1f * 4.0f;
             float walkSpeed = walkVelocity * demo.FrameDelta * 10;// * 0.0001f;
             float turnSpeed = demo.FrameDelta * 3;
-            Vector3 position = transform.Origin;
+            Vector3 position = transform.Translation;
 
             var keysDown = demo.Input.KeysDown;
             if (keysDown.Count > 0)
             {
                 if (keysDown.Contains(Keys.Left))
                 {
-                    transform.Origin = Vector3.Zero;
-                    transform *= Matrix.RotationAxis(upDir, -turnSpeed);
-                    transform.Origin = position;
+                    transform.Translation = Vector3.Zero;
+                    transform *= Matrix4x4.CreateFromAxisAngle(upDir, -turnSpeed);
+                    transform.Translation = position;
                     simulation.GhostObject.WorldTransform = transform;
                 }
                 if (keysDown.Contains(Keys.Right))
                 {
-                    transform.Origin = Vector3.Zero;
-                    transform *= Matrix.RotationAxis(upDir, turnSpeed);
-                    transform.Origin = position;
+                    transform.Translation = Vector3.Zero;
+                    transform *= Matrix4x4.CreateFromAxisAngle(upDir, turnSpeed);
+                    transform.Translation = position;
                     simulation.GhostObject.WorldTransform = transform;
                 }
                 if (keysDown.Contains(Keys.Up))
@@ -95,7 +93,7 @@ namespace CharacterDemo
             convexResultCallback.ConvexToWorld = cameraPos;
             convexResultCallback.ClosestHitFraction = 1.0f;
             simulation.World.ConvexSweepTest(simulation.CameraSphere,
-                Matrix.Translation(position), Matrix.Translation(cameraPos), convexResultCallback);
+                Matrix4x4.CreateTranslation(position), Matrix4x4.CreateTranslation(cameraPos), convexResultCallback);
             if (convexResultCallback.HasHit)
             {
                 cameraPos = Vector3.Lerp(position, cameraPos, convexResultCallback.ClosestHitFraction);
@@ -164,7 +162,7 @@ namespace CharacterDemo
             GhostObject = new PairCachingGhostObject()
             {
                 CollisionShape = capsule,
-                WorldTransform = Matrix.Translation(10.210098f, -1.6433364f, 16.453260f)
+                WorldTransform = Matrix4x4.CreateTranslation(10.210098f, -1.6433364f, 16.453260f)
             };
             GhostObject.CollisionFlags |= CollisionFlags.CharacterObject;
             World.AddCollisionObject(GhostObject, CollisionFilterGroups.CharacterFilter, CollisionFilterGroups.StaticFilter | CollisionFilterGroups.DefaultFilter);
@@ -193,7 +191,7 @@ namespace CharacterDemo
             var shape = new ConvexHullShape(verticesTransformed);
 
             const float mass = 0.0f;
-            Matrix startTransform = Matrix.Translation(0, -10.0f, 0); // shift
+            Matrix4x4 startTransform = Matrix4x4.CreateTranslation(0, -10.0f, 0); // shift
             PhysicsHelper.CreateBody(mass, startTransform, shape, _world);
         }
     }

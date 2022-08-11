@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using System.Runtime.InteropServices;
-using BulletSharp.Math;
 using System.Text;
 
 namespace BulletSharp
@@ -83,7 +83,7 @@ namespace BulletSharp
                     for (int i = 0; i < numChildShapes; i++)
                     {
                         int cs = i * childLength;
-                        Matrix localTransform = BulletReader.ToMatrix(childShapes, cs + CompoundShapeChildData.Offset("Transform"));
+                        Matrix4x4 localTransform = BulletReader.ToMatrix(childShapes, cs + CompoundShapeChildData.Offset("Transform"));
                         long childShapePtr = BulletReader.ToPtr(childShapes, cs + CompoundShapeChildData.Offset("ChildShape"));
                         //int childShapeType = BitConverter.ToInt32(childShapes, cs + CompoundShapeChildData.Offset("ChildShapeType"));
                         //float childMargin = BitConverter.ToSingle(childShapes, cs + CompoundShapeChildData.Offset("ChildMargin"));
@@ -298,10 +298,10 @@ namespace BulletSharp
                 case TypedConstraintType.ConeTwist:
                 {
                     ConeTwistConstraint coneTwist;
-                    Matrix rbaFrame = BulletReader.ToMatrix(data, ConeTwistConstraintFloatData.Offset("RigidBodyAFrame"));
+                    Matrix4x4 rbaFrame = BulletReader.ToMatrix(data, ConeTwistConstraintFloatData.Offset("RigidBodyAFrame"));
                     if (rigidBodyA != null && rigidBodyB != null)
                     {
-                        Matrix rbbFrame = BulletReader.ToMatrix(data, ConeTwistConstraintFloatData.Offset("RigidBodyBFrame"));
+                        Matrix4x4 rbbFrame = BulletReader.ToMatrix(data, ConeTwistConstraintFloatData.Offset("RigidBodyBFrame"));
                         coneTwist = CreateConeTwistConstraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame);
                     }
                     else
@@ -325,8 +325,8 @@ namespace BulletSharp
                     Generic6DofConstraint dof = null;
                     if (rigidBodyA != null && rigidBodyB != null)
                     {
-                        Matrix rbaFrame = BulletReader.ToMatrix(data, Generic6DofConstraintFloatData.Offset("RigidBodyAFrame"));
-                        Matrix rbbFrame = BulletReader.ToMatrix(data, Generic6DofConstraintFloatData.Offset("RigidBodyBFrame"));
+                        Matrix4x4 rbaFrame = BulletReader.ToMatrix(data, Generic6DofConstraintFloatData.Offset("RigidBodyAFrame"));
+                        Matrix4x4 rbbFrame = BulletReader.ToMatrix(data, Generic6DofConstraintFloatData.Offset("RigidBodyBFrame"));
                         int useLinearReferenceFrameA =
                             BitConverter.ToInt32(data, Generic6DofConstraintFloatData.Offset("UseLinearReferenceFrameA"));
                         dof = CreateGeneric6DofConstraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame,
@@ -336,7 +336,7 @@ namespace BulletSharp
                     {
                         if (rigidBodyB != null)
                         {
-                            Matrix rbbFrame = BulletReader.ToMatrix(data, Generic6DofConstraintFloatData.Offset("RigidBodyBFrame"));
+                            Matrix4x4 rbbFrame = BulletReader.ToMatrix(data, Generic6DofConstraintFloatData.Offset("RigidBodyBFrame"));
                             int useLinearReferenceFrameA =
                                 BitConverter.ToInt32(data, Generic6DofConstraintFloatData.Offset("UseLinearReferenceFrameA"));
                             dof = CreateGeneric6DofConstraint(rigidBodyB, ref rbbFrame, useLinearReferenceFrameA != 0);
@@ -367,8 +367,8 @@ namespace BulletSharp
                     int sixDofData = Generic6DofSpringConstraintFloatData.Offset("SixDofData");
                     if (rigidBodyA != null && rigidBodyB != null)
                     {
-                        Matrix rbaFrame = BulletReader.ToMatrix(data, sixDofData + Generic6DofConstraintFloatData.Offset("RigidBodyAFrame"));
-                        Matrix rbbFrame = BulletReader.ToMatrix(data, sixDofData + Generic6DofConstraintFloatData.Offset("RigidBodyBFrame"));
+                        Matrix4x4 rbaFrame = BulletReader.ToMatrix(data, sixDofData + Generic6DofConstraintFloatData.Offset("RigidBodyAFrame"));
+                        Matrix4x4 rbbFrame = BulletReader.ToMatrix(data, sixDofData + Generic6DofConstraintFloatData.Offset("RigidBodyBFrame"));
                         int useLinearReferenceFrameA = BitConverter.ToInt32(data, sixDofData +
                             Generic6DofConstraintFloatData.Offset("UseLinearReferenceFrameA"));
                         dof = CreateGeneric6DofSpringConstraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame,
@@ -411,8 +411,8 @@ namespace BulletSharp
                     Generic6DofSpring2Constraint dof = null;
                     if (rigidBodyA != null && rigidBodyB != null)
                     {
-                        Matrix rbaFrame = BulletReader.ToMatrix(data, Generic6DofSpring2ConstraintFloatData.Offset("RigidBodyAFrame"));
-                        Matrix rbbFrame = BulletReader.ToMatrix(data, Generic6DofSpring2ConstraintFloatData.Offset("RigidBodyBFrame"));
+                        Matrix4x4 rbaFrame = BulletReader.ToMatrix(data, Generic6DofSpring2ConstraintFloatData.Offset("RigidBodyAFrame"));
+                        Matrix4x4 rbbFrame = BulletReader.ToMatrix(data, Generic6DofSpring2ConstraintFloatData.Offset("RigidBodyBFrame"));
                         RotateOrder rotateOrder = (RotateOrder)BitConverter.ToInt32(data, Generic6DofSpring2ConstraintFloatData.Offset("RotateOrder"));
                         dof = CreateGeneric6DofSpring2Constraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame, rotateOrder);
                     }
@@ -491,11 +491,11 @@ namespace BulletSharp
                 case TypedConstraintType.Hinge:
                 {
                     HingeConstraint hinge;
-                    Matrix rbaFrame = BulletReader.ToMatrix(data, HingeConstraintFloatData.Offset("RigidBodyAFrame"));
+                    Matrix4x4 rbaFrame = BulletReader.ToMatrix(data, HingeConstraintFloatData.Offset("RigidBodyAFrame"));
                     int useReferenceFrameA = BitConverter.ToInt32(data, HingeConstraintFloatData.Offset("UseReferenceFrameA"));
                     if (rigidBodyA != null && rigidBodyB != null)
                     {
-                        Matrix rbbFrame = BulletReader.ToMatrix(data, HingeConstraintFloatData.Offset("RigidBodyBFrame"));
+                        Matrix4x4 rbbFrame = BulletReader.ToMatrix(data, HingeConstraintFloatData.Offset("RigidBodyBFrame"));
                         hinge = CreateHingeConstraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame,
                             useReferenceFrameA != 0);
                     }
@@ -522,12 +522,12 @@ namespace BulletSharp
                 case TypedConstraintType.Slider:
                 {
                     SliderConstraint slider;
-                    Matrix rbbFrame = BulletReader.ToMatrix(data, SliderConstraintFloatData.Offset("RigidBodyBFrame"));
+                    Matrix4x4 rbbFrame = BulletReader.ToMatrix(data, SliderConstraintFloatData.Offset("RigidBodyBFrame"));
                     int useLinearReferenceFrameA =
                         BitConverter.ToInt32(data, SliderConstraintFloatData.Offset("UseLinearReferenceFrameA"));
                     if (rigidBodyA != null && rigidBodyB != null)
                     {
-                        Matrix rbaFrame = BulletReader.ToMatrix(data, SliderConstraintFloatData.Offset("RigidBodyAFrame"));
+                        Matrix4x4 rbaFrame = BulletReader.ToMatrix(data, SliderConstraintFloatData.Offset("RigidBodyAFrame"));
                         slider = CreateSliderConstraint(rigidBodyA, rigidBodyB, ref rbaFrame, ref rbbFrame,
                             useLinearReferenceFrameA != 0);
                     }
@@ -551,11 +551,11 @@ namespace BulletSharp
                         throw new InvalidDataException("Error: requires rigidBodyA && rigidBodyB");
                     }
 
-                    Matrix rbaFrame = rigidBodyA.WorldTransform;
-                    Matrix rbbFrame = rigidBodyB.WorldTransform;
-                    Matrix sharedFrame = Matrix.Translation(0.5f * (rbaFrame.Origin + rbbFrame.Origin));
-                    rbaFrame.Invert();
-                    rbbFrame.Invert();
+                    Matrix4x4 rbaFrame = rigidBodyA.WorldTransform;
+                    Matrix4x4 rbbFrame = rigidBodyB.WorldTransform;
+                    Matrix4x4 sharedFrame = Matrix4x4.CreateTranslation(0.5f * (rbaFrame.Translation + rbbFrame.Translation));
+                    Matrix4x4.Invert(rbaFrame, out rbaFrame);
+                    Matrix4x4.Invert(rbbFrame, out rbbFrame);
                     rbaFrame = rbaFrame * sharedFrame;
                     rbbFrame = rbbFrame * sharedFrame;
                     Generic6DofSpring2Constraint dof = new Generic6DofSpring2Constraint(rigidBodyA, rigidBodyB, rbaFrame, rbbFrame, RotateOrder.XYZ)
@@ -604,7 +604,7 @@ namespace BulletSharp
         {
             int cod = RigidBodyFloatData.Offset("CollisionObjectData");
             long collisionShapePtr = BulletReader.ToPtr(data, cod + CollisionObjectFloatData.Offset("CollisionShape"));
-            Matrix startTransform = BulletReader.ToMatrix(data, cod + CollisionObjectFloatData.Offset("WorldTransform"));
+            Matrix4x4 startTransform = BulletReader.ToMatrix(data, cod + CollisionObjectFloatData.Offset("WorldTransform"));
             long namePtr = BulletReader.ToPtr(data, cod + CollisionObjectFloatData.Offset("Name"));
             float friction = BitConverter.ToSingle(data, cod + CollisionObjectFloatData.Offset("Friction"));
             float restitution = BitConverter.ToSingle(data, cod + CollisionObjectFloatData.Offset("Restitution"));
@@ -647,7 +647,7 @@ namespace BulletSharp
         {
             int cod = RigidBodyFloatData.Offset("CollisionObjectData");
             long collisionShapePtr = BulletReader.ToPtr(data, cod + CollisionObjectFloatData.Offset("CollisionShape"));
-            Matrix startTransform = BulletReader.ToMatrixDouble(data, cod + CollisionObjectFloatData.Offset("WorldTransform"));
+            Matrix4x4 startTransform = BulletReader.ToMatrixDouble(data, cod + CollisionObjectFloatData.Offset("WorldTransform"));
             long namePtr = BulletReader.ToPtr(data, cod + CollisionObjectFloatData.Offset("Name"));
             double friction = BitConverter.ToDouble(data, cod + CollisionObjectFloatData.Offset("Friction"));
             double restitution = BitConverter.ToDouble(data, cod + CollisionObjectFloatData.Offset("Restitution"));
@@ -730,7 +730,7 @@ namespace BulletSharp
             return shape;
 		}
 
-		public CollisionObject CreateCollisionObject(ref Matrix startTransform, CollisionShape shape, string bodyName)
+		public CollisionObject CreateCollisionObject(ref Matrix4x4 startTransform, CollisionShape shape, string bodyName)
 		{
             return CreateRigidBody(false, 0, ref startTransform, shape, bodyName);
 		}
@@ -763,14 +763,14 @@ namespace BulletSharp
             return shape;
 		}
 
-		public ConeTwistConstraint CreateConeTwistConstraint(RigidBody rbA, ref Matrix rbAFrame)
+		public ConeTwistConstraint CreateConeTwistConstraint(RigidBody rbA, ref Matrix4x4 rbAFrame)
 		{
             ConeTwistConstraint constraint = new ConeTwistConstraint(rbA, rbAFrame);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
 
-		public ConeTwistConstraint CreateConeTwistConstraint(RigidBody rbA, RigidBody rbB, ref Matrix rbAFrame, ref Matrix rbBFrame)
+		public ConeTwistConstraint CreateConeTwistConstraint(RigidBody rbA, RigidBody rbB, ref Matrix4x4 rbAFrame, ref Matrix4x4 rbBFrame)
 		{
             ConeTwistConstraint constraint = new ConeTwistConstraint(rbA, rbB, rbAFrame, rbBFrame);
             _allocatedConstraints.Add(constraint);
@@ -817,28 +817,28 @@ namespace BulletSharp
             return constraint;
 		}
 
-		public Generic6DofConstraint CreateGeneric6DofConstraint(RigidBody rbB, ref Matrix frameInB, bool useLinearReferenceFrameB)
+		public Generic6DofConstraint CreateGeneric6DofConstraint(RigidBody rbB, ref Matrix4x4 frameInB, bool useLinearReferenceFrameB)
 		{
 			Generic6DofConstraint constraint = new Generic6DofConstraint(rbB, frameInB, useLinearReferenceFrameB);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
 
-		public Generic6DofConstraint CreateGeneric6DofConstraint(RigidBody rbA, RigidBody rbB, ref Matrix frameInA, ref Matrix frameInB, bool useLinearReferenceFrameA)
+		public Generic6DofConstraint CreateGeneric6DofConstraint(RigidBody rbA, RigidBody rbB, ref Matrix4x4 frameInA, ref Matrix4x4 frameInB, bool useLinearReferenceFrameA)
 		{
 			Generic6DofConstraint constraint = new Generic6DofConstraint(rbA, rbB, frameInA, frameInB, useLinearReferenceFrameA);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
 
-		public Generic6DofSpringConstraint CreateGeneric6DofSpringConstraint(RigidBody rbA, RigidBody rbB, ref Matrix frameInA, ref Matrix frameInB, bool useLinearReferenceFrameA)
+		public Generic6DofSpringConstraint CreateGeneric6DofSpringConstraint(RigidBody rbA, RigidBody rbB, ref Matrix4x4 frameInA, ref Matrix4x4 frameInB, bool useLinearReferenceFrameA)
 		{
 			Generic6DofSpringConstraint constraint = new Generic6DofSpringConstraint(rbA, rbB, frameInA, frameInB, useLinearReferenceFrameA);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
 
-        public Generic6DofSpring2Constraint CreateGeneric6DofSpring2Constraint(RigidBody rbA, RigidBody rbB, ref Matrix frameInA, ref Matrix frameInB, RotateOrder rotateOrder)
+        public Generic6DofSpring2Constraint CreateGeneric6DofSpring2Constraint(RigidBody rbA, RigidBody rbB, ref Matrix4x4 frameInA, ref Matrix4x4 frameInB, RotateOrder rotateOrder)
         {
             Generic6DofSpring2Constraint constraint = new Generic6DofSpring2Constraint(rbA, rbB, frameInA, frameInB, rotateOrder);
             _allocatedConstraints.Add(constraint);
@@ -852,28 +852,28 @@ namespace BulletSharp
             return shape;
 		}
 
-		public HingeConstraint CreateHingeConstraint(RigidBody rbA, RigidBody rbB, ref Matrix rbAFrame, ref Matrix rbBFrame, bool useReferenceFrameA)
+		public HingeConstraint CreateHingeConstraint(RigidBody rbA, RigidBody rbB, ref Matrix4x4 rbAFrame, ref Matrix4x4 rbBFrame, bool useReferenceFrameA)
 		{
             HingeConstraint constraint = new HingeConstraint(rbA, rbB, rbAFrame, rbBFrame, useReferenceFrameA);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
 
-        public HingeConstraint CreateHingeConstraint(RigidBody rbA, RigidBody rbB, ref Matrix rbAFrame, ref Matrix rbBFrame)
+        public HingeConstraint CreateHingeConstraint(RigidBody rbA, RigidBody rbB, ref Matrix4x4 rbAFrame, ref Matrix4x4 rbBFrame)
 		{
             HingeConstraint constraint = new HingeConstraint(rbA, rbB, rbAFrame, rbBFrame);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
 
-        public HingeConstraint CreateHingeConstraint(RigidBody rbA, ref Matrix rbAFrame, bool useReferenceFrameA)
+        public HingeConstraint CreateHingeConstraint(RigidBody rbA, ref Matrix4x4 rbAFrame, bool useReferenceFrameA)
 		{
             HingeConstraint constraint = new HingeConstraint(rbA, rbAFrame, useReferenceFrameA);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
 
-        public HingeConstraint CreateHingeConstraint(RigidBody rbA, ref Matrix rbAFrame)
+        public HingeConstraint CreateHingeConstraint(RigidBody rbA, ref Matrix4x4 rbAFrame)
 		{
             HingeConstraint constraint = new HingeConstraint(rbA, rbAFrame);
             _allocatedConstraints.Add(constraint);
@@ -970,7 +970,7 @@ namespace BulletSharp
             return constraint;
 		}
 
-		public virtual RigidBody CreateRigidBody(bool isDynamic, float mass, ref Matrix startTransform, CollisionShape shape, string bodyName)
+		public virtual RigidBody CreateRigidBody(bool isDynamic, float mass, ref Matrix4x4 startTransform, CollisionShape shape, string bodyName)
 		{
             Vector3 localInertia;
             if (mass != 0.0f)
@@ -1010,14 +1010,14 @@ namespace BulletSharp
             return shape;
 		}
 
-		public SliderConstraint CreateSliderConstraint(RigidBody rbB, ref Matrix frameInB, bool useLinearReferenceFrameA)
+		public SliderConstraint CreateSliderConstraint(RigidBody rbB, ref Matrix4x4 frameInB, bool useLinearReferenceFrameA)
 		{
 			SliderConstraint constraint = new SliderConstraint(rbB, frameInB, useLinearReferenceFrameA);
             _allocatedConstraints.Add(constraint);
             return constraint;
 		}
 
-		public SliderConstraint CreateSliderConstraint(RigidBody rbA, RigidBody rbB, ref Matrix frameInA, ref Matrix frameInB, bool useLinearReferenceFrameA)
+		public SliderConstraint CreateSliderConstraint(RigidBody rbA, RigidBody rbB, ref Matrix4x4 frameInA, ref Matrix4x4 frameInB, bool useLinearReferenceFrameA)
 		{
             SliderConstraint constraint = new SliderConstraint(rbA, rbB, frameInA, frameInB, useLinearReferenceFrameA);
             _allocatedConstraints.Add(constraint);

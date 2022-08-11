@@ -1,7 +1,7 @@
 using BulletSharp;
-using BulletSharp.Math;
 using DemoFramework;
 using System;
+using System.Numerics;
 
 namespace FeatherStoneDemo
 {
@@ -69,8 +69,7 @@ namespace FeatherStoneDemo
                 float q0 = 45.0f * (float)Math.PI / 180.0f;
                 if (spherical)
                 {
-                    Quaternion quat0 = Quaternion.RotationAxis(Vector3.Normalize(new Vector3(1, 1, 0)), q0);
-                    quat0.Normalize();
+                    Quaternion quat0 = Quaternion.Normalize(Quaternion.CreateFromAxisAngle(Vector3.Normalize(new Vector3(1, 1, 0)), q0));
                     multiBody.SetJointPosMultiDof(0, new float[] { quat0.X, quat0.Y, quat0.Z, quat0.W });
                 }
                 else
@@ -81,7 +80,7 @@ namespace FeatherStoneDemo
             CreateColliders(multiBody, baseHalfExtents, linkHalfExtents);
 
 
-            CreateRigidBody(1, Matrix.Translation(0, -0.95f, 0), new BoxShape(0.5f, 0.5f, 0.5f));
+            CreateRigidBody(1, Matrix4x4.CreateTranslation(0, -0.95f, 0), new BoxShape(0.5f, 0.5f, 0.5f));
         }
 
         public CollisionConfiguration CollisionConfiguration { get; }
@@ -103,7 +102,7 @@ namespace FeatherStoneDemo
             //groundShape.InitializePolyhedralFeatures();
             //var groundShape = new StaticPlaneShape(new Vector3(0, 1, 0), 50);
 
-            CollisionObject ground = CreateRigidBody(0, Matrix.Translation(0, -51.55f, 0), groundShape);
+            CollisionObject ground = CreateRigidBody(0, Matrix4x4.CreateTranslation(0, -51.55f, 0), groundShape);
             ground.UserObject = "Ground";
         }
 
@@ -143,8 +142,8 @@ namespace FeatherStoneDemo
             }
 
             //y-axis assumed up
-            Vector3 parentComToCurrentCom = new Vector3(0, -linkHalfExtents[1] * 2.0f, 0);       //par body's COM to cur body's COM offset	
-            Vector3 currentPivotToCurrentCom = new Vector3(0, -linkHalfExtents[1], 0);          //cur body's COM to cur body's PIV offset
+            Vector3 parentComToCurrentCom = new Vector3(0, -linkHalfExtents.Y * 2.0f, 0);       //par body's COM to cur body's COM offset	
+            Vector3 currentPivotToCurrentCom = new Vector3(0, -linkHalfExtents.Y, 0);          //cur body's COM to cur body's PIV offset
             Vector3 parentComToCurrentPivot = parentComToCurrentCom - currentPivotToCurrentCom; //par body's COM to cur body's PIV offset
 
             for (int i = 0; i < numLinks; i++)
@@ -188,7 +187,7 @@ namespace FeatherStoneDemo
 
                         // using motionstate is recommended, it provides interpolation capabilities
                         // and only synchronizes 'active' objects
-                        rbInfo.MotionState = new DefaultMotionState(Matrix.Translation(position));
+                        rbInfo.MotionState = new DefaultMotionState(Matrix4x4.CreateTranslation(position));
                         var body = new RigidBody(rbInfo);
                         World.AddRigidBody(body);
                     }
@@ -212,8 +211,8 @@ namespace FeatherStoneDemo
                 var collider = new MultiBodyLinkCollider(multiBody, -1);
                 collider.CollisionShape = new BoxShape(baseHalfExtents);
 
-                Matrix tr = Matrix.RotationQuaternion(worldToLocal[0].Inverse);
-                tr.Origin = localOrigin[0];
+                Matrix4x4 tr = Matrix4x4.CreateFromQuaternion(Quaternion.Inverse(worldToLocal[0]));
+                tr.Translation = localOrigin[0];
                 collider.WorldTransform = tr;
 
                 World.AddCollisionObject(collider, CollisionFilterGroups.StaticFilter,
@@ -226,14 +225,14 @@ namespace FeatherStoneDemo
             {
                 int parent = multiBody.GetParent(i);
                 worldToLocal[i + 1] = multiBody.GetParentToLocalRot(i) * worldToLocal[parent + 1];
-                localOrigin[i + 1] = localOrigin[parent + 1] + (worldToLocal[i + 1].Inverse.Rotate(multiBody.GetRVector(i)));
+                localOrigin[i + 1] = localOrigin[parent + 1] + Vector3.Transform(multiBody.GetRVector(i), Quaternion.Inverse(worldToLocal[i + 1]));
             }
 
             for (int i = 0; i < multiBody.NumLinks; i++)
             {
                 var collider = new MultiBodyLinkCollider(multiBody, i);
                 collider.CollisionShape = new BoxShape(linkHalfExtents);
-                Matrix tr = Matrix.RotationQuaternion(worldToLocal[i + 1].Inverse) * Matrix.Translation(localOrigin[i + 1]);
+                Matrix4x4 tr = Matrix4x4.CreateFromQuaternion(Quaternion.Inverse(worldToLocal[i + 1])) * Matrix4x4.CreateTranslation(localOrigin[i + 1]);
                 collider.WorldTransform = tr;
                 World.AddCollisionObject(collider, CollisionFilterGroups.StaticFilter,
                     CollisionFilterGroups.DefaultFilter | CollisionFilterGroups.StaticFilter);
@@ -243,7 +242,7 @@ namespace FeatherStoneDemo
             }
         }
 
-        private RigidBody CreateRigidBody(float mass, Matrix startTransform, CollisionShape shape)
+        private RigidBody CreateRigidBody(float mass, Matrix4x4 startTransform, CollisionShape shape)
         {
             //rigidbody is dynamic if and only if mass is non zero, otherwise static
             bool isDynamic = (mass != 0.0f);

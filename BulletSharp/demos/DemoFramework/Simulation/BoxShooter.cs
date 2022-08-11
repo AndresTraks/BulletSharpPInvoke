@@ -1,5 +1,5 @@
 ﻿using BulletSharp;
-using BulletSharp.Math;
+using System.Numerics;
 using System;
 using System.Linq;
 
@@ -28,12 +28,11 @@ namespace DemoFramework
                 //shootBoxShape.InitializePolyhedralFeatures();
             }
 
-            RigidBody body = PhysicsHelper.CreateBody(mass, Matrix.Translation(eyePosition), _shootBoxShape, _world);
+            RigidBody body = PhysicsHelper.CreateBody(mass, Matrix4x4.CreateTranslation(eyePosition), _shootBoxShape, _world);
             body.LinearFactor = new Vector3(1, 1, 1);
             //body.Restitution = 1;
 
-            Vector3 linVel = destination - eyePosition;
-            linVel.Normalize();
+            Vector3 linVel = Vector3.Normalize(destination - eyePosition);
             body.LinearVelocity = linVel * ShootBoxInitialSpeed;
             body.CcdMotionThreshold = 0.5f;
             body.CcdSweptSphereRadius = 0.9f;

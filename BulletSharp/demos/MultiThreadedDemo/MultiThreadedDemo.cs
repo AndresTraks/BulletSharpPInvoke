@@ -1,8 +1,8 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Windows.Forms;
 
 namespace BasicDemo
@@ -138,7 +138,7 @@ namespace BasicDemo
             var groundShape = new BoxShape(Scale * new Vector3(400, 1, 400));
             //var groundShape = new StaticPlaneShape(Vector3.UnitY, Scale);
 
-            CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix.Identity, groundShape, World);
+            CollisionObject ground = PhysicsHelper.CreateStaticBody(Matrix4x4.Identity, groundShape, World);
             ground.Friction = 1;
             ground.UserObject = "Ground";
         }
@@ -172,7 +172,7 @@ namespace BasicDemo
                     {
                         Vector3 position = offset + Scale * 2 * new Vector3(x, y, z);
 
-                        bodyInfo.MotionState = new DefaultMotionState(Matrix.Translation(position));
+                        bodyInfo.MotionState = new DefaultMotionState(Matrix4x4.CreateTranslation(position));
                         var body = new RigidBody(bodyInfo);
 
                         World.AddRigidBody(body);

@@ -1,5 +1,4 @@
 ﻿using BulletSharp;
-using System;
 using System.Collections.Generic;
 
 namespace DemoFramework

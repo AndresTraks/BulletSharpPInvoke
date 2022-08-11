@@ -1,9 +1,9 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace SerializeDemo
@@ -66,7 +66,7 @@ namespace SerializeDemo
             {
                 var groundShape = new BoxShape(50);
                 _collisionShapes.Add(groundShape);
-                RigidBody ground = PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -50, 0), groundShape, World);
+                RigidBody ground = PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(0, -50, 0), groundShape, World);
                 ground.UserObject = "Ground";
 
                 // create a few dynamic rigidbodies
@@ -95,7 +95,7 @@ namespace SerializeDemo
                     {
                         for (int z = 0; z < NumObjectsZ; z++)
                         {
-                            Matrix startTransform = Matrix.Translation(
+                            Matrix4x4 startTransform = Matrix4x4.CreateTranslation(
                                 2 * x + startX,
                                 2 * y + startY,
                                 2 * z + startZ
@@ -161,7 +161,7 @@ namespace SerializeDemo
         {
         }
 
-        public override RigidBody CreateRigidBody(bool isDynamic, float mass, ref Matrix startTransform, CollisionShape shape, string bodyName)
+        public override RigidBody CreateRigidBody(bool isDynamic, float mass, ref Matrix4x4 startTransform, CollisionShape shape, string bodyName)
         {
             RigidBody body = base.CreateRigidBody(isDynamic, mass, ref startTransform, shape, bodyName);
 

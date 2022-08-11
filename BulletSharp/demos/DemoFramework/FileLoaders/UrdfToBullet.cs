@@ -1,10 +1,10 @@
 ﻿using BulletSharp;
-using BulletSharp.Math;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 
 namespace DemoFramework.FileLoaders
 {
@@ -29,7 +29,7 @@ namespace DemoFramework.FileLoaders
             var rootLink = _linkToParentJoint.FirstOrDefault(link => link.Value == null).Key;
             if (rootLink != null)
             {
-                LoadLink(rootLink, Matrix.Identity, baseDirectory);
+                LoadLink(rootLink, Matrix4x4.Identity, baseDirectory);
             }
         }
 
@@ -44,11 +44,11 @@ namespace DemoFramework.FileLoaders
             return linkToParent;
         }
 
-        private void LoadLink(UrdfLink link, Matrix parentTransform, string baseDirectory)
+        private void LoadLink(UrdfLink link, Matrix4x4 parentTransform, string baseDirectory)
         {
             LoadCollisions(link, baseDirectory, parentTransform);
 
-            Matrix worldTransform;
+            Matrix4x4 worldTransform;
             RigidBody body;
             if (_linkToRigidBody.TryGetValue(link.Name, out body))
             {
@@ -56,7 +56,7 @@ namespace DemoFramework.FileLoaders
             }
             else
             {
-                worldTransform = Matrix.Identity;
+                worldTransform = Matrix4x4.Identity;
             }
 
             var children = _linkToParentJoint.Where(l => l.Value?.Parent == link);
@@ -67,7 +67,7 @@ namespace DemoFramework.FileLoaders
             }
         }
 
-        private void LoadCollisions(UrdfLink link, string baseDirectory, Matrix parentTransform)
+        private void LoadCollisions(UrdfLink link, string baseDirectory, Matrix4x4 parentTransform)
         {
             if (link.Collisions.Length == 0)
             {
@@ -79,12 +79,12 @@ namespace DemoFramework.FileLoaders
                 ? (float)inertial.Mass
                 : 0;
 
-            Matrix origin = ParsePose(link.Inertial.Origin);
+            Matrix4x4 origin = ParsePose(link.Inertial.Origin);
             //Matrix inertia = ParseInertia(link.Inertial.Inertia);
             parentTransform = parentTransform * origin;
 
             CollisionShape shape;
-            Matrix pose;
+            Matrix4x4 pose;
             if (link.Collisions.Length == 1)
             {
                 var collision = link.Collisions[0];
@@ -110,28 +110,28 @@ namespace DemoFramework.FileLoaders
             _linkToRigidBody[link.Name] = body;
         }
 
-        private CompoundShape LoadCompoundCollisionShape(UrdfCollision[] collisions, string baseDirectory, float mass, Matrix parentTransform)
+        private CompoundShape LoadCompoundCollisionShape(UrdfCollision[] collisions, string baseDirectory, float mass, Matrix4x4 parentTransform)
         {
             var compoundShape = new CompoundShape(true, collisions.Length);
             foreach (UrdfCollision collision in collisions)
             {
-                Matrix origin = ParsePose(collision.Origin);
-                Matrix childTransform = origin * parentTransform;
+                Matrix4x4 origin = ParsePose(collision.Origin);
+                Matrix4x4 childTransform = origin * parentTransform;
                 CollisionShape shape = CreateShapeFromGeometry(collision.Geometry, mass, baseDirectory);
                 compoundShape.AddChildShapeRef(ref childTransform, shape);
             }
             return compoundShape;
         }
 
-        private Matrix ParsePose(UrdfPose pose)
+        private Matrix4x4 ParsePose(UrdfPose pose)
         {
             if (pose == null)
             {
-                return Matrix.Identity;
+                return Matrix4x4.Identity;
             }
             Vector3 rpy = ParseVector3(pose.RollPitchYaw);
-            Matrix matrix = Matrix.RotationYawPitchRoll(rpy.Z, rpy.Y, rpy.X);
-            matrix.Origin = ParseVector3(pose.Position);
+            Matrix4x4 matrix = Matrix4x4.CreateFromYawPitchRoll(rpy.Z, rpy.Y, rpy.X);
+            matrix.Translation = ParseVector3(pose.Position);
             return matrix;
         }
 
@@ -297,7 +297,7 @@ namespace DemoFramework.FileLoaders
             }
             else if (joint is UrdfFixedJoint)
             {
-                Matrix childFrame = ParseInertia(joint.Child.Inertial.Inertia);
+                Matrix4x4 childFrame = ParseInertia(joint.Child.Inertial.Inertia);
                 childFrame = ParsePose(joint.Origin);
 
                 constraint = CreateFixedJoint(childRigidBody, parentRigidBody, childFrame);
@@ -312,16 +312,16 @@ namespace DemoFramework.FileLoaders
 
         private Generic6DofSpring2Constraint CreateRevoluteJoint(RigidBody rigidBodyA, RigidBody rigidBodyB)
         {
-            return new Generic6DofSpring2Constraint(rigidBodyA, rigidBodyB, Matrix.Identity, Matrix.Identity)
+            return new Generic6DofSpring2Constraint(rigidBodyA, rigidBodyB, Matrix4x4.Identity, Matrix4x4.Identity)
             {
                 LinearLowerLimit = Vector3.Zero,
                 LinearUpperLimit = Vector3.Zero
             };
         }
 
-        private Generic6DofSpring2Constraint CreateFixedJoint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix childFrame)
+        private Generic6DofSpring2Constraint CreateFixedJoint(RigidBody rigidBodyA, RigidBody rigidBodyB, Matrix4x4 childFrame)
         {
-            return new Generic6DofSpring2Constraint(rigidBodyA, rigidBodyB, childFrame, Matrix.Identity)
+            return new Generic6DofSpring2Constraint(rigidBodyA, rigidBodyB, childFrame, Matrix4x4.Identity)
             {
                 AngularLowerLimit = Vector3.Zero,
                 AngularUpperLimit = Vector3.Zero,
@@ -330,14 +330,14 @@ namespace DemoFramework.FileLoaders
             };
         }
 
-        private Matrix ParseInertia(UrdfInertia inertia)
+        private Matrix4x4 ParseInertia(UrdfInertia inertia)
         {
             if (inertia.XY == 0 && inertia.XZ == 0 && inertia.YZ == 0)
             {
-                return Matrix.Identity;
+                return Matrix4x4.Identity;
             }
 
-            return new Matrix(
+            return new Matrix4x4(
                 (float)inertia.XX, (float)inertia.XY, (float)inertia.XZ, 0,
                 (float)inertia.XY, (float)inertia.YY, (float)inertia.YZ, 0,
                 (float)inertia.XZ, (float)inertia.YZ, (float)inertia.ZZ, 0,

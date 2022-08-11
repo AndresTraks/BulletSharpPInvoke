@@ -1,5 +1,5 @@
-using BulletSharp.Math;
 using System;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -61,14 +61,14 @@ namespace BulletSharp
 			btConvexPolyhedron_initialize2(Native);
 		}
 
-		public void ProjectRef(ref Matrix trans, ref Vector3 dir, out float minProj, out float maxProj,
+		public void ProjectRef(ref Matrix4x4 trans, ref Vector3 dir, out float minProj, out float maxProj,
 			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
 		{
 			btConvexPolyhedron_project(Native, ref trans, ref dir, out minProj,
 				out maxProj, out witnesPtMin, out witnesPtMax);
 		}
 
-		public void Project(Matrix trans, Vector3 dir, out float minProj, out float maxProj,
+		public void Project(Matrix4x4 trans, Vector3 dir, out float minProj, out float maxProj,
 			out Vector3 witnesPtMin, out Vector3 witnesPtMax)
 		{
 			btConvexPolyhedron_project(Native, ref trans, ref dir, out minProj,

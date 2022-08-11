@@ -1,5 +1,5 @@
 using System;
-using BulletSharp.Math;
+using System.Numerics;
 using static BulletSharp.UnsafeNativeMethods;
 
 namespace BulletSharp
@@ -20,22 +20,22 @@ namespace BulletSharp
 				set => btDiscreteCollisionDetectorInterface_ClosestPointInput_setMaximumDistanceSquared(Native, value);
 			}
 
-			public Matrix TransformA
+			public Matrix4x4 TransformA
 			{
 				get
 				{
-					Matrix value;
+					Matrix4x4 value;
 					btDiscreteCollisionDetectorInterface_ClosestPointInput_getTransformA(Native, out value);
 					return value;
 				}
 				set => btDiscreteCollisionDetectorInterface_ClosestPointInput_setTransformA(Native, ref value);
 			}
 
-			public Matrix TransformB
+			public Matrix4x4 TransformB
 			{
 				get
 				{
-					Matrix value;
+					Matrix4x4 value;
 					btDiscreteCollisionDetectorInterface_ClosestPointInput_getTransformB(Native, out value);
 					return value;
 				}

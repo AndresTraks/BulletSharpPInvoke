@@ -1,7 +1,7 @@
-﻿using BulletSharp;
-using BulletSharp.Math;
+using BulletSharp;
 using DemoFramework;
 using System;
+using System.Numerics;
 
 namespace RollingFrictionDemo
 {
@@ -68,7 +68,7 @@ namespace RollingFrictionDemo
                     {
                         Vector3 position = _startPosition + 2 * new Vector3(x, y, z);
                         position += new Vector3(0, 10, 0);
-                        Matrix startTransform = Matrix.Translation(position);
+                        Matrix4x4 startTransform = Matrix4x4.CreateTranslation(position);
 
                         shapeIndex++;
                         var shape = colShapes[shapeIndex % colShapes.Length];
@@ -110,14 +110,14 @@ namespace RollingFrictionDemo
         {
             var groundShape = new BoxShape(20, 50, 10);
             CollisionObject ground = PhysicsHelper.CreateStaticBody(
-                Matrix.RotationAxis(new Vector3(0, 0, 1), (float)Math.PI * 0.03f) * Matrix.Translation(0, -50, 0),
+                Matrix4x4.CreateFromAxisAngle(new Vector3(0, 0, 1), (float)Math.PI * 0.03f) * Matrix4x4.CreateTranslation(0, -50, 0),
                 groundShape, World);
             ground.Friction = 1;
             ground.RollingFriction = 1;
             ground.UserObject = "Ground";
 
             groundShape = new BoxShape(100, 50, 100);
-            ground = PhysicsHelper.CreateStaticBody(Matrix.Translation(0, -54, 0), groundShape, World);
+            ground = PhysicsHelper.CreateStaticBody(Matrix4x4.CreateTranslation(0, -54, 0), groundShape, World);
             ground.Friction = 1;
             ground.RollingFriction = 1;
             ground.UserObject = "Ground";

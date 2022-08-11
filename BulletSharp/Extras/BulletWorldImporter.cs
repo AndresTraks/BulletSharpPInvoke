@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace BulletSharp
@@ -117,7 +118,7 @@ namespace BulletSharp
                         {
                             long shapePtr = colObjReader.ReadPtr(CollisionObjectDoubleData.Offset("CollisionShape"));
                             CollisionShape shape = _shapeMap[shapePtr];
-                            Math.Matrix startTransform = colObjReader.ReadMatrixDouble(CollisionObjectDoubleData.Offset("WorldTransform"));
+                            Matrix4x4 startTransform = colObjReader.ReadMatrixDouble(CollisionObjectDoubleData.Offset("WorldTransform"));
                             long namePtr = colObjReader.ReadPtr(CollisionObjectDoubleData.Offset("Name"));
                             string name = null;
                             if (namePtr != 0)
@@ -133,7 +134,7 @@ namespace BulletSharp
                         {
                             long shapePtr = colObjReader.ReadPtr(CollisionObjectFloatData.Offset("CollisionShape"));
                             CollisionShape shape = _shapeMap[shapePtr];
-                            Math.Matrix startTransform = colObjReader.ReadMatrix(CollisionObjectFloatData.Offset("WorldTransform"));
+                            Matrix4x4 startTransform = colObjReader.ReadMatrix(CollisionObjectFloatData.Offset("WorldTransform"));
                             long namePtr = colObjReader.ReadPtr(CollisionObjectFloatData.Offset("Name"));
                             string name = null;
                             if (namePtr != 0)
