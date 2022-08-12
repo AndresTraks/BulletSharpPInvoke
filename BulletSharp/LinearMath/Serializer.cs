@@ -506,6 +506,7 @@ namespace BulletSharp
 		public void WriteDna()
 		{
 			Chunk dnaChunk = Allocate((uint)_dnaData.Length, 1);
+			Marshal.Copy(_dnaData, 0, dnaChunk.OldPtr, _dnaData.Length);
 			GCHandle dnaHandle = GCHandle.Alloc(_dnaData, GCHandleType.Pinned);
 			FinalizeChunk(dnaChunk, "DNA1", DnaID.Dna, dnaHandle.AddrOfPinnedObject());
 			dnaHandle.Free();
