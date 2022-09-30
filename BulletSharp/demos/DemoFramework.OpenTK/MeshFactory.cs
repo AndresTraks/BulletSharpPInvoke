@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using BulletSharp;
 using BulletSharp.SoftBody;
-using OpenTK;
+using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL;
 //using Vector3 = OpenTK.Vector3;
 using Vector3 = BulletSharp.Math.Vector3;
@@ -69,15 +69,12 @@ namespace DemoFramework.OpenTK
 
         static void SetBuffer<T>(T[] vertices, out int bufferId, BufferUsageHint usage = BufferUsageHint.StaticDraw) where T : struct
         {
-            // Generate Array Buffer Id
             GL.GenBuffers(1, out bufferId);
             OpenTKGraphics.CheckGLError("GenBuffers");
 
-            // Bind current context to Array Buffer ID
             GL.BindBuffer(BufferTarget.ArrayBuffer, bufferId);
             OpenTKGraphics.CheckGLError("BindBuffer");
 
-            // Send data to buffer
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * Vector3.SizeInBytes), vertices, usage);
             OpenTKGraphics.CheckGLError("BufferData");
 
@@ -95,13 +92,10 @@ namespace DemoFramework.OpenTK
 
         static void UpdateBuffer<T>(T[] vertices, int bufferId) where T : struct
         {
-            // Bind current context to Array Buffer ID
             GL.BindBuffer(BufferTarget.ArrayBuffer, bufferId);
 
-            // Send data to buffer
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * Vector3.SizeInBytes), vertices, BufferUsageHint.DynamicDraw);
 
-            // Clear the buffer Binding
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
@@ -111,13 +105,9 @@ namespace DemoFramework.OpenTK
 
             ElementsType = DrawElementsType.UnsignedInt;
 
-            // Generate Array Buffer Id
             GL.GenBuffers(1, out ElementBufferID);
-
-            // Bind current context to Array Buffer ID
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ElementBufferID);
 
-            // Send data to buffer
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(uint)), indices, BufferUsageHint.StaticDraw);
 
             // Validate that the buffer is the correct size
@@ -125,7 +115,6 @@ namespace DemoFramework.OpenTK
             if (indices.Length * sizeof(uint) != bufferSize)
                 throw new ApplicationException("Element array not uploaded correctly");
 
-            // Clear the buffer Binding
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
@@ -133,13 +122,9 @@ namespace DemoFramework.OpenTK
         {
             ElementsType = DrawElementsType.UnsignedShort;
 
-            // Generate Array Buffer Id
             GL.GenBuffers(1, out ElementBufferID);
-
-            // Bind current context to Array Buffer ID
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ElementBufferID);
 
-            // Send data to buffer
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(ushort)), indices, BufferUsageHint.StaticDraw);
 
             // Validate that the buffer is the correct size
@@ -148,7 +133,6 @@ namespace DemoFramework.OpenTK
             if (indices.Length * sizeof(ushort) != bufferSize)
                 throw new ApplicationException("Element array not uploaded correctly");
 
-            // Clear the buffer Binding
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
@@ -156,13 +140,9 @@ namespace DemoFramework.OpenTK
         {
             ElementsType = DrawElementsType.UnsignedByte;
 
-            // Generate Array Buffer Id
             GL.GenBuffers(1, out ElementBufferID);
-
-            // Bind current context to Array Buffer ID
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ElementBufferID);
 
-            // Send data to buffer
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)indices.Length, indices, BufferUsageHint.StaticDraw);
 
             // Validate that the buffer is the correct size
@@ -171,7 +151,6 @@ namespace DemoFramework.OpenTK
             if (indices.Length != bufferSize)
                 throw new ApplicationException("Element array not uploaded correctly");
 
-            // Clear the buffer Binding
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 

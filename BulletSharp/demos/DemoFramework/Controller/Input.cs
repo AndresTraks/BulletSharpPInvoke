@@ -32,11 +32,11 @@ namespace DemoFramework
             }
         }
 
-        public Input(Control control)
+        public Input(Control form, Control control)
         {
             Control = control;
 
-            MousePoint = control.PointToClient(Cursor.Position);
+            MousePoint = form.PointToClient(Cursor.Position);
             MouseWheelDelta = 0;
         }
 
@@ -55,7 +55,7 @@ namespace DemoFramework
             _control = null;
         }
 
-        void ControlOnKeyDown(object sender, KeyEventArgs e)
+        void ControlOnKeyDown(object? sender, KeyEventArgs e)
         {
             Keys key = e.KeyData & ~Keys.Shift;
 
@@ -66,7 +66,7 @@ namespace DemoFramework
             }
         }
 
-        void ControlOnKeyUp(object sender, KeyEventArgs e)
+        void ControlOnKeyUp(object? sender, KeyEventArgs e)
         {
             Keys key = e.KeyData & ~Keys.Shift;
 
@@ -83,7 +83,7 @@ namespace DemoFramework
             MouseWheelDelta = 0;
         }
 
-        void ControlOnMouseDown(object sender, MouseEventArgs e)
+        void ControlOnMouseDown(object? sender, MouseEventArgs e)
         {
             MousePoint = e.Location;
 
@@ -115,12 +115,12 @@ namespace DemoFramework
             }
         }
 
-        void ControlOnMouseMove(object sender, MouseEventArgs e)
+        void ControlOnMouseMove(object? sender, MouseEventArgs e)
         {
             MousePoint = e.Location;
         }
 
-        void ControlOnMouseUp(object sender, MouseEventArgs e)
+        void ControlOnMouseUp(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -135,7 +135,7 @@ namespace DemoFramework
             }
         }
 
-        void ControlOnMouseWheel(object sender, MouseEventArgs e)
+        void ControlOnMouseWheel(object? sender, MouseEventArgs e)
         {
             MouseWheelDelta = e.Delta;
         }

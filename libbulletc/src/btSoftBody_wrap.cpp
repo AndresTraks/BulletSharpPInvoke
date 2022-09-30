@@ -2137,6 +2137,17 @@ void btSoftBody_Tetra_setRv(btSoftBody_Tetra* obj, btScalar value)
 }
 
 
+void btSoftBody_TetraScratch_getF(btSoftBody_TetraScratch* obj, btMatrix3x3* value)
+{
+	BTMATRIX3X3_OUT(value, &obj->m_F);
+}
+
+void btSoftBody_TetraScratch_setF(btSoftBody_TetraScratch* obj, const btMatrix3x3* value)
+{
+	BTMATRIX3X3_SET(&obj->m_F, (btScalar*)value);
+}
+
+
 btSoftBody* btSoftBody_new(btSoftBodyWorldInfo* worldInfo, int node_count, const btScalar* x,
 	const btScalar* m)
 {
@@ -2804,6 +2815,11 @@ void btSoftBody_scale(btSoftBody* obj, const btVector3* scl)
 void btSoftBody_setBUpdateRtCst(btSoftBody* obj, bool value)
 {
 	obj->m_bUpdateRtCst = value;
+}
+
+void btSoftBody_setDampingCoefficient(btSoftBody* obj, btScalar damping_coeff)
+{
+	obj->setDampingCoefficient(damping_coeff);
 }
 
 void btSoftBody_setMass(btSoftBody* obj, int node, btScalar mass)

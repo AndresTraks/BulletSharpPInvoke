@@ -69,6 +69,9 @@ extern "C" {
 	EXPORT int btAlignedObjectArray_btSoftBody_Node_size(btAlignedObjectArray_btSoftBody_Node* obj);
 
 	EXPORT btSoftBody_Note* btAlignedObjectArray_btSoftBody_Note_at(btAlignedObjectArray_btSoftBody_Note* obj, int n);
+	EXPORT int btAlignedObjectArray_btSoftBody_Note_index_of(btAlignedObjectArray_btSoftBody_Note* obj, btSoftBody_Note* val);
+	EXPORT void btAlignedObjectArray_btSoftBody_Note_push_back(btAlignedObjectArray_btSoftBody_Note* obj, btSoftBody_Note* val);
+	EXPORT void btAlignedObjectArray_btSoftBody_Note_resizeNoInitialize(btAlignedObjectArray_btSoftBody_Note* obj, int newSize);
 	EXPORT int btAlignedObjectArray_btSoftBody_Note_size(btAlignedObjectArray_btSoftBody_Note* obj);
 
 	EXPORT btSoftBody_Tetra* btAlignedObjectArray_btSoftBody_Tetra_at(btAlignedObjectArray_btSoftBody_Tetra* obj, int n);
@@ -77,7 +80,7 @@ extern "C" {
 	EXPORT int btAlignedObjectArray_btSoftBody_Tetra_size(btAlignedObjectArray_btSoftBody_Tetra* obj);
 
 	EXPORT btSoftBody_TetraScratch* btAlignedObjectArray_btSoftBody_TetraScratch_at(btAlignedObjectArray_btSoftBody_TetraScratch* obj, int n);
-	EXPORT void btAlignedObjectArray_btSoftBody_TetraScratch_push_back(btAlignedObjectArray_btSoftBody_Tetra* obj, btSoftBody_TetraScratch* val);
+	EXPORT void btAlignedObjectArray_btSoftBody_TetraScratch_push_back(btAlignedObjectArray_btSoftBody_TetraScratch* obj, btSoftBody_TetraScratch* val);
 	EXPORT void btAlignedObjectArray_btSoftBody_TetraScratch_resize(btAlignedObjectArray_btSoftBody_TetraScratch* obj, int newSize);
 	EXPORT void btAlignedObjectArray_btSoftBody_TetraScratch_resizeNoInitialize(btAlignedObjectArray_btSoftBody_TetraScratch* obj, int newSize);
 	EXPORT int btAlignedObjectArray_btSoftBody_TetraScratch_size(btAlignedObjectArray_btSoftBody_TetraScratch* obj);

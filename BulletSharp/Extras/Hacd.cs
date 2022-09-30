@@ -49,7 +49,7 @@ namespace BulletSharp
 			HACD_HACD_DenormalizeData(Native);
 		}
 
-		public bool GetCH(int numCH, double[] points, long[] triangles)
+		public bool GetCH(int numCH, double[] points, int[] triangles)
 		{
 			if (points.Length < GetNPointsCH(numCH))
 			{
@@ -92,15 +92,15 @@ namespace BulletSharp
 			return pointsArray;
 		}
 
-		public long[] GetTriangles()
+		public int[] GetTriangles()
 		{
 			IntPtr trianglesPtr = HACD_HACD_GetTriangles(Native);
 			int trianglesLen = NTriangles * 3;
 			if (trianglesLen == 0 || trianglesPtr == IntPtr.Zero)
 			{
-				return new long[0];
+				return new int[0];
 			}
-			long[] trianglesArray = new long[trianglesLen];
+			int[] trianglesArray = new int[trianglesLen];
 			Marshal.Copy(trianglesPtr, trianglesArray, 0, trianglesLen);
 			return trianglesArray;
 		}
@@ -162,15 +162,15 @@ namespace BulletSharp
 			SetPoints(pointsArray);
 		}
 
-		public void SetTriangles(ICollection<long> triangles)
+		public void SetTriangles(ICollection<int> triangles)
 		{
-			long[] trianglesLong;
+			int[] trianglesArray;
 			int arrayLen = triangles.Count;
-			trianglesLong = triangles as long[];
-			if (trianglesLong == null)
+			trianglesArray = triangles as int[];
+			if (trianglesArray == null)
 			{
-				trianglesLong = new long[arrayLen];
-				triangles.CopyTo(trianglesLong, 0);
+				trianglesArray = new int[arrayLen];
+				triangles.CopyTo(trianglesArray, 0);
 			}
 
 			IntPtr trianglesPtr = HACD_HACD_GetTriangles(Native);
@@ -179,22 +179,10 @@ namespace BulletSharp
 				Marshal.FreeHGlobal(trianglesPtr);
 			}
 
-			trianglesPtr = Marshal.AllocHGlobal(sizeof(long) * arrayLen);
-			Marshal.Copy(trianglesLong, 0, trianglesPtr, arrayLen);
+			trianglesPtr = Marshal.AllocHGlobal(sizeof(int) * arrayLen);
+			Marshal.Copy(trianglesArray, 0, trianglesPtr, arrayLen);
 			HACD_HACD_SetTriangles(Native, trianglesPtr);
 			NTriangles = arrayLen / 3;
-		}
-
-		public void SetTriangles(ICollection<int> triangles)
-		{
-			int n = triangles.Count;
-			long[] trianglesLong = new long[n];
-			int i = 0;
-			foreach (int t in triangles)
-			{
-				trianglesLong[i++] = t;
-			}
-			SetTriangles(trianglesLong);
 		}
 
 		public bool AddExtraDistPoints

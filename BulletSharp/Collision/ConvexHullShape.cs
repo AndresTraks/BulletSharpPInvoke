@@ -8,7 +8,6 @@ namespace BulletSharp
 {
 	public class ConvexHullShape : PolyhedralConvexAabbCachingShape
 	{
-		private Vector3Array _points;
 		private Vector3Array _unscaledPoints;
 
 		public ConvexHullShape()
@@ -88,18 +87,6 @@ namespace BulletSharp
 		}
 
 		public int NumPoints => btConvexHullShape_getNumPoints(Native);
-
-		public Vector3Array Points
-		{
-			get
-			{
-				if (_points == null || _points.Count != NumPoints)
-				{
-					_points = new Vector3Array(btConvexHullShape_getPoints(Native), NumPoints);
-				}
-				return _points;
-			}
-		}
 
 		public Vector3Array UnscaledPoints
 		{

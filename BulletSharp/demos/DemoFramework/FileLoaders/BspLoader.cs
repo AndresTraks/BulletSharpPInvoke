@@ -61,10 +61,10 @@ namespace DemoFramework.FileLoaders
 
     public struct BspPlane
     {
-        public double NormalX;
-        public double NormalY;
-        public double NormalZ;
-        public double Distance;
+        public float NormalX;
+        public float NormalY;
+        public float NormalZ;
+        public float Distance;
     }
 
     [Flags]
@@ -409,10 +409,10 @@ namespace DemoFramework.FileLoaders
 
             for (int i = 0; i < length; i++)
             {
-                Planes[i].NormalX = reader.ReadDouble();
-                Planes[i].NormalY = reader.ReadDouble();
-                Planes[i].NormalZ = reader.ReadDouble();
-                Planes[i].Distance = reader.ReadDouble();
+                Planes[i].NormalX = reader.ReadSingle();
+                Planes[i].NormalY = reader.ReadSingle();
+                Planes[i].NormalZ = reader.ReadSingle();
+                Planes[i].Distance = reader.ReadSingle();
                 if (IsVbsp)
                 {
                     reader.ReadInt32(); // type

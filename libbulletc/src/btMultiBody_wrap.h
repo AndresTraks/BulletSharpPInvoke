@@ -119,7 +119,7 @@ extern "C" {
 	EXPORT void btMultiBody_setWorldToBaseRot(btMultiBody* obj, const btQuaternion* rot);
 	EXPORT void btMultiBody_stepPositionsMultiDof(btMultiBody* obj, btScalar dt, btScalar* pq, btScalar* pqd);
 	EXPORT void btMultiBody_updateCollisionObjectWorldTransforms(btMultiBody* obj, btAlignedObjectArray_btQuaternion* scratch_q, btAlignedObjectArray_btVector3* scratch_m);
-	EXPORT void btMultiBody_updateCollisionObjectWorldTransforms2(btMultiBody* obj, btAlignedObjectArray_btQuaternion* world_to_local, btAlignedObjectArray_btVector3* local_origin);
+	EXPORT void btMultiBody_updateCollisionObjectInterpolationWorldTransforms2(btMultiBody* obj, btAlignedObjectArray_btQuaternion* world_to_local, btAlignedObjectArray_btVector3* local_origin);
 	EXPORT void btMultiBody_useGlobalVelocities(btMultiBody* obj, bool use);
 	EXPORT void btMultiBody_useRK4Integration(btMultiBody* obj, bool use);
 	EXPORT void btMultiBody_wakeUp(btMultiBody* obj);

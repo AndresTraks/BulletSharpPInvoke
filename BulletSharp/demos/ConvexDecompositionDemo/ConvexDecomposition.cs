@@ -19,7 +19,7 @@ namespace ConvexDecompositionDemo
 
         public Vector3 LocalScaling { get; set; } = new Vector3(1, 1, 1);
 
-        public void Result(Vector3[] hullVertices, long[] hullIndices)
+        public void Result(Vector3[] hullVertices, int[] hullIndices)
         {
             _wavefrontWriter.OutputObject(hullVertices, hullIndices);
 

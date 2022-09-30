@@ -13,7 +13,7 @@ namespace DemoFramework
             TryLoadBulletSharp();
 
             T configuration = new T();
-            Demo demo = new Demo(configuration);
+            var demo = new Demo(configuration);
 
             GraphicsLibraryManager.Run(demo);
         }

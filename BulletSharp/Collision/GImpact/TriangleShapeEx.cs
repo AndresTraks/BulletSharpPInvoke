@@ -72,9 +72,9 @@ namespace BulletSharp
 			InitializeUserOwned(native);
 		}
 
-		public void ApplyTransform(Matrix t)
+		public void ApplyTransform(Matrix transform)
 		{
-			btPrimitiveTriangle_applyTransform(Native, ref t);
+			btPrimitiveTriangle_applyTransform(Native, ref transform);
 		}
 
 		public void BuildTriPlane()

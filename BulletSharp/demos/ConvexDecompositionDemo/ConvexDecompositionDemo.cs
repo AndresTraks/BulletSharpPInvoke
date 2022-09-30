@@ -1,4 +1,4 @@
-﻿using BulletSharp;
+using BulletSharp;
 using BulletSharp.Math;
 using DemoFramework;
 using DemoFramework.FileLoaders;
@@ -230,7 +230,7 @@ namespace ConvexDecompositionDemo
                 {
                     continue;
                 }
-                var triangles = new long[trianglesLen];
+                var triangles = new int[trianglesLen];
 
                 int nVertices = hacd.GetNPointsCH(c);
                 var points = new double[nVertices * 3];

@@ -2,6 +2,7 @@
 using BulletSharp.Math;
 using System;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace DemoFramework
 {
@@ -28,7 +29,7 @@ namespace DemoFramework
 
     public abstract class BufferedDebugDraw : DebugDraw
     {
-        PositionColored[] _lines = new PositionColored[0];
+        PositionColored[] _lines = Array.Empty<PositionColored>();
         protected PositionColored[] Lines
         {
             get { return _lines; }
@@ -68,7 +69,7 @@ namespace DemoFramework
 
         public override void ReportErrorWarning(string warningString)
         {
-            System.Windows.Forms.MessageBox.Show(warningString);
+            MessageBox.Show(warningString);
         }
     }
 };

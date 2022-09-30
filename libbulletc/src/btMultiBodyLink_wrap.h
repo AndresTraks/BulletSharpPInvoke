@@ -48,7 +48,9 @@ extern "C" {
 	EXPORT void btMultibodyLink_setAxisTop(btMultibodyLink* obj, int dof, btScalar x, btScalar y, btScalar z);
 	EXPORT void btMultibodyLink_setAxisTop2(btMultibodyLink* obj, int dof, const btVector3* axis);
 	EXPORT void btMultibodyLink_setCachedRotParentToThis(btMultibodyLink* obj, const btQuaternion* value);
+	EXPORT void btMultibodyLink_setCachedRotParentToThisInterpolate(btMultibodyLink* obj, const btQuaternion* value);
 	EXPORT void btMultibodyLink_setCachedRVector(btMultibodyLink* obj, const btVector3* value);
+	EXPORT void btMultibodyLink_setCachedRVectorInterpolate(btMultibodyLink* obj, const btVector3* value);
 	EXPORT void btMultibodyLink_setCachedWorldTransform(btMultibodyLink* obj, const btTransform* value);
 	EXPORT void btMultibodyLink_setCfgOffset(btMultibodyLink* obj, int value);
 	EXPORT void btMultibodyLink_setCollider(btMultibodyLink* obj, btMultiBodyLinkCollider* value);

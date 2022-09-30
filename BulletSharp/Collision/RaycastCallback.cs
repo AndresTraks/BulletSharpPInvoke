@@ -64,9 +64,9 @@ namespace BulletSharp
                 edgeTolerance *= -0.0001f;
                 Vector3 point = Vector3.Lerp(From, To, distance);
                 {
-                    Vector3 v0p; v0p = point0 - point;
-                    Vector3 v1p; v1p = point1 - point;
-                    Vector3 cp0; cp0 = v0p.Cross(v1p);
+                    Vector3 v0p = point0 - point;
+                    Vector3 v1p = point1 - point;
+                    Vector3 cp0 = v0p.Cross(v1p);
 
                     double dot;
                     cp0.Dot(ref triangleNormal, out dot);

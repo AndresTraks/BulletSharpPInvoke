@@ -11,7 +11,7 @@ namespace ConvexDecompositionDemo
         private StreamWriter _outputStream;
         private CultureInfo _doubleFormat = new CultureInfo("en-US");
 
-        private long _baseIndex = 0;
+        private int _baseIndex = 0;
         private int _objectCount = 0;
 
         public WavefrontWriter(string filename)
@@ -20,7 +20,7 @@ namespace ConvexDecompositionDemo
             _outputStream = new StreamWriter(_outputFile);
         }
 
-        public void OutputObject(Vector3[] hullVertices, long[] hullIndices)
+        public void OutputObject(Vector3[] hullVertices, int[] hullIndices)
         {
             _outputStream.WriteLine("## Object {0} with {1} vertices and {2} triangles.", _objectCount, hullVertices.Length, hullIndices.Length / 3);
 
@@ -34,9 +34,9 @@ namespace ConvexDecompositionDemo
 
             for (int i = 0; i < hullIndices.Length; i += 3)
             {
-                long index0 = _baseIndex + hullIndices[i];
-                long index1 = _baseIndex + hullIndices[i + 1];
-                long index2 = _baseIndex + hullIndices[i + 2];
+                int index0 = _baseIndex + hullIndices[i];
+                int index1 = _baseIndex + hullIndices[i + 1];
+                int index2 = _baseIndex + hullIndices[i + 2];
 
                 _outputStream.WriteLine("f {0} {1} {2}", index0 + 1, index1 + 1, index2 + 1);
             }

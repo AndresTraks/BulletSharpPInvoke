@@ -36,7 +36,7 @@ namespace BulletSharp
 
 		private unsafe void SerializeDynamicsWorldInfo(Serializer serializer)
 		{
-			int len = 88;
+			int len = Environment.Is64BitProcess ? 156 : 88;
 			Chunk chunk = serializer.Allocate((uint)len, 1);
 
 			using (var stream = new UnmanagedMemoryStream((byte*)chunk.OldPtr.ToPointer(), len, len, FileAccess.Write))

@@ -410,12 +410,16 @@ extern "C" {
 	EXPORT btScalar btSoftBody_RContact_getC4(btSoftBody_RContact* obj);
 	EXPORT btSoftBody_sCti* btSoftBody_RContact_getCti(btSoftBody_RContact* obj);
 	EXPORT btSoftBody_Node* btSoftBody_RContact_getNode(btSoftBody_RContact* obj);
+	EXPORT void btSoftBody_RContact_getT1(btSoftBody_RContact* obj, btVector3* value);
+	EXPORT void btSoftBody_RContact_getT2(btSoftBody_RContact* obj, btVector3* value);
 	EXPORT void btSoftBody_RContact_setC0(btSoftBody_RContact* obj, const btMatrix3x3* value);
 	EXPORT void btSoftBody_RContact_setC1(btSoftBody_RContact* obj, const btVector3* value);
 	EXPORT void btSoftBody_RContact_setC2(btSoftBody_RContact* obj, btScalar value);
 	EXPORT void btSoftBody_RContact_setC3(btSoftBody_RContact* obj, btScalar value);
 	EXPORT void btSoftBody_RContact_setC4(btSoftBody_RContact* obj, btScalar value);
 	EXPORT void btSoftBody_RContact_setNode(btSoftBody_RContact* obj, btSoftBody_Node* value);
+	EXPORT void btSoftBody_RContact_setT1(btSoftBody_RContact* obj, const btVector3* value);
+	EXPORT void btSoftBody_RContact_setT2(btSoftBody_RContact* obj, const btVector3* value);
 	EXPORT void btSoftBody_RContact_delete(btSoftBody_RContact* obj);
 
 	EXPORT btSoftBody_SContact* btSoftBody_SContact_new();
@@ -475,6 +479,9 @@ extern "C" {
 	EXPORT void btSoftBody_Tetra_setC2(btSoftBody_Tetra* obj, btScalar value);
 	EXPORT void btSoftBody_Tetra_setLeaf(btSoftBody_Tetra* obj, btDbvtNode* value);
 	EXPORT void btSoftBody_Tetra_setRv(btSoftBody_Tetra* obj, btScalar value);
+
+	EXPORT void btSoftBody_TetraScratch_getF(btSoftBody_TetraScratch* obj, btMatrix3x3* value);
+	EXPORT void btSoftBody_TetraScratch_setF(btSoftBody_TetraScratch* obj, const btMatrix3x3* value);
 
 	EXPORT btSoftBody* btSoftBody_new(btSoftBodyWorldInfo* worldInfo, int node_count, const btScalar* x, const btScalar* m);
 	EXPORT btSoftBody* btSoftBody_new2(btSoftBodyWorldInfo* worldInfo);
@@ -595,6 +602,7 @@ extern "C" {
 	EXPORT void btSoftBody_rotate(btSoftBody* obj, const btQuaternion* rot);
 	EXPORT void btSoftBody_scale(btSoftBody* obj, const btVector3* scl);
 	EXPORT void btSoftBody_setBUpdateRtCst(btSoftBody* obj, bool value);
+	EXPORT void btSoftBody_setDampingCoefficient(btSoftBody* obj, btScalar damping_coeff);
 	EXPORT void btSoftBody_setMass(btSoftBody* obj, int node, btScalar mass);
 	EXPORT void btSoftBody_setPose(btSoftBody* obj, bool bvolume, bool bframe);
 	EXPORT void btSoftBody_setRestLengthScale(btSoftBody* obj, btScalar restLength);
