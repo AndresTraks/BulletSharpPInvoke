@@ -22,6 +22,15 @@ void btITaskScheduler_setNumThreads(btITaskScheduler* obj, int numThreads)
 	obj->setNumThreads(numThreads);
 }
 
+
+btITaskScheduler* btThreads_CreateGetDefaultTaskScheduler()
+{
+	return btCreateDefaultTaskScheduler();
+}
+void btThreads_DestroyDefaultTaskScheduler(btITaskScheduler* obj)
+{
+	delete obj;
+}
 btITaskScheduler* btThreads_btGetSequentialTaskScheduler()
 {
 	return btGetSequentialTaskScheduler();

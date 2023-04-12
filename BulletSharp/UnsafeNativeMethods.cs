@@ -6601,7 +6601,14 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern void btTetrahedronShapeEx_setVertices(IntPtr obj, [In] ref Vector3 v0, [In] ref Vector3 v1, [In] ref Vector3 v2, [In] ref Vector3 v3);
 
-		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
+
+        [DllImport(Native.Dll, CallingConvention = Native.Conv)]
+        public static extern IntPtr btThreads_CreateGetDefaultTaskScheduler();
+
+        [DllImport(Native.Dll, CallingConvention = Native.Conv)]
+        public static extern void btThreads_DestroyDefaultTaskScheduler(IntPtr taskScheduler);
+
+        [DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btThreads_btGetOpenMPTaskScheduler();
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btThreads_btGetPPLTaskScheduler();

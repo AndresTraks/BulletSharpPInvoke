@@ -8,6 +8,9 @@ extern "C" {
 	EXPORT int btITaskScheduler_getNumThreads(btITaskScheduler* obj);
 	EXPORT void btITaskScheduler_setNumThreads(btITaskScheduler* obj, int numThreads);
 
+	EXPORT btITaskScheduler* btThreads_CreateGetDefaultTaskScheduler();
+	EXPORT void btThreads_DestroyDefaultTaskScheduler(btITaskScheduler* ts);
+
 	EXPORT btITaskScheduler* btThreads_btGetSequentialTaskScheduler();
 	EXPORT btITaskScheduler* btThreads_btGetOpenMPTaskScheduler();
 	EXPORT btITaskScheduler* btThreads_btGetPPLTaskScheduler();
