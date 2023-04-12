@@ -56,6 +56,33 @@ namespace BulletSharp
 		}
 	}
 
+	/// <summary>
+	/// Default task sheduler not get but created, so mast be disposable 
+	/// </summary>
+    public sealed class TaskSchedulerDefault : TaskScheduler, System.IDisposable
+    {
+        internal TaskSchedulerDefault(IntPtr native)
+            : base(native)
+        {
+        }
+
+        ~TaskSchedulerDefault()
+        {
+            DestroyNativeObject();
+        }
+        private void DestroyNativeObject()
+        {
+            if (Native != IntPtr.Zero)
+                btThreads_DestroyDefaultTaskScheduler(Native);
+        }
+
+        void IDisposable.Dispose()
+        {
+            DestroyNativeObject();
+            GC.SuppressFinalize(this);
+        }
+    }
+
 	public class Threads
 	{
 		private static TaskSchedulerOpenMP _taskSchedulerOpenMP;
@@ -122,5 +149,14 @@ namespace BulletSharp
 			}
 			return _taskSchedulerTbb;
 		}
+
+        public static TaskSchedulerDefault CreateDefaultTaskSheduler()
+        {
+            IntPtr native = btThreads_CreateGetDefaultTaskScheduler();
+            if (native != IntPtr.Zero)
+                return new TaskSchedulerDefault(native);
+            return null;
+        }
+
 	}
 }
