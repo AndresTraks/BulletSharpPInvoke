@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8.9)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.5)
 PROJECT (libbulletc)
 
 IF (NOT CMAKE_BUILD_TYPE)
@@ -422,6 +422,10 @@ ADD_LIBRARY(${BULLETC_LIB} ${BULLETC_TYPE}
     src/hacdHACD_wrap.cpp
     src/hacdHACD_wrap.h
 )
+
+if(ANDROID)
+    target_link_options(${BULLETC_LIB} PRIVATE "-Wl,-z,max-page-size=16384")
+endif()
 
 set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
 
