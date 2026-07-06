@@ -3146,7 +3146,7 @@ int btSoftBody_getTetraVertexNormalData(btSoftBody* obj, btScalar* vertices)
 	int vertexCount = tetraCount * 12;
 
 	int i;
-	btVector3 c1, c2, c3, normal;
+	ATTRIBUTE_ALIGNED16(btVector3) c1, c2, c3, normal;
 	for (i = 0; i < tetraCount; i++) {
 		btSoftBody_Tetra* t = &tetraArray->at(i);
 		c1 = t->m_n[1]->m_x - t->m_n[0]->m_x;
@@ -3205,7 +3205,7 @@ int btSoftBody_getTetraVertexNormalData2(btSoftBody* obj, btScalar* vertices, bt
 	int vertexCount = tetraCount * 12;
 
 	int i;
-	btVector3 c1, c2, c3, normal;
+	ATTRIBUTE_ALIGNED16(btVector3) c1, c2, c3, normal;
 	for (i = 0; i < tetraCount; i++) {
 		btSoftBody_Tetra* t = &tetraArray->at(i);
 		c1 = t->m_n[1]->m_x - t->m_n[0]->m_x;

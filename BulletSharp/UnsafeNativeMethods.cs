@@ -308,7 +308,7 @@ namespace BulletSharp
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btSoftBodyNodePtrArray_at(IntPtr obj, int index);
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
-		public static extern IntPtr btSoftBodyNodePtrArray_set(IntPtr obj, IntPtr value, int index);
+		public static extern void btSoftBodyNodePtrArray_set(IntPtr obj, IntPtr value, int index);
 
 		[DllImport(Native.Dll, CallingConvention = Native.Conv)]
 		public static extern IntPtr btAlignedObjectArray_btVector3_new();
